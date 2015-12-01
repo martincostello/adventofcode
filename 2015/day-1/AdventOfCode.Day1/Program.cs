@@ -32,6 +32,9 @@ namespace MartinCostello.AdventOfCode.Day1
             }
 
             int floor = 0;
+            int instruction = 0;
+
+            bool hasVisitedBasement = false;
 
             using (Stream stream = File.OpenRead(args[0]))
             {
@@ -42,6 +45,7 @@ namespace MartinCostello.AdventOfCode.Day1
                     while (!reader.EndOfStream)
                     {
                         ch = (char)reader.Read();
+                        instruction++;
 
                         switch (ch)
                         {
@@ -55,6 +59,15 @@ namespace MartinCostello.AdventOfCode.Day1
 
                             default:
                                 break;
+                        }
+
+                        if (!hasVisitedBasement)
+                        {
+                            if (floor == -1)
+                            {
+                                hasVisitedBasement = true;
+                                Console.WriteLine("Santa first enters the basement after following instruction {0:N0}.", instruction);
+                            }
                         }
                     }
                 }
