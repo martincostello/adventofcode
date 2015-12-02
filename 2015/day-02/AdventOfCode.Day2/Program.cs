@@ -42,11 +42,25 @@ namespace MartinCostello.AdventOfCode.Day2
             }
 
             int totalArea = presents.Sum(GetWrappingPaperSurfaceArea);
+            int length = presents.Sum(GetRibbonLength);
 
-            Console.Write("The elves should order {0:N0} square feet of wrapping paper.", totalArea);
+            Console.Write(
+                "The elves should order {0:N0} square feet of wrapping paper.{1}They also need {2:N0} feet of ribbon.",
+                totalArea,
+                Environment.NewLine,
+                length);
+
             Console.Read();
 
             return 0;
+        }
+
+        private static int GetRibbonLength(Present present)
+        {
+            int smallestPerimiter = new[] { (present.Length + present.Width) * 2, (present.Width + present.Height) * 2, (present.Height + present.Length) * 2 }.Min();
+            int lengthForBow = present.Height * present.Length * present.Width;
+
+            return smallestPerimiter + lengthForBow;
         }
 
         private static int GetWrappingPaperSurfaceArea(Present present)
