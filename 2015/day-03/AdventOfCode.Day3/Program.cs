@@ -74,32 +74,32 @@ namespace MartinCostello.AdventOfCode.Day3
                 }
             }
 
-            List<Point> houseCoordinates = new List<Point>();
-            Point current = new Point(0, 0);
+            List<Point> houseCoordinates2015 = new List<Point>();
+            SantaGps santa2015 = new SantaGps();
 
             foreach (var direction in directions)
             {
-                if (!houseCoordinates.Contains(current))
+                if (!houseCoordinates2015.Contains(santa2015.Location))
                 {
-                    houseCoordinates.Add(current);
+                    houseCoordinates2015.Add(santa2015.Location);
                 }
 
                 switch (direction)
                 {
                     case CardinalDirection.East:
-                        current += Moves.East;
+                        santa2015.Location += Moves.East;
                         break;
 
                     case CardinalDirection.North:
-                        current += Moves.North;
+                        santa2015.Location += Moves.North;
                         break;
 
                     case CardinalDirection.South:
-                        current += Moves.South;
+                        santa2015.Location += Moves.South;
                         break;
 
                     case CardinalDirection.West:
-                        current += Moves.West;
+                        santa2015.Location += Moves.West;
                         break;
 
                     default:
@@ -108,10 +108,58 @@ namespace MartinCostello.AdventOfCode.Day3
                 }
             }
 
-            Console.Write("Santa has delivered presents to {0:N0} houses.", houseCoordinates.Count);
+            List<Point> houseCoordinates2016 = new List<Point>();
+            SantaGps santa2016 = new SantaGps();
+            SantaGps roboSanta2016 = new SantaGps();
+
+            bool roboSantasMove = false;
+            SantaGps currentSanta = santa2016;
+
+            foreach (var direction in directions)
+            {
+                switch (direction)
+                {
+                    case CardinalDirection.East:
+                        currentSanta.Location += Moves.East;
+                        break;
+
+                    case CardinalDirection.North:
+                        currentSanta.Location += Moves.North;
+                        break;
+
+                    case CardinalDirection.South:
+                        currentSanta.Location += Moves.South;
+                        break;
+
+                    case CardinalDirection.West:
+                        currentSanta.Location += Moves.West;
+                        break;
+
+                    default:
+                        Console.WriteLine("Invalid direction: {0}.", direction);
+                        return -1;
+                }
+
+                if (!houseCoordinates2016.Contains(currentSanta.Location))
+                {
+                    houseCoordinates2016.Add(currentSanta.Location);
+                }
+
+                roboSantasMove = !roboSantasMove;
+                currentSanta = roboSantasMove ? roboSanta2016 : santa2016;
+            }
+
+            Console.WriteLine("In 2015, Santa delivered presents to {0:N0} houses.", houseCoordinates2015.Count);
+            Console.WriteLine("In 2016, Santa and Robo-Santa delivered presents to {0:N0} houses.", houseCoordinates2016.Count);
+            Console.Write("Robo-Santa makes Santa {0:P2} more efficient.", ((double)houseCoordinates2016.Count / houseCoordinates2015.Count) - 1);
             Console.Read();
 
             return 0;
+        }
+
+        private sealed class SantaGps
+        {
+            internal Point Location { get; set; }
         }
 
         private sealed class Moves
