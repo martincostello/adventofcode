@@ -47,7 +47,10 @@ namespace MartinCostello.AdventOfCode.Day4
             stopwatch.Stop();
 
             Console.WriteLine();
-            Console.WriteLine("The lowest positive number for a hash starting with five zeroes is {0}. Took {1:N2} seconds.", answerFor5, stopwatch.Elapsed.TotalSeconds);
+            Console.WriteLine(
+                "The lowest positive number for a hash starting with five zeroes is {0}. Took {1:N2} seconds.",
+                answerFor5,
+                stopwatch.Elapsed.TotalSeconds);
 
             stopwatch.Reset();
             stopwatch.Start();
@@ -55,7 +58,10 @@ namespace MartinCostello.AdventOfCode.Day4
             int answerFor6 = GetLowestPositiveNumberWithStartingZeroes(secretKey, 6);
 
             Console.WriteLine();
-            Console.WriteLine("The lowest positive number for a hash starting with six zeroes is {0}. Took {1:N2} seconds.", answerFor6, stopwatch.Elapsed.TotalSeconds);
+            Console.WriteLine(
+                "The lowest positive number for a hash starting with six zeroes is {0}. Took {1:N2} seconds.",
+                answerFor6,
+                stopwatch.Elapsed.TotalSeconds);
 
             return 0;
         }
