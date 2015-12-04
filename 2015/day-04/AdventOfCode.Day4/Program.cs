@@ -13,10 +13,13 @@
 namespace MartinCostello.AdventOfCode.Day4
 {
     using System;
+    using System.Collections.Concurrent;
     using System.Diagnostics;
     using System.Globalization;
+    using System.Linq;
     using System.Security.Cryptography;
     using System.Text;
+    using System.Threading.Tasks;
 
     /// <summary>
     /// A console application that solves <c>http://adventofcode.com/day/4</c>. This class cannot be inherited.
@@ -66,31 +69,41 @@ namespace MartinCostello.AdventOfCode.Day4
         /// <returns>The lowest positive integer that generates an MD5 hash with the number of zeroes specified.</returns>
         private static int GetLowestPositiveNumberWithStartingZeroes(string secretKey, int zeroes)
         {
-            int? answer = null;
             string prefix = new string('0', zeroes);
 
-            for (int i = 1; !answer.HasValue && i < int.MaxValue; i++)
-            {
-                string value = string.Format(CultureInfo.InvariantCulture, "{0}{1}", secretKey, i);
-                string hash = ComputeMD5(value);
+            ConcurrentBag<int> bag = new ConcurrentBag<int>();
 
-                if (hash.StartsWith(prefix, StringComparison.Ordinal))
+            // N.B. It is possible that for other input values that one range of the partition
+            // yields an answer earlier than tha partition that would produce a lower number.
+            var source = Partitioner.Create(Enumerable.Range(1, int.MaxValue - 1));
+
+            Parallel.ForEach(
+                source,
+                (i, s) =>
                 {
-                    answer = i;
-                }
+                    string value = string.Format(CultureInfo.InvariantCulture, "{0}{1}", secretKey, i);
+                    string hash = ComputeMD5(value);
 
-                if (i % 100000 == 0)
-                {
-                    Console.Write('.');
-                }
-            }
+                    if (hash.StartsWith(prefix, StringComparison.Ordinal))
+                    {
+                        bag.Add(i);
+                        s.Stop();
+                    }
 
-            if (answer == null)
+                    if (i % 100000 == 0)
+                    {
+                        Console.Write('.');
+                    }
+                });
+
+            if (bag.Count < 1)
             {
                 throw new ArgumentException("No answer was found for the specified secret key.", nameof(secretKey));
             }
 
-            return answer.Value;
+            return bag
+                .ToArray()
+                .Min();
         }
 
         /// <summary>
