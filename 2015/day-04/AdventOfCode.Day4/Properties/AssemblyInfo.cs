@@ -13,7 +13,7 @@
 using System.Reflection;
 using System.Runtime.InteropServices;
 
-[assembly: AssemblyTitle("AdventOfCode.Day3")]
+[assembly: AssemblyTitle("AdventOfCode.Day4")]
 [assembly: AssemblyDescription("Solution to day 4 of http://adventofcode.com/day/4.")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Martin Costello")]
