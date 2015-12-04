@@ -13,12 +13,21 @@
 namespace MartinCostello.AdventOfCode.Day4
 {
     using System;
+    using System.Diagnostics;
     using System.Globalization;
     using System.Security.Cryptography;
     using System.Text;
 
+    /// <summary>
+    /// A console application that solves <c>http://adventofcode.com/day/4</c>. This class cannot be inherited.
+    /// </summary>
     internal static class Program
     {
+        /// <summary>
+        /// The main entry-point to the application.
+        /// </summary>
+        /// <param name="args">The arguments to the application.</param>
+        /// <returns>The exit code from the application.</returns>
         internal static int Main(string[] args)
         {
             if (args.Length != 1)
@@ -29,53 +38,50 @@ namespace MartinCostello.AdventOfCode.Day4
 
             string secretKey = args[0];
 
-            int answer5 = GetLowestPositiveNumberWithStartingZeroes(secretKey, 5);
+            Stopwatch stopwatch = Stopwatch.StartNew();
+
+            int answerFor5 = GetLowestPositiveNumberWithStartingZeroes(secretKey, 5);
+            stopwatch.Stop();
 
             Console.WriteLine();
-            Console.WriteLine("The lowest positive number for a hash starting with five zeroes is {0}.", answer5);
+            Console.WriteLine("The lowest positive number for a hash starting with five zeroes is {0}. Took {1:N2} seconds.", answerFor5, stopwatch.Elapsed.TotalSeconds);
 
-            int answer6 = GetLowestPositiveNumberWithStartingZeroes(secretKey, 6);
+            stopwatch.Reset();
+            stopwatch.Start();
+
+            int answerFor6 = GetLowestPositiveNumberWithStartingZeroes(secretKey, 6);
 
             Console.WriteLine();
-            Console.WriteLine("The lowest positive number for a hash starting with six zeroes is {0}.", answer6);
-
-            Console.ReadKey();
+            Console.WriteLine("The lowest positive number for a hash starting with six zeroes is {0}. Took {1:N2} seconds.", answerFor6, stopwatch.Elapsed.TotalSeconds);
 
             return 0;
         }
 
+        /// <summary>
+        /// Gets the lowest positive integer which when combined with a secret key has an MD5 hash whose
+        /// hexadecimal representation starts with the specified number of zeroes.
+        /// </summary>
+        /// <param name="secretKey">The secret key to use.</param>
+        /// <param name="zeroes">The number of zeroes to get the value for.</param>
+        /// <returns>The lowest positive integer that generates an MD5 hash with the number of zeroes specified.</returns>
         private static int GetLowestPositiveNumberWithStartingZeroes(string secretKey, int zeroes)
         {
             int? answer = null;
             string prefix = new string('0', zeroes);
 
-            using (HashAlgorithm algorithm = HashAlgorithm.Create("MD5"))
+            for (int i = 1; !answer.HasValue && i < int.MaxValue; i++)
             {
-                for (int i = 1; !answer.HasValue && i < int.MaxValue; i++)
+                string value = string.Format(CultureInfo.InvariantCulture, "{0}{1}", secretKey, i);
+                string hash = ComputeMD5(value);
+
+                if (hash.StartsWith(prefix, StringComparison.Ordinal))
                 {
-                    string value = string.Format(CultureInfo.InvariantCulture, "{0}{1}", secretKey, i);
-                    byte[] buffer = Encoding.UTF8.GetBytes(value);
+                    answer = i;
+                }
 
-                    byte[] hashBytes = algorithm.ComputeHash(buffer);
-
-                    StringBuilder builder = new StringBuilder();
-
-                    foreach (byte b in hashBytes)
-                    {
-                        builder.AppendFormat(CultureInfo.InvariantCulture, "{0:x2}", b);
-                    }
-
-                    string hash = builder.ToString();
-
-                    if (hash.StartsWith(prefix, StringComparison.Ordinal))
-                    {
-                        answer = i;
-                    }
-
-                    if (i % 100000 == 0)
-                    {
-                        Console.Write('.');
-                    }
+                if (i % 100000 == 0)
+                {
+                    Console.Write('.');
                 }
             }
 
@@ -85,6 +91,30 @@ namespace MartinCostello.AdventOfCode.Day4
             }
 
             return answer.Value;
+        }
+
+        /// <summary>
+        /// Gets the hexadecimal representation of the MD5 hash of the specified <see cref="string"/>.
+        /// </summary>
+        /// <param name="value">The <see cref="string"/> to get the MD5 hash of.</param>
+        /// <returns>The hexadecimal MD5 hash of <paramref name="value"/>.</returns>
+        private static string ComputeMD5(string value)
+        {
+            using (HashAlgorithm algorithm = HashAlgorithm.Create("MD5"))
+            {
+                byte[] buffer = Encoding.UTF8.GetBytes(value);
+
+                byte[] hashBytes = algorithm.ComputeHash(buffer);
+
+                StringBuilder builder = new StringBuilder();
+
+                foreach (byte b in hashBytes)
+                {
+                    builder.AppendFormat(CultureInfo.InvariantCulture, "{0:x2}", b);
+                }
+
+                return builder.ToString();
+            }
         }
     }
 }

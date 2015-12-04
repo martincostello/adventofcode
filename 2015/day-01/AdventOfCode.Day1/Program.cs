@@ -15,8 +15,17 @@ namespace MartinCostello.AdventOfCode.Day1
     using System;
     using System.IO;
 
+    /// <summary>
+    /// A console application that solves <c>http://adventofcode.com/day/1</c>. This class cannot be inherited.
+    /// </summary>
     internal static class Program
     {
+        /// <summary>
+        /// The main entry-point to the application.
+        /// </summary>
+        /// <param name="args">The arguments to the application.</param>
+        /// <returns>The exit code from the application.</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2202:Do not dispose objects multiple times", Justification = "The stream is not disposed multiple times.")]
         internal static int Main(string[] args)
         {
             if (args.Length != 1)
@@ -73,8 +82,7 @@ namespace MartinCostello.AdventOfCode.Day1
                 }
             }
 
-            Console.Write("Santa should go to floor {0}. Press any key to exit...", floor);
-            Console.Read();
+            Console.WriteLine("Santa should go to floor {0}.", floor);
 
             return 0;
         }

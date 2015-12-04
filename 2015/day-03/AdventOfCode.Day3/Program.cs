@@ -17,8 +17,16 @@ namespace MartinCostello.AdventOfCode.Day3
     using System.Drawing;
     using System.IO;
 
+    /// <summary>
+    /// A console application that solves <c>http://adventofcode.com/day/3</c>. This class cannot be inherited.
+    /// </summary>
     internal static class Program
     {
+        /// <summary>
+        /// The main entry-point to the application.
+        /// </summary>
+        /// <param name="args">The arguments to the application.</param>
+        /// <returns>The exit code from the application.</returns>
         internal static int Main(string[] args)
         {
             if (args.Length != 1)
@@ -33,9 +41,29 @@ namespace MartinCostello.AdventOfCode.Day3
                 return -1;
             }
 
+            ICollection<CardinalDirection> directions = GetDirections(args[0]);
+
+            int housesWithPresents2015 = GetUniqueHousesVisitedBySanta(directions);
+            int housesWithPresents2016 = GetUniqueHousesVisitedBySantaAndRoboSanta(directions);
+
+            Console.WriteLine("In 2015, Santa delivered presents to {0:N0} houses.", housesWithPresents2015);
+            Console.WriteLine("In 2016, Santa and Robo-Santa delivered presents to {0:N0} houses.", housesWithPresents2016);
+            Console.WriteLine("Robo-Santa makes Santa {0:P2} more efficient.", ((double)housesWithPresents2016 / housesWithPresents2015) - 1);
+
+            return 0;
+        }
+
+        /// <summary>
+        /// Reads the directions from the specified file.
+        /// </summary>
+        /// <param name="path">The path of the file containing the directions.</param>
+        /// <returns>An <see cref="ICollection{T}"/> containing the directions from from the specified file.</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2202:Do not dispose objects multiple times", Justification = "The stream is not disposed multiple times.")]
+        private static ICollection<CardinalDirection> GetDirections(string path)
+        {
             IList<CardinalDirection> directions = new List<CardinalDirection>();
 
-            using (Stream stream = File.OpenRead(args[0]))
+            using (Stream stream = File.OpenRead(path))
             {
                 using (StreamReader reader = new StreamReader(stream))
                 {
@@ -66,7 +94,7 @@ namespace MartinCostello.AdventOfCode.Day3
 
                             default:
                                 Console.WriteLine("Invalid direction: '{0}'.", ch);
-                                return -1;
+                                continue;
                         }
 
                         directions.Add(direction);
@@ -74,103 +102,58 @@ namespace MartinCostello.AdventOfCode.Day3
                 }
             }
 
-            List<Point> houseCoordinates2015 = new List<Point>();
-            SantaGps santa2015 = new SantaGps();
+            return directions;
+        }
+
+        /// <summary>
+        /// Gets the number of unique houses that Santa delivers at least one present to.
+        /// </summary>
+        /// <param name="directions">The directions Santa should follow.</param>
+        /// <returns>The number of unique houses that receive a delivery of at least one present.</returns>
+        private static int GetUniqueHousesVisitedBySanta(IEnumerable<CardinalDirection> directions)
+        {
+            List<Point> coordinates = new List<Point>();
+            SantaGps santa = new SantaGps();
 
             foreach (var direction in directions)
             {
-                if (!houseCoordinates2015.Contains(santa2015.Location))
+                if (!coordinates.Contains(santa.Location))
                 {
-                    houseCoordinates2015.Add(santa2015.Location);
+                    coordinates.Add(santa.Location);
                 }
 
-                switch (direction)
-                {
-                    case CardinalDirection.East:
-                        santa2015.Location += Moves.East;
-                        break;
-
-                    case CardinalDirection.North:
-                        santa2015.Location += Moves.North;
-                        break;
-
-                    case CardinalDirection.South:
-                        santa2015.Location += Moves.South;
-                        break;
-
-                    case CardinalDirection.West:
-                        santa2015.Location += Moves.West;
-                        break;
-
-                    default:
-                        Console.WriteLine("Invalid direction: {0}.", direction);
-                        return -1;
-                }
+                santa.Move(direction);
             }
 
-            List<Point> houseCoordinates2016 = new List<Point>();
-            SantaGps santa2016 = new SantaGps();
-            SantaGps roboSanta2016 = new SantaGps();
+            return coordinates.Count;
+        }
 
-            bool roboSantasMove = false;
-            SantaGps currentSanta = santa2016;
+        /// <summary>
+        /// Gets the number of unique houses that Santa and Robo-Santa deliver at least one present to.
+        /// </summary>
+        /// <param name="directions">The directions that Santa and Robo-Santa should follow.</param>
+        /// <returns>The number of unique houses that receive a delivery of at least one present.</returns>
+        private static int GetUniqueHousesVisitedBySantaAndRoboSanta(IEnumerable<CardinalDirection> directions)
+        {
+            List<Point> coordinates = new List<Point>();
+            SantaGps santa = new SantaGps();
+            SantaGps roboSanta = new SantaGps();
+
+            SantaGps current = santa;
 
             foreach (var direction in directions)
             {
-                switch (direction)
+                current.Move(direction);
+
+                if (!coordinates.Contains(current.Location))
                 {
-                    case CardinalDirection.East:
-                        currentSanta.Location += Moves.East;
-                        break;
-
-                    case CardinalDirection.North:
-                        currentSanta.Location += Moves.North;
-                        break;
-
-                    case CardinalDirection.South:
-                        currentSanta.Location += Moves.South;
-                        break;
-
-                    case CardinalDirection.West:
-                        currentSanta.Location += Moves.West;
-                        break;
-
-                    default:
-                        Console.WriteLine("Invalid direction: {0}.", direction);
-                        return -1;
+                    coordinates.Add(current.Location);
                 }
 
-                if (!houseCoordinates2016.Contains(currentSanta.Location))
-                {
-                    houseCoordinates2016.Add(currentSanta.Location);
-                }
-
-                roboSantasMove = !roboSantasMove;
-                currentSanta = roboSantasMove ? roboSanta2016 : santa2016;
+                current = current == santa ? roboSanta : santa;
             }
 
-            Console.WriteLine("In 2015, Santa delivered presents to {0:N0} houses.", houseCoordinates2015.Count);
-            Console.WriteLine("In 2016, Santa and Robo-Santa delivered presents to {0:N0} houses.", houseCoordinates2016.Count);
-            Console.Write("Robo-Santa makes Santa {0:P2} more efficient.", ((double)houseCoordinates2016.Count / houseCoordinates2015.Count) - 1);
-            Console.Read();
-
-            return 0;
-        }
-
-        private sealed class SantaGps
-        {
-            internal Point Location { get; set; }
-        }
-
-        private sealed class Moves
-        {
-            internal static readonly Size North = new Size(0, 1);
-
-            internal static readonly Size East = new Size(1, 0);
-
-            internal static readonly Size South = new Size(0, -1);
-
-            internal static readonly Size West = new Size(-1, 0);
+            return coordinates.Count;
         }
     }
 }
