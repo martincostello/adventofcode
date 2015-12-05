@@ -77,28 +77,34 @@ namespace MartinCostello.AdventOfCode.Day4
         {
             string prefix = new string('0', zeroes);
 
-            ConcurrentBag<int> bag = new ConcurrentBag<int>();
-
-            // N.B. It is possible that for other input values that one range of the partition
-            // yields an answer earlier than tha partition that would produce a lower number.
-            var source = Partitioner.Create(Enumerable.Range(1, int.MaxValue - 1));
+            var bag = new ConcurrentBag<int>();
+            var source = Partitioner.Create(1, int.MaxValue - 1, 50000);
 
             Parallel.ForEach(
                 source,
-                (i, s) =>
+                (range, state) =>
                 {
-                    string value = string.Format(CultureInfo.InvariantCulture, "{0}{1}", secretKey, i);
-                    string hash = ComputeMD5(value);
-
-                    if (hash.StartsWith(prefix, StringComparison.Ordinal))
+                    // Does this range start at a value greater than an already found value?
+                    if (bag.Count > 0 && range.Item1 > bag.Min())
                     {
-                        bag.Add(i);
-                        s.Stop();
+                        return;
                     }
 
-                    if (i % 100000 == 0)
+                    for (int i = range.Item1; !state.ShouldExitCurrentIteration && i < range.Item2; i++)
                     {
-                        Console.Write('.');
+                        string value = string.Format(CultureInfo.InvariantCulture, "{0}{1}", secretKey, i);
+                        string hash = ComputeMD5(value);
+
+                        if (hash.StartsWith(prefix, StringComparison.Ordinal))
+                        {
+                            // We've found a possible solution stop this loop
+                            bag.Add(i);
+                        }
+
+                        if (i % 100000 == 0)
+                        {
+                            Console.Write('.');
+                        }
                     }
                 });
 
