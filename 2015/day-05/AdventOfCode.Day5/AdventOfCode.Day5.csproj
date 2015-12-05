@@ -36,6 +36,9 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="INicenessRule.cs" />
+    <Compile Include="NicenessRuleV1.cs" />
+    <Compile Include="NicenessRuleV2.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
