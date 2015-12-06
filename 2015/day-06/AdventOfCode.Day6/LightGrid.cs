@@ -300,7 +300,7 @@ namespace MartinCostello.AdventOfCode.Day6
                 }
             }
 
-            return 0;
+            return current == null ? 0 : current.Value;
         }
 
         /// <summary>
