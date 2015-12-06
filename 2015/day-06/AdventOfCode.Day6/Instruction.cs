@@ -23,6 +23,12 @@ namespace MartinCostello.AdventOfCode.Day6
         /// <inheritdoc />
         public abstract void Act(LightGrid grid);
 
+        /// <summary>
+        /// Parses the specified origin and termination points, as strings, to a bounding rectangle.
+        /// </summary>
+        /// <param name="origin">The origin point of the bounding rectangle, as a <see cref="string"/>.</param>
+        /// <param name="termination">The termination point of the bounding rectangle, as a <see cref="string"/>.</param>
+        /// <returns>A bounding <see cref="Rectangle"/> parsed from <paramref name="origin"/> and <paramref name="termination"/>.</returns>
         protected static Rectangle ParseBounds(string origin, string termination)
         {
             // Determine the termination and origin points of the bounds of the lights to operate on
