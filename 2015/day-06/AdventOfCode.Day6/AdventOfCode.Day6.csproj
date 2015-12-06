@@ -37,8 +37,11 @@
     <Reference Include="System.Drawing" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="LightGrid.cs" />
+    <Compile Include="IInstruction.cs" />
     <Compile Include="Instruction.cs" />
+    <Compile Include="InstructionV1.cs" />
+    <Compile Include="InstructionV2.cs" />
+    <Compile Include="LightGrid.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

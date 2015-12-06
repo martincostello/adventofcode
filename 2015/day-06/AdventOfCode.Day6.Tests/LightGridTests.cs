@@ -65,72 +65,110 @@ namespace MartinCostello.AdventOfCode.Day6
             Point minimum = new Point(0, 0);
             Point maximum = new Point(width - 1, height - 1);
 
+            Assert.Equal(0, target.Brightness);
             Assert.Equal(0, target.Count);
-            Assert.False(target[minimum]);
-            Assert.False(target[maximum]);
+            Assert.Equal(0, target[minimum]);
+            Assert.Equal(0, target[maximum]);
 
             Assert.True(target.Toggle(minimum));
-            Assert.True(target[minimum]);
+            Assert.Equal(1, target[minimum]);
+            Assert.Equal(1, target.Brightness);
             Assert.Equal(1, target.Count);
 
             Assert.True(target.Toggle(maximum));
-            Assert.True(target[maximum]);
+            Assert.Equal(1, target[maximum]);
+            Assert.Equal(2, target.Brightness);
             Assert.Equal(2, target.Count);
 
             target.TurnOn(minimum);
-            Assert.True(target[minimum]);
+            Assert.Equal(1, target[minimum]);
+            Assert.Equal(2, target.Brightness);
             Assert.Equal(2, target.Count);
 
             target.TurnOff(minimum);
-            Assert.False(target[minimum]);
+            Assert.Equal(0, target[minimum]);
+            Assert.Equal(1, target.Brightness);
             Assert.Equal(1, target.Count);
 
             target.TurnOff(minimum);
-            Assert.False(target[minimum]);
+            Assert.Equal(0, target[minimum]);
+            Assert.Equal(1, target.Brightness);
             Assert.Equal(1, target.Count);
 
             target.TurnOff(maximum);
-            Assert.False(target[maximum]);
+            Assert.Equal(0, target[maximum]);
+            Assert.Equal(0, target.Brightness);
             Assert.Equal(0, target.Count);
 
             target.TurnOn(minimum);
-            Assert.True(target[minimum]);
+            Assert.Equal(1, target[minimum]);
+            Assert.Equal(1, target.Brightness);
             Assert.Equal(1, target.Count);
 
             Assert.False(target.Toggle(minimum));
-            Assert.False(target[minimum]);
+            Assert.Equal(0, target[minimum]);
+            Assert.Equal(0, target.Brightness);
             Assert.Equal(0, target.Count);
 
             Assert.True(target.Toggle(maximum));
-            Assert.True(target[maximum]);
+            Assert.Equal(1, target[maximum]);
+            Assert.Equal(1, target.Brightness);
             Assert.Equal(1, target.Count);
 
             Rectangle bounds = new Rectangle(0, 0, width, height);
 
             target.TurnOff(bounds);
-            Assert.False(target[minimum]);
-            Assert.False(target[maximum]);
+            Assert.Equal(0, target[minimum]);
+            Assert.Equal(0, target[maximum]);
+            Assert.Equal(0, target.Brightness);
             Assert.Equal(0, target.Count);
 
             target.TurnOff(bounds);
-            Assert.False(target[minimum]);
-            Assert.False(target[maximum]);
+            Assert.Equal(0, target[minimum]);
+            Assert.Equal(0, target[maximum]);
+            Assert.Equal(0, target.Brightness);
             Assert.Equal(0, target.Count);
 
             target.TurnOn(bounds);
-            Assert.True(target[minimum]);
-            Assert.True(target[maximum]);
+            Assert.Equal(1, target[minimum]);
+            Assert.Equal(1, target[maximum]);
+            Assert.Equal(width * height, target.Brightness);
             Assert.Equal(width * height, target.Count);
 
             target.TurnOn(bounds);
-            Assert.True(target[minimum]);
-            Assert.True(target[maximum]);
+            Assert.Equal(1, target[minimum]);
+            Assert.Equal(1, target[maximum]);
+            Assert.Equal(width * height, target.Brightness);
             Assert.Equal(width * height, target.Count);
 
             target.Toggle(bounds);
-            Assert.False(target[minimum]);
-            Assert.False(target[maximum]);
+            Assert.Equal(0, target[minimum]);
+            Assert.Equal(0, target[maximum]);
+            Assert.Equal(0, target.Brightness);
             Assert.Equal(0, target.Count);
+
+            target.IncrementBrightness(minimum, 1);
+            target.IncrementBrightness(minimum, 2);
+            target.IncrementBrightness(minimum, 3);
+            target.IncrementBrightness(minimum, -4);
+
+            Assert.Equal(2, target[minimum]);
+            Assert.Equal(2, target.Brightness);
+            Assert.Equal(1, target.Count);
+
+            target.IncrementBrightness(maximum, 10);
+
+            Assert.Equal(2, target[minimum]);
+            Assert.Equal(10, target[maximum]);
+            Assert.Equal(12, target.Brightness);
+            Assert.Equal(2, target.Count);
+
+            target.IncrementBrightness(minimum, -3);
+
+            Assert.Equal(0, target[minimum]);
+            Assert.Equal(10, target[maximum]);
+            Assert.Equal(10, target.Brightness);
+            Assert.Equal(1, target.Count);
         }
 
         [Fact]
@@ -145,9 +183,9 @@ namespace MartinCostello.AdventOfCode.Day6
             target.TurnOn(new Point(2, 0));
             target.TurnOn(new Point(2, 2));
 
-            string expected = @"x x
- x 
-x x
+            string expected = @"101
+010
+101
 ";
 
             // Act
@@ -160,9 +198,9 @@ x x
             target.TurnOff(new Rectangle(0, 0, 3, 3));
             target.TurnOn(new Rectangle(0, 0, 2, 2));
 
-            expected = @"xx 
-xx 
-   
+            expected = @"110
+110
+000
 ";
 
             // Act
@@ -175,9 +213,23 @@ xx
             target.TurnOff(new Rectangle(0, 0, 3, 3));
             target.TurnOn(new Rectangle(1, 1, 2, 2));
 
-            expected = @"   
- xx
- xx
+            expected = @"000
+011
+011
+";
+
+            // Act
+            actual = target.ToString();
+
+            // Assert
+            Assert.Equal(expected, actual);
+
+            // Arrange
+            target.IncrementBrightness(new Rectangle(1, 1, 2, 2), 2);
+
+            expected = @"000
+033
+033
 ";
 
             // Act

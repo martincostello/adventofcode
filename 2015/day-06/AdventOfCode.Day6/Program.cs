@@ -29,9 +29,9 @@ namespace MartinCostello.AdventOfCode.Day6
         /// <returns>The exit code from the application.</returns>
         internal static int Main(string[] args)
         {
-            if (args.Length != 1)
+            if (args.Length != 2)
             {
-                Console.Error.WriteLine("No input file path specified.");
+                Console.Error.WriteLine("No input file path and instruction set specified.");
                 return -1;
             }
 
@@ -41,14 +41,43 @@ namespace MartinCostello.AdventOfCode.Day6
                 return -1;
             }
 
-            var instructions = new List<Instruction>();
+            int version = -1;
+
+            switch (args[1])
+            {
+                case "1":
+                    version = 1;
+                    break;
+
+                case "2":
+                    version = 2;
+                    break;
+
+                default:
+                    break;
+            }
+
+            if (version == -1)
+            {
+                Console.Error.WriteLine("The instruction set specified is invalid.");
+                return -1;
+            }
+
+            var instructions = new List<IInstruction>();
 
             foreach (string line in File.ReadLines(args[0]))
             {
-                instructions.Add(Instruction.Parse(line));
+                if (version == 1)
+                {
+                    instructions.Add(InstructionV1.Parse(line));
+                }
+                else
+                {
+                    instructions.Add(InstructionV2.Parse(line));
+                }
             }
 
-            Console.WriteLine("Processing instructions...");
+            Console.WriteLine("Processing instructions using set {0}...", version);
 
             Stopwatch stopwatch = Stopwatch.StartNew();
 
@@ -61,7 +90,14 @@ namespace MartinCostello.AdventOfCode.Day6
 
             stopwatch.Stop();
 
-            Console.WriteLine("{0:N0} lights are illuminated. Took {1:N2} seconds.", grid.Count, stopwatch.Elapsed.TotalSeconds);
+            if (version == 1)
+            {
+                Console.WriteLine("{0:N0} lights are illuminated. Took {1:N2} seconds.", grid.Count, stopwatch.Elapsed.TotalSeconds);
+            }
+            else
+            {
+                Console.WriteLine("The total brightness of the grid is {0:N0}. Took {1:N2} seconds.", grid.Brightness, stopwatch.Elapsed.TotalSeconds);
+            }
 
             return 0;
         }
