@@ -36,18 +36,8 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AndGate.cs" />
-    <Compile Include="CircuitBuilder.cs" />
-    <Compile Include="FutureGate.cs" />
-    <Compile Include="ILogicGate.cs" />
-    <Compile Include="LeftShiftGate.cs" />
-    <Compile Include="LogicGate.cs" />
-    <Compile Include="NotGate.cs" />
-    <Compile Include="OrGate.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RightShiftGate.cs" />
-    <Compile Include="SimpleGate.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
