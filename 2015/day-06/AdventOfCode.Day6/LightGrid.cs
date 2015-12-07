@@ -286,21 +286,23 @@ namespace MartinCostello.AdventOfCode.Day6
         {
             EnsureInBounds(position);
 
+            int current = _lightBrightnesses[position.X, position.Y];
+
             if (set)
             {
-                return _lightBrightnesses[position.X, position.Y] = delta;
+                current = delta;
             }
             else
             {
-                int newValue = _lightBrightnesses[position.X, position.Y] += delta;
-
-                if (newValue < 0)
-                {
-                    newValue = 0;
-                }
-
-                return _lightBrightnesses[position.X, position.Y] = newValue;
+                current += delta;
             }
+
+            if (current < 0)
+            {
+                current = 0;
+            }
+
+            return _lightBrightnesses[position.X, position.Y] = current;
         }
     }
 }
