@@ -13,10 +13,8 @@
 namespace MartinCostello.AdventOfCode.Day6
 {
     using System;
-    using System.Collections.Generic;
     using System.Drawing;
     using System.Globalization;
-    using System.Linq;
     using System.Text;
 
     /// <summary>
@@ -27,10 +25,7 @@ namespace MartinCostello.AdventOfCode.Day6
         /// <summary>
         /// The brightnesses of lights by their position.
         /// </summary>
-        /// <remarks>
-        /// By convention, if the position is not present, the light has never been on.
-        /// </remarks>
-        private readonly IDictionary<Point, LightBrightness> _lightBrightnesses = new Dictionary<Point, LightBrightness>();
+        private readonly int[,] _lightBrightnesses;
 
         /// <summary>
         /// The bounds of the grid. This field is read-only.
@@ -57,17 +52,50 @@ namespace MartinCostello.AdventOfCode.Day6
             }
 
             _bounds = new Rectangle(0, 0, width, height);
+            _lightBrightnesses = new int[width, height];
         }
 
         /// <summary>
         /// Gets the total brightness of the grid.
         /// </summary>
-        internal int Brightness => _lightBrightnesses.Sum((p) => p.Value.Value);
+        internal int Brightness
+        {
+            get
+            {
+                int result = 0;
+
+                for (int x = 0; x < _lightBrightnesses.GetLength(0); x++)
+                {
+                    for (int y = 0; y < _lightBrightnesses.GetLength(1); y++)
+                    {
+                        result += _lightBrightnesses[x, y];
+                    }
+                }
+
+                return result;
+            }
+        }
 
         /// <summary>
         /// Gets the number of lights in the grid that have a brightness of at least one.
         /// </summary>
-        internal int Count => _lightBrightnesses.Count((p) => p.Value.Value > 0);
+        internal int Count
+        {
+            get
+            {
+                int result = 0;
+
+                for (int x = 0; x < _bounds.Width; x++)
+                {
+                    for (int y = 0; y < _bounds.Height; y++)
+                    {
+                        result += _lightBrightnesses[x, y] > 0 ? 1 : 0;
+                    }
+                }
+
+                return result;
+            }
+        }
 
         /// <inheritdoc />
         public override string ToString()
@@ -78,15 +106,7 @@ namespace MartinCostello.AdventOfCode.Day6
             {
                 for (int y = 0; y < _bounds.Height; y++)
                 {
-                    int value = 0;
-                    LightBrightness brightness;
-
-                    if (_lightBrightnesses.TryGetValue(new Point(x, y), out brightness))
-                    {
-                        value = brightness.Value;
-                    }
-
-                    builder.AppendFormat(CultureInfo.InvariantCulture, "{0}", value);
+                    builder.AppendFormat(CultureInfo.InvariantCulture, "{0}", _lightBrightnesses[x, y]);
                 }
 
                 builder.AppendLine();
@@ -106,16 +126,7 @@ namespace MartinCostello.AdventOfCode.Day6
             get
             {
                 EnsureInBounds(position);
-
-                int value = 0;
-                LightBrightness brightness;
-
-                if (_lightBrightnesses.TryGetValue(position, out brightness))
-                {
-                    value = brightness.Value;
-                }
-
-                return value;
+                return _lightBrightnesses[position.X, position.Y];
             }
         }
 
@@ -275,68 +286,20 @@ namespace MartinCostello.AdventOfCode.Day6
         {
             EnsureInBounds(position);
 
-            LightBrightness current;
-
-            if (!_lightBrightnesses.TryGetValue(position, out current))
+            if (set)
             {
-                // Only update the dictionary if there's a positive value of brightness
-                if (delta > 0)
-                {
-                    current = new LightBrightness();
-                    current.Set(delta);
-
-                    _lightBrightnesses[position] = current;
-                }
+                return _lightBrightnesses[position.X, position.Y] = delta;
             }
             else
             {
-                if (set)
+                int newValue = _lightBrightnesses[position.X, position.Y] += delta;
+
+                if (newValue < 0)
                 {
-                    current.Set(delta);
+                    newValue = 0;
                 }
-                else
-                {
-                    current.Increment(delta);
-                }
-            }
 
-            return current == null ? 0 : current.Value;
-        }
-
-        /// <summary>
-        /// A class representing the brightness of a light. This class cannot be inherited.
-        /// </summary>
-        /// <remarks>
-        /// A reference class is used to reduce the amount of writes to the dictionary holiding the lights' brightnesses.
-        /// </remarks>
-        private sealed class LightBrightness
-        {
-            /// <summary>
-            /// Gets the current brightness of the light.
-            /// </summary>
-            internal int Value { get; private set; }
-
-            /// <summary>
-            /// Increments the brightness of the light.
-            /// </summary>
-            /// <param name="delta">The amount to change the brightness by.</param>
-            internal void Increment(int delta)
-            {
-                Value += delta;
-
-                if (Value < 0)
-                {
-                    Value = 0;
-                }
-            }
-
-            /// <summary>
-            /// Sets the brightness of the light.
-            /// </summary>
-            /// <param name="value">The new brightness of the light.</param>
-            internal void Set(int value)
-            {
-                Value = value < 1 ? 0 : value;
+                return _lightBrightnesses[position.X, position.Y] = newValue;
             }
         }
     }
