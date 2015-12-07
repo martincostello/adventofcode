@@ -64,9 +64,9 @@ namespace MartinCostello.AdventOfCode.Day6
             {
                 int result = 0;
 
-                for (int x = 0; x < _lightBrightnesses.GetLength(0); x++)
+                for (int x = 0; x < _bounds.Width; x++)
                 {
-                    for (int y = 0; y < _lightBrightnesses.GetLength(1); y++)
+                    for (int y = 0; y < _bounds.Height; y++)
                     {
                         result += _lightBrightnesses[x, y];
                     }
