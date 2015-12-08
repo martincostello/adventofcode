@@ -53,5 +53,38 @@ namespace MartinCostello.AdventOfCode.Day8
             // Assert
             Assert.Equal(11, actual);
         }
+
+        [Theory]
+        [InlineData("\"\"", 6)]
+        [InlineData("\"abc\"", 9)]
+        [InlineData("\"aaa\\\"aaa\"", 16)]
+        [InlineData("\"\\x27\"", 11)]
+        public static void GetEncodedCharacterCount(string value, int expected)
+        {
+            // Act
+            int actual = Program.GetEncodedCharacterCount(value);
+
+            // Assert
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public static void GetEncodedCharacterCountForCollection()
+        {
+            // Arrange
+            string[] collection = new[]
+            {
+                "\"\"",
+                "\"abc\"",
+                "\"aaa\\\"aaa\"",
+                "\"\\x27\"",
+            };
+
+            // Act
+            int actual = Program.GetEncodedCharacterCount(collection);
+
+            // Assert
+            Assert.Equal(42, actual);
+        }
     }
 }

@@ -14,9 +14,9 @@ namespace MartinCostello.AdventOfCode.Day8
 {
     using System;
     using System.Collections.Generic;
-    using System.Globalization;
     using System.IO;
     using System.Linq;
+    using System.Text;
 
     /// <summary>
     /// A console application that solves <c>http://adventofcode.com/day/8</c>. This class cannot be inherited.
@@ -46,12 +46,57 @@ namespace MartinCostello.AdventOfCode.Day8
 
             int countForCode = input.Sum((p) => p.Length);
             int countInMemory = GetLiteralCharacterCount(input);
+            int countEncoded = GetEncodedCharacterCount(input);
 
             Console.WriteLine(
                 "The number of characters of code for string literals minus the number of characters in memory for the values of the strings is {0:N0}.",
                 countForCode - countInMemory);
 
+            Console.WriteLine(
+                "The total number of characters to represent the newly encoded strings minus the number of characters of code in each original string literal is {0:N0}.",
+                countEncoded - countForCode);
+
             return 0;
+        }
+
+        /// <summary>
+        /// Returns the number of characters in the specified collection of <see cref="string"/> if literals are encoded.
+        /// </summary>
+        /// <param name="value">The values to get the encoded number of characters from.</param>
+        /// <returns>The number of characters in <paramref name="collection"/> when encoded.</returns>
+        internal static int GetEncodedCharacterCount(IEnumerable<string> collection) => collection.Sum(GetEncodedCharacterCount);
+
+        /// <summary>
+        /// Returns the number of characters in the specified <see cref="string"/> if literals are encoded.
+        /// </summary>
+        /// <param name="value">The value to get the encoded number of characters from.</param>
+        /// <returns>The number of characters in <paramref name="value"/> when encoded.</returns>
+        internal static int GetEncodedCharacterCount(string value)
+        {
+            StringBuilder builder = new StringBuilder("\"");
+
+            for (int i = 0; i < value.Length; i++)
+            {
+                char current = value[i];
+
+                switch (current)
+                {
+                    case '\"':
+                    case '\\':
+                    case '\'':
+                        builder.Append("\\");
+                        break;
+
+                    default:
+                        break;
+                }
+
+                builder.Append(current);
+            }
+
+            builder.Append("\"");
+
+            return builder.Length;
         }
 
         /// <summary>
