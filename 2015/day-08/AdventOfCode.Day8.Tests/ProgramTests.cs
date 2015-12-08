@@ -12,7 +12,6 @@
 
 namespace MartinCostello.AdventOfCode.Day8
 {
-    using System;
     using Xunit;
 
     /// <summary>
@@ -20,5 +19,39 @@ namespace MartinCostello.AdventOfCode.Day8
     /// </summary>
     public static class ProgramTests
     {
+        [Theory]
+        [InlineData("\"\"", 0)]
+        [InlineData("\"abc\"", 3)]
+        [InlineData("\"aaa\\\"aaa\"", 7)]
+        [InlineData("\"\\x27\"", 1)]
+        [InlineData("\"v\\xfb\"lgs\"kvjfywmut\\x9cr\"", 18)]
+        [InlineData("\"d\\\\gkbqo\\\\fwukyxab\"u\"", 18)]
+        public static void GetLiteralCharacterCount(string value, int expected)
+        {
+            // Act
+            int actual = Program.GetLiteralCharacterCount(value);
+
+            // Assert
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public static void GetLiteralCharacterCountForCollection()
+        {
+            // Arrange
+            string[] collection = new[]
+            {
+                "\"\"",
+                "\"abc\"",
+                "\"aaa\\\"aaa\"",
+                "\"\\x27\"",
+            };
+
+            // Act
+            int actual = Program.GetLiteralCharacterCount(collection);
+
+            // Assert
+            Assert.Equal(11, actual);
+        }
     }
 }
