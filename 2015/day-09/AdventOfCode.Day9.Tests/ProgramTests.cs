@@ -10,7 +10,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace MartinCostello.AdventOfCode.Day8
+namespace MartinCostello.AdventOfCode.Day9
 {
     using Xunit;
 
@@ -19,5 +19,38 @@ namespace MartinCostello.AdventOfCode.Day8
     /// </summary>
     public static class ProgramTests
     {
+        [Fact]
+        public static void Shortest_Distance_To_Visit_All_Points_Once_Is_Correct()
+        {
+            // Arrange
+            var distances = new[]
+            {
+                "London to Dublin = 464",
+                "London to Belfast = 518",
+                "Dublin to Belfast = 141",
+            };
+
+            // Act
+            int actual = Program.GetShortestDistanceBetweenPoints(distances);
+
+            // Assert
+            Assert.Equal(605, actual);
+        }
+
+        [Fact]
+        public static void Shortest_Distance_To_Visit_All_Points_Once_Is_Correct_If_Only_One_Point()
+        {
+            // Arrange
+            var distances = new[]
+            {
+                "London to Dublin = 464",
+            };
+
+            // Act
+            int actual = Program.GetShortestDistanceBetweenPoints(distances);
+
+            // Assert
+            Assert.Equal(464, actual);
+        }
     }
 }
