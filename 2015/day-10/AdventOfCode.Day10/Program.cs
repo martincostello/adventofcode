@@ -15,9 +15,11 @@ namespace MartinCostello.AdventOfCode.Day10
     using System;
     using System.Collections.Generic;
     using System.Globalization;
-    using System.Text;/// <summary>
-                      /// A console application that solves <c>http://adventofcode.com/day/10</c>. This class cannot be inherited.
-                      /// </summary>
+    using System.Text;
+
+    /// <summary>
+    /// A console application that solves <c>http://adventofcode.com/day/10</c>. This class cannot be inherited.
+    /// </summary>
     internal static class Program
     {
         /// <summary>
