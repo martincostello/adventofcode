@@ -29,7 +29,7 @@ namespace MartinCostello.AdventOfCode.Day9
         /// <returns>The exit code from the application.</returns>
         internal static int Main(string[] args)
         {
-            if (args.Length != 1)
+            if (args.Length != 1 && args.Length != 2)
             {
                 Console.Error.WriteLine("No input file path specified.");
                 return -1;
@@ -41,9 +41,20 @@ namespace MartinCostello.AdventOfCode.Day9
                 return -1;
             }
 
-            int shortestDistance = GetShortestDistanceBetweenPoints(File.ReadAllLines(args[0]));
+            bool findLongest =
+                args.Length == 2 &&
+                string.Equals(args[1], bool.TrueString, StringComparison.OrdinalIgnoreCase);
 
-            Console.WriteLine("The distance of the shortest route is {0:N0}.", shortestDistance);
+            int distance = GetDistanceBetweenPoints(File.ReadAllLines(args[0]), findLongest);
+
+            if (findLongest)
+            {
+                Console.WriteLine("The distance of the longest route is {0:N0}.", distance);
+            }
+            else
+            {
+                Console.WriteLine("The distance of the shortest route is {0:N0}.", distance);
+            }
 
             return 0;
         }
@@ -54,9 +65,23 @@ namespace MartinCostello.AdventOfCode.Day9
         /// </summary>
         /// <param name="collection">A collection of distances.</param>
         /// <returns>
-        /// The shortest possible distance to visit all the specified locations once.
+        /// The shortest possible distance to visit all the specified locations exactly once.
         /// </returns>
         internal static int GetShortestDistanceBetweenPoints(ICollection<string> collection)
+        {
+            return GetDistanceBetweenPoints(collection, findLongest: false);
+        }
+
+        /// <summary>
+        /// Gets the distance to visit all of the specified locations exactly
+        /// once and starting and ending at distinct separate points.
+        /// </summary>
+        /// <param name="collection">A collection of distances.</param>
+        /// <param name="findLongest">Whether to find the longest distance.</param>
+        /// <returns>
+        /// The shortest or longest possible distance to visit all the specified locations exactly once.
+        /// </returns>
+        internal static int GetDistanceBetweenPoints(ICollection<string> collection, bool findLongest)
         {
             // Parse the input
             var parsedDistances = collection
@@ -124,14 +149,13 @@ namespace MartinCostello.AdventOfCode.Day9
                 .OrderBy((p) => p.ToString())
                 .ToList();
 
-            var shortestPath = completePaths
-                .OrderBy((p) => p.PathDistance)
-                .First();
+            var orderedPaths = completePaths.OrderBy((p) => p.PathDistance);
 
-            System.Diagnostics.Trace.WriteLine(shortestPath);
+            var pathOfInterest = findLongest ? orderedPaths.Last() : orderedPaths.First();
 
-            // Find the shortest complete path
-            return shortestPath.PathDistance;
+            System.Diagnostics.Trace.WriteLine(pathOfInterest);
+
+            return pathOfInterest.PathDistance;
         }
 
         /// <summary>
