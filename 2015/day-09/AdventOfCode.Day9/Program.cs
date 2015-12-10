@@ -49,8 +49,8 @@ namespace MartinCostello.AdventOfCode.Day9
         }
 
         /// <summary>
-        /// Gets the shortest distance to visit all of the specified locations once and
-        /// starting and ending at distinct separate points.
+        /// Gets the shortest distance to visit all of the specified locations
+        /// exactly once and starting and ending at distinct separate points.
         /// </summary>
         /// <param name="collection">A collection of distances.</param>
         /// <returns>
@@ -58,6 +58,7 @@ namespace MartinCostello.AdventOfCode.Day9
         /// </returns>
         internal static int GetShortestDistanceBetweenPoints(ICollection<string> collection)
         {
+            // Parse the input
             var parsedDistances = collection
                 .Select((p) => p.Split(new[] { " = " }, StringSplitOptions.None))
                 .Select((p) => new { Locations = p[0].Split(new[] { " to " }, StringSplitOptions.None), Distance = int.Parse(p[1]) })
@@ -65,15 +66,18 @@ namespace MartinCostello.AdventOfCode.Day9
 
             if (parsedDistances.Count == 1)
             {
+                // Trivial case
                 return parsedDistances[0].Distance;
             }
 
+            // How many unique locations can be started from?
             var uniqueLocations = parsedDistances
                 .SelectMany((p) => p.Locations)
                 .Distinct(StringComparer.Ordinal)
                 .ToList();
 
-            IDictionary<string, IDictionary<string, int>> possibleDestinationsFromSource = new Dictionary<string, IDictionary<string, int>>();
+            // Get the possible next destination and the distance to it from each unique location
+            IDictionary<string, IDictionary<string, int>> possibleDestinations = new Dictionary<string, IDictionary<string, int>>();
 
             foreach (string location in uniqueLocations)
             {
@@ -99,16 +103,166 @@ namespace MartinCostello.AdventOfCode.Day9
                     destinations[other] = distancePair.Distance;
                 }
 
-                possibleDestinationsFromSource[location] = destinations;
+                possibleDestinations[location] = destinations;
             }
 
-            var pathDistances = new List<int>();
+            // Get the distance of each possible path
+            var paths = new List<Path>();
 
-            // TODO Implement finding the path distances
+            // Walk the paths from all of the possible origin points
+            foreach (string origin in uniqueLocations)
+            {
+                paths.AddRange(WalkPaths(origin, possibleDestinations));
+            }
 
-            return pathDistances
-                .DefaultIfEmpty()
-                .Min();
+            // Find the length of the longest path
+            int maxPathLength = paths.Max((p) => p.Steps.Count);
+
+            // Discount any paths that did not visit all locations
+            var completePaths = paths
+                .Where((p) => p.Steps.Count == maxPathLength)
+                .OrderBy((p) => p.ToString())
+                .ToList();
+
+            var shortestPath = completePaths
+                .OrderBy((p) => p.PathDistance)
+                .First();
+
+            System.Diagnostics.Trace.WriteLine(shortestPath);
+
+            // Find the shortest complete path
+            return shortestPath.PathDistance;
+        }
+
+        /// <summary>
+        /// Walks all of the possible paths from a specified origin point where each point is visited exactly once.
+        /// </summary>
+        /// <param name="origin">The origin point.</param>
+        /// <param name="pathsFromSources">The possible next paths and the distances to them from each location.</param>
+        /// <returns>An <see cref="IList{T}"/> containing all the possible paths that start at <paramref name="origin"/>.</returns>
+        private static IList<Path> WalkPaths(string origin, IDictionary<string, IDictionary<string, int>> pathsFromSources)
+        {
+            Path path = new Path(origin);
+
+            var pathsWalked = new List<Path>()
+            {
+                path,
+            };
+
+            // Walk all the possible paths from the origin point
+            foreach (var next in pathsFromSources[origin])
+            {
+                WalkPaths(next.Key, path, pathsWalked, pathsFromSources);
+            }
+
+            return pathsWalked;
+        }
+
+        /// <summary>
+        /// Walks all of the possible paths from a specified origin point where each point is visited exactly once.
+        /// </summary>
+        /// <param name="current">The current point.</param>
+        /// <param name="currentPath">The path that lead to the current point.</param>
+        /// <param name="pathsWalked">A collection of all the paths walked so far.</param>
+        /// <param name="pathsFromSources">The possible next paths and the distances to them from each location.</param>
+        /// <returns>An <see cref="IList{T}"/> containing all the possible paths that start at <paramref name="origin"/>.</returns>
+        private static void WalkPaths(
+            string current,
+            Path currentPath,
+            ICollection<Path> pathsWalked,
+            IDictionary<string, IDictionary<string, int>> pathsFromSources)
+        {
+            if (currentPath.HasVisited(current))
+            {
+                // We've already been here so walk no further down this route
+                return;
+            }
+
+            // Create a new path that is the scurrent path plus a step to this position
+            int distanceFromPreviousToCurrent = pathsFromSources[currentPath.Current][current];
+
+            Path nextPath = currentPath.Clone();
+            nextPath.Visit(current, distanceFromPreviousToCurrent);
+
+            pathsWalked.Add(nextPath);
+
+            // Recursively continue down the path to the next possible destinations
+            foreach (var next in pathsFromSources[nextPath.Current])
+            {
+                WalkPaths(next.Key, nextPath, pathsWalked, pathsFromSources);
+            }
+        }
+
+        /// <summary>
+        /// A class representing a path between some locations. This class cannot be inherited.
+        /// </summary>
+        private sealed class Path
+        {
+            /// <summary>
+            /// Initializes a new instance of the <see cref="Path"/> class.
+            /// </summary>
+            /// <param name="origin">The origin point.</param>
+            internal Path(string origin)
+            {
+                Origin = origin;
+                Steps = new List<string>(new[] { origin });
+            }
+
+            /// <summary>
+            /// Gets the origin point.
+            /// </summary>
+            internal string Origin { get; }
+
+            /// <summary>
+            /// Gets the current position on the path.
+            /// </summary>
+            internal string Current => Steps.Last();
+
+            /// <summary>
+            /// Gets the steps along the path.
+            /// </summary>
+            internal IList<string> Steps { get; private set; }
+
+            /// <summary>
+            /// Gets the total distance along the path.
+            /// </summary>
+            internal int PathDistance { get; private set; }
+
+            /// <summary>
+            /// Clones this instance.
+            /// </summary>
+            /// <returns>A new instance of <see cref="Path"/> cloned from the current instance.</returns>
+            internal Path Clone()
+            {
+                return new Path(Origin)
+                {
+                    Steps = new List<string>(Steps),
+                    PathDistance = PathDistance,
+                };
+            }
+
+            /// <summary>
+            /// Visits the specified location.
+            /// </summary>
+            /// <param name="location">The location to visit.</param>
+            /// <param name="distance">The distance to the location.</param>
+            internal void Visit(string location, int distance)
+            {
+                Steps.Add(location);
+                PathDistance += distance;
+            }
+
+            /// <summary>
+            /// Determines whether the specified location has already been visited.
+            /// </summary>
+            /// <param name="location">The location to test for.</param>
+            /// <returns>
+            /// <see langword="true"/> if <paramref name="location"/> has already been visited; otherwise <see langword="false"/>.
+            /// </returns>
+            internal bool HasVisited(string location) => Steps.Contains(location);
+
+            /// <inheritdoc />
+            public override string ToString() => string.Join(" -> ", Steps);
         }
     }
 }
