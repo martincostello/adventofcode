@@ -30,5 +30,18 @@ namespace MartinCostello.AdventOfCode.Day11
             // Assert
             Assert.Equal(expected, actual);
         }
+
+        [Theory]
+        [InlineData("hijklmmn", false)]
+        [InlineData("abbceffg", true)]
+        [InlineData("abbcegjk", false)]
+        public static void HasMoreThanOneDistinctPairOfLetters(string value, bool expected)
+        {
+            // Act
+            bool actual = Program.HasMoreThanOneDistinctPairOfLetters(value.ToCharArray());
+
+            // Assert
+            Assert.Equal(expected, actual);
+        }
     }
 }
