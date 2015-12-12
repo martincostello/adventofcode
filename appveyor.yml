@@ -1,0 +1,26 @@
+version: 1.0.{build}
+
+assembly_info:
+  patch: true
+  file: AssemblyVersion.cs
+  assembly_version: "1.0.0.0"
+  assembly_file_version: "{version}.0"
+  assembly_informational_version: "{version}.0"
+
+build:
+  project: src\AdventOfCode2015.msbuild
+  verbosity: minimal
+
+after_build:
+    - "SET PATH=C:\\Python34;C:\\Python34\\Scripts;%PATH%"
+    - pip install codecov
+    - codecov -f "src\BuildOutput\AdventOfCode2015_coverage.xml"
+
+artifacts:
+  - path: src\BuildOutput\AdventOfCode2015.exe
+
+nuget:
+  disable_publish_on_pr: true
+
+skip_tags: false
+test: off
