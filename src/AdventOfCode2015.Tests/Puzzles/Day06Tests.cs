@@ -5,6 +5,7 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
 {
     using System;
     using System.Drawing;
+    using System.Globalization;
     using Impl;
     using Xunit;
 
@@ -205,10 +206,7 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
             target.TurnOn(new Point(2, 0));
             target.TurnOn(new Point(2, 2));
 
-            string expected = @"101
-010
-101
-";
+            string expected = string.Format(CultureInfo.InvariantCulture, "101{0}010{0}101{0}", Environment.NewLine);
 
             // Act
             string actual = target.ToString();
@@ -220,10 +218,7 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
             target.TurnOff(new Rectangle(0, 0, 3, 3));
             target.TurnOn(new Rectangle(0, 0, 2, 2));
 
-            expected = @"110
-110
-000
-";
+            expected = string.Format(CultureInfo.InvariantCulture, "110{0}110{0}000{0}", Environment.NewLine);
 
             // Act
             actual = target.ToString();
@@ -235,10 +230,7 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
             target.TurnOff(new Rectangle(0, 0, 3, 3));
             target.TurnOn(new Rectangle(1, 1, 2, 2));
 
-            expected = @"000
-011
-011
-";
+            expected = string.Format(CultureInfo.InvariantCulture, "000{0}011{0}011{0}", Environment.NewLine);
 
             // Act
             actual = target.ToString();
@@ -249,10 +241,7 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
             // Arrange
             target.IncrementBrightness(new Rectangle(1, 1, 2, 2), 2);
 
-            expected = @"000
-033
-033
-";
+            expected = string.Format(CultureInfo.InvariantCulture, "000{0}033{0}033{0}", Environment.NewLine);
 
             // Act
             actual = target.ToString();
