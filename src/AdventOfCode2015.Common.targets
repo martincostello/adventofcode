@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="14.0">
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' or '$(RunCodeAnalysis)' == 'true' ">
+    <DefineConstants>$(DefineConstants);CODE_ANALYSIS</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>$(SolutionDir)AdventOfCode2015.snk</AssemblyOriginatorKeyFile>
+    <CodeAnalysisRuleSet>$(SolutionDir)AdventOfCode2015.ruleset</CodeAnalysisRuleSet>
+    <HighEntropyVA>true</HighEntropyVA>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <Import Project="$(SolutionDir)Tools\StyleCop\StyleCop.targets" />
+</Project>
