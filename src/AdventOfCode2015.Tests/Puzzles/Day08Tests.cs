@@ -17,7 +17,7 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
         [InlineData("\"\\x27\"", 1)]
         [InlineData("\"v\\xfb\"lgs\"kvjfywmut\\x9cr\"", 18)]
         [InlineData("\"d\\\\gkbqo\\\\fwukyxab\"u\"", 18)]
-        public static void Day8_GetLiteralCharacterCount(string value, int expected)
+        public static void Day08_GetLiteralCharacterCount(string value, int expected)
         {
             // Act
             int actual = Day08.GetLiteralCharacterCount(value);
@@ -27,7 +27,7 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
         }
 
         [Fact]
-        public static void Day8_GetLiteralCharacterCountForCollection()
+        public static void Day08_GetLiteralCharacterCountForCollection()
         {
             // Arrange
             string[] collection = new[]
@@ -50,7 +50,7 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
         [InlineData("\"abc\"", 9)]
         [InlineData("\"aaa\\\"aaa\"", 16)]
         [InlineData("\"\\x27\"", 11)]
-        public static void Day8_GetEncodedCharacterCount(string value, int expected)
+        public static void Day08_GetEncodedCharacterCount(string value, int expected)
         {
             // Act
             int actual = Day08.GetEncodedCharacterCount(value);
@@ -60,7 +60,7 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
         }
 
         [Fact]
-        public static void Day8_GetEncodedCharacterCountForCollection()
+        public static void Day08_GetEncodedCharacterCountForCollection()
         {
             // Arrange
             string[] collection = new[]

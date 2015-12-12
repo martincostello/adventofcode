@@ -11,7 +11,7 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
     public static class Day09Tests
     {
         [Fact]
-        public static void Day9_Shortest_Distance_To_Visit_All_Points_Once_Is_Correct()
+        public static void Day09_Shortest_Distance_To_Visit_All_Points_Once_Is_Correct()
         {
             // Arrange
             var distances = new[]
@@ -29,7 +29,7 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
         }
 
         [Fact]
-        public static void Day9_Shortest_Distance_To_Visit_All_Points_Once_Is_Correct_If_Only_One_Point()
+        public static void Day09_Shortest_Distance_To_Visit_All_Points_Once_Is_Correct_If_Only_One_Point()
         {
             // Arrange
             var distances = new[]

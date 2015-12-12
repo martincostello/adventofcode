@@ -17,7 +17,7 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
         [InlineData("turn on 0,0 through 999,999", "ON", 0, 0, 1000, 1000)]
         [InlineData("toggle 0,0 through 999,0", "TOGGLE", 0, 0, 1000, 1)]
         [InlineData("turn off 499,499 through 500,500", "OFF", 499, 499, 2, 2)]
-        public static void Day6_V1InstructionsCanBeParsed(string value, string action, int x, int y, int width, int height)
+        public static void Day06_V1InstructionsCanBeParsed(string value, string action, int x, int y, int width, int height)
         {
             InstructionV1 actual = InstructionV1.Parse(value);
 
@@ -32,7 +32,7 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
         [InlineData("turn on 0,0 through 999,999", 1, 0, 0, 1000, 1000)]
         [InlineData("toggle 0,0 through 999,0", 2, 0, 0, 1000, 1)]
         [InlineData("turn off 499,499 through 500,500", -1, 499, 499, 2, 2)]
-        public static void Day6_V2InstructionsCanBeParsed(string value, int delta, int x, int y, int width, int height)
+        public static void Day06_V2InstructionsCanBeParsed(string value, int delta, int x, int y, int width, int height)
         {
             InstructionV2 actual = InstructionV2.Parse(value);
 
@@ -44,7 +44,7 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
         }
 
         [Fact]
-        public static void Day6_LightGridValidatesBounds()
+        public static void Day06_LightGridValidatesBounds()
         {
             Assert.Throws<ArgumentOutOfRangeException>("width", () => new LightGrid(0, 1));
             Assert.Throws<ArgumentOutOfRangeException>("height", () => new LightGrid(1, 0));
@@ -80,7 +80,7 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
         [InlineData(2, 1)]
         [InlineData(2, 2)]
         [InlineData(100, 100)]
-        public static void Day6_LightGridExhibitsCorrectBehavior(int width, int height)
+        public static void Day06_LightGridExhibitsCorrectBehavior(int width, int height)
         {
             var target = new LightGrid(width, height);
 
@@ -194,7 +194,7 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
         }
 
         [Fact]
-        public static void Day6_LightGridDrawsCorrectly3x3()
+        public static void Day06_LightGridDrawsCorrectly3x3()
         {
             // Arrange
             var target = new LightGrid(3, 3);

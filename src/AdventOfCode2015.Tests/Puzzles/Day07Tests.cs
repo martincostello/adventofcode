@@ -12,7 +12,7 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
     public static class Day07Tests
     {
         [Fact]
-        public static void Day7_InstructionsAreInterpretedCorrectly()
+        public static void Day07_InstructionsAreInterpretedCorrectly()
         {
             // Arrange
             var instructions = new string[]

@@ -20,7 +20,7 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
         [InlineData("haegwjzuvuyypabu", false)]
         [InlineData("haegwjzuvuyypcdu", false)]
         [InlineData("haegwjzuvuyyppqu", false)]
-        public static void Day5_IsStringNiceV1(string value, bool expected)
+        public static void Day05_IsStringNiceV1(string value, bool expected)
         {
             // Arrange
             var target = new NicenessRuleV1();
@@ -37,7 +37,7 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
         [InlineData("xxyxx", true)]
         [InlineData("uurcxstgmygtbstg", false)]
         [InlineData("ieodomkazucvgmuy", false)]
-        public static void Day5_IsStringNiceV2(string value, bool expected)
+        public static void Day05_IsStringNiceV2(string value, bool expected)
         {
             // Arrange
             var target = new NicenessRuleV2();
@@ -57,7 +57,7 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
         [InlineData("aa", false)]
         [InlineData("aaa", false)]
         [InlineData("aaaa", true)]
-        public static void Day5_HasPairOfLettersWithMoreThanOneOccurence(string value, bool expected)
+        public static void Day05_HasPairOfLettersWithMoreThanOneOccurence(string value, bool expected)
         {
             // Act
             bool actual = NicenessRuleV2.HasPairOfLettersWithMoreThanOneOccurence(value);
@@ -72,7 +72,7 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
         [InlineData("aaa", true)]
         [InlineData("a", false)]
         [InlineData("aa", false)]
-        public static void Day5_HasLetterThatIsTheBreadOfALetterSandwich(string value, bool expected)
+        public static void Day05_HasLetterThatIsTheBreadOfALetterSandwich(string value, bool expected)
         {
             // Act
             bool actual = NicenessRuleV2.HasLetterThatIsTheBreadOfALetterSandwich(value);
