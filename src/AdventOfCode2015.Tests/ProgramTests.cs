@@ -10,218 +10,48 @@ namespace MartinCostello.AdventOfCode2015
     /// </summary>
     public static class ProgramTests
     {
-        [Fact(Skip = "Needs input file.")]
-        public static void Day01_Program_Returns_Zero_If_Input_Valid()
+        /// <summary>
+        /// Gets the argument test cases to pass to the application to test it.
+        /// </summary>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage(
+            "Microsoft.Performance",
+            "CA1819:PropertiesShouldNotReturnArrays",
+            Justification = "Required for xunit data-driven tests.")]
+        public static object[][] Arguments
         {
-            // Arrange
-            string[] args = new[] { "1", "input.txt" };
-
-            // Act
-            int actual = Program.Main(args);
-
-            // Assert
-            Assert.Equal(0, actual);
+            get
+            {
+                return new[]
+                {
+                    new[] { new[] { "1", @".\Input\Day01\input.txt" } },
+                    new[] { new[] { "2", @".\Input\Day02\input.txt" } },
+                    new[] { new[] { "3", @".\Input\Day03\input.txt" } },
+                    new[] { new[] { "4", "iwrupvqb", "5" } },
+                    new[] { new[] { "4", "iwrupvqb", "6" } },
+                    new[] { new[] { "5", @".\Input\Day05\input.txt", "1" } },
+                    new[] { new[] { "5", @".\Input\Day05\input.txt", "2" } },
+                    new[] { new[] { "6", @".\Input\Day06\input.txt", "1" } },
+                    new[] { new[] { "6", @".\Input\Day06\input.txt", "2" } },
+                    new[] { new[] { "7", @".\Input\Day07\input.txt" } },
+                    new[] { new[] { "8", @".\Input\Day08\input.txt" } },
+                    new[] { new[] { "9", @".\Input\Day09\input.txt" } },
+                    new[] { new[] { "9", @".\Input\Day09\input.txt", "true" } },
+                    new[] { new[] { "10", "1321131112", "40" } },
+                    new[] { new[] { "10", "1321131112", "50" } },
+                    new[] { new[] { "11", "cqjxjnds" } },
+                    new[] { new[] { "11", "cqjxxyzz" } },
+                    new[] { new[] { "12", @".\Input\Day12\input.txt" } },
+                    new[] { new[] { "12", @".\Input\Day12\input.txt", "red" } },
+                };
+            }
         }
 
-        [Fact(Skip = "Needs input file.")]
-        public static void Day02_Program_Returns_Zero_If_Input_Valid()
+        [Theory]
+        [MemberData(nameof(Arguments))]
+        public static void Program_Returns_Zero_If_Input_Valid(string[] args)
         {
-            // Arrange
-            string[] args = new[] { "2", "input.txt" };
-
             // Act
             int actual = Program.Main(args);
-
-            // Assert
-            Assert.Equal(0, actual);
-        }
-
-        [Fact(Skip = "Needs input file.")]
-        public static void Day03_Program_Returns_Zero_If_Input_Valid()
-        {
-            // Arrange
-            string[] args = new[] { "3", "input.txt" };
-
-            // Act
-            int actual = Program.Main(args);
-
-            // Assert
-            Assert.Equal(0, actual);
-        }
-
-        public static void Day04_Program_Returns_Zero_If_Input_Valid()
-        {
-            // Arrange
-            string[] args = new[] { "4", "iwrupvqb", "5" };
-
-            // Act
-            int actual = Program.Main(args);
-
-            // Assert
-            Assert.Equal(0, actual);
-
-            // Arrange
-            args = new[] { "4", "iwrupvqb", "6" };
-
-            // Act
-            actual = Program.Main(args);
-
-            // Assert
-            Assert.Equal(0, actual);
-        }
-
-        [Fact(Skip = "Needs input file.")]
-        public static void Day05_Program_Returns_Zero_If_Input_Valid()
-        {
-            // Arrange
-            string[] args = new[] { "5", "input.txt", "1" };
-
-            // Act
-            int actual = Program.Main(args);
-
-            // Assert
-            Assert.Equal(0, actual);
-
-            // Arrange
-            args = new[] { "5", "input.txt", "2" };
-
-            // Act
-            actual = Program.Main(args);
-
-            // Assert
-            Assert.Equal(0, actual);
-        }
-
-        [Fact(Skip = "Needs input file.")]
-        public static void Day06_Program_Returns_Zero_If_Input_Valid()
-        {
-            // Arrange
-            string[] args = new[] { "6", "input.txt", "1" };
-
-            // Act
-            int actual = Program.Main(args);
-
-            // Assert
-            Assert.Equal(0, actual);
-
-            // Arrange
-            args = new[] { "6", "input.txt", "2" };
-
-            // Act
-            actual = Program.Main(args);
-
-            // Assert
-            Assert.Equal(0, actual);
-        }
-
-        [Fact(Skip = "Needs input file.")]
-        public static void Day07_Program_Returns_Zero_If_Input_Valid()
-        {
-            // Arrange
-            string[] args = new[] { "7", "input.txt" };
-
-            // Act
-            int actual = Program.Main(args);
-
-            // Assert
-            Assert.Equal(0, actual);
-        }
-
-        [Fact(Skip = "Needs input file.")]
-        public static void Day08_Program_Returns_Zero_If_Input_Valid()
-        {
-            // Arrange
-            string[] args = new[] { "8", "input.txt" };
-
-            // Act
-            int actual = Program.Main(args);
-
-            // Assert
-            Assert.Equal(0, actual);
-        }
-
-        [Fact(Skip = "Needs input file.")]
-        public static void Day09_Program_Returns_Zero_If_Input_Valid()
-        {
-            // Arrange
-            string[] args = new[] { "9", "input.txt" };
-
-            // Act
-            int actual = Program.Main(args);
-
-            // Assert
-            Assert.Equal(0, actual);
-
-            // Arrange
-            args = new[] { "9", "input.txt", "true" };
-
-            // Act
-            actual = Program.Main(args);
-
-            // Assert
-            Assert.Equal(0, actual);
-        }
-
-        [Fact]
-        public static void Day10_Program_Returns_Zero_If_Input_Valid()
-        {
-            // Arrange
-            string[] args = new[] { "10", "1321131112", "40" };
-
-            // Act
-            int actual = Program.Main(args);
-
-            // Assert
-            Assert.Equal(0, actual);
-
-            // Arrange
-            args = new[] { "10", "1321131112", "50" };
-
-            // Act
-            actual = Program.Main(args);
-
-            // Assert
-            Assert.Equal(0, actual);
-        }
-
-        [Fact]
-        public static void Day11_Program_Returns_Zero_If_Input_Valid()
-        {
-            // Arrange
-            string[] args = new[] { "11", "cqjxjnds" };
-
-            // Act
-            int actual = Program.Main(args);
-
-            // Assert
-            Assert.Equal(0, actual);
-
-            args = new[] { "11", "cqjxxyzz" };
-
-            // Act
-            actual = Program.Main(args);
-
-            // Assert
-            Assert.Equal(0, actual);
-        }
-
-        [Fact(Skip = "Needs input file.")]
-        public static void Day12_Program_Returns_Zero_If_Input_Valid()
-        {
-            // Arrange
-            string[] args = new[] { "12", "input.txt" };
-
-            // Act
-            int actual = Program.Main(args);
-
-            // Assert
-            Assert.Equal(0, actual);
-
-            // Arrange
-            args = new[] { "12", "input.txt", "red" };
-
-            // Act
-            actual = Program.Main(args);
 
             // Assert
             Assert.Equal(0, actual);
