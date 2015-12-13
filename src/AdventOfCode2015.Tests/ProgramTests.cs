@@ -197,6 +197,19 @@ namespace MartinCostello.AdventOfCode2015
             Assert.Equal(0, actual);
         }
 
+        [Fact(Skip = "Needs input file.")]
+        public static void Day12_Program_Returns_Zero_If_Input_Valid()
+        {
+            // Arrange
+            string[] args = new[] { "12", "input.txt" };
+
+            // Act
+            int actual = Program.Main(args);
+
+            // Assert
+            Assert.Equal(0, actual);
+        }
+
         [Fact]
         public static void Program_Exits_If_Null_Arguments()
         {
