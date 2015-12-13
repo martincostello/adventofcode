@@ -4,6 +4,7 @@
 namespace MartinCostello.AdventOfCode2015
 {
     using System;
+    using System.Diagnostics;
     using System.Globalization;
     using System.Linq;
 
@@ -38,7 +39,18 @@ namespace MartinCostello.AdventOfCode2015
             Console.WriteLine();
 
             IPuzzle puzzle = GetPuzzle(day);
-            return puzzle.Solve(args.Skip(1).ToArray());
+            args = args.Skip(1).ToArray();
+
+            Stopwatch stopwatch = Stopwatch.StartNew();
+
+            int result = puzzle.Solve(args);
+
+            stopwatch.Stop();
+
+            Console.WriteLine();
+            Console.WriteLine("Took {0:N2} seconds.", stopwatch.Elapsed.TotalSeconds);
+
+            return result;
         }
 
         /// <summary>
