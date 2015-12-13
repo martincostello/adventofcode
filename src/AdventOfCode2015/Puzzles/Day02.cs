@@ -14,6 +14,16 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
     /// </summary>
     internal sealed class Day02 : IPuzzle
     {
+        /// <summary>
+        /// Gets the total amount of wrapping paper required in square feet.
+        /// </summary>
+        internal int TotalAreaOfPaper { get; private set; }
+
+        /// <summary>
+        /// Gets the total length of ribbon required in feet.
+        /// </summary>
+        internal int TotalLengthOfRibbon { get; private set; }
+
         /// <inheritdoc />
         public int Solve(string[] args)
         {
@@ -29,10 +39,35 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
                 return -1;
             }
 
+            Tuple<int, int> result = GetTotalWrappingPaperAreaAndRibbonLength(File.ReadLines(args[0]));
+
+            TotalAreaOfPaper = result.Item1;
+            TotalLengthOfRibbon = result.Item2;
+
+            Console.WriteLine(
+                "The elves should order {0:N0} square feet of wrapping paper.{1}They also need {2:N0} feet of ribbon.",
+                TotalAreaOfPaper,
+                Environment.NewLine,
+                TotalLengthOfRibbon);
+
+            return 0;
+        }
+
+        /// <summary>
+        /// Gets the total area of wrapping paper and length of ribbon required to
+        /// wrap the presents of the specified dimensions.
+        /// </summary>
+        /// <param name="dimensions">The dimensions of the presents to wrap.</param>
+        /// <returns>
+        /// A <see cref="Tuple{T1, T2}"/> that returns the total area of wrapping paper
+        /// required in square feet and the total length of ribbon required in feet.
+        /// </returns>
+        internal static Tuple<int, int> GetTotalWrappingPaperAreaAndRibbonLength(IEnumerable<string> dimensions)
+        {
             // Read in the dimensions of the presents from the specified input file
             List<Present> presents = new List<Present>();
 
-            foreach (string line in File.ReadLines(args[0]))
+            foreach (string line in dimensions)
             {
                 presents.Add(Present.Parse(line));
             }
@@ -41,13 +76,7 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
             int totalArea = presents.Sum(GetWrappingPaperArea);
             int length = presents.Sum(GetRibbonLength);
 
-            Console.WriteLine(
-                "The elves should order {0:N0} square feet of wrapping paper.{1}They also need {2:N0} feet of ribbon.",
-                totalArea,
-                Environment.NewLine,
-                length);
-
-            return 0;
+            return Tuple.Create(totalArea, length);
         }
 
         /// <summary>

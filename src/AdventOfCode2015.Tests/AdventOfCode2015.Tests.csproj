@@ -66,6 +66,9 @@
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="ProgramTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Puzzles\Day01Tests.cs" />
+    <Compile Include="Puzzles\Day02Tests.cs" />
+    <Compile Include="Puzzles\Day03Tests.cs" />
     <Compile Include="Puzzles\Day04Tests.cs" />
     <Compile Include="Puzzles\Day10Tests.cs" />
     <Compile Include="Puzzles\Day11Tests.cs" />

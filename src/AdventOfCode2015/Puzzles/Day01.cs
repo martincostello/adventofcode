@@ -11,11 +11,17 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
     /// </summary>
     internal sealed class Day01 : IPuzzle
     {
+        /// <summary>
+        /// Gets the final floor reached by the instructions.
+        /// </summary>
+        internal int FinalFloor { get; private set; }
+
+        /// <summary>
+        /// Gets the instruction number that first causes the basement to first be entered.
+        /// </summary>
+        internal int FirstBasementInstruction { get; private set; }
+
         /// <inheritdoc />
-        [System.Diagnostics.CodeAnalysis.SuppressMessage(
-            "Microsoft.Usage",
-            "CA2202:Do not dispose objects multiple times",
-            Justification = "The stream is not disposed multiple times.")]
         public int Solve(string[] args)
         {
             if (args.Length != 1)
@@ -30,51 +36,62 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
                 return -1;
             }
 
+            string value = File.ReadAllText(args[0]);
+
+            Tuple<int, int> result = GetFinalFloorAndFirstInstructionBasementReached(value);
+
+            FinalFloor = result.Item1;
+            FirstBasementInstruction = result.Item2;
+
+            Console.WriteLine("Santa should go to floor {0}.", FinalFloor);
+            Console.WriteLine("Santa first enters the basement after following instruction {0:N0}.", FirstBasementInstruction);
+
+            return 0;
+        }
+
+        /// <summary>
+        /// Gets the final floor reached by following the specified set of instructions
+        /// and the number of the instruction that first enters the basement.
+        /// </summary>
+        /// <param name="value">A string containing the instructions to follow.</param>
+        /// <returns>
+        /// A <see cref="Tuple{T1, T2}"/> that returns the floor Santa is on when the instructions
+        /// are followed and the number of the instruction that first causes the basement to be entered.
+        /// </returns>
+        internal static Tuple<int, int> GetFinalFloorAndFirstInstructionBasementReached(string value)
+        {
             int floor = 0;
-            int instruction = 0;
+            int instructionThatEntersBasement = -1;
 
             bool hasVisitedBasement = false;
 
-            using (Stream stream = File.OpenRead(args[0]))
+            for (int i = 0; i < value.Length; i++)
             {
-                using (StreamReader reader = new StreamReader(stream))
+                switch (value[i])
                 {
-                    char ch;
+                    case '(':
+                        floor++;
+                        break;
 
-                    while (!reader.EndOfStream)
+                    case ')':
+                        floor--;
+                        break;
+
+                    default:
+                        break;
+                }
+
+                if (!hasVisitedBasement)
+                {
+                    if (floor == -1)
                     {
-                        ch = (char)reader.Read();
-                        instruction++;
-
-                        switch (ch)
-                        {
-                            case '(':
-                                floor++;
-                                break;
-
-                            case ')':
-                                floor--;
-                                break;
-
-                            default:
-                                break;
-                        }
-
-                        if (!hasVisitedBasement)
-                        {
-                            if (floor == -1)
-                            {
-                                hasVisitedBasement = true;
-                                Console.WriteLine("Santa first enters the basement after following instruction {0:N0}.", instruction);
-                            }
-                        }
+                        instructionThatEntersBasement = i + 1;
+                        hasVisitedBasement = true;
                     }
                 }
             }
 
-            Console.WriteLine("Santa should go to floor {0}.", floor);
-
-            return 0;
+            return Tuple.Create(floor, instructionThatEntersBasement);
         }
     }
 }
