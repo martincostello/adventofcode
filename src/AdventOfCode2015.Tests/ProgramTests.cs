@@ -24,10 +24,6 @@ namespace MartinCostello.AdventOfCode2015
                 return new[]
                 {
                     new[] { new[] { "1", @".\Input\Day01\input.txt" } },
-                    new[] { new[] { "2", @".\Input\Day02\input.txt" } },
-                    new[] { new[] { "3", @".\Input\Day03\input.txt" } },
-                    new[] { new[] { "4", "iwrupvqb", "5" } },
-                    new[] { new[] { "4", "iwrupvqb", "6" } },
                     new[] { new[] { "5", @".\Input\Day05\input.txt", "1" } },
                     new[] { new[] { "5", @".\Input\Day05\input.txt", "2" } },
                     new[] { new[] { "6", @".\Input\Day06\input.txt", "1" } },

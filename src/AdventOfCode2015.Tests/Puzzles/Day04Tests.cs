@@ -21,5 +21,30 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
             // Assert
             Assert.Equal(expected, actual);
         }
+
+        [Fact]
+        public static void Day04_Solve_Returns_Correct_Solution()
+        {
+            // Arrange
+            string[] args = new[] { "iwrupvqb", "5" };
+            Day04 target = new Day04();
+
+            // Act
+            int actual = target.Solve(args);
+
+            // Assert
+            Assert.Equal(0, actual);
+            Assert.Equal(346386, target.LowestZeroHash);
+
+            // Arrange
+            args = new[] { "iwrupvqb", "6" };
+
+            // Act
+            actual = target.Solve(args);
+
+            // Assert
+            Assert.Equal(0, actual);
+            Assert.Equal(9958218, target.LowestZeroHash);
+        }
     }
 }

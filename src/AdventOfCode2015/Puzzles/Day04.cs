@@ -16,6 +16,11 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
     /// </summary>
     internal sealed class Day04 : IPuzzle
     {
+        /// <summary>
+        /// Gets the lowest value that produces a hash that starts with the required number of zeroes.
+        /// </summary>
+        internal int LowestZeroHash { get; private set; }
+
         /// <inheritdoc />
         public int Solve(string[] args)
         {
@@ -28,12 +33,12 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
             string secretKey = args[0];
             int zeroes = int.Parse(args[1], CultureInfo.InvariantCulture);
 
-            int answer = GetLowestPositiveNumberWithStartingZeroes(secretKey, zeroes);
+            LowestZeroHash = GetLowestPositiveNumberWithStartingZeroes(secretKey, zeroes);
 
             Console.WriteLine(
                 "The lowest positive number for a hash starting with {0} zeroes is {1:N0}.",
                 zeroes,
-                answer);
+                LowestZeroHash);
 
             return 0;
         }
