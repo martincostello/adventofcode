@@ -14,6 +14,11 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
     /// </summary>
     internal sealed class Day09 : IPuzzle
     {
+        /// <summary>
+        /// Gets the solution.
+        /// </summary>
+        internal int Solution { get; private set; }
+
         /// <inheritdoc />
         public int Solve(string[] args)
         {
@@ -33,15 +38,15 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
                 args.Length == 2 &&
                 string.Equals(args[1], bool.TrueString, StringComparison.OrdinalIgnoreCase);
 
-            int distance = GetDistanceBetweenPoints(File.ReadAllLines(args[0]), findLongest);
+            Solution = GetDistanceBetweenPoints(File.ReadAllLines(args[0]), findLongest);
 
             if (findLongest)
             {
-                Console.WriteLine("The distance of the longest route is {0:N0}.", distance);
+                Console.WriteLine("The distance of the longest route is {0:N0}.", Solution);
             }
             else
             {
-                Console.WriteLine("The distance of the shortest route is {0:N0}.", distance);
+                Console.WriteLine("The distance of the shortest route is {0:N0}.", Solution);
             }
 
             return 0;

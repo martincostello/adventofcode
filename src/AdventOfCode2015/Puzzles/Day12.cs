@@ -13,6 +13,11 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
     /// </summary>
     internal sealed class Day12 : IPuzzle
     {
+        /// <summary>
+        /// Gets the sum of the integers in the JSON document.
+        /// </summary>
+        internal long Sum { get; private set; }
+
         /// <inheritdoc />
         public int Solve(string[] args)
         {
@@ -31,9 +36,9 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
             JToken document = JToken.Parse(File.ReadAllText(args[0]));
             string keyToIgnore = args.Length > 1 ? args[1] : string.Empty;
 
-            long sum = SumIntegerValues(document, keyToIgnore);
+            Sum = SumIntegerValues(document, keyToIgnore);
 
-            Console.WriteLine("The sum of the integers in the JSON document is {0:N0}.", sum);
+            Console.WriteLine("The sum of the integers in the JSON document is {0:N0}.", Sum);
 
             return 0;
         }

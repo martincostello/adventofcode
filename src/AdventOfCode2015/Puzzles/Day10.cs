@@ -13,6 +13,11 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
     /// </summary>
     internal sealed class Day10 : IPuzzle
     {
+        /// <summary>
+        /// Gets the solution to the puzzle.
+        /// </summary>
+        internal int Solution { get; private set; }
+
         /// <inheritdoc />
         public int Solve(string[] args)
         {
@@ -36,7 +41,7 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
                 "The length of the result for input '{0}' after {1:N0} iterations is {2:N0}.",
                 value,
                 iterations,
-                result.Length);
+                Solution = result.Length);
 
             return 0;
         }

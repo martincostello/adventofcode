@@ -80,5 +80,30 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
             // Assert
             Assert.Equal(expected, actual);
         }
+
+        [Fact]
+        public static void Day05_Solve_Returns_Correct_Solution()
+        {
+            // Arrange
+            string[] args = new[] { @".\Input\Day05\input.txt", "1" };
+            Day05 target = new Day05();
+
+            // Act
+            int actual = target.Solve(args);
+
+            // Assert
+            Assert.Equal(0, actual);
+            Assert.Equal(236, target.NiceStringCount);
+
+            // Arrange
+            args = new[] { @".\Input\Day05\input.txt", "2" };
+
+            // Act
+            actual = target.Solve(args);
+
+            // Assert
+            Assert.Equal(0, actual);
+            Assert.Equal(51, target.NiceStringCount);
+        }
     }
 }

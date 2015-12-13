@@ -14,6 +14,16 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
     /// </summary>
     internal sealed class Day06 : IPuzzle
     {
+        /// <summary>
+        /// Gets the number of lights illuminated.
+        /// </summary>
+        internal int LightsIlluminated { get; private set; }
+
+        /// <summary>
+        /// Gets the total brightness of the grid.
+        /// </summary>
+        internal int TotalBrightness { get; private set; }
+
         /// <inheritdoc />
         public int Solve(string[] args)
         {
@@ -67,8 +77,6 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
 
             Console.WriteLine("Processing instructions using set {0}...", version);
 
-            Stopwatch stopwatch = Stopwatch.StartNew();
-
             var grid = new LightGrid(1000, 1000);
 
             foreach (var instruction in instructions)
@@ -76,15 +84,15 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
                 instruction.Act(grid);
             }
 
-            stopwatch.Stop();
-
             if (version == 1)
             {
-                Console.WriteLine("{0:N0} lights are illuminated. Took {1:N2} seconds.", grid.Count, stopwatch.Elapsed.TotalSeconds);
+                LightsIlluminated = grid.Count;
+                Console.WriteLine("{0:N0} lights are illuminated.", LightsIlluminated);
             }
             else
             {
-                Console.WriteLine("The total brightness of the grid is {0:N0}. Took {1:N2} seconds.", grid.Brightness, stopwatch.Elapsed.TotalSeconds);
+                TotalBrightness = grid.Brightness;
+                Console.WriteLine("The total brightness of the grid is {0:N0}.", TotalBrightness);
             }
 
             return 0;

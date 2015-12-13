@@ -34,5 +34,30 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
             // Assert
             Assert.Equal(expected, actual);
         }
+
+        [Fact]
+        public static void Day11_Solve_Returns_Correct_Solution()
+        {
+            // Arrange
+            string[] args = new[] { "cqjxjnds" };
+            Day11 target = new Day11();
+
+            // Act
+            int actual = target.Solve(args);
+
+            // Assert
+            Assert.Equal(0, actual);
+            Assert.Equal("cqjxxyzz", target.NextPassword);
+
+            // Arrange
+            args = new[] { target.NextPassword };
+
+            // Act
+            actual = target.Solve(args);
+
+            // Assert
+            Assert.Equal(0, actual);
+            Assert.Equal("cqkaabcc", target.NextPassword);
+        }
     }
 }

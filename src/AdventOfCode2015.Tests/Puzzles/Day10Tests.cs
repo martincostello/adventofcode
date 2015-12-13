@@ -24,5 +24,30 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
             // Assert
             Assert.Equal(expected, actual);
         }
+
+        [Fact]
+        public static void Day10_Solve_Returns_Correct_Solution()
+        {
+            // Arrange
+            string[] args = new[] { "1321131112", "40" };
+            Day10 target = new Day10();
+
+            // Act
+            int actual = target.Solve(args);
+
+            // Assert
+            Assert.Equal(0, actual);
+            Assert.Equal(492982, target.Solution);
+
+            // Arrange
+            args = new[] { "1321131112", "50" };
+
+            // Act
+            actual = target.Solve(args);
+
+            // Assert
+            Assert.Equal(0, actual);
+            Assert.Equal(6989950, target.Solution);
+        }
     }
 }

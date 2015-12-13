@@ -44,5 +44,21 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
             Assert.Equal(123, actual["x"]);
             Assert.Equal(456, actual["y"]);
         }
+
+        [Fact]
+        public static void Day07_Solve_Returns_Correct_Solution()
+        {
+            // Arrange
+            string[] args = new[] { @".\Input\Day07\input.txt" };
+            Day07 target = new Day07();
+
+            // Act
+            int actual = target.Solve(args);
+
+            // Assert
+            Assert.Equal(0, actual);
+            Assert.Equal(3176, target.FirstSignal);
+            Assert.Equal(14710, target.SecondSignal);
+        }
     }
 }

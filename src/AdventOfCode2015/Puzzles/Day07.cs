@@ -14,6 +14,16 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
     /// </summary>
     internal sealed class Day07 : IPuzzle
     {
+        /// <summary>
+        /// Gets the first signal value.
+        /// </summary>
+        internal int FirstSignal { get; private set; }
+
+        /// <summary>
+        /// Gets the second signal value.
+        /// </summary>
+        internal int SecondSignal { get; private set; }
+
         /// <inheritdoc />
         public int Solve(string[] args)
         {
@@ -34,19 +44,19 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
             // Get the wire values for the initial instructions
             IDictionary<string, ushort> values = GetWireValues(instructions);
 
-            ushort a = values["a"];
+            FirstSignal = values["a"];
 
-            Console.WriteLine("The signal for wire a is {0:N0}.", a);
+            Console.WriteLine("The signal for wire a is {0:N0}.", FirstSignal);
 
             // Replace the input value for b with the value for a, then re-calculate
             int indexForB = instructions.IndexOf("44430 -> b");
-            instructions[indexForB] = string.Format(CultureInfo.InvariantCulture, "{0} -> b", a);
+            instructions[indexForB] = string.Format(CultureInfo.InvariantCulture, "{0} -> b", FirstSignal);
 
             values = GetWireValues(instructions);
 
-            a = values["a"];
+            SecondSignal = values["a"];
 
-            Console.WriteLine("The new signal for wire a is {0:N0}.", a);
+            Console.WriteLine("The new signal for wire a is {0:N0}.", SecondSignal);
 
             return 0;
         }

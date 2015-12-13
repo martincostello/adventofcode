@@ -10,42 +10,12 @@ namespace MartinCostello.AdventOfCode2015
     /// </summary>
     public static class ProgramTests
     {
-        /// <summary>
-        /// Gets the argument test cases to pass to the application to test it.
-        /// </summary>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage(
-            "Microsoft.Performance",
-            "CA1819:PropertiesShouldNotReturnArrays",
-            Justification = "Required for xunit data-driven tests.")]
-        public static object[][] Arguments
+        [Fact]
+        public static void Program_Returns_Zero_If_Input_Valid()
         {
-            get
-            {
-                return new[]
-                {
-                    new[] { new[] { "1", @".\Input\Day01\input.txt" } },
-                    new[] { new[] { "5", @".\Input\Day05\input.txt", "1" } },
-                    new[] { new[] { "5", @".\Input\Day05\input.txt", "2" } },
-                    new[] { new[] { "6", @".\Input\Day06\input.txt", "1" } },
-                    new[] { new[] { "6", @".\Input\Day06\input.txt", "2" } },
-                    new[] { new[] { "7", @".\Input\Day07\input.txt" } },
-                    new[] { new[] { "8", @".\Input\Day08\input.txt" } },
-                    new[] { new[] { "9", @".\Input\Day09\input.txt" } },
-                    new[] { new[] { "9", @".\Input\Day09\input.txt", "true" } },
-                    new[] { new[] { "10", "1321131112", "40" } },
-                    new[] { new[] { "10", "1321131112", "50" } },
-                    new[] { new[] { "11", "cqjxjnds" } },
-                    new[] { new[] { "11", "cqjxxyzz" } },
-                    new[] { new[] { "12", @".\Input\Day12\input.txt" } },
-                    new[] { new[] { "12", @".\Input\Day12\input.txt", "red" } },
-                };
-            }
-        }
+            // Arrange
+            string[] args = new[] { "1", @".\Input\Day01\input.txt" };
 
-        [Theory]
-        [MemberData(nameof(Arguments))]
-        public static void Program_Returns_Zero_If_Input_Valid(string[] args)
-        {
             // Act
             int actual = Program.Main(args);
 

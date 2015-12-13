@@ -12,6 +12,11 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
     /// </summary>
     internal sealed class Day11 : IPuzzle
     {
+        /// <summary>
+        /// Gets the next password.
+        /// </summary>
+        internal string NextPassword { get; private set; }
+
         /// <inheritdoc />
         public int Solve(string[] args)
         {
@@ -22,9 +27,9 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
             }
 
             string current = args[0];
-            string next = GenerateNextPassword(current);
+            NextPassword = GenerateNextPassword(current);
 
-            Console.WriteLine("Santa's new password should be '{0}'. But he really shouldn't print it out in plaintext.", next);
+            Console.WriteLine("Santa's new password should be '{0}'. But he really shouldn't print it out in plaintext.", NextPassword);
 
             return 0;
         }

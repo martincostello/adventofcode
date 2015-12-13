@@ -12,6 +12,11 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
     /// </summary>
     internal sealed class Day05 : IPuzzle
     {
+        /// <summary>
+        /// Gets the number of 'nice' strings.
+        /// </summary>
+        internal int NiceStringCount { get; private set; }
+
         /// <inheritdoc />
         public int Solve(string[] args)
         {
@@ -49,7 +54,7 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
                 return -1;
             }
 
-            int niceStrings = 0;
+            int count = 0;
             INicenessRule rule;
 
             if (version == 1)
@@ -65,11 +70,13 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
             {
                 if (rule.IsNice(value))
                 {
-                    niceStrings++;
+                    count++;
                 }
             }
 
-            Console.WriteLine("{0:N0} strings are nice using version {1} of the rules.", niceStrings, version);
+            NiceStringCount = count;
+
+            Console.WriteLine("{0:N0} strings are nice using version {1} of the rules.", NiceStringCount, version);
 
             return 0;
         }

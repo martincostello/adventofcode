@@ -14,6 +14,16 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
     /// </summary>
     internal sealed class Day08 : IPuzzle
     {
+        /// <summary>
+        /// Gets the value for the first solution.
+        /// </summary>
+        internal int FirstSolution { get; private set; }
+
+        /// <summary>
+        /// Gets the value for the second solution.
+        /// </summary>
+        internal int SecondSolution { get; private set; }
+
         /// <inheritdoc />
         public int Solve(string[] args)
         {
@@ -37,11 +47,11 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
 
             Console.WriteLine(
                 "The number of characters of code for string literals minus the number of characters in memory for the values of the strings is {0:N0}.",
-                countForCode - countInMemory);
+                FirstSolution = countForCode - countInMemory);
 
             Console.WriteLine(
                 "The total number of characters to represent the newly encoded strings minus the number of characters of code in each original string literal is {0:N0}.",
-                countEncoded - countForCode);
+                SecondSolution = countEncoded - countForCode);
 
             return 0;
         }

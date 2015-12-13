@@ -35,5 +35,30 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
             // Assert
             Assert.Equal(expected, actual);
         }
+
+        [Fact]
+        public static void Day12_Solve_Returns_Correct_Solution()
+        {
+            // Arrange
+            string[] args = new[] { @".\Input\Day12\input.txt" };
+            Day12 target = new Day12();
+
+            // Act
+            int actual = target.Solve(args);
+
+            // Assert
+            Assert.Equal(0, actual);
+            Assert.Equal(191164, target.Sum);
+
+            // Arrange
+            args = new[] { @".\Input\Day12\input.txt", "red" };
+
+            // Act
+            actual = target.Solve(args);
+
+            // Assert
+            Assert.Equal(0, actual);
+            Assert.Equal(87842, target.Sum);
+        }
     }
 }
