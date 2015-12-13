@@ -5,7 +5,6 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
 {
     using System;
     using System.Collections.Concurrent;
-    using System.Diagnostics;
     using System.Globalization;
     using System.Linq;
     using System.Security.Cryptography;
@@ -20,35 +19,21 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
         /// <inheritdoc />
         public int Solve(string[] args)
         {
-            if (args.Length != 1)
+            if (args.Length != 2)
             {
-                Console.Error.WriteLine("No secret key specified.");
+                Console.Error.WriteLine("No secret key and number of zeroes specified.");
                 return -1;
             }
 
             string secretKey = args[0];
+            int zeroes = int.Parse(args[1], CultureInfo.InvariantCulture);
 
-            Stopwatch stopwatch = Stopwatch.StartNew();
+            int answer = GetLowestPositiveNumberWithStartingZeroes(secretKey, zeroes);
 
-            int answerFor5 = GetLowestPositiveNumberWithStartingZeroes(secretKey, 5);
-            stopwatch.Stop();
-
-            Console.WriteLine();
             Console.WriteLine(
-                "The lowest positive number for a hash starting with five zeroes is {0}. Took {1:N2} seconds.",
-                answerFor5,
-                stopwatch.Elapsed.TotalSeconds);
-
-            stopwatch.Reset();
-            stopwatch.Start();
-
-            int answerFor6 = GetLowestPositiveNumberWithStartingZeroes(secretKey, 6);
-
-            Console.WriteLine();
-            Console.WriteLine(
-                "The lowest positive number for a hash starting with six zeroes is {0}. Took {1:N2} seconds.",
-                answerFor6,
-                stopwatch.Elapsed.TotalSeconds);
+                "The lowest positive number for a hash starting with {0} zeroes is {1:N0}.",
+                zeroes,
+                answer);
 
             return 0;
         }
@@ -60,10 +45,8 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
         /// <param name="secretKey">The secret key to use.</param>
         /// <param name="zeroes">The number of zeroes to get the value for.</param>
         /// <returns>The lowest positive integer that generates an MD5 hash with the number of zeroes specified.</returns>
-        private static int GetLowestPositiveNumberWithStartingZeroes(string secretKey, int zeroes)
+        internal static int GetLowestPositiveNumberWithStartingZeroes(string secretKey, int zeroes)
         {
-            string prefix = new string('0', zeroes);
-
             var bag = new ConcurrentBag<int>();
             var source = Partitioner.Create(1, int.MaxValue - 1, 50000);
 
@@ -80,17 +63,24 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
                     for (int i = range.Item1; !state.ShouldExitCurrentIteration && i < range.Item2; i++)
                     {
                         string value = string.Format(CultureInfo.InvariantCulture, "{0}{1}", secretKey, i);
-                        string hash = ComputeMD5(value);
+                        byte[] hash = ComputeMD5(value);
 
-                        if (hash.StartsWith(prefix, StringComparison.Ordinal))
+                        int wholeBytes = zeroes / 2;
+                        bool hasHalfByte = zeroes % 2 == 1;
+
+                        int sum = hash[0];
+
+                        for (int j = 1; sum == 0 && j < wholeBytes; j++)
                         {
-                            // We've found a possible solution stop this loop
-                            bag.Add(i);
+                            sum += hash[j];
                         }
 
-                        if (i % 100000 == 0)
+                        if (sum == 0)
                         {
-                            Console.Write('.');
+                            if (!hasHalfByte || hash[wholeBytes] < 0x10)
+                            {
+                                bag.Add(i);
+                            }
                         }
                     }
                 });
@@ -106,26 +96,16 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
         }
 
         /// <summary>
-        /// Gets the hexadecimal representation of the MD5 hash of the specified <see cref="string"/>.
+        /// Gets the MD5 hash of the specified <see cref="string"/>.
         /// </summary>
         /// <param name="value">The <see cref="string"/> to get the MD5 hash of.</param>
-        /// <returns>The hexadecimal MD5 hash of <paramref name="value"/>.</returns>
-        private static string ComputeMD5(string value)
+        /// <returns>The hash of <paramref name="value"/>.</returns>
+        private static byte[] ComputeMD5(string value)
         {
             using (HashAlgorithm algorithm = HashAlgorithm.Create("MD5"))
             {
                 byte[] buffer = Encoding.UTF8.GetBytes(value);
-
-                byte[] hashBytes = algorithm.ComputeHash(buffer);
-
-                StringBuilder builder = new StringBuilder();
-
-                foreach (byte b in hashBytes)
-                {
-                    builder.AppendFormat(CultureInfo.InvariantCulture, "{0:x2}", b);
-                }
-
-                return builder.ToString();
+                return algorithm.ComputeHash(buffer);
             }
         }
     }

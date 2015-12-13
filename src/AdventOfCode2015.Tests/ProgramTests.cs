@@ -49,14 +49,22 @@ namespace MartinCostello.AdventOfCode2015
             Assert.Equal(0, actual);
         }
 
-        [Fact(Skip = "Too slow.")]
         public static void Day04_Program_Returns_Zero_If_Input_Valid()
         {
             // Arrange
-            string[] args = new[] { "4", "iwrupvqb" };
+            string[] args = new[] { "4", "iwrupvqb", "5" };
 
             // Act
             int actual = Program.Main(args);
+
+            // Assert
+            Assert.Equal(0, actual);
+
+            // Arrange
+            args = new[] { "4", "iwrupvqb", "6" };
+
+            // Act
+            actual = Program.Main(args);
 
             // Assert
             Assert.Equal(0, actual);
