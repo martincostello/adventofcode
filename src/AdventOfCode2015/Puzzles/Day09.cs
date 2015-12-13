@@ -5,6 +5,7 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
 {
     using System;
     using System.Collections.Generic;
+    using System.Globalization;
     using System.IO;
     using System.Linq;
 
@@ -73,7 +74,7 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
             // Parse the input
             var parsedDistances = collection
                 .Select((p) => p.Split(new[] { " = " }, StringSplitOptions.None))
-                .Select((p) => new { Locations = p[0].Split(new[] { " to " }, StringSplitOptions.None), Distance = int.Parse(p[1]) })
+                .Select((p) => new { Locations = p[0].Split(new[] { " to " }, StringSplitOptions.None), Distance = int.Parse(p[1], CultureInfo.InvariantCulture) })
                 .ToList();
 
             if (parsedDistances.Count == 1)

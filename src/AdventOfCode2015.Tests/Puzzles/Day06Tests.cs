@@ -81,6 +81,16 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
         [InlineData(2, 1)]
         [InlineData(2, 2)]
         [InlineData(100, 100)]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage(
+            "Microsoft.Usage",
+            "CA2233:OperationsShouldNotOverflow",
+            MessageId = "height-1",
+            Justification = "Test values will not cause overflow.")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage(
+            "Microsoft.Usage",
+            "CA2233:OperationsShouldNotOverflow",
+            MessageId = "width-1",
+            Justification = "Test values will not cause overflow.")]
         public static void Day06_LightGridExhibitsCorrectBehavior(int width, int height)
         {
             var target = new LightGrid(width, height);
@@ -195,7 +205,7 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
         }
 
         [Fact]
-        public static void Day06_LightGridDrawsCorrectly3x3()
+        public static void Day06_LightGridDrawsCorrectly3By3()
         {
             // Arrange
             var target = new LightGrid(3, 3);

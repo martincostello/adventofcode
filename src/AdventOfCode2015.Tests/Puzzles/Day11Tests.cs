@@ -29,7 +29,7 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
         public static void Day11_HasMoreThanOneDistinctPairOfLetters(string value, bool expected)
         {
             // Act
-            bool actual = Day11.HasMoreThanOneDistinctPairOfLetters(value.ToCharArray());
+            bool actual = Day11.HasMoreThanOneDistinctPairOfLetters(value?.ToCharArray());
 
             // Assert
             Assert.Equal(expected, actual);

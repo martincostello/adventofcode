@@ -16,6 +16,11 @@ namespace MartinCostello.AdventOfCode2015.Puzzles.Impl
         /// <summary>
         /// The brightnesses of lights by their position.
         /// </summary>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage(
+            "Microsoft.Performance",
+            "CA1814:PreferJaggedArraysOverMultidimensional",
+            MessageId = "Member",
+            Justification = "The array is always square.")]
         private readonly int[,] _lightBrightnesses;
 
         /// <summary>
@@ -34,12 +39,12 @@ namespace MartinCostello.AdventOfCode2015.Puzzles.Impl
         {
             if (width < 1)
             {
-                throw new ArgumentOutOfRangeException(nameof(width), width, $"{nameof(width)} cannot be less than zero.");
+                throw new ArgumentOutOfRangeException(nameof(width), width, FormattableString.Invariant($"{nameof(width)} cannot be less than zero."));
             }
 
             if (height < 1)
             {
-                throw new ArgumentOutOfRangeException(nameof(height), height, $"{nameof(height)} cannot be less than zero.");
+                throw new ArgumentOutOfRangeException(nameof(height), height, FormattableString.Invariant($"{nameof(height)} cannot be less than zero."));
             }
 
             _bounds = new Rectangle(0, 0, width, height);

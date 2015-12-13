@@ -121,27 +121,7 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
                             (ushort.TryParse(secondOperand, out secondValue) || result.TryGetValue(secondOperand, out secondValue)))
                         {
                             string operation = words.ElementAtOrDefault(1);
-
-                            if (operation == "AND")
-                            {
-                                // "x AND y -> z"
-                                solvedValue = (ushort)(firstValue & secondValue);
-                            }
-                            else if (operation == "OR")
-                            {
-                                // "i OR j => k"
-                                solvedValue = (ushort)(firstValue | secondValue);
-                            }
-                            else if (operation == "LSHIFT")
-                            {
-                                // "p LSHIFT 2"
-                                solvedValue = (ushort)(firstValue << secondValue);
-                            }
-                            else if (operation == "RSHIFT")
-                            {
-                                // "q RSHIFT 3"
-                                solvedValue = (ushort)(firstValue >> secondValue);
-                            }
+                            solvedValue = TrySolveValueForOperation(operation, firstValue, secondValue);
                         }
                     }
 
@@ -154,6 +134,39 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
             }
 
             return result;
+        }
+
+        /// <summary>
+        /// Tries to solve the value for the specified operation and values.
+        /// </summary>
+        /// <param name="operation">The operation.</param>
+        /// <param name="firstValue">The first value.</param>
+        /// <param name="secondValue">The second value.</param>
+        /// <returns>The solved value for the specified parameters if solved; otherwise <see langword="null"/>.</returns>
+        private static ushort? TrySolveValueForOperation(string operation, ushort firstValue, ushort secondValue)
+        {
+            if (operation == "AND")
+            {
+                // "x AND y -> z"
+                return (ushort)(firstValue & secondValue);
+            }
+            else if (operation == "OR")
+            {
+                // "i OR j => k"
+                return (ushort)(firstValue | secondValue);
+            }
+            else if (operation == "LSHIFT")
+            {
+                // "p LSHIFT 2"
+                return (ushort)(firstValue << secondValue);
+            }
+            else if (operation == "RSHIFT")
+            {
+                // "q RSHIFT 3"
+                return (ushort)(firstValue >> secondValue);
+            }
+
+            return null;
         }
     }
 }

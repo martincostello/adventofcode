@@ -49,7 +49,7 @@ namespace MartinCostello.AdventOfCode2015.Puzzles.Impl
         /// <summary>
         /// A class containing the moves that Santa can make. This class cannot be inherited.
         /// </summary>
-        private sealed class Moves
+        private static class Moves
         {
             /// <summary>
             /// A move north. This field is read-only.
