@@ -5,6 +5,7 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
 {
     using System;
     using System.IO;
+    using System.Linq;
     using Newtonsoft.Json.Linq;
 
     /// <summary>
@@ -15,7 +16,7 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
         /// <inheritdoc />
         public int Solve(string[] args)
         {
-            if (args.Length != 1)
+            if (args.Length != 1 && args.Length != 2)
             {
                 Console.Error.WriteLine("No input file path specified.");
                 return -1;
@@ -28,15 +29,23 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
             }
 
             JToken document = JToken.Parse(File.ReadAllText(args[0]));
+            string keyToIgnore = args.Length > 1 ? args[1] : string.Empty;
 
-            long sum = SumIntegerValues(document);
+            long sum = SumIntegerValues(document, keyToIgnore);
 
             Console.WriteLine("The sum of the integers in the JSON document is {0:N0}.", sum);
 
             return 0;
         }
 
-        internal static long SumIntegerValues(JToken token)
+        /// <summary>
+        /// Sums the integer values in the specified JSON token, ignoring any values from
+        /// child tokens that contain the specified string value, if specified.
+        /// </summary>
+        /// <param name="token">The JSON token.</param>
+        /// <param name="valueToIgnore">The tokens to ignore if they contain this value.</param>
+        /// <returns>The sum of the tokens in <paramref name="token"/>.</returns>
+        internal static long SumIntegerValues(JToken token, string valueToIgnore)
         {
             JValue value = token as JValue;
 
@@ -48,9 +57,31 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
             }
             else
             {
-                foreach (JToken child in token.Children())
+                JToken[] children = token
+                    .Children()
+                    .ToArray();
+
+                bool ignore = children
+                    .OfType<JProperty>()
+                    .Where((p) => p.Value.Type == JTokenType.String)
+                    .Where((p) => (string)((JValue)p.Value).Value == valueToIgnore)
+                    .Any();
+
+                if (!ignore)
                 {
-                    sum += SumIntegerValues(child);
+                    foreach (JToken child in children)
+                    {
+                        ignore = child
+                            .Children<JProperty>()
+                            .Where((p) => p.Value.Type == JTokenType.String)
+                            .Where((p) => (string)((JValue)p.Value).Value == valueToIgnore)
+                            .Any();
+
+                        if (!ignore)
+                        {
+                            sum += SumIntegerValues(child, valueToIgnore);
+                        }
+                    }
                 }
             }
 

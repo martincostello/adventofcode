@@ -208,6 +208,15 @@ namespace MartinCostello.AdventOfCode2015
 
             // Assert
             Assert.Equal(0, actual);
+
+            // Arrange
+            args = new[] { "12", "input.txt", "red" };
+
+            // Act
+            actual = Program.Main(args);
+
+            // Assert
+            Assert.Equal(0, actual);
         }
 
         [Fact]

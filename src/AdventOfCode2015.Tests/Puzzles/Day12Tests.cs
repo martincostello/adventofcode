@@ -12,21 +12,25 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
     public static class Day12Tests
     {
         [Theory]
-        [InlineData("[1,2,3]", 6)]
-        [InlineData(@"{""a"":2,""b"":4}", 6)]
-        [InlineData("[[[3]]]", 3)]
-        [InlineData(@"{""a"":{""b"":4},""c"":-1}", 3)]
-        [InlineData(@"{""a"":[-1,1]}", 0)]
-        [InlineData(@"[-1,{""a"":1}]", 0)]
-        [InlineData("[]", 0)]
-        [InlineData("{}", 0)]
-        public static void SumIntegerValues(string json, long expected)
+        [InlineData("[1,2,3]", null, 6)]
+        [InlineData(@"{""a"":2,""b"":4}", null, 6)]
+        [InlineData("[[[3]]]", null, 3)]
+        [InlineData(@"{""a"":{""b"":4},""c"":-1}", null, 3)]
+        [InlineData(@"{""a"":[-1,1]}", null, 0)]
+        [InlineData(@"[-1,{""a"":1}]", null, 0)]
+        [InlineData("[]", null, 0)]
+        [InlineData("{}", null, 0)]
+        [InlineData("[1,2,3]", "red", 6)]
+        [InlineData(@"[1,{""c"":""red"",""b"":2},3]", "red", 4)]
+        [InlineData(@"{""d"":""red"",""e"":[1,2,3,4],""f"":5}", "red", 0)]
+        [InlineData(@"[1,""red"",5]", "red", 6)]
+        public static void SumIntegerValues(string json, string keyToIgnore, long expected)
         {
             // Arrange
             JToken token = JToken.Parse(json);
 
             // Act
-            long actual = Day12.SumIntegerValues(token);
+            long actual = Day12.SumIntegerValues(token, keyToIgnore);
 
             // Assert
             Assert.Equal(expected, actual);
