@@ -61,6 +61,25 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
         }
 
         [Fact]
+        public static void Day14_GetMaximumPointsOfFastestReindeer()
+        {
+            // Arrange
+            string[] flightData = new[]
+            {
+                "Comet can fly 14 km/s for 10 seconds, but then must rest for 127 seconds.",
+                "Dancer can fly 16 km/s for 11 seconds, but then must rest for 162 seconds.",
+            };
+
+            int timeIndex = 1000;
+
+            // Act
+            int actual = Day14.GetMaximumPointsOfFastestReindeer(flightData, timeIndex);
+
+            // Assert
+            Assert.Equal(689, actual);
+        }
+
+        [Fact]
         public static void Day14_Solve_Returns_Correct_Solution()
         {
             // Arrange
@@ -73,6 +92,7 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
             // Assert
             Assert.Equal(0, actual);
             Assert.Equal(2655, target.MaximumReindeerDistance);
+            Assert.Equal(1059, target.MaximumReindeerPoints);
         }
     }
 }

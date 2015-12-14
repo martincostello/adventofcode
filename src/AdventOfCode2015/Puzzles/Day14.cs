@@ -15,9 +15,14 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
     internal sealed class Day14 : IPuzzle
     {
         /// <summary>
-        /// Gets the maximum distance travelled by the winning reindeed at the given point in time, in kilometers.
+        /// Gets the maximum distance travelled by the winning reindeer at the given point in time, in kilometers.
         /// </summary>
         internal int MaximumReindeerDistance { get; private set; }
+
+        /// <summary>
+        /// Gets the maximum number of points for the winning reindeer at the given point in time.
+        /// </summary>
+        internal int MaximumReindeerPoints { get; private set; }
 
         /// <inheritdoc />
         public int Solve(string[] args)
@@ -49,16 +54,20 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
 
             Console.WriteLine("After {0:N0} seconds, the furthest reindeer is {1:N0} km away.", timeIndex, MaximumReindeerDistance);
 
+            MaximumReindeerPoints = GetMaximumPointsOfFastestReindeer(flightData, timeIndex);
+
+            Console.WriteLine("After {0:N0} seconds, the reindeer in the lead has {1:N0} points.", timeIndex, MaximumReindeerPoints);
+
             return 0;
         }
 
         /// <summary>
-        /// Gets the maximum distance travelled by the specified reindeed at the specified time index.
+        /// Gets the maximum distance travelled by the specified reindeer at the specified time index.
         /// </summary>
-        /// <param name="flightData">The reindeed flight data.</param>
+        /// <param name="flightData">The reindeer flight data.</param>
         /// <param name="timeIndex">The time index.</param>
         /// <returns>
-        /// The maximum distance travelled by a reindeed at the time index specified by <paramref name="timeIndex"/>.
+        /// The maximum distance travelled by a reindeer at the time index specified by <paramref name="timeIndex"/>.
         /// </returns>
         internal static int GetMaximumDistanceOfFastestReindeer(ICollection<string> flightData, int timeIndex)
         {
@@ -68,6 +77,43 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
 
             return data
                 .Select((p) => p.GetDistanceAfterTimeIndex(timeIndex))
+                .Max();
+        }
+
+        /// <summary>
+        /// Gets the maximum number of points for the reindeer at the specified time index.
+        /// </summary>
+        /// <param name="flightData">The reindeer flight data.</param>
+        /// <param name="timeIndex">The time index.</param>
+        /// <returns>
+        /// The maximum number of points for a reindeer at the time index specified by <paramref name="timeIndex"/>.
+        /// </returns>
+        internal static int GetMaximumPointsOfFastestReindeer(ICollection<string> flightData, int timeIndex)
+        {
+            List<FlightData> data = flightData
+                .Select(FlightData.Parse)
+                .ToList();
+
+            var scoreboard = data.ToDictionary((p) => p.Name, (p) => 0);
+
+            for (int i = 1; i < timeIndex; i++)
+            {
+                // Find how far each reindeer is from the starting point
+                var distances = data
+                    .ToDictionary((p) => p.Name, (p) => p.GetDistanceAfterTimeIndex(i));
+
+                // Find the furthest distance away one or more reindeer are
+                int maxDistance = distances.Max((p) => p.Value);
+
+                // Award each reindeer who is that distance away a point
+                foreach (var reindeer in distances.Where((p) => p.Value == maxDistance))
+                {
+                    scoreboard[reindeer.Key]++;
+                }
+            }
+
+            return scoreboard
+                .Select((p) => p.Value)
                 .Max();
         }
 
@@ -87,12 +133,12 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
             internal int MaximumSpeed { get; set; }
 
             /// <summary>
-            /// Gets or sets the maximum activity period of the reindeed, in seconds.
+            /// Gets or sets the maximum activity period of the reindeer, in seconds.
             /// </summary>
             internal int MaximumActivityPeriod { get; set; }
 
             /// <summary>
-            /// Gets or sets the rest period of the reindeed, in seconds.
+            /// Gets or sets the rest period of the reindeer, in seconds.
             /// </summary>
             internal int RestPeriod { get; set; }
 
@@ -117,11 +163,11 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
             }
 
             /// <summary>
-            /// Gets the distance the reindeed has travelled at the specified time index.
+            /// Gets the distance the reindeer has travelled at the specified time index.
             /// </summary>
             /// <param name="timeIndex">The time index to get the distance for.</param>
             /// <returns>
-            /// The distance travelled by the reindeed at the time index specified by <paramref name="timeIndex"/>.
+            /// The distance travelled by the reindeer at the time index specified by <paramref name="timeIndex"/>.
             /// </returns>
             internal int GetDistanceAfterTimeIndex(int timeIndex)
             {
