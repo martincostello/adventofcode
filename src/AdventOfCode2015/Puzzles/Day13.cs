@@ -19,6 +19,11 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
         /// </summary>
         internal int MaximumTotalChangeInHappiness { get; private set; }
 
+        /// <summary>
+        /// Gets the maximum total change in happiness with the current user also seated.
+        /// </summary>
+        internal int MaximumTotalChangeInHappinessWithCurrentUser { get; private set; }
+
         /// <inheritdoc />
         public int Solve(string[] args)
         {
@@ -39,6 +44,33 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
             MaximumTotalChangeInHappiness = GetMaximumTotalChangeInHappiness(potentialHappiness);
 
             Console.WriteLine("The total change in happiness is {0:N0}.", MaximumTotalChangeInHappiness);
+
+            // Create a new guest list which is the same as the previous one but with the current user added
+            List<string> potentialHappinessWithCurrentUser = new List<string>(potentialHappiness);
+
+            var existingGuestNames = potentialHappiness
+                .Select((p) => p.Split(' ').First())
+                .Distinct()
+                .ToList();
+
+            // Add the current user to the guest list where everyone is neutral to them
+            string currentUser = string.Format(
+                CultureInfo.InvariantCulture,
+                "{0}\\{1}",
+                Environment.UserDomainName,
+                Environment.UserName);
+
+            const string AmbivalentFormat = "{0} would gain 0 happiness units by sitting next to {1}.";
+
+            foreach (string guest in existingGuestNames)
+            {
+                potentialHappinessWithCurrentUser.Add(string.Format(CultureInfo.InvariantCulture, AmbivalentFormat, guest, currentUser));
+                potentialHappinessWithCurrentUser.Add(string.Format(CultureInfo.InvariantCulture, AmbivalentFormat, currentUser, guest));
+            }
+
+            MaximumTotalChangeInHappinessWithCurrentUser = GetMaximumTotalChangeInHappiness(potentialHappinessWithCurrentUser);
+
+            Console.WriteLine("The total change in happiness with the current user seated is {0:N0}.", MaximumTotalChangeInHappinessWithCurrentUser);
 
             return 0;
         }
@@ -64,6 +96,7 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
                 .Distinct()
                 .ToList();
 
+            // TODO Remove all permutations which are equal when considering the table is circular
             IList<IList<string>> permutations = GetPermutations(names)
                 .Select((p) => new List<string>(p) as IList<string>)
                 .ToList();
