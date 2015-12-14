@@ -19,6 +19,11 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
         [InlineData(12, 16, 11, 162, 176)]
         [InlineData(1000, 14, 10, 127, 1120)]
         [InlineData(1000, 16, 11, 162, 1056)]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage(
+            "Microsoft.Naming",
+            "CA1702:CompoundWordsShouldBeCasedCorrectly",
+            MessageId = "AfterTime",
+            Justification = "'After time' is correct.")]
         public static void Day14_GetDistanceAfterTimeIndex(int timeIndex, int speed, int activityPeriod, int restPeriod, int expected)
         {
             // Arrange
