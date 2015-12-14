@@ -78,6 +78,7 @@
     <Compile Include="Puzzles\Day08Tests.cs" />
     <Compile Include="Puzzles\Day09Tests.cs" />
     <Compile Include="Puzzles\Day12Tests.cs" />
+    <Compile Include="Puzzles\Day13Tests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
@@ -135,7 +136,12 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="..\..\input\day-13\input.txt">
+      <Link>Input\Day13\input.txt</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)AdventOfCode2015.Common.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
