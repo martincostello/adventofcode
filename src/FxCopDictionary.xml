@@ -4,12 +4,10 @@
     <Unrecognized>
     </Unrecognized>
     <Recognized>
-      <Word>api</Word>
     </Recognized>
     <Deprecated>
     </Deprecated>
     <Compound>
-      <Term CompoundAlternate="BrowserStack">browserstack</Term>
     </Compound>
     <DiscreteExceptions>
     </DiscreteExceptions>
