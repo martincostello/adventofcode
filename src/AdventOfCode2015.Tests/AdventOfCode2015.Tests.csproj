@@ -80,6 +80,7 @@
     <Compile Include="Puzzles\Day12Tests.cs" />
     <Compile Include="Puzzles\Day13Tests.cs" />
     <Compile Include="Puzzles\Day14Tests.cs" />
+    <Compile Include="Puzzles\Day15Tests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
@@ -146,6 +147,12 @@
   <ItemGroup>
     <None Include="..\..\input\day-14\input.txt">
       <Link>Input\Day14\input.txt</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\input\day-15\input.txt">
+      <Link>Input\Day15\input.txt</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
