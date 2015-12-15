@@ -47,6 +47,7 @@
     <Compile Include="..\CommonAssemblyInfo.cs">
       <Link>CommonAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="Maths.cs" />
     <Compile Include="NotImplementedPuzzle.cs" />
     <Compile Include="Puzzles\Impl\CardinalDirection.cs" />
     <Compile Include="Puzzles\Day01.cs" />
@@ -55,7 +56,6 @@
     <Compile Include="Puzzles\Day12.cs" />
     <Compile Include="Puzzles\Day13.cs" />
     <Compile Include="Puzzles\Day14.cs" />
-    <Compile Include="Puzzles\Day15.cs" />
     <Compile Include="Puzzles\Day16.cs" />
     <Compile Include="Puzzles\Day17.cs" />
     <Compile Include="Puzzles\Day18.cs" />

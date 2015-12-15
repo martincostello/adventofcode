@@ -97,7 +97,7 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
                 .ToList();
 
             // TODO Remove all permutations which are equal when considering the table is circular
-            IList<IList<string>> permutations = GetPermutations(names)
+            IList<IList<string>> permutations = Maths.GetPermutations(names)
                 .Select((p) => new List<string>(p) as IList<string>)
                 .ToList();
 
@@ -139,37 +139,6 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
             }
 
             return happiness;
-        }
-
-        /// <summary>
-        /// Returns all the permutations of the specified collection of strings.
-        /// </summary>
-        /// <param name="collection">The collection to get the permutations of.</param>
-        /// <returns>
-        /// An <see cref="IEnumerable{T}"/> that returns the permutations of <paramref name="collection"/>.
-        /// </returns>
-        private static IEnumerable<IEnumerable<string>> GetPermutations(ICollection<string> collection)
-        {
-            return GetPermutations(collection, collection.Count);
-        }
-
-        /// <summary>
-        /// Returns all the permutations of the specified collection of strings.
-        /// </summary>
-        /// <param name="collection">The collection to get the permutations of.</param>
-        /// <param name="count">The number of items to calculate the permutations from.</param>
-        /// <returns>
-        /// An <see cref="IEnumerable{T}"/> that returns the permutations of <paramref name="collection"/>.
-        /// </returns>
-        private static IEnumerable<IEnumerable<string>> GetPermutations(IEnumerable<string> collection, int count)
-        {
-            if (count == 1)
-            {
-                return collection.Select((p) => new[] { p });
-            }
-
-            return GetPermutations(collection, count - 1)
-                .SelectMany((p) => collection.Where((r) => !p.Contains(r)), (set, value) => set.Concat(new[] { value }));
         }
 
         /// <summary>
