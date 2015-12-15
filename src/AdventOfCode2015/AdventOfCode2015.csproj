@@ -49,6 +49,7 @@
     </Compile>
     <Compile Include="Maths.cs" />
     <Compile Include="NotImplementedPuzzle.cs" />
+    <Compile Include="Puzzles\Day15.cs" />
     <Compile Include="Puzzles\Impl\CardinalDirection.cs" />
     <Compile Include="Puzzles\Day01.cs" />
     <Compile Include="Puzzles\Day10.cs" />
