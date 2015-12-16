@@ -25,7 +25,7 @@ namespace MartinCostello.AdventOfCode2015
         }
 
         /// <summary>
-        /// Returns all the permutations of the specified collection of strings.
+        /// Returns all the permutations of the specified collection of values.
         /// </summary>
         /// <typeparam name="T">The type of the values.</typeparam>
         /// <param name="collection">The collection to get the permutations of.</param>
