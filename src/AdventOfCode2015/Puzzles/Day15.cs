@@ -19,6 +19,11 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
         /// </summary>
         internal int HighestTotalCookieScore { get; private set; }
 
+        /// <summary>
+        /// Gets the highest total cookie score that has exactly 500 calories.
+        /// </summary>
+        internal int HighestTotalCookieScoreWith500Calories { get; private set; }
+
         /// <inheritdoc />
         public int Solve(string[] args)
         {
@@ -37,8 +42,10 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
             string[] ingredients = File.ReadAllLines(args[0]);
 
             HighestTotalCookieScore = GetHighestTotalCookieScore(ingredients);
+            HighestTotalCookieScoreWith500Calories = GetHighestTotalCookieScore(ingredients, 500);
 
             Console.WriteLine("The highest total cookie score is {0:N0}.", HighestTotalCookieScore);
+            Console.WriteLine("The highest total cookie score for a cookie with 500 calories is {0:N0}.", HighestTotalCookieScoreWith500Calories);
 
             return 0;
         }
@@ -47,10 +54,11 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
         /// Returns the highest total cookie score for the specified ingredients.
         /// </summary>
         /// <param name="collection">The ingredients.</param>
+        /// <param name="calorieCount">The optional target calorie count.</param>
         /// <returns>
         /// The highest total cookie score for the specified ingredients.
         /// </returns>
-        internal static int GetHighestTotalCookieScore(ICollection<string> collection)
+        internal static int GetHighestTotalCookieScore(ICollection<string> collection, int? calorieCount = null)
         {
             // Parse the ingredients
             var ingredientProperties = collection
@@ -89,7 +97,7 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
 
             foreach (var recipe in recipies)
             {
-                int score = GetRecipeScore(recipe, ingredientProperties);
+                int score = GetRecipeScore(recipe, ingredientProperties, calorieCount);
                 scores.Add(score);
             }
 
@@ -173,24 +181,30 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
         }
 
         /// <summary>
-        /// Gets the score for the specified recipe.
+        /// Gets the score for the specified recipe that optionally has the specified number of calories.
         /// </summary>
         /// <param name="recipe">The recipe.</param>
         /// <param name="ingredients">The ingredients.</param>
+        /// <param name="calorieCount">The optional target calorie count.</param>
         /// <returns>
         /// The total score for the specified recipe.
         /// </returns>
-        private static int GetRecipeScore(IDictionary<string, int> recipe, IDictionary<string, Ingredient> ingredients)
+        private static int GetRecipeScore(
+            IDictionary<string, int> recipe,
+            IDictionary<string, Ingredient> ingredients,
+            int? calorieCount)
         {
             int capacity = 0;
             int durability = 0;
             int flavor = 0;
             int texture = 0;
+            int calories = 0;
 
             foreach (var item in recipe.Where((p) => p.Value > 0))
             {
                 var ingredient = ingredients[item.Key];
 
+                calories += ingredient.Calories * item.Value;
                 capacity += ingredient.Capacity * item.Value;
                 durability += ingredient.Durability * item.Value;
                 flavor += ingredient.Flavor * item.Value;
@@ -207,6 +221,12 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
             else
             {
                 score = capacity * durability * flavor * texture;
+            }
+
+            if (calorieCount.HasValue && calories != calorieCount.Value)
+            {
+                // Does not have the target number of calories, so discount
+                score = 0;
             }
 
             return score;
@@ -245,7 +265,6 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
             /// <summary>
             /// Gets or sets the calories.
             /// </summary>
-            [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "Will be used in part 2.")]
             internal int Calories { get; set; }
 
             /// <summary>

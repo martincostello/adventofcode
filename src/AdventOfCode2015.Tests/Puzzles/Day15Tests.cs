@@ -25,6 +25,12 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
 
             // Assert
             Assert.Equal(62842880, actual);
+
+            // Act
+            actual = Day15.GetHighestTotalCookieScore(collection, 500);
+
+            // Assert
+            Assert.Equal(57600000, actual);
         }
 
         [Fact]
@@ -40,6 +46,7 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
             // Assert
             Assert.Equal(0, actual);
             Assert.Equal(222870, target.HighestTotalCookieScore);
+            Assert.Equal(117936, target.HighestTotalCookieScoreWith500Calories);
         }
     }
 }
