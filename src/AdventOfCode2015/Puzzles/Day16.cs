@@ -18,24 +18,29 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
         /// The result of the forensic analysis of the gift from Aunt Sue X
         /// as provided by the My First Crime Scene Analysis Machine (MFCSAM).
         /// </summary>
-        private static readonly IDictionary<string, int> ForensicAnalysis = new Dictionary<string, int>()
+        private static readonly IDictionary<string, Tuple<int, int>> ForensicAnalysis = new Dictionary<string, Tuple<int, int>>()
         {
-            { "children", 3 },
-            { "cats", 7 },
-            { "samoyeds", 2 },
-            { "pomeranians", 3 },
-            { "akitas", 0 },
-            { "vizslas", 0 },
-            { "goldfish", 5 },
-            { "trees", 3 },
-            { "cars", 2 },
-            { "perfumes", 1 },
+            { "children", Tuple.Create(3, 0) },
+            { "cats", Tuple.Create(7, 1) },
+            { "samoyeds", Tuple.Create(2, 0) },
+            { "pomeranians", Tuple.Create(3, -1) },
+            { "akitas", Tuple.Create(0, 0) },
+            { "vizslas", Tuple.Create(0, 0) },
+            { "goldfish", Tuple.Create(5, -1) },
+            { "trees", Tuple.Create(3, 1) },
+            { "cars", Tuple.Create(2, 0) },
+            { "perfumes", Tuple.Create(1, 0) },
         };
 
         /// <summary>
         /// Gets the number of the Aunt Sue that sent the gift.
         /// </summary>
         internal int AuntSueNumber { get; private set; }
+
+        /// <summary>
+        /// Gets the number of the real Aunt Sue that sent the gift.
+        /// </summary>
+        internal int RealAuntSueNumber { get; private set; }
 
         /// <inheritdoc />
         public int Solve(string[] args)
@@ -55,8 +60,12 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
             string[] auntSueMetadata = File.ReadAllLines(args[0]);
 
             AuntSueNumber = WhichAuntSueSentTheGift(auntSueMetadata);
+            RealAuntSueNumber = WhichAuntSueSentTheGift(auntSueMetadata, compensateForRetroEncabulator: true);
 
-            Console.WriteLine("The number of the Aunt Sue that got me the gift is {0}.", AuntSueNumber);
+            Console.WriteLine(
+                "The number of the Aunt Sue that got me the gift was originally thought to be {0}, but it was actually {1}.",
+                AuntSueNumber,
+                RealAuntSueNumber);
 
             return 0;
         }
@@ -65,16 +74,31 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
         /// Returns the number of the Aunt Sue that sent the gift from the specified Aunt Sue metadata.
         /// </summary>
         /// <param name="metadata">The metadata about all the Aunt Sues.</param>
+        /// <param name="compensateForRetroEncabulator">Whether to compensate for the Retro Encabulator.</param>
         /// <returns>
         /// The number of the Aunt Sue which sent the gift based on forensic analysis of <paramref name="metadata"/>.
         /// </returns>
-        internal static int WhichAuntSueSentTheGift(ICollection<string> metadata)
+        internal static int WhichAuntSueSentTheGift(ICollection<string> metadata, bool compensateForRetroEncabulator = false)
         {
             var parsed = metadata.Select(AuntSue.Parse);
 
             foreach (var item in ForensicAnalysis)
             {
-                parsed = parsed.Where((p) => !p.Metadata.ContainsKey(item.Key) || p.Metadata[item.Key] == item.Value);
+                if (compensateForRetroEncabulator && item.Value.Item2 != 0)
+                {
+                    if (item.Value.Item2 == 1)
+                    {
+                        parsed = parsed.Where((p) => !p.Metadata.ContainsKey(item.Key) || p.Metadata[item.Key] > item.Value.Item1);
+                    }
+                    else
+                    {
+                        parsed = parsed.Where((p) => !p.Metadata.ContainsKey(item.Key) || p.Metadata[item.Key] < item.Value.Item1);
+                    }
+                }
+                else
+                {
+                    parsed = parsed.Where((p) => !p.Metadata.ContainsKey(item.Key) || p.Metadata[item.Key] == item.Value.Item1);
+                }
             }
 
             return parsed.Single().Number;

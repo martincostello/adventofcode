@@ -23,6 +23,7 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
             // Assert
             Assert.Equal(0, actual);
             Assert.Equal(373, target.AuntSueNumber);
+            Assert.Equal(260, target.RealAuntSueNumber);
         }
     }
 }
