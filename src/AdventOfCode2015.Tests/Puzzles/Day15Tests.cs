@@ -27,7 +27,7 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
             Assert.Equal(62842880, actual);
         }
 
-        [Fact(Skip = "Not implemented fully yet.")]
+        [Fact]
         public static void Day15_Solve_Returns_Correct_Solution()
         {
             // Arrange
@@ -39,7 +39,7 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
 
             // Assert
             Assert.Equal(0, actual);
-            Assert.NotEqual(0, target.HighestTotalCookieScore);
+            Assert.Equal(222870, target.HighestTotalCookieScore);
         }
     }
 }
