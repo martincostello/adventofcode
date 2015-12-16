@@ -10,7 +10,7 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
     /// </summary>
     public static class Day16Tests
     {
-        [Fact(Skip = "Not implemented yet.")]
+        [Fact]
         public static void Day16_Solve_Returns_Correct_Solution()
         {
             // Arrange
@@ -22,7 +22,7 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
 
             // Assert
             Assert.Equal(0, actual);
-            Assert.NotEqual(0, target.AuntSueNumber);
+            Assert.Equal(373, target.AuntSueNumber);
         }
     }
 }

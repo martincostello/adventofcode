@@ -5,7 +5,9 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
 {
     using System;
     using System.Collections.Generic;
+    using System.Globalization;
     using System.IO;
+    using System.Linq;
 
     /// <summary>
     /// A class representing the puzzle for <c>http://adventofcode.com/day/16</c>. This class cannot be inherited.
@@ -50,32 +52,77 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
                 return -1;
             }
 
-            string[] clues = File.ReadAllLines(args[0]);
+            string[] auntSueMetadata = File.ReadAllLines(args[0]);
 
-            AuntSueNumber = WhichAuntSueSentTheGift(clues);
+            AuntSueNumber = WhichAuntSueSentTheGift(auntSueMetadata);
+
+            Console.WriteLine("The number of the Aunt Sue that got me the gift is {0}.", AuntSueNumber);
 
             return 0;
         }
 
         /// <summary>
-        /// Returns the number of the Aunt Sue that sent the gift from the specified clues.
+        /// Returns the number of the Aunt Sue that sent the gift from the specified Aunt Sue metadata.
         /// </summary>
-        /// <param name="clues">The clues.</param>
+        /// <param name="metadata">The metadata about all the Aunt Sues.</param>
         /// <returns>
-        /// The number of the Aunt Sue which sent the gift based on forensic analysis of <paramref name="clues"/>.
+        /// The number of the Aunt Sue which sent the gift based on forensic analysis of <paramref name="metadata"/>.
         /// </returns>
-        internal static int WhichAuntSueSentTheGift(ICollection<string> clues)
+        internal static int WhichAuntSueSentTheGift(ICollection<string> metadata)
         {
+            var parsed = metadata.Select(AuntSue.Parse);
+
             foreach (var item in ForensicAnalysis)
             {
-                // TODO Analyze the results
-                if (clues != null && item.Value > 0)
-                {
-                }
+                parsed = parsed.Where((p) => !p.Metadata.ContainsKey(item.Key) || p.Metadata[item.Key] == item.Value);
             }
 
-            // TODO Implement
-            return 0;
+            return parsed.Single().Number;
+        }
+
+        /// <summary>
+        /// A class representing an aunt called Sue. This class cannot be inherited.
+        /// </summary>
+        private sealed class AuntSue
+        {
+            /// <summary>
+            /// Gets the number of the Aunt Sue.
+            /// </summary>
+            internal int Number { get; private set; }
+
+            /// <summary>
+            /// Gets the metadata about this Aunt Sue.
+            /// </summary>
+            internal IDictionary<string, int> Metadata { get; private set; }
+
+            /// <summary>
+            /// Parses an instance of <see cref="AuntSue"/> from the specified <see cref="string"/>.
+            /// </summary>
+            /// <param name="value">The value to parse.</param>
+            /// <returns>
+            /// An instance of <see cref="AuntSue"/> that represents <paramref name="value"/>.
+            /// </returns>
+            internal static AuntSue Parse(string value)
+            {
+                AuntSue result = new AuntSue()
+                {
+                    Metadata = new Dictionary<string, int>(),
+                };
+
+                string[] split = value.Split(' ');
+
+                result.Number = int.Parse(split[1].TrimEnd(':'), CultureInfo.InvariantCulture);
+
+                split = string.Join(" ", split, 2, split.Length - 2).Split(',');
+
+                foreach (string item in split)
+                {
+                    string[] itemSplit = item.Split(':');
+                    result.Metadata[itemSplit[0].Trim()] = int.Parse(itemSplit[1].Trim(), CultureInfo.InvariantCulture);
+                }
+
+                return result;
+            }
         }
     }
 }
