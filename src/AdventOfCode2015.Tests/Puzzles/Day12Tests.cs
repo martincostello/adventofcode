@@ -24,7 +24,7 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
         [InlineData(@"[1,{""c"":""red"",""b"":2},3]", "red", 4)]
         [InlineData(@"{""d"":""red"",""e"":[1,2,3,4],""f"":5}", "red", 0)]
         [InlineData(@"[1,""red"",5]", "red", 6)]
-        public static void SumIntegerValues(string json, string keyToIgnore, long expected)
+        public static void Day12_SumIntegerValues(string json, string keyToIgnore, long expected)
         {
             // Arrange
             JToken token = JToken.Parse(json);

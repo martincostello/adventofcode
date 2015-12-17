@@ -13,7 +13,7 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
         [Theory]
         [InlineData("abcdef", 5, 609043)]
         [InlineData("pqrstuv", 5, 1048970)]
-        public static void Day04_IsStringNiceV1(string secretKey, int zeroes, int expected)
+        public static void Day04_GetLowestPositiveNumberWithStartingZeroes(string secretKey, int zeroes, int expected)
         {
             // Act
             int actual = Day04.GetLowestPositiveNumberWithStartingZeroes(secretKey, zeroes);
