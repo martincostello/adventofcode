@@ -10,7 +10,7 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
     /// </summary>
     public static class Day17Tests
     {
-        [Fact(Skip = "Not implemented yet.")]
+        [Fact]
         public static void Day17_GetContainerCombinationCount()
         {
             // Arrange
@@ -24,11 +24,11 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
             Assert.Equal(4, actual);
         }
 
-        [Fact(Skip = "Not implemented yet.")]
+        [Fact(Skip = "Not working correctly yet.")]
         public static void Day17_Solve_Returns_Correct_Solution()
         {
             // Arrange
-            string[] args = new[] { @".\Input\Day17\input.txt" };
+            string[] args = new[] { @".\Input\Day17\input.txt", "150" };
             var target = new Day17();
 
             // Act
