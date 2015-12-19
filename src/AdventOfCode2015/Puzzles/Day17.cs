@@ -4,6 +4,7 @@
 namespace MartinCostello.AdventOfCode2015.Puzzles
 {
     using System;
+    using System.Collections;
     using System.Collections.Generic;
     using System.Globalization;
     using System.IO;
@@ -18,6 +19,11 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
         /// Gets the number of combinations of containers that can be used.
         /// </summary>
         internal int Combinations { get; private set; }
+
+        /// <summary>
+        /// Gets the number of combinations of the minimum number of containers that can be used.
+        /// </summary>
+        internal int CombinationsWithMinimumContainers { get; private set; }
 
         /// <inheritdoc />
         public int Solve(string[] args)
@@ -40,98 +46,90 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
 
             int volume = int.Parse(args[1], CultureInfo.InvariantCulture);
 
-            Combinations = GetContainerCombinationCount(volume, containerVolumes);
+            var combinations = GetContainerCombinations(volume, containerVolumes);
+            var combinationsWithLeastContainers = combinations.GroupBy((p) => p.Count).OrderBy((p) => p.Key).First();
+
+            Combinations = combinations.Count;
+            CombinationsWithMinimumContainers = combinationsWithLeastContainers.Count();
 
             Console.WriteLine(
                 "There are {0:N0} combinations of containers that can store {1:0} liters of eggnog.",
                 Combinations,
                 volume);
 
+            Console.WriteLine(
+                "There are {0:N0} combinations of containers that can store {1:0} liters of eggnog using {2} containers.",
+                CombinationsWithMinimumContainers,
+                volume,
+                combinationsWithLeastContainers.Key);
+
             return 0;
-        }
-
-        /// <summary>
-        /// Returns the number of combinations of containers that can be used to completely fill
-        /// one or more containers completely with the specified total volume of eggnog.
-        /// </summary>
-        /// <param name="volume">The volume of eggnog.</param>
-        /// <param name="containerVolumes">The volumes of the containers.</param>
-        /// <returns>
-        /// The number of combinations of containers that can store the volume specified by <paramref name="volume"/>.
-        /// </returns>
-        internal static int GetContainerCombinationCount(int volume, IList<int> containerVolumes)
-        {
-            var containers = containerVolumes
-                .OrderBy((p) => p)
-                .Select((p) => new Container() { Volume = p })
-                .ToList();
-
-            IList<ISet<Container>> combinations = new List<ISet<Container>>();
-
-            GetContainerCombinations(new HashSet<Container>(), containers, volume, combinations);
-
-            return combinations.Count;
         }
 
         /// <summary>
         /// Returns the combinations of containers that can be used to completely fill
         /// one or more containers completely with the specified total volume of eggnog.
         /// </summary>
-        /// <param name="current">The current set of used containers.</param>
-        /// <param name="containers">The remaining containers that can be used.</param>
-        /// <param name="targetVolume">The volume of eggnog.</param>
-        /// <param name="combinations">The combinations of containers that can store the volume specified by <paramref name="targetVolume"/>.</param>
-        private static void GetContainerCombinations(
-            ISet<Container> current,
-            IList<Container> containers,
-            int targetVolume,
-            IList<ISet<Container>> combinations)
+        /// <param name="volume">The volume of eggnog.</param>
+        /// <param name="containerVolumes">The volumes of the containers.</param>
+        /// <returns>
+        /// The combinations of containers that can store the volume specified by <paramref name="volume"/>.
+        /// </returns>
+        internal static IList<ICollection<int>> GetContainerCombinations(int volume, IList<int> containerVolumes)
         {
-            for (int i = 0; i < containers.Count; i++)
+            var containers = containerVolumes
+                .OrderByDescending((p) => p)
+                .ToList();
+
+            List<ICollection<int>> result = new List<ICollection<int>>();
+
+            BitArray bits = new BitArray(containerVolumes.Count);
+
+            for (int i = 0; i < Math.Pow(2, bits.Length); i++)
             {
-                var next = containers[i];
+                int sum = 0;
 
-                var sequence = new HashSet<Container>(current)
+                for (int j = 0; j < bits.Length; j++)
                 {
-                    next,
-                };
-
-                int sum = sequence.Sum((p) => p.Volume);
-
-                if (sum == targetVolume)
-                {
-                    if (!combinations.Any((p) => p.SetEquals(sequence)))
+                    if (bits[j])
                     {
-                        combinations.Add(sequence);
+                        sum += containers[j];
                     }
                 }
-                else if (sum < targetVolume && containers.Count > 1)
+
+                if (sum == volume)
                 {
-                    var remaining = new List<Container>(containers);
-                    remaining.Remove(next);
+                    List<int> volumes = new List<int>();
 
-                    remaining = remaining
-                        .Where((p) => sum + p.Volume <= targetVolume)
-                        .ToList();
-
-                    if (remaining.Sum((p) => p.Volume) >= targetVolume)
+                    for (int j = 0; j < bits.Length; j++)
                     {
-                        GetContainerCombinations(sequence, remaining, targetVolume, combinations);
+                        if (bits[j])
+                        {
+                            volumes.Add(containers[j]);
+                        }
                     }
+
+                    result.Add(volumes);
                 }
+
+                Increment(bits);
             }
+
+            return result;
         }
 
-        /// <summary>
-        /// A class representing a container. This class cannot be inherited.
-        /// </summary>
-        [System.Diagnostics.DebuggerDisplay("{Volume}")]
-        private sealed class Container
+        private static void Increment(BitArray value)
         {
-            /// <summary>
-            /// Gets or sets the volume of the container.
-            /// </summary>
-            internal int Volume { get; set; }
+            for (int i = 0; i < value.Length; i++)
+            {
+                bool previous = value[i];
+                value[i] = !previous;
+
+                if (!previous)
+                {
+                    return;
+                }
+            }
         }
     }
 }

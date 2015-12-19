@@ -3,6 +3,7 @@
 
 namespace MartinCostello.AdventOfCode2015.Puzzles
 {
+    using System.Linq;
     using Xunit;
 
     /// <summary>
@@ -18,13 +19,14 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
             int[] containerVolumes = new[] { 20, 15, 10, 5, 5 };
 
             // Act
-            int actual = Day17.GetContainerCombinationCount(volume, containerVolumes);
+            var result = Day17.GetContainerCombinations(volume, containerVolumes);
 
             // Assert
-            Assert.Equal(4, actual);
+            Assert.Equal(4, result.Count);
+            Assert.Equal(3, result.GroupBy((p) => p.Count).OrderBy((p) => p.Key).First().Count());
         }
 
-        [Fact(Skip = "Not working correctly yet.")]
+        [Fact]
         public static void Day17_Solve_Returns_Correct_Solution()
         {
             // Arrange
@@ -36,7 +38,8 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
 
             // Assert
             Assert.Equal(0, actual);
-            Assert.NotEqual(0, target.Combinations);
+            Assert.Equal(1304, target.Combinations);
+            Assert.Equal(18, target.CombinationsWithMinimumContainers);
         }
     }
 }
