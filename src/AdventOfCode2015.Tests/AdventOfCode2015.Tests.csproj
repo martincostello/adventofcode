@@ -83,6 +83,14 @@
     <Compile Include="Puzzles\Day15Tests.cs" />
     <Compile Include="Puzzles\Day16Tests.cs" />
     <Compile Include="Puzzles\Day17Tests.cs" />
+    <Compile Include="Puzzles\Day18Tests.cs" />
+    <Compile Include="Puzzles\Day19Tests.cs" />
+    <Compile Include="Puzzles\Day20Tests.cs" />
+    <Compile Include="Puzzles\Day21Tests.cs" />
+    <Compile Include="Puzzles\Day22Tests.cs" />
+    <Compile Include="Puzzles\Day23Tests.cs" />
+    <Compile Include="Puzzles\Day24Tests.cs" />
+    <Compile Include="Puzzles\Day25Tests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
