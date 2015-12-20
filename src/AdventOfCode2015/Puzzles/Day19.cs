@@ -15,16 +15,16 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
     internal sealed class Day19 : IPuzzle
     {
         /// <summary>
-        /// Gets the number of distinct molecules that can be created.
+        /// Gets the solution for fabrication or calibration.
         /// </summary>
-        internal int DistinctMoleculeCount { get; private set; }
+        internal int Solution { get; private set; }
 
         /// <inheritdoc />
         public int Solve(string[] args)
         {
-            if (args.Length != 1)
+            if (args.Length != 2)
             {
-                Console.Error.WriteLine("No input file path.");
+                Console.Error.WriteLine("No input file path and mode specified.");
                 return -1;
             }
 
@@ -32,6 +32,23 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
             {
                 Console.Error.WriteLine("The input file path specified cannot be found.");
                 return -1;
+            }
+
+            bool fabricate;
+
+            switch (args[1].ToUpperInvariant())
+            {
+                case "CALIBRATE":
+                    fabricate = false;
+                    break;
+
+                case "FABRICATE":
+                    fabricate = true;
+                    break;
+
+                default:
+                    Console.Error.WriteLine("The mode specified is invalid.");
+                    return -1;
             }
 
             string[] lines = File.ReadAllLines(args[0]);
@@ -43,14 +60,22 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
                 .Where((p) => !string.IsNullOrEmpty(p))
                 .ToList();
 
-            var molecules = GetPossibleMolecules(molecule, replacements);
+            if (fabricate)
+            {
+                Solution = GetMinimumSteps(molecule, replacements);
+                Console.WriteLine("The target molecule can be made in a minimum of {0:N0} steps.", Solution);
+            }
+            else
+            {
+                var molecules = GetPossibleMolecules(molecule, replacements);
 
-            DistinctMoleculeCount = molecules.Count;
+                Solution = molecules.Count;
 
-            Console.WriteLine(
-                "{0:N0} distinct molecules can be created from {1:N0} possible replacements.",
-                DistinctMoleculeCount,
-                replacements.Count);
+                Console.WriteLine(
+                    "{0:N0} distinct molecules can be created from {1:N0} possible replacements.",
+                    Solution,
+                    replacements.Count);
+            }
 
             return 0;
         }
@@ -59,7 +84,7 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
         /// Gets the possible molecules that can be created from single step transformations of a molecule.
         /// </summary>
         /// <param name="molecule">The input molecule.</param>
-        /// <param name="replacements">The possible replacemnts.</param>
+        /// <param name="replacements">The possible replacements.</param>
         /// <returns>
         /// The distinct molecules that can be created from <paramref name="molecule"/> using all of the
         /// possible replacements specified by <paramref name="replacements"/>.
@@ -99,6 +124,54 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
             return molecules
                 .OrderBy((p) => p, StringComparer.Ordinal)
                 .ToList();
+        }
+
+        /// <summary>
+        /// Gets the minimum number of steps that can be performed to make the specified molecule using the specified replacements.
+        /// </summary>
+        /// <param name="molecule">The desired molecule.</param>
+        /// <param name="replacements">The possible replacements.</param>
+        /// <returns>
+        /// The minimum number of steps required to create <paramref name="molecule"/> using the possible
+        /// replacements specified by <paramref name="replacements"/>.
+        /// </returns>
+        internal static int GetMinimumSteps(string molecule, ICollection<string> replacements)
+        {
+            return GetMinimumSteps(molecule, replacements, "e", 1);
+        }
+
+        /// <summary>
+        /// Gets the minimum number of steps that can be performed to make the specified molecule using the specified replacements.
+        /// </summary>
+        /// <param name="molecule">The desired molecule.</param>
+        /// <param name="replacements">The possible replacements.</param>
+        /// <param name="current">The current molecule being worked with.</param>
+        /// <param name="step">The current step number.</param>
+        /// <returns>
+        /// The minimum number of steps required to create <paramref name="molecule"/> using the possible
+        /// replacements specified by <paramref name="replacements"/>.
+        /// </returns>
+        internal static int GetMinimumSteps(string molecule, ICollection<string> replacements, string current, int step)
+        {
+            ICollection<string> nextSteps = GetPossibleMolecules(current, replacements);
+
+            if (nextSteps.Contains(molecule))
+            {
+                Console.WriteLine("Found solution that takes {0:N0} steps.", step);
+                return step;
+            }
+
+            List<int> steps = new List<int>();
+
+            foreach (string next in nextSteps.Where((p) => p.Length < molecule.Length))
+            {
+                steps.Add(GetMinimumSteps(molecule, replacements, next, step + 1));
+            }
+
+            return steps
+                .Where((p) => p > 0)
+                .DefaultIfEmpty()
+                .Min();
         }
     }
 }

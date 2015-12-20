@@ -32,10 +32,26 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
         }
 
         [Fact]
-        public static void Day19_Solve_Returns_Correct_Solution()
+        public static void Day19_GetMinimumSteps()
         {
             // Arrange
-            string[] args = new[] { @".\Input\Day19\input.txt" };
+            string molecule = "HOH";
+            string[] replacements = new[] { "e => H", "e => O", "H => HO", "H => OH", "O => HH" };
+
+            // Act
+            int actual = Day19.GetMinimumSteps(molecule, replacements);
+
+            // Assert
+            Assert.Equal(3, actual);
+        }
+
+        [Theory]
+        [InlineData("calibrate", 576)]
+        ////[InlineData("fabricate", 0)]
+        public static void Day19_Solve_Returns_Correct_Solution(string mode, int expected)
+        {
+            // Arrange
+            string[] args = new[] { @".\Input\Day19\input.txt", mode };
             var target = new Day19();
 
             // Act
@@ -43,7 +59,7 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
 
             // Assert
             Assert.Equal(0, actual);
-            Assert.Equal(576, target.DistinctMoleculeCount);
+            Assert.Equal(expected, target.Solution);
         }
     }
 }
