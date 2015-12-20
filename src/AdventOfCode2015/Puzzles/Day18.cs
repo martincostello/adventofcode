@@ -34,7 +34,7 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
         /// <inheritdoc />
         public int Solve(string[] args)
         {
-            if (args.Length != 2)
+            if (args.Length != 2 && args.Length != 3)
             {
                 Console.Error.WriteLine("No input file path and iterations specified.");
                 return -1;
@@ -48,8 +48,9 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
 
             IList<string> initial = File.ReadAllLines(args[0]);
             int steps = int.Parse(args[1], CultureInfo.InvariantCulture);
+            bool areCornerLightsBroken = args.Length == 3 && string.Equals(args[2], bool.TrueString, StringComparison.OrdinalIgnoreCase);
 
-            IList<string> final = GetGridConfigurationAfterSteps(initial, steps);
+            IList<string> final = GetGridConfigurationAfterSteps(initial, steps, areCornerLightsBroken);
 
             for (int x = 0; x < final.Count; x++)
             {
@@ -77,17 +78,18 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
         /// </summary>
         /// <param name="initial">The initial light configuration.</param>
         /// <param name="steps">The number of steps to return the configuration for.</param>
+        /// <param name="areCornerLightsBroken">Whether the corner lights are broken.</param>
         /// <returns>
         /// An <see cref="IList{T}"/> of <see cref="string"/> containing the light
         /// configuration after the number of steps specified by the value of <paramref name="steps"/>.
         /// </returns>
-        internal static IList<string> GetGridConfigurationAfterSteps(IList<string> initial, int steps)
+        internal static IList<string> GetGridConfigurationAfterSteps(IList<string> initial, int steps, bool areCornerLightsBroken)
         {
             bool[,] current = ParseInitialState(initial);
 
             for (int i = 0; i < steps; i++)
             {
-                current = Animate(current);
+                current = Animate(current, areCornerLightsBroken);
             }
 
             List<string> result = new List<string>();
@@ -114,57 +116,82 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
         /// Animates the specified input frame and returns the new output frame.
         /// </summary>
         /// <param name="input">The input frame.</param>
+        /// <param name="areCornerLightsBroken">Whether the corner lights are broken.</param>
         /// <returns>
         /// An <see cref="Array"/> of <see cref="bool"/> containing the new frame.
         /// </returns>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1814:PreferJaggedArraysOverMultidimensional", MessageId = "0#", Justification = "Easier to visualize.")]
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1814:PreferJaggedArraysOverMultidimensional", MessageId = "Body", Justification = "Easier to visualize.")]
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1814:PreferJaggedArraysOverMultidimensional", MessageId = "Return", Justification = "Easier to visualize.")]
-        private static bool[,] Animate(bool[,] input)
+        private static bool[,] Animate(bool[,] input, bool areCornerLightsBroken)
         {
             int width = input.GetLength(0);
             int height = input.GetLength(1);
 
             bool[,] output = new bool[width, height];
 
+            IList<Point> cornerLights;
+
+            if (areCornerLightsBroken)
+            {
+                cornerLights = new Point[]
+                {
+                    new Point(0, 0),
+                    new Point(width - 1, 0),
+                    new Point(0, height - 1),
+                    new Point(width - 1, height - 1),
+                };
+            }
+            else
+            {
+                cornerLights = new Point[0];
+            }
+
             for (int x = 0; x < width; x++)
             {
                 for (int y = 0; y < height; y++)
                 {
-                    List<Point> neighbors = new List<Point>()
-                    {
-                        new Point(x - 1, y - 1),
-                        new Point(x, y - 1),
-                        new Point(x + 1, y - 1),
-                        new Point(x - 1, y),
-                        new Point(x + 1, y),
-                        new Point(x + 1, y + 1),
-                        new Point(x, y + 1),
-                        new Point(x - 1, y + 1),
-                    };
-
-                    int neighborsOn = 0;
-
-                    foreach (var neighbor in neighbors)
-                    {
-                        if (neighbor.X >= 0 && neighbor.X < width && neighbor.Y >= 0 && neighbor.Y < height)
-                        {
-                            if (input[neighbor.X, neighbor.Y])
-                            {
-                                neighborsOn++;
-                            }
-                        }
-                    }
-
                     bool newState;
 
-                    if (input[x, y])
+                    if (areCornerLightsBroken && cornerLights.Contains(new Point(x, y)))
                     {
-                        newState = neighborsOn == 2 || neighborsOn == 3;
+                        newState = true;
                     }
                     else
                     {
-                        newState = neighborsOn == 3;
+                        List<Point> neighbors = new List<Point>()
+                        {
+                            new Point(x - 1, y - 1),
+                            new Point(x, y - 1),
+                            new Point(x + 1, y - 1),
+                            new Point(x - 1, y),
+                            new Point(x + 1, y),
+                            new Point(x + 1, y + 1),
+                            new Point(x, y + 1),
+                            new Point(x - 1, y + 1),
+                        };
+
+                        int neighborsOn = 0;
+
+                        foreach (var neighbor in neighbors)
+                        {
+                            if (neighbor.X >= 0 && neighbor.X < width && neighbor.Y >= 0 && neighbor.Y < height)
+                            {
+                                if (input[neighbor.X, neighbor.Y] || cornerLights.Contains(new Point(neighbor.X, neighbor.Y)))
+                                {
+                                    neighborsOn++;
+                                }
+                            }
+                        }
+
+                        if (input[x, y])
+                        {
+                            newState = neighborsOn == 2 || neighborsOn == 3;
+                        }
+                        else
+                        {
+                            newState = neighborsOn == 3;
+                        }
                     }
 
                     output[x, y] = newState;

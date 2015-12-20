@@ -26,9 +26,10 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
             };
 
             int steps = 0;
+            bool areCornerLightsBroken = false;
 
             // Act
-            IList<string> actual = Day18.GetGridConfigurationAfterSteps(initialState, steps);
+            IList<string> actual = Day18.GetGridConfigurationAfterSteps(initialState, steps, areCornerLightsBroken);
 
             // Assert
             Assert.NotNull(actual);
@@ -44,7 +45,7 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
             steps = 4;
 
             // Act
-            actual = Day18.GetGridConfigurationAfterSteps(initialState, steps);
+            actual = Day18.GetGridConfigurationAfterSteps(initialState, steps, areCornerLightsBroken);
 
             // Assert
             Assert.NotNull(actual);
@@ -55,13 +56,32 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
             Assert.Equal("..##..", actual[3]);
             Assert.Equal("......", actual[4]);
             Assert.Equal("......", actual[5]);
+
+            // Arrange
+            steps = 5;
+            areCornerLightsBroken = true;
+
+            // Act
+            actual = Day18.GetGridConfigurationAfterSteps(initialState, steps, areCornerLightsBroken);
+
+            // Assert
+            Assert.NotNull(actual);
+            Assert.Equal(6, actual.Count);
+            Assert.Equal("##.###", actual[0]);
+            Assert.Equal(".##..#", actual[1]);
+            Assert.Equal(".##...", actual[2]);
+            Assert.Equal(".##...", actual[3]);
+            Assert.Equal("#.#...", actual[4]);
+            Assert.Equal("##...#", actual[5]);
         }
 
-        [Fact]
-        public static void Day18_Solve_Returns_Correct_Solution()
+        [Theory]
+        [InlineData("false", 814)]
+        [InlineData("true", 924)]
+        public static void Day18_Solve_Returns_Correct_Solution(string areCornerLightsBroken, int lightsIlluminated)
         {
             // Arrange
-            string[] args = new[] { @".\Input\Day18\input.txt", "100" };
+            string[] args = new[] { @".\Input\Day18\input.txt", "100", areCornerLightsBroken };
             var target = new Day18();
 
             // Act
@@ -69,7 +89,7 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
 
             // Assert
             Assert.Equal(0, actual);
-            Assert.Equal(814, target.LightsIlluminated);
+            Assert.Equal(lightsIlluminated, target.LightsIlluminated);
         }
     }
 }
