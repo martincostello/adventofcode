@@ -3,6 +3,7 @@
 
 namespace MartinCostello.AdventOfCode2015.Puzzles
 {
+    using System.Collections.Generic;
     using System.Linq;
     using Xunit;
 
@@ -11,5 +12,38 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
     /// </summary>
     public static class Day19Tests
     {
+        [Fact]
+        public static void Day19_GetPossibleMolecules()
+        {
+            // Arrange
+            string molecule = "HOH";
+            string[] replacements = new[] { "H => HO", "H => OH", "O => HH" };
+
+            // Act
+            ICollection<string> result = Day19.GetPossibleMolecules(molecule, replacements);
+
+            // Assert
+            Assert.NotNull(result);
+            Assert.Equal(4, result.Count);
+            Assert.Equal("HHHH", result.ElementAt(0));
+            Assert.Equal("HOHO", result.ElementAt(1));
+            Assert.Equal("HOOH", result.ElementAt(2));
+            Assert.Equal("OHOH", result.ElementAt(3));
+        }
+
+        [Fact]
+        public static void Day19_Solve_Returns_Correct_Solution()
+        {
+            // Arrange
+            string[] args = new[] { @".\Input\Day19\input.txt" };
+            var target = new Day19();
+
+            // Act
+            int actual = target.Solve(args);
+
+            // Assert
+            Assert.Equal(0, actual);
+            Assert.Equal(576, target.DistinctMoleculeCount);
+        }
     }
 }
