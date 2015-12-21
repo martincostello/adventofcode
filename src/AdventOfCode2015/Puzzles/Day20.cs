@@ -18,15 +18,16 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
 
         public int Solve(string[] args)
         {
-            if (args.Length != 1)
+            if (args.Length != 1 && args.Length != 2)
             {
-                Console.Error.WriteLine("No target value specified.");
+                Console.Error.WriteLine("No target value or maximum number of visits specified.");
                 return -1;
             }
 
             int target = int.Parse(args[0], CultureInfo.InvariantCulture);
+            int? maximumVisits = args.Length == 2 ? int.Parse(args[1], CultureInfo.InvariantCulture) : default(int?);
 
-            LowestHouseNumber = GetLowestHouseNumber(target);
+            LowestHouseNumber = GetLowestHouseNumber(target, maximumVisits);
 
             Console.WriteLine(
                 "The first house to receive at least {0:N0} presents is house number {1:N0}.",
@@ -40,14 +41,15 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
         /// Returns the lowest house number that gets the specified number of presents.
         /// </summary>
         /// <param name="target">The target number.</param>
+        /// <param name="maximumVisits">The optional maximum visits each elf makes to a house.</param>
         /// <returns>
         /// The lowest house number that receives at least the specified number of presents.
         /// </returns>
-        internal static int GetLowestHouseNumber(int target)
+        internal static int GetLowestHouseNumber(int target, int? maximumVisits)
         {
             for (int i = 1; ; i++)
             {
-                if (GetPresentsDelivered(i) >= target)
+                if (GetPresentsDelivered(i, maximumVisits) >= target)
                 {
                     return i;
                 }
@@ -58,18 +60,28 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
         /// Returns the number of presents delivered to the specified house.
         /// </summary>
         /// <param name="house">The house number.</param>
+        /// <param name="maximumVisits">The optional maximum visits each elf makes to a house.</param>
         /// <returns>
         /// The number of presents delivered to the specified house.
         /// </returns>
-        internal static int GetPresentsDelivered(int house)
+        internal static int GetPresentsDelivered(int house, int? maximumVisits)
         {
             int count = 0;
 
+            int presents = maximumVisits.HasValue ? 11 : 10;
+
             for (int elf = 1; elf < house + 1; elf++)
             {
-                if (house % elf == 0)
+                bool isElfInRange = maximumVisits == null;
+
+                if (!isElfInRange)
                 {
-                    count += elf * 10;
+                    isElfInRange = house <= elf * maximumVisits.Value;
+                }
+
+                if (isElfInRange && house % elf == 0)
+                {
+                    count += elf * presents;
                 }
             }
 

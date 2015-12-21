@@ -11,19 +11,25 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
     public static class Day20Tests
     {
         [Theory]
-        [InlineData(1, 10)]
-        [InlineData(2, 30)]
-        [InlineData(3, 40)]
-        [InlineData(4, 70)]
-        [InlineData(5, 60)]
-        [InlineData(6, 120)]
-        [InlineData(7, 80)]
-        [InlineData(8, 150)]
-        [InlineData(9, 130)]
-        public static void Day20_GetPresentsDelivered(int house, int expected)
+        [InlineData(1, 10, null)]
+        [InlineData(2, 30, null)]
+        [InlineData(3, 40, null)]
+        [InlineData(4, 70, null)]
+        [InlineData(5, 60, null)]
+        [InlineData(6, 120, null)]
+        [InlineData(7, 80, null)]
+        [InlineData(8, 150, null)]
+        [InlineData(9, 130, null)]
+        [InlineData(1, 11, 2)]
+        [InlineData(2, 33, 2)]
+        [InlineData(3, 33, 2)]
+        [InlineData(4, 66, 2)]
+        [InlineData(5, 55, 2)]
+        [InlineData(6, 99, 2)]
+        public static void Day20_GetPresentsDelivered(int house, int expected, int? maximumVisits)
         {
             // Act
-            int actual = Day20.GetPresentsDelivered(house);
+            int actual = Day20.GetPresentsDelivered(house, maximumVisits);
 
             // Assert
             Assert.Equal(expected, actual);
@@ -41,8 +47,11 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
         [InlineData(130, 8)]
         public static void Day20_GetLowestHouseNumber(int target, int expected)
         {
+            // Arrange
+            int? maximumVisits = null;
+
             // Act
-            int actual = Day20.GetLowestHouseNumber(target);
+            int actual = Day20.GetLowestHouseNumber(target, maximumVisits);
 
             // Assert
             Assert.Equal(expected, actual);
@@ -61,6 +70,21 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
             // Assert
             Assert.Equal(0, actual);
             Assert.Equal(786240, target.LowestHouseNumber);
+        }
+
+        [Fact(Skip = "Too slow.")]
+        public static void Day20_Solve_Returns_Correct_Solution_Maximum_Visits()
+        {
+            // Arrange
+            string[] args = new[] { "34000000", "50" };
+            var target = new Day20();
+
+            // Act
+            int actual = target.Solve(args);
+
+            // Assert
+            Assert.Equal(0, actual);
+            Assert.Equal(0, target.LowestHouseNumber);
         }
     }
 }
