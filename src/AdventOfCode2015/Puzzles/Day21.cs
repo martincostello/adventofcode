@@ -13,9 +13,14 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
     internal sealed class Day21 : IPuzzle
     {
         /// <summary>
+        /// Gets the maximum cost of items that can be purchased for the human to lost to the boss.
+        /// </summary>
+        internal int MaximumCostToLose { get; private set; }
+
+        /// <summary>
         /// Gets the minimum cost of items that can be purchased for the human to beat the boss.
         /// </summary>
-        internal int MinimumCost { get; private set; }
+        internal int MinimumCostToWin { get; private set; }
 
         /// <inheritdoc />
         public int Solve(string[] args)
@@ -39,7 +44,8 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
                 potentialRings.Add(permutation.ToArray());
             }
 
-            List<int> costs = new List<int>();
+            List<int> costsToLose = new List<int>();
+            List<int> costsToWin = new List<int>();
 
             foreach (string weapon in potentialWeapons)
             {
@@ -47,19 +53,25 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
                 {
                     foreach (var rings in potentialRings)
                     {
-                        int? cost = Fight(weapon, armor, rings);
+                        Tuple<bool, int> result = Fight(weapon, armor, rings);
 
-                        if (cost.HasValue)
+                        if (result.Item1)
                         {
-                            costs.Add(cost.Value);
+                            costsToWin.Add(result.Item2);
+                        }
+                        else
+                        {
+                            costsToLose.Add(result.Item2);
                         }
                     }
                 }
             }
 
-            MinimumCost = costs.Min();
+            MaximumCostToLose = costsToLose.Max();
+            MinimumCostToWin = costsToWin.Min();
 
-            Console.WriteLine("The minimum amoung of gold spent for the human to beat the boss is {0:N0}.", MinimumCost);
+            Console.WriteLine("The minimum amount of gold spent for the human to beat the boss is {0:N0}.", MinimumCostToWin);
+            Console.WriteLine("The maximum amount of gold spent for the human to lose to the boss is {0:N0}.", MaximumCostToLose);
 
             return 0;
         }
@@ -71,9 +83,9 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
         /// <param name="armor">The armor to purchase, if any.</param>
         /// <param name="rings">The rings to purchase, if any.</param>
         /// <returns>
-        /// The amount of gold spent for the human to win the fight, or <see cref="null"/> if the human lost.
+        /// A <see cref="Tuple{T1, T2}"/> that returns whether the human player won and the amount of gold spent.
         /// </returns>
-        internal static int? Fight(string weapon, string armor, ICollection<string> rings)
+        internal static Tuple<bool, int> Fight(string weapon, string armor, ICollection<string> rings)
         {
             Shop shop = new Shop();
             Human human = new Human();
@@ -94,7 +106,7 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
 
             Player winner = Fight(human, boss);
 
-            return winner == human ? goldSpent : default(int?);
+            return Tuple.Create(winner == human, goldSpent);
         }
 
         /// <summary>

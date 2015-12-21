@@ -35,7 +35,8 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
 
             // Assert
             Assert.Equal(0, actual);
-            Assert.Equal(78, target.MinimumCost);
+            Assert.Equal(148, target.MaximumCostToLose);
+            Assert.Equal(78, target.MinimumCostToWin);
         }
     }
 }
