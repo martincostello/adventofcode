@@ -84,7 +84,7 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
 
             // Assert
             Assert.Equal(0, actual);
-            Assert.Equal(0, target.LowestHouseNumber);
+            Assert.Equal(831600, target.LowestHouseNumber);
         }
     }
 }
