@@ -47,7 +47,7 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
 
         [Theory]
         [InlineData("calibrate", 576)]
-        ////[InlineData("fabricate", 0)]
+        ////[InlineData("fabricate", 207)]
         public static void Day19_Solve_Returns_Correct_Solution(string mode, int expected)
         {
             // Arrange
