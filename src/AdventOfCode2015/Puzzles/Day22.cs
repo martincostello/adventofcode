@@ -21,13 +21,15 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
         /// <inheritdoc />
         public int Solve(string[] args)
         {
+            string difficulty = args.Length == 1 ? args[0] : "easy";
+
             List<Tuple<bool, int>> solutions = new List<Tuple<bool, int>>();
             Random random = new Random();
 
-            // Play the game 10,000 times with random choices of spells
+            // Play the game 100,000 times with random choices of spells
             while (solutions.Count < 100000)
             {
-                Tuple<bool, int> result = Fight((wizard, spells) => spells.ElementAt(random.Next(0, spells.Count)));
+                Tuple<bool, int> result = Fight((wizard, spells) => spells.ElementAt(random.Next(0, spells.Count)), difficulty);
                 solutions.Add(Tuple.Create(result.Item1, result.Item2));
             }
 
@@ -35,7 +37,10 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
                 .Where((p) => p.Item1)
                 .Min((p) => p.Item2);
 
-            Console.WriteLine("The minimum amount of mana that can be spent to win is {0:N0}.", MinimumCostToWin);
+            Console.WriteLine(
+                "The minimum amount of mana that can be spent to win on {0} difficulty is {1:N0}.",
+                difficulty,
+                MinimumCostToWin);
 
             return 0;
         }
@@ -44,51 +49,69 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
         /// Simulates a fight between the wizard and the boss.
         /// </summary>
         /// <param name="spellSelector">A delegate to a method to use to select the next spell to conjure.</param>
+        /// <param name="difficulty">The difficulty to play with.</param>
         /// <returns>
         /// A <see cref="Tuple{T1, T2}"/> that returns whether the wizard won and the amount of mana spent by the wizard.
         /// </returns>
-        internal static Tuple<bool, int> Fight(Func<Wizard, ICollection<string>, string> spellSelector)
+        internal static Tuple<bool, int> Fight(Func<Wizard, ICollection<string>, string> spellSelector, string difficulty)
         {
             Wizard wizard = new Wizard(spellSelector);
             Boss boss = new Boss();
 
-            Player winner = Fight(wizard, boss);
+            Player winner = Fight(wizard, boss, difficulty, (f, a) => { });
 
             return Tuple.Create(winner == wizard, wizard.ManaSpent);
         }
 
         /// <summary>
-        /// Simulates a fight between the specified players.
+        /// Simulates a fight between the specified wizard and opponent.
         /// </summary>
-        /// <param name="player1">The first player.</param>
-        /// <param name="player2">The second player.</param>
+        /// <param name="wizard">The wizard.</param>
+        /// <param name="opponent">The opponent.</param>
+        /// <param name="difficulty">The difficulty to play with.</param>
+        /// <param name="output">A delegate to a method to use to output messages.</param>
         /// <returns>
         /// The player which won the fight.
         /// </returns>
-        internal static Player Fight(Wizard player1, Player player2)
+        internal static Player Fight(Wizard wizard, Player opponent, string difficulty, Action<string, object[]> output)
         {
-            Player attacker = player1;
-            Player defender = player2;
+            Player attacker = wizard;
+            Player defender = opponent;
+
+            bool isHardDifficulty = string.Equals("HARD", difficulty, StringComparison.OrdinalIgnoreCase);
 
             do
             {
-                if (attacker != player1)
+                output("-- {0} turn --", new object[] { attacker.Name });
+                output("- {0} has {1} hit points, {2} armor, {3} mana", new object[] { wizard.Name, wizard.HitPoints, wizard.Armor, wizard.Mana });
+                output("- {0} has {1} hit points", new object[] { opponent.Name, opponent.HitPoints });
+
+                if (isHardDifficulty && attacker == wizard)
                 {
-                    player1.CastSpells(attacker);
+                    wizard.HitPoints--;
+
+                    if (wizard.HitPoints < 1)
+                    {
+                        break;
+                    }
                 }
+
+                wizard.CastSpells(opponent, output);
 
                 if (attacker.HitPoints > 0)
                 {
-                    attacker.Attack(defender);
+                    attacker.Attack(defender, output);
                 }
 
                 var player = attacker;
                 attacker = defender;
                 defender = player;
-            }
-            while (player1.HitPoints > 0 && player2.HitPoints > 0);
 
-            return player1.HitPoints > 0 ? player1 : player2;
+                output(string.Empty, new object[0]);
+            }
+            while (wizard.HitPoints > 0 && opponent.HitPoints > 0);
+
+            return wizard.HitPoints > 0 ? wizard : opponent;
         }
 
         /// <summary>
@@ -110,15 +133,12 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
             /// <param name="hitPoints">The number of hit points the boss has.</param>
             /// <param name="damage">The initial damage the boss inflicts on others.</param>
             internal Boss(int hitPoints, int damage)
-                : base(hitPoints, damage)
+                : base("Boss", hitPoints, damage)
             {
             }
 
-            /// <summary>
-            /// Attacks the specified player.
-            /// </summary>
-            /// <param name="other">The other player to attack with this player.</param>
-            public override void Attack(Player other)
+            /// <inheritdoc />
+            public override void Attack(Player other, Action<string, object[]> output)
             {
                 int damage = Damage - other.Armor;
 
@@ -128,6 +148,15 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
                 }
 
                 other.HitPoints -= damage;
+
+                if (other.Armor == 0)
+                {
+                    output("{0} attacks for {1} damage!", new object[] { Name, damage });
+                }
+                else
+                {
+                    output("{0} attacks for {1} - {2} = {3} damage!", new object[] { Name, Damage, other.Armor, damage });
+                }
             }
         }
 
@@ -162,7 +191,7 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
             /// <param name="mana">The amount of mana the wizard has.</param>
             /// <param name="spellSelector">A delegate to a method to use to select the next spell to conjure.</param>
             internal Wizard(int hitPoints, int mana, Func<Wizard, ICollection<string>, string> spellSelector)
-                : base(hitPoints, 0)
+                : base("Player", hitPoints, 0)
             {
                 Mana = mana;
                 _spellSelector = spellSelector;
@@ -192,7 +221,8 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
             /// Attacks the specified player.
             /// </summary>
             /// <param name="other">The other player to attack with this player.</param>
-            public override void Attack(Player other)
+            /// <param name="output">A delegate to a method to use to output messages.</param>
+            public override void Attack(Player other, Action<string, object[]> output)
             {
                 var availableSpells = SpellInfo.Spells
                     .Where((p) => p.Value.Cost <= Mana)
@@ -214,33 +244,31 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
                     .Select((p) => p.Value)
                     .Single();
 
-                // Equip it
-                Equip(info);
-
-                // Cast any available spells to apply their effects
-                CastSpells(other);
+                // Conjure the new spell and then cast it
+                Conjure(info).Cast(this, other, output);
             }
 
             /// <summary>
             /// Casts the wizard's active spells on the specified player.
             /// </summary>
             /// <param name="other">The other player to cast the spells on.</param>
-            internal void CastSpells(Player other)
+            /// <param name="output">A delegate to a method to use to output messages.</param>
+            internal void CastSpells(Player other, Action<string, object[]> output)
             {
                 foreach (var spell in _spells.Where((p) => p.TurnsLeft > 0))
                 {
-                    spell.Cast(this, other);
+                    spell.Cast(this, other, output);
                 }
             }
 
             /// <summary>
-            /// Equips the wizard with the specified spell.
+            /// Conjures the specified spell.
             /// </summary>
-            /// <param name="info">Information about the spell to equip the wizard with.</param>
+            /// <param name="info">Information about the spell to conjure.</param>
             /// <returns>
-            /// The spell that was equipped.
+            /// The spell that was conjured.
             /// </returns>
-            internal Spell Equip(SpellInfo info)
+            internal Spell Conjure(SpellInfo info)
             {
                 Mana -= info.Cost;
                 ManaSpent += info.Cost;
@@ -261,10 +289,12 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
             /// <summary>
             /// Initializes a new instance of the <see cref="Player"/> class.
             /// </summary>
+            /// <param name="name">The name of the player.</param>
             /// <param name="hitPoints">The number of hit points the player has.</param>
             /// <param name="damage">The initial damage the player inflicts on others.</param>
-            internal Player(int hitPoints, int damage)
+            internal Player(string name, int hitPoints, int damage)
             {
+                Name = name;
                 HitPoints = hitPoints;
                 Damage = damage;
             }
@@ -285,10 +315,16 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
             public int HitPoints { get; set; }
 
             /// <summary>
+            /// Gets the name of the player.
+            /// </summary>
+            public string Name { get; }
+
+            /// <summary>
             /// Attacks the specified player.
             /// </summary>
             /// <param name="other">The other player to attack with this player.</param>
-            public abstract void Attack(Player other);
+            /// <param name="output">A delegate to a method to use to output messages.</param>
+            public abstract void Attack(Player other, Action<string, object[]> output);
         }
 
         /// <summary>
@@ -376,30 +412,46 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
             internal int TurnsLeft { get; private set; }
 
             /// <summary>
+            /// Gets or sets a value indicating whether the spell has been cast.
+            /// </summary>
+            private bool HasBeenCast { get; set; }
+
+            /// <summary>
             /// Casts the spell on the specified player.
             /// </summary>
             /// <param name="wizard">The wizard casting the spell.</param>
             /// <param name="other">The player to cast the spell on.</param>
-            internal virtual void Cast(Wizard wizard, Player other)
+            /// <param name="output">A delegate to a method to use to output messages.</param>
+            internal virtual void Cast(Wizard wizard, Player other, Action<string, object[]> output)
             {
-                if (TurnsLeft > 0)
+                if (!HasBeenCast)
                 {
-                    Affect(wizard);
-                    Affect(other);
+                    Cast(wizard, output);
+                    Cast(other, output);
+
+                    HasBeenCast = true;
+                }
+                else if (TurnsLeft > 0)
+                {
+                    Affect(wizard, output);
+                    Affect(other, output);
 
                     TurnsLeft--;
-                }
-                else
-                {
-                    Reset(wizard);
+
+                    if (TurnsLeft == 0)
+                    {
+                        Reverse(wizard, output);
+                        Reverse(other, output);
+                    }
                 }
             }
 
             /// <summary>
             /// Applies the effect(s) of the spell on the specified player.
             /// </summary>
-            /// <param name="player">The player to apply the effects of the spell on.</param>
-            protected virtual void Affect(Player player)
+            /// <param name="other">The player to apply the effects of the spell on.</param>
+            /// <param name="output">A delegate to a method to use to output messages.</param>
+            protected virtual void Affect(Player other, Action<string, object[]> output)
             {
             }
 
@@ -407,15 +459,44 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
             /// Applies the effect(s) of the spell on the specified wizard.
             /// </summary>
             /// <param name="wizard">The wizard to apply the effects of the spell on.</param>
-            protected virtual void Affect(Wizard wizard)
+            /// <param name="output">A delegate to a method to use to output messages.</param>
+            protected virtual void Affect(Wizard wizard, Action<string, object[]> output)
             {
             }
 
             /// <summary>
-            /// Resets any effect(s) of the spell on the specified wizard.
+            /// Casts the spell on the specified player.
             /// </summary>
-            /// <param name="wizard">The wizard to reset the effects of the spell on.</param>
-            protected virtual void Reset(Wizard wizard)
+            /// <param name="other">The player to cast the spell on.</param>
+            /// <param name="output">A delegate to a method to use to output messages.</param>
+            protected virtual void Cast(Player other, Action<string, object[]> output)
+            {
+            }
+
+            /// <summary>
+            /// Casts the spell on the specified wizard.
+            /// </summary>
+            /// <param name="wizard">The wizard to cast the spell on.</param>
+            /// <param name="output">A delegate to a method to use to output messages.</param>
+            protected virtual void Cast(Wizard wizard, Action<string, object[]> output)
+            {
+            }
+
+            /// <summary>
+            /// Reverses any effect(s) of the spell on the specified player.
+            /// </summary>
+            /// <param name="other">The player to reverse the effects of the spell on.</param>
+            /// <param name="output">A delegate to a method to use to output messages.</param>
+            protected virtual void Reverse(Player other, Action<string, object[]> output)
+            {
+            }
+
+            /// <summary>
+            /// Reverses any effect(s) of the spell on the specified wizard.
+            /// </summary>
+            /// <param name="wizard">The wizard to reverse the effects of the spell on.</param>
+            /// <param name="output">A delegate to a method to use to output messages.</param>
+            protected virtual void Reverse(Wizard wizard, Action<string, object[]> output)
             {
             }
         }
@@ -433,16 +514,22 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
             {
             }
 
+            /// <summary>
+            /// Gets the amount of damage/healing the spell provides.
+            /// </summary>
+            private static int Delta => 2;
+
             /// <inheritdoc />
-            protected override void Affect(Player player)
+            protected override void Cast(Player other, Action<string, object[]> output)
             {
-                player.HitPoints -= 2;
+                other.HitPoints -= Delta;
             }
 
             /// <inheritdoc />
-            protected override void Affect(Wizard wizard)
+            protected override void Cast(Wizard wizard, Action<string, object[]> output)
             {
-                wizard.HitPoints += 2;
+                wizard.HitPoints += Delta;
+                output("{0} casts Drain, dealing {1} damage, and healing {1} hit points.", new object[] { wizard.Name, Delta });
             }
         }
 
@@ -455,14 +542,25 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
             /// Initializes a new instance of the <see cref="MagicMissile"/> class.
             /// </summary>
             internal MagicMissile()
-                : base(1)
+                : base(0)
             {
             }
 
+            /// <summary>
+            /// Gets the amount of damage the magic missile causes.
+            /// </summary>
+            private static int Damage => 4;
+
             /// <inheritdoc />
-            protected override void Affect(Player player)
+            protected override void Cast(Wizard wizard, Action<string, object[]> output)
             {
-                player.HitPoints -= 4;
+                output("{0} casts {1}, dealing {2} damage.", new object[] { wizard.Name, Name, Damage });
+            }
+
+            /// <inheritdoc />
+            protected override void Cast(Player other, Action<string, object[]> output)
+            {
+                other.HitPoints -= Damage;
             }
         }
 
@@ -479,10 +577,34 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
             {
             }
 
+            /// <summary>
+            /// Gets the amount of damage the poison causes.
+            /// </summary>
+            private static int Damage => 3;
+
             /// <inheritdoc />
-            protected override void Affect(Player player)
+            protected override void Cast(Wizard wizard, Action<string, object[]> output)
             {
-                player.HitPoints -= 3;
+                output("{0} casts {1}.", new object[] { wizard.Name, Name });
+            }
+
+            /// <inheritdoc />
+            [System.Diagnostics.CodeAnalysis.SuppressMessage(
+                "Microsoft.Globalization",
+                "CA1308:NormalizeStringsToUppercase",
+                Justification = "Used for correct sentence casing for display.")]
+            protected override void Affect(Player other, Action<string, object[]> output)
+            {
+                other.HitPoints -= Damage;
+
+                if (other.HitPoints < 1)
+                {
+                    output("{0} deals {1} damage. This kills the {2}, and the player wins.", new object[] { Name, Damage, other.Name.ToLowerInvariant() });
+                }
+                else
+                {
+                    output("{0} deals {1} damage; its timer is now {2}.", new object[] { Name, Damage, TurnsLeft - 1 });
+                }
             }
         }
 
@@ -500,9 +622,21 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
             }
 
             /// <inheritdoc />
-            protected override void Affect(Wizard wizard)
+            protected override void Cast(Wizard wizard, Action<string, object[]> output)
+            {
+                output("{0} casts {1}.", new object[] { wizard.Name, Name });
+            }
+
+            /// <inheritdoc />
+            protected override void Affect(Wizard wizard, Action<string, object[]> output)
             {
                 wizard.Mana += 101;
+                output("{0} provides 101 mana; its timer is now {1}.", new object[] { Name, TurnsLeft - 1 });
+
+                if (TurnsLeft - 1 == 0)
+                {
+                    output("{0} wears off.", new object[] { Name });
+                }
             }
         }
 
@@ -519,24 +653,35 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
             {
             }
 
+            /// <summary>
+            /// Gets the amount of armor the shield provides.
+            /// </summary>
+            private static int ArmorIncrease => 7;
+
             /// <inheritdoc />
-            protected override void Affect(Wizard wizard)
+            protected override void Cast(Wizard wizard, Action<string, object[]> output)
             {
-                if (Turns == TurnsLeft)
-                {
-                    wizard.Armor += 7;
-                }
+                wizard.Armor += ArmorIncrease;
+                output("{0} casts {1}, increasing armor by {2}.", new object[] { wizard.Name, Name, ArmorIncrease });
             }
 
             /// <inheritdoc />
-            protected override void Reset(Wizard wizard)
+            protected override void Affect(Wizard wizard, Action<string, object[]> output)
             {
-                wizard.Armor -= 7;
+                output("{0}'s timer is now {1}.", new object[] { Name, TurnsLeft - 1 });
+            }
+
+            /// <inheritdoc />
+            protected override void Reverse(Wizard wizard, Action<string, object[]> output)
+            {
+                wizard.Armor -= ArmorIncrease;
 
                 if (wizard.Armor < 0)
                 {
                     wizard.Armor = 0;
                 }
+
+                output("{0} wears off, decreasing armor by {1}.", new object[] { Name, ArmorIncrease });
             }
         }
     }
