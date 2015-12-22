@@ -510,7 +510,7 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
             /// Initializes a new instance of the <see cref="Drain"/> class.
             /// </summary>
             internal Drain()
-                : base(1)
+                : base(0)
             {
             }
 
