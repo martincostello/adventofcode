@@ -27,9 +27,9 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
         /// <inheritdoc />
         public int Solve(string[] args)
         {
-            if (args.Length != 1)
+            if (args.Length != 1 && args.Length != 2)
             {
-                Console.Error.WriteLine("No input file path specified.");
+                Console.Error.WriteLine("No input file path or start value for register a specified.");
                 return -1;
             }
 
@@ -40,8 +40,9 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
             }
 
             string[] instructions = File.ReadAllLines(args[0]);
+            int initialValue = args.Length == 2 ? int.Parse(args[1], CultureInfo.InvariantCulture) : 0;
 
-            Tuple<int, int> result = ProcessInstructions(instructions);
+            Tuple<int, int> result = ProcessInstructions(instructions, initialValue);
 
             A = result.Item1;
             B = result.Item2;
@@ -59,15 +60,20 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
         /// Processes the specified instructions and returns the values of registers a and b.
         /// </summary>
         /// <param name="instructions">The instructions to process.</param>
+        /// <param name="initialValue">The initial value to use for register a.</param>
         /// <returns>
         /// A <see cref="Tuple{T1, T2}"/> that contains the values of the a and b registers.
         /// </returns>
-        internal static Tuple<int, int> ProcessInstructions(IList<string> instructions)
+        internal static Tuple<int, int> ProcessInstructions(IList<string> instructions, int initialValue)
         {
-            Register a = new Register();
+            Register a = new Register()
+            {
+                Value = initialValue,
+            };
+
             Register b = new Register();
 
-            for (int i = 0; i < instructions.Count; i++)
+            for (int i = 0; i >= 0 && i < instructions.Count;)
             {
                 string instruction = instructions[i];
                 string[] split = instruction.Split(' ');
@@ -75,6 +81,8 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
                 string operation = split.ElementAtOrDefault(0);
                 string registerOrOffset = split.ElementAtOrDefault(1);
                 string offset = split.ElementAtOrDefault(2);
+
+                int next = i + 1;
 
                 switch (operation)
                 {
@@ -91,13 +99,13 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
                         break;
 
                     case "jmp":
-                        i += int.Parse(registerOrOffset, CultureInfo.InvariantCulture) - 1;
+                        next = i + int.Parse(registerOrOffset, CultureInfo.InvariantCulture);
                         break;
 
                     case "jie":
                         if ((registerOrOffset.Split(',')[0].Trim() == "a" ? a : b).Value % 2 == 0)
                         {
-                            i += int.Parse(offset, CultureInfo.InvariantCulture) - 1;
+                            next = i + int.Parse(offset, CultureInfo.InvariantCulture);
                         }
 
                         break;
@@ -105,7 +113,7 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
                     case "jio":
                         if ((registerOrOffset.Split(',')[0].Trim() == "a" ? a : b).Value == 1)
                         {
-                            i += int.Parse(offset, CultureInfo.InvariantCulture) - 1;
+                            next = i + int.Parse(offset, CultureInfo.InvariantCulture);
                         }
 
                         break;
@@ -114,6 +122,14 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
                         Console.Error.WriteLine("Instruction '{0}' is not defined.", operation);
                         return Tuple.Create(-1, -1);
                 }
+
+                if (next == i)
+                {
+                    Console.Error.WriteLine("Instruction at line {0:N0} creates an infinite loop.", i + 1);
+                    break;
+                }
+
+                i = next;
             }
 
             return Tuple.Create(a.Value, b.Value);

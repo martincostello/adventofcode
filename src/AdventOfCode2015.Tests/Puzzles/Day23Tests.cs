@@ -24,8 +24,10 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
                 "inc a",
             };
 
+            int initialValue = 0;
+
             // Act
-            Tuple<int, int> actual = Day23.ProcessInstructions(instructions);
+            Tuple<int, int> actual = Day23.ProcessInstructions(instructions, initialValue);
 
             // Assert
             Assert.NotNull(actual);
@@ -34,7 +36,7 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
         }
 
         [Fact]
-        public static void Day23_Solve_Returns_Correct_Solution()
+        public static void Day23_Solve_Returns_Correct_Solution_1()
         {
             // Arrange
             string[] args = new string[] { @".\Input\Day23\input.txt" };
@@ -47,6 +49,22 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
             Assert.Equal(0, actual);
             Assert.Equal(1, target.A);
             Assert.Equal(170, target.B);
+        }
+
+        [Fact(Skip = "Does not appear to terminate.")]
+        public static void Day23_Solve_Returns_Correct_Solution_2()
+        {
+            // Arrange
+            string[] args = new string[] { @".\Input\Day23\input.txt", "1" };
+            var target = new Day23();
+
+            // Act
+            int actual = target.Solve(args);
+
+            // Assert
+            Assert.Equal(0, actual);
+            ////Assert.NotEqual(0, target.A);
+            Assert.NotEqual(247, target.B);
         }
     }
 }
