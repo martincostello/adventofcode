@@ -17,12 +17,12 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
         /// <summary>
         /// Gets the final value of the <c>a</c> register.
         /// </summary>
-        internal int A { get; private set; }
+        internal uint A { get; private set; }
 
         /// <summary>
         /// Gets the final value of the <c>b</c> register.
         /// </summary>
-        internal int B { get; private set; }
+        internal uint B { get; private set; }
 
         /// <inheritdoc />
         public int Solve(string[] args)
@@ -40,9 +40,9 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
             }
 
             string[] instructions = File.ReadAllLines(args[0]);
-            int initialValue = args.Length == 2 ? int.Parse(args[1], CultureInfo.InvariantCulture) : 0;
+            uint initialValue = args.Length == 2 ? uint.Parse(args[1], CultureInfo.InvariantCulture) : 0;
 
-            Tuple<int, int> result = ProcessInstructions(instructions, initialValue);
+            Tuple<uint, uint> result = ProcessInstructions(instructions, initialValue);
 
             A = result.Item1;
             B = result.Item2;
@@ -64,7 +64,7 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
         /// <returns>
         /// A <see cref="Tuple{T1, T2}"/> that contains the values of the a and b registers.
         /// </returns>
-        internal static Tuple<int, int> ProcessInstructions(IList<string> instructions, int initialValue)
+        internal static Tuple<uint, uint> ProcessInstructions(IList<string> instructions, uint initialValue)
         {
             Register a = new Register()
             {
@@ -120,7 +120,7 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
 
                     default:
                         Console.Error.WriteLine("Instruction '{0}' is not defined.", operation);
-                        return Tuple.Create(-1, -1);
+                        return Tuple.Create(uint.MaxValue, uint.MaxValue);
                 }
 
                 if (next == i)
@@ -143,7 +143,7 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
             /// <summary>
             /// Gets or sets the value of the register.
             /// </summary>
-            internal int Value { get; set; }
+            internal uint Value { get; set; }
         }
     }
 }

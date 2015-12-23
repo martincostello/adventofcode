@@ -24,15 +24,15 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
                 "inc a",
             };
 
-            int initialValue = 0;
+            uint initialValue = 0;
 
             // Act
-            Tuple<int, int> actual = Day23.ProcessInstructions(instructions, initialValue);
+            Tuple<uint, uint> actual = Day23.ProcessInstructions(instructions, initialValue);
 
             // Assert
             Assert.NotNull(actual);
-            Assert.Equal(2, actual.Item1);
-            Assert.Equal(0, actual.Item2);
+            Assert.Equal(2u, actual.Item1);
+            Assert.Equal(0u, actual.Item2);
         }
 
         [Fact]
@@ -47,11 +47,11 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
 
             // Assert
             Assert.Equal(0, actual);
-            Assert.Equal(1, target.A);
-            Assert.Equal(170, target.B);
+            Assert.Equal(1u, target.A);
+            Assert.Equal(170u, target.B);
         }
 
-        [Fact(Skip = "Does not appear to terminate.")]
+        [Fact]
         public static void Day23_Solve_Returns_Correct_Solution_2()
         {
             // Arrange
@@ -63,8 +63,8 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
 
             // Assert
             Assert.Equal(0, actual);
-            ////Assert.NotEqual(0, target.A);
-            Assert.NotEqual(247, target.B);
+            Assert.Equal(1u, target.A);
+            Assert.Equal(247u, target.B);
         }
     }
 }
