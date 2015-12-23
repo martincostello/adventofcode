@@ -3,7 +3,8 @@
 
 namespace MartinCostello.AdventOfCode2015.Puzzles
 {
-    using System.Linq;
+    using System;
+    using System.Collections.Generic;
     using Xunit;
 
     /// <summary>
@@ -11,5 +12,41 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
     /// </summary>
     public static class Day23Tests
     {
+        [Fact]
+        public static void Day23_ProcessInstructions()
+        {
+            // Arrange
+            IList<string> instructions = new[]
+            {
+                "inc a",
+                "jio a, +2",
+                "tpl a",
+                "inc a",
+            };
+
+            // Act
+            Tuple<int, int> actual = Day23.ProcessInstructions(instructions);
+
+            // Assert
+            Assert.NotNull(actual);
+            Assert.Equal(2, actual.Item1);
+            Assert.Equal(0, actual.Item2);
+        }
+
+        [Fact]
+        public static void Day23_Solve_Returns_Correct_Solution()
+        {
+            // Arrange
+            string[] args = new string[] { @".\Input\Day23\input.txt" };
+            var target = new Day23();
+
+            // Act
+            int actual = target.Solve(args);
+
+            // Assert
+            Assert.Equal(0, actual);
+            Assert.Equal(1, target.A);
+            Assert.Equal(170, target.B);
+        }
     }
 }
