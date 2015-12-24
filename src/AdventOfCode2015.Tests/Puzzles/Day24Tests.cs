@@ -14,13 +14,23 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
         public static void Day24_GetQuantumEntanglementOfIdealConfiguration()
         {
             // Arrange
+            int compartments = 3;
             int[] weights = new[] { 1, 2, 3, 4, 5, 7, 8, 9, 10, 11 };
 
             // Act
-            long actual = Day24.GetQuantumEntanglementOfIdealConfiguration(weights);
+            long actual = Day24.GetQuantumEntanglementOfIdealConfiguration(compartments, weights);
 
             // Assert
             Assert.Equal(99, actual);
+
+            // Arrange
+            compartments = 4;
+
+            // Act
+            actual = Day24.GetQuantumEntanglementOfIdealConfiguration(compartments, weights);
+
+            // Assert
+            Assert.Equal(44, actual);
         }
 
         [Fact(Skip = "Too slow.")]
@@ -36,6 +46,16 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
             // Assert
             Assert.Equal(0, actual);
             Assert.Equal(11266889531, target.QuantumEntanglementOfFirstGroup);
+
+            // Arrange
+            args = new string[] { @".\Input\Day24\input.txt", "4" };
+
+            // Act
+            actual = target.Solve(args);
+
+            // Assert
+            Assert.Equal(0, actual);
+            Assert.Equal(77387711, target.QuantumEntanglementOfFirstGroup);
         }
     }
 }

@@ -24,9 +24,9 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
         /// <inheritdoc />
         public int Solve(string[] args)
         {
-            if (args.Length != 1)
+            if (args.Length != 1 && args.Length != 2)
             {
-                Console.Error.WriteLine("No input file path specified.");
+                Console.Error.WriteLine("No input file path or number of compartments specified.");
                 return -1;
             }
 
@@ -40,7 +40,9 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
                 .Select((p) => int.Parse(p, CultureInfo.InvariantCulture))
                 .ToList();
 
-            QuantumEntanglementOfFirstGroup = GetQuantumEntanglementOfIdealConfiguration(weights);
+            int compartments = args.Length == 2 ? int.Parse(args[1], CultureInfo.InvariantCulture) : 3;
+
+            QuantumEntanglementOfFirstGroup = GetQuantumEntanglementOfIdealConfiguration(compartments, weights);
 
             Console.WriteLine(
                 "The quantum entanglement of the ideal configuration of {0:N0} packages is {1:N0}.",
@@ -54,6 +56,9 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
         /// Gets the quantum entanglement of the first group of packages of
         /// the ideal configuration for the specified packages and their weights.
         /// </summary>
+        /// <param name="compartments">
+        /// The number of comparments in the sleigh.
+        /// </param>
         /// <param name="weights">
         /// The weights of the packages to find the quantum entanglement for.
         /// </param>
@@ -61,10 +66,10 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
         /// The quantum entanglement of the first group of packages of the ideal
         /// configuration of the packages with weights specified by <paramref name="weights"/>.
         /// </returns>
-        internal static long GetQuantumEntanglementOfIdealConfiguration(IList<int> weights)
+        internal static long GetQuantumEntanglementOfIdealConfiguration(int compartments, IList<int> weights)
         {
             // How much should each compartment weigh?
-            int targetCompartmentWeight = weights.Sum() / 3;
+            int targetCompartmentWeight = weights.Sum() / compartments;
 
             List<ICollection<long>> result = new List<ICollection<long>>();
 
