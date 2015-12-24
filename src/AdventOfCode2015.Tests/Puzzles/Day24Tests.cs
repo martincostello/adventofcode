@@ -3,7 +3,6 @@
 
 namespace MartinCostello.AdventOfCode2015.Puzzles
 {
-    using System.Linq;
     using Xunit;
 
     /// <summary>
@@ -11,5 +10,32 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
     /// </summary>
     public static class Day24Tests
     {
+        [Fact]
+        public static void Day24_GetQuantumEntanglementOfIdealConfiguration()
+        {
+            // Arrange
+            int[] weights = new[] { 1, 2, 3, 4, 5, 7, 8, 9, 10, 11 };
+
+            // Act
+            long actual = Day24.GetQuantumEntanglementOfIdealConfiguration(weights);
+
+            // Assert
+            Assert.Equal(99, actual);
+        }
+
+        [Fact(Skip = "Too slow.")]
+        public static void Day24_Solve_Returns_Correct_Solution()
+        {
+            // Arrange
+            string[] args = new string[] { @".\Input\Day24\input.txt" };
+            var target = new Day24();
+
+            // Act
+            int actual = target.Solve(args);
+
+            // Assert
+            Assert.Equal(0, actual);
+            Assert.Equal(11266889531, target.QuantumEntanglementOfFirstGroup);
+        }
     }
 }

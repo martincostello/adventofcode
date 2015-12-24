@@ -122,7 +122,7 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
         /// Increments the value of the specified <see cref="BitArray"/>.
         /// </summary>
         /// <param name="value">The value to increment.</param>
-        private static void Increment(BitArray value)
+        internal static void Increment(BitArray value)
         {
             for (int i = 0; i < value.Length; i++)
             {
