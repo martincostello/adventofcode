@@ -87,8 +87,8 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
             int count = 0;
 
             // Remove quotes if present as first/last characters
-            bool removeFirstQuote = value.Length > 0 && value.First() == '\"';
-            bool removeLastQuote = value.Length > 1 && value.Last() == '\"';
+            bool removeFirstQuote = value.Length > 0 && value[0] == '\"';
+            bool removeLastQuote = value.Length > 1 && value[value.Length - 1] == '\"';
 
             if (removeFirstQuote)
             {
@@ -102,7 +102,7 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
 
             if (value.Length > 0)
             {
-                Queue<char> characters = new Queue<char>(value);
+                var characters = new Queue<char>(value);
 
                 while (characters.Count > 0)
                 {
