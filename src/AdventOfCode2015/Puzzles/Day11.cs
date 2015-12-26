@@ -72,7 +72,7 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
         /// <returns><see langword="true"/> if <paramref name="value"/> meets the rule; otherwise <see langword="false"/>.</returns>
         internal static bool HasMoreThanOneDistinctPairOfLetters(char[] value)
         {
-            Dictionary<string, IList<int>> letterPairs = new Dictionary<string, IList<int>>();
+            var letterPairs = new Dictionary<string, IList<int>>();
 
             for (int i = 0; i < value.Length - 1; i++)
             {
