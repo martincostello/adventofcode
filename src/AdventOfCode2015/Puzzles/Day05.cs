@@ -84,10 +84,13 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
         }
 
         /// <summary>
-        /// Tests whether a string contains a pair of any two letters that appear at least twice in the string without overlapping.
+        /// Tests whether a string contains a pair of any two letters that
+        /// appear at least twice in the string without overlapping.
         /// </summary>
         /// <param name="value">The value to test against the rule.</param>
-        /// <returns><see langword="true"/> if <paramref name="value"/> meets the rule; otherwise <see langword="false"/>.</returns>
+        /// <returns>
+        /// <see langword="true"/> if <paramref name="value"/> meets the rule; otherwise <see langword="false"/>.
+        /// </returns>
         internal static bool HasPairOfLettersWithMoreThanOneOccurence(string value)
         {
             Dictionary<string, IList<int>> letterPairs = new Dictionary<string, IList<int>>();
@@ -119,7 +122,9 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
         /// Tests whether a string contains at least one letter which repeats with exactly one letter between them.
         /// </summary>
         /// <param name="value">The value to test against the rule.</param>
-        /// <returns><see langword="true"/> if <paramref name="value"/> meets the rule; otherwise <see langword="false"/>.</returns>
+        /// <returns>
+        /// <see langword="true"/> if <paramref name="value"/> meets the rule; otherwise <see langword="false"/>.
+        /// </returns>
         internal static bool HasLetterThatIsTheBreadOfALetterSandwich(string value)
         {
             if (value.Length < 3)
@@ -195,7 +200,9 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
         /// Returns whether the specified letter is a vowel.
         /// </summary>
         /// <param name="letter">The letter to test for being a vowel.</param>
-        /// <returns><see langword="true"/> if <paramref name="letter"/> is a vowel; otherwise <see langword="false"/>.</returns>
+        /// <returns>
+        /// <see langword="true"/> if <paramref name="letter"/> is a vowel; otherwise <see langword="false"/>.
+        /// </returns>
         private static bool IsVowel(char letter)
         {
             switch (letter)
