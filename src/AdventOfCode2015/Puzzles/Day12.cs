@@ -11,7 +11,7 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
     /// <summary>
     /// A class representing the puzzle for <c>http://adventofcode.com/day/12</c>. This class cannot be inherited.
     /// </summary>
-    internal sealed class Day12 : IPuzzle
+    internal sealed class Day12 : Puzzle
     {
         /// <summary>
         /// Gets the sum of the integers in the JSON document.
@@ -19,29 +19,10 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
         internal long Sum { get; private set; }
 
         /// <inheritdoc />
-        public int Solve(string[] args)
-        {
-            if (args.Length != 1 && args.Length != 2)
-            {
-                Console.Error.WriteLine("No input file path specified.");
-                return -1;
-            }
+        protected override bool IsFirstArgumentFilePath => true;
 
-            if (!File.Exists(args[0]))
-            {
-                Console.Error.WriteLine("The input file path specified cannot be found.");
-                return -1;
-            }
-
-            JToken document = JToken.Parse(File.ReadAllText(args[0]));
-            string keyToIgnore = args.Length > 1 ? args[1] : string.Empty;
-
-            Sum = SumIntegerValues(document, keyToIgnore);
-
-            Console.WriteLine("The sum of the integers in the JSON document is {0:N0}.", Sum);
-
-            return 0;
-        }
+        /// <inheritdoc />
+        protected override int MinimumArguments => 1;
 
         /// <summary>
         /// Sums the integer values in the specified JSON token, ignoring any values from
@@ -91,6 +72,19 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
             }
 
             return sum;
+        }
+
+        /// <inheritdoc />
+        protected override int SolveCore(string[] args)
+        {
+            JToken document = JToken.Parse(File.ReadAllText(args[0]));
+            string keyToIgnore = args.Length > 1 ? args[1] : string.Empty;
+
+            Sum = SumIntegerValues(document, keyToIgnore);
+
+            Console.WriteLine("The sum of the integers in the JSON document is {0:N0}.", Sum);
+
+            return 0;
         }
     }
 }

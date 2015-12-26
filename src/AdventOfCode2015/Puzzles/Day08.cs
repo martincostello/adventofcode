@@ -12,7 +12,7 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
     /// <summary>
     /// A class representing the puzzle for <c>http://adventofcode.com/day/8</c>. This class cannot be inherited.
     /// </summary>
-    internal sealed class Day08 : IPuzzle
+    internal sealed class Day08 : Puzzle
     {
         /// <summary>
         /// Gets the value for the first solution.
@@ -25,36 +25,10 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
         internal int SecondSolution { get; private set; }
 
         /// <inheritdoc />
-        public int Solve(string[] args)
-        {
-            if (args.Length != 1)
-            {
-                Console.Error.WriteLine("No input file path specified.");
-                return -1;
-            }
+        protected override bool IsFirstArgumentFilePath => true;
 
-            if (!File.Exists(args[0]))
-            {
-                Console.Error.WriteLine("The input file path specified cannot be found.");
-                return -1;
-            }
-
-            string[] input = File.ReadAllLines(args[0]);
-
-            int countForCode = input.Sum((p) => p.Length);
-            int countInMemory = GetLiteralCharacterCount(input);
-            int countEncoded = GetEncodedCharacterCount(input);
-
-            Console.WriteLine(
-                "The number of characters of code for string literals minus the number of characters in memory for the values of the strings is {0:N0}.",
-                FirstSolution = countForCode - countInMemory);
-
-            Console.WriteLine(
-                "The total number of characters to represent the newly encoded strings minus the number of characters of code in each original string literal is {0:N0}.",
-                SecondSolution = countEncoded - countForCode);
-
-            return 0;
-        }
+        /// <inheritdoc />
+        protected override int MinimumArguments => 1;
 
         /// <summary>
         /// Returns the number of characters in the specified collection of <see cref="string"/> if literals are encoded.
@@ -164,6 +138,26 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
             }
 
             return count;
+        }
+
+        /// <inheritdoc />
+        protected override int SolveCore(string[] args)
+        {
+            string[] input = File.ReadAllLines(args[0]);
+
+            int countForCode = input.Sum((p) => p.Length);
+            int countInMemory = GetLiteralCharacterCount(input);
+            int countEncoded = GetEncodedCharacterCount(input);
+
+            Console.WriteLine(
+                "The number of characters of code for string literals minus the number of characters in memory for the values of the strings is {0:N0}.",
+                FirstSolution = countForCode - countInMemory);
+
+            Console.WriteLine(
+                "The total number of characters to represent the newly encoded strings minus the number of characters of code in each original string literal is {0:N0}.",
+                SecondSolution = countEncoded - countForCode);
+
+            return 0;
         }
     }
 }

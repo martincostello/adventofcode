@@ -5,12 +5,11 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
 {
     using System;
     using System.Drawing;
-    using System.Globalization;
 
     /// <summary>
     /// A class representing the puzzle for <c>http://adventofcode.com/day/25</c>. This class cannot be inherited.
     /// </summary>
-    internal sealed class Day25 : IPuzzle
+    internal sealed class Day25 : Puzzle
     {
         /// <summary>
         /// Gets the code for the weather machine.
@@ -18,27 +17,7 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
         internal ulong Code { get; private set; }
 
         /// <inheritdoc />
-        public int Solve(string[] args)
-        {
-            if (args.Length != 2)
-            {
-                Console.Error.WriteLine("No row number and column number specified.");
-                return -1;
-            }
-
-            int row = int.Parse(args[0], CultureInfo.InvariantCulture);
-            int column = int.Parse(args[1], CultureInfo.InvariantCulture);
-
-            Code = GetCodeForWeatherMachine(row, column);
-
-            Console.WriteLine(
-                "The code for row {0:N0} and column {1:N0} is {2:N0}.",
-                row,
-                column,
-                Code);
-
-            return 0;
-        }
+        protected override int MinimumArguments => 2;
 
         /// <summary>
         /// Gets the code for the weather machine at the specified row and column.
@@ -85,9 +64,24 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
         internal static ulong GenerateCode(ulong value)
         {
             ulong result = value * 252533;
-            result = result % 33554393;
+            return result % 33554393;
+        }
 
-            return result;
+        /// <inheritdoc />
+        protected override int SolveCore(string[] args)
+        {
+            int row = ParseInt32(args[0]);
+            int column = ParseInt32(args[1]);
+
+            Code = GetCodeForWeatherMachine(row, column);
+
+            Console.WriteLine(
+                "The code for row {0:N0} and column {1:N0} is {2:N0}.",
+                row,
+                column,
+                Code);
+
+            return 0;
         }
     }
 }

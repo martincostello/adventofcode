@@ -12,7 +12,7 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
     /// <summary>
     /// A class representing the puzzle for <c>http://adventofcode.com/day/19</c>. This class cannot be inherited.
     /// </summary>
-    internal sealed class Day19 : IPuzzle
+    internal sealed class Day19 : Puzzle
     {
         /// <summary>
         /// Gets the solution for fabrication or calibration.
@@ -20,65 +20,10 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
         internal int Solution { get; private set; }
 
         /// <inheritdoc />
-        public int Solve(string[] args)
-        {
-            if (args.Length != 2)
-            {
-                Console.Error.WriteLine("No input file path and mode specified.");
-                return -1;
-            }
+        protected override bool IsFirstArgumentFilePath => true;
 
-            if (!File.Exists(args[0]))
-            {
-                Console.Error.WriteLine("The input file path specified cannot be found.");
-                return -1;
-            }
-
-            bool fabricate;
-
-            switch (args[1].ToUpperInvariant())
-            {
-                case "CALIBRATE":
-                    fabricate = false;
-                    break;
-
-                case "FABRICATE":
-                    fabricate = true;
-                    break;
-
-                default:
-                    Console.Error.WriteLine("The mode specified is invalid.");
-                    return -1;
-            }
-
-            string[] lines = File.ReadAllLines(args[0]);
-
-            string molecule = lines.Last();
-
-            ICollection<string> replacements = lines
-                .Take(lines.Length - 1)
-                .Where((p) => !string.IsNullOrEmpty(p))
-                .ToList();
-
-            if (fabricate)
-            {
-                Solution = GetMinimumSteps(molecule, replacements);
-                Console.WriteLine("The target molecule can be made in a minimum of {0:N0} steps.", Solution);
-            }
-            else
-            {
-                var molecules = GetPossibleMolecules(molecule, replacements);
-
-                Solution = molecules.Count;
-
-                Console.WriteLine(
-                    "{0:N0} distinct molecules can be created from {1:N0} possible replacements.",
-                    Solution,
-                    replacements.Count);
-            }
-
-            return 0;
-        }
+        /// <inheritdoc />
+        protected override int MinimumArguments => 2;
 
         /// <summary>
         /// Gets the possible molecules that can be created from single step transformations of a molecule.
@@ -106,8 +51,7 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
 
                     if (index > -1)
                     {
-                        string newMolecule = string.Format(
-                            CultureInfo.InvariantCulture,
+                        string newMolecule = Format(
                             "{0}{1}{2}",
                             index == 0 ? string.Empty : molecule.Substring(0, index),
                             target,
@@ -172,6 +116,55 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
                 .Where((p) => p > 0)
                 .DefaultIfEmpty()
                 .Min();
+        }
+
+        /// <inheritdoc />
+        protected override int SolveCore(string[] args)
+        {
+            bool fabricate;
+
+            switch (args[1].ToUpperInvariant())
+            {
+                case "CALIBRATE":
+                    fabricate = false;
+                    break;
+
+                case "FABRICATE":
+                    fabricate = true;
+                    break;
+
+                default:
+                    Console.Error.WriteLine("The mode specified is invalid.");
+                    return -1;
+            }
+
+            string[] lines = File.ReadAllLines(args[0]);
+
+            string molecule = lines.Last();
+
+            ICollection<string> replacements = lines
+                .Take(lines.Length - 1)
+                .Where((p) => !string.IsNullOrEmpty(p))
+                .ToList();
+
+            if (fabricate)
+            {
+                Solution = GetMinimumSteps(molecule, replacements);
+                Console.WriteLine("The target molecule can be made in a minimum of {0:N0} steps.", Solution);
+            }
+            else
+            {
+                var molecules = GetPossibleMolecules(molecule, replacements);
+
+                Solution = molecules.Count;
+
+                Console.WriteLine(
+                    "{0:N0} distinct molecules can be created from {1:N0} possible replacements.",
+                    Solution,
+                    replacements.Count);
+            }
+
+            return 0;
         }
     }
 }

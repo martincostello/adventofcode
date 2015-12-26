@@ -10,7 +10,7 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
     /// <summary>
     /// A class representing the puzzle for <c>http://adventofcode.com/day/21</c>. This class cannot be inherited.
     /// </summary>
-    internal sealed class Day21 : IPuzzle
+    internal sealed class Day21 : Puzzle
     {
         /// <summary>
         /// Gets the maximum cost of items that can be purchased for the human to lost to the boss.
@@ -21,60 +21,6 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
         /// Gets the minimum cost of items that can be purchased for the human to beat the boss.
         /// </summary>
         internal int MinimumCostToWin { get; private set; }
-
-        /// <inheritdoc />
-        public int Solve(string[] args)
-        {
-            var potentialWeapons = Shop.PotentialWeapons.Keys.ToArray();
-            var potentialArmor = Shop.PotentialArmor.Keys.Concat(new string[] { null }).ToArray();
-
-            var potentialRings = new List<ICollection<string>>();
-
-            potentialRings.Add(new string[0]);
-
-            foreach (var ring in Shop.PotentialRings.Keys.ToArray())
-            {
-                potentialRings.Add(new[] { ring });
-            }
-
-            var permutations = Maths.GetPermutations(Shop.PotentialRings.Keys, 2);
-
-            foreach (var permutation in permutations)
-            {
-                potentialRings.Add(permutation.ToArray());
-            }
-
-            List<int> costsToLose = new List<int>();
-            List<int> costsToWin = new List<int>();
-
-            foreach (string weapon in potentialWeapons)
-            {
-                foreach (string armor in potentialArmor)
-                {
-                    foreach (var rings in potentialRings)
-                    {
-                        Tuple<bool, int> result = Fight(weapon, armor, rings);
-
-                        if (result.Item1)
-                        {
-                            costsToWin.Add(result.Item2);
-                        }
-                        else
-                        {
-                            costsToLose.Add(result.Item2);
-                        }
-                    }
-                }
-            }
-
-            MaximumCostToLose = costsToLose.Max();
-            MinimumCostToWin = costsToWin.Min();
-
-            Console.WriteLine("The minimum amount of gold spent for the human to beat the boss is {0:N0}.", MinimumCostToWin);
-            Console.WriteLine("The maximum amount of gold spent for the human to lose to the boss is {0:N0}.", MaximumCostToLose);
-
-            return 0;
-        }
 
         /// <summary>
         /// Simulates a fight between the player and the boss using the specified upgrades.
@@ -132,6 +78,65 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
             }
 
             return player1.HitPoints > 0 ? player1 : player2;
+        }
+
+        /// <inheritdoc />
+        protected override int SolveCore(string[] args)
+        {
+            var potentialWeapons = Shop.PotentialWeapons.Keys.ToArray();
+            var potentialArmor = Shop.PotentialArmor.Keys.Concat(new string[] { null }).ToArray();
+
+            var potentialRings = new List<ICollection<string>>();
+
+            potentialRings.Add(new string[0]);
+
+            foreach (var ring in Shop.PotentialRings.Keys.ToArray())
+            {
+                potentialRings.Add(new[] { ring });
+            }
+
+            var permutations = Maths.GetPermutations(Shop.PotentialRings.Keys, 2);
+
+            foreach (var permutation in permutations)
+            {
+                potentialRings.Add(permutation.ToArray());
+            }
+
+            List<int> costsToLose = new List<int>();
+            List<int> costsToWin = new List<int>();
+
+            foreach (string weapon in potentialWeapons)
+            {
+                foreach (string armor in potentialArmor)
+                {
+                    foreach (var rings in potentialRings)
+                    {
+                        Tuple<bool, int> result = Fight(weapon, armor, rings);
+
+                        if (result.Item1)
+                        {
+                            costsToWin.Add(result.Item2);
+                        }
+                        else
+                        {
+                            costsToLose.Add(result.Item2);
+                        }
+                    }
+                }
+            }
+
+            MaximumCostToLose = costsToLose.Max();
+            MinimumCostToWin = costsToWin.Min();
+
+            Console.WriteLine(
+                "The minimum amount of gold spent for the human to beat the boss is {0:N0}.",
+                MinimumCostToWin);
+
+            Console.WriteLine(
+                "The maximum amount of gold spent for the human to lose to the boss is {0:N0}.",
+                MaximumCostToLose);
+
+            return 0;
         }
 
         /// <summary>

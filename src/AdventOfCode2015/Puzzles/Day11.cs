@@ -10,7 +10,7 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
     /// <summary>
     /// A class representing the puzzle for <c>http://adventofcode.com/day/11</c>. This class cannot be inherited.
     /// </summary>
-    internal sealed class Day11 : IPuzzle
+    internal sealed class Day11 : Puzzle
     {
         /// <summary>
         /// Gets the next password.
@@ -18,21 +18,7 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
         internal string NextPassword { get; private set; }
 
         /// <inheritdoc />
-        public int Solve(string[] args)
-        {
-            if (args.Length != 1)
-            {
-                Console.Error.WriteLine("No input value specified.");
-                return -1;
-            }
-
-            string current = args[0];
-            NextPassword = GenerateNextPassword(current);
-
-            Console.WriteLine("Santa's new password should be '{0}'. But he really shouldn't print it out in plaintext.", NextPassword);
-
-            return 0;
-        }
+        protected override int MinimumArguments => 1;
 
         /// <summary>
         /// Generates the next password that should be used based on a current password value.
@@ -114,6 +100,17 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
             }
 
             return letterPairs.Count > 1;
+        }
+
+        /// <inheritdoc />
+        protected override int SolveCore(string[] args)
+        {
+            string current = args[0];
+            NextPassword = GenerateNextPassword(current);
+
+            Console.WriteLine("Santa's new password should be '{0}'.", NextPassword);
+
+            return 0;
         }
 
         /// <summary>

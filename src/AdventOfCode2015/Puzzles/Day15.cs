@@ -5,14 +5,13 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
 {
     using System;
     using System.Collections.Generic;
-    using System.Globalization;
     using System.IO;
     using System.Linq;
 
     /// <summary>
     /// A class representing the puzzle for <c>http://adventofcode.com/day/15</c>. This class cannot be inherited.
     /// </summary>
-    internal sealed class Day15 : IPuzzle
+    internal sealed class Day15 : Puzzle
     {
         /// <summary>
         /// Gets the highest total cookie score.
@@ -25,30 +24,10 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
         internal int HighestTotalCookieScoreWith500Calories { get; private set; }
 
         /// <inheritdoc />
-        public int Solve(string[] args)
-        {
-            if (args.Length != 1)
-            {
-                Console.Error.WriteLine("No input file path specified.");
-                return -1;
-            }
+        protected override bool IsFirstArgumentFilePath => true;
 
-            if (!File.Exists(args[0]))
-            {
-                Console.Error.WriteLine("The input file path specified cannot be found.");
-                return -1;
-            }
-
-            string[] ingredients = File.ReadAllLines(args[0]);
-
-            HighestTotalCookieScore = GetHighestTotalCookieScore(ingredients);
-            HighestTotalCookieScoreWith500Calories = GetHighestTotalCookieScore(ingredients, 500);
-
-            Console.WriteLine("The highest total cookie score is {0:N0}.", HighestTotalCookieScore);
-            Console.WriteLine("The highest total cookie score for a cookie with 500 calories is {0:N0}.", HighestTotalCookieScoreWith500Calories);
-
-            return 0;
-        }
+        /// <inheritdoc />
+        protected override int MinimumArguments => 1;
 
         /// <summary>
         /// Returns the highest total cookie score for the specified ingredients.
@@ -103,6 +82,20 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
 
             // Return the best recipe
             return scores.Max();
+        }
+
+        /// <inheritdoc />
+        protected override int SolveCore(string[] args)
+        {
+            string[] ingredients = File.ReadAllLines(args[0]);
+
+            HighestTotalCookieScore = GetHighestTotalCookieScore(ingredients);
+            HighestTotalCookieScoreWith500Calories = GetHighestTotalCookieScore(ingredients, 500);
+
+            Console.WriteLine("The highest total cookie score is {0:N0}.", HighestTotalCookieScore);
+            Console.WriteLine("The highest total cookie score for a cookie with 500 calories is {0:N0}.", HighestTotalCookieScoreWith500Calories);
+
+            return 0;
         }
 
         /// <summary>
@@ -285,11 +278,11 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
 
                 split = string.Join(string.Empty, split, 1, split.Length - 1).Split(',');
 
-                result.Calories = int.Parse(split[4].Trim().Split(' ')[1], CultureInfo.InvariantCulture);
-                result.Capacity = int.Parse(split[0].Trim().Split(' ')[1], CultureInfo.InvariantCulture);
-                result.Durability = int.Parse(split[1].Trim().Split(' ')[1], CultureInfo.InvariantCulture);
-                result.Flavor = int.Parse(split[2].Trim().Split(' ')[1], CultureInfo.InvariantCulture);
-                result.Texture = int.Parse(split[3].Trim().Split(' ')[1], CultureInfo.InvariantCulture);
+                result.Calories = ParseInt32(split[4].Trim().Split(' ')[1]);
+                result.Capacity = ParseInt32(split[0].Trim().Split(' ')[1]);
+                result.Durability = ParseInt32(split[1].Trim().Split(' ')[1]);
+                result.Flavor = ParseInt32(split[2].Trim().Split(' ')[1]);
+                result.Texture = ParseInt32(split[3].Trim().Split(' ')[1]);
 
                 return result;
             }

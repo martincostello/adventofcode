@@ -5,14 +5,13 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
 {
     using System;
     using System.Collections.Generic;
-    using System.Globalization;
     using System.IO;
     using System.Linq;
 
     /// <summary>
     /// A class representing the puzzle for <c>http://adventofcode.com/day/23</c>. This class cannot be inherited.
     /// </summary>
-    internal sealed class Day23 : IPuzzle
+    internal sealed class Day23 : Puzzle
     {
         /// <summary>
         /// Gets the final value of the <c>a</c> register.
@@ -25,36 +24,10 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
         internal uint B { get; private set; }
 
         /// <inheritdoc />
-        public int Solve(string[] args)
-        {
-            if (args.Length != 1 && args.Length != 2)
-            {
-                Console.Error.WriteLine("No input file path or start value for register a specified.");
-                return -1;
-            }
+        protected override bool IsFirstArgumentFilePath => true;
 
-            if (!File.Exists(args[0]))
-            {
-                Console.Error.WriteLine("The input file path specified cannot be found.");
-                return -1;
-            }
-
-            string[] instructions = File.ReadAllLines(args[0]);
-            uint initialValue = args.Length == 2 ? uint.Parse(args[1], CultureInfo.InvariantCulture) : 0;
-
-            Tuple<uint, uint> result = ProcessInstructions(instructions, initialValue);
-
-            A = result.Item1;
-            B = result.Item2;
-
-            Console.WriteLine(
-                "After processing {0:N0} instructions, the value of a is {1:N0} and the value of b is {2:N0}.",
-                instructions.Length,
-                A,
-                B);
-
-            return 0;
-        }
+        /// <inheritdoc />
+        protected override int MinimumArguments => 1;
 
         /// <summary>
         /// Processes the specified instructions and returns the values of registers a and b.
@@ -99,13 +72,13 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
                         break;
 
                     case "jmp":
-                        next = i + int.Parse(registerOrOffset, CultureInfo.InvariantCulture);
+                        next = i + ParseInt32(registerOrOffset);
                         break;
 
                     case "jie":
                         if ((registerOrOffset.Split(',')[0].Trim() == "a" ? a : b).Value % 2 == 0)
                         {
-                            next = i + int.Parse(offset, CultureInfo.InvariantCulture);
+                            next = i + ParseInt32(offset);
                         }
 
                         break;
@@ -113,7 +86,7 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
                     case "jio":
                         if ((registerOrOffset.Split(',')[0].Trim() == "a" ? a : b).Value == 1)
                         {
-                            next = i + int.Parse(offset, CultureInfo.InvariantCulture);
+                            next = i + ParseInt32(offset);
                         }
 
                         break;
@@ -133,6 +106,26 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
             }
 
             return Tuple.Create(a.Value, b.Value);
+        }
+
+        /// <inheritdoc />
+        protected override int SolveCore(string[] args)
+        {
+            string[] instructions = File.ReadAllLines(args[0]);
+            uint initialValue = args.Length == 2 ? ParseUInt32(args[1]) : 0;
+
+            Tuple<uint, uint> result = ProcessInstructions(instructions, initialValue);
+
+            A = result.Item1;
+            B = result.Item2;
+
+            Console.WriteLine(
+                "After processing {0:N0} instructions, the value of a is {1:N0} and the value of b is {2:N0}.",
+                instructions.Length,
+                A,
+                B);
+
+            return 0;
         }
 
         /// <summary>

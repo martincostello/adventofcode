@@ -11,7 +11,7 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
     /// <summary>
     /// A class representing the puzzle for <c>http://adventofcode.com/day/3</c>. This class cannot be inherited.
     /// </summary>
-    internal sealed class Day03 : IPuzzle
+    internal sealed class Day03 : Puzzle
     {
         /// <summary>
         /// An enumeration of cardinal directions.
@@ -50,35 +50,10 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
         internal int HousesWithPresentsFromSantaAndRoboSanta { get; private set; }
 
         /// <inheritdoc />
-        public int Solve(string[] args)
-        {
-            if (args.Length != 1)
-            {
-                Console.Error.WriteLine("No input file path specified.");
-                return -1;
-            }
+        protected override bool IsFirstArgumentFilePath => true;
 
-            if (!File.Exists(args[0]))
-            {
-                Console.Error.WriteLine("The input file path specified cannot be found.");
-                return -1;
-            }
-
-            string instructions = File.ReadAllText(args[0]);
-
-            HousesWithPresentsFromSanta = GetUniqueHousesVisitedBySanta(instructions);
-            HousesWithPresentsFromSantaAndRoboSanta = GetUniqueHousesVisitedBySantaAndRoboSanta(instructions);
-
-            Console.WriteLine(
-                "In 2015, Santa delivered presents to {0:N0} houses.",
-                HousesWithPresentsFromSanta);
-
-            Console.WriteLine(
-                "In 2016, Santa and Robo-Santa delivered presents to {0:N0} houses.",
-                HousesWithPresentsFromSantaAndRoboSanta);
-
-            return 0;
-        }
+        /// <inheritdoc />
+        protected override int MinimumArguments => 1;
 
         /// <summary>
         /// Gets the number of unique houses that Santa delivers at least one present to.
@@ -133,6 +108,25 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
             }
 
             return coordinates.Count + 1;
+        }
+
+        /// <inheritdoc />
+        protected override int SolveCore(string[] args)
+        {
+            string instructions = File.ReadAllText(args[0]);
+
+            HousesWithPresentsFromSanta = GetUniqueHousesVisitedBySanta(instructions);
+            HousesWithPresentsFromSantaAndRoboSanta = GetUniqueHousesVisitedBySantaAndRoboSanta(instructions);
+
+            Console.WriteLine(
+                "In 2015, Santa delivered presents to {0:N0} houses.",
+                HousesWithPresentsFromSanta);
+
+            Console.WriteLine(
+                "In 2016, Santa and Robo-Santa delivered presents to {0:N0} houses.",
+                HousesWithPresentsFromSantaAndRoboSanta);
+
+            return 0;
         }
 
         /// <summary>

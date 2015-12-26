@@ -14,7 +14,7 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
     /// <summary>
     /// A class representing the puzzle for <c>http://adventofcode.com/day/6</c>. This class cannot be inherited.
     /// </summary>
-    internal sealed class Day06 : IPuzzle
+    internal sealed class Day06 : Puzzle
     {
         /// <summary>
         /// Gets the number of lights illuminated.
@@ -27,20 +27,14 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
         internal int TotalBrightness { get; private set; }
 
         /// <inheritdoc />
-        public int Solve(string[] args)
+        protected override bool IsFirstArgumentFilePath => true;
+
+        /// <inheritdoc />
+        protected override int MinimumArguments => 2;
+
+        /// <inheritdoc />
+        protected override int SolveCore(string[] args)
         {
-            if (args.Length != 2)
-            {
-                Console.Error.WriteLine("No input file path and instruction set specified.");
-                return -1;
-            }
-
-            if (!File.Exists(args[0]))
-            {
-                Console.Error.WriteLine("The input file path specified cannot be found.");
-                return -1;
-            }
-
             int version = -1;
 
             switch (args[1])
@@ -123,11 +117,11 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
                 string[] originPoints = origin.Split(',');
                 string[] terminationPoints = termination.Split(',');
 
-                int left = int.Parse(originPoints[0], NumberStyles.Integer, CultureInfo.InvariantCulture);
-                int bottom = int.Parse(originPoints[1], NumberStyles.Integer, CultureInfo.InvariantCulture);
+                int left = ParseInt32(originPoints[0]);
+                int bottom = ParseInt32(originPoints[1]);
 
-                int right = int.Parse(terminationPoints[0], NumberStyles.Integer, CultureInfo.InvariantCulture);
-                int top = int.Parse(terminationPoints[1], NumberStyles.Integer, CultureInfo.InvariantCulture);
+                int right = ParseInt32(terminationPoints[0]);
+                int top = ParseInt32(terminationPoints[1]);
 
                 // Add one to the termination point so that the grid always has a width of at least one light
                 return Rectangle.FromLTRB(left, bottom, right + 1, top + 1);

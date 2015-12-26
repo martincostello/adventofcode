@@ -11,7 +11,7 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
     /// <summary>
     /// A class representing the puzzle for <c>http://adventofcode.com/day/10</c>. This class cannot be inherited.
     /// </summary>
-    internal sealed class Day10 : IPuzzle
+    internal sealed class Day10 : Puzzle
     {
         /// <summary>
         /// Gets the solution to the puzzle.
@@ -19,32 +19,7 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
         internal int Solution { get; private set; }
 
         /// <inheritdoc />
-        public int Solve(string[] args)
-        {
-            if (args.Length != 2)
-            {
-                Console.Error.WriteLine("No input value and number of iterations specified.");
-                return -1;
-            }
-
-            string value = args[0];
-            int iterations = int.Parse(args[1], NumberStyles.Integer & ~NumberStyles.AllowLeadingSign, CultureInfo.InvariantCulture);
-
-            string result = value;
-
-            for (int i = 0; i < iterations; i++)
-            {
-                result = AsLookAndSay(result);
-            }
-
-            Console.WriteLine(
-                "The length of the result for input '{0}' after {1:N0} iterations is {2:N0}.",
-                value,
-                iterations,
-                Solution = result.Length);
-
-            return 0;
-        }
+        protected override int MinimumArguments => 2;
 
         /// <summary>
         /// Gets the 'look-and-say' representation of a <see cref="string"/>.
@@ -71,6 +46,28 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
             }
 
             return output.ToString();
+        }
+
+        /// <inheritdoc />
+        protected override int SolveCore(string[] args)
+        {
+            string value = args[0];
+            int iterations = ParseInt32(args[1], NumberStyles.Integer & ~NumberStyles.AllowLeadingSign);
+
+            string result = value;
+
+            for (int i = 0; i < iterations; i++)
+            {
+                result = AsLookAndSay(result);
+            }
+
+            Console.WriteLine(
+                "The length of the result for input '{0}' after {1:N0} iterations is {2:N0}.",
+                value,
+                iterations,
+                Solution = result.Length);
+
+            return 0;
         }
     }
 }

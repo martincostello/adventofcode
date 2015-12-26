@@ -5,14 +5,13 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
 {
     using System;
     using System.Collections.Generic;
-    using System.Globalization;
     using System.IO;
     using System.Linq;
 
     /// <summary>
     /// A class representing the puzzle for <c>http://adventofcode.com/day/16</c>. This class cannot be inherited.
     /// </summary>
-    internal sealed class Day16 : IPuzzle
+    internal sealed class Day16 : Puzzle
     {
         /// <summary>
         /// The result of the forensic analysis of the gift from Aunt Sue X
@@ -43,32 +42,10 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
         internal int RealAuntSueNumber { get; private set; }
 
         /// <inheritdoc />
-        public int Solve(string[] args)
-        {
-            if (args.Length != 1)
-            {
-                Console.Error.WriteLine("No input file path specified.");
-                return -1;
-            }
+        protected override bool IsFirstArgumentFilePath => true;
 
-            if (!File.Exists(args[0]))
-            {
-                Console.Error.WriteLine("The input file path specified cannot be found.");
-                return -1;
-            }
-
-            string[] auntSueMetadata = File.ReadAllLines(args[0]);
-
-            AuntSueNumber = WhichAuntSueSentTheGift(auntSueMetadata);
-            RealAuntSueNumber = WhichAuntSueSentTheGift(auntSueMetadata, compensateForRetroEncabulator: true);
-
-            Console.WriteLine(
-                "The number of the Aunt Sue that got me the gift was originally thought to be {0}, but it was actually {1}.",
-                AuntSueNumber,
-                RealAuntSueNumber);
-
-            return 0;
-        }
+        /// <inheritdoc />
+        protected override int MinimumArguments => 1;
 
         /// <summary>
         /// Returns the number of the Aunt Sue that sent the gift from the specified Aunt Sue metadata.
@@ -104,6 +81,22 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
             return parsed.Single().Number;
         }
 
+        /// <inheritdoc />
+        protected override int SolveCore(string[] args)
+        {
+            string[] auntSueMetadata = File.ReadAllLines(args[0]);
+
+            AuntSueNumber = WhichAuntSueSentTheGift(auntSueMetadata);
+            RealAuntSueNumber = WhichAuntSueSentTheGift(auntSueMetadata, compensateForRetroEncabulator: true);
+
+            Console.WriteLine(
+                "The number of the Aunt Sue that got me the gift was originally thought to be {0}, but it was actually {1}.",
+                AuntSueNumber,
+                RealAuntSueNumber);
+
+            return 0;
+        }
+
         /// <summary>
         /// A class representing an aunt called Sue. This class cannot be inherited.
         /// </summary>
@@ -135,14 +128,14 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
 
                 string[] split = value.Split(' ');
 
-                result.Number = int.Parse(split[1].TrimEnd(':'), CultureInfo.InvariantCulture);
+                result.Number = ParseInt32(split[1].TrimEnd(':'));
 
                 split = string.Join(" ", split, 2, split.Length - 2).Split(',');
 
                 foreach (string item in split)
                 {
                     string[] itemSplit = item.Split(':');
-                    result.Metadata[itemSplit[0].Trim()] = int.Parse(itemSplit[1].Trim(), CultureInfo.InvariantCulture);
+                    result.Metadata[itemSplit[0].Trim()] = ParseInt32(itemSplit[1].Trim());
                 }
 
                 return result;

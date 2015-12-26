@@ -12,7 +12,7 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
     /// <summary>
     /// A class representing the puzzle for <c>http://adventofcode.com/day/13</c>. This class cannot be inherited.
     /// </summary>
-    internal sealed class Day13 : IPuzzle
+    internal sealed class Day13 : Puzzle
     {
         /// <summary>
         /// Gets the maximum total change in happiness.
@@ -25,55 +25,10 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
         internal int MaximumTotalChangeInHappinessWithCurrentUser { get; private set; }
 
         /// <inheritdoc />
-        public int Solve(string[] args)
-        {
-            if (args.Length != 1)
-            {
-                Console.Error.WriteLine("No input file path specified.");
-                return -1;
-            }
+        protected override bool IsFirstArgumentFilePath => true;
 
-            if (!File.Exists(args[0]))
-            {
-                Console.Error.WriteLine("The input file path specified cannot be found.");
-                return -1;
-            }
-
-            string[] potentialHappiness = File.ReadAllLines(args[0]);
-
-            MaximumTotalChangeInHappiness = GetMaximumTotalChangeInHappiness(potentialHappiness);
-
-            Console.WriteLine("The total change in happiness is {0:N0}.", MaximumTotalChangeInHappiness);
-
-            // Create a new guest list which is the same as the previous one but with the current user added
-            List<string> potentialHappinessWithCurrentUser = new List<string>(potentialHappiness);
-
-            var existingGuestNames = potentialHappiness
-                .Select((p) => p.Split(' ').First())
-                .Distinct()
-                .ToList();
-
-            // Add the current user to the guest list where everyone is neutral to them
-            string currentUser = string.Format(
-                CultureInfo.InvariantCulture,
-                "{0}\\{1}",
-                Environment.UserDomainName,
-                Environment.UserName);
-
-            const string AmbivalentFormat = "{0} would gain 0 happiness units by sitting next to {1}.";
-
-            foreach (string guest in existingGuestNames)
-            {
-                potentialHappinessWithCurrentUser.Add(string.Format(CultureInfo.InvariantCulture, AmbivalentFormat, guest, currentUser));
-                potentialHappinessWithCurrentUser.Add(string.Format(CultureInfo.InvariantCulture, AmbivalentFormat, currentUser, guest));
-            }
-
-            MaximumTotalChangeInHappinessWithCurrentUser = GetMaximumTotalChangeInHappiness(potentialHappinessWithCurrentUser);
-
-            Console.WriteLine("The total change in happiness with the current user seated is {0:N0}.", MaximumTotalChangeInHappinessWithCurrentUser);
-
-            return 0;
-        }
+        /// <inheritdoc />
+        protected override int MinimumArguments => 1;
 
         /// <summary>
         /// Gets the maximum total change in happiness for the specified potential happiness of the guests.
@@ -110,6 +65,41 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
             return permutations
                 .Select((p) => GetHappiness(p, happinesses))
                 .Max();
+        }
+
+        /// <inheritdoc />
+        protected override int SolveCore(string[] args)
+        {
+            string[] potentialHappiness = File.ReadAllLines(args[0]);
+
+            MaximumTotalChangeInHappiness = GetMaximumTotalChangeInHappiness(potentialHappiness);
+
+            Console.WriteLine("The total change in happiness is {0:N0}.", MaximumTotalChangeInHappiness);
+
+            // Create a new guest list which is the same as the previous one but with the current user added
+            List<string> potentialHappinessWithCurrentUser = new List<string>(potentialHappiness);
+
+            var existingGuestNames = potentialHappiness
+                .Select((p) => p.Split(' ').First())
+                .Distinct()
+                .ToList();
+
+            // Add the current user to the guest list where everyone is neutral to them
+            string currentUser = Format("{0}\\{1}", Environment.UserDomainName, Environment.UserName);
+
+            const string AmbivalentFormat = "{0} would gain 0 happiness units by sitting next to {1}.";
+
+            foreach (string guest in existingGuestNames)
+            {
+                potentialHappinessWithCurrentUser.Add(Format(AmbivalentFormat, guest, currentUser));
+                potentialHappinessWithCurrentUser.Add(Format(AmbivalentFormat, currentUser, guest));
+            }
+
+            MaximumTotalChangeInHappinessWithCurrentUser = GetMaximumTotalChangeInHappiness(potentialHappinessWithCurrentUser);
+
+            Console.WriteLine("The total change in happiness with the current user seated is {0:N0}.", MaximumTotalChangeInHappinessWithCurrentUser);
+
+            return 0;
         }
 
         /// <summary>
@@ -156,7 +146,7 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
                 AdjacentName = split.Last().TrimEnd('.'),
             };
 
-            result.Happiness = int.Parse(split[3], CultureInfo.InvariantCulture);
+            result.Happiness = ParseInt32(split[3]);
 
             if (split[2] == "lose")
             {

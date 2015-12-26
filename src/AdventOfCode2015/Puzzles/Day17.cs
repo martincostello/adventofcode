@@ -6,14 +6,13 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
     using System;
     using System.Collections;
     using System.Collections.Generic;
-    using System.Globalization;
     using System.IO;
     using System.Linq;
 
     /// <summary>
     /// A class representing the puzzle for <c>http://adventofcode.com/day/17</c>. This class cannot be inherited.
     /// </summary>
-    internal sealed class Day17 : IPuzzle
+    internal sealed class Day17 : Puzzle
     {
         /// <summary>
         /// Gets the number of combinations of containers that can be used.
@@ -26,45 +25,10 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
         internal int CombinationsWithMinimumContainers { get; private set; }
 
         /// <inheritdoc />
-        public int Solve(string[] args)
-        {
-            if (args.Length != 2)
-            {
-                Console.Error.WriteLine("No input file path and volume specified.");
-                return -1;
-            }
+        protected override bool IsFirstArgumentFilePath => true;
 
-            if (!File.Exists(args[0]))
-            {
-                Console.Error.WriteLine("The input file path specified cannot be found.");
-                return -1;
-            }
-
-            var containerVolumes = File.ReadAllLines(args[0])
-                .Select((p) => int.Parse(p, CultureInfo.InvariantCulture))
-                .ToList();
-
-            int volume = int.Parse(args[1], CultureInfo.InvariantCulture);
-
-            var combinations = GetContainerCombinations(volume, containerVolumes);
-            var combinationsWithLeastContainers = combinations.GroupBy((p) => p.Count).OrderBy((p) => p.Key).First();
-
-            Combinations = combinations.Count;
-            CombinationsWithMinimumContainers = combinationsWithLeastContainers.Count();
-
-            Console.WriteLine(
-                "There are {0:N0} combinations of containers that can store {1:0} liters of eggnog.",
-                Combinations,
-                volume);
-
-            Console.WriteLine(
-                "There are {0:N0} combinations of containers that can store {1:0} liters of eggnog using {2} containers.",
-                CombinationsWithMinimumContainers,
-                volume,
-                combinationsWithLeastContainers.Key);
-
-            return 0;
-        }
+        /// <inheritdoc />
+        protected override int MinimumArguments => 2;
 
         /// <summary>
         /// Returns the combinations of containers that can be used to completely fill
@@ -134,6 +98,35 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
                     return;
                 }
             }
+        }
+
+        /// <inheritdoc />
+        protected override int SolveCore(string[] args)
+        {
+            var containerVolumes = File.ReadAllLines(args[0])
+                .Select((p) => ParseInt32(p))
+                .ToList();
+
+            int volume = ParseInt32(args[1]);
+
+            var combinations = GetContainerCombinations(volume, containerVolumes);
+            var combinationsWithLeastContainers = combinations.GroupBy((p) => p.Count).OrderBy((p) => p.Key).First();
+
+            Combinations = combinations.Count;
+            CombinationsWithMinimumContainers = combinationsWithLeastContainers.Count();
+
+            Console.WriteLine(
+                "There are {0:N0} combinations of containers that can store {1:0} liters of eggnog.",
+                Combinations,
+                volume);
+
+            Console.WriteLine(
+                "There are {0:N0} combinations of containers that can store {1:0} liters of eggnog using {2} containers.",
+                CombinationsWithMinimumContainers,
+                volume,
+                combinationsWithLeastContainers.Key);
+
+            return 0;
         }
     }
 }

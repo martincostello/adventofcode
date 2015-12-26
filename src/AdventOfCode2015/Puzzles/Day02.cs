@@ -5,14 +5,13 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
 {
     using System;
     using System.Collections.Generic;
-    using System.Globalization;
     using System.IO;
     using System.Linq;
 
     /// <summary>
     /// A class representing the puzzle for <c>http://adventofcode.com/day/2</c>. This class cannot be inherited.
     /// </summary>
-    internal sealed class Day02 : IPuzzle
+    internal sealed class Day02 : Puzzle
     {
         /// <summary>
         /// Gets the total amount of wrapping paper required in square feet.
@@ -25,33 +24,10 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
         internal int TotalLengthOfRibbon { get; private set; }
 
         /// <inheritdoc />
-        public int Solve(string[] args)
-        {
-            if (args.Length != 1)
-            {
-                Console.Error.WriteLine("No input file path specified.");
-                return -1;
-            }
+        protected override bool IsFirstArgumentFilePath => true;
 
-            if (!File.Exists(args[0]))
-            {
-                Console.Error.WriteLine("The input file path specified cannot be found.");
-                return -1;
-            }
-
-            Tuple<int, int> result = GetTotalWrappingPaperAreaAndRibbonLength(File.ReadLines(args[0]));
-
-            TotalAreaOfPaper = result.Item1;
-            TotalLengthOfRibbon = result.Item2;
-
-            Console.WriteLine(
-                "The elves should order {0:N0} square feet of wrapping paper.{1}They also need {2:N0} feet of ribbon.",
-                TotalAreaOfPaper,
-                Environment.NewLine,
-                TotalLengthOfRibbon);
-
-            return 0;
-        }
+        /// <inheritdoc />
+        protected override int MinimumArguments => 1;
 
         /// <summary>
         /// Gets the total area of wrapping paper and length of ribbon required to
@@ -77,6 +53,23 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
             int length = presents.Sum(GetRibbonLength);
 
             return Tuple.Create(totalArea, length);
+        }
+
+        /// <inheritdoc />
+        protected override int SolveCore(string[] args)
+        {
+            Tuple<int, int> result = GetTotalWrappingPaperAreaAndRibbonLength(File.ReadLines(args[0]));
+
+            TotalAreaOfPaper = result.Item1;
+            TotalLengthOfRibbon = result.Item2;
+
+            Console.WriteLine(
+                "The elves should order {0:N0} square feet of wrapping paper.{1}They also need {2:N0} feet of ribbon.",
+                TotalAreaOfPaper,
+                Environment.NewLine,
+                TotalLengthOfRibbon);
+
+            return 0;
         }
 
         /// <summary>
@@ -147,9 +140,9 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
             {
                 string[] split = value.Split('x');
 
-                int length = int.Parse(split[0], NumberStyles.Integer, CultureInfo.InvariantCulture);
-                int width = int.Parse(split[1], NumberStyles.Integer, CultureInfo.InvariantCulture);
-                int height = int.Parse(split[2], NumberStyles.Integer, CultureInfo.InvariantCulture);
+                int length = ParseInt32(split[0]);
+                int width = ParseInt32(split[1]);
+                int height = ParseInt32(split[2]);
 
                 return new Present(length, width, height);
             }

@@ -6,14 +6,13 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
     using System;
     using System.Collections;
     using System.Collections.Generic;
-    using System.Globalization;
     using System.IO;
     using System.Linq;
 
     /// <summary>
     /// A class representing the puzzle for <c>http://adventofcode.com/day/24</c>. This class cannot be inherited.
     /// </summary>
-    internal sealed class Day24 : IPuzzle
+    internal sealed class Day24 : Puzzle
     {
         /// <summary>
         /// Gets the quantum entanglement of the first group
@@ -22,35 +21,10 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
         internal long QuantumEntanglementOfFirstGroup { get; private set; }
 
         /// <inheritdoc />
-        public int Solve(string[] args)
-        {
-            if (args.Length != 1 && args.Length != 2)
-            {
-                Console.Error.WriteLine("No input file path or number of compartments specified.");
-                return -1;
-            }
+        protected override bool IsFirstArgumentFilePath => true;
 
-            if (!File.Exists(args[0]))
-            {
-                Console.Error.WriteLine("The input file path specified cannot be found.");
-                return -1;
-            }
-
-            IList<int> weights = File.ReadAllLines(args[0])
-                .Select((p) => int.Parse(p, CultureInfo.InvariantCulture))
-                .ToList();
-
-            int compartments = args.Length == 2 ? int.Parse(args[1], CultureInfo.InvariantCulture) : 3;
-
-            QuantumEntanglementOfFirstGroup = GetQuantumEntanglementOfIdealConfiguration(compartments, weights);
-
-            Console.WriteLine(
-                "The quantum entanglement of the ideal configuration of {0:N0} packages is {1:N0}.",
-                weights.Count,
-                QuantumEntanglementOfFirstGroup);
-
-            return 0;
-        }
+        /// <inheritdoc />
+        protected override int MinimumArguments => 1;
 
         /// <summary>
         /// Gets the quantum entanglement of the first group of packages of
@@ -112,6 +86,25 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
                 .First();
 
             return optimumConfiguration.QuantumEntanglement;
+        }
+
+        /// <inheritdoc />
+        protected override int SolveCore(string[] args)
+        {
+            IList<int> weights = File.ReadAllLines(args[0])
+                .Select((p) => ParseInt32(p))
+                .ToList();
+
+            int compartments = args.Length == 2 ? ParseInt32(args[1]) : 3;
+
+            QuantumEntanglementOfFirstGroup = GetQuantumEntanglementOfIdealConfiguration(compartments, weights);
+
+            Console.WriteLine(
+                "The quantum entanglement of the ideal configuration of {0:N0} packages is {1:N0}.",
+                weights.Count,
+                QuantumEntanglementOfFirstGroup);
+
+            return 0;
         }
     }
 }

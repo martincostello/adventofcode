@@ -11,39 +11,12 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
     /// <summary>
     /// A class representing the puzzle for <c>http://adventofcode.com/day/22</c>. This class cannot be inherited.
     /// </summary>
-    internal sealed class Day22 : IPuzzle
+    internal sealed class Day22 : Puzzle
     {
         /// <summary>
         /// Gets the minimum amount of mana that can be spent to win.
         /// </summary>
         internal int MinimumCostToWin { get; private set; }
-
-        /// <inheritdoc />
-        public int Solve(string[] args)
-        {
-            string difficulty = args.Length == 1 ? args[0] : "easy";
-
-            List<Tuple<bool, int>> solutions = new List<Tuple<bool, int>>();
-            Random random = new Random();
-
-            // Play the game 100,000 times with random choices of spells
-            while (solutions.Count < 100000)
-            {
-                Tuple<bool, int> result = Fight((wizard, spells) => spells.ElementAt(random.Next(0, spells.Count)), difficulty);
-                solutions.Add(Tuple.Create(result.Item1, result.Item2));
-            }
-
-            MinimumCostToWin = solutions
-                .Where((p) => p.Item1)
-                .Min((p) => p.Item2);
-
-            Console.WriteLine(
-                "The minimum amount of mana that can be spent to win on {0} difficulty is {1:N0}.",
-                difficulty,
-                MinimumCostToWin);
-
-            return 0;
-        }
 
         /// <summary>
         /// Simulates a fight between the wizard and the boss.
@@ -112,6 +85,33 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
             while (wizard.HitPoints > 0 && opponent.HitPoints > 0);
 
             return wizard.HitPoints > 0 ? wizard : opponent;
+        }
+
+        /// <inheritdoc />
+        protected override int SolveCore(string[] args)
+        {
+            string difficulty = args.Length == 1 ? args[0] : "easy";
+
+            List<Tuple<bool, int>> solutions = new List<Tuple<bool, int>>();
+            Random random = new Random();
+
+            // Play the game 100,000 times with random choices of spells
+            while (solutions.Count < 100000)
+            {
+                Tuple<bool, int> result = Fight((wizard, spells) => spells.ElementAt(random.Next(0, spells.Count)), difficulty);
+                solutions.Add(Tuple.Create(result.Item1, result.Item2));
+            }
+
+            MinimumCostToWin = solutions
+                .Where((p) => p.Item1)
+                .Min((p) => p.Item2);
+
+            Console.WriteLine(
+                "The minimum amount of mana that can be spent to win on {0} difficulty is {1:N0}.",
+                difficulty,
+                MinimumCostToWin);
+
+            return 0;
         }
 
         /// <summary>

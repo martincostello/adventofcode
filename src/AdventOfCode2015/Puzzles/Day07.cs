@@ -5,14 +5,13 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
 {
     using System;
     using System.Collections.Generic;
-    using System.Globalization;
     using System.IO;
     using System.Linq;
 
     /// <summary>
     /// A class representing the puzzle for <c>http://adventofcode.com/day/7</c>. This class cannot be inherited.
     /// </summary>
-    internal sealed class Day07 : IPuzzle
+    internal sealed class Day07 : Puzzle
     {
         /// <summary>
         /// Gets the first signal value.
@@ -25,41 +24,10 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
         internal int SecondSignal { get; private set; }
 
         /// <inheritdoc />
-        public int Solve(string[] args)
-        {
-            if (args.Length != 1)
-            {
-                Console.Error.WriteLine("No input file path specified.");
-                return -1;
-            }
+        protected override bool IsFirstArgumentFilePath => true;
 
-            if (!File.Exists(args[0]))
-            {
-                Console.Error.WriteLine("The input file path specified cannot be found.");
-                return -1;
-            }
-
-            IList<string> instructions = File.ReadAllLines(args[0]);
-
-            // Get the wire values for the initial instructions
-            IDictionary<string, ushort> values = GetWireValues(instructions);
-
-            FirstSignal = values["a"];
-
-            Console.WriteLine("The signal for wire a is {0:N0}.", FirstSignal);
-
-            // Replace the input value for b with the value for a, then re-calculate
-            int indexForB = instructions.IndexOf("44430 -> b");
-            instructions[indexForB] = string.Format(CultureInfo.InvariantCulture, "{0} -> b", FirstSignal);
-
-            values = GetWireValues(instructions);
-
-            SecondSignal = values["a"];
-
-            Console.WriteLine("The new signal for wire a is {0:N0}.", SecondSignal);
-
-            return 0;
-        }
+        /// <inheritdoc />
+        protected override int MinimumArguments => 1;
 
         /// <summary>
         /// Gets the wire values for the specified instructions.
@@ -144,6 +112,31 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
             }
 
             return result;
+        }
+
+        /// <inheritdoc />
+        protected override int SolveCore(string[] args)
+        {
+            IList<string> instructions = File.ReadAllLines(args[0]);
+
+            // Get the wire values for the initial instructions
+            IDictionary<string, ushort> values = GetWireValues(instructions);
+
+            FirstSignal = values["a"];
+
+            Console.WriteLine("The signal for wire a is {0:N0}.", FirstSignal);
+
+            // Replace the input value for b with the value for a, then re-calculate
+            int indexForB = instructions.IndexOf("44430 -> b");
+            instructions[indexForB] = Format("{0} -> b", FirstSignal);
+
+            values = GetWireValues(instructions);
+
+            SecondSignal = values["a"];
+
+            Console.WriteLine("The new signal for wire a is {0:N0}.", SecondSignal);
+
+            return 0;
         }
 
         /// <summary>

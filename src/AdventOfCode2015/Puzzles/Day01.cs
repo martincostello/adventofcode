@@ -9,7 +9,7 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
     /// <summary>
     /// A class representing the puzzle for <c>http://adventofcode.com/day/1</c>. This class cannot be inherited.
     /// </summary>
-    internal sealed class Day01 : IPuzzle
+    internal sealed class Day01 : Puzzle
     {
         /// <summary>
         /// Gets the final floor reached by the instructions.
@@ -22,32 +22,10 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
         internal int FirstBasementInstruction { get; private set; }
 
         /// <inheritdoc />
-        public int Solve(string[] args)
-        {
-            if (args.Length != 1)
-            {
-                Console.Error.WriteLine("No input file path specified.");
-                return -1;
-            }
+        protected override bool IsFirstArgumentFilePath => true;
 
-            if (!File.Exists(args[0]))
-            {
-                Console.Error.WriteLine("The input file path specified cannot be found.");
-                return -1;
-            }
-
-            string value = File.ReadAllText(args[0]);
-
-            Tuple<int, int> result = GetFinalFloorAndFirstInstructionBasementReached(value);
-
-            FinalFloor = result.Item1;
-            FirstBasementInstruction = result.Item2;
-
-            Console.WriteLine("Santa should go to floor {0}.", FinalFloor);
-            Console.WriteLine("Santa first enters the basement after following instruction {0:N0}.", FirstBasementInstruction);
-
-            return 0;
-        }
+        /// <inheritdoc />
+        protected override int MinimumArguments => 1;
 
         /// <summary>
         /// Gets the final floor reached by following the specified set of instructions
@@ -92,6 +70,22 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
             }
 
             return Tuple.Create(floor, instructionThatEntersBasement);
+        }
+
+        /// <inheritdoc />
+        protected override int SolveCore(string[] args)
+        {
+            string value = File.ReadAllText(args[0]);
+
+            Tuple<int, int> result = GetFinalFloorAndFirstInstructionBasementReached(value);
+
+            FinalFloor = result.Item1;
+            FirstBasementInstruction = result.Item2;
+
+            Console.WriteLine("Santa should go to floor {0}.", FinalFloor);
+            Console.WriteLine("Santa first enters the basement after following instruction {0:N0}.", FirstBasementInstruction);
+
+            return 0;
         }
     }
 }

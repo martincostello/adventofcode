@@ -5,14 +5,13 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
 {
     using System;
     using System.Collections.Generic;
-    using System.Globalization;
     using System.IO;
     using System.Linq;
 
     /// <summary>
     /// A class representing the puzzle for <c>http://adventofcode.com/day/9</c>. This class cannot be inherited.
     /// </summary>
-    internal sealed class Day09 : IPuzzle
+    internal sealed class Day09 : Puzzle
     {
         /// <summary>
         /// Gets the solution.
@@ -20,37 +19,10 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
         internal int Solution { get; private set; }
 
         /// <inheritdoc />
-        public int Solve(string[] args)
-        {
-            if (args.Length != 1 && args.Length != 2)
-            {
-                Console.Error.WriteLine("No input file path specified.");
-                return -1;
-            }
+        protected override bool IsFirstArgumentFilePath => true;
 
-            if (!File.Exists(args[0]))
-            {
-                Console.Error.WriteLine("The input file path specified cannot be found.");
-                return -1;
-            }
-
-            bool findLongest =
-                args.Length == 2 &&
-                string.Equals(args[1], bool.TrueString, StringComparison.OrdinalIgnoreCase);
-
-            Solution = GetDistanceBetweenPoints(File.ReadAllLines(args[0]), findLongest);
-
-            if (findLongest)
-            {
-                Console.WriteLine("The distance of the longest route is {0:N0}.", Solution);
-            }
-            else
-            {
-                Console.WriteLine("The distance of the shortest route is {0:N0}.", Solution);
-            }
-
-            return 0;
-        }
+        /// <inheritdoc />
+        protected override int MinimumArguments => 1;
 
         /// <summary>
         /// Gets the shortest distance to visit all of the specified locations
@@ -79,7 +51,7 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
             // Parse the input
             var parsedDistances = collection
                 .Select((p) => p.Split(new[] { " = " }, StringSplitOptions.None))
-                .Select((p) => new { Locations = p[0].Split(new[] { " to " }, StringSplitOptions.None), Distance = int.Parse(p[1], CultureInfo.InvariantCulture) })
+                .Select((p) => new { Locations = p[0].Split(new[] { " to " }, StringSplitOptions.None), Distance = ParseInt32(p[1]) })
                 .ToList();
 
             if (parsedDistances.Count == 1)
@@ -149,6 +121,27 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
             System.Diagnostics.Trace.WriteLine(pathOfInterest);
 
             return pathOfInterest.PathDistance;
+        }
+
+        /// <inheritdoc />
+        protected override int SolveCore(string[] args)
+        {
+            bool findLongest =
+                args.Length == 2 &&
+                string.Equals(args[1], bool.TrueString, StringComparison.OrdinalIgnoreCase);
+
+            Solution = GetDistanceBetweenPoints(File.ReadAllLines(args[0]), findLongest);
+
+            if (findLongest)
+            {
+                Console.WriteLine("The distance of the longest route is {0:N0}.", Solution);
+            }
+            else
+            {
+                Console.WriteLine("The distance of the shortest route is {0:N0}.", Solution);
+            }
+
+            return 0;
         }
 
         /// <summary>

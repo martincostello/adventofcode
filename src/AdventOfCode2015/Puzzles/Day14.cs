@@ -12,7 +12,7 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
     /// <summary>
     /// A class representing the puzzle for <c>http://adventofcode.com/day/14</c>. This class cannot be inherited.
     /// </summary>
-    internal sealed class Day14 : IPuzzle
+    internal sealed class Day14 : Puzzle
     {
         /// <summary>
         /// Gets the maximum distance travelled by the winning reindeer at the given point in time, in kilometers.
@@ -25,41 +25,10 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
         internal int MaximumReindeerPoints { get; private set; }
 
         /// <inheritdoc />
-        public int Solve(string[] args)
-        {
-            if (args.Length != 2)
-            {
-                Console.Error.WriteLine("No input file path or time index specified.");
-                return -1;
-            }
+        protected override bool IsFirstArgumentFilePath => true;
 
-            if (!File.Exists(args[0]))
-            {
-                Console.Error.WriteLine("The input file path specified cannot be found.");
-                return -1;
-            }
-
-            int timeIndex;
-
-            if (!int.TryParse(args[1], NumberStyles.Integer & ~NumberStyles.AllowLeadingSign, CultureInfo.InvariantCulture, out timeIndex) ||
-                timeIndex < 0)
-            {
-                Console.Error.WriteLine("The time index specified is invalid.");
-                return -1;
-            }
-
-            string[] flightData = File.ReadAllLines(args[0]);
-
-            MaximumReindeerDistance = GetMaximumDistanceOfFastestReindeer(flightData, timeIndex);
-
-            Console.WriteLine("After {0:N0} seconds, the furthest reindeer is {1:N0} km away.", timeIndex, MaximumReindeerDistance);
-
-            MaximumReindeerPoints = GetMaximumPointsOfFastestReindeer(flightData, timeIndex);
-
-            Console.WriteLine("After {0:N0} seconds, the reindeer in the lead has {1:N0} points.", timeIndex, MaximumReindeerPoints);
-
-            return 0;
-        }
+        /// <inheritdoc />
+        protected override int MinimumArguments => 2;
 
         /// <summary>
         /// Gets the maximum distance travelled by the specified reindeer at the specified time index.
@@ -117,6 +86,30 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
                 .Max();
         }
 
+        /// <inheritdoc />
+        protected override int SolveCore(string[] args)
+        {
+            int timeIndex = ParseInt32(args[1], NumberStyles.Integer & ~NumberStyles.AllowLeadingSign);
+
+            if (timeIndex < 0)
+            {
+                Console.Error.WriteLine("The time index specified is invalid.");
+                return -1;
+            }
+
+            string[] flightData = File.ReadAllLines(args[0]);
+
+            MaximumReindeerDistance = GetMaximumDistanceOfFastestReindeer(flightData, timeIndex);
+
+            Console.WriteLine("After {0:N0} seconds, the furthest reindeer is {1:N0} km away.", timeIndex, MaximumReindeerDistance);
+
+            MaximumReindeerPoints = GetMaximumPointsOfFastestReindeer(flightData, timeIndex);
+
+            Console.WriteLine("After {0:N0} seconds, the reindeer in the lead has {1:N0} points.", timeIndex, MaximumReindeerPoints);
+
+            return 0;
+        }
+
         /// <summary>
         /// A class representing flight data for a reindeer. This class cannot be inherited.
         /// </summary>
@@ -156,9 +149,9 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
                 return new FlightData()
                 {
                     Name = split.First(),
-                    MaximumSpeed = int.Parse(split[3], CultureInfo.InvariantCulture),
-                    MaximumActivityPeriod = int.Parse(split[6], CultureInfo.InvariantCulture),
-                    RestPeriod = int.Parse(split[13], CultureInfo.InvariantCulture),
+                    MaximumSpeed = ParseInt32(split[3]),
+                    MaximumActivityPeriod = ParseInt32(split[6]),
+                    RestPeriod = ParseInt32(split[13]),
                 };
             }
 
