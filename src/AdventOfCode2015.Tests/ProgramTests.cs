@@ -24,6 +24,19 @@ namespace MartinCostello.AdventOfCode2015
         }
 
         [Fact]
+        public static void Program_Returns_Zero_If_Input_Invalid()
+        {
+            // Arrange
+            string[] args = new[] { "1", @"does_not_exist.txt" };
+
+            // Act
+            int actual = Program.Main(args);
+
+            // Assert
+            Assert.Equal(-1, actual);
+        }
+
+        [Fact]
         public static void Program_Exits_If_Null_Arguments()
         {
             // Arrange
