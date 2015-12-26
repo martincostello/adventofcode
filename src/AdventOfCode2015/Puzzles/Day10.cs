@@ -28,8 +28,8 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
         /// <returns>The 'look-and-say' representation of <paramref name="value"/>.</returns>
         internal static string AsLookAndSay(string value)
         {
-            Queue<char> input = new Queue<char>(value);
-            StringBuilder output = new StringBuilder();
+            var input = new Queue<char>(value);
+            var output = new StringBuilder();
 
             while (input.Count > 0)
             {
