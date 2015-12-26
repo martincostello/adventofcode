@@ -40,13 +40,10 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
         /// </returns>
         internal static Tuple<int, int> GetTotalWrappingPaperAreaAndRibbonLength(IEnumerable<string> dimensions)
         {
-            // Read in the dimensions of the presents from the specified input file
-            List<Present> presents = new List<Present>();
-
-            foreach (string line in dimensions)
-            {
-                presents.Add(Present.Parse(line));
-            }
+            // Parse the dimensions of the presents
+            var presents = dimensions
+                .Select(Present.Parse)
+                .ToList();
 
             // Determine the total area of wrapping paper required and the amount of ribbon
             int totalArea = presents.Sum(GetWrappingPaperArea);
@@ -79,10 +76,18 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
         /// <returns>The length of ribbon, in feet, required to wrap the present.</returns>
         private static int GetRibbonLength(Present present)
         {
-            int smallestPerimiter = new[] { (present.Length + present.Width) * 2, (present.Width + present.Height) * 2, (present.Height + present.Length) * 2 }.Min();
+            var perimetersOfSides = new[]
+            {
+                (present.Length + present.Width) * 2,
+                (present.Width + present.Height) * 2,
+                (present.Height + present.Length) * 2,
+            };
+
+            int smallestPerimeter = perimetersOfSides.Min();
+
             int lengthForBow = present.Height * present.Length * present.Width;
 
-            return smallestPerimiter + lengthForBow;
+            return smallestPerimeter + lengthForBow;
         }
 
         /// <summary>
@@ -92,8 +97,19 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
         /// <returns>The area of wrapping paper, in square feet, required to wrap the present.</returns>
         private static int GetWrappingPaperArea(Present present)
         {
-            int surfaceArea = (2 * present.Length * present.Width) + (2 * present.Width * present.Height) + (2 * present.Height * present.Length);
-            int extra = new[] { present.Length * present.Width, present.Width * present.Height, present.Height * present.Length }.Min();
+            int surfaceArea =
+                (2 * present.Length * present.Width) +
+                (2 * present.Width * present.Height) +
+                (2 * present.Height * present.Length);
+
+            var areasOfSides = new[]
+            {
+                present.Length * present.Width,
+                present.Width * present.Height,
+                present.Height * present.Length,
+            };
+
+            int extra = areasOfSides.Min();
 
             return surfaceArea + extra;
         }
