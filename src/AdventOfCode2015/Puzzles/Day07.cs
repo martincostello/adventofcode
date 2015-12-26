@@ -33,7 +33,9 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
         /// Gets the wire values for the specified instructions.
         /// </summary>
         /// <param name="instructions">The instructions to get the wire values for.</param>
-        /// <returns>An <see cref="IDictionary{TKey, TValue}"/> containing the values for wires keyed by their Ids.</returns>
+        /// <returns>
+        /// An <see cref="IDictionary{TKey, TValue}"/> containing the values for wires keyed by their Ids.
+        /// </returns>
         internal static IDictionary<string, ushort> GetWireValues(IEnumerable<string> instructions)
         {
             // Create a map of wire Ids to the instructions to get their value
@@ -41,7 +43,7 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
                 .Select((p) => p.Split(new string[] { " -> " }, StringSplitOptions.None))
                 .ToDictionary((p) => p.Last(), (p) => p.First().Split(' '));
 
-            Dictionary<string, ushort> result = new Dictionary<string, ushort>();
+            var result = new Dictionary<string, ushort>();
 
             // Loop through the instructions until we have reduced each instruction to a value
             while (result.Count != instructionMap.Count)
@@ -145,7 +147,9 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
         /// <param name="operation">The operation.</param>
         /// <param name="firstValue">The first value.</param>
         /// <param name="secondValue">The second value.</param>
-        /// <returns>The solved value for the specified parameters if solved; otherwise <see langword="null"/>.</returns>
+        /// <returns>
+        /// The solved value for the specified parameters if solved; otherwise <see langword="null"/>.
+        /// </returns>
         private static ushort? TrySolveValueForOperation(string operation, ushort firstValue, ushort secondValue)
         {
             if (operation == "AND")
