@@ -35,7 +35,7 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
             Assert.Equal(346386, target.LowestZeroHash);
         }
 
-        [Fact]
+        [LocalOnly]
         public static void Day04_Solve_Returns_Correct_Solution_6_Zeroes()
         {
             // Arrange
