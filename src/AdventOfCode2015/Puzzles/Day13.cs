@@ -5,7 +5,6 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
 {
     using System;
     using System.Collections.Generic;
-    using System.Globalization;
     using System.IO;
     using System.Linq;
 
@@ -38,12 +37,9 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
         internal static int GetMaximumTotalChangeInHappiness(ICollection<string> potentialHappiness)
         {
             // Parse the input data
-            List<Potential> potentials = new List<Potential>();
-
-            foreach (string value in potentialHappiness)
-            {
-                potentials.Add(ParsePotentialHappiness(value));
-            }
+            IList<Potential> potentials = potentialHappiness
+                .Select(ParsePotentialHappiness)
+                .ToList();
 
             // Determine all of the possible seating arrangements
             List<string> names = potentials
@@ -77,7 +73,7 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
             Console.WriteLine("The total change in happiness is {0:N0}.", MaximumTotalChangeInHappiness);
 
             // Create a new guest list which is the same as the previous one but with the current user added
-            List<string> potentialHappinessWithCurrentUser = new List<string>(potentialHappiness);
+            var potentialHappinessWithCurrentUser = new List<string>(potentialHappiness);
 
             var existingGuestNames = potentialHappiness
                 .Select((p) => p.Split(' ').First())
