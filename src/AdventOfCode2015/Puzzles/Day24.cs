@@ -4,7 +4,6 @@
 namespace MartinCostello.AdventOfCode2015.Puzzles
 {
     using System;
-    using System.Collections;
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
@@ -43,43 +42,9 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
         internal static long GetQuantumEntanglementOfIdealConfiguration(int compartments, IList<int> weights)
         {
             // How much should each compartment weigh?
-            int targetCompartmentWeight = weights.Sum() / compartments;
+            int total = weights.Sum() / compartments;
 
-            List<ICollection<long>> result = new List<ICollection<long>>();
-
-            BitArray bits = new BitArray(weights.Count);
-
-            for (int i = 0; i < Math.Pow(2, bits.Length); i++)
-            {
-                int sum = 0;
-
-                for (int j = 0; j < bits.Length; j++)
-                {
-                    if (bits[j])
-                    {
-                        sum += weights[j];
-                    }
-                }
-
-                if (sum == targetCompartmentWeight)
-                {
-                    List<long> weightsInCompartment = new List<long>();
-
-                    for (int j = 0; j < bits.Length; j++)
-                    {
-                        if (bits[j])
-                        {
-                            weightsInCompartment.Add(weights[j]);
-                        }
-                    }
-
-                    result.Add(weightsInCompartment);
-                }
-
-                Day17.Increment(bits);
-            }
-
-            var optimumConfiguration = result
+            var optimumConfiguration = Maths.GetCombinations(total, weights)
                 .Select((p) => new { Count = p.Count, QuantumEntanglement = p.Aggregate((x, y) => x * y) })
                 .OrderBy((p) => p.Count)
                 .ThenBy((p) => p.QuantumEntanglement)

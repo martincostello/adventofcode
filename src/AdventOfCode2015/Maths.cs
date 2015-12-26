@@ -3,6 +3,8 @@
 
 namespace MartinCostello.AdventOfCode2015
 {
+    using System;
+    using System.Collections;
     using System.Collections.Generic;
     using System.Linq;
 
@@ -11,6 +13,53 @@ namespace MartinCostello.AdventOfCode2015
     /// </summary>
     internal static class Maths
     {
+        /// <summary>
+        /// Returns the combinations of values that add up to the specified total.
+        /// </summary>
+        /// <param name="total">The total required for the combination(s).</param>
+        /// <param name="values">The values to generate the combinations for.</param>
+        /// <returns>
+        /// The combinations of values whose total is the value specified by <paramref name="total"/>.
+        /// </returns>
+        internal static IList<ICollection<long>> GetCombinations(long total, IList<int> values)
+        {
+            List<ICollection<long>> result = new List<ICollection<long>>();
+
+            BitArray bits = new BitArray(values.Count);
+
+            for (int i = 0; i < Math.Pow(2, bits.Length); i++)
+            {
+                int sum = 0;
+
+                for (int j = 0; j < bits.Length; j++)
+                {
+                    if (bits[j])
+                    {
+                        sum += values[j];
+                    }
+                }
+
+                if (sum == total)
+                {
+                    List<long> combination = new List<long>();
+
+                    for (int j = 0; j < bits.Length; j++)
+                    {
+                        if (bits[j])
+                        {
+                            combination.Add(values[j]);
+                        }
+                    }
+
+                    result.Add(combination);
+                }
+
+                Increment(bits);
+            }
+
+            return result;
+        }
+
         /// <summary>
         /// Returns all the permutations of the specified collection of values.
         /// </summary>
@@ -42,6 +91,24 @@ namespace MartinCostello.AdventOfCode2015
 
             return GetPermutations(collection, count - 1)
                 .SelectMany((p) => collection.Where((r) => !p.Contains(r)), (set, value) => set.Concat(new[] { value }));
+        }
+
+        /// <summary>
+        /// Increments the value of the specified <see cref="BitArray"/>.
+        /// </summary>
+        /// <param name="value">The value to increment.</param>
+        private static void Increment(BitArray value)
+        {
+            for (int i = 0; i < value.Length; i++)
+            {
+                bool previous = value[i];
+                value[i] = !previous;
+
+                if (!previous)
+                {
+                    return;
+                }
+            }
         }
     }
 }

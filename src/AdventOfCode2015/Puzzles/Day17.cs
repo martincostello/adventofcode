@@ -4,7 +4,6 @@
 namespace MartinCostello.AdventOfCode2015.Puzzles
 {
     using System;
-    using System.Collections;
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
@@ -39,65 +38,13 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
         /// <returns>
         /// The combinations of containers that can store the volume specified by <paramref name="volume"/>.
         /// </returns>
-        internal static IList<ICollection<int>> GetContainerCombinations(int volume, IList<int> containerVolumes)
+        internal static IList<ICollection<long>> GetContainerCombinations(int volume, IList<int> containerVolumes)
         {
             var containers = containerVolumes
                 .OrderByDescending((p) => p)
                 .ToList();
 
-            List<ICollection<int>> result = new List<ICollection<int>>();
-
-            BitArray bits = new BitArray(containerVolumes.Count);
-
-            for (int i = 0; i < Math.Pow(2, bits.Length); i++)
-            {
-                int sum = 0;
-
-                for (int j = 0; j < bits.Length; j++)
-                {
-                    if (bits[j])
-                    {
-                        sum += containers[j];
-                    }
-                }
-
-                if (sum == volume)
-                {
-                    List<int> volumes = new List<int>();
-
-                    for (int j = 0; j < bits.Length; j++)
-                    {
-                        if (bits[j])
-                        {
-                            volumes.Add(containers[j]);
-                        }
-                    }
-
-                    result.Add(volumes);
-                }
-
-                Increment(bits);
-            }
-
-            return result;
-        }
-
-        /// <summary>
-        /// Increments the value of the specified <see cref="BitArray"/>.
-        /// </summary>
-        /// <param name="value">The value to increment.</param>
-        internal static void Increment(BitArray value)
-        {
-            for (int i = 0; i < value.Length; i++)
-            {
-                bool previous = value[i];
-                value[i] = !previous;
-
-                if (!previous)
-                {
-                    return;
-                }
-            }
+            return Maths.GetCombinations(volume, containers);
         }
 
         /// <inheritdoc />
