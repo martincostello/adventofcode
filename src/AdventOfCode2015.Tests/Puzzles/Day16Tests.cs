@@ -14,16 +14,14 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
         public static void Day16_Solve_Returns_Correct_Solution()
         {
             // Arrange
-            string[] args = new[] { @".\Input\Day16\input.txt" };
-            var target = new Day16();
+            string[] args = new[] { PuzzleTestHelpers.GetInputPath(16) };
 
             // Act
-            int actual = target.Solve(args);
+            var puzzle = PuzzleTestHelpers.SolvePuzzle<Day16>(args);
 
             // Assert
-            Assert.Equal(0, actual);
-            Assert.Equal(373, target.AuntSueNumber);
-            Assert.Equal(260, target.RealAuntSueNumber);
+            Assert.Equal(373, puzzle.AuntSueNumber);
+            Assert.Equal(260, puzzle.RealAuntSueNumber);
         }
     }
 }

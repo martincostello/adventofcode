@@ -37,16 +37,14 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
         public static void Day01_Solve_Returns_Correct_Solution()
         {
             // Arrange
-            string[] args = new[] { @".\Input\Day01\input.txt" };
-            Day01 target = new Day01();
+            string[] args = new[] { PuzzleTestHelpers.GetInputPath(1) };
 
             // Act
-            int actual = target.Solve(args);
+            var puzzle = PuzzleTestHelpers.SolvePuzzle<Day01>(args);
 
             // Assert
-            Assert.Equal(0, actual);
-            Assert.Equal(232, target.FinalFloor);
-            Assert.Equal(1783, target.FirstBasementInstruction);
+            Assert.Equal(232, puzzle.FinalFloor);
+            Assert.Equal(1783, puzzle.FirstBasementInstruction);
         }
     }
 }

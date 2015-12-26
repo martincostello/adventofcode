@@ -263,25 +263,23 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
         public static void Day06_Solve_Returns_Correct_Solution()
         {
             // Arrange
-            string[] args = new[] { @".\Input\Day06\input.txt", "1" };
-            Day06 target = new Day06();
+            string inputPath = PuzzleTestHelpers.GetInputPath(6);
+            string[] args = new[] { inputPath, "1" };
 
             // Act
-            int actual = target.Solve(args);
+            var puzzle = PuzzleTestHelpers.SolvePuzzle<Day06>(args);
 
             // Assert
-            Assert.Equal(0, actual);
-            Assert.Equal(543903, target.LightsIlluminated);
+            Assert.Equal(543903, puzzle.LightsIlluminated);
 
             // Arrange
-            args = new[] { @".\Input\Day06\input.txt", "2" };
+            args = new[] { inputPath, "2" };
 
             // Act
-            actual = target.Solve(args);
+            puzzle = PuzzleTestHelpers.SolvePuzzle<Day06>(args);
 
             // Assert
-            Assert.Equal(0, actual);
-            Assert.Equal(14687245, target.TotalBrightness);
+            Assert.Equal(14687245, puzzle.TotalBrightness);
         }
     }
 }

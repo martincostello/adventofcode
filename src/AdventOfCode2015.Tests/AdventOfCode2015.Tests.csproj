@@ -91,6 +91,7 @@
     <Compile Include="Puzzles\Day23Tests.cs" />
     <Compile Include="Puzzles\Day24Tests.cs" />
     <Compile Include="Puzzles\Day25Tests.cs" />
+    <Compile Include="Puzzles\PuzzleTestHelpers.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

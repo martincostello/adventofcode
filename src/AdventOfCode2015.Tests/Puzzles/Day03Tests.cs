@@ -40,16 +40,14 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
         public static void Day03_Solve_Returns_Correct_Solution()
         {
             // Arrange
-            string[] args = new[] { @".\Input\Day03\input.txt" };
-            var target = new Day03();
+            string[] args = new[] { PuzzleTestHelpers.GetInputPath(3) };
 
             // Act
-            int actual = target.Solve(args);
+            var puzzle = PuzzleTestHelpers.SolvePuzzle<Day03>(args);
 
             // Assert
-            Assert.Equal(0, actual);
-            Assert.Equal(2565, target.HousesWithPresentsFromSanta);
-            Assert.Equal(2639, target.HousesWithPresentsFromSantaAndRoboSanta);
+            Assert.Equal(2565, puzzle.HousesWithPresentsFromSanta);
+            Assert.Equal(2639, puzzle.HousesWithPresentsFromSantaAndRoboSanta);
         }
     }
 }

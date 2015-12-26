@@ -30,16 +30,14 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
         public static void Day17_Solve_Returns_Correct_Solution()
         {
             // Arrange
-            string[] args = new[] { @".\Input\Day17\input.txt", "150" };
-            var target = new Day17();
+            string[] args = new[] { PuzzleTestHelpers.GetInputPath(17), "150" };
 
             // Act
-            int actual = target.Solve(args);
+            var puzzle = PuzzleTestHelpers.SolvePuzzle<Day17>(args);
 
             // Assert
-            Assert.Equal(0, actual);
-            Assert.Equal(1304, target.Combinations);
-            Assert.Equal(18, target.CombinationsWithMinimumContainers);
+            Assert.Equal(1304, puzzle.Combinations);
+            Assert.Equal(18, puzzle.CombinationsWithMinimumContainers);
         }
     }
 }

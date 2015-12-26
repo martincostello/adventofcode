@@ -23,28 +23,29 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
         }
 
         [Fact]
-        public static void Day04_Solve_Returns_Correct_Solution()
+        public static void Day04_Solve_Returns_Correct_Solution_5_Zeroes()
         {
             // Arrange
             string[] args = new[] { "iwrupvqb", "5" };
-            Day04 target = new Day04();
 
             // Act
-            int actual = target.Solve(args);
+            var target = PuzzleTestHelpers.SolvePuzzle<Day04>(args);
 
             // Assert
-            Assert.Equal(0, actual);
             Assert.Equal(346386, target.LowestZeroHash);
+        }
 
+        [Fact(Skip = "Too slow.")]
+        public static void Day04_Solve_Returns_Correct_Solution_6_Zeroes()
+        {
             // Arrange
-            args = new[] { "iwrupvqb", "6" };
+            var args = new[] { "iwrupvqb", "6" };
 
             // Act
-            actual = target.Solve(args);
+            var puzzle = PuzzleTestHelpers.SolvePuzzle<Day04>(args);
 
             // Assert
-            Assert.Equal(0, actual);
-            Assert.Equal(9958218, target.LowestZeroHash);
+            Assert.Equal(9958218, puzzle.LowestZeroHash);
         }
     }
 }

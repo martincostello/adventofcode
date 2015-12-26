@@ -41,16 +41,14 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
         public static void Day13_Solve_Returns_Correct_Solution()
         {
             // Arrange
-            string[] args = new[] { @".\Input\Day13\input.txt" };
-            Day13 target = new Day13();
+            string[] args = new[] { PuzzleTestHelpers.GetInputPath(13) };
 
             // Act
-            int actual = target.Solve(args);
+            var puzzle = PuzzleTestHelpers.SolvePuzzle<Day13>(args);
 
             // Assert
-            Assert.Equal(0, actual);
-            Assert.Equal(618, target.MaximumTotalChangeInHappiness);
-            Assert.Equal(601, target.MaximumTotalChangeInHappinessWithCurrentUser);
+            Assert.Equal(618, puzzle.MaximumTotalChangeInHappiness);
+            Assert.Equal(601, puzzle.MaximumTotalChangeInHappinessWithCurrentUser);
         }
     }
 }

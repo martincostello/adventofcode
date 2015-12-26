@@ -37,16 +37,14 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
         public static void Day15_Solve_Returns_Correct_Solution()
         {
             // Arrange
-            string[] args = new[] { @".\Input\Day15\input.txt" };
-            var target = new Day15();
+            string[] args = new[] { PuzzleTestHelpers.GetInputPath(15) };
 
             // Act
-            int actual = target.Solve(args);
+            var puzzle = PuzzleTestHelpers.SolvePuzzle<Day15>(args);
 
             // Assert
-            Assert.Equal(0, actual);
-            Assert.Equal(222870, target.HighestTotalCookieScore);
-            Assert.Equal(117936, target.HighestTotalCookieScoreWith500Calories);
+            Assert.Equal(222870, puzzle.HighestTotalCookieScore);
+            Assert.Equal(117936, puzzle.HighestTotalCookieScoreWith500Calories);
         }
     }
 }

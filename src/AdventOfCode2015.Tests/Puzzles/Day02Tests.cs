@@ -31,16 +31,14 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
         public static void Day02_Solve_Returns_Correct_Solution()
         {
             // Arrange
-            string[] args = new[] { @".\Input\Day02\input.txt" };
-            Day02 target = new Day02();
+            string[] args = new[] { PuzzleTestHelpers.GetInputPath(2) };
 
             // Act
-            int actual = target.Solve(args);
+            var puzzle = PuzzleTestHelpers.SolvePuzzle<Day02>(args);
 
             // Assert
-            Assert.Equal(0, actual);
-            Assert.Equal(1598415, target.TotalAreaOfPaper);
-            Assert.Equal(3812909, target.TotalLengthOfRibbon);
+            Assert.Equal(1598415, puzzle.TotalAreaOfPaper);
+            Assert.Equal(3812909, puzzle.TotalLengthOfRibbon);
         }
     }
 }

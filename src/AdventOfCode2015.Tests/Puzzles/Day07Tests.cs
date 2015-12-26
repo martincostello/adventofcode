@@ -49,16 +49,14 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
         public static void Day07_Solve_Returns_Correct_Solution()
         {
             // Arrange
-            string[] args = new[] { @".\Input\Day07\input.txt" };
-            Day07 target = new Day07();
+            string[] args = new[] { PuzzleTestHelpers.GetInputPath(7) };
 
             // Act
-            int actual = target.Solve(args);
+            var puzzle = PuzzleTestHelpers.SolvePuzzle<Day07>(args);
 
             // Assert
-            Assert.Equal(0, actual);
-            Assert.Equal(3176, target.FirstSignal);
-            Assert.Equal(14710, target.SecondSignal);
+            Assert.Equal(3176, puzzle.FirstSignal);
+            Assert.Equal(14710, puzzle.SecondSignal);
         }
     }
 }

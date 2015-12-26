@@ -40,24 +40,21 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
         {
             // Arrange
             string[] args = new[] { "cqjxjnds" };
-            Day11 target = new Day11();
 
             // Act
-            int actual = target.Solve(args);
+            var puzzle = PuzzleTestHelpers.SolvePuzzle<Day11>(args);
 
             // Assert
-            Assert.Equal(0, actual);
-            Assert.Equal("cqjxxyzz", target.NextPassword);
+            Assert.Equal("cqjxxyzz", puzzle.NextPassword);
 
             // Arrange
-            args = new[] { target.NextPassword };
+            args = new[] { puzzle.NextPassword };
 
             // Act
-            actual = target.Solve(args);
+            puzzle = PuzzleTestHelpers.SolvePuzzle<Day11>(args);
 
             // Assert
-            Assert.Equal(0, actual);
-            Assert.Equal("cqkaabcc", target.NextPassword);
+            Assert.Equal("cqkaabcc", puzzle.NextPassword);
         }
     }
 }

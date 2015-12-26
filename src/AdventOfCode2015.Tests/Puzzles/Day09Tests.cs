@@ -48,25 +48,23 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
         public static void Day09_Solve_Returns_Correct_Solution()
         {
             // Arrange
-            string[] args = new[] { @".\Input\Day09\input.txt" };
-            Day09 target = new Day09();
+            string inputPath = PuzzleTestHelpers.GetInputPath(9);
+            string[] args = new[] { inputPath };
 
             // Act
-            int actual = target.Solve(args);
+            var puzzle = PuzzleTestHelpers.SolvePuzzle<Day09>(args);
 
             // Assert
-            Assert.Equal(0, actual);
-            Assert.Equal(207, target.Solution);
+            Assert.Equal(207, puzzle.Solution);
 
             // Arrange
-            args = new[] { @".\Input\Day09\input.txt", "true" };
+            args = new[] { inputPath, "true" };
 
             // Act
-            actual = target.Solve(args);
+            puzzle = PuzzleTestHelpers.SolvePuzzle<Day09>(args);
 
             // Assert
-            Assert.Equal(0, actual);
-            Assert.Equal(804, target.Solution);
+            Assert.Equal(804, puzzle.Solution);
         }
     }
 }

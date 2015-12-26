@@ -82,16 +82,14 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
         public static void Day08_Solve_Returns_Correct_Solution()
         {
             // Arrange
-            string[] args = new[] { @".\Input\Day08\input.txt" };
-            Day08 target = new Day08();
+            string[] args = new[] { PuzzleTestHelpers.GetInputPath(8) };
 
             // Act
-            int actual = target.Solve(args);
+            var puzzle = PuzzleTestHelpers.SolvePuzzle<Day08>(args);
 
             // Assert
-            Assert.Equal(0, actual);
-            Assert.Equal(1342, target.FirstSolution);
-            Assert.Equal(2074, target.SecondSolution);
+            Assert.Equal(1342, puzzle.FirstSolution);
+            Assert.Equal(2074, puzzle.SecondSolution);
         }
     }
 }

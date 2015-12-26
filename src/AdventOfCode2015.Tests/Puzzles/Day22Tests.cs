@@ -32,14 +32,12 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
         {
             // Arrange
             string[] args = new string[0];
-            var target = new Day22();
 
             // Act
-            int actual = target.Solve(args);
+            var puzzle = PuzzleTestHelpers.SolvePuzzle<Day22>(args);
 
             // Assert
-            Assert.Equal(0, actual);
-            Assert.Equal(953, target.MinimumCostToWin);
+            Assert.Equal(953, puzzle.MinimumCostToWin);
         }
 
         [Fact]
@@ -47,14 +45,12 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
         {
             // Arrange
             string[] args = new string[] { "hard" };
-            var target = new Day22();
 
             // Act
-            int actual = target.Solve(args);
+            var puzzle = PuzzleTestHelpers.SolvePuzzle<Day22>(args);
 
             // Assert
-            Assert.Equal(0, actual);
-            Assert.Equal(1289, target.MinimumCostToWin);
+            Assert.Equal(1289, puzzle.MinimumCostToWin);
         }
 
         [Fact]

@@ -81,15 +81,13 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
         public static void Day18_Solve_Returns_Correct_Solution(string areCornerLightsBroken, int lightsIlluminated)
         {
             // Arrange
-            string[] args = new[] { @".\Input\Day18\input.txt", "100", areCornerLightsBroken };
-            var target = new Day18();
+            string[] args = new[] { PuzzleTestHelpers.GetInputPath(18), "100", areCornerLightsBroken };
 
             // Act
-            int actual = target.Solve(args);
+            var puzzle = PuzzleTestHelpers.SolvePuzzle<Day18>(args);
 
             // Assert
-            Assert.Equal(0, actual);
-            Assert.Equal(lightsIlluminated, target.LightsIlluminated);
+            Assert.Equal(lightsIlluminated, puzzle.LightsIlluminated);
         }
     }
 }

@@ -62,14 +62,12 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
         {
             // Arrange
             string[] args = new[] { "34000000" };
-            var target = new Day20();
 
             // Act
-            int actual = target.Solve(args);
+            var puzzle = PuzzleTestHelpers.SolvePuzzle<Day20>(args);
 
             // Assert
-            Assert.Equal(0, actual);
-            Assert.Equal(786240, target.LowestHouseNumber);
+            Assert.Equal(786240, puzzle.LowestHouseNumber);
         }
 
         [Fact(Skip = "Too slow.")]
@@ -77,14 +75,12 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
         {
             // Arrange
             string[] args = new[] { "34000000", "50" };
-            var target = new Day20();
 
             // Act
-            int actual = target.Solve(args);
+            var puzzle = PuzzleTestHelpers.SolvePuzzle<Day20>(args);
 
             // Assert
-            Assert.Equal(0, actual);
-            Assert.Equal(831600, target.LowestHouseNumber);
+            Assert.Equal(831600, puzzle.LowestHouseNumber);
         }
     }
 }

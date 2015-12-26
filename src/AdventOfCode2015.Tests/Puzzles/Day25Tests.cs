@@ -76,14 +76,12 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
         {
             // Arrange
             string[] args = new string[] { "2947", "3029" };
-            var target = new Day25();
 
             // Act
-            int actual = target.Solve(args);
+            var puzzle = PuzzleTestHelpers.SolvePuzzle<Day25>(args);
 
             // Assert
-            Assert.Equal(0, actual);
-            Assert.Equal(19980801u, target.Code);
+            Assert.Equal(19980801u, puzzle.Code);
         }
     }
 }

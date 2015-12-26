@@ -51,15 +51,13 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
         public static void Day19_Solve_Returns_Correct_Solution(string mode, int expected)
         {
             // Arrange
-            string[] args = new[] { @".\Input\Day19\input.txt", mode };
-            var target = new Day19();
+            string[] args = new[] { PuzzleTestHelpers.GetInputPath(19), mode };
 
             // Act
-            int actual = target.Solve(args);
+            var puzzle = PuzzleTestHelpers.SolvePuzzle<Day19>(args);
 
             // Assert
-            Assert.Equal(0, actual);
-            Assert.Equal(expected, target.Solution);
+            Assert.Equal(expected, puzzle.Solution);
         }
     }
 }

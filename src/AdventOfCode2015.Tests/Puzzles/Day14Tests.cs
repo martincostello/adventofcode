@@ -83,16 +83,14 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
         public static void Day14_Solve_Returns_Correct_Solution()
         {
             // Arrange
-            string[] args = new[] { @".\Input\Day14\input.txt", "2503" };
-            Day14 target = new Day14();
+            string[] args = new[] { PuzzleTestHelpers.GetInputPath(14), "2503" };
 
             // Act
-            int actual = target.Solve(args);
+            var puzzle = PuzzleTestHelpers.SolvePuzzle<Day14>(args);
 
             // Assert
-            Assert.Equal(0, actual);
-            Assert.Equal(2655, target.MaximumReindeerDistance);
-            Assert.Equal(1059, target.MaximumReindeerPoints);
+            Assert.Equal(2655, puzzle.MaximumReindeerDistance);
+            Assert.Equal(1059, puzzle.MaximumReindeerPoints);
         }
     }
 }

@@ -28,15 +28,13 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
         {
             // Arrange
             string[] args = new string[0];
-            var target = new Day21();
 
             // Act
-            int actual = target.Solve(args);
+            var puzzle = PuzzleTestHelpers.SolvePuzzle<Day21>(args);
 
             // Assert
-            Assert.Equal(0, actual);
-            Assert.Equal(148, target.MaximumCostToLose);
-            Assert.Equal(78, target.MinimumCostToWin);
+            Assert.Equal(148, puzzle.MaximumCostToLose);
+            Assert.Equal(78, puzzle.MinimumCostToWin);
         }
     }
 }

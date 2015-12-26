@@ -37,25 +37,23 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
         public static void Day24_Solve_Returns_Correct_Solution()
         {
             // Arrange
-            string[] args = new string[] { @".\Input\Day24\input.txt" };
-            var target = new Day24();
+            string inputPath = PuzzleTestHelpers.GetInputPath(24);
+            string[] args = new string[] { inputPath };
 
             // Act
-            int actual = target.Solve(args);
+            var puzzle = PuzzleTestHelpers.SolvePuzzle<Day24>(args);
 
             // Assert
-            Assert.Equal(0, actual);
-            Assert.Equal(11266889531, target.QuantumEntanglementOfFirstGroup);
+            Assert.Equal(11266889531, puzzle.QuantumEntanglementOfFirstGroup);
 
             // Arrange
-            args = new string[] { @".\Input\Day24\input.txt", "4" };
+            args = new string[] { inputPath, "4" };
 
             // Act
-            actual = target.Solve(args);
+            puzzle = PuzzleTestHelpers.SolvePuzzle<Day24>(args);
 
             // Assert
-            Assert.Equal(0, actual);
-            Assert.Equal(77387711, target.QuantumEntanglementOfFirstGroup);
+            Assert.Equal(77387711, puzzle.QuantumEntanglementOfFirstGroup);
         }
     }
 }
