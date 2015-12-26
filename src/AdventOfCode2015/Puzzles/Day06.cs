@@ -110,7 +110,9 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
             /// </summary>
             /// <param name="origin">The origin point of the bounding rectangle, as a <see cref="string"/>.</param>
             /// <param name="termination">The termination point of the bounding rectangle, as a <see cref="string"/>.</param>
-            /// <returns>A bounding <see cref="Rectangle"/> parsed from <paramref name="origin"/> and <paramref name="termination"/>.</returns>
+            /// <returns>
+            /// A bounding <see cref="Rectangle"/> parsed from <paramref name="origin"/> and <paramref name="termination"/>.
+            /// </returns>
             protected static Rectangle ParseBounds(string origin, string termination)
             {
                 // Determine the termination and origin points of the bounds of the lights to operate on
@@ -335,18 +337,28 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
             /// </summary>
             /// <param name="width">The width of the light grid.</param>
             /// <param name="height">The height of the light grid.</param>
-            /// <exception cref="ArgumentOutOfRangeException"><paramref name="width"/> or <paramref name="height"/> is less than one.</exception>
-            /// <remarks>The initial state of each light in the grid is that it is off.</remarks>
+            /// <exception cref="ArgumentOutOfRangeException">
+            /// <paramref name="width"/> or <paramref name="height"/> is less than one.
+            /// </exception>
+            /// <remarks>
+            /// The initial state of each light in the grid is that it is off.
+            /// </remarks>
             internal LightGrid(int width, int height)
             {
                 if (width < 1)
                 {
-                    throw new ArgumentOutOfRangeException(nameof(width), width, FormattableString.Invariant($"{nameof(width)} cannot be less than zero."));
+                    throw new ArgumentOutOfRangeException(
+                        nameof(width),
+                        width,
+                        FormattableString.Invariant($"{nameof(width)} cannot be less than zero."));
                 }
 
                 if (height < 1)
                 {
-                    throw new ArgumentOutOfRangeException(nameof(height), height, FormattableString.Invariant($"{nameof(height)} cannot be less than zero."));
+                    throw new ArgumentOutOfRangeException(
+                        nameof(height),
+                        height,
+                        FormattableString.Invariant($"{nameof(height)} cannot be less than zero."));
                 }
 
                 _bounds = new Rectangle(0, 0, width, height);
@@ -400,15 +412,7 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
             /// </summary>
             /// <param name="position">The position of the light to get the state of.</param>
             /// <returns>The current brightness of the light at <paramref name="position"/>.</returns>
-            /// <exception cref="ArgumentOutOfRangeException"><paramref name="position"/> is not in the light grid.</exception>
-            internal int this[Point position]
-            {
-                get
-                {
-                    EnsureInBounds(position);
-                    return _lightBrightnesses[position.X, position.Y];
-                }
-            }
+            internal int this[Point position] => _lightBrightnesses[position.X, position.Y];
 
             /// <inheritdoc />
             public override string ToString()
@@ -433,11 +437,8 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
             /// </summary>
             /// <param name="bounds">The bounds of the lights to toggle.</param>
             /// <param name="delta">The brightness to increase (or decrease) the brightness of the lights by.</param>
-            /// <exception cref="ArgumentOutOfRangeException"><paramref name="bounds"/> is not entirely within the light grid.</exception>
             internal void IncrementBrightness(Rectangle bounds, int delta)
             {
-                EnsureInBounds(bounds);
-
                 for (int x = 0; x < bounds.Width; x++)
                 {
                     for (int y = 0; y < bounds.Height; y++)
@@ -453,18 +454,14 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
             /// <param name="position">The position of the light to increment the brightness for.</param>
             /// <param name="delta">The brightness to increase (or decrease) the brightness of the lights by.</param>
             /// <returns>The new brightness of the light at <paramref name="position"/>.</returns>
-            /// <exception cref="ArgumentOutOfRangeException"><paramref name="position"/> is not in the light grid.</exception>
             internal int IncrementBrightness(Point position, int delta) => IncrementOrSetBrightness(position, delta, false);
 
             /// <summary>
             /// Toggles the lights within the specified bounds.
             /// </summary>
             /// <param name="bounds">The bounds of the lights to toggle.</param>
-            /// <exception cref="ArgumentOutOfRangeException"><paramref name="bounds"/> is not entirely within the light grid.</exception>
             internal void Toggle(Rectangle bounds)
             {
-                EnsureInBounds(bounds);
-
                 for (int x = 0; x < bounds.Width; x++)
                 {
                     for (int y = 0; y < bounds.Height; y++)
@@ -478,8 +475,9 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
             /// Toggles the state of the light at the specified position.
             /// </summary>
             /// <param name="position">The position of the light to toggle.</param>
-            /// <returns><see langword="true"/> if the light at <paramref name="position"/> is now on; otherwise <see langword="false"/>.</returns>
-            /// <exception cref="ArgumentOutOfRangeException"><paramref name="position"/> is not in the light grid.</exception>
+            /// <returns>
+            /// <see langword="true"/> if the light at <paramref name="position"/> is now on; otherwise <see langword="false"/>.
+            /// </returns>
             internal bool Toggle(Point position)
             {
                 bool isOff = this[position] == 0;
@@ -500,11 +498,8 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
             /// Turns off the lights within the specified bounds.
             /// </summary>
             /// <param name="bounds">The bounds of the lights to turn off.</param>
-            /// <exception cref="ArgumentOutOfRangeException"><paramref name="bounds"/> is not entirely within the light grid.</exception>
             internal void TurnOff(Rectangle bounds)
             {
-                EnsureInBounds(bounds);
-
                 for (int x = 0; x < bounds.Width; x++)
                 {
                     for (int y = 0; y < bounds.Height; y++)
@@ -518,18 +513,14 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
             /// Turns off the light at the specified position.
             /// </summary>
             /// <param name="position">The position of the light to turn off.</param>
-            /// <exception cref="ArgumentOutOfRangeException"><paramref name="position"/> is not in the light grid.</exception>
             internal void TurnOff(Point position) => IncrementOrSetBrightness(position, 0, true);
 
             /// <summary>
             /// Turns on the lights within the specified bounds.
             /// </summary>
             /// <param name="bounds">The bounds of the lights to turn on.</param>
-            /// <exception cref="ArgumentOutOfRangeException"><paramref name="bounds"/> is not entirely within the light grid.</exception>
             internal void TurnOn(Rectangle bounds)
             {
-                EnsureInBounds(bounds);
-
                 for (int x = 0; x < bounds.Width; x++)
                 {
                     for (int y = 0; y < bounds.Height; y++)
@@ -543,34 +534,7 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
             /// Turns on the light at the specified position.
             /// </summary>
             /// <param name="position">The position of the light to turn on.</param>
-            /// <exception cref="ArgumentOutOfRangeException"><paramref name="position"/> is not in the light grid.</exception>
             internal void TurnOn(Point position) => IncrementOrSetBrightness(position, 1, true);
-
-            /// <summary>
-            /// Validates that the specified position is within the light grid.
-            /// </summary>
-            /// <param name="position">The position to validate.</param>
-            /// <exception cref="ArgumentOutOfRangeException"><paramref name="position"/> is not in the light grid.</exception>
-            private void EnsureInBounds(Point position)
-            {
-                if (!_bounds.Contains(position))
-                {
-                    throw new ArgumentOutOfRangeException(nameof(position), position, "The specified position is not in the light grid.");
-                }
-            }
-
-            /// <summary>
-            /// Validates that the specified position is within the light grid.
-            /// </summary>
-            /// <param name="bounds">The position to validate.</param>
-            /// <exception cref="ArgumentOutOfRangeException"><paramref name="bounds"/> is not in the light grid.</exception>
-            private void EnsureInBounds(Rectangle bounds)
-            {
-                if (!_bounds.Contains(bounds))
-                {
-                    throw new ArgumentOutOfRangeException(nameof(bounds), bounds, "The specified bounds are not entirely within the light grid.");
-                }
-            }
 
             /// <summary>
             /// Increments or sets the brightness of the light at the specified position by the specified amount.
@@ -579,11 +543,8 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
             /// <param name="delta">The brightness to increase (or decrease) the brightness of the lights by .</param>
             /// <param name="set">Whether to set the value rather than increment it.</param>
             /// <returns>The new brightness of the light at <paramref name="position"/>.</returns>
-            /// <exception cref="ArgumentOutOfRangeException"><paramref name="position"/> is not in the light grid.</exception>
             private int IncrementOrSetBrightness(Point position, int delta, bool set = false)
             {
-                EnsureInBounds(position);
-
                 int current = _lightBrightnesses[position.X, position.Y];
 
                 if (set)

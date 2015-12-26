@@ -43,38 +43,6 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
             Assert.Equal(width, actual.Bounds.Width);
         }
 
-        [Fact]
-        public static void Day06_LightGridValidatesBounds()
-        {
-            Assert.Throws<ArgumentOutOfRangeException>("width", () => new Day06.LightGrid(0, 1));
-            Assert.Throws<ArgumentOutOfRangeException>("height", () => new Day06.LightGrid(1, 0));
-
-            int width = 1;
-            int height = 1;
-
-            var target = new Day06.LightGrid(width, height);
-
-            Assert.Throws<ArgumentOutOfRangeException>("position", () => target[new Point(-1, 0)]);
-            Assert.Throws<ArgumentOutOfRangeException>("position", () => target[new Point(0, -1)]);
-            Assert.Throws<ArgumentOutOfRangeException>("position", () => target[new Point(0, 1)]);
-            Assert.Throws<ArgumentOutOfRangeException>("position", () => target[new Point(1, 0)]);
-
-            Assert.Throws<ArgumentOutOfRangeException>("position", () => target.Toggle(new Point(-1, 0)));
-            Assert.Throws<ArgumentOutOfRangeException>("position", () => target.Toggle(new Point(0, -1)));
-            Assert.Throws<ArgumentOutOfRangeException>("position", () => target.Toggle(new Point(0, 1)));
-            Assert.Throws<ArgumentOutOfRangeException>("position", () => target.Toggle(new Point(1, 0)));
-
-            Assert.Throws<ArgumentOutOfRangeException>("position", () => target.TurnOff(new Point(-1, 0)));
-            Assert.Throws<ArgumentOutOfRangeException>("position", () => target.TurnOff(new Point(0, -1)));
-            Assert.Throws<ArgumentOutOfRangeException>("position", () => target.TurnOff(new Point(0, 1)));
-            Assert.Throws<ArgumentOutOfRangeException>("position", () => target.TurnOff(new Point(1, 0)));
-
-            Assert.Throws<ArgumentOutOfRangeException>("position", () => target.TurnOn(new Point(-1, 0)));
-            Assert.Throws<ArgumentOutOfRangeException>("position", () => target.TurnOn(new Point(0, -1)));
-            Assert.Throws<ArgumentOutOfRangeException>("position", () => target.TurnOn(new Point(0, 1)));
-            Assert.Throws<ArgumentOutOfRangeException>("position", () => target.TurnOn(new Point(1, 0)));
-        }
-
         [Theory]
         [InlineData(1, 2)]
         [InlineData(2, 1)]
@@ -260,23 +228,26 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
         }
 
         [Fact]
-        public static void Day06_Solve_Returns_Correct_Solution()
+        public static void Day06_Solve_Returns_Correct_Solution_Version_1()
         {
             // Arrange
-            string inputPath = PuzzleTestHelpers.GetInputPath(6);
-            string[] args = new[] { inputPath, "1" };
+            string[] args = new[] { PuzzleTestHelpers.GetInputPath(6), "1" };
 
             // Act
             var puzzle = PuzzleTestHelpers.SolvePuzzle<Day06>(args);
 
             // Assert
             Assert.Equal(543903, puzzle.LightsIlluminated);
+        }
 
+        [Fact]
+        public static void Day06_Solve_Returns_Correct_Solution_Version_2()
+        {
             // Arrange
-            args = new[] { inputPath, "2" };
+            string[] args = new[] { PuzzleTestHelpers.GetInputPath(6), "2" };
 
             // Act
-            puzzle = PuzzleTestHelpers.SolvePuzzle<Day06>(args);
+            var puzzle = PuzzleTestHelpers.SolvePuzzle<Day06>(args);
 
             // Assert
             Assert.Equal(14687245, puzzle.TotalBrightness);
