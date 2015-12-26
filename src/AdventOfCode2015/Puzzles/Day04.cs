@@ -42,6 +42,7 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
 
                     int sum = hash[0];
 
+                    // Are the whole bytes all zero?
                     for (int j = 1; sum == 0 && j < wholeBytes; j++)
                     {
                         sum += hash[j];
@@ -49,6 +50,8 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
 
                     if (sum == 0)
                     {
+                        // The current value is a solution if there is an even number
+                        // of zeroes of if the low bits of the odd byte are zero.
                         if (!hasHalfByte || hash[wholeBytes] < 0x10)
                         {
                             return i;
