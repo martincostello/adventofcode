@@ -6,7 +6,6 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
     using System;
     using System.Drawing;
     using System.Globalization;
-    using Impl;
     using Xunit;
 
     /// <summary>
@@ -20,7 +19,7 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
         [InlineData("turn off 499,499 through 500,500", "OFF", 499, 499, 2, 2)]
         public static void Day06_V1InstructionsCanBeParsed(string value, string action, int x, int y, int width, int height)
         {
-            InstructionV1 actual = InstructionV1.Parse(value);
+            var actual = Day06.InstructionV1.Parse(value);
 
             Assert.Equal(action, actual.Action);
             Assert.Equal(x, actual.Bounds.X);
@@ -35,7 +34,7 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
         [InlineData("turn off 499,499 through 500,500", -1, 499, 499, 2, 2)]
         public static void Day06_V2InstructionsCanBeParsed(string value, int delta, int x, int y, int width, int height)
         {
-            InstructionV2 actual = InstructionV2.Parse(value);
+            var actual = Day06.InstructionV2.Parse(value);
 
             Assert.Equal(delta, actual.Delta);
             Assert.Equal(x, actual.Bounds.X);
@@ -47,13 +46,13 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
         [Fact]
         public static void Day06_LightGridValidatesBounds()
         {
-            Assert.Throws<ArgumentOutOfRangeException>("width", () => new LightGrid(0, 1));
-            Assert.Throws<ArgumentOutOfRangeException>("height", () => new LightGrid(1, 0));
+            Assert.Throws<ArgumentOutOfRangeException>("width", () => new Day06.LightGrid(0, 1));
+            Assert.Throws<ArgumentOutOfRangeException>("height", () => new Day06.LightGrid(1, 0));
 
             int width = 1;
             int height = 1;
 
-            var target = new LightGrid(width, height);
+            var target = new Day06.LightGrid(width, height);
 
             Assert.Throws<ArgumentOutOfRangeException>("position", () => target[new Point(-1, 0)]);
             Assert.Throws<ArgumentOutOfRangeException>("position", () => target[new Point(0, -1)]);
@@ -93,7 +92,7 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
             Justification = "Test values will not cause overflow.")]
         public static void Day06_LightGridExhibitsCorrectBehavior(int width, int height)
         {
-            var target = new LightGrid(width, height);
+            var target = new Day06.LightGrid(width, height);
 
             Point minimum = new Point(0, 0);
             Point maximum = new Point(width - 1, height - 1);
@@ -208,7 +207,7 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
         public static void Day06_LightGridDrawsCorrectly3By3()
         {
             // Arrange
-            var target = new LightGrid(3, 3);
+            var target = new Day06.LightGrid(3, 3);
 
             target.TurnOn(new Point(0, 0));
             target.TurnOn(new Point(0, 2));

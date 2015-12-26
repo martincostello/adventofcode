@@ -4,14 +4,28 @@
 namespace MartinCostello.AdventOfCode2015.Puzzles
 {
     using System;
+    using System.Collections.Generic;
     using System.IO;
-    using Impl;
+    using System.Linq;
 
     /// <summary>
     /// A class representing the puzzle for <c>http://adventofcode.com/day/5</c>. This class cannot be inherited.
     /// </summary>
     internal sealed class Day05 : IPuzzle
     {
+        /// <summary>
+        /// Defines a rule for testing for the whether a <see cref="string"/> is 'nice'.
+        /// </summary>
+        internal interface INicenessRule
+        {
+            /// <summary>
+            /// Returns whether the specified string is 'nice'.
+            /// </summary>
+            /// <param name="value">The string to test for niceness.</param>
+            /// <returns><see langword="true"/> if <paramref name="value"/> is 'nice'; otherwise <see langword="false"/>.</returns>
+            bool IsNice(string value);
+        }
+
         /// <summary>
         /// Gets the number of 'nice' strings.
         /// </summary>
@@ -79,6 +93,140 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
             Console.WriteLine("{0:N0} strings are nice using version {1} of the rules.", NiceStringCount, version);
 
             return 0;
+        }
+
+        /// <summary>
+        /// A class defining version 1 of the niceness rule. This class cannot be inherited.
+        /// </summary>
+        internal sealed class NicenessRuleV1 : INicenessRule
+        {
+            /// <inheritdoc />
+            public bool IsNice(string value)
+            {
+                // The string is not nice if it contain any of the following sequences
+                if (new[] { "ab", "cd", "pq", "xy" }.Any((p) => value.Contains(p)))
+                {
+                    return false;
+                }
+
+                int vowels = 0;
+                bool hasAnyConsecutiveLetters = false;
+
+                // The string is nice if it has three or more vowels and at least two consecutive letters
+                Func<bool> isNice = () => hasAnyConsecutiveLetters && vowels > 2;
+
+                for (int i = 0; i < value.Length; i++)
+                {
+                    char current = value[i];
+
+                    if (IsVowel(current))
+                    {
+                        vowels++;
+                    }
+
+                    if (i > 0 && !hasAnyConsecutiveLetters)
+                    {
+                        hasAnyConsecutiveLetters = current == value[i - 1];
+                    }
+
+                    if (isNice())
+                    {
+                        // Criteria all met, no further analysis required
+                        return true;
+                    }
+                }
+
+                return isNice();
+            }
+
+            /// <summary>
+            /// Returns whether the specified letter is a vowel.
+            /// </summary>
+            /// <param name="letter">The letter to test for being a vowel.</param>
+            /// <returns><see langword="true"/> if <paramref name="letter"/> is a vowel; otherwise <see langword="false"/>.</returns>
+            private static bool IsVowel(char letter)
+            {
+                switch (letter)
+                {
+                    case 'a':
+                    case 'e':
+                    case 'i':
+                    case 'o':
+                    case 'u':
+                        return true;
+
+                    default:
+                        return false;
+                }
+            }
+        }
+
+        /// <summary>
+        /// A class defining version 2 of the niceness rule. This class cannot be inherited.
+        /// </summary>
+        internal sealed class NicenessRuleV2 : INicenessRule
+        {
+            /// <inheritdoc />
+            public bool IsNice(string value)
+            {
+                return HasPairOfLettersWithMoreThanOneOccurence(value) && HasLetterThatIsTheBreadOfALetterSandwich(value);
+            }
+
+            /// <summary>
+            /// Tests whether a string contains a pair of any two letters that appear at least twice in the string without overlapping.
+            /// </summary>
+            /// <param name="value">The value to test against the rule.</param>
+            /// <returns><see langword="true"/> if <paramref name="value"/> meets the rule; otherwise <see langword="false"/>.</returns>
+            internal static bool HasPairOfLettersWithMoreThanOneOccurence(string value)
+            {
+                Dictionary<string, IList<int>> letterPairs = new Dictionary<string, IList<int>>();
+
+                for (int i = 0; i < value.Length - 1; i++)
+                {
+                    char first = value[i];
+                    char second = value[i + 1];
+
+                    string pair = new string(new[] { first, second });
+
+                    IList<int> indexes;
+
+                    if (!letterPairs.TryGetValue(pair, out indexes))
+                    {
+                        indexes = letterPairs[pair] = new List<int>();
+                    }
+
+                    if (!indexes.Contains(i - 1))
+                    {
+                        indexes.Add(i);
+                    }
+                }
+
+                return letterPairs.Any((p) => p.Value.Count > 1);
+            }
+
+            /// <summary>
+            /// Tests whether a string contains at least one letter which repeats with exactly one letter between them.
+            /// </summary>
+            /// <param name="value">The value to test against the rule.</param>
+            /// <returns><see langword="true"/> if <paramref name="value"/> meets the rule; otherwise <see langword="false"/>.</returns>
+            internal static bool HasLetterThatIsTheBreadOfALetterSandwich(string value)
+            {
+                if (value.Length < 3)
+                {
+                    // The value is not long enough
+                    return false;
+                }
+
+                for (int i = 1; i < value.Length - 1; i++)
+                {
+                    if (value[i - 1] == value[i + 1])
+                    {
+                        return true;
+                    }
+                }
+
+                return false;
+            }
         }
     }
 }

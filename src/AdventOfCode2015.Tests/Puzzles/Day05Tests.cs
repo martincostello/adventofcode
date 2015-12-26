@@ -3,7 +3,6 @@
 
 namespace MartinCostello.AdventOfCode2015.Puzzles
 {
-    using Impl;
     using Xunit;
 
     /// <summary>
@@ -23,7 +22,7 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
         public static void Day05_IsStringNiceV1(string value, bool expected)
         {
             // Arrange
-            var target = new NicenessRuleV1();
+            var target = new Day05.NicenessRuleV1();
 
             // Act
             bool actual = target.IsNice(value);
@@ -40,7 +39,7 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
         public static void Day05_IsStringNiceV2(string value, bool expected)
         {
             // Arrange
-            var target = new NicenessRuleV2();
+            var target = new Day05.NicenessRuleV2();
 
             // Act
             bool actual = target.IsNice(value);
@@ -60,7 +59,7 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
         public static void Day05_HasPairOfLettersWithMoreThanOneOccurence(string value, bool expected)
         {
             // Act
-            bool actual = NicenessRuleV2.HasPairOfLettersWithMoreThanOneOccurence(value);
+            bool actual = Day05.NicenessRuleV2.HasPairOfLettersWithMoreThanOneOccurence(value);
 
             // Assert
             Assert.Equal(expected, actual);
@@ -75,7 +74,7 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
         public static void Day05_HasLetterThatIsTheBreadOfALetterSandwich(string value, bool expected)
         {
             // Act
-            bool actual = NicenessRuleV2.HasLetterThatIsTheBreadOfALetterSandwich(value);
+            bool actual = Day05.NicenessRuleV2.HasLetterThatIsTheBreadOfALetterSandwich(value);
 
             // Assert
             Assert.Equal(expected, actual);
