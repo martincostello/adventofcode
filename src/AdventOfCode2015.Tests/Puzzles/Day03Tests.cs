@@ -41,7 +41,7 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
         {
             // Arrange
             string[] args = new[] { @".\Input\Day03\input.txt" };
-            Day03 target = new Day03();
+            var target = new Day03();
 
             // Act
             int actual = target.Solve(args);

@@ -16,7 +16,7 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
         /// <summary>
         /// An enumeration of cardinal directions.
         /// </summary>
-        internal enum CardinalDirection
+        private enum CardinalDirection
         {
             /// <summary>
             /// North.
@@ -69,9 +69,13 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
             HousesWithPresentsFromSanta = GetUniqueHousesVisitedBySanta(instructions);
             HousesWithPresentsFromSantaAndRoboSanta = GetUniqueHousesVisitedBySantaAndRoboSanta(instructions);
 
-            Console.WriteLine("In 2015, Santa delivered presents to {0:N0} houses.", HousesWithPresentsFromSanta);
-            Console.WriteLine("In 2016, Santa and Robo-Santa delivered presents to {0:N0} houses.", HousesWithPresentsFromSantaAndRoboSanta);
-            Console.WriteLine("Robo-Santa makes Santa {0:P2} more efficient.", ((double)HousesWithPresentsFromSantaAndRoboSanta / HousesWithPresentsFromSanta) - 1);
+            Console.WriteLine(
+                "In 2015, Santa delivered presents to {0:N0} houses.",
+                HousesWithPresentsFromSanta);
+
+            Console.WriteLine(
+                "In 2016, Santa and Robo-Santa delivered presents to {0:N0} houses.",
+                HousesWithPresentsFromSantaAndRoboSanta);
 
             return 0;
         }
@@ -85,8 +89,8 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
         {
             ICollection<CardinalDirection> directions = GetDirections(instructions);
 
-            List<Point> coordinates = new List<Point>();
-            SantaGps santa = new SantaGps();
+            var santa = new SantaGps();
+            var coordinates = new List<Point>();
 
             foreach (var direction in directions)
             {
@@ -110,12 +114,11 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
         {
             ICollection<CardinalDirection> directions = GetDirections(instructions);
 
-            SantaGps santa = new SantaGps();
-            SantaGps roboSanta = new SantaGps();
+            var santa = new SantaGps();
+            var roboSanta = new SantaGps();
+            var current = santa;
 
-            List<Point> coordinates = new List<Point>();
-
-            SantaGps current = santa;
+            var coordinates = new List<Point>();
 
             foreach (var direction in directions)
             {
@@ -139,14 +142,13 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
         /// <returns>An <see cref="ICollection{T}"/> containing the directions from from the specified file.</returns>
         private static ICollection<CardinalDirection> GetDirections(string instructions)
         {
-            IList<CardinalDirection> directions = new List<CardinalDirection>();
+            var directions = new List<CardinalDirection>();
 
             for (int i = 0; i < instructions.Length; i++)
             {
-                char ch = (char)instructions[i];
                 CardinalDirection direction;
 
-                switch (ch)
+                switch (instructions[i])
                 {
                     case '^':
                         direction = CardinalDirection.North;
@@ -165,7 +167,7 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
                         break;
 
                     default:
-                        Console.WriteLine("Invalid direction: '{0}'.", ch);
+                        Console.WriteLine("Invalid direction: '{0}'.", instructions[i]);
                         continue;
                 }
 
@@ -178,7 +180,7 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
         /// <summary>
         /// A class representing a GPS locator for a Santa-type figure. This class cannot be inherited.
         /// </summary>
-        internal sealed class SantaGps
+        private sealed class SantaGps
         {
             /// <summary>
             /// Gets or sets the location of the Santa-type figure.
@@ -195,50 +197,24 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
                 switch (direction)
                 {
                     case CardinalDirection.East:
-                        Location += Moves.East;
+                        Location += new Size(1, 0);
                         break;
 
                     case CardinalDirection.North:
-                        Location += Moves.North;
+                        Location += new Size(0, 1);
                         break;
 
                     case CardinalDirection.South:
-                        Location += Moves.South;
+                        Location += new Size(0, -1);
                         break;
 
                     case CardinalDirection.West:
-                        Location += Moves.West;
+                        Location += new Size(-1, 0);
                         break;
 
                     default:
                         throw new ArgumentOutOfRangeException(nameof(direction), direction, "The specified direction is invalid.");
                 }
-            }
-
-            /// <summary>
-            /// A class containing the moves that Santa can make. This class cannot be inherited.
-            /// </summary>
-            private static class Moves
-            {
-                /// <summary>
-                /// A move north. This field is read-only.
-                /// </summary>
-                internal static readonly Size North = new Size(0, 1);
-
-                /// <summary>
-                /// A move east. This field is read-only.
-                /// </summary>
-                internal static readonly Size East = new Size(1, 0);
-
-                /// <summary>
-                /// A move south. This field is read-only.
-                /// </summary>
-                internal static readonly Size South = new Size(0, -1);
-
-                /// <summary>
-                /// A move west. This field is read-only.
-                /// </summary>
-                internal static readonly Size West = new Size(-1, 0);
             }
         }
     }
