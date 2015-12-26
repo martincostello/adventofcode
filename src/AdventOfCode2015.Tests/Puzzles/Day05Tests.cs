@@ -19,13 +19,10 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
         [InlineData("haegwjzuvuyypabu", false)]
         [InlineData("haegwjzuvuyypcdu", false)]
         [InlineData("haegwjzuvuyyppqu", false)]
-        public static void Day05_IsStringNiceV1(string value, bool expected)
+        public static void Day05_IsNiceV1(string value, bool expected)
         {
-            // Arrange
-            var target = new Day05.NicenessRuleV1();
-
             // Act
-            bool actual = target.IsNice(value);
+            bool actual = Day05.IsNiceV1(value);
 
             // Assert
             Assert.Equal(expected, actual);
@@ -36,13 +33,10 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
         [InlineData("xxyxx", true)]
         [InlineData("uurcxstgmygtbstg", false)]
         [InlineData("ieodomkazucvgmuy", false)]
-        public static void Day05_IsStringNiceV2(string value, bool expected)
+        public static void Day05_IsNiceV2(string value, bool expected)
         {
-            // Arrange
-            var target = new Day05.NicenessRuleV2();
-
             // Act
-            bool actual = target.IsNice(value);
+            bool actual = Day05.IsNiceV2(value);
 
             // Assert
             Assert.Equal(expected, actual);
@@ -59,7 +53,7 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
         public static void Day05_HasPairOfLettersWithMoreThanOneOccurence(string value, bool expected)
         {
             // Act
-            bool actual = Day05.NicenessRuleV2.HasPairOfLettersWithMoreThanOneOccurence(value);
+            bool actual = Day05.HasPairOfLettersWithMoreThanOneOccurence(value);
 
             // Assert
             Assert.Equal(expected, actual);
@@ -74,7 +68,7 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
         public static void Day05_HasLetterThatIsTheBreadOfALetterSandwich(string value, bool expected)
         {
             // Act
-            bool actual = Day05.NicenessRuleV2.HasLetterThatIsTheBreadOfALetterSandwich(value);
+            bool actual = Day05.HasLetterThatIsTheBreadOfALetterSandwich(value);
 
             // Assert
             Assert.Equal(expected, actual);
