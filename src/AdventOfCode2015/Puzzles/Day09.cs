@@ -67,7 +67,7 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
                 .ToList();
 
             // Get the possible next destination and the distance to it from each unique location
-            IDictionary<string, IDictionary<string, int>> possibleDestinations = new Dictionary<string, IDictionary<string, int>>();
+            var possibleDestinations = new Dictionary<string, IDictionary<string, int>>();
 
             foreach (string location in uniqueLocations)
             {
@@ -110,9 +110,7 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
 
             // Discount any paths that did not visit all locations
             var completePaths = paths
-                .Where((p) => p.Steps.Count == maxPathLength)
-                .OrderBy((p) => p.ToString())
-                .ToList();
+                .Where((p) => p.Steps.Count == maxPathLength);
 
             var orderedPaths = completePaths.OrderBy((p) => p.PathDistance);
 
@@ -190,8 +188,9 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
             // Create a new path that is the scurrent path plus a step to this position
             int distanceFromPreviousToCurrent = pathsFromSources[currentPath.Current][current];
 
-            Path nextPath = currentPath.Clone();
-            nextPath.Visit(current, distanceFromPreviousToCurrent);
+            Path nextPath = currentPath
+                .Clone()
+                .Visit(current, distanceFromPreviousToCurrent);
 
             pathsWalked.Add(nextPath);
 
@@ -258,10 +257,13 @@ namespace MartinCostello.AdventOfCode2015.Puzzles
             /// </summary>
             /// <param name="location">The location to visit.</param>
             /// <param name="distance">The distance to the location.</param>
-            internal void Visit(string location, int distance)
+            /// <returns>The current <see cref="Path"/>.</returns>
+            internal Path Visit(string location, int distance)
             {
                 Steps.Add(location);
                 PathDistance += distance;
+
+                return this;
             }
 
             /// <summary>
