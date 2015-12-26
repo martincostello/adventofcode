@@ -47,8 +47,11 @@ namespace MartinCostello.AdventOfCode2015
 
             stopwatch.Stop();
 
-            Console.WriteLine();
-            Console.WriteLine("Took {0:N2} seconds.", stopwatch.Elapsed.TotalSeconds);
+            if (result == 0)
+            {
+                Console.WriteLine();
+                Console.WriteLine("Took {0:N2} seconds.", stopwatch.Elapsed.TotalSeconds);
+            }
 
             return result;
         }
