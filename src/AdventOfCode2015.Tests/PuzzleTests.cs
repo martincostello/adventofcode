@@ -24,6 +24,15 @@ namespace MartinCostello.AdventOfCode2015
             Assert.Equal(-1, actual);
 
             // Arrange
+            target = new MyPuzzle(1, isFirstArgumentFilePath: true);
+
+            // Act
+            actual = target.Solve(args);
+
+            // Assert
+            Assert.Equal(-1, actual);
+
+            // Arrange
             args = new string[0];
             target = new MyPuzzle(1);
 
@@ -50,7 +59,12 @@ namespace MartinCostello.AdventOfCode2015
         private sealed class MyPuzzle : Puzzle
         {
             /// <summary>
-            /// The value to use ofr <see cref="MinimumArguments"/>.
+            /// The value to use for <see cref="IsFirstArgumentFilePath"/>.
+            /// </summary>
+            private readonly bool _isFirstArgumentFilePath;
+
+            /// <summary>
+            /// The value to use for <see cref="MinimumArguments"/>.
             /// </summary>
             private readonly int _minimumArguments;
 
@@ -58,8 +72,10 @@ namespace MartinCostello.AdventOfCode2015
             /// Initializes a new instance of the <see cref="MyPuzzle"/> class.
             /// </summary>
             /// <param name="minimumArguments">The value to use for <see cref="MinimumArguments"/>.</param>
-            internal MyPuzzle(int minimumArguments)
+            /// <param name="isFirstArgumentFilePath">The optional value to use for <see cref="IsFirstArgumentFilePath"/>.</param>
+            internal MyPuzzle(int minimumArguments, bool isFirstArgumentFilePath = false)
             {
+                _isFirstArgumentFilePath = isFirstArgumentFilePath;
                 _minimumArguments = minimumArguments;
             }
 
@@ -67,6 +83,9 @@ namespace MartinCostello.AdventOfCode2015
             /// Gets the answer to the puzzle.
             /// </summary>
             internal int Answer { get; private set; }
+
+            /// <inheritdoc />
+            protected override bool IsFirstArgumentFilePath => _isFirstArgumentFilePath;
 
             /// <inheritdoc />
             protected override int MinimumArguments => _minimumArguments;
