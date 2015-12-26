@@ -48,7 +48,6 @@
       <Link>CommonAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="Maths.cs" />
-    <Compile Include="NotImplementedPuzzle.cs" />
     <Compile Include="Puzzle.cs" />
     <Compile Include="Puzzles\Day15.cs" />
     <Compile Include="Puzzles\Day01.cs" />
