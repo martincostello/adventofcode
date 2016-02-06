@@ -10,7 +10,8 @@
     <BuildProperties Condition=" '$(TF_BUILD)' != 'True' ">Platform=$(Platform);OutputPath=$(OutputPath)</BuildProperties>
     <CreatePackage Condition="'$(CI)' != ''">true</CreatePackage>
     <CreatePackage Condition="'$(CreatePackage)' == ''">false</CreatePackage>
-    <EnableCodeCoverage Condition="'$(EnableCodeCoverage)' == ''">true</EnableCodeCoverage>
+    <DotNetExecPrefix Condition="'$(OS)' == 'Unix'">mono </DotNetExecPrefix>
+    <EnableCodeCoverage Condition="'$(EnableCodeCoverage)' == '' and '$(OS)' != 'Unix'">true</EnableCodeCoverage>
     <CodeTaskFactoryAssembly Condition="'$(MSBuildToolsVersion)' != '14.0'">$(MSBuildToolsPath)\Microsoft.Build.Tasks.v$(MSBuildToolsVersion).dll</CodeTaskFactoryAssembly>
     <CodeTaskFactoryAssembly Condition="'$(MSBuildToolsVersion)' == '14.0'">$(MSBuildToolsPath)\Microsoft.Build.Tasks.Core.dll</CodeTaskFactoryAssembly>
   </PropertyGroup>
@@ -24,7 +25,7 @@
     <MSBuild Targets="Rebuild" Projects="$(SolutionFile)" Properties="Configuration=$(Configuration);$(BuildProperties)" />
   </Target>
   <Target Name="BeforeBuild" BeforeTargets="Build;Rebuild">
-    <CallTarget Targets="UpdateAssemblyConfiguration" />
+    <CallTarget Targets="UpdateAssemblyConfiguration" Condition="'$(OS)' != 'Unix'" />
   </Target>
   <Target Name="AfterBuild" AfterTargets="Build;Rebuild">
     <CallTarget Targets="Test" Condition="'$(RunTests)' == 'true'" />
@@ -36,7 +37,8 @@
       <RequireRestoreConsent>false</RequireRestoreConsent>
     </PropertyGroup>
     <Message Text="Restoring NuGet packages..." Importance="normal" />
-    <Exec Command="%22$(NuGetExePath)%22 restore %22$(SolutionFile)%22" LogStandardErrorAsError="true" />
+    <Exec Condition="'$(OS)' == 'Unix'" Command="chmod +x %22$(NuGetExePath)%22" />
+    <Exec Command="$(DotNetExecPrefix)%22$(NuGetExePath)%22 restore %22$(SolutionFile)%22" LogStandardErrorAsError="true" />
   </Target>
   <Target Name="Test">
     <ItemGroup Condition="'$(TestTool)' == ''">
@@ -55,7 +57,8 @@
       <_OpenCoverTool>%22$(SolutionDir)packages\OpenCover.$(_OpenCoverVersion)\Tools\OpenCover.Console.exe%22</_OpenCoverTool>
       <_OpenCoverOptions>-register:user -hideskipped:All -mergebyhash -skipautoprops -filter:%22+[*]* -[xunit*]* -[*Tests]*%22 -returntargetcode -output:%22$(_CodeCoverageXml)%22</_OpenCoverOptions>
     </PropertyGroup>
-    <Exec Condition="'$(EnableCodeCoverage)' != 'true'" Command="$(TestTool) $(_TestCommand)" WorkingDirectory="$(OutputPath)" />    
+    <Exec Condition="'$(OS)' == 'Unix'" Command="chmod +x %22$(TestTool)%22" />
+    <Exec Condition="'$(EnableCodeCoverage)' != 'true'" Command="$(DotNetExecPrefix)$(TestTool) $(_TestCommand)" WorkingDirectory="$(OutputPath)" />
     <Exec Condition="'$(EnableCodeCoverage)' == 'true'" Command="$(_OpenCoverTool) $(_OpenCoverOptions) -target:$(TestTool) -targetargs:$(_TestCommand)" WorkingDirectory="$(OutputPath)" />
   </Target>
   <Target Name="UpdateAssemblyConfiguration">
