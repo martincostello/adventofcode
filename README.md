@@ -8,7 +8,7 @@ My solutions for [http://adventofcode.com/](http://adventofcode.com/).
 
 [![Build status](https://img.shields.io/appveyor/ci/martincostello/adventofcode/master.svg)](https://ci.appveyor.com/project/martincostello/adventofcode) [![Coverage Status](https://img.shields.io/codecov/c/github/martincostello/adventofcode/master.svg)](https://codecov.io/github/martincostello/adventofcode)
 
-[![Build History](https://ci-buildstats.azurewebsites.net/appveyor/chart/martincostello/adventofcode?branch=master&includeBuildsFromPullRequest=false)](https://ci.appveyor.com/project/martincostello/adventofcode)
+[![Build History](https://buildstats.info/appveyor/chart/martincostello/adventofcode?branch=master&includeBuildsFromPullRequest=false)](https://ci.appveyor.com/project/martincostello/adventofcode)
 
 ## Prerequisites
 
