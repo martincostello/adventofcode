@@ -89,7 +89,7 @@ namespace MartinCostello.AdventOfCode.Puzzles
 
             if (timeIndex < 0)
             {
-                Console.Error.WriteLine("The time index specified is invalid.");
+                Console.WriteLine("The time index specified is invalid.");
                 return -1;
             }
 

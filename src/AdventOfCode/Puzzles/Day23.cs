@@ -85,13 +85,13 @@ namespace MartinCostello.AdventOfCode.Puzzles
                         break;
 
                     default:
-                        Console.Error.WriteLine("Instruction '{0}' is not defined.", operation);
+                        Console.WriteLine("Instruction '{0}' is not defined.", operation);
                         return Tuple.Create(uint.MaxValue, uint.MaxValue);
                 }
 
                 if (next == i)
                 {
-                    Console.Error.WriteLine("Instruction at line {0:N0} creates an infinite loop.", i + 1);
+                    Console.WriteLine("Instruction at line {0:N0} creates an infinite loop.", i + 1);
                     break;
                 }
 

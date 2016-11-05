@@ -74,7 +74,7 @@ namespace MartinCostello.AdventOfCode.Puzzles
         {
             if (args.Length != 1 && args.Length != 2)
             {
-                Console.Error.WriteLine("No target value or maximum number of visits specified.");
+                Console.WriteLine("No target value or maximum number of visits specified.");
                 return -1;
             }
 

@@ -129,7 +129,7 @@ namespace MartinCostello.AdventOfCode.Puzzles
                     break;
 
                 default:
-                    Console.Error.WriteLine("The mode specified is invalid.");
+                    Console.WriteLine("The mode specified is invalid.");
                     return -1;
             }
 

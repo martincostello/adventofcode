@@ -161,7 +161,7 @@ namespace MartinCostello.AdventOfCode.Puzzles
 
             if (version == -1)
             {
-                Console.Error.WriteLine("The rules version specified is invalid.");
+                Console.WriteLine("The rules version specified is invalid.");
                 return -1;
             }
 

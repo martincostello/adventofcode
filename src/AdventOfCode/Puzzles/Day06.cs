@@ -48,7 +48,7 @@ namespace MartinCostello.AdventOfCode.Puzzles
 
             if (version == -1)
             {
-                Console.Error.WriteLine("The instruction set specified is invalid.");
+                Console.WriteLine("The instruction set specified is invalid.");
                 return -1;
             }
 

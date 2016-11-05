@@ -24,7 +24,7 @@ namespace MartinCostello.AdventOfCode
         {
             if (!EnsureArguments(args, MinimumArguments))
             {
-                Console.Error.WriteLine(
+                Console.WriteLine(
                     "At least {0:N0} argument{1} {2} required.",
                     MinimumArguments,
                     MinimumArguments == 1 ? string.Empty : "s",

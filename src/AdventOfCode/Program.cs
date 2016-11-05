@@ -22,7 +22,7 @@ namespace MartinCostello.AdventOfCode
         {
             if (args == null || args.Length < 1)
             {
-                Console.Error.WriteLine("No day specified.");
+                Console.WriteLine("No day specified.");
                 return -1;
             }
 
@@ -30,7 +30,7 @@ namespace MartinCostello.AdventOfCode
 
             if (!int.TryParse(args[0], NumberStyles.Integer & ~NumberStyles.AllowLeadingSign, CultureInfo.InvariantCulture, out day) || day < 1 || day > 25)
             {
-                Console.Error.WriteLine("The day specified is invalid.");
+                Console.WriteLine("The day specified is invalid.");
                 return -1;
             }
 
