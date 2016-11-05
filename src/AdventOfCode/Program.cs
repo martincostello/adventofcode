@@ -26,49 +26,85 @@ namespace MartinCostello.AdventOfCode
                 return -1;
             }
 
-            int day;
+            // TODO Make the year configurable
+            int year = DateTime.UtcNow.Year;
 
-            if (!int.TryParse(args[0], NumberStyles.Integer & ~NumberStyles.AllowLeadingSign, CultureInfo.InvariantCulture, out day) || day < 1 || day > 25)
+            int day;
+            Type type = null;
+
+            if (!int.TryParse(args[0], NumberStyles.Integer & ~NumberStyles.AllowLeadingSign, CultureInfo.InvariantCulture, out day) ||
+                day < 1 ||
+                year < 2015 ||
+                year > DateTime.UtcNow.Year ||
+                (type = GetPuzzleType(year, day)) == null)
             {
-                Console.WriteLine("The day specified is invalid.");
+                Console.WriteLine("The year and/or puzzle number specified is invalid.");
                 return -1;
             }
 
-            Console.WriteLine();
-            Console.WriteLine("Advent of Code - Day {0}", day);
-            Console.WriteLine();
-
-            IPuzzle puzzle = GetPuzzle(day);
             args = args.Skip(1).ToArray();
+
+            return SolvePuzzle(type, year, day, args);
+        }
+
+        /// <summary>
+        /// Solves the puzzle associated with the specified type.
+        /// </summary>
+        /// <param name="type">The type of the puzzle.</param>
+        /// <param name="year">The year associated with the puzzle.</param>
+        /// <param name="day">The day associated with the puzzle.</param>
+        /// <param name="args">The arguments to pass to the puzzle.</param>
+        /// <returns>
+        /// The value returned by <see cref="IPuzzle.Solve"/>.
+        /// </returns>
+        internal static int SolvePuzzle(Type type, int year, int day, string[] args)
+        {
+            IPuzzle puzzle = Activator.CreateInstance(type) as IPuzzle;
+
+            Console.WriteLine();
+            Console.WriteLine("Advent of Code {0} - Day {1}", year, day);
+            Console.WriteLine();
 
             Stopwatch stopwatch = Stopwatch.StartNew();
 
             int result = puzzle.Solve(args);
 
-            stopwatch.Stop();
-
             if (result == 0)
             {
+                stopwatch.Stop();
+
+                if (stopwatch.Elapsed.TotalSeconds < 0.01f)
+                {
+                    Console.WriteLine("Took <0.01 seconds.");
+                }
+                else
+                {
+                    Console.WriteLine("Took {0:N2} seconds.", stopwatch.Elapsed.TotalSeconds);
+                }
+
                 Console.WriteLine();
-                Console.WriteLine("Took {0:N2} seconds.", stopwatch.Elapsed.TotalSeconds);
             }
 
             return result;
         }
 
         /// <summary>
-        /// Gets the puzzle to use for the specified day.
+        /// Gets the puzzle type to use for the specified number.
         /// </summary>
+        /// <param name="year">The year to get the puzzle for.</param>
         /// <param name="day">The day to get the puzzle for.</param>
-        /// <returns>The <see cref="IPuzzle"/> for the specified day.</returns>
-        private static IPuzzle GetPuzzle(int day)
+        /// <returns>
+        /// The <see cref="Type"/> for the specified year and puzzle number, if found; otherwise <see langword="null"/>.
+        /// </returns>
+        private static Type GetPuzzleType(int year, int day)
         {
             string typeName = string.Format(
                 CultureInfo.InvariantCulture,
-                "MartinCostello.AdventOfCode.Puzzles.Day{0:00}",
+                "MartinCostello.AdventOfCode.Puzzles.Y{0}.Day{1:00}",
+                year,
                 day);
 
-            return Activator.CreateInstance(Type.GetType(typeName), nonPublic: true) as IPuzzle;
+            return Type.GetType(typeName);
         }
     }
 }

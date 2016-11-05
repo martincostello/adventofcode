@@ -19,6 +19,11 @@ namespace MartinCostello.AdventOfCode
         /// </summary>
         protected virtual int MinimumArguments => 0;
 
+        /// <summary>
+        /// Gets the year associated with the puzzle.
+        /// </summary>
+        protected abstract int Year { get; }
+
         /// <inheritdoc />
         public virtual int Solve(string[] args)
         {
@@ -99,7 +104,7 @@ namespace MartinCostello.AdventOfCode
         protected Stream ReadResource()
         {
             var thisType = GetType().GetTypeInfo();
-            string name = FormattableString.Invariant($"{thisType.Assembly.GetName().Name}.Input.{thisType.Name}.input.txt");
+            string name = FormattableString.Invariant($"{thisType.Assembly.GetName().Name}.Input.Y{Year}.{thisType.Name}.input.txt");
 
             return thisType.Assembly.GetManifestResourceStream(name);
         }
