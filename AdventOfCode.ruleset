@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<RuleSet Name="AdventOfCode Rules" Description="This rule set contains rules for the AdventOfCode solution." ToolsVersion="14.0">
+  <IncludeAll Action="Warning" />
+  <Rules AnalyzerId="StyleCop.Analyzers" RuleNamespace="StyleCop.Analyzers">
+    <Rule Id="SA1100" Action="None" />
+    <Rule Id="SA1101" Action="None" />
+    <Rule Id="SA1129" Action="None" />
+    <Rule Id="SA1309" Action="None" />
+    <Rule Id="SA1609" Action="None" />
+    <Rule Id="SA1652" Action="None" />
+  </Rules>
+</RuleSet>

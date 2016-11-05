@@ -1,36 +1,38 @@
 # Advent of Code
 
+| | Linux | Windows |
+|:-:|:-:|:-:|
+| **Build Status** | [![Build status](https://img.shields.io/travis/martincostello/adventofcode/master.svg)](https://travis-ci.org/martincostello/adventofcode) | [![Build status](https://img.shields.io/appveyor/ci/martincostello/adventofcode/master.svg)](https://ci.appveyor.com/project/martincostello/adventofcode) |
+| **Build History** | [![Build history](https://buildstats.info/travisci/chart/martincostello/adventofcode?branch=master&includeBuildsFromPullRequest=false)](https://travis-ci.org/martincostello/adventofcode) |  [![Build history](https://buildstats.info/appveyor/chart/martincostello/adventofcode?branch=master&includeBuildsFromPullRequest=false)](https://ci.appveyor.com/project/martincostello/adventofcode) |
+
 ## Overview
 
 My solutions for [http://adventofcode.com/](http://adventofcode.com/).
 
-## Build Status
+## Feedback
 
-[![Build status](https://img.shields.io/appveyor/ci/martincostello/adventofcode/master.svg)](https://ci.appveyor.com/project/martincostello/adventofcode) [![Coverage Status](https://img.shields.io/codecov/c/github/martincostello/adventofcode/master.svg)](https://codecov.io/github/martincostello/adventofcode)
+Any feedback or issues can be added to the issues for this project in [GitHub](https://github.com/martincostello/adventofcode/issues).
 
-[![Build History](https://buildstats.info/appveyor/chart/martincostello/adventofcode?branch=master&includeBuildsFromPullRequest=false)](https://ci.appveyor.com/project/martincostello/adventofcode)
+## Repository
 
-## Prerequisites
-
-### Compilation and Debugging
-
- * Microsoft Windows 7 SP1 (or later);
- * Visual Studio (Community, Professional or Enterprise) 2015 (or later).
-
-### Runtime
-
-The following prerequisites are required to use the assembly:
-
- * Microsoft Windows 7 SP1 (or later);
- * Microsoft .NET Framework 4.5 (or later).
-
-## Compilation
-
-To compile the application, you can do any of the following:
-
- * Open ```src\AdventOfCode2015.sln``` in Visual Studio;
- * Run ```Build.cmd``` from the command prompt.
+The repository is hosted in [GitHub](https://github.com/martincostello/adventofcode): https://github.com/martincostello/adventofcode.git
 
 ## License
 
-Licensed under the Apache 2.0 license.
+This project is licensed under the [Apache 2.0](https://github.com/martincostello/adventofcode/blob/master/LICENSE) license.
+
+## Building and Testing
+
+To build and test the puzzles run one of the following commands:
+
+**Linux/OS X**
+
+```sh
+    ./build.sh
+```
+
+**Windows**
+
+```batchfile
+    .\Build.ps1
+```

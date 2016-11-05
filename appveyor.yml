@@ -1,23 +1,21 @@
+os: Visual Studio 2015
 version: 1.0.{build}
 
-assembly_info:
-  patch: true
-  file: AssemblyVersion.cs
-  assembly_version: "1.0.0.0"
-  assembly_file_version: "{version}.0"
-  assembly_informational_version: "{version}.0"
+environment:
+  CLI_VERSION: 1.0.0-preview2-003121
+  DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
+  NUGET_XMLDOC_MODE: skip
 
-build:
-  project: src\AdventOfCode2015.msbuild
-  verbosity: minimal
+branches:
+  only:
+    - master
 
-after_build:
-    - "SET PATH=C:\\Python34;C:\\Python34\\Scripts;%PATH%"
-    - pip install codecov
-    - codecov -f "src\BuildOutput\AdventOfCode2015_coverage.xml"
+build_script:
+  - ps: dotnet --info
+  - ps: .\Build.ps1
 
 artifacts:
-  - path: src\BuildOutput\AdventOfCode2015.exe
+  - path: artifacts
 
 nuget:
   disable_publish_on_pr: true
