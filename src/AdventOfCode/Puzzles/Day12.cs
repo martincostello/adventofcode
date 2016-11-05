@@ -8,7 +8,7 @@ namespace MartinCostello.AdventOfCode.Puzzles
     using Newtonsoft.Json.Linq;
 
     /// <summary>
-    /// A class representing the puzzle for <c>http://adventofcode.com/day/12</c>. This class cannot be inherited.
+    /// A class representing the puzzle for <c>http://adventofcode.com/2015/day/12</c>. This class cannot be inherited.
     /// </summary>
     internal sealed class Day12 : Puzzle
     {

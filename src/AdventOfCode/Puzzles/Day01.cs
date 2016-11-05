@@ -6,7 +6,7 @@ namespace MartinCostello.AdventOfCode.Puzzles
     using System;
 
     /// <summary>
-    /// A class representing the puzzle for <c>http://adventofcode.com/day/1</c>. This class cannot be inherited.
+    /// A class representing the puzzle for <c>http://adventofcode.com/2015/day/1</c>. This class cannot be inherited.
     /// </summary>
     internal sealed class Day01 : Puzzle
     {

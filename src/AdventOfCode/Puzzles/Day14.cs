@@ -9,7 +9,7 @@ namespace MartinCostello.AdventOfCode.Puzzles
     using System.Linq;
 
     /// <summary>
-    /// A class representing the puzzle for <c>http://adventofcode.com/day/14</c>. This class cannot be inherited.
+    /// A class representing the puzzle for <c>http://adventofcode.com/2015/day/14</c>. This class cannot be inherited.
     /// </summary>
     internal sealed class Day14 : Puzzle
     {
