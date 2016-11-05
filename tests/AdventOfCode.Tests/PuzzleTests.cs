@@ -3,6 +3,7 @@
 
 namespace MartinCostello.AdventOfCode
 {
+    using System;
     using Xunit;
 
     /// <summary>
@@ -70,6 +71,9 @@ namespace MartinCostello.AdventOfCode
 
             /// <inheritdoc />
             protected override int MinimumArguments => _minimumArguments;
+
+            /// <inheritdoc />
+            protected override int Year => DateTime.UtcNow.Year;
 
             /// <inheritdoc />
             protected override int SolveCore(string[] args)
