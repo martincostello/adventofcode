@@ -9,7 +9,7 @@ namespace MartinCostello.AdventOfCode
     /// <summary>
     /// Attribute that is applied to a method to indicate that it is a fact that should
     /// only be run by the test runner locally and not in the <c>AppVeyor</c> or <c>Travis</c>
-    //// continuous integrations. This class cannot be inherited.
+    /// continuous integrations. This class cannot be inherited.
     /// </summary>
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
     public sealed class LocalOnlyAttribute : FactAttribute
