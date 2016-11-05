@@ -1,0 +1,61 @@
+﻿{
+  "authors": [ "Martin Costello" ],
+  "copyright": "Martin Costello (c) 2015",
+  "description": "Tests for AdventOfCode.",
+  "title": "AdventOfCode.Tests",
+  "version": "2.0.0-*",
+
+  "buildOptions": {
+    "additionalArguments": [ "/ruleset:../../AdventOfCode.ruleset", "/additionalfile:../../stylecop.json" ],
+    "compile": {
+      "includeFiles": [ "../../AssemblyVersion.cs", "../../CommonAssemblyInfo.cs" ]
+    },
+    "copyToOutput": {
+      "include": [ "xunit.runner.json" ]
+    },
+    "keyFile": "../../AdventOfCode.snk",
+    "warningsAsErrors": true,
+    "xmlDoc": false
+  },
+
+  "dependencies": {
+    "Microsoft.NETCore.App": {
+      "type": "platform",
+      "version": "1.0.0"
+    },
+    "dotnet-test-xunit": "2.2.0-preview2-build1029",
+    "StyleCop.Analyzers": {
+      "version": "1.0.0",
+      "type": "build"
+    },
+    "AdventOfCode": "2.0.0-*",
+    "xunit": "2.2.0-beta3-build3402"
+  },
+
+  "frameworks": {
+    "netcoreapp1.0": {
+      "imports": "dotnet5.6"
+    }
+  },
+
+  "packOptions": {
+    "iconUrl": "https://martincostello.com/favicon.ico",
+    "licenseUrl": "https://github.com/martincostello/adventofcode/blob/master/LICENSE",
+    "owners": [ "Martin Costello" ],
+    "projectUrl": "https://github.com/martincostello/adventofcode",
+    "releaseNotes": "https://github.com/martincostello/adventofcode/releases",
+    "repository": {
+      "type": "git",
+      "url": "https://github.com/martincostello/adventofcode.git"
+    },
+    "requireLicenseAcceptance": false,
+    "summary": "Tests for AdventOfCode.",
+    "tags": []
+  },
+
+  "testRunner": "xunit",
+
+  "tools": {
+    "Microsoft.DotNet.Watcher.Tools": "1.0.0-preview2-final"
+  }
+}
