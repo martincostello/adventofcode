@@ -61,6 +61,32 @@ namespace MartinCostello.AdventOfCode
         }
 
         /// <summary>
+        /// Returns the factors of the specified number.
+        /// </summary>
+        /// <param name="value">The value to get the factors for.</param>
+        /// <returns>
+        /// An <see cref="IEnumerable{T}"/> containing the factors of the specified number.
+        /// </returns>
+        /// <remarks>
+        /// The values returned are unsorted.
+        /// </remarks>
+        internal static IEnumerable<int> GetFactorsUnordered(int value)
+        {
+            for (int i = 1; i * i <= value; i++)
+            {
+                if (value % i == 0)
+                {
+                    yield return i;
+
+                    if (i * i != value)
+                    {
+                        yield return value / i;
+                    }
+                }
+            }
+        }
+
+        /// <summary>
         /// Returns all the permutations of the specified collection of values.
         /// </summary>
         /// <typeparam name="T">The type of the values.</typeparam>

@@ -57,7 +57,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
             Assert.Equal(expected, actual);
         }
 
-        [Fact(Skip = "Too slow.")]
+        [Fact]
         public static void Y2015_Day20_Solve_Returns_Correct_Solution()
         {
             // Arrange

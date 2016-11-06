@@ -4,6 +4,7 @@
 namespace MartinCostello.AdventOfCode.Puzzles.Y2015
 {
     using System;
+    using System.Linq;
 
     /// <summary>
     /// A class representing the puzzle for <c>http://adventofcode.com/2015/day/20</c>. This class cannot be inherited.
@@ -49,21 +50,25 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
         {
             int count = 0;
 
-            int presents = maximumVisits.HasValue ? 11 : 10;
-
-            for (int elf = 1; elf < house + 1; elf++)
+            if (maximumVisits.HasValue)
             {
-                bool isElfInRange = maximumVisits == null;
+                int max = maximumVisits.Value;
 
-                if (!isElfInRange)
+                for (int elf = 1; elf < house + 1; elf++)
                 {
-                    isElfInRange = house <= elf * maximumVisits.Value;
+                    bool isElfInRange = house <= elf * max;
+
+                    if (isElfInRange && house % elf == 0)
+                    {
+                        count += elf;
+                    }
                 }
 
-                if (isElfInRange && house % elf == 0)
-                {
-                    count += elf * presents;
-                }
+                count *= 11;
+            }
+            else
+            {
+                count = Maths.GetFactorsUnordered(house).Sum() * 10;
             }
 
             return count;
