@@ -70,7 +70,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
             Assert.Equal(786240, puzzle.LowestHouseNumber);
         }
 
-        [Fact(Skip = "Too slow.")]
+        [Fact]
         public static void Y2015_Day20_Solve_Returns_Correct_Solution_Maximum_Visits()
         {
             // Arrange

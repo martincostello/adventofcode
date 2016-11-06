@@ -50,15 +50,15 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
         {
             int count = 0;
 
+            var visitingElves = Maths.GetFactorsUnordered(house);
+
             if (maximumVisits.HasValue)
             {
                 int max = maximumVisits.Value;
 
-                for (int elf = 1; elf < house + 1; elf++)
+                foreach (int elf in visitingElves)
                 {
-                    bool isElfInRange = house <= elf * max;
-
-                    if (isElfInRange && house % elf == 0)
+                    if (house <= elf * max)
                     {
                         count += elf;
                     }
@@ -68,7 +68,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
             }
             else
             {
-                count = Maths.GetFactorsUnordered(house).Sum() * 10;
+                count = visitingElves.Sum() * 10;
             }
 
             return count;
