@@ -88,7 +88,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
                 target,
                 LowestHouseNumber);
 
-            return -1;
+            return 0;
         }
     }
 }
