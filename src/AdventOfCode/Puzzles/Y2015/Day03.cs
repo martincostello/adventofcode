@@ -12,32 +12,6 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
     internal sealed class Day03 : Puzzle2015
     {
         /// <summary>
-        /// An enumeration of cardinal directions.
-        /// </summary>
-        private enum CardinalDirection
-        {
-            /// <summary>
-            /// North.
-            /// </summary>
-            North,
-
-            /// <summary>
-            /// South.
-            /// </summary>
-            South,
-
-            /// <summary>
-            /// East.
-            /// </summary>
-            East,
-
-            /// <summary>
-            /// West.
-            /// </summary>
-            West,
-        }
-
-        /// <summary>
         /// Gets the number of houses with presents delivered to by Santa.
         /// </summary>
         internal int HousesWithPresentsFromSanta { get; private set; }

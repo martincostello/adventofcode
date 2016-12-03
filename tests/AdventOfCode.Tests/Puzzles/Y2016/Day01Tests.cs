@@ -10,10 +10,27 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
     /// </summary>
     public static class Day01Tests
     {
-        [Fact(Skip = "Not yet implemented.")]
+        [Theory]
+        [InlineData("R2, L3", 5)]
+        [InlineData("R2, R2, R2", 2)]
+        [InlineData("R5, L5, R5, R3", 12)]
+        public static void Y2016_Day01_CalculateDistance_Returns_Correct_Solution(string instructions, int expected)
+        {
+            // Act
+            int actual = Day01.CalculateDistance(instructions);
+
+            // Assert
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
         public static void Y2016_Day01_Solve_Returns_Correct_Solution()
         {
-            // TODO
+            // Act
+            var puzzle = PuzzleTestHelpers.SolvePuzzle<Day01>();
+
+            // Assert
+            Assert.Equal(287, puzzle.BlockToEasterBunnyHQ);
         }
     }
 }
