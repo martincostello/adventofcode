@@ -34,20 +34,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
             var puzzle = PuzzleTestHelpers.SolvePuzzle<Day01>();
 
             // Assert
-            Assert.Equal(287, puzzle.BlockToEasterBunnyHQ);
-        }
-
-        [Fact]
-        public static void Y2016_Day01_Solve_Returns_Correct_Solution_With_Duplicates()
-        {
-            // Arrange
-            string[] args = new[] { "false" };
-
-            // Act
-            var puzzle = PuzzleTestHelpers.SolvePuzzle<Day01>(args);
-
-            // Assert
-            Assert.Equal(133, puzzle.BlockToEasterBunnyHQ);
+            Assert.Equal(287, puzzle.BlocksToEasterBunnyHQIgnoringDuplicates);
+            Assert.Equal(133, puzzle.BlocksToEasterBunnyHQ);
         }
     }
 }

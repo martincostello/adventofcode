@@ -8,7 +8,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
     using System.Globalization;
 
     /// <summary>
-    /// A class representing the puzzle for <c>http://adventofcode.com/day/1</c>. This class cannot be inherited.
+    /// A class representing the puzzle for <c>http://adventofcode.com/2016/day/1</c>. This class cannot be inherited.
     /// </summary>
     internal sealed class Day01 : Puzzle2016
     {
@@ -31,7 +31,12 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         /// <summary>
         /// Gets the number of blocks to the Easter Bunny's headquarters.
         /// </summary>
-        public int BlockToEasterBunnyHQ { get; private set; }
+        public int BlocksToEasterBunnyHQ { get; private set; }
+
+        /// <summary>
+        /// Gets the number of blocks to the Easter Bunny's headquarters ignoring duplicates.
+        /// </summary>
+        public int BlocksToEasterBunnyHQIgnoringDuplicates { get; private set; }
 
         /// <summary>
         /// Calculate the distance, in blocks, following the specified instructions are.
@@ -93,14 +98,17 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         protected override int SolveCore(string[] args)
         {
             string instructions = ReadResourceAsString();
-            bool ignoreDuplicates;
 
-            if (args.Length != 1 || !bool.TryParse(args[0], out ignoreDuplicates))
-            {
-                ignoreDuplicates = true;
-            }
+            BlocksToEasterBunnyHQIgnoringDuplicates = CalculateDistance(instructions, ignoreDuplicates: true);
+            BlocksToEasterBunnyHQ = CalculateDistance(instructions, ignoreDuplicates: false);
 
-            BlockToEasterBunnyHQ = CalculateDistance(instructions, ignoreDuplicates);
+            Console.WriteLine(
+                "The Easter Bunny's headquarters are {0:N0} blocks away.",
+                BlocksToEasterBunnyHQIgnoringDuplicates);
+
+            Console.WriteLine(
+                "The Easter Bunny's headquarters are {0:N0} blocks away if it is the first location visited twice.",
+                BlocksToEasterBunnyHQ);
 
             return 0;
         }
