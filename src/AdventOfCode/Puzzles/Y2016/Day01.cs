@@ -37,37 +37,52 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         /// Calculate the distance, in blocks, following the specified instructions are.
         /// </summary>
         /// <param name="input">The instructions to follow.</param>
+        /// <param name="ignoreDuplicates">Whether to ignore duplicate locations.</param>
         /// <returns>
         /// The shortest distance, in blocks, away from the origin following the instructions would take you.
         /// </returns>
-        internal static int CalculateDistance(string input)
+        internal static int CalculateDistance(string input, bool ignoreDuplicates)
         {
             var bearing = CardinalDirection.North;
             var position = Point.Empty;
 
             IList<Instruction> instructions = ParseDirections(input);
+            IList<Point> positions = new List<Point>();
 
             foreach (Instruction instruction in instructions)
             {
                 bearing = Turn(bearing, instruction.Direction);
 
-                switch (bearing)
+                for (int i = 0; i < instruction.Distance; i++)
                 {
-                    case CardinalDirection.East:
-                        position += new Size(instruction.Distance, 0);
-                        break;
+                    if (!ignoreDuplicates)
+                    {
+                        if (positions.Contains(position))
+                        {
+                            break;
+                        }
 
-                    case CardinalDirection.North:
-                        position += new Size(0, instruction.Distance);
-                        break;
+                        positions.Add(position);
+                    }
 
-                    case CardinalDirection.South:
-                        position += new Size(0, instruction.Distance * -1);
-                        break;
+                    switch (bearing)
+                    {
+                        case CardinalDirection.East:
+                            position += new Size(1, 0);
+                            break;
 
-                    case CardinalDirection.West:
-                        position += new Size(instruction.Distance * -1, 0);
-                        break;
+                        case CardinalDirection.North:
+                            position += new Size(0, 1);
+                            break;
+
+                        case CardinalDirection.South:
+                            position += new Size(0, -1);
+                            break;
+
+                        case CardinalDirection.West:
+                            position += new Size(-1, 0);
+                            break;
+                    }
                 }
             }
 
@@ -78,8 +93,14 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         protected override int SolveCore(string[] args)
         {
             string instructions = ReadResourceAsString();
+            bool ignoreDuplicates;
 
-            BlockToEasterBunnyHQ = CalculateDistance(instructions);
+            if (args.Length != 1 || !bool.TryParse(args[0], out ignoreDuplicates))
+            {
+                ignoreDuplicates = true;
+            }
+
+            BlockToEasterBunnyHQ = CalculateDistance(instructions, ignoreDuplicates);
 
             return 0;
         }
