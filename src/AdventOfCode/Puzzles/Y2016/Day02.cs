@@ -5,7 +5,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
 {
     using System;
     using System.Collections.Generic;
-    using System.Globalization;
+    using System.Text;
 
     /// <summary>
     /// A class representing the puzzle for <c>http://adventofcode.com/2016/day/2</c>. This class cannot be inherited.
@@ -39,30 +39,65 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         }
 
         /// <summary>
-        /// Gets the code for the bathroom.
+        /// Gets the code for the bathroom using an alphanumeric keypad.
         /// </summary>
-        public int BathroomCode { get; private set; }
+        public string BathroomCodeAlphanumericKeypad { get; private set; }
 
         /// <summary>
-        /// Returns the bathroom code associated with the specified instructions.
+        /// Gets the code for the bathroom using a keypad with only digits.
+        /// </summary>
+        public string BathroomCodeDigitKeypad { get; private set; }
+
+        /// <summary>
+        /// Gets the keypad grid containing digits and letters.
+        /// </summary>
+        internal static char[][] AlphanumericGrid => new[]
+        {
+            new[] { '\0', '\0', '1', '\0', '\0' },
+            new[] { '\0', '2', '3', '4', '\0' },
+            new[] { '5', '6', '7', '8', '9' },
+            new[] { '\0', 'A', 'B', 'C', '\0' },
+            new[] { '\0', '\0', 'D', '\0', '\0' },
+        };
+
+        /// <summary>
+        /// Gets the keypad grid containing only digits.
+        /// </summary>
+        internal static char[][] DigitGrid => new[]
+        {
+            new[] { '1', '2', '3' },
+            new[] { '4', '5', '6' },
+            new[] { '7', '8', '9' },
+        };
+
+        /// <summary>
+        /// Returns the bathroom code associated with the specified instructions and grid.
         /// </summary>
         /// <param name="instructions">The instructions to determine the bathroom code from.</param>
+        /// <param name="grid">The grid representing the keypad in use.</param>
         /// <returns>
         /// The bathroom code to use given the instructions in <paramref name="instructions"/>.
         /// </returns>
-        internal static int GetBathroomCode(ICollection<string> instructions)
+        internal static string GetBathroomCode(ICollection<string> instructions, char[][] grid)
         {
             IList<IList<Direction>> directions = ParseInstructions(instructions);
-            IList<int> digits = new List<int>(instructions.Count);
+            StringBuilder code = new StringBuilder(instructions.Count);
 
-            var grid = new[]
+            var origin = Point.Empty;
+
+            for (int y = 0; y < grid.Length && origin == Point.Empty; y++)
             {
-                new[] { 1, 2, 3 },
-                new[] { 4, 5, 6 },
-                new[] { 7, 8, 9 },
-            };
+                for (int x = 0; x < grid[y].Length; x++)
+                {
+                    if (grid[y][x] == '5')
+                    {
+                        origin = new Point(x, y);
+                        break;
+                    }
+                }
+            }
 
-            var position = new Point(1, 1);
+            var position = origin;
 
             foreach (IList<Direction> sequence in directions)
             {
@@ -76,10 +111,10 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
                     }
                 }
 
-                digits.Add(grid[position.Y][position.X]);
+                code.Append(grid[position.Y][position.X]);
             }
 
-            return Maths.FromDigits(digits);
+            return code.ToString();
         }
 
         /// <inheritdoc />
@@ -87,7 +122,16 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         {
             ICollection<string> instructions = ReadResourceAsLines();
 
-            BathroomCode = GetBathroomCode(instructions);
+            BathroomCodeDigitKeypad = GetBathroomCode(instructions, DigitGrid);
+            BathroomCodeAlphanumericKeypad = GetBathroomCode(instructions, AlphanumericGrid);
+
+            Console.WriteLine(
+                "The code for the bathroom with a digit keypad is {0}.",
+                BathroomCodeDigitKeypad);
+
+            Console.WriteLine(
+                "The code for the bathroom with an alphanumeric keypad is {0}.",
+                BathroomCodeAlphanumericKeypad);
 
             return 0;
         }
@@ -133,13 +177,14 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         /// <returns>
         /// <see langword="true"/> if the position is within the bounds of the grid; otherwise <see langword="false"/>.
         /// </returns>
-        private static bool IsInBounds(int[][] grid, Point position)
+        private static bool IsInBounds(char[][] grid, Point position)
         {
             return
                 position.Y >= 0 &&
                 position.Y < grid.Length &&
                 position.X >= 0 &&
-                position.X < grid[position.Y].Length;
+                position.X < grid[position.Y].Length &&
+                grid[position.Y][position.X] != '\0';
         }
 
         /// <summary>

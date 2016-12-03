@@ -11,12 +11,24 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
     public static class Day02Tests
     {
         [Theory]
-        [InlineData(new[] { "UDLR" }, 5)]
-        [InlineData(new[] { "ULL", "RRDDD", "LURDL", "UUUUD" }, 1985)]
-        public static void Y2016_Day02_GetBathroomCode_Returns_Correct_Solution(string[] instructions, int expected)
+        [InlineData(new[] { "UDLR" }, "5")]
+        [InlineData(new[] { "ULL", "RRDDD", "LURDL", "UUUUD" }, "1985")]
+        public static void Y2016_Day02_GetBathroomCode_Returns_Correct_Solution_Digits(string[] instructions, string expected)
         {
             // Act
-            int actual = Day02.GetBathroomCode(instructions);
+            string actual = Day02.GetBathroomCode(instructions, Day02.DigitGrid);
+
+            // Assert
+            Assert.Equal(expected, actual);
+        }
+
+        [Theory]
+        [InlineData(new[] { "UDLR" }, "6")]
+        [InlineData(new[] { "ULL", "RRDDD", "LURDL", "UUUUD" }, "5DB3")]
+        public static void Y2016_Day02_GetBathroomCode_Returns_Correct_Solution_Alphanumeric(string[] instructions, string expected)
+        {
+            // Act
+            string actual = Day02.GetBathroomCode(instructions, Day02.AlphanumericGrid);
 
             // Assert
             Assert.Equal(expected, actual);
@@ -29,7 +41,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
             var puzzle = PuzzleTestHelpers.SolvePuzzle<Day02>();
 
             // Assert
-            Assert.Equal(14894, puzzle.BathroomCode);
+            Assert.Equal("14894", puzzle.BathroomCodeDigitKeypad);
+            Assert.Equal("26B96", puzzle.BathroomCodeAlphanumericKeypad);
         }
     }
 }
