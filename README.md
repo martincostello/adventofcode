@@ -7,7 +7,7 @@
 
 ## Overview
 
-My solutions for [http://adventofcode.com/](http://adventofcode.com/).
+My solutions for [http://adventofcode.com/](http://adventofcode.com/) in C# using .NET Core.
 
 ## Feedback
 
@@ -28,11 +28,11 @@ To build and test the puzzles run one of the following commands:
 **Linux/OS X**
 
 ```sh
-    ./build.sh
+./build.sh
 ```
 
 **Windows**
 
 ```batchfile
-    .\Build.ps1
+.\Build.ps1
 ```
