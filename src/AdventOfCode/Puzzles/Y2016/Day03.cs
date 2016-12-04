@@ -14,20 +14,26 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
     internal sealed class Day03 : Puzzle2016
     {
         /// <summary>
-        /// Gets the number of possible triangles.
+        /// Gets the number of possible triangles by columns.
         /// </summary>
-        public int PossibleTriangles { get; private set; }
+        public int PossibleTrianglesByColumns { get; private set; }
+
+        /// <summary>
+        /// Gets the number of possible triangles by rows.
+        /// </summary>
+        public int PossibleTrianglesByRows { get; private set; }
 
         /// <summary>
         /// Returns the number of valid triangles from the specified triangle instructions.
         /// </summary>
         /// <param name="dimensions">A collection of strings containing the dimensions of possible triangles.</param>
+        /// <param name="readAsColumns">Whether to parse the dimensions as columns instead of rows.</param>
         /// <returns>
         /// The number of valid triangles in the dimensions specified in <paramref name="dimensions"/>.
         /// </returns>
-        internal static int GetPossibleTriangleCount(ICollection<string> dimensions)
+        internal static int GetPossibleTriangleCount(ICollection<string> dimensions, bool readAsColumns)
         {
-            IList<Tuple<int, int, int>> triangles = ParseTriangles(dimensions);
+            IList<Tuple<int, int, int>> triangles = ParseTriangles(dimensions, readAsColumns);
             return triangles.Count((p) => IsValidTriangle(p.Item1, p.Item2, p.Item3));
         }
 
@@ -53,9 +59,11 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         {
             IList<string> dimensions = ReadResourceAsLines();
 
-            PossibleTriangles = GetPossibleTriangleCount(dimensions);
+            PossibleTrianglesByRows = GetPossibleTriangleCount(dimensions, readAsColumns: false);
+            PossibleTrianglesByColumns = GetPossibleTriangleCount(dimensions, readAsColumns: true);
 
-            Console.Write("The number of possible triangles is {0:N0}.", PossibleTriangles);
+            Console.WriteLine("The number of possible triangles using rows is {0:N0}.", PossibleTrianglesByRows);
+            Console.WriteLine("The number of possible triangles using columns is {0:N0}.", PossibleTrianglesByColumns);
 
             return 0;
         }
@@ -64,10 +72,11 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         /// Parses the specified set of triangle dimensions.
         /// </summary>
         /// <param name="dimensions">The triangle dimensions to parse.</param>
+        /// <param name="readAsColumns">Whether to parse the dimensions as columns instead of rows.</param>
         /// <returns>
         /// An <see cref="IList{T}"/> containing the parsed triangle dimensions.
         /// </returns>
-        private static IList<Tuple<int, int, int>> ParseTriangles(ICollection<string> dimensions)
+        private static IList<Tuple<int, int, int>> ParseTriangles(ICollection<string> dimensions, bool readAsColumns)
         {
             var result = new List<Tuple<int, int, int>>(dimensions.Count);
             var separator = new[] { ' ' };
@@ -81,6 +90,24 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
                 int c = int.Parse(components[2], CultureInfo.InvariantCulture);
 
                 result.Add(Tuple.Create(a, b, c));
+            }
+
+            if (readAsColumns)
+            {
+                var resultFromColumns = new List<Tuple<int, int, int>>();
+
+                for (int i = 0; i < result.Count; i += 3)
+                {
+                    var first = result[i];
+                    var second = result[i + 1];
+                    var third = result[i + 2];
+
+                    resultFromColumns.Add(Tuple.Create(first.Item1, second.Item1, third.Item1));
+                    resultFromColumns.Add(Tuple.Create(first.Item2, second.Item2, third.Item2));
+                    resultFromColumns.Add(Tuple.Create(first.Item3, second.Item3, third.Item3));
+                }
+
+                result = resultFromColumns;
             }
 
             return result;

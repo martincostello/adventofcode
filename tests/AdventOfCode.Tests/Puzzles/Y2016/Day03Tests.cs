@@ -28,7 +28,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
             var puzzle = PuzzleTestHelpers.SolvePuzzle<Day03>();
 
             // Assert
-            Assert.Equal(983, puzzle.PossibleTriangles);
+            Assert.Equal(983, puzzle.PossibleTrianglesByRows);
+            Assert.Equal(1836, puzzle.PossibleTrianglesByColumns);
         }
     }
 }
