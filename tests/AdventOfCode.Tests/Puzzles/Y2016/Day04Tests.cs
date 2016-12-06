@@ -11,6 +11,17 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
     public static class Day04Tests
     {
         [Theory]
+        [InlineData("qzmt-zixmtkozy-ivhz-343[zimth]", "very encrypted name")]
+        public static void Y2016_Day04_DecryptRoomName_Returns_Correct_Solution(string name, string expected)
+        {
+            // Act
+            string actual = Day04.DecryptRoomName(name);
+
+            // Assert
+            Assert.Equal(expected, actual);
+        }
+
+        [Theory]
         [InlineData("aaaaa-bbb-z-y-x-123[abxyz]", true)]
         [InlineData("a-b-c-d-e-f-g-h-987[abcde]", true)]
         [InlineData("not-a-real-room-404[oarel]", true)]
@@ -43,6 +54,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
 
             // Assert
             Assert.Equal(137896, puzzle.SumOfSectorIdsOfRealRooms);
+            Assert.Equal(501, puzzle.SectorIdOfNorthPoleObjectsRoom);
         }
     }
 }
