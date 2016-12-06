@@ -27,7 +27,7 @@ namespace MartinCostello.AdventOfCode
         public static void Program_Returns_Zero_If_Input_Invalid()
         {
             // Arrange
-            string[] args = new[] { "4", "a" };
+            string[] args = new[] { "26", "a" };
 
             // Act
             int actual = Program.Main(args);
