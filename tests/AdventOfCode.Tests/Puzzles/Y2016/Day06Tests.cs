@@ -11,11 +11,12 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
     public static class Day06Tests
     {
         [Theory]
-        [InlineData(new[] { "eedadn", "drvtee", "eandsr", "raavrd", "atevrs", "tsrnev", "sdttsa", "rasrtv", "nssdts", "ntnada", "svetve", "tesnvt", "vntsnd", "vrdear", "dvrsen", "enarar" }, "easter")]
-        public static void Y2016_Day06_DecryptMessage_Returns_Correct_Solution(string[] messages, string expected)
+        [InlineData(new[] { "eedadn", "drvtee", "eandsr", "raavrd", "atevrs", "tsrnev", "sdttsa", "rasrtv", "nssdts", "ntnada", "svetve", "tesnvt", "vntsnd", "vrdear", "dvrsen", "enarar" }, false, "easter")]
+        [InlineData(new[] { "eedadn", "drvtee", "eandsr", "raavrd", "atevrs", "tsrnev", "sdttsa", "rasrtv", "nssdts", "ntnada", "svetve", "tesnvt", "vntsnd", "vrdear", "dvrsen", "enarar" }, true, "advent")]
+        public static void Y2016_Day06_DecryptMessage_Returns_Correct_Solution(string[] messages, bool leastLikely, string expected)
         {
             // Act
-            string actual = Day06.DecryptMessage(messages);
+            string actual = Day06.DecryptMessage(messages, leastLikely);
 
             // Assert
             Assert.Equal(expected, actual);
@@ -29,6 +30,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
 
             // Assert
             Assert.Equal("qzedlxso", puzzle.ErrorCorrectedMessage);
+            Assert.Equal("ucmifjae", puzzle.ModifiedErrorCorrectedMessage);
         }
     }
 }
