@@ -4,7 +4,9 @@
 namespace MartinCostello.AdventOfCode.Puzzles.Y2016
 {
     using System;
+    using System.Collections.Generic;
     using System.Globalization;
+    using System.Linq;
     using System.Security.Cryptography;
     using System.Text;
 
@@ -18,6 +20,11 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         /// </summary>
         public string Password { get; private set; }
 
+        /// <summary>
+        /// Gets the password for the door when the hash indicates the position of password characters.
+        /// </summary>
+        public string PasswordWhenPositionIsIndicated { get; private set; }
+
         /// <inheritdoc />
         protected override int MinimumArguments => 1;
 
@@ -25,18 +32,20 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         /// Generates the password for the door with the specified Id.
         /// </summary>
         /// <param name="doorId">The door Id to generate the password for.</param>
+        /// <param name="isPositionSpecifiedByHash">Whether the hash specifies the position containing the password characters.</param>
         /// <returns>
         /// The password for the door specified by <paramref name="doorId"/>.
         /// </returns>
-        internal static string GeneratePassword(string doorId)
+        internal static string GeneratePassword(string doorId, bool isPositionSpecifiedByHash)
         {
-            var password = new StringBuilder();
+            const int PasswordLength = 8;
 
+            var characters = new Dictionary<int, char>();
             int index = 0;
 
             using (HashAlgorithm algorithm = MD5.Create())
             {
-                while (password.Length < 8)
+                while (characters.Count < PasswordLength)
                 {
                     byte[] buffer = GenerateBytesToHash(doorId, index);
                     byte[] hashBytes = algorithm.ComputeHash(buffer);
@@ -44,14 +53,26 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
 
                     if (hash.StartsWith("00000", StringComparison.Ordinal))
                     {
-                        password.Append(hash[5]);
+                        if (isPositionSpecifiedByHash)
+                        {
+                            int position = hash[5] - '0';
+
+                            if (position < PasswordLength && !characters.ContainsKey(position))
+                            {
+                                characters[position] = hash[6];
+                            }
+                        }
+                        else
+                        {
+                            characters[characters.Count] = hash[5];
+                        }
                     }
 
                     index++;
                 }
             }
 
-            return password.ToString();
+            return string.Join(string.Empty, characters.OrderBy((p) => p.Key).Select((p) => p.Value));
         }
 
         /// <inheritdoc />
@@ -59,9 +80,11 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         {
             string doorId = args[0];
 
-            Password = GeneratePassword(doorId);
+            Password = GeneratePassword(doorId, isPositionSpecifiedByHash: false);
+            PasswordWhenPositionIsIndicated = GeneratePassword(doorId, isPositionSpecifiedByHash: true);
 
             Console.WriteLine($"The password for door '{doorId}' is '{Password}'.");
+            Console.WriteLine($"The password for door '{doorId}' is '{PasswordWhenPositionIsIndicated}' when the position is specified in the hash.");
 
             return 0;
         }
