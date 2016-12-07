@@ -43,28 +43,35 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
             var characters = new Dictionary<int, char>();
             int index = 0;
 
+            byte[] doorIdAsBytes = Encoding.ASCII.GetBytes(doorId);
+
             using (HashAlgorithm algorithm = MD5.Create())
             {
                 while (characters.Count < PasswordLength)
                 {
-                    byte[] buffer = GenerateBytesToHash(doorId, index);
+                    byte[] buffer = GenerateBytesToHash(doorIdAsBytes, index);
                     byte[] hashBytes = algorithm.ComputeHash(buffer);
-                    string hash = GetStringForHash(hashBytes);
 
-                    if (hash.StartsWith("00000", StringComparison.Ordinal))
+                    // Are the first four characters 0?
+                    if (hashBytes[0] == 0 && hashBytes[1] == 0)
                     {
-                        if (isPositionSpecifiedByHash)
-                        {
-                            int position = hash[5] - '0';
+                        string hash = GetStringForHash(hashBytes);
 
-                            if (position < PasswordLength && !characters.ContainsKey(position))
-                            {
-                                characters[position] = hash[6];
-                            }
-                        }
-                        else
+                        if (hash[4] == '0')
                         {
-                            characters[characters.Count] = hash[5];
+                            if (isPositionSpecifiedByHash)
+                            {
+                                int position = hash[5] - '0';
+
+                                if (position < PasswordLength && !characters.ContainsKey(position))
+                                {
+                                    characters[position] = hash[6];
+                                }
+                            }
+                            else
+                            {
+                                characters[characters.Count] = hash[5];
+                            }
                         }
                     }
 
@@ -92,15 +99,21 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         /// <summary>
         /// Generates the hash bytes for the specified door Id and index.
         /// </summary>
-        /// <param name="doorId">The door Id.</param>
+        /// <param name="doorIdAsBytes">The bytes of the hash of the door Id.</param>
         /// <param name="index">The index to generate the hash with.</param>
         /// <returns>
         /// A <see cref="Array"/> of <see cref="byte"/> containing the hash for the specified door Id and index.
         /// </returns>
-        private static byte[] GenerateBytesToHash(string doorId, int index)
+        private static byte[] GenerateBytesToHash(byte[] doorIdAsBytes, int index)
         {
-            string key = string.Format(CultureInfo.InvariantCulture, "{0}{1}", doorId, index);
-            return Encoding.UTF8.GetBytes(key);
+            byte[] indexAsBytes = Encoding.ASCII.GetBytes(index.ToString(CultureInfo.InvariantCulture));
+
+            byte[] result = new byte[indexAsBytes.Length + doorIdAsBytes.Length];
+
+            Array.Copy(doorIdAsBytes, 0, result, 0, doorIdAsBytes.Length);
+            Array.Copy(indexAsBytes, 0, result, doorIdAsBytes.Length, indexAsBytes.Length);
+
+            return result;
         }
 
         /// <summary>
@@ -113,11 +126,12 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         /// </returns>
         private static string GetStringForHash(byte[] hashBytes)
         {
-            var hash = new StringBuilder();
+            var hash = new StringBuilder("0000");
 
-            foreach (byte b in hashBytes)
+            // Skip the first 2 bytes as they should already have been checked to be zero
+            for (int i = 2; i < hashBytes.Length; i++)
             {
-                hash.AppendFormat(CultureInfo.InvariantCulture, "{0:x2}", b);
+                hash.AppendFormat(CultureInfo.InvariantCulture, "{0:x2}", hashBytes[i]);
             }
 
             return hash.ToString();
