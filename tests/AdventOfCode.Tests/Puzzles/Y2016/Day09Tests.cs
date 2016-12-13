@@ -11,16 +11,20 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
     public static class Day09Tests
     {
         [Theory]
-        [InlineData("ADVENT", "ADVENT")]
-        [InlineData("A(1x5)BC", "ABBBBBC")]
-        [InlineData("(3x3)XYZ", "XYZXYZXYZ")]
-        [InlineData("A(2x2)BCD(2x2)EFG", "ABCBCDEFEFG")]
-        [InlineData("(6x1)(1x3)A", "(1x3)A")]
-        [InlineData("X(8x2)(3x3)ABCY", "X(3x3)ABC(3x3)ABCY")]
-        public static void Y2016_Day09_Decompress_Returns_Correct_Solution(string data, string expected)
+        [InlineData("ADVENT", 1, 6)]
+        [InlineData("A(1x5)BC", 1, 7)]
+        [InlineData("(3x3)XYZ", 1, 9)]
+        [InlineData("A(2x2)BCD(2x2)EFG", 1, 11)]
+        [InlineData("(6x1)(1x3)A", 1, 6)]
+        [InlineData("X(8x2)(3x3)ABCY", 1, 18)]
+        [InlineData("(3x3)XYZ", 2, 9)]
+        [InlineData("X(8x2)(3x3)ABCY", 2, 20)]
+        [InlineData("(27x12)(20x12)(13x14)(7x10)(1x12)A", 2, 241920)]
+        [InlineData("(25x3)(3x3)ABC(2x3)XY(5x2)PQRSTX(18x9)(3x2)TWO(5x7)SEVEN", 2, 445)]
+        public static void Y2016_Day09_GetDecompressedLength_Returns_Correct_Solution(string data, int version, long expected)
         {
             // Act
-            string actual = Day09.Decompress(data);
+            long actual = Day09.GetDecompressedLength(data, version);
 
             // Assert
             Assert.Equal(expected, actual);
@@ -33,7 +37,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
             var puzzle = PuzzleTestHelpers.SolvePuzzle<Day09>();
 
             // Assert
-            Assert.Equal(98135, puzzle.DecompressedLength);
+            Assert.Equal(98135L, puzzle.DecompressedLengthVersion1);
+            Assert.Equal(10964557606L, puzzle.DecompressedLengthVersion2);
         }
     }
 }

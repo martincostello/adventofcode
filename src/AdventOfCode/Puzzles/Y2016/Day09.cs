@@ -18,32 +18,65 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         private static readonly char[] XArray = new[] { 'x' };
 
         /// <summary>
-        /// Gets the decompressed length of the data.
+        /// Gets the decompressed length of the data using version 1 of the decompression algorithm.
         /// </summary>
-        public int DecompressedLength { get; private set; }
+        public long DecompressedLengthVersion1 { get; private set; }
 
         /// <summary>
-        /// Decompresses the specified data.
+        /// Gets the decompressed length of the data using version 2 of the decompression algorithm.
+        /// </summary>
+        public long DecompressedLengthVersion2 { get; private set; }
+
+        /// <summary>
+        /// Decompresses the specified data and returns the length of the decompressed data.
         /// </summary>
         /// <param name="data">The data to decompress.</param>
+        /// <param name="version">The version of the decompression algorithm to use.</param>
         /// <returns>
-        /// The <see cref="string"/> value from decompressing <paramref name="data"/>.
+        /// The length of the value from decompressing <paramref name="data"/>.
         /// </returns>
-        internal static string Decompress(string data)
+        internal static long GetDecompressedLength(string data, int version)
+        {
+            return GetDecompressedLength(data, 0, data.Length, version);
+        }
+
+        /// <inheritdoc />
+        protected override int SolveCore(string[] args)
+        {
+            string data = ReadResourceAsString();
+
+            DecompressedLengthVersion1 = GetDecompressedLength(data, version: 1);
+            DecompressedLengthVersion2 = GetDecompressedLength(data, version: 2);
+
+            Console.WriteLine($"The decompressed length of the data using version 1 of the algorithm is {DecompressedLengthVersion1:N0}.");
+            Console.WriteLine($"The decompressed length of the data using version 2 of the algorithm is {DecompressedLengthVersion2:N0}.");
+
+            return 0;
+        }
+
+        /// <summary>
+        /// Decompresses the specified data and returns the length of the decompressed data.
+        /// </summary>
+        /// <param name="data">The data to decompress.</param>
+        /// <param name="index">The index to decompress up to.</param>
+        /// <param name="count">The number of characters to decompress.</param>
+        /// <param name="version">The version of the decompression algorithm to use.</param>
+        /// <returns>
+        /// The length of the value from decompressing <paramref name="data"/>.
+        /// </returns>
+        private static long GetDecompressedLength(string data, int index, int count, int version)
         {
             bool isInMarker = false;
             bool isInRepeat = false;
 
-            var decompressed = new StringBuilder();
-
             var marker = new StringBuilder();
-            var repeat = new StringBuilder();
 
-            int repeatIndex = 0;
             int repeatCount = 0;
             int repeatLength = 0;
 
-            for (int i = 0; i < data.Length; i++)
+            long length = 0;
+
+            for (int i = index; i < index + count; i++)
             {
                 char ch = data[i];
 
@@ -55,7 +88,6 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
 
                         string[] split = marker.ToString().Split(XArray, StringSplitOptions.None);
 
-                        repeatIndex = 0;
                         repeatLength = int.Parse(split[0], CultureInfo.InvariantCulture);
                         repeatCount = int.Parse(split[1], CultureInfo.InvariantCulture);
 
@@ -73,40 +105,29 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
                 }
                 else if (isInRepeat)
                 {
-                    repeat.Append(ch);
+                    long chunkLength;
 
-                    if (++repeatIndex == repeatLength)
+                    if (version == 2)
                     {
-                        string chunk = repeat.ToString();
-
-                        for (int j = 0; j < repeatCount; j++)
-                        {
-                            decompressed.Append(chunk);
-                        }
-
-                        isInRepeat = false;
-                        repeat.Clear();
+                        chunkLength = GetDecompressedLength(data, i, repeatLength, 2);
                     }
+                    else
+                    {
+                        chunkLength = repeatLength;
+                    }
+
+                    length += chunkLength * repeatCount;
+
+                    i += repeatLength - 1;
+                    isInRepeat = false;
                 }
                 else if (!char.IsWhiteSpace(ch))
                 {
-                    decompressed.Append(ch);
+                    length++;
                 }
             }
 
-            return decompressed.ToString();
-        }
-
-        /// <inheritdoc />
-        protected override int SolveCore(string[] args)
-        {
-            string data = ReadResourceAsString();
-
-            DecompressedLength = Decompress(data).Length;
-
-            Console.WriteLine($"The decompressed length of the data is {DecompressedLength:N0}.");
-
-            return 0;
+            return length;
         }
     }
 }
