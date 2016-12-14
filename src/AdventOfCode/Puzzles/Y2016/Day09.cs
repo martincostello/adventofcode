@@ -13,11 +13,6 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
     internal sealed class Day09 : Puzzle2016
     {
         /// <summary>
-        /// An array containing the 'x' character. This field is read-only.
-        /// </summary>
-        private static readonly char[] XArray = new[] { 'x' };
-
-        /// <summary>
         /// Gets the decompressed length of the data using version 1 of the decompression algorithm.
         /// </summary>
         public long DecompressedLengthVersion1 { get; private set; }
@@ -86,7 +81,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
                     {
                         isInMarker = false;
 
-                        string[] split = marker.ToString().Split(XArray, StringSplitOptions.None);
+                        string[] split = marker.ToString().Split(Arrays.X, StringSplitOptions.None);
 
                         repeatLength = int.Parse(split[0], CultureInfo.InvariantCulture);
                         repeatCount = int.Parse(split[1], CultureInfo.InvariantCulture);

@@ -15,11 +15,6 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
     internal sealed class Day04 : Puzzle2016
     {
         /// <summary>
-        /// An array containing dashes. This field is read-only.
-        /// </summary>
-        private static readonly char[] Separator = new[] { '-' };
-
-        /// <summary>
         /// Gets the sector Id of the room where North Pole objects are stored.
         /// </summary>
         public int SectorIdOfNorthPoleObjectsRoom { get; private set; }

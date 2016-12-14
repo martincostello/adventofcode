@@ -79,11 +79,10 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         private static IList<Tuple<int, int, int>> ParseTriangles(ICollection<string> dimensions, bool readAsColumns)
         {
             var result = new List<Tuple<int, int, int>>(dimensions.Count);
-            var separator = new[] { ' ' };
 
             foreach (string dimension in dimensions)
             {
-                string[] components = dimension.Trim().Split(separator, StringSplitOptions.RemoveEmptyEntries);
+                string[] components = dimension.Trim().Split(Arrays.Space, StringSplitOptions.RemoveEmptyEntries);
 
                 int a = int.Parse(components[0], CultureInfo.InvariantCulture);
                 int b = int.Parse(components[1], CultureInfo.InvariantCulture);
