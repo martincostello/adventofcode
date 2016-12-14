@@ -14,21 +14,6 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
     internal sealed class Day08 : Puzzle2016
     {
         /// <summary>
-        /// An array containing the '=' character. This field is read-only.
-        /// </summary>
-        private static readonly char[] EqualsArray = new[] { '=' };
-
-        /// <summary>
-        /// An array containing the ' ' character. This field is read-only.
-        /// </summary>
-        private static readonly char[] SpaceArray = new[] { ' ' };
-
-        /// <summary>
-        /// An array containing the 'x' character. This field is read-only.
-        /// </summary>
-        private static readonly char[] XArray = new[] { 'x' };
-
-        /// <summary>
         /// Gets the number of pixels that are be lit.
         /// </summary>
         public int PixelsLit { get; private set; }
@@ -226,12 +211,12 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         {
             var result = new Instruction();
 
-            string[] split = instruction.Split(SpaceArray, StringSplitOptions.None);
+            string[] split = instruction.Split(Arrays.Space, StringSplitOptions.None);
 
             switch (split[0])
             {
                 case "rect":
-                    split = split[1].Split(XArray, StringSplitOptions.None);
+                    split = split[1].Split(Arrays.X, StringSplitOptions.None);
                     result.A = int.Parse(split[0], CultureInfo.InvariantCulture);
                     result.B = int.Parse(split[1], CultureInfo.InvariantCulture);
                     break;
@@ -239,7 +224,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
                 case "rotate":
                     result.IsRotation = true;
                     result.IsColumn = string.Equals(split[1], "column", StringComparison.Ordinal);
-                    result.A = int.Parse(split[2].Split(EqualsArray, StringSplitOptions.None)[1]);
+                    result.A = int.Parse(split[2].Split(Arrays.EqualsSign, StringSplitOptions.None)[1]);
                     result.B = int.Parse(split[4], CultureInfo.InvariantCulture);
                     break;
 
