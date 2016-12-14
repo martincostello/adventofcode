@@ -39,7 +39,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         public int BlocksToEasterBunnyHQIgnoringDuplicates { get; private set; }
 
         /// <summary>
-        /// Calculate the distance, in blocks, following the specified instructions are.
+        /// Calculate the distance, in blocks, by following the specified instructions.
         /// </summary>
         /// <param name="input">The instructions to follow.</param>
         /// <param name="ignoreDuplicates">Whether to ignore duplicate locations.</param>
