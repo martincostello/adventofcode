@@ -24,11 +24,14 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
                 "value 2 goes to bot 2",
             };
 
+            int[] binsOfInterest = new[] { 0, 1, 2 };
+
             // Act
-            int actual = Day10.GetBotNumber(instructions, 5, 2);
+            var actual = Day10.GetBotNumber(instructions, 5, 2, binsOfInterest);
 
             // Assert
-            Assert.Equal(2, actual);
+            Assert.Equal(2, actual.Item1);
+            Assert.Equal(30, actual.Item2);
         }
 
         [Fact]
@@ -39,6 +42,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
 
             // Assert
             Assert.Equal(141, puzzle.BotThatCompares61And17Microchips);
+            Assert.Equal(1209, puzzle.ProductOfMicrochipsInBins012);
         }
     }
 }

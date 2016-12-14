@@ -19,21 +19,29 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         public int BotThatCompares61And17Microchips { get; private set; }
 
         /// <summary>
+        /// Gets the product of the value of the microchips in output bins 0, 1 and 2.
+        /// </summary>
+        public int ProductOfMicrochipsInBins012 { get; private set; }
+
+        /// <summary>
         /// Returns the value of the bot that compares microchips with the specified values.
         /// </summary>
         /// <param name="instructions">The instructions to process.</param>
         /// <param name="a">The first number to find the bot that compares it.</param>
         /// <param name="b">The second number to find the bot that compares it.</param>
+        /// <param name="binsOfInterest">The numbers of the bins of interest for which to find the product of the microchip values.</param>
         /// <returns>
-        /// The number of the bot that compares microchips with the values specified
-        /// by <paramref name="a"/> and <paramref name="b"/>.
+        /// A <see cref="Tuple{T1, T2}"/> that returns the number of the bot that compares microchips
+        /// with the values specified by <paramref name="a"/> and <paramref name="b"/> and the product
+        /// of the values of the microchips in the output bins with the numbers specified by <paramref name="binsOfInterest"/>.
         /// </returns>
-        internal static int GetBotNumber(IEnumerable<string> instructions, int a, int b)
+        internal static Tuple<int, int> GetBotNumber(IEnumerable<string> instructions, int a, int b, IEnumerable<int> binsOfInterest)
         {
             int max = Math.Max(a, b);
             int min = Math.Min(a, b);
 
-            int result = -1;
+            int botOfInterest = -1;
+            int productOfBinsOfInterest = 1;
 
             var processor = new InstructionProcessor();
 
@@ -43,19 +51,31 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
                 {
                     if (low == min && high == max)
                     {
-                        result = bot;
+                        botOfInterest = bot;
                     }
                 });
 
-            return result;
+            foreach (var bin in processor.Bins)
+            {
+                if (binsOfInterest.Contains(bin.Key))
+                {
+                    productOfBinsOfInterest *= bin.Value.Microchip.Value;
+                }
+            }
+
+            return Tuple.Create(botOfInterest, productOfBinsOfInterest);
         }
 
         /// <inheritdoc />
         protected override int SolveCore(string[] args)
         {
             IList<string> instructions = ReadResourceAsLines();
+            IList<int> binsOfInterest = new[] { 0, 1, 2 };
 
-            BotThatCompares61And17Microchips = GetBotNumber(instructions, 61, 17);
+            var result = GetBotNumber(instructions, 61, 17, binsOfInterest);
+
+            BotThatCompares61And17Microchips = result.Item1;
+            ProductOfMicrochipsInBins012 = result.Item2;
 
             Console.WriteLine($"The number of the bot that compares value-61 and value-17 microchips is {BotThatCompares61And17Microchips:N0}.");
 
