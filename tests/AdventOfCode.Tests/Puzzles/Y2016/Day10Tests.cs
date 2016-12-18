@@ -6,7 +6,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
     using Xunit;
 
     /// <summary>
-    /// A class containing tests for the <see cref="Day01"/> class. This class cannot be inherited.
+    /// A class containing tests for the <see cref="Day10"/> class. This class cannot be inherited.
     /// </summary>
     public static class Day10Tests
     {
