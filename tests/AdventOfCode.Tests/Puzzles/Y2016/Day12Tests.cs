@@ -27,7 +27,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
             int[] binsOfInterest = new[] { 0, 1, 2 };
 
             // Act
-            var actual = Day12.Process(instructions);
+            var actual = Day12.Process(instructions, initialValueOfC: 0);
 
             // Assert
             Assert.NotNull(actual);
@@ -46,6 +46,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
 
             // Assert
             Assert.Equal(318020, puzzle.ValueInRegisterA);
+            Assert.Equal(9227674, puzzle.ValueInRegisterAWhenInitializedWithIgnitionKey);
         }
     }
 }

@@ -18,20 +18,28 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         public int ValueInRegisterA { get; private set; }
 
         /// <summary>
+        /// Gets the value in register A after processing the instructions
+        /// if register C is initialized with the value of the position of
+        /// the ignition key.
+        /// </summary>
+        public int ValueInRegisterAWhenInitializedWithIgnitionKey { get; private set; }
+
+        /// <summary>
         /// Processes the specified instructions and returns the values of the CPU registers.
         /// </summary>
         /// <param name="instructions">The instructions to process.</param>
+        /// <param name="initialValueOfC">The initial value of register C.</param>
         /// <returns>
         /// An <see cref="IDictionary{TKey, TValue}"/> containing the values of the CPU
         /// registers after processing the instructions specified by <paramref name="instructions"/>.
         /// </returns>
-        internal static IDictionary<char, int> Process(IList<string> instructions)
+        internal static IDictionary<char, int> Process(IList<string> instructions, int initialValueOfC)
         {
             IDictionary<char, int> registers = new Dictionary<char, int>()
             {
                 { 'a', 0 },
                 { 'b', 0 },
-                { 'c', 0 },
+                { 'c', initialValueOfC },
                 { 'd', 0 },
             };
 
@@ -90,11 +98,15 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         protected override int SolveCore(string[] args)
         {
             IList<string> instructions = ReadResourceAsLines();
-            IDictionary<char, int> registers = Process(instructions);
 
+            IDictionary<char, int> registers = Process(instructions, initialValueOfC: 0);
             ValueInRegisterA = registers['a'];
 
-            Console.WriteLine($"The value left in register a is {ValueInRegisterA}");
+            registers = Process(instructions, initialValueOfC: 1);
+            ValueInRegisterAWhenInitializedWithIgnitionKey = registers['a'];
+
+            Console.WriteLine($"The value left in register a is {ValueInRegisterA:N0}.");
+            Console.WriteLine($"The value left in register a if c is initialized to 1 is {ValueInRegisterAWhenInitializedWithIgnitionKey:N0}.");
 
             return 0;
         }
