@@ -129,18 +129,18 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
 
                 int rounds = useKeyStretching ? 2017 : 1;
 
-                byte[] buffer = Encoding.ASCII.GetBytes(result);
+                byte[] buffer = null;
                 byte[] hash = null;
 
                 for (int i = 0; i < rounds; i++)
                 {
+                    buffer = Encoding.ASCII.GetBytes(result);
                     hash = algorithm.ComputeHash(buffer);
 
                     result = GetStringForHash(hash);
-                    buffer = Encoding.ASCII.GetBytes(result);
                 }
 
-                cache[key] = result = GetStringForHash(hash);
+                cache[key] = result;
             }
 
             return result;
