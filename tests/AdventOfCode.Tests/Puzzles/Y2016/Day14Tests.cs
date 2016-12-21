@@ -11,11 +11,12 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
     public static class Day14Tests
     {
         [Theory]
-        [InlineData("abc", 64, 22728)]
-        public static void Y2016_Day14_GetOneTimePadKey_Returns_Correct_Solution(string salt, int ordinal, int expected)
+        [InlineData("abc", 64, false, 22728)]
+        [InlineData("abc", 64, true, 22551)]
+        public static void Y2016_Day14_GetOneTimePadKeyIndex_Returns_Correct_Solution(string salt, int ordinal, bool useKeyStretching, int expected)
         {
             // Act
-            int actual = Day14.GetOneTimePadKeyIndex(salt, ordinal);
+            int actual = Day14.GetOneTimePadKeyIndex(salt, ordinal, useKeyStretching);
 
             // Assert
             Assert.Equal(expected, actual);
@@ -32,6 +33,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
 
             // Assert
             Assert.Equal(15035, puzzle.IndexOfKey64);
+            Assert.Equal(19968, puzzle.IndexOfKey64WithStretching);
         }
     }
 }

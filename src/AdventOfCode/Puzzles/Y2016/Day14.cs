@@ -19,6 +19,12 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         /// </summary>
         public int IndexOfKey64 { get; private set; }
 
+        /// <summary>
+        /// Gets the index that produces the 64th one-time pad key
+        /// when key stretching is in use.
+        /// </summary>
+        public int IndexOfKey64WithStretching { get; private set; }
+
         /// <inheritdoc />
         protected override int MinimumArguments => 1;
 
@@ -27,11 +33,12 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         /// </summary>
         /// <param name="salt">The salt to use to generate the one-time pad key.</param>
         /// <param name="ordinal">The ordinal of the key to return the index of.</param>
+        /// <param name="useKeyStretching">Whether to use key stretching.</param>
         /// <returns>
         /// The index of the one-time pad key generated using <paramref name="salt"/>
         /// with the ordinal value specified by <paramref name="ordinal"/>.
         /// </returns>
-        internal static int GetOneTimePadKeyIndex(string salt, int ordinal)
+        internal static int GetOneTimePadKeyIndex(string salt, int ordinal, bool useKeyStretching)
         {
             int current = 0;
             var cache = new Dictionary<string, string>();
@@ -41,7 +48,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
                 for (int i = 0; current < ordinal; i++)
                 {
                     string value = string.Format(CultureInfo.InvariantCulture, "{0}{1}", salt, i);
-                    string key = GenerateKey(value, algorithm, cache);
+                    string key = GenerateKey(value, algorithm, useKeyStretching, cache);
 
                     char triple = GetTripleCharacter(key);
 
@@ -58,9 +65,9 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
                     for (int j = next; j <= last; j++)
                     {
                         value = string.Format(CultureInfo.InvariantCulture, "{0}{1}", salt, j);
-                        key = GenerateKey(value, algorithm, cache);
+                        key = GenerateKey(value, algorithm, useKeyStretching, cache);
 
-                        if (GetFiveRepeatitionsOfCharacter(key, triple))
+                        if (HasFiveRepeatitionsOfCharacter(key, triple))
                         {
                             found5InARow = true;
                             break;
@@ -87,9 +94,11 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         {
             string salt = args[0];
 
-            IndexOfKey64 = GetOneTimePadKeyIndex(salt, 64);
+            IndexOfKey64 = GetOneTimePadKeyIndex(salt, 64, useKeyStretching: false);
+            IndexOfKey64WithStretching = GetOneTimePadKeyIndex(salt, 64, useKeyStretching: true);
 
             Console.WriteLine($"The index that produces the 64th one-time pad key is {IndexOfKey64:N0}.");
+            Console.WriteLine($"The index that produces the 64th one-time pad key when using key stretching is {IndexOfKey64WithStretching:N0}.");
 
             return 0;
         }
@@ -99,20 +108,39 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         /// </summary>
         /// <param name="value">The value to generate the one-time pad key for.</param>
         /// <param name="algorithm">The hash algorithm to use to generate the key.</param>
+        /// <param name="useKeyStretching">Whether to use key stretching.</param>
         /// <param name="cache">A cache of pre-generated hashes.</param>
         /// <returns>
         /// A <see cref="string"/> containing the one-time pad key derived from <paramref name="value"/>.
         /// </returns>
-        private static string GenerateKey(string value, HashAlgorithm algorithm, IDictionary<string, string> cache)
+        private static string GenerateKey(
+            string value,
+            HashAlgorithm algorithm,
+            bool useKeyStretching,
+            IDictionary<string, string> cache)
         {
+            string key = string.Concat(value, useKeyStretching ? "|s" : "|u");
+
             string result;
 
-            if (!cache.TryGetValue(value, out result))
+            if (!cache.TryGetValue(key, out result))
             {
-                byte[] buffer = Encoding.ASCII.GetBytes(value);
-                byte[] hash = algorithm.ComputeHash(buffer);
+                result = value;
 
-                cache[value] = result = GetStringForHash(hash);
+                int rounds = useKeyStretching ? 2017 : 1;
+
+                byte[] buffer = Encoding.ASCII.GetBytes(result);
+                byte[] hash = null;
+
+                for (int i = 0; i < rounds; i++)
+                {
+                    hash = algorithm.ComputeHash(buffer);
+
+                    result = GetStringForHash(hash);
+                    buffer = Encoding.ASCII.GetBytes(result);
+                }
+
+                cache[key] = result = GetStringForHash(hash);
             }
 
             return result;
@@ -128,7 +156,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         /// <see langword="true"/> if <paramref name="value"/> contains that character
         /// specified by <paramref name="ch"/> five times consecutively.
         /// </returns>
-        private static bool GetFiveRepeatitionsOfCharacter(string value, char ch)
+        private static bool HasFiveRepeatitionsOfCharacter(string value, char ch)
         {
             int start = value.IndexOf(ch);
 
