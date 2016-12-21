@@ -11,14 +11,16 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
     public static class Day20Tests
     {
         [Theory]
-        [InlineData(new[] { "5-8", "0-2", "4-7" }, 3)]
-        public static void Y2016_Day20_GetLowestNonblockedIP_Returns_Correct_Solution(string[] blacklist, uint expected)
+        [InlineData(9, new[] { "5-8", "0-2", "4-7" }, 3, 2)]
+        public static void Y2016_Day20_GetLowestNonblockedIP_Returns_Correct_Solution(uint maxValue, string[] blacklist, uint expectedIP, uint expectedCount)
         {
             // Act
-            uint actual = Day20.GetLowestNonblockedIP(blacklist);
+            uint count;
+            uint address = Day20.GetLowestNonblockedIP(maxValue, blacklist, out count);
 
             // Assert
-            Assert.Equal(expected, actual);
+            Assert.Equal(expectedIP, address);
+            Assert.Equal(expectedCount, count);
         }
 
         [Fact]
@@ -29,6 +31,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
 
             // Assert
             Assert.Equal(22887907u, puzzle.LowestNonblockedIP);
+            Assert.Equal(109u, puzzle.AllowedIPCount);
         }
     }
 }

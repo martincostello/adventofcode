@@ -13,6 +13,11 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
     internal sealed class Day20 : Puzzle2016
     {
         /// <summary>
+        /// Gets the number of IP addresses that are not blocked.
+        /// </summary>
+        public uint AllowedIPCount { get; private set; }
+
+        /// <summary>
         /// Gets the value of the lowest IP address that is not blocked.
         /// </summary>
         public uint LowestNonblockedIP { get; private set; }
@@ -21,12 +26,17 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         /// Returns the value of the lowest IP address that is not
         /// blocked by the specified IP address range blacklist.
         /// </summary>
+        /// <param name="maxValue">The maximum possible IP address value.</param>
         /// <param name="blacklist">The IP address ranges that form the blacklist.</param>
+        /// <param name="count">When the method returns contains the number of allowed IP addresses.</param>
         /// <returns>
         /// The lowest IP address that is not blocked, as a 32-bit integer.
         /// </returns>
-        internal static uint GetLowestNonblockedIP(IEnumerable<string> blacklist)
+        internal static uint GetLowestNonblockedIP(uint maxValue, IEnumerable<string> blacklist, out uint count)
         {
+            count = 0;
+
+            // Parse the IP ranges for the blacklist and sort
             IList<Tuple<uint, uint>> ranges = new List<Tuple<uint, uint>>();
 
             foreach (string range in blacklist)
@@ -60,8 +70,10 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
                     }
                     else
                     {
+                        // Create a new range that combines the existing ranges
                         var composite = Tuple.Create(range1.Item1, range2.Item2);
 
+                        // Remove the original ranges and replace with the new one
                         ranges.RemoveAt(i);
                         ranges.RemoveAt(i);
                         ranges.Insert(i, composite);
@@ -72,25 +84,37 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
                             .ToList();
                     }
 
+                    // Compare from the new range onwards
                     i--;
                 }
             }
 
             uint result = 0;
-            uint lastHigh = 0;
 
-            foreach (var range in ranges)
+            // Count the number of IPs not in the blacklist ranges
+            for (int i = 0; i < ranges.Count - 1; i++)
             {
-                uint low = range.Item1;
-                uint high = range.Item2;
+                var range1 = ranges[i];
+                var range2 = ranges[i + 1];
 
-                if (result < low && result > lastHigh)
+                count += range2.Item1 - range1.Item2 - 1;
+
+                if (i == 0)
                 {
-                    break;
+                    // As ranges are sorted and do not overlap,
+                    // the lowest allowed IP is 1 more than the
+                    // high value for the first blacklisted range.
+                    result = range1.Item2 + 1;
                 }
+            }
 
-                result = high + 1;
-                lastHigh = high;
+            // Add on the remaining IPs if the last blacklist
+            // does not run to the maximum allowed IP address.
+            var lastRange = ranges.Last();
+
+            if (lastRange.Item2 != maxValue)
+            {
+                count += maxValue - lastRange.Item2;
             }
 
             return result;
@@ -101,9 +125,13 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         {
             IList<string> ranges = ReadResourceAsLines();
 
-            LowestNonblockedIP = GetLowestNonblockedIP(ranges);
+            uint count;
+
+            LowestNonblockedIP = GetLowestNonblockedIP(uint.MaxValue, ranges, out count);
+            AllowedIPCount = count;
 
             Console.WriteLine($"The lowest-valued IP that is not blocked is {LowestNonblockedIP}.");
+            Console.WriteLine($"The number of IP addresses allowed is {AllowedIPCount:N0}.");
 
             return 0;
         }
