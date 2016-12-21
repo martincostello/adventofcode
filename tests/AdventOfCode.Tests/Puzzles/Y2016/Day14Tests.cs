@@ -12,7 +12,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
     {
         [Theory]
         [InlineData("abc", 64, false, 22728)]
-        [InlineData("abc", 64, true, 22551)]
+        [InlineData("abc", 64, true, 22551, Skip = "Too slow.")]
         public static void Y2016_Day14_GetOneTimePadKeyIndex_Returns_Correct_Solution(string salt, int ordinal, bool useKeyStretching, int expected)
         {
             // Act
@@ -22,7 +22,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
             Assert.Equal(expected, actual);
         }
 
-        [Fact]
+        [Fact(Skip = "Too slow.")]
         public static void Y2016_Day14_Solve_Returns_Correct_Solution()
         {
             // Arrange
