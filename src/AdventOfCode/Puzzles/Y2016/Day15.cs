@@ -18,6 +18,12 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         public int TimeOfFirstButtonPress { get; private set; }
 
         /// <summary>
+        /// Gets the value of T where the button can first be pressed to get a capsule
+        /// when an additional disc with 11 positions is present at the bottom of the sculpture.
+        /// </summary>
+        public int TimeOfFirstButtonPressWithExtraDisc { get; private set; }
+
+        /// <summary>
         /// Finds the value of T when the discs described by the specified input are
         /// first aligned in such a manner as a capsule can be retrieved from the sculpture.
         /// </summary>
@@ -45,9 +51,16 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         {
             IList<string> input = ReadResourceAsLines();
 
+            IList<string> extraDisc = new[]
+            {
+                $"Disc #{input.Count + 1} has 11 positions; at time=0, it is at position 0."
+            };
+
             TimeOfFirstButtonPress = FindTimeForCapsuleRelease(input);
+            TimeOfFirstButtonPressWithExtraDisc = FindTimeForCapsuleRelease(input.Concat(extraDisc));
 
             Console.WriteLine($"The first time the button can be pressed to get a capsule is {TimeOfFirstButtonPress:N0}.");
+            Console.WriteLine($"The first time the button can be pressed to get a capsule with the extra disc present is {TimeOfFirstButtonPressWithExtraDisc:N0}.");
 
             return 0;
         }
@@ -114,7 +127,9 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
             {
                 int position = Current;
 
-                for (int i = 0; i < t; i++)
+                int steps = t % Positions;
+
+                for (int i = 0; i < steps; i++)
                 {
                     if (position == Positions - 1)
                     {

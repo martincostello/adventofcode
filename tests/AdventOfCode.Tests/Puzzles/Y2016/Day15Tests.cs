@@ -35,6 +35,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
 
             // Assert
             Assert.Equal(16824, puzzle.TimeOfFirstButtonPress);
+            Assert.Equal(3543984, puzzle.TimeOfFirstButtonPressWithExtraDisc);
         }
     }
 }
