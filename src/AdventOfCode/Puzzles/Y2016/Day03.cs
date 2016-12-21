@@ -5,7 +5,6 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
 {
     using System;
     using System.Collections.Generic;
-    using System.Globalization;
     using System.Linq;
 
     /// <summary>
@@ -84,9 +83,9 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
             {
                 string[] components = dimension.Trim().Split(Arrays.Space, StringSplitOptions.RemoveEmptyEntries);
 
-                int a = int.Parse(components[0], CultureInfo.InvariantCulture);
-                int b = int.Parse(components[1], CultureInfo.InvariantCulture);
-                int c = int.Parse(components[2], CultureInfo.InvariantCulture);
+                int a = ParseInt32(components[0]);
+                int b = ParseInt32(components[1]);
+                int c = ParseInt32(components[2]);
 
                 result.Add(Tuple.Create(a, b, c));
             }

@@ -4,7 +4,6 @@
 namespace MartinCostello.AdventOfCode.Puzzles.Y2016
 {
     using System;
-    using System.Globalization;
     using System.Text;
 
     /// <summary>
@@ -83,8 +82,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
 
                         string[] split = marker.ToString().Split(Arrays.X, StringSplitOptions.None);
 
-                        repeatLength = int.Parse(split[0], CultureInfo.InvariantCulture);
-                        repeatCount = int.Parse(split[1], CultureInfo.InvariantCulture);
+                        repeatLength = ParseInt32(split[0]);
+                        repeatCount = ParseInt32(split[1]);
 
                         isInRepeat = true;
                         marker.Clear();

@@ -5,7 +5,6 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
 {
     using System;
     using System.Collections.Generic;
-    using System.Globalization;
     using System.Linq;
 
     /// <summary>
@@ -217,15 +216,15 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
             {
                 case "rect":
                     split = split[1].Split(Arrays.X, StringSplitOptions.None);
-                    result.A = int.Parse(split[0], CultureInfo.InvariantCulture);
-                    result.B = int.Parse(split[1], CultureInfo.InvariantCulture);
+                    result.A = ParseInt32(split[0]);
+                    result.B = ParseInt32(split[1]);
                     break;
 
                 case "rotate":
                     result.IsRotation = true;
                     result.IsColumn = string.Equals(split[1], "column", StringComparison.Ordinal);
-                    result.A = int.Parse(split[2].Split(Arrays.EqualsSign, StringSplitOptions.None)[1]);
-                    result.B = int.Parse(split[4], CultureInfo.InvariantCulture);
+                    result.A = ParseInt32(split[2].Split(Arrays.EqualsSign, StringSplitOptions.None)[1]);
+                    result.B = ParseInt32(split[4]);
                     break;
 
                 default:

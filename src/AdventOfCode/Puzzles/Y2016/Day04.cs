@@ -5,7 +5,6 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
 {
     using System;
     using System.Collections.Generic;
-    using System.Globalization;
     using System.Linq;
     using System.Text;
 
@@ -70,7 +69,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
 
                 if (string.Equals("northpole object storage", decryptedName, StringComparison.OrdinalIgnoreCase))
                 {
-                    sectorId = int.Parse(sectorIdString, CultureInfo.InvariantCulture);
+                    sectorId = ParseInt32(sectorIdString);
                 }
             }
 
@@ -95,7 +94,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
 
                 if (IsRoomReal(name, out encryptedName, out sectorIdString))
                 {
-                    sum += int.Parse(sectorIdString, CultureInfo.InvariantCulture);
+                    sum += ParseInt32(sectorIdString);
                 }
             }
 
@@ -132,7 +131,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
 
             if (IsRoomReal(name, out encryptedName, out sectorId))
             {
-                int sectorIdValue = int.Parse(sectorId, CultureInfo.InvariantCulture);
+                int sectorIdValue = ParseInt32(sectorId);
 
                 foreach (char ch in encryptedName)
                 {

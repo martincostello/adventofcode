@@ -5,7 +5,6 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
 {
     using System;
     using System.Collections.Generic;
-    using System.Globalization;
     using System.Linq;
 
     /// <summary>
@@ -273,20 +272,20 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
 
                 if (string.Equals(split[0], "value", StringComparison.Ordinal))
                 {
-                    int chipValue = int.Parse(split[1], CultureInfo.InvariantCulture);
-                    int botNumber = int.Parse(split[5], CultureInfo.InvariantCulture);
+                    int chipValue = ParseInt32(split[1]);
+                    int botNumber = ParseInt32(split[5]);
 
                     GetBot(botNumber).Accept(new Chip(chipValue));
                 }
                 else
                 {
                     bool isHighBot = string.Equals("bot", split[10], StringComparison.Ordinal);
-                    int highValue = int.Parse(split[11], CultureInfo.InvariantCulture);
+                    int highValue = ParseInt32(split[11]);
 
                     bool isLowBot = string.Equals("bot", split[5], StringComparison.Ordinal);
-                    int lowValue = int.Parse(split[6], CultureInfo.InvariantCulture);
+                    int lowValue = ParseInt32(split[6]);
 
-                    int botNumber = int.Parse(split[1], CultureInfo.InvariantCulture);
+                    int botNumber = ParseInt32(split[1]);
 
                     Bot bot = GetBot(botNumber);
 
