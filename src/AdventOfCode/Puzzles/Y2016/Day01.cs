@@ -5,7 +5,6 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
 {
     using System;
     using System.Collections.Generic;
-    using System.Globalization;
 
     /// <summary>
     /// A class representing the puzzle for <c>http://adventofcode.com/2016/day/1</c>. This class cannot be inherited.
@@ -131,7 +130,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
                 var instruction = new Instruction()
                 {
                     Direction = rawInstruction[0] == 'L' ? Direction.Left : Direction.Right,
-                    Distance = int.Parse(rawInstruction.Substring(1), CultureInfo.InvariantCulture),
+                    Distance = ParseInt32(rawInstruction.Substring(1)),
                 };
 
                 result.Add(instruction);

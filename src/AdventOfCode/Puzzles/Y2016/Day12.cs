@@ -81,7 +81,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
 
                         if (value != 0)
                         {
-                            i += int.Parse(split[2], CultureInfo.InvariantCulture) - 1;
+                            i += ParseInt32(split[2]) - 1;
                         }
 
                         break;
