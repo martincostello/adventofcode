@@ -34,17 +34,18 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         public static void Y2016_Day21_RotateDirection_Returns_Correct_Solution(char[] values, bool right, int steps, char[] expected)
         {
             // Act
-            Day21.RotateDirection(values, right, steps);
+            Day21.RotateDirection(values, right, steps, reverse: false);
 
             // Assert
             Assert.Equal(expected as IEnumerable<char>, values as IEnumerable<char>);
         }
 
-        [Fact]
-        public static void Y2016_Day21_Scramble_Returns_Correct_Solution()
+        [Theory]
+        [InlineData("abcde", false, "decab")]
+        [InlineData("decab", true, "abcde")]
+        public static void Y2016_Day21_Scramble_Returns_Correct_Solution(string text, bool reverse, string expected)
         {
             // Arrange
-            string text = "abcde";
             string[] instructions = new[]
             {
                 "swap position 4 with position 0",
@@ -58,10 +59,10 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
             };
 
             // Act
-            string actual = Day21.Scramble(text, instructions);
+            string actual = Day21.Scramble(text, instructions, reverse);
 
             // Assert
-            Assert.Equal("decab", actual);
+            Assert.Equal(expected, actual);
         }
 
         [Fact]
@@ -75,6 +76,15 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
 
             // Assert
             Assert.Equal("gcedfahb", puzzle.ScrambledResult);
+
+            // Arrange
+            args = new[] { "fbgdceah", bool.TrueString };
+
+            // Act
+            puzzle = PuzzleTestHelpers.SolvePuzzle<Day21>(args);
+
+            // Assert
+            Assert.Equal("hegbdcfa", puzzle.ScrambledResult);
         }
     }
 }

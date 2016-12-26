@@ -25,17 +25,25 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         /// </summary>
         /// <param name="text">The text to scramble.</param>
         /// <param name="instructions">The instructions to use to scramble the string.</param>
+        /// <param name="reverse">Whether to reverse the process.</param>
         /// <returns>
         /// The scrambled text after applying the instructions in <paramref name="instructions"/>
         /// to the text specified by <paramref name="text"/>.
         /// </returns>
-        internal static string Scramble(string text, IEnumerable<string> instructions)
+        internal static string Scramble(string text, IEnumerable<string> instructions, bool reverse)
         {
             char[] values = text.ToCharArray();
 
+            if (reverse)
+            {
+                instructions = instructions.Reverse();
+            }
+
+            char[] before = new char[values.Length];
+
             foreach (string instruction in instructions)
             {
-                Process(instruction, values);
+                Process(instruction, values, reverse);
             }
 
             return new string(values);
@@ -68,8 +76,14 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         /// <param name="values">The value to rotate characters for.</param>
         /// <param name="right">Whether to rotate right (instead of left).</param>
         /// <param name="steps">The number of steps to rotate by.</param>
-        internal static void RotateDirection(char[] values, bool right, int steps)
+        /// <param name="reverse">Whether to reverse the process.</param>
+        internal static void RotateDirection(char[] values, bool right, int steps, bool reverse)
         {
+            if (reverse)
+            {
+                right = !right;
+            }
+
             int rotations = steps % values.Length;
 
             for (int i = 0; i < rotations; i++)
@@ -103,11 +117,13 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         protected override int SolveCore(string[] args)
         {
             string text = args[0];
+            bool reverse = args.Length > 1 && string.Equals(args[1], bool.TrueString, StringComparison.OrdinalIgnoreCase);
+
             IList<string> instructions = ReadResourceAsLines();
 
-            ScrambledResult = Scramble(text, instructions);
+            ScrambledResult = Scramble(text, instructions, reverse);
 
-            Console.WriteLine($"The result of scrambling '{text}' is '{ScrambledResult}'.");
+            Console.WriteLine($"The result of {(reverse ? "un" : string.Empty)}scrambling '{text}' is '{ScrambledResult}'.");
 
             return 0;
         }
@@ -117,14 +133,15 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         /// </summary>
         /// <param name="instruction">The instruction to process.</param>
         /// <param name="values">The characters to apply the instruction to when processes.</param>
-        private static void Process(string instruction, char[] values)
+        /// <param name="reverse">Whether to reverse the instruction.</param>
+        private static void Process(string instruction, char[] values, bool reverse)
         {
             string[] split = instruction.Split(Arrays.Space);
 
             switch (split[0])
             {
                 case "move":
-                    Move(values, ParseInt32(split[2]), ParseInt32(split[5]));
+                    Move(values, ParseInt32(split[2]), ParseInt32(split[5]), reverse);
                     break;
 
                 case "reverse":
@@ -135,11 +152,11 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
 
                     if (string.Equals(split[1], "based", StringComparison.Ordinal))
                     {
-                        RotatePosition(values, split[6]);
+                        RotatePosition(values, split[6], reverse);
                     }
                     else
                     {
-                        RotateDirection(values, string.Equals(split[1], "right", StringComparison.Ordinal), ParseInt32(split[2]));
+                        RotateDirection(values, string.Equals(split[1], "right", StringComparison.Ordinal), ParseInt32(split[2]), reverse);
                     }
 
                     break;
@@ -169,8 +186,16 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         /// <param name="values">The value to move characters for.</param>
         /// <param name="x">The index to remove the letter from.</param>
         /// <param name="y">The index to insert the removed letter at.</param>
-        private static void Move(char[] values, int x, int y)
+        /// <param name="reverse">Whether to reverse the process.</param>
+        private static void Move(char[] values, int x, int y, bool reverse)
         {
+            if (reverse)
+            {
+                int temp = x;
+                x = y;
+                y = temp;
+            }
+
             string value = new string(values);
             string ch = values[x].ToString();
 
@@ -188,23 +213,32 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         /// </summary>
         /// <param name="values">The value to rotate characters for.</param>
         /// <param name="letter">The letter to use to perform the rotation.</param>
-        private static void RotatePosition(char[] values, string letter)
+        /// <param name="reverse">Whether to reverse the process.</param>
+        private static void RotatePosition(char[] values, string letter, bool reverse)
         {
-            char ch = letter[0];
-            int index = -1;
+            int index = Array.IndexOf(values, letter[0]);
 
-            for (int i = 0; i < values.Length; i++)
+            int steps;
+
+            if (reverse)
             {
-                if (values[i] == ch)
+                steps = 1;
+
+                if (index == 0 || index % 2 != 0)
                 {
-                    index = i;
-                    break;
+                    steps += index / 2;
+                }
+                else
+                {
+                    steps += index + Math.Abs((index / 2) - 4);
                 }
             }
+            else
+            {
+                steps = 1 + index + (index >= 4 ? 1 : 0);
+            }
 
-            int steps = 1 + index + (index >= 4 ? 1 : 0);
-
-            RotateDirection(values, right: true, steps: steps);
+            RotateDirection(values, right: !reverse, steps: steps, reverse: false);
         }
 
         /// <summary>
