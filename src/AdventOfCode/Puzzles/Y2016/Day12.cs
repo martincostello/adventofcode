@@ -30,6 +30,10 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         /// <param name="instructions">The instructions to process.</param>
         /// <param name="initialValueOfA">The initial value of register A.</param>
         /// <param name="initialValueOfC">The initial value of register C.</param>
+        /// <param name="signal">
+        /// An optional delegate to receive any output clock signal; which causes signal
+        /// processing to stop if it returns <see langword="true"/>.
+        /// </param>
         /// <returns>
         /// An <see cref="IDictionary{TKey, TValue}"/> containing the values of the CPU
         /// registers after processing the instructions specified by <paramref name="instructions"/>.
@@ -37,7 +41,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         internal static IDictionary<char, int> Process(
             IList<string> instructions,
             int initialValueOfA = 0,
-            int initialValueOfC = 0)
+            int initialValueOfC = 0,
+            Func<int, bool> signal = null)
         {
             instructions = new List<string>(instructions); // Copy before possible modification
 
@@ -139,6 +144,22 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
                         if (value != 0)
                         {
                             i += other - 1;
+                        }
+
+                        break;
+
+                    case "out":
+
+                        if (!TryParseInt32(split[1], out value))
+                        {
+                            value = registers[split[1][0]];
+                        }
+
+                        if (signal?.Invoke(value) == true)
+                        {
+                            // Force the signal to stop being repeated
+                            i = int.MaxValue - 1;
+                            break;
                         }
 
                         break;
