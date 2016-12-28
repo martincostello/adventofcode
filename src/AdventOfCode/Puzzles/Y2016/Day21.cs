@@ -39,8 +39,6 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
                 instructions = instructions.Reverse();
             }
 
-            char[] before = new char[values.Length];
-
             foreach (string instruction in instructions)
             {
                 Process(instruction, values, reverse);
