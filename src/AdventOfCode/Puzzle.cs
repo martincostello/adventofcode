@@ -59,7 +59,7 @@ namespace MartinCostello.AdventOfCode
         /// <summary>
         /// Parses the specified <see cref="string"/> as an <see cref="int"/>.
         /// </summary>
-        /// <param name="s">The value to parsed.</param>
+        /// <param name="s">The value to parse.</param>
         /// <param name="style">
         /// A bitwise combination of enumeration values that indicates
         /// the style elements that can be present in <paramref name="s"/>.
@@ -73,9 +73,26 @@ namespace MartinCostello.AdventOfCode
         }
 
         /// <summary>
+        /// Tries to parse the specified <see cref="string"/> as an <see cref="int"/>.
+        /// </summary>
+        /// <param name="s">The value to parse.</param>
+        /// <param name="value">
+        /// When the method returns contains the parsed value
+        /// of <paramref name="s"/>; otherwise zero.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if <paramref name="s"/> was parsed
+        /// successfully; otherwise <see langword="false"/>.
+        /// </returns>
+        protected internal static bool TryParseInt32(string s, out int value)
+        {
+            return int.TryParse(s, NumberStyles.Integer, CultureInfo.InvariantCulture, out value);
+        }
+
+        /// <summary>
         /// Parses the specified <see cref="string"/> as an <see cref="uint"/>.
         /// </summary>
-        /// <param name="s">The value to parsed.</param>
+        /// <param name="s">The value to parse.</param>
         /// <returns>
         /// The parsed value of <paramref name="s"/>.
         /// </returns>

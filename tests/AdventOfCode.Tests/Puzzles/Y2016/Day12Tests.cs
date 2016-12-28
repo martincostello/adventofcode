@@ -39,6 +39,35 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         }
 
         [Fact]
+        public static void Y2016_Day12_Process_With_Toggle_Returns_Correct_Solution()
+        {
+            // Arrange
+            string[] instructions = new[]
+            {
+                "cpy 2 a",
+                "tgl a",
+                "tgl a",
+                "tgl a",
+                "cpy 1 a",
+                "dec a",
+                "dec a",
+            };
+
+            int[] binsOfInterest = new[] { 0, 1, 2 };
+
+            // Act
+            var actual = Day12.Process(instructions, initialValueOfC: 0);
+
+            // Assert
+            Assert.NotNull(actual);
+            Assert.Equal(4, actual.Count);
+            Assert.Equal(3, actual['a']);
+            Assert.Equal(0, actual['b']);
+            Assert.Equal(0, actual['c']);
+            Assert.Equal(0, actual['d']);
+        }
+
+        [Fact]
         public static void Y2016_Day12_Solve_Returns_Correct_Solution()
         {
             // Act

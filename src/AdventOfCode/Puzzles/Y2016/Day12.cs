@@ -28,16 +28,22 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         /// Processes the specified instructions and returns the values of the CPU registers.
         /// </summary>
         /// <param name="instructions">The instructions to process.</param>
+        /// <param name="initialValueOfA">The initial value of register A.</param>
         /// <param name="initialValueOfC">The initial value of register C.</param>
         /// <returns>
         /// An <see cref="IDictionary{TKey, TValue}"/> containing the values of the CPU
         /// registers after processing the instructions specified by <paramref name="instructions"/>.
         /// </returns>
-        internal static IDictionary<char, int> Process(IList<string> instructions, int initialValueOfC)
+        internal static IDictionary<char, int> Process(
+            IList<string> instructions,
+            int initialValueOfA = 0,
+            int initialValueOfC = 0)
         {
+            instructions = new List<string>(instructions); // Copy before possible modification
+
             IDictionary<char, int> registers = new Dictionary<char, int>()
             {
-                { 'a', 0 },
+                { 'a', initialValueOfA },
                 { 'b', 0 },
                 { 'c', initialValueOfC },
                 { 'd', 0 },
@@ -72,16 +78,67 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
                         registers[split[1][0]]--;
                         break;
 
-                    case "jnz":
+                    case "tgl":
 
-                        if (!int.TryParse(split[1], NumberStyles.Integer, CultureInfo.InvariantCulture, out value))
+                        if (!TryParseInt32(split[1], out value))
                         {
                             value = registers[split[1][0]];
                         }
 
+                        int target = i + value;
+
+                        if (target >= 0 && target < instructions.Count)
+                        {
+                            string otherInstruction = instructions[target];
+                            split = otherInstruction.Split(Arrays.Space);
+
+                            string toggled;
+
+                            if (split.Length == 2)
+                            {
+                                if (string.Equals(split[0], "inc", StringComparison.OrdinalIgnoreCase))
+                                {
+                                    toggled = $"dec {split[1]}";
+                                }
+                                else
+                                {
+                                    toggled = $"inc {split[1]}";
+                                }
+                            }
+                            else
+                            {
+                                if (string.Equals(split[0], "jnz", StringComparison.OrdinalIgnoreCase))
+                                {
+                                    toggled = $"cpy {split[1]} {split[2]}";
+                                }
+                                else
+                                {
+                                    toggled = $"jnz {split[1]} {split[2]}";
+                                }
+                            }
+
+                            instructions[target] = toggled;
+                        }
+
+                        break;
+
+                    case "jnz":
+
+                        if (!TryParseInt32(split[1], out value))
+                        {
+                            value = registers[split[1][0]];
+                        }
+
+                        int other;
+
+                        if (!TryParseInt32(split[2], out other))
+                        {
+                            other = registers[split[2][0]];
+                        }
+
                         if (value != 0)
                         {
-                            i += ParseInt32(split[2]) - 1;
+                            i += other - 1;
                         }
 
                         break;
