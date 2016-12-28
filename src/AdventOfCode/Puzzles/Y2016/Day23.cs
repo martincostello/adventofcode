@@ -5,7 +5,6 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
 {
     using System;
     using System.Collections.Generic;
-    using System.Linq;
 
     /// <summary>
     /// A class representing the puzzle for <c>http://adventofcode.com/2016/day/23</c>. This class cannot be inherited.
@@ -18,14 +17,19 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         public int SafeValue { get; private set; }
 
         /// <inheritdoc />
+        protected override int MinimumArguments => 1;
+
+        /// <inheritdoc />
         protected override int SolveCore(string[] args)
         {
+            int input = ParseInt32(args[0]);
+
             IList<string> instructions = ReadResourceAsLines();
 
-            IDictionary<char, int> registers = Day12.Process(instructions, initialValueOfA: 7);
+            IDictionary<char, int> registers = Day12.Process(instructions, initialValueOfA: input);
             SafeValue = registers['a'];
 
-            Console.WriteLine($"The value to send to the safe is '{SafeValue}'.");
+            Console.WriteLine($"The value to send to the safe for an input of {input:N0} is '{SafeValue}'.");
 
             return 0;
         }

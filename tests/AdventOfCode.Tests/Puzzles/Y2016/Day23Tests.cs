@@ -10,14 +10,19 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
     /// </summary>
     public static class Day23Tests
     {
-        [Fact]
-        public static void Y2016_Day23_Solve_Returns_Correct_Solution()
+        [Theory]
+        [InlineData(7, 14346)]
+        [InlineData(12, 479010906, Skip = "Too slow.")]
+        public static void Y2016_Day23_Solve_Returns_Correct_Solution(string input, int expected)
         {
+            // Arrange
+            string[] args = new[] { input };
+
             // Act
-            var puzzle = PuzzleTestHelpers.SolvePuzzle<Day23>();
+            var puzzle = PuzzleTestHelpers.SolvePuzzle<Day23>(args);
 
             // Assert
-            Assert.Equal(14346, puzzle.SafeValue);
+            Assert.Equal(expected, puzzle.SafeValue);
         }
     }
 }
