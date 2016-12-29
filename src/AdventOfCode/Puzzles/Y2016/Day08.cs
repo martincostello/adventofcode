@@ -75,23 +75,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         /// <returns>
         /// The number of pixels lit in <paramref name="grid"/>.
         /// </returns>
-        private static int CountLitPixels(bool[,] grid)
-        {
-            int result = 0;
-
-            for (int x = 0; x < grid.GetLength(0); x++)
-            {
-                for (int y = 0; y < grid.GetLength(1); y++)
-                {
-                    if (grid[x, y])
-                    {
-                        result++;
-                    }
-                }
-            }
-
-            return result;
-        }
+        private static int CountLitPixels(bool[,] grid) => Arrays.TrueCount(grid);
 
         /// <summary>
         /// Lights a rectangle of the specified size in the top-left of the specified grid.
@@ -114,38 +98,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         /// Prints the message displayed in the grid to the console.
         /// </summary>
         /// <param name="grid">The grid to print to the console.</param>
-        private static void PrintGrid(bool[,] grid)
-        {
-            Console.WriteLine();
-
-            for (int x = 0; x < grid.GetLength(0); x++)
-            {
-                for (int y = 0; y < grid.GetLength(1); y++)
-                {
-                    if (y % 5 == 0)
-                    {
-                        Console.ForegroundColor =
-                            Console.ForegroundColor == ConsoleColor.Red ?
-                            ConsoleColor.Green :
-                            ConsoleColor.Red;
-                    }
-
-                    if (grid[x, y])
-                    {
-                        Console.Write('X');
-                    }
-                    else
-                    {
-                        Console.Write(' ');
-                    }
-                }
-
-                Console.WriteLine();
-            }
-
-            Console.WriteLine();
-            Console.ResetColor();
-        }
+        private static void PrintGrid(bool[,] grid) => Arrays.Print(grid, ' ', 'X');
 
         /// <summary>
         /// Rotates the specified column the specified number of pixels.
