@@ -62,8 +62,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
 
             while (circle.Count > 1)
             {
-                circle.Remove(current.Next ?? circle.First);
-                current = current.Next ?? circle.First;
+                circle.Remove(current.NextCircular());
+                current = current.NextCircular();
             }
 
             return circle.First.Value;
@@ -86,23 +86,23 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
 
             for (int i = 0; i < steps; i++)
             {
-                opposite = opposite.Next ?? circle.First;
+                opposite = opposite.NextCircular();
             }
 
             while (circle.Count > 1)
             {
-                var next = opposite.Next ?? circle.First;
+                var next = opposite.NextCircular();
 
                 if (circle.Count % 2 == 1)
                 {
-                    next = next.Next ?? circle.First;
+                    next = next.NextCircular();
                 }
 
                 circle.Remove(opposite);
 
                 opposite = next;
 
-                current = current.Next ?? circle.First;
+                current = current.NextCircular();
             }
 
             return circle.First.Value;
