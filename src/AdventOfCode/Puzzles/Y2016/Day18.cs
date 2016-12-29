@@ -56,7 +56,10 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
                 }
             }
 
-            PrintGrid(tiles);
+            if (!Console.IsOutputRedirected && rows <= Console.WindowHeight)
+            {
+                PrintGrid(tiles);
+            }
 
             return (width * rows) - CountTrapTiles(tiles);
         }
