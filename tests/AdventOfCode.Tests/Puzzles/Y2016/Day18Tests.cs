@@ -24,6 +24,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
 
         [Theory]
         [InlineData("40", 1987)]
+        [InlineData("400000", 19984714)]
         public static void Y2016_Day18_Solve_Returns_Correct_Solution(string rows, int expected)
         {
             // Arrange
