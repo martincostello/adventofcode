@@ -22,14 +22,18 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
             Assert.Equal(expected, actual);
         }
 
-        [Fact]
-        public static void Y2016_Day18_Solve_Returns_Correct_Solution()
+        [Theory]
+        [InlineData("40", 1987)]
+        public static void Y2016_Day18_Solve_Returns_Correct_Solution(string rows, int expected)
         {
+            // Arrange
+            string[] args = new[] { rows };
+
             // Act
-            var puzzle = PuzzleTestHelpers.SolvePuzzle<Day18>();
+            var puzzle = PuzzleTestHelpers.SolvePuzzle<Day18>(args);
 
             // Assert
-            Assert.Equal(1987, puzzle.SafeTileCount);
+            Assert.Equal(expected, puzzle.SafeTileCount);
         }
     }
 }

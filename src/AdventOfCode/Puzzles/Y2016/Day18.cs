@@ -16,6 +16,9 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         /// </summary>
         public int SafeTileCount { get; private set; }
 
+        /// <inheritdoc />
+        protected override int MinimumArguments => 1;
+
         /// <summary>
         /// Finds the number of safe tiles from the specified map.
         /// </summary>
@@ -61,9 +64,10 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         /// <inheritdoc />
         protected override int SolveCore(string[] args)
         {
-            string firstRowTiles = args.Length == 1 ? args[0] : ReadResourceAsString().TrimEnd();
+            int rows = ParseInt32(args[0]);
+            string firstRowTiles = args.Length > 1 ? args[1] : ReadResourceAsString().TrimEnd();
 
-            SafeTileCount = FindSafeTileCount(firstRowTiles, rows: 40);
+            SafeTileCount = FindSafeTileCount(firstRowTiles, rows);
 
             Console.WriteLine($"The number of safe tiles is {SafeTileCount:N0}.");
 
