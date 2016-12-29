@@ -4,7 +4,6 @@
 namespace MartinCostello.AdventOfCode.Puzzles.Y2016
 {
     using System;
-    using System.Collections.Generic;
 
     /// <summary>
     /// A class representing the puzzle for <c>http://adventofcode.com/2016/day/18</c>. This class cannot be inherited.
@@ -43,14 +42,9 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
                 for (int x = 0; x < width; x++)
                 {
                     bool left = x == 0 ? false : tiles[y - 1, x - 1];
-                    bool center = tiles[y - 1, x];
                     bool right = x == width - 1 ? false : tiles[y - 1, x + 1];
 
-                    bool isTrap =
-                        (left && center && !right) ||
-                        (center && right && !left) ||
-                        (left && !center && !right) ||
-                        (right && !center && !left);
+                    bool isTrap = left ^ right;
 
                     tiles[y, x] = isTrap;
                 }
