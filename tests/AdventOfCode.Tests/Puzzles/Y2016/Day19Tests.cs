@@ -26,7 +26,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         [InlineData("5", "1", 3)]
         [InlineData("5", "2", 2)]
         [InlineData("3014387", "1", 1834471)]
-        [InlineData("3014387", "2", 0, Skip = "Too slow.")]
+        [InlineData("3014387", "2", 1420064)]
         public static void Y2016_Day19_Solve_Returns_Correct_Solution(string elves, string version, int expected)
         {
             // Arrange

@@ -80,37 +80,32 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         {
             var circle = CreateCircle(count);
             var current = circle.First;
+            var opposite = current;
+
+            int steps = circle.Count / 2;
+
+            for (int i = 0; i < steps; i++)
+            {
+                opposite = opposite.Next ?? circle.First;
+            }
 
             while (circle.Count > 1)
             {
-                var opposite = FindOppositeElf(current, circle);
+                var next = opposite.Next ?? circle.First;
+
+                if (circle.Count % 2 == 1)
+                {
+                    next = next.Next ?? circle.First;
+                }
+
                 circle.Remove(opposite);
+
+                opposite = next;
 
                 current = current.Next ?? circle.First;
             }
 
             return circle.First.Value;
-        }
-
-        /// <summary>
-        /// Finds the elf sitting opposite the specified elf.
-        /// </summary>
-        /// <param name="current">The number of the elf to find the opposite elf for.</param>
-        /// <param name="circle">The circle of elves.</param>
-        /// <returns>
-        /// The <see cref="LinkedListNode{T}"/> representing the elf opposite the
-        /// elf with the number specified by <paramref name="current"/>.
-        /// </returns>
-        private static LinkedListNode<int> FindOppositeElf(LinkedListNode<int> current, LinkedList<int> circle)
-        {
-            int steps = circle.Count / 2;
-
-            for (int i = 0; i < steps; i++)
-            {
-                current = current.Next ?? circle.First;
-            }
-
-            return current;
         }
 
         /// <summary>
