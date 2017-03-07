@@ -14,7 +14,7 @@ namespace MartinCostello.AdventOfCode
         public static void Program_Returns_Zero_If_Input_Valid()
         {
             // Arrange
-            string[] args = new[] { "1" };
+            string[] args = new[] { "1", "2016" };
 
             // Act
             int actual = Program.Main(args);

@@ -26,13 +26,23 @@ namespace MartinCostello.AdventOfCode
                 return -1;
             }
 
-            // TODO Make the year configurable
-            int year = DateTime.UtcNow.Year;
+            int year;
 
-            int day;
+            if (args.Length == 2)
+            {
+                if (!int.TryParse(args[1], NumberStyles.Integer & ~NumberStyles.AllowLeadingSign, CultureInfo.InvariantCulture, out year))
+                {
+                    year = 0;
+                }
+            }
+            else
+            {
+                year = DateTime.UtcNow.Year;
+            }
+
             Type type = null;
 
-            if (!int.TryParse(args[0], NumberStyles.Integer & ~NumberStyles.AllowLeadingSign, CultureInfo.InvariantCulture, out day) ||
+            if (!int.TryParse(args[0], NumberStyles.Integer & ~NumberStyles.AllowLeadingSign, CultureInfo.InvariantCulture, out int day) ||
                 day < 1 ||
                 year < 2015 ||
                 year > DateTime.UtcNow.Year ||
