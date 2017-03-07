@@ -1,7 +1,7 @@
-﻿
+
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.26114.2
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{A16BB7EB-64BE-4E3B-B1E3-6AC44D46CAAF}"
 	ProjectSection(SolutionItems) = preProject
@@ -15,7 +15,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		Build.ps1 = Build.ps1
 		build.sh = build.sh
 		CommonAssemblyInfo.cs = CommonAssemblyInfo.cs
-		global.json = global.json
 		LICENSE = LICENSE
 		README.md = README.md
 		stylecop.json = stylecop.json
@@ -25,9 +24,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{42E4BE8A-65D
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{BC7347DF-3D60-4150-B245-7E836674DF8C}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "AdventOfCode", "src\AdventOfCode\AdventOfCode.xproj", "{3CC1AA88-06C9-4948-98CE-565317E4D9D4}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AdventOfCode", "src\AdventOfCode\AdventOfCode.csproj", "{3CC1AA88-06C9-4948-98CE-565317E4D9D4}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "AdventOfCode.Tests", "tests\AdventOfCode.Tests\AdventOfCode.Tests.xproj", "{2BB833A0-9436-4F50-AE90-F31449DD03E1}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AdventOfCode.Tests", "tests\AdventOfCode.Tests\AdventOfCode.Tests.csproj", "{2BB833A0-9436-4F50-AE90-F31449DD03E1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
