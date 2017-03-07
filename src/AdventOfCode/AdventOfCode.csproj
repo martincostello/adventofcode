@@ -3,6 +3,7 @@
   <PropertyGroup>
     <Description>Solutions for Advent of Code.</Description>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <OutputType>Exe</OutputType>
     <PackageTargetFallback>$(PackageTargetFallback);dotnet5.6;portable-net45+win8</PackageTargetFallback>
     <PreserveCompilationContext>true</PreserveCompilationContext>
     <RootNamespace>MartinCostello.AdventOfCode</RootNamespace>
