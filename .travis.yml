@@ -3,7 +3,6 @@ dist: trusty
 
 env:
   global:
-    - CLI_VERSION=2.0.0-preview1-005977
     - DOTNET_SKIP_FIRST_TIME_EXPERIENCE=true
     - NUGET_XMLDOC_MODE=skip
 
