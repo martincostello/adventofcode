@@ -3,7 +3,6 @@
   <PropertyGroup>
     <Description>Tests for AdventOfCode.</Description>
     <GenerateDocumentationFile>false</GenerateDocumentationFile>
-    <PackageTargetFallback>$(PackageTargetFallback);dotnet5.6</PackageTargetFallback>
     <RootNamespace>MartinCostello.AdventOfCode</RootNamespace>
     <TargetFramework>netcoreapp2.0</TargetFramework>
   </PropertyGroup>

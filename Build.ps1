@@ -11,7 +11,7 @@ $ErrorActionPreference = "Stop"
 
 $solutionPath = Split-Path $MyInvocation.MyCommand.Definition
 $solutionFile = Join-Path $solutionPath "AdventOfCode.sln"
-$dotnetVersion = "2.0.0-preview1-005977"
+$dotnetVersion = "2.0.0-preview2-006497"
 
 if ($OutputPath -eq "") {
     $OutputPath = Join-Path "$(Convert-Path "$PSScriptRoot")" "artifacts"
@@ -44,7 +44,7 @@ if ($installDotNetSdk -eq $true) {
     }
 
     $installScript = Join-Path $env:DOTNET_INSTALL_DIR "install.ps1"
-    Invoke-WebRequest "https://raw.githubusercontent.com/dotnet/cli/rel/1.0.0/scripts/obtain/dotnet-install.ps1" -OutFile $installScript
+    Invoke-WebRequest "https://raw.githubusercontent.com/dotnet/cli/release/2.0.0/scripts/obtain/dotnet-install.ps1" -OutFile $installScript
     & $installScript -Version "$dotnetVersion" -InstallDir "$env:DOTNET_INSTALL_DIR" -NoPath
 
     $env:PATH = "$env:DOTNET_INSTALL_DIR;$env:PATH"
