@@ -11,7 +11,7 @@ $ErrorActionPreference = "Stop"
 
 $solutionPath = Split-Path $MyInvocation.MyCommand.Definition
 $solutionFile = Join-Path $solutionPath "AdventOfCode.sln"
-$dotnetVersion = "2.0.0-preview2-006497"
+$dotnetVersion = "2.0.0"
 
 if ($OutputPath -eq "") {
     $OutputPath = Join-Path "$(Convert-Path "$PSScriptRoot")" "artifacts"
