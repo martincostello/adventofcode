@@ -63,48 +63,7 @@ function DotNetRestore {
 function DotNetTest {
     param([string]$Project)
 
-    if ($DisableCodeCoverage -eq $true) {
-        & $dotnet test $Project --output $OutputPath
-    }
-    else {
-
-        if ($installDotNetSdk -eq $true) {
-            $dotnetPath = $dotnet
-        }
-        else {
-            $dotnetPath = (Get-Command "dotnet.exe").Source
-        }
-
-        $nugetPath = Join-Path $env:USERPROFILE ".nuget\packages"
-
-        $openCoverVersion = "4.6.519"
-        $openCoverPath = Join-Path $nugetPath "OpenCover\$openCoverVersion\tools\OpenCover.Console.exe"
-
-        $reportGeneratorVersion = "3.0.2"
-        $reportGeneratorPath = Join-Path $nugetPath "ReportGenerator\$reportGeneratorVersion\tools\ReportGenerator.exe"
-
-        $coverageOutput = Join-Path $OutputPath "code-coverage.xml"
-        $reportOutput = Join-Path $OutputPath "coverage"
-
-        & $openCoverPath `
-            `"-target:$dotnetPath`" `
-            `"-targetargs:test $Project --output $OutputPath`" `
-            -output:$coverageOutput `
-            -excludebyattribute:*.ExcludeFromCodeCoverage* `
-            -hideskipped:All `
-            -mergebyhash `
-            -oldstyle `
-            -register:user `
-            -skipautoprops `
-            `"-filter:+[AdventOfCode]* -[AdventOfCode.Tests]*`"
-
-        if ($LASTEXITCODE -eq 0) {
-            & $reportGeneratorPath `
-                `"-reports:$coverageOutput`" `
-                `"-targetdir:$reportOutput`" `
-                -verbosity:Warning
-        }
-    }
+    & $dotnet test $Project --output $OutputPath
 
     if ($LASTEXITCODE -ne 0) {
         throw "dotnet test failed with exit code $LASTEXITCODE"
