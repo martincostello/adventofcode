@@ -11,16 +11,22 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
     public static class Day01Tests
     {
         [Theory]
-        [InlineData("1122", 3)]
-        [InlineData("1111", 4)]
-        [InlineData("1234", 0)]
-        [InlineData("91212129", 9)]
+        [InlineData("1122", false, 3)]
+        [InlineData("1111", false, 4)]
+        [InlineData("1234", false, 0)]
+        [InlineData("91212129", false, 9)]
+        [InlineData("1212", true, 6)]
+        [InlineData("1221", true, 0)]
+        [InlineData("123425", true, 4)]
+        [InlineData("123123", true, 12)]
+        [InlineData("12131415", true, 4)]
         public static void Y2017_Day01_CalculateSum_Returns_Correct_Solution(
             string digits,
+            bool nextDigit,
             int expected)
         {
             // Act
-            int actual = Day01.CalculateSum(digits);
+            int actual = Day01.CalculateSum(digits, nextDigit);
 
             // Assert
             Assert.Equal(expected, actual);
@@ -33,7 +39,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
             var puzzle = PuzzleTestHelpers.SolvePuzzle<Day01>();
 
             // Assert
-            Assert.Equal(1034, puzzle.CaptchaSolution);
+            Assert.Equal(1034, puzzle.CaptchaSolutionNext);
+            Assert.Equal(1356, puzzle.CaptchaSolutionOpposite);
         }
     }
 }

@@ -9,35 +9,44 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
     internal sealed class Day01 : Puzzle2017
     {
         /// <summary>
-        /// Gets the solution to the captcha.
+        /// Gets the solution to the captcha using the next number.
         /// </summary>
-        public int CaptchaSolution { get; private set; }
+        public int CaptchaSolutionNext { get; private set; }
 
         /// <summary>
-        /// Calculates the sum of all digits that match the next digit in the specified string.
+        /// Gets the solution to the captcha using the "opposite" number.
+        /// </summary>
+        public int CaptchaSolutionOpposite { get; private set; }
+
+        /// <summary>
+        /// Calculates the sum of all digits that match either the next or "opposite" digit in the specified string.
         /// </summary>
         /// <param name="digits">A <see cref="string"/> of digits to sum.</param>
+        /// <param name="useOppositeDigit">Whether to calculate sums using the "opposite" digit.</param>
         /// <returns>
-        /// The sum of all digits that match the next digit in <paramref name="digits"/>.
+        /// The sum of all digits that match the relevant digit in <paramref name="digits"/>.
         /// </returns>
-        public static int CalculateSum(string digits)
+        public static int CalculateSum(string digits, bool useOppositeDigit)
         {
             int sum = 0;
+            int offset = useOppositeDigit ? digits.Length / 2 : 1;
 
-            for (int i = 0; i < digits.Length - 1; i++)
+            for (int i = 0; i < digits.Length; i++)
             {
+                int j = i + offset;
+
+                if (j >= digits.Length)
+                {
+                    j -= digits.Length;
+                }
+
                 char first = digits[i];
-                char second = digits[i + 1];
+                char second = digits[j];
 
                 if (first == second)
                 {
                     sum += first - '0';
                 }
-            }
-
-            if (digits[0] == digits[digits.Length - 1])
-            {
-                sum += digits[0] - '0';
             }
 
             return sum;
@@ -48,7 +57,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
         {
             string digits = ReadResourceAsString().TrimEnd();
 
-            CaptchaSolution = CalculateSum(digits);
+            CaptchaSolutionNext = CalculateSum(digits, useOppositeDigit: false);
+            CaptchaSolutionOpposite = CalculateSum(digits, useOppositeDigit: true);
 
             return 0;
         }
