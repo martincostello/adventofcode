@@ -3,23 +3,22 @@ param(
     [Parameter(Mandatory = $false)][string] $Configuration = "Release",
     [Parameter(Mandatory = $false)][string] $VersionSuffix = "",
     [Parameter(Mandatory = $false)][string] $OutputPath = "",
-    [Parameter(Mandatory = $false)][switch] $PatchVersion,
-    [Parameter(Mandatory = $false)][switch] $SkipTests
+    [Parameter(Mandatory = $false)][switch] $SkipTests,
+    [Parameter(Mandatory = $false)][switch] $DisableCodeCoverage
 )
 
 $ErrorActionPreference = "Stop"
 
 $solutionPath = Split-Path $MyInvocation.MyCommand.Definition
 $solutionFile = Join-Path $solutionPath "AdventOfCode.sln"
-$dotnetVersion = "2.0.0"
+$dotnetVersion = "2.0.3"
 
 if ($OutputPath -eq "") {
     $OutputPath = Join-Path "$(Convert-Path "$PSScriptRoot")" "artifacts"
 }
 
-if ($env:CI -ne $null) {
+if ($env:CI -ne $null -Or $env:TF_BUILD -ne $null) {
     $RestorePackages = $true
-    $PatchVersion = $true
 }
 
 $installDotNetSdk = $false;
@@ -41,14 +40,13 @@ if ($installDotNetSdk -eq $true) {
 
     if (!(Test-Path $env:DOTNET_INSTALL_DIR)) {
         mkdir $env:DOTNET_INSTALL_DIR | Out-Null
+        $installScript = Join-Path $env:DOTNET_INSTALL_DIR "install.ps1"
+        Invoke-WebRequest "https://raw.githubusercontent.com/dotnet/cli/release/2.0.0/scripts/obtain/dotnet-install.ps1" -OutFile $installScript
+        & $installScript -Version "$dotnetVersion" -InstallDir "$env:DOTNET_INSTALL_DIR" -NoPath
     }
 
-    $installScript = Join-Path $env:DOTNET_INSTALL_DIR "install.ps1"
-    Invoke-WebRequest "https://raw.githubusercontent.com/dotnet/cli/release/2.0.0/scripts/obtain/dotnet-install.ps1" -OutFile $installScript
-    & $installScript -Version "$dotnetVersion" -InstallDir "$env:DOTNET_INSTALL_DIR" -NoPath
-
     $env:PATH = "$env:DOTNET_INSTALL_DIR;$env:PATH"
-    $dotnet = Join-Path "$env:DOTNET_INSTALL_DIR" "dotnet"
+    $dotnet = Join-Path "$env:DOTNET_INSTALL_DIR" "dotnet.exe"
 }
 else {
     $dotnet = "dotnet"
@@ -59,6 +57,57 @@ function DotNetRestore {
     & $dotnet restore $Project --verbosity minimal
     if ($LASTEXITCODE -ne 0) {
         throw "dotnet restore failed with exit code $LASTEXITCODE"
+    }
+}
+
+function DotNetTest {
+    param([string]$Project)
+
+    if ($DisableCodeCoverage -eq $true) {
+        & $dotnet test $Project --output $OutputPath
+    }
+    else {
+
+        if ($installDotNetSdk -eq $true) {
+            $dotnetPath = $dotnet
+        }
+        else {
+            $dotnetPath = (Get-Command "dotnet.exe").Source
+        }
+
+        $nugetPath = Join-Path $env:USERPROFILE ".nuget\packages"
+
+        $openCoverVersion = "4.6.519"
+        $openCoverPath = Join-Path $nugetPath "OpenCover\$openCoverVersion\tools\OpenCover.Console.exe"
+
+        $reportGeneratorVersion = "3.0.2"
+        $reportGeneratorPath = Join-Path $nugetPath "ReportGenerator\$reportGeneratorVersion\tools\ReportGenerator.exe"
+
+        $coverageOutput = Join-Path $OutputPath "code-coverage.xml"
+        $reportOutput = Join-Path $OutputPath "coverage"
+
+        & $openCoverPath `
+            `"-target:$dotnetPath`" `
+            `"-targetargs:test $Project --output $OutputPath`" `
+            -output:$coverageOutput `
+            -excludebyattribute:*.ExcludeFromCodeCoverage* `
+            -hideskipped:All `
+            -mergebyhash `
+            -oldstyle `
+            -register:user `
+            -skipautoprops `
+            `"-filter:+[AdventOfCode]* -[AdventOfCode.Tests]*`"
+
+        if ($LASTEXITCODE -eq 0) {
+            & $reportGeneratorPath `
+                `"-reports:$coverageOutput`" `
+                `"-targetdir:$reportOutput`" `
+                -verbosity:Warning
+        }
+    }
+
+    if ($LASTEXITCODE -ne 0) {
+        throw "dotnet test failed with exit code $LASTEXITCODE"
     }
 }
 
@@ -75,43 +124,17 @@ function DotNetBuild {
     }
 }
 
-function DotNetTest {
-    param([string]$Project)
-    & $dotnet test $Project --output $OutputPath --no-build
-    if ($LASTEXITCODE -ne 0) {
-        throw "dotnet test failed with exit code $LASTEXITCODE"
-    }
-}
-
-if ($PatchVersion -eq $true) {
-
-    $gitBranch = $env:BUILD_SOURCEBRANCHNAME
-
-    if ([string]::IsNullOrEmpty($gitBranch)) {
-        $gitBranch = (git rev-parse --abbrev-ref HEAD | Out-String).Trim()
-    }
-
-    $gitRevision = (git rev-parse HEAD | Out-String).Trim()
-    $timestamp = [DateTime]::UtcNow.ToString("yyyy-MM-ddTHH:mm:ssK")
-
-    $assemblyVersion = Get-Content ".\AssemblyVersion.cs" -Raw
-    $assemblyVersionWithMetadata = "{0}using System.Reflection;`r`n`r`n[assembly: AssemblyMetadata(""CommitHash"", ""{1}"")]`r`n[assembly: AssemblyMetadata(""CommitBranch"", ""{2}"")]`r`n[assembly: AssemblyMetadata(""BuildTimestamp"", ""{3}"")]" -f $assemblyVersion, $gitRevision, $gitBranch, $timestamp
-
-    Set-Content ".\AssemblyVersion.cs" $assemblyVersionWithMetadata -Encoding utf8
-}
+$testProjects = @(
+    (Join-Path $solutionPath "tests\AdventOfCode.Tests\AdventOfCode.Tests.csproj")
+)
 
 if ($RestorePackages -eq $true) {
     Write-Host "Restoring NuGet packages for solution..." -ForegroundColor Green
     DotNetRestore $solutionFile
 }
 
-# Will compile the main project by extension
-$testProjects = @(
-    (Join-Path $solutionPath "tests\AdventOfCode.Tests\AdventOfCode.Tests.csproj")
-)
-
-Write-Host "Building $($testProjects.Count) projects..." -ForegroundColor Green
-ForEach ($project in $testProjects) {
+Write-Host "Building solution..." -ForegroundColor Green
+ForEach ($project in $publishProjects) {
     DotNetBuild $project $Configuration $PrereleaseSuffix
 }
 
@@ -120,8 +143,4 @@ if ($SkipTests -eq $false) {
     ForEach ($project in $testProjects) {
         DotNetTest $project
     }
-}
-
-if ($PatchVersion -eq $true) {
-    Set-Content ".\AssemblyVersion.cs" $assemblyVersion -Encoding utf8
 }
