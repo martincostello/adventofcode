@@ -10,7 +10,7 @@
       "args": [],
       "cwd": "${workspaceRoot}",
       "stopAtEntry": false,
-      "console": "internalConsole"
+      "internalConsoleOptions": "openOnSessionStart"
     },
     {
       "name": ".NET Core Attach",

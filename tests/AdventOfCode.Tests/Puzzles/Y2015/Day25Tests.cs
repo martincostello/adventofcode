@@ -1,4 +1,4 @@
-﻿// Copyright (c) Martin Costello, 2015. All rights reserved.
+// Copyright (c) Martin Costello, 2015. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2015
@@ -50,7 +50,6 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
         [InlineData(4, 1, 24592653u)]
         [InlineData(3, 2, 8057251u)]
         [InlineData(2, 3, 16929656u)]
-        [InlineData(4, 1, 24592653u)]
         [InlineData(5, 1, 77061u)]
         [InlineData(4, 2, 32451966u)]
         [InlineData(3, 3, 1601130u)]

@@ -1,7 +1,6 @@
-
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26114.2
+VisualStudioVersion = 15.0.27004.2010
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{A16BB7EB-64BE-4E3B-B1E3-6AC44D46CAAF}"
 	ProjectSection(SolutionItems) = preProject
@@ -11,11 +10,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		AdventOfCode.ruleset = AdventOfCode.ruleset
 		AdventOfCode.snk = AdventOfCode.snk
 		appveyor.yml = appveyor.yml
-		AssemblyVersion.cs = AssemblyVersion.cs
 		Build.ps1 = Build.ps1
 		build.sh = build.sh
 		CommonAssemblyInfo.cs = CommonAssemblyInfo.cs
+		Directory.Build.props = Directory.Build.props
+		Directory.Build.targets = Directory.Build.targets
 		LICENSE = LICENSE
+		NuGet.config = NuGet.config
 		README.md = README.md
 		stylecop.json = stylecop.json
 	EndProjectSection
@@ -24,9 +25,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{42E4BE8A-65D
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{BC7347DF-3D60-4150-B245-7E836674DF8C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AdventOfCode", "src\AdventOfCode\AdventOfCode.csproj", "{3CC1AA88-06C9-4948-98CE-565317E4D9D4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AdventOfCode", "src\AdventOfCode\AdventOfCode.csproj", "{3CC1AA88-06C9-4948-98CE-565317E4D9D4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AdventOfCode.Tests", "tests\AdventOfCode.Tests\AdventOfCode.Tests.csproj", "{2BB833A0-9436-4F50-AE90-F31449DD03E1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AdventOfCode.Tests", "tests\AdventOfCode.Tests\AdventOfCode.Tests.csproj", "{2BB833A0-9436-4F50-AE90-F31449DD03E1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -49,5 +50,8 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{3CC1AA88-06C9-4948-98CE-565317E4D9D4} = {42E4BE8A-65DC-4DCF-AF2D-4B39239FEAA3}
 		{2BB833A0-9436-4F50-AE90-F31449DD03E1} = {BC7347DF-3D60-4150-B245-7E836674DF8C}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {C690654F-56C1-4E71-9835-4C5ED66BD059}
 	EndGlobalSection
 EndGlobal
