@@ -124,6 +124,10 @@ function DotNetBuild {
     }
 }
 
+$buildProjects = @(
+    (Join-Path $solutionPath "src\AdventOfCode\AdventOfCode.csproj")
+)
+
 $testProjects = @(
     (Join-Path $solutionPath "tests\AdventOfCode.Tests\AdventOfCode.Tests.csproj")
 )
@@ -134,7 +138,7 @@ if ($RestorePackages -eq $true) {
 }
 
 Write-Host "Building solution..." -ForegroundColor Green
-ForEach ($project in $publishProjects) {
+ForEach ($project in $buildProjects) {
     DotNetBuild $project $Configuration $PrereleaseSuffix
 }
 
