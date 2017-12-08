@@ -23,22 +23,53 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
             Assert.Equal(expected, actual);
         }
 
+        [Theory]
+        [InlineData(new[] { 5, 9, 2, 8 }, 4)]
+        [InlineData(new[] { 9, 4, 7, 3 }, 3)]
+        [InlineData(new[] { 3, 8, 6, 5 }, 2)]
+        public static void Y2017_Day02_ComputeDivisionOfEvenlyDivisible_Returns_Correct_Solution(int[] row, int expected)
+        {
+            // Act
+            int actual = Day02.ComputeDivisionOfEvenlyDivisible(row);
+
+            // Assert
+            Assert.Equal(expected, actual);
+        }
+
         [Fact]
-        public static void Y2017_Day02_CalculateChecksum_Returns_Correct_Solution()
+        public static void Y2017_Day02_CalculateChecksum_Returns_Correct_Solution_Using_Difference()
         {
             // Arrange
             var spreadsheet = new[]
             {
                 new[] { 5, 1, 9, 5 },
                 new[] { 7, 5, 3 },
-                new[] { 2, 4, 6, 8 }
+                new[] { 2, 4, 6, 8 },
             };
 
             // Act
-            int actual = Day02.CalculateChecksum(spreadsheet);
+            int actual = Day02.CalculateChecksum(spreadsheet, forEvenlyDivisible: false);
 
             // Assert
             Assert.Equal(18, actual);
+        }
+
+        [Fact]
+        public static void Y2017_Day02_CalculateChecksum_Returns_Correct_Solution_Using_Evenly_Divisible()
+        {
+            // Arrange
+            var spreadsheet = new[]
+            {
+                new[] { 5, 9, 2, 8 },
+                new[] { 9, 4, 7, 3 },
+                new[] { 3, 8, 6, 5 },
+            };
+
+            // Act
+            int actual = Day02.CalculateChecksum(spreadsheet, forEvenlyDivisible: true);
+
+            // Assert
+            Assert.Equal(9, actual);
         }
 
         [Fact]
@@ -48,7 +79,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
             var puzzle = PuzzleTestHelpers.SolvePuzzle<Day02>();
 
             // Assert
-            Assert.Equal(36174, puzzle.Checksum);
+            Assert.Equal(36174, puzzle.ChecksumForDifference);
+            Assert.Equal(244, puzzle.ChecksumForEvenlyDivisible);
         }
     }
 }
