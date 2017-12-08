@@ -16,13 +16,24 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
         [InlineData("23", 2)]
         [InlineData("1024", 31)]
         [InlineData("312051", 430)]
-        public static void Y2017_Day03_Solve_Returns_Correct_Solution(string square, int expected)
+        public static void Y2017_Day03_Solve_Returns_Correct_Solution_For_Steps(string square, int expected)
         {
             // Act
             var puzzle = PuzzleTestHelpers.SolvePuzzle<Day03>(square);
 
             // Assert
             Assert.Equal(expected, puzzle.Steps);
+        }
+
+        [Theory]
+        [InlineData("312051", 312453)]
+        public static void Y2017_Day03_Solve_Returns_Correct_Solution_For_Storage(string square, int expected)
+        {
+            // Act
+            var puzzle = PuzzleTestHelpers.SolvePuzzle<Day03>(square);
+
+            // Assert
+            Assert.Equal(expected, puzzle.FirstStorageLargerThanInput);
         }
     }
 }

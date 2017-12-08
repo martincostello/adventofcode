@@ -4,6 +4,7 @@
 namespace MartinCostello.AdventOfCode.Puzzles.Y2017
 {
     using System;
+    using System.Collections.Generic;
 
     /// <summary>
     /// A class representing the puzzle for <c>http://adventofcode.com/2017/day/3</c>. This class cannot be inherited.
@@ -11,9 +12,34 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
     internal sealed class Day03 : Puzzle2017
     {
         /// <summary>
-        /// Gets the checksum of the spreadsheet using the difference between the minimum and maximum.
+        /// A move one unit left. This field is read-only.
+        /// </summary>
+        private static readonly Size Left = new Size(width: -1, height: 0);
+
+        /// <summary>
+        /// A move one unit right. This field is read-only.
+        /// </summary>
+        private static readonly Size Right = new Size(width: 1, height: 0);
+
+        /// <summary>
+        /// A move one unit up. This field is read-only.
+        /// </summary>
+        private static readonly Size Up = new Size(width: 0, height: 1);
+
+        /// <summary>
+        /// A move one unit down. This field is read-only.
+        /// </summary>
+        private static readonly Size Down = new Size(width: 0, height: -1);
+
+        /// <summary>
+        /// Gets the number steps that are required to carry the data from the input value to the access port.
         /// </summary>
         public int Steps { get; private set; }
+
+        /// <summary>
+        /// Gets the first value written that is larger than the input value.
+        /// </summary>
+        public int FirstStorageLargerThanInput { get; private set; }
 
         /// <inheritdoc />
         protected override int MinimumArguments => 1;
@@ -23,19 +49,11 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
         /// </summary>
         /// <param name="square">The number of the square to get the number of steps to retrieve data from.</param>
         /// <returns>
-        /// The number of steps required to carry the data from the specified square specified by <paramref name="square"/> to the access port.
+        /// The number of steps required to carry the data from the square specified by <paramref name="square"/> to the access port.
         /// </returns>
-        public static int ComputeSteps(int square)
+        internal static int ComputeSteps(int square)
         {
             var position = Point.Empty;
-            var right = new Size(width: 1, height: 0);
-            var up = new Size(width: 0, height: 1);
-            var left = new Size(width: -1, height: 0);
-            var down = new Size(width: 0, height: -1);
-
-            int LengthOfRing(int r) => 1 + (2 * (r - 1));
-            int PerimiterOfRing(int r) => (2 * LengthOfRing(r)) + (2 * LengthOfRing(r - 1));
-
             int ring = 2;
             int currentSquare = 1;
 
@@ -47,7 +65,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
                 // Is the target square in the current ring?
                 if (currentSquare + perimeter >= square)
                 {
-                    position += right;
+                    position += Right;
                     currentSquare++;
 
                     int movesUp = length - 2;
@@ -55,11 +73,11 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
 
                     for (int i = 0; currentSquare != square && i < movesUp; i++)
                     {
-                        position += up;
+                        position += Up;
                         currentSquare++;
                     }
 
-                    foreach (var direction in new[] { left, down, right })
+                    foreach (var direction in new[] { Left, Down, Right })
                     {
                         for (int i = 0; currentSquare != square && i < movesOther; i++)
                         {
@@ -81,8 +99,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
 
                 // Skip to the next ring
                 currentSquare += PerimiterOfRing(ring++);
-                position += right;
-                position += down;
+                position += Right;
+                position += Down;
             }
 
             int manhattenDistance = Math.Abs(position.X) + Math.Abs(position.Y);
@@ -90,16 +108,159 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
             return manhattenDistance;
         }
 
+        /// <summary>
+        /// Computes the first value written that is larger than the specified square.
+        /// </summary>
+        /// <param name="square">The number of the square to get first larger written value for.</param>
+        /// <returns>
+        /// The value that is written first that is larger than <paramref name="square"/>.
+        /// </returns>
+        internal static int ComputeFirstLargestWrittenValue(int square)
+        {
+            var position = Point.Empty;
+            int ring = 2;
+            int currentSquare = 1;
+
+            var memory = new Memory();
+            int lastValueWritten = memory.Write(position);
+
+            while (lastValueWritten <= square)
+            {
+                int length = LengthOfRing(ring);
+
+                position += Right;
+                currentSquare++;
+
+                lastValueWritten = memory.Write(position);
+
+                int movesUp = length - 2;
+                int movesOther = movesUp + 1;
+
+                for (int i = 0; lastValueWritten <= square && i < movesUp; i++)
+                {
+                    position += Up;
+                    currentSquare++;
+
+                    lastValueWritten = memory.Write(position);
+                }
+
+                foreach (var direction in new[] { Left, Down, Right })
+                {
+                    for (int i = 0; lastValueWritten <= square && i < movesOther; i++)
+                    {
+                        position += direction;
+                        currentSquare++;
+
+                        lastValueWritten = memory.Write(position);
+                    }
+
+                    if (lastValueWritten >= square)
+                    {
+                        break;
+                    }
+                }
+
+                if (lastValueWritten >= square)
+                {
+                    break;
+                }
+
+                ring++;
+            }
+
+            return lastValueWritten;
+        }
+
         /// <inheritdoc />
         protected override int SolveCore(string[] args)
         {
-            int input = ParseInt32(args[0]);
+            int square = ParseInt32(args[0]);
 
-            Steps = ComputeSteps(input);
+            Steps = ComputeSteps(square);
+            FirstStorageLargerThanInput = ComputeFirstLargestWrittenValue(square);
 
-            Console.WriteLine($"The number of steps required to carry the data from square {input:N0} all the way to the access port is {Steps:N0}.");
+            Console.WriteLine($"The number of steps required to carry the data from square {square:N0} all the way to the access port is {Steps:N0}.");
+            Console.WriteLine($"The first value written that is larger than square {square:N0} is {FirstStorageLargerThanInput:N0}.");
 
             return 0;
+        }
+
+        /// <summary>
+        /// Gets the length of the specified ring number.
+        /// </summary>
+        /// <param name="ring">The number of the ring.</param>
+        /// <returns>
+        /// The length of the ring number specified by <paramref name="ring"/>.
+        /// </returns>
+        private static int LengthOfRing(int ring) => 1 + (2 * (ring - 1));
+
+        /// <summary>
+        /// Gets the perimeter of the specified ring number.
+        /// </summary>
+        /// <param name="ring">The number of the ring.</param>
+        /// <returns>
+        /// The perimeter of the ring number specified by <paramref name="ring"/>.
+        /// </returns>
+        private static int PerimiterOfRing(int ring) => (2 * LengthOfRing(ring)) + (2 * LengthOfRing(ring - 1));
+
+        /// <summary>
+        /// A class representing values in a grid of two-dimensional memory. This class cannot be inherited.
+        /// </summary>
+        private sealed class Memory : Dictionary<Point, int>
+        {
+            /// <summary>
+            /// An array of offsets that may surround an address in the grid.
+            /// </summary>
+            private static readonly Size[] Offsets = new[]
+            {
+                new Size(0, 1),
+                new Size(1, 1),
+                new Size(1, 0),
+                new Size(1, -1),
+                new Size(0, -1),
+                new Size(-1, -1),
+                new Size(-1, 0),
+                new Size(-1, 1),
+            };
+
+            /// <summary>
+            /// Writes the value for the specified address to memory.
+            /// </summary>
+            /// <param name="address">The address to write the value of.</param>
+            /// <returns>
+            /// The value that was written for <paramref name="address"/>.
+            /// </returns>
+            public int Write(Point address)
+            {
+                return this[address] = GetSumOfAdjacentAddresses(address);
+            }
+
+            /// <summary>
+            /// Gets the sum of the values stored in the adjacent addresses.
+            /// </summary>
+            /// <param name="address">The memory address to get the sum for.</param>
+            /// <returns>
+            /// The sum of the memory addresses adjacent to <paramref name="address"/>.
+            /// </returns>
+            private int GetSumOfAdjacentAddresses(Point address)
+            {
+                if (address == Point.Empty)
+                {
+                    return 1;
+                }
+
+                int sum = 0;
+
+                foreach (var offset in Offsets)
+                {
+                    if (TryGetValue(address + offset, out int value))
+                    {
+                        sum += value;
+                    }
+                }
+
+                return sum;
+            }
         }
     }
 }
