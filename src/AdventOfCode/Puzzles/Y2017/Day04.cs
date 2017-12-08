@@ -13,22 +13,40 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
     internal sealed class Day04 : Puzzle2017
     {
         /// <summary>
-        /// Gets the number of valid passwords in the input.
+        /// Gets the number of valid passphrases in the input using version 1 of the passphrase policy.
         /// </summary>
-        public int ValidPasswordCount { get; private set; }
+        public int ValidPassphraseCountV1 { get; private set; }
+
+        /// <summary>
+        /// Gets the number of valid passphrases in the input using version 2 of the passphrase policy.
+        /// </summary>
+        public int ValidPassphraseCountV2 { get; private set; }
 
         /// <summary>
         /// Returns whether the specified passphrase is valid.
         /// </summary>
         /// <param name="passphrase">The passphrase to test for validity.</param>
+        /// <param name="version">The version of the passphrase policy to use.</param>
         /// <returns>
         /// <see langword="true"/> if <paramref name="passphrase"/> is valid; otherwise <see langword="false"/>.
         /// </returns>
-        internal static bool IsPassphraseValid(string passphrase)
+        internal static bool IsPassphraseValid(string passphrase, int version)
         {
             string[] words = passphrase.Split(Arrays.Space);
+            bool isValid = words.Distinct().Count() == words.Length;
 
-            return words.Distinct().Count() == words.Length;
+            if (isValid && version == 2)
+            {
+                string[] sorted = words
+                    .Select((p) => p.ToCharArray())
+                    .Select((p) => p.OrderBy((r) => r).ToArray())
+                    .Select((p) => new string(p))
+                    .ToArray();
+
+                isValid = sorted.Distinct().Count() == words.Length;
+            }
+
+            return isValid;
         }
 
         /// <inheritdoc />
@@ -36,9 +54,11 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
         {
             ICollection<string> passphrases = ReadResourceAsLines();
 
-            ValidPasswordCount = passphrases.Where(IsPassphraseValid).Count();
+            ValidPassphraseCountV1 = passphrases.Where((p) => IsPassphraseValid(p, 1)).Count();
+            ValidPassphraseCountV2 = passphrases.Where((p) => IsPassphraseValid(p, 2)).Count();
 
-            Console.WriteLine($"There are {ValidPasswordCount:N0} valid passphrases.");
+            Console.WriteLine($"There are {ValidPassphraseCountV1:N0} valid passphrases using version 1 of the policy.");
+            Console.WriteLine($"There are {ValidPassphraseCountV2:N0} valid passphrases using version 2 of the policy.");
 
             return 0;
         }
