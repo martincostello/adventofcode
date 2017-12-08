@@ -17,10 +17,11 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
             var memory = new[] { 0, 2, 7, 0 };
 
             // Act
-            int actual = Day06.Debug(memory);
+            (int cycleCount, int loopSize) = Day06.Debug(memory);
 
             // Assert
-            Assert.Equal(5, actual);
+            Assert.Equal(5, cycleCount);
+            Assert.Equal(4, loopSize);
         }
 
         [Fact]
@@ -31,6 +32,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
 
             // Assert
             Assert.Equal(3156, puzzle.CycleCount);
+            Assert.Equal(1610, puzzle.LoopSize);
         }
     }
 }
