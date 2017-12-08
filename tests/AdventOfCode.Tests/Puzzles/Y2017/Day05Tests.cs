@@ -10,17 +10,19 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
     /// </summary>
     public static class Day05Tests
     {
-        [Fact]
-        public static void Y2017_Day05_Execute_Returns_Correct_Value()
+        [Theory]
+        [InlineData(1, 5)]
+        [InlineData(2, 10)]
+        public static void Y2017_Day05_Execute_Returns_Correct_Value(int version, int expected)
         {
             // Arrange
             var program = new[] { 0, 3, 0, 1, -3 };
 
             // Act
-            int actual = Day05.Execute(program);
+            int actual = Day05.Execute(program, version);
 
             // Assert
-            Assert.Equal(5, actual);
+            Assert.Equal(expected, actual);
         }
 
         [Fact]
@@ -30,7 +32,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
             var puzzle = PuzzleTestHelpers.SolvePuzzle<Day05>();
 
             // Assert
-            Assert.Equal(373543, puzzle.StepsToExit);
+            Assert.Equal(373543, puzzle.StepsToExitV1);
+            Assert.Equal(27502966, puzzle.StepsToExitV2);
         }
     }
 }
