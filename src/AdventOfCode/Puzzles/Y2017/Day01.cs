@@ -3,6 +3,8 @@
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2017
 {
+    using System;
+
     /// <summary>
     /// A class representing the puzzle for <c>http://adventofcode.com/2017/day/1</c>. This class cannot be inherited.
     /// </summary>
@@ -59,6 +61,9 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
 
             CaptchaSolutionNext = CalculateSum(digits, useOppositeDigit: false);
             CaptchaSolutionOpposite = CalculateSum(digits, useOppositeDigit: true);
+
+            Console.WriteLine($"The solution to the first captcha is {CaptchaSolutionNext:N0}.");
+            Console.WriteLine($"The solution to the second captcha is {CaptchaSolutionOpposite:N0}.");
 
             return 0;
         }

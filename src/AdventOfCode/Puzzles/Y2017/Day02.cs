@@ -98,6 +98,9 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
             ChecksumForDifference = CalculateChecksum(spreadsheet, forEvenlyDivisible: false);
             ChecksumForEvenlyDivisible = CalculateChecksum(spreadsheet, forEvenlyDivisible: true);
 
+            Console.WriteLine($"The checksum for the spreadsheet using differences is {ChecksumForDifference:N0}.");
+            Console.WriteLine($"The checksum for the spreadsheet using even division is {ChecksumForEvenlyDivisible:N0}.");
+
             return 0;
         }
 
