@@ -25,4 +25,5 @@ UpgradeLog*.XML
 *.sln.docstates
 *.sln.ide
 *.suo
+*.TMP
 *.user
