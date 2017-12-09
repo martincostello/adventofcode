@@ -11,7 +11,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
     public static class Day08Tests
     {
         [Fact]
-        public static void Y2017_Day08_FindHighestRegisterValue_Returns_Correct_Value()
+        public static void Y2017_Day08_FindHighestRegisterValueAtEnd_Returns_Correct_Value()
         {
             // Arrange
             var instructions = new[]
@@ -23,10 +23,29 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
             };
 
             // Act
-            int actual = Day08.FindHighestRegisterValue(instructions);
+            int actual = Day08.FindHighestRegisterValueAtEnd(instructions);
 
             // Assert
             Assert.Equal(1, actual);
+        }
+
+        [Fact]
+        public static void Y2017_Day08_FindHighestRegisterValueDuring_Returns_Correct_Value()
+        {
+            // Arrange
+            var instructions = new[]
+            {
+                "b inc 5 if a > 1",
+                "a inc 1 if b < 5",
+                "c dec -10 if a >= 1",
+                "c inc -20 if c == 10",
+            };
+
+            // Act
+            int actual = Day08.FindHighestRegisterValueDuring(instructions);
+
+            // Assert
+            Assert.Equal(10, actual);
         }
 
         [Fact]
@@ -36,7 +55,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
             var puzzle = PuzzleTestHelpers.SolvePuzzle<Day08>();
 
             // Assert
-            Assert.Equal(7296, puzzle.HighestRegisterValue);
+            Assert.Equal(7296, puzzle.HighestRegisterValueAtEnd);
+            Assert.Equal(8186, puzzle.HighestRegisterValueDuring);
         }
     }
 }

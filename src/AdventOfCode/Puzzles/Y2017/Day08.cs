@@ -15,7 +15,12 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
         /// <summary>
         /// Gets the highest value in any register once the program has run.
         /// </summary>
-        public int HighestRegisterValue { get; private set; }
+        public int HighestRegisterValueAtEnd { get; private set; }
+
+        /// <summary>
+        /// Gets the highest value in any register while the program was running.
+        /// </summary>
+        public int HighestRegisterValueDuring { get; private set; }
 
         /// <summary>
         /// Finds the highest value in any register once the specified program has run.
@@ -24,10 +29,23 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
         /// <returns>
         /// The highest value in any register once the program specified by <paramref name="instructions"/> has run.
         /// </returns>
-        public static int FindHighestRegisterValue(ICollection<string> instructions)
+        public static int FindHighestRegisterValueAtEnd(ICollection<string> instructions)
         {
-            IDictionary<string, int> cpu = RunProgram(instructions);
+            Cpu cpu = RunProgram(instructions);
             return cpu.Values.Max();
+        }
+
+        /// <summary>
+        /// Finds the highest value in any register at any point when the specified program was run.
+        /// </summary>
+        /// <param name="instructions">The program instructions.</param>
+        /// <returns>
+        /// The highest value in any register at any point while the program specified by <paramref name="instructions"/> was run.
+        /// </returns>
+        public static int FindHighestRegisterValueDuring(ICollection<string> instructions)
+        {
+            Cpu cpu = RunProgram(instructions);
+            return cpu.HighestValue;
         }
 
         /// <inheritdoc />
@@ -35,9 +53,11 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
         {
             IList<string> instructions = ReadResourceAsLines();
 
-            HighestRegisterValue = FindHighestRegisterValue(instructions);
+            HighestRegisterValueAtEnd = FindHighestRegisterValueAtEnd(instructions);
+            HighestRegisterValueDuring = FindHighestRegisterValueDuring(instructions);
 
-            Console.WriteLine($"The largest value in any register after executing the input is {HighestRegisterValue:N0}.");
+            Console.WriteLine($"The largest value in any register after executing the input is {HighestRegisterValueAtEnd:N0}.");
+            Console.WriteLine($"The largest value in any register at any point while executing the input was {HighestRegisterValueDuring:N0}.");
 
             return 0;
         }
@@ -47,15 +67,15 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
         /// </summary>
         /// <param name="instructions">The program instructions.</param>
         /// <returns>
-        /// A <see cref="IDictionary{TKey, TValue}"/> containing the value of each CPU register at the end of the program.
+        /// A <see cref="Cpu"/> containing the value of each CPU register at the end of the program.
         /// </returns>
-        private static IDictionary<string, int> RunProgram(ICollection<string> instructions)
+        private static Cpu RunProgram(ICollection<string> instructions)
         {
             var program = instructions
                 .Select((p) => new Instruction(p))
                 .ToList();
 
-            var cpu = new Dictionary<string, int>();
+            var cpu = new Cpu();
 
             foreach (var instruction in program)
             {
@@ -82,6 +102,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
                 {
                     cpu[instruction.TargetRegister] -= instruction.OperatorValue;
                 }
+
+                cpu.HighestValue = Math.Max(cpu.HighestValue, cpu.Values.DefaultIfEmpty().Max());
             }
 
             return cpu;
@@ -124,9 +146,20 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
         }
 
         /// <summary>
-        /// A class representing a CPU instruction.
+        /// A class representing the CPU. This class cannot be inherited.
         /// </summary>
-        private class Instruction
+        private sealed class Cpu : Dictionary<string, int>
+        {
+            /// <summary>
+            /// Gets or sets the highest value held in any register at any time.
+            /// </summary>
+            internal int HighestValue { get; set; }
+        }
+
+        /// <summary>
+        /// A class representing a CPU instruction. This class cannot be inherited.
+        /// </summary>
+        private sealed class Instruction
         {
             /// <summary>
             /// Initializes a new instance of the <see cref="Instruction"/> class.
