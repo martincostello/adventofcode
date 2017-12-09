@@ -18,13 +18,62 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
         public string BottomProgramName { get; private set; }
 
         /// <summary>
+        /// Gets the weight that the disc that unbalances the structure should be to balance it.
+        /// </summary>
+        public int DesiredWeightOfUnbalancedDisc { get; private set; }
+
+        /// <summary>
         /// Finds the name of the program at the bottom of the specified structure.
         /// </summary>
         /// <param name="structure">A collection of strings representing the structure of the tower.</param>
         /// <returns>
         /// The name of the program at the bottom of the tower described by <paramref name="structure"/>.
         /// </returns>
-        public static string FindBottomProgramName(ICollection<string> structure)
+        public static string FindBottomProgramName(IEnumerable<string> structure)
+        {
+            IDictionary<string, ProgramDisc> tower = BuildStructure(structure);
+            return FindBottomProgramName(tower.Values);
+        }
+
+        /// <summary>
+        /// Finds the weight that the program that unbalances the structure should be to balance it.
+        /// </summary>
+        /// <param name="structure">A collection of strings representing the structure of the tower.</param>
+        /// <returns>
+        /// The weight the program that unbalances the tower described by <paramref name="structure"/> should be.
+        /// </returns>
+        public static int FindDesiredWeightOfUnbalancedDisc(IEnumerable<string> structure)
+        {
+            IDictionary<string, ProgramDisc> tower = BuildStructure(structure);
+            string bottomName = FindBottomProgramName(tower.Values);
+
+            ProgramDisc bottom = tower[bottomName];
+
+            return FindDesiredWeightOfUnbalancedDisc(bottom);
+        }
+
+        /// <inheritdoc />
+        protected override int SolveCore(string[] args)
+        {
+            IList<string> structure = ReadResourceAsLines();
+
+            BottomProgramName = FindBottomProgramName(structure);
+            DesiredWeightOfUnbalancedDisc = FindDesiredWeightOfUnbalancedDisc(structure);
+
+            Console.WriteLine($"The name of the bottom program is '{BottomProgramName}'.");
+            Console.WriteLine($"The desired weight of the program to balance the structure is {DesiredWeightOfUnbalancedDisc:N0}.");
+
+            return 0;
+        }
+
+        /// <summary>
+        /// Builds the structure of discs.
+        /// </summary>
+        /// <param name="structure">A collection of strings representing the structure of the tower.</param>
+        /// <returns>
+        /// An <see cref="IDictionary{TKey, TValue}"/> containing the programs with references to their parent and children, keyed by their names.
+        /// </returns>
+        private static IDictionary<string, ProgramDisc> BuildStructure(IEnumerable<string> structure)
         {
             var programs = structure
                 .Select((p) => new ProgramDisc(p))
@@ -41,22 +90,65 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
                 }
             }
 
-            return programs.Values
+            return programs;
+        }
+
+        /// <summary>
+        /// Finds the name of the program at the bottom of the specified tower.
+        /// </summary>
+        /// <param name="tower">A collection of discs representing the structure of the tower.</param>
+        /// <returns>
+        /// The name of the program at the bottom of the tower described by <paramref name="tower"/>.
+        /// </returns>
+        private static string FindBottomProgramName(ICollection<ProgramDisc> tower)
+        {
+            return tower
                 .Where((p) => p.Parent == null)
                 .Select((p) => p.Name)
                 .Single();
         }
 
-        /// <inheritdoc />
-        protected override int SolveCore(string[] args)
+        /// <summary>
+        /// Finds the weight that the program that unbalances the structure should be to balance it, if found.
+        /// </summary>
+        /// <param name="root">The root node of the structure.</param>
+        /// <returns>
+        /// The weight the program that unbalances the tower described by <paramref name="root"/> should be, if any; otherwise zero.
+        /// </returns>
+        private static int FindDesiredWeightOfUnbalancedDisc(ProgramDisc root)
         {
-            IList<string> structure = ReadResourceAsLines();
+            if (root.ProgramsHeld.Count == 0)
+            {
+                // Leaf node, no children to inspect
+                return 0;
+            }
 
-            BottomProgramName = FindBottomProgramName(structure);
+            var unbalancedSubtree = root.Children
+                .GroupBy((p) => FindDesiredWeightOfUnbalancedDisc(p))
+                .Where((p) => p.Key != 0)
+                .SingleOrDefault();
 
-            Console.WriteLine($"The name of the bottom program is '{BottomProgramName}'.");
+            if (unbalancedSubtree != null)
+            {
+                // The unbalanced program was found in the subtree
+                return unbalancedSubtree.Key;
+            }
 
-            return 0;
+            var childWeights = root.Children.GroupBy((p) => p.TotalWeight);
+            ProgramDisc unbalanced = childWeights.FirstOrDefault((p) => p.Count() == 1)?.FirstOrDefault();
+
+            if (unbalanced == null)
+            {
+                // All children's trees weigh the same
+                return 0;
+            }
+
+            int currentWeight = unbalanced.TotalWeight;
+            int targetWeight = childWeights.First((p) => p.Count() != 1).Key;
+
+            int delta = currentWeight - targetWeight;
+
+            return unbalanced.Weight - delta;
         }
 
         /// <summary>
@@ -109,6 +201,11 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
             /// Gets the child programs of the program.
             /// </summary>
             public ICollection<ProgramDisc> Children { get; } = new List<ProgramDisc>();
+
+            /// <summary>
+            /// Gets the total weight of this program and all its children.
+            /// </summary>
+            public int TotalWeight => Weight + Children.Sum((p) => p.TotalWeight);
         }
     }
 }

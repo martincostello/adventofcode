@@ -39,6 +39,34 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
         }
 
         [Fact]
+        public static void Y2017_Day07_FindDesiredWeightOfUnbalancedDisc_Returns_Correct_Value()
+        {
+            // Arrange
+            var structure = new[]
+            {
+                "pbga (66)",
+                "xhth (57)",
+                "ebii (61)",
+                "havc (66)",
+                "ktlj (57)",
+                "fwft (72) -> ktlj, cntj, xhth",
+                "qoyq (66)",
+                "padx (45) -> pbga, havc, qoyq",
+                "tknk (41) -> ugml, padx, fwft",
+                "jptl (61)",
+                "ugml (68) -> gyxo, ebii, jptl",
+                "gyxo (61)",
+                "cntj (57)",
+            };
+
+            // Act
+            int actual = Day07.FindDesiredWeightOfUnbalancedDisc(structure);
+
+            // Assert
+            Assert.Equal(60, actual);
+        }
+
+        [Fact]
         public static void Y2017_Day07_Solve_Returns_Correct_Solution()
         {
             // Act
@@ -46,6 +74,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
 
             // Assert
             Assert.Equal("fbgguv", puzzle.BottomProgramName);
+            Assert.Equal(1864, puzzle.DesiredWeightOfUnbalancedDisc);
         }
     }
 }
