@@ -19,10 +19,27 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
         [InlineData("{{<ab>},{<ab>},{<ab>},{<ab>}}", 9)]
         [InlineData("{{<!!>},{<!!>},{<!!>},{<!!>}}", 9)]
         [InlineData("{{<a!>},{<a!>},{<a!>},{<ab>}}", 3)]
-        public static void Y2017_Day09_Solve_Returns_Correct_Value(string stream, int expected)
+        public static void Y2017_Day09_ParseStream_Returns_Correct_Value_For_Score(string stream, int expected)
         {
             // Act
-            int actual = Day09.ComputeTotalScore(stream);
+            (int actual, int _) = Day09.ParseStream(stream);
+
+            // Assert
+            Assert.Equal(expected, actual);
+        }
+
+        [Theory]
+        [InlineData("<>", 0)]
+        [InlineData("<random characters>", 17)]
+        [InlineData("<<<<>", 3)]
+        [InlineData("<{!>}>", 2)]
+        [InlineData("<!!>", 0)]
+        [InlineData("<!!!>>", 0)]
+        [InlineData("<{o\"i!a,<{i<a>", 10)]
+        public static void Y2017_Day09_ParseStream_Returns_Correct_Value_For_Garbage(string stream, int expected)
+        {
+            // Act
+            (int _, int actual) = Day09.ParseStream(stream);
 
             // Assert
             Assert.Equal(expected, actual);
@@ -36,6 +53,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
 
             // Assert
             Assert.Equal(11898, puzzle.TotalScore);
+            Assert.Equal(5601, puzzle.GarbageCount);
         }
     }
 }

@@ -16,16 +16,22 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
         public int TotalScore { get; private set; }
 
         /// <summary>
+        /// Gets the number of garbage characters in the stream.
+        /// </summary>
+        public int GarbageCount { get; private set; }
+
+        /// <summary>
         /// Computes the total score for all the groups in the specified stream.
         /// </summary>
         /// <param name="stream">The stream to get the score for.</param>
         /// <returns>
         /// The total score for the groups in the stream specified by <paramref name="stream"/>.
         /// </returns>
-        public static int ComputeTotalScore(string stream)
+        public static(int score, int garbageCount) ParseStream(string stream)
         {
             int score = 0;
             int level = 0;
+            int garbageCount = 0;
             bool withinGarbage = false;
 
             for (int i = 0; i < stream.Length; i++)
@@ -35,7 +41,11 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
                 switch (c)
                 {
                     case '{':
-                        if (!withinGarbage)
+                        if (withinGarbage)
+                        {
+                            garbageCount++;
+                        }
+                        else
                         {
                             level++;
                             score += level;
@@ -44,7 +54,11 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
                         break;
 
                     case '}':
-                        if (!withinGarbage)
+                        if (withinGarbage)
+                        {
+                            garbageCount++;
+                        }
+                        else
                         {
                             level--;
                         }
@@ -52,7 +66,15 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
                         break;
 
                     case '<':
-                        withinGarbage = true;
+                        if (withinGarbage)
+                        {
+                            garbageCount++;
+                        }
+                        else
+                        {
+                            withinGarbage = true;
+                        }
+
                         break;
 
                     case '>':
@@ -64,14 +86,17 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
                         break;
 
                     case ',':
-                        break;
-
                     default:
+                        if (withinGarbage)
+                        {
+                            garbageCount++;
+                        }
+
                         break;
                 }
             }
 
-            return score;
+            return (score, garbageCount);
         }
 
         /// <inheritdoc />
@@ -79,9 +104,13 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
         {
             string stream = ReadResourceAsString().Trim();
 
-            TotalScore = ComputeTotalScore(stream);
+            (int score, int garbageCount) = ParseStream(stream);
+
+            TotalScore = score;
+            GarbageCount = garbageCount;
 
             Console.WriteLine($"The total score for all the groups is {TotalScore:N0}.");
+            Console.WriteLine($"There are {GarbageCount:N0} non-canceled characters within the garbage.");
 
             return 0;
         }
