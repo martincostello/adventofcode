@@ -1,4 +1,4 @@
-﻿// Copyright (c) Martin Costello, 2015. All rights reserved.
+// Copyright (c) Martin Costello, 2015. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 namespace MartinCostello.AdventOfCode
@@ -11,7 +11,12 @@ namespace MartinCostello.AdventOfCode
     internal static class Arrays
     {
         /// <summary>
-        /// An array containing dashes. This field is read-only.
+        /// An array containing the ',' character. This field is read-only.
+        /// </summary>
+        internal static readonly char[] Comma = new[] { ',' };
+
+        /// <summary>
+        /// An array containing the '-' character. This field is read-only.
         /// </summary>
         internal static readonly char[] Dash = new[] { '-' };
 
