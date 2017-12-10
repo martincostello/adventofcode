@@ -6,6 +6,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Text;
 
     /// <summary>
     /// A class representing the puzzle for <c>http://adventofcode.com/2017/day/10</c>. This class cannot be inherited.
@@ -13,9 +14,48 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
     internal sealed class Day10 : Puzzle2017
     {
         /// <summary>
+        /// The default sequence length to use.
+        /// </summary>
+        private const int SequenceLength = 256;
+
+        /// <summary>
         /// Gets the product of multiplying the first two elements after the hash is applied to the input.
         /// </summary>
         public int ProductOfFirstTwoElements { get; private set; }
+
+        /// <summary>
+        /// Gets the hexadecimal representation of the dense hash of the input.
+        /// </summary>
+        public string DenseHash { get; private set; }
+
+        /// <summary>
+        /// Computes the hash of the specified sequence of ASCII-encoded bytes.
+        /// </summary>
+        /// <param name="asciiBytes">The ASCII-encoded bytes to hash.</param>
+        /// <returns>
+        /// The hexadecimal dense hash of <paramref name="asciiBytes"/>.
+        /// </returns>
+        public static string ComputeHash(string asciiBytes)
+        {
+            int[] lengths = Encoding.ASCII.GetBytes(asciiBytes)
+                .Select((p) => (int)p)
+                .Concat(new[] { 17, 31, 73, 47, 23 })
+                .ToArray();
+
+            int index = 0;
+            int skip = 0;
+
+            int[] sequence = CreateSequence(SequenceLength);
+
+            const int Rounds = 64;
+
+            for (int i = 0; i < Rounds; i++)
+            {
+                Hash(sequence, lengths, ref index, ref skip);
+            }
+
+            return ComputeDenseHash(sequence);
+        }
 
         /// <summary>
         /// Finds the product of the first two elements in a string of the specified size when
@@ -28,7 +68,13 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
         /// </returns>
         public static int FindProductOfFirstTwoHashElements(int size, IEnumerable<int> lengths)
         {
-            IList<int> sequence = Hash(size, lengths);
+            int index = 0;
+            int skip = 0;
+
+            int[] sequence = CreateSequence(size);
+
+            Hash(sequence, lengths, ref index, ref skip);
+
             return sequence[0] * sequence[1];
         }
 
@@ -42,28 +88,24 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
                 .Select((p) => ParseInt32(p))
                 .ToList();
 
-            ProductOfFirstTwoElements = FindProductOfFirstTwoHashElements(256, lengths);
+            ProductOfFirstTwoElements = FindProductOfFirstTwoHashElements(SequenceLength, lengths);
+            DenseHash = ComputeHash(rawLengths);
 
             Console.WriteLine($"The product of the first two elements of the hash is {ProductOfFirstTwoElements:N0}.");
+            Console.WriteLine($"The hexadecimal dense hash of the input is {DenseHash}.");
 
             return 0;
         }
 
         /// <summary>
-        /// Applies the hash to a string of the specified size using the specified lengths for knots.
+        /// Applies the hash to the specified sequence using the specified lengths for knots.
         /// </summary>
-        /// <param name="size">The total size of the string to hash.</param>
+        /// <param name="sequence">The sequence to apply the hash to.</param>
         /// <param name="lengths">The lengths to use for the knots of the hash.</param>
-        /// <returns>
-        /// The final hashed string's positions after applying the hash from the values in <paramref name="lengths"/>.
-        /// </returns>
-        private static IList<int> Hash(int size, IEnumerable<int> lengths)
+        /// <param name="index">The index to start the hash from.</param>
+        /// <param name="skip">The skip value to use.</param>
+        private static void Hash(int[] sequence, IEnumerable<int> lengths, ref int index, ref int skip)
         {
-            var sequence = Enumerable.Range(0, size).ToArray();
-
-            int index = 0;
-            int skip = 0;
-
             foreach (int length in lengths)
             {
                 Hash(sequence, index, length);
@@ -71,8 +113,6 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
                 index += (length + skip) % sequence.Length;
                 skip++;
             }
-
-            return sequence;
         }
 
         /// <summary>
@@ -102,5 +142,49 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
                 sequence[target] = subset[i];
             }
         }
+
+        /// <summary>
+        /// Computes the dense hash for the specified sparse hash.
+        /// </summary>
+        /// <param name="sparseHash">The input to use to generate the dense hash.</param>
+        /// <returns>
+        /// The hexadecimal dense hash of <paramref name="sparseHash"/>.
+        /// </returns>
+        private static string ComputeDenseHash(int[] sparseHash)
+        {
+            const int BlockSize = 16;
+
+            var denseHash = new List<int>(sparseHash.Length / BlockSize);
+
+            for (int i = 0; i < sparseHash.Length; i += BlockSize)
+            {
+                int part = 0;
+
+                for (int j = 0; j < BlockSize; j++)
+                {
+                    part ^= sparseHash[i + j];
+                }
+
+                denseHash.Add(part);
+            }
+
+            var builder = new StringBuilder();
+
+            foreach (int value in denseHash)
+            {
+                builder.AppendFormat("{0:x2}", value);
+            }
+
+            return builder.ToString();
+        }
+
+        /// <summary>
+        /// Creates an ascending sequence of numbers of the specified length.
+        /// </summary>
+        /// <param name="length">The length of the sequence to generate.</param>
+        /// <returns>
+        /// An array containing an ascending sequence of numbers of the length specified by <paramref name="length"/>.
+        /// </returns>
+        private static int[] CreateSequence(int length) => Enumerable.Range(0, length).ToArray();
     }
 }

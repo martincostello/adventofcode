@@ -24,6 +24,20 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
             Assert.Equal(expected, actual);
         }
 
+        [Theory]
+        [InlineData("", "a2582a3a0e66e6e86e3812dcb672a272")]
+        [InlineData("AoC 2017", "33efeb34ea91902bb2f59c9920caa6cd")]
+        [InlineData("1,2,3", "3efbe78a8d82f29979031a4aa0b16a9d")]
+        [InlineData("1,2,4", "63960835bcdc130f0b66d7ff4f6a5a8e")]
+        public static void Y2017_Day10_ComputeHash_Returns_Correct_Value(string asciiBytes, string expected)
+        {
+            // Act
+            string actual = Day10.ComputeHash(asciiBytes);
+
+            // Assert
+            Assert.Equal(expected, actual);
+        }
+
         [Fact]
         public static void Y2017_Day10_Solve_Returns_Correct_Solution()
         {
@@ -32,6 +46,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
 
             // Assert
             Assert.Equal(11413, puzzle.ProductOfFirstTwoElements);
+            Assert.Equal("7adfd64c2a03a4968cf708d1b7fd418d", puzzle.DenseHash);
         }
     }
 }
