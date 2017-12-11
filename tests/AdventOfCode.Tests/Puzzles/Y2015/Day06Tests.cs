@@ -1,9 +1,10 @@
-﻿// Copyright (c) Martin Costello, 2015. All rights reserved.
+// Copyright (c) Martin Costello, 2015. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2015
 {
     using System;
+    using System.Drawing;
     using System.Globalization;
     using Xunit;
 
@@ -61,8 +62,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
         {
             var target = new Day06.LightGrid(width, height);
 
-            Point minimum = new Point(0, 0);
-            Point maximum = new Point(width - 1, height - 1);
+            var minimum = new Point(0, 0);
+            var maximum = new Point(width - 1, height - 1);
 
             Assert.Equal(0, target.Brightness);
             Assert.Equal(0, target.Count);
