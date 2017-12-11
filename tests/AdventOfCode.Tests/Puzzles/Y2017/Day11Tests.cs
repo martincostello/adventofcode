@@ -18,7 +18,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
         public static void Y2017_Day11_FindMinimumSteps_Returns_Correct_Solution(string path, int expected)
         {
             // Arrange
-            int actual = Day11.FindMinimumSteps(path);
+            (int actual, int _) = Day11.FindStepRange(path);
 
             // Assert
             Assert.Equal(expected, actual);
@@ -32,6 +32,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
 
             // Assert
             Assert.Equal(796, puzzle.MinimumSteps);
+            Assert.Equal(1585, puzzle.MaximumDistance);
         }
     }
 }

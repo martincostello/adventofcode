@@ -44,34 +44,43 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
         private static readonly Vector2 SouthWest = -Vector2.UnitY + -Vector2.UnitX;
 
         /// <summary>
+        /// Gets the maximum distance the child process reached from its origin.
+        /// </summary>
+        public int MaximumDistance { get; private set; }
+
+        /// <summary>
         /// Gets the minimum number of steps required to reach the child process.
         /// </summary>
         public int MinimumSteps { get; private set; }
 
         /// <summary>
-        /// Finds the minimum number of steps required to traverse the specified path.
+        /// Finds the minimum number of steps required to traverse the specified path and
+        /// the maximum number of steps taken from the origin.
         /// </summary>
         /// <param name="path">A string describing the path taken.</param>
         /// <returns>
-        /// The minimum number of steps required to traverse the path described by <paramref name="path"/>.
+        /// The minimum number of steps required to traverse the path described by <paramref name="path"/>
+        /// and the maximum number of steps taken from the origin point.
         /// </returns>
-        public static int FindMinimumSteps(string path)
+        public static(int minimum, int maximum) FindStepRange(string path)
         {
             IList<CardinalDirection> directions = ParsePath(path);
 
             var vectors = new List<Vector2>();
+            var distances = new List<int>();
 
             foreach (var direction in directions)
             {
                 Vector2 vector = ToVector(direction);
                 vectors.Add(vector);
+
+                distances.Add(GetSteps(vectors));
             }
 
-            var magnitude = vectors.Aggregate((i, j) => i + j);
-            var absoluteX = Math.Abs(magnitude.X);
-            var absoluteY = Math.Abs(magnitude.Y);
+            int minimum = GetSteps(vectors);
+            int maximum = distances.Max();
 
-            return (int)((Math.Abs(absoluteX - absoluteY) / 2) + Math.Min(absoluteX, absoluteY));
+            return (minimum, maximum);
         }
 
         /// <inheritdoc />
@@ -79,11 +88,28 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
         {
             string path = ReadResourceAsString().Trim();
 
-            MinimumSteps = FindMinimumSteps(path);
+            (MinimumSteps, MaximumDistance) = FindStepRange(path);
 
             Console.WriteLine($"The minimum number of steps required to reach the child process is {MinimumSteps:N0}.");
+            Console.WriteLine($"The maximum distance reached by the child process was {MaximumDistance:N0}.");
 
             return 0;
+        }
+
+        /// <summary>
+        /// Gets the number of steps traversed along the specified vector path.
+        /// </summary>
+        /// <param name="path">The vector path.</param>
+        /// <returns>
+        /// The number of steps along the vector path specified by <paramref name="path"/>.
+        /// </returns>
+        private static int GetSteps(IList<Vector2> path)
+        {
+            var magnitude = path.Aggregate((i, j) => i + j);
+            var absoluteX = Math.Abs(magnitude.X);
+            var absoluteY = Math.Abs(magnitude.Y);
+
+            return (int)((Math.Abs(absoluteX - absoluteY) / 2) + Math.Min(absoluteX, absoluteY));
         }
 
         /// <summary>
