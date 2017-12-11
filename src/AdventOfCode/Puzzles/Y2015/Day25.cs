@@ -1,9 +1,10 @@
-﻿// Copyright (c) Martin Costello, 2015. All rights reserved.
+// Copyright (c) Martin Costello, 2015. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2015
 {
     using System;
+    using System.Drawing;
 
     /// <summary>
     /// A class representing the puzzle for <c>http://adventofcode.com/2015/day/25</c>. This class cannot be inherited.
@@ -34,8 +35,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
 
             ulong result = 20151125;
 
-            Point current = new Point(0, 0);
-            Point target = new Point(column, row);
+            var current = new Point(0, 0);
+            var target = new Point(column, row);
 
             int currentRow = 0;
 
