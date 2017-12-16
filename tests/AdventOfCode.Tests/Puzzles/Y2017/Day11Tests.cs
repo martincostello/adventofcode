@@ -17,7 +17,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
         [InlineData("se,sw,se,sw,sw", 3)]
         public static void Y2017_Day11_FindMinimumSteps_Returns_Correct_Solution(string path, int expected)
         {
-            // Arrange
+            // Act
             (int actual, int _) = Day11.FindStepRange(path);
 
             // Assert
