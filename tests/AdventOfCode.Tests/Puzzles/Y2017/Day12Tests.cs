@@ -35,6 +35,28 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
         }
 
         [Fact]
+        public static void Y2017_Day12_GetGroupsInNetwork_Returns_Correct_Value()
+        {
+            // Arrange
+            var pipes = new[]
+            {
+                "0 <-> 2",
+                "1 <-> 1",
+                "2 <-> 0, 3, 4",
+                "3 <-> 2, 4",
+                "4 <-> 2, 3, 6",
+                "5 <-> 6",
+                "6 <-> 4, 5",
+            };
+
+            // Arrange
+            int actual = Day12.GetGroupsInNetwork(pipes);
+
+            // Assert
+            Assert.Equal(2, actual);
+        }
+
+        [Fact]
         public static void Y2017_Day12_Solve_Returns_Correct_Solution()
         {
             // Act
@@ -42,6 +64,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
 
             // Assert
             Assert.Equal(113, puzzle.ProgramsInGroupOfProgram0);
+            Assert.Equal(202, puzzle.NumberOfGroups);
         }
     }
 }
