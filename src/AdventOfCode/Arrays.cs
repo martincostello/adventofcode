@@ -11,6 +11,11 @@ namespace MartinCostello.AdventOfCode
     internal static class Arrays
     {
         /// <summary>
+        /// An array containing the ':' character. This field is read-only.
+        /// </summary>
+        internal static readonly char[] Colon = new[] { ':' };
+
+        /// <summary>
         /// An array containing the ',' character. This field is read-only.
         /// </summary>
         internal static readonly char[] Comma = new[] { ',' };
