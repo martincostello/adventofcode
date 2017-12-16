@@ -6,7 +6,6 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Text;
 
     /// <summary>
     /// A class representing the puzzle for <c>http://adventofcode.com/2017/day/13</c>. This class cannot be inherited.
@@ -32,24 +31,39 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
         /// </returns>
         public static int GetSeverityOfTrip(ICollection<string> depthRanges)
         {
-            return GetSeverityOfTrip(depthRanges, delay: 0);
+            var firewall = new Firewall(depthRanges);
+            firewall.AddPacket();
+
+            int severity = firewall.Tick();
+
+            while (!firewall.TripComplete)
+            {
+                firewall.Move();
+                severity += firewall.Tick();
+            }
+
+            return severity;
         }
 
         /// <summary>
-        /// Gets the shortest delay for a trip through the firewall with the specified scanner depth and ranges that has a severity of zero.
+        /// Gets the shortest delay for a trip through the firewall with the specified scanner depth and ranges that does not capture the packet.
         /// </summary>
         /// <param name="depthRanges">A collection of scanner depths and ranges.</param>
         /// <returns>
-        /// The shortest delay to a trip with the scanners specified by <paramref name="depthRanges"/> that has a severity of zero.
+        /// The shortest delay to a trip with the scanners specified by <paramref name="depthRanges"/> that does not capture the packet.
         /// </returns>
-        public static int GetShortestDelayForZeroSeverity(ICollection<string> depthRanges)
+        public static int GetShortestDelayForNeverCaught(ICollection<string> depthRanges)
         {
+            var firewall = new Firewall(depthRanges);
+
             for (int delay = 0; delay < int.MaxValue; delay++)
             {
-                if (GetSeverityOfTrip(depthRanges, delay) == 0)
+                if (!IsEverCaught(firewall, delay))
                 {
                     return delay;
                 }
+
+                firewall.Reset();
             }
 
             throw new InvalidProgramException("Failed to find delay for a trip with a severity of zero.");
@@ -61,7 +75,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
             IList<string> depthRanges = ReadResourceAsLines();
 
             Severity = GetSeverityOfTrip(depthRanges);
-            ShortestDelay = GetShortestDelayForZeroSeverity(depthRanges);
+            ShortestDelay = GetShortestDelayForNeverCaught(depthRanges);
 
             Console.WriteLine($"The severity of the trip through the firewall is {Severity:N0}.");
             Console.WriteLine($"The fewest number of picoseconds that the packet needs to be delayed by to pass through the firewall without being caught is {ShortestDelay:N0}.");
@@ -70,34 +84,40 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
         }
 
         /// <summary>
-        /// Gets the severity of a trip through the firewall with the specified scanner depth and ranges.
+        /// Gets whether the packet gets caught by a trip through the firewall with the specified scanner depth and ranges.
         /// </summary>
-        /// <param name="depthRanges">A collection of scanner depths and ranges.</param>
+        /// <param name="firewall">The firewall to pass the packet through.</param>
         /// <param name="delay">The delay to apply before moving the packet.</param>
         /// <returns>
-        /// The severity of the trip through the firewall with the scanners specified by <paramref name="depthRanges"/>.
+        /// <see langword="true"/> if the packet if ever caught; otherwise <see langword="false"/>.
         /// </returns>
-        private static int GetSeverityOfTrip(ICollection<string> depthRanges, int delay)
+        private static bool IsEverCaught(Firewall firewall, int delay)
         {
-            var firewall = new Firewall(depthRanges);
-
             for (int i = 0; i < delay; i++)
             {
                 firewall.Tick();
             }
 
             firewall.AddPacket();
+            firewall.Tick(out bool wasCaught);
 
-            int severity = firewall.Tick();
+            if (wasCaught)
+            {
+                return true;
+            }
 
             while (!firewall.TripComplete)
             {
                 firewall.Move();
+                firewall.Tick(out wasCaught);
 
-                severity += firewall.Tick();
+                if (wasCaught)
+                {
+                    return true;
+                }
             }
 
-            return severity;
+            return false;
         }
 
         /// <summary>
@@ -151,57 +171,6 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
             /// </summary>
             private int? Index { get; set; }
 
-            /// <inheritdoc />
-            public override string ToString()
-            {
-                var builder = new StringBuilder();
-
-                for (int i = 0; i < Scanners.Count; i++)
-                {
-                    builder.Append(' ');
-                    builder.Append(i);
-                    builder.Append(' ');
-                    builder.Append(' ');
-                }
-
-                builder.AppendLine();
-
-                var scanners = Scanners.Values
-                    .Select((p) => p?.ToString())
-                    .Select((p) => p ?? "...")
-                    .Select((p) => p.Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries))
-                    .ToList();
-
-                if (Index.HasValue)
-                {
-                    string value = scanners[Index.Value][0];
-
-                    if (value.StartsWith('['))
-                    {
-                        value = $"({value[1]})";
-                    }
-                    else
-                    {
-                        value = "(.)";
-                    }
-
-                    scanners[Index.Value][0] = value;
-                }
-
-                for (int row = 0; row < scanners.Max((p) => p.Length); row++)
-                {
-                    for (int column = 0; column < Scanners.Count; column++)
-                    {
-                        builder.Append(scanners[column].Length - 1 >= row ? scanners[column][row].ToString() : "   ");
-                        builder.Append(' ');
-                    }
-
-                    builder.AppendLine();
-                }
-
-                return builder.ToString();
-            }
-
             /// <summary>
             /// Adds the packet to the firewall.
             /// </summary>
@@ -213,13 +182,38 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
             internal void Move() => Index++;
 
             /// <summary>
+            /// Resets the firewall.
+            /// </summary>
+            internal void Reset()
+            {
+                Index = null;
+                Ticks = 0;
+
+                foreach (var scanner in Scanners.Values)
+                {
+                    scanner?.Reset();
+                }
+            }
+
+            /// <summary>
             /// Increments the clock associated with the firewall.
             /// </summary>
             /// <returns>
             /// The severity of the current packet's trip through the firewall.
             /// </returns>
-            internal int Tick()
+            internal int Tick() => Tick(out var _);
+
+            /// <summary>
+            /// Increments the clock associated with the firewall.
+            /// </summary>
+            /// <param name="wasCaught">Whether the packet was caught by the firewall.</param>
+            /// <returns>
+            /// The severity of the current packet's trip through the firewall.
+            /// </returns>
+            internal int Tick(out bool wasCaught)
             {
+                wasCaught = false;
+
                 Ticks++;
 
                 int severity = 0;
@@ -229,6 +223,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
                     scanner?.IsAtTop == true)
                 {
                     severity = scanner.Severity;
+                    wasCaught = true;
                 }
 
                 foreach (var pair in Scanners.Values)
@@ -286,20 +281,14 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
             /// </summary>
             private int Ticks { get; set; }
 
-            /// <inheritdoc />
-            public override string ToString()
+            /// <summary>
+            /// Resets the scanner.
+            /// </summary>
+            internal void Reset()
             {
-                var builder = new StringBuilder();
-
-                for (int i = 0; i < Range; i++)
-                {
-                    builder.Append('[');
-                    builder.Append(Index == i ? 'S' : ' ');
-                    builder.Append(']');
-                    builder.AppendLine();
-                }
-
-                return builder.ToString();
+                Incrementing = false;
+                Index = 0;
+                Ticks = 0;
             }
 
             /// <summary>
