@@ -56,6 +56,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
 
             // Assert
             Assert.Equal(1612, puzzle.Severity);
+            Assert.Equal(3907994, puzzle.ShortestDelay);
         }
     }
 }
