@@ -11,7 +11,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
     public static class Day13Tests
     {
         [Fact]
-        public static void Y2017_Day13_GetProgramsInGroup_Returns_Correct_Value()
+        public static void Y2017_Day13_GetSeverityOfTrip_Returns_Correct_Value()
         {
             // Arrange
             var depthRanges = new[]
@@ -27,6 +27,25 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
 
             // Assert
             Assert.Equal(24, actual);
+        }
+
+        [Fact]
+        public static void Y2017_Day13_GetShortestDelayForZeroSeverity_Returns_Correct_Value()
+        {
+            // Arrange
+            var depthRanges = new[]
+            {
+                "0: 3",
+                "1: 2",
+                "4: 4",
+                "6: 4",
+            };
+
+            // Act
+            int actual = Day13.GetShortestDelayForZeroSeverity(depthRanges);
+
+            // Assert
+            Assert.Equal(10, actual);
         }
 
         [Fact]
