@@ -31,15 +31,28 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
         /// </returns>
         public static int GetSeverityOfTrip(ICollection<string> depthRanges)
         {
-            var firewall = new Firewall(depthRanges);
-            firewall.AddPacket();
+            var configuration = depthRanges
+                .Select((p) => p.Split(Arrays.Colon))
+                .Select((p) => new { layer = ParseInt32(p[0]), range = ParseInt32(p[1].Trim()) })
+                .ToList();
 
-            int severity = firewall.Tick();
+            var depths = configuration.Select((p) => p.layer).ToArray();
+            var ranges = configuration.Select((p) => p.range).ToArray();
 
-            while (!firewall.TripComplete)
+            int severity = 0;
+
+            for (int i = 0; i < depths.Length; i++)
             {
-                firewall.Move();
-                severity += firewall.Tick();
+                int depth = depths[i];
+                int range = ranges[i];
+
+                int index = depth % ((2 * range) - 2);
+                bool detected = index == 0;
+
+                if (detected)
+                {
+                    severity += depth * range;
+                }
             }
 
             return severity;
@@ -54,19 +67,39 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
         /// </returns>
         public static int GetShortestDelayForNeverCaught(ICollection<string> depthRanges)
         {
-            var firewall = new Firewall(depthRanges);
+            var configuration = depthRanges
+                .Select((p) => p.Split(Arrays.Colon))
+                .Select((p) => new { layer = ParseInt32(p[0]), range = ParseInt32(p[1].Trim()) })
+                .ToList();
 
-            for (int delay = 0; delay < int.MaxValue; delay++)
+            var depths = configuration.Select((p) => p.layer).ToArray();
+            var ranges = configuration.Select((p) => p.range).ToArray();
+
+            bool caught = false;
+            int delay = 0;
+
+            while (!caught)
             {
-                if (!IsEverCaught(firewall, delay))
-                {
-                    return delay;
-                }
+                caught = true;
 
-                firewall.Reset();
+                for (int i = 0; i < depths.Length; i++)
+                {
+                    int depth = depths[i];
+                    int range = ranges[i];
+
+                    int index = (depth + delay) % ((2 * range) - 2);
+                    bool detected = index == 0;
+
+                    if (detected)
+                    {
+                        delay++;
+                        caught = false;
+                        break;
+                    }
+                }
             }
 
-            throw new InvalidProgramException("Failed to find delay for a trip with a severity of zero.");
+            return delay;
         }
 
         /// <inheritdoc />
@@ -81,237 +114,6 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
             Console.WriteLine($"The fewest number of picoseconds that the packet needs to be delayed by to pass through the firewall without being caught is {ShortestDelay:N0}.");
 
             return 0;
-        }
-
-        /// <summary>
-        /// Gets whether the packet gets caught by a trip through the firewall with the specified scanner depth and ranges.
-        /// </summary>
-        /// <param name="firewall">The firewall to pass the packet through.</param>
-        /// <param name="delay">The delay to apply before moving the packet.</param>
-        /// <returns>
-        /// <see langword="true"/> if the packet if ever caught; otherwise <see langword="false"/>.
-        /// </returns>
-        private static bool IsEverCaught(Firewall firewall, int delay)
-        {
-            for (int i = 0; i < delay; i++)
-            {
-                firewall.Tick();
-            }
-
-            firewall.AddPacket();
-            firewall.Tick(out bool wasCaught);
-
-            if (wasCaught)
-            {
-                return true;
-            }
-
-            while (!firewall.TripComplete)
-            {
-                firewall.Move();
-                firewall.Tick(out wasCaught);
-
-                if (wasCaught)
-                {
-                    return true;
-                }
-            }
-
-            return false;
-        }
-
-        /// <summary>
-        /// A class representing the firewall. This class cannot be inherited.
-        /// </summary>
-        private sealed class Firewall
-        {
-            /// <summary>
-            /// Initializes a new instance of the <see cref="Firewall"/> class.
-            /// </summary>
-            /// <param name="depthRanges">A collection of scanner depths and ranges.</param>
-            internal Firewall(ICollection<string> depthRanges)
-            {
-                var configuration = depthRanges
-                    .Select((p) => p.Split(Arrays.Colon))
-                    .Select((p) => Tuple.Create(ParseInt32(p[0]), ParseInt32(p[1].Trim())))
-                    .ToDictionary((p) => p.Item1, (p) => p.Item2);
-
-                int length = configuration.Max((p) => p.Key) + 1;
-
-                for (int depth = 0; depth < length; depth++)
-                {
-                    Scanner scanner = null;
-
-                    if (configuration.TryGetValue(depth, out int range))
-                    {
-                        scanner = new Scanner(depth, range);
-                    }
-
-                    Scanners.Add(depth, scanner);
-                }
-            }
-
-            /// <summary>
-            /// Gets or sets the number of ticks that have elapsed.
-            /// </summary>
-            internal int Ticks { get; set; }
-
-            /// <summary>
-            /// Gets a value indicating whether the packet's trip through the firewall is complete.
-            /// </summary>
-            internal bool TripComplete => Index >= Scanners.Count - 1;
-
-            /// <summary>
-            /// Gets the scanners associated with the firewall.
-            /// </summary>
-            private IDictionary<int, Scanner> Scanners { get; } = new Dictionary<int, Scanner>();
-
-            /// <summary>
-            /// Gets or sets the current index of the packet travelling through the firewall.
-            /// </summary>
-            private int? Index { get; set; }
-
-            /// <summary>
-            /// Adds the packet to the firewall.
-            /// </summary>
-            internal void AddPacket() => Index = 0;
-
-            /// <summary>
-            /// Moves the packet forward.
-            /// </summary>
-            internal void Move() => Index++;
-
-            /// <summary>
-            /// Resets the firewall.
-            /// </summary>
-            internal void Reset()
-            {
-                Index = null;
-                Ticks = 0;
-
-                foreach (var scanner in Scanners.Values)
-                {
-                    scanner?.Reset();
-                }
-            }
-
-            /// <summary>
-            /// Increments the clock associated with the firewall.
-            /// </summary>
-            /// <returns>
-            /// The severity of the current packet's trip through the firewall.
-            /// </returns>
-            internal int Tick() => Tick(out var _);
-
-            /// <summary>
-            /// Increments the clock associated with the firewall.
-            /// </summary>
-            /// <param name="wasCaught">Whether the packet was caught by the firewall.</param>
-            /// <returns>
-            /// The severity of the current packet's trip through the firewall.
-            /// </returns>
-            internal int Tick(out bool wasCaught)
-            {
-                wasCaught = false;
-
-                Ticks++;
-
-                int severity = 0;
-
-                if (Index.HasValue &&
-                    Scanners.TryGetValue(Index.Value, out var scanner) &&
-                    scanner?.IsAtTop == true)
-                {
-                    severity = scanner.Severity;
-                    wasCaught = true;
-                }
-
-                foreach (var pair in Scanners.Values)
-                {
-                    pair?.Tick();
-                }
-
-                return severity;
-            }
-        }
-
-        /// <summary>
-        /// A class representing a scanner. This class cannot be inherited.
-        /// </summary>
-        private sealed class Scanner
-        {
-            /// <summary>
-            /// Initializes a new instance of the <see cref="Scanner"/> class.
-            /// </summary>
-            /// <param name="depth">The depth of the scanner.</param>
-            /// <param name="range">The range of the scanner.</param>
-            internal Scanner(int depth, int range)
-            {
-                Range = range;
-                Severity = depth * range;
-            }
-
-            /// <summary>
-            /// Gets a value indicating whether the scanner is at the top of its range.
-            /// </summary>
-            internal bool IsAtTop => Index == 0;
-
-            /// <summary>
-            /// Gets the severity of the scanner.
-            /// </summary>
-            internal int Severity { get; }
-
-            /// <summary>
-            /// Gets or sets the current index of the scanner.
-            /// </summary>
-            private int Index { get; set; }
-
-            /// <summary>
-            /// Gets or sets a value indicating whether the index is currently incrementing.
-            /// </summary>
-            private bool Incrementing { get; set; }
-
-            /// <summary>
-            /// Gets the range of the scanner.
-            /// </summary>
-            private int Range { get; }
-
-            /// <summary>
-            /// Gets or sets the number of ticks that have elapsed.
-            /// </summary>
-            private int Ticks { get; set; }
-
-            /// <summary>
-            /// Resets the scanner.
-            /// </summary>
-            internal void Reset()
-            {
-                Incrementing = false;
-                Index = 0;
-                Ticks = 0;
-            }
-
-            /// <summary>
-            /// Increments the clock associated with the scanner.
-            /// </summary>
-            internal void Tick()
-            {
-                Ticks++;
-
-                if (Index == 0 || Index == Range - 1)
-                {
-                    Incrementing = !Incrementing;
-                }
-
-                if (Incrementing)
-                {
-                    Index++;
-                }
-                else
-                {
-                    Index--;
-                }
-            }
         }
     }
 }

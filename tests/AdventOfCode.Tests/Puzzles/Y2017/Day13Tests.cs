@@ -48,7 +48,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
             Assert.Equal(10, actual);
         }
 
-        [Fact(Skip = "Too slow and not solved for part 2 yet.")]
+        [Fact]
         public static void Y2017_Day13_Solve_Returns_Correct_Solution()
         {
             // Act
