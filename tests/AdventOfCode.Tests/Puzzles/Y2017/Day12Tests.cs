@@ -27,7 +27,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
                 "6 <-> 4, 5",
             };
 
-            // Arrange
+            // Act
             int actual = Day12.GetProgramsInGroup(programId, pipes);
 
             // Assert
@@ -49,7 +49,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
                 "6 <-> 4, 5",
             };
 
-            // Arrange
+            // Act
             int actual = Day12.GetGroupsInNetwork(pipes);
 
             // Assert
