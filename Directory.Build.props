@@ -17,7 +17,7 @@
     <LangVersion>latest</LangVersion>
     <NeutralLanguage>en-US</NeutralLanguage>
     <NoWarn>CS1591</NoWarn>
-    <PackageIconUrl>https://martincostello.com/favicon.ico</PackageIconUrl>
+    <PackageIconUrl>https://cdn.martincostello.com/favicon.ico</PackageIconUrl>
     <PackageProjectUrl>https://github.com/martincostello/adventofcode</PackageProjectUrl>
     <PackageLicenseUrl>$(PackageProjectUrl)/blob/master/LICENSE</PackageLicenseUrl>
     <PackageReleaseNotes>$(PackageProjectUrl)/releases</PackageReleaseNotes>
@@ -28,7 +28,7 @@
     <RepositoryUrl>$(PackageProjectUrl).git</RepositoryUrl>
     <SignAssembly>true</SignAssembly>
     <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
-    <VersionPrefix>2.0.0</VersionPrefix>
+    <VersionPrefix>2.1.0</VersionPrefix>
     <VersionSuffix></VersionSuffix>
   </PropertyGroup>
 </Project>
