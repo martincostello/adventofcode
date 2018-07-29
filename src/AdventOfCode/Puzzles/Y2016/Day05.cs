@@ -1,4 +1,4 @@
-﻿// Copyright (c) Martin Costello, 2015. All rights reserved.
+// Copyright (c) Martin Costello, 2015. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2016
@@ -90,8 +90,11 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
             Password = GeneratePassword(doorId, isPositionSpecifiedByHash: false);
             PasswordWhenPositionIsIndicated = GeneratePassword(doorId, isPositionSpecifiedByHash: true);
 
-            Console.WriteLine($"The password for door '{doorId}' is '{Password}'.");
-            Console.WriteLine($"The password for door '{doorId}' is '{PasswordWhenPositionIsIndicated}' when the position is specified in the hash.");
+            if (Verbose)
+            {
+                Console.WriteLine($"The password for door '{doorId}' is '{Password}'.");
+                Console.WriteLine($"The password for door '{doorId}' is '{PasswordWhenPositionIsIndicated}' when the position is specified in the hash.");
+            }
 
             return 0;
         }
@@ -124,14 +127,14 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         /// <returns>
         /// A <see cref="string"/> containing the hexadecimal representation of <paramref name="hashBytes"/>.
         /// </returns>
-        private static string GetStringForHash(byte[] hashBytes)
+        private static string GetStringForHash(ReadOnlySpan<byte> hashBytes)
         {
             var hash = new StringBuilder("0000");
 
             // Skip the first 2 bytes as they should already have been checked to be zero
             for (int i = 2; i < hashBytes.Length; i++)
             {
-                hash.AppendFormat(CultureInfo.InvariantCulture, "{0:x2}", hashBytes[i]);
+                hash.Append(hashBytes[i].ToString("x2", CultureInfo.InvariantCulture));
             }
 
             return hash.ToString();

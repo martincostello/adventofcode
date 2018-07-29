@@ -185,7 +185,10 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
 
             NiceStringCount = count;
 
-            Console.WriteLine("{0:N0} strings are nice using version {1} of the rules.", NiceStringCount, version);
+            if (Verbose)
+            {
+                Console.WriteLine("{0:N0} strings are nice using version {1} of the rules.", NiceStringCount, version);
+            }
 
             return 0;
         }

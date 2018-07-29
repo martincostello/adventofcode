@@ -93,10 +93,13 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
                 }
             }
 
-            Console.WriteLine(
-                "There are {0:N0} lights illuminated after {1:N0} steps.",
-                LightsIlluminated,
-                steps);
+            if (Verbose)
+            {
+                Console.WriteLine(
+                    "There are {0:N0} lights illuminated after {1:N0} steps.",
+                    LightsIlluminated,
+                    steps);
+            }
 
             return 0;
         }
@@ -109,9 +112,6 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
         /// <returns>
         /// An <see cref="Array"/> of <see cref="bool"/> containing the new frame.
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1814:PreferJaggedArraysOverMultidimensional", MessageId = "0#", Justification = "Easier to visualize.")]
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1814:PreferJaggedArraysOverMultidimensional", MessageId = "Body", Justification = "Easier to visualize.")]
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1814:PreferJaggedArraysOverMultidimensional", MessageId = "Return", Justification = "Easier to visualize.")]
         private static bool[,] Animate(bool[,] input, bool areCornerLightsBroken)
         {
             int width = input.GetLength(0);
@@ -198,8 +198,6 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
         /// An <see cref="Array"/> of <see cref="bool"/> representing the light configuration
         /// specified by <paramref name="initialState"/>.
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1814:PreferJaggedArraysOverMultidimensional", MessageId = "Body", Justification = "Easier to visualize.")]
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1814:PreferJaggedArraysOverMultidimensional", MessageId = "Return", Justification = "Easier to visualize.")]
         private static bool[,] ParseInitialState(IList<string> initialState)
         {
             // Assume that the input configuration is a rectangle

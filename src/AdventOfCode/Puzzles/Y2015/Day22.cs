@@ -31,7 +31,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
             Wizard wizard = new Wizard(spellSelector);
             Boss boss = new Boss();
 
-            Player winner = Fight(wizard, boss, difficulty, (f, a) => { });
+            Player winner = Fight(wizard, boss, difficulty, null);
 
             return Tuple.Create(winner == wizard, wizard.ManaSpent);
         }
@@ -55,9 +55,9 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
 
             do
             {
-                output("-- {0} turn --", new object[] { attacker.Name });
-                output("- {0} has {1} hit points, {2} armor, {3} mana", new object[] { wizard.Name, wizard.HitPoints, wizard.Armor, wizard.Mana });
-                output("- {0} has {1} hit points", new object[] { opponent.Name, opponent.HitPoints });
+                output?.Invoke("-- {0} turn --", new object[] { attacker.Name });
+                output?.Invoke("- {0} has {1} hit points, {2} armor, {3} mana", new object[] { wizard.Name, wizard.HitPoints, wizard.Armor, wizard.Mana });
+                output?.Invoke("- {0} has {1} hit points", new object[] { opponent.Name, opponent.HitPoints });
 
                 if (isHardDifficulty && attacker == wizard)
                 {
@@ -80,7 +80,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
                 attacker = defender;
                 defender = player;
 
-                output(string.Empty, Array.Empty<object>());
+                output?.Invoke(string.Empty, Array.Empty<object>());
             }
             while (wizard.HitPoints > 0 && opponent.HitPoints > 0);
 
@@ -106,10 +106,13 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
                 .Where((p) => p.Item1)
                 .Min((p) => p.Item2);
 
-            Console.WriteLine(
-                "The minimum amount of mana that can be spent to win on {0} difficulty is {1:N0}.",
-                difficulty,
-                MinimumCostToWin);
+            if (Verbose)
+            {
+                Console.WriteLine(
+                    "The minimum amount of mana that can be spent to win on {0} difficulty is {1:N0}.",
+                    difficulty,
+                    MinimumCostToWin);
+            }
 
             return 0;
         }
@@ -151,11 +154,11 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
 
                 if (other.Armor == 0)
                 {
-                    output("{0} attacks for {1} damage!", new object[] { Name, damage });
+                    output?.Invoke("{0} attacks for {1} damage!", new object[] { Name, damage });
                 }
                 else
                 {
-                    output("{0} attacks for {1} - {2} = {3} damage!", new object[] { Name, Damage, other.Armor, damage });
+                    output?.Invoke("{0} attacks for {1} - {2} = {3} damage!", new object[] { Name, Damage, other.Armor, damage });
                 }
             }
         }
@@ -529,7 +532,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
             protected override void Cast(Wizard wizard, Action<string, object[]> output)
             {
                 wizard.HitPoints += Delta;
-                output("{0} casts Drain, dealing {1} damage, and healing {1} hit points.", new object[] { wizard.Name, Delta });
+                output?.Invoke("{0} casts Drain, dealing {1} damage, and healing {1} hit points.", new object[] { wizard.Name, Delta });
             }
         }
 
@@ -554,7 +557,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
             /// <inheritdoc />
             protected override void Cast(Wizard wizard, Action<string, object[]> output)
             {
-                output("{0} casts {1}, dealing {2} damage.", new object[] { wizard.Name, Name, Damage });
+                output?.Invoke("{0} casts {1}, dealing {2} damage.", new object[] { wizard.Name, Name, Damage });
             }
 
             /// <inheritdoc />
@@ -585,7 +588,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
             /// <inheritdoc />
             protected override void Cast(Wizard wizard, Action<string, object[]> output)
             {
-                output("{0} casts {1}.", new object[] { wizard.Name, Name });
+                output?.Invoke("{0} casts {1}.", new object[] { wizard.Name, Name });
             }
 
             /// <inheritdoc />
@@ -599,11 +602,11 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
 
                 if (other.HitPoints < 1)
                 {
-                    output("{0} deals {1} damage. This kills the {2}, and the player wins.", new object[] { Name, Damage, other.Name.ToLowerInvariant() });
+                    output?.Invoke("{0} deals {1} damage. This kills the {2}, and the player wins.", new object[] { Name, Damage, other.Name.ToLowerInvariant() });
                 }
                 else
                 {
-                    output("{0} deals {1} damage; its timer is now {2}.", new object[] { Name, Damage, TurnsLeft - 1 });
+                    output?.Invoke("{0} deals {1} damage; its timer is now {2}.", new object[] { Name, Damage, TurnsLeft - 1 });
                 }
             }
         }
@@ -624,18 +627,18 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
             /// <inheritdoc />
             protected override void Cast(Wizard wizard, Action<string, object[]> output)
             {
-                output("{0} casts {1}.", new object[] { wizard.Name, Name });
+                output?.Invoke("{0} casts {1}.", new object[] { wizard.Name, Name });
             }
 
             /// <inheritdoc />
             protected override void Affect(Wizard wizard, Action<string, object[]> output)
             {
                 wizard.Mana += 101;
-                output("{0} provides 101 mana; its timer is now {1}.", new object[] { Name, TurnsLeft - 1 });
+                output?.Invoke("{0} provides 101 mana; its timer is now {1}.", new object[] { Name, TurnsLeft - 1 });
 
                 if (TurnsLeft - 1 == 0)
                 {
-                    output("{0} wears off.", new object[] { Name });
+                    output?.Invoke("{0} wears off.", new object[] { Name });
                 }
             }
         }
@@ -662,13 +665,13 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
             protected override void Cast(Wizard wizard, Action<string, object[]> output)
             {
                 wizard.Armor += ArmorIncrease;
-                output("{0} casts {1}, increasing armor by {2}.", new object[] { wizard.Name, Name, ArmorIncrease });
+                output?.Invoke("{0} casts {1}, increasing armor by {2}.", new object[] { wizard.Name, Name, ArmorIncrease });
             }
 
             /// <inheritdoc />
             protected override void Affect(Wizard wizard, Action<string, object[]> output)
             {
-                output("{0}'s timer is now {1}.", new object[] { Name, TurnsLeft - 1 });
+                output?.Invoke("{0}'s timer is now {1}.", new object[] { Name, TurnsLeft - 1 });
             }
 
             /// <inheritdoc />
@@ -681,7 +684,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
                     wizard.Armor = 0;
                 }
 
-                output("{0} wears off, decreasing armor by {1}.", new object[] { Name, ArmorIncrease });
+                output?.Invoke("{0} wears off, decreasing armor by {1}.", new object[] { Name, ArmorIncrease });
             }
         }
     }

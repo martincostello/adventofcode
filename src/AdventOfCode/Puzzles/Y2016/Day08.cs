@@ -1,4 +1,4 @@
-﻿// Copyright (c) Martin Costello, 2015. All rights reserved.
+// Copyright (c) Martin Costello, 2015. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2016
@@ -63,7 +63,10 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
 
             PixelsLit = GetPixelsLit(instructions, width: 50, height: 6);
 
-            Console.WriteLine($"There are {PixelsLit:N0} pixels lit.");
+            if (Verbose)
+            {
+                Console.WriteLine($"There are {PixelsLit:N0} pixels lit.");
+            }
 
             return 0;
         }

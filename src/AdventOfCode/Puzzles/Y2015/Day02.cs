@@ -1,4 +1,4 @@
-﻿// Copyright (c) Martin Costello, 2015. All rights reserved.
+// Copyright (c) Martin Costello, 2015. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2015
@@ -53,11 +53,14 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
             TotalAreaOfPaper = result.Item1;
             TotalLengthOfRibbon = result.Item2;
 
-            Console.WriteLine(
-                "The elves should order {0:N0} square feet of wrapping paper.{1}They also need {2:N0} feet of ribbon.",
-                TotalAreaOfPaper,
-                Environment.NewLine,
-                TotalLengthOfRibbon);
+            if (Verbose)
+            {
+                Console.WriteLine(
+                    "The elves should order {0:N0} square feet of wrapping paper.{1}They also need {2:N0} feet of ribbon.",
+                    TotalAreaOfPaper,
+                    Environment.NewLine,
+                    TotalLengthOfRibbon);
+            }
 
             return 0;
         }

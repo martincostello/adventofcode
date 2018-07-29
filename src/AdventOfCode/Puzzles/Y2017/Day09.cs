@@ -109,8 +109,11 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
             TotalScore = score;
             GarbageCount = garbageCount;
 
-            Console.WriteLine($"The total score for all the groups is {TotalScore:N0}.");
-            Console.WriteLine($"There are {GarbageCount:N0} non-canceled characters within the garbage.");
+            if (Verbose)
+            {
+                Console.WriteLine($"The total score for all the groups is {TotalScore:N0}.");
+                Console.WriteLine($"There are {GarbageCount:N0} non-canceled characters within the garbage.");
+            }
 
             return 0;
         }

@@ -1,4 +1,4 @@
-﻿// Copyright (c) Martin Costello, 2015. All rights reserved.
+// Copyright (c) Martin Costello, 2015. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2016
@@ -29,7 +29,10 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
             IDictionary<char, int> registers = Day12.Process(instructions, initialValueOfA: input);
             SafeValue = registers['a'];
 
-            Console.WriteLine($"The value to send to the safe for an input of {input:N0} is '{SafeValue}'.");
+            if (Verbose)
+            {
+                Console.WriteLine($"The value to send to the safe for an input of {input:N0} is '{SafeValue}'.");
+            }
 
             return 0;
         }

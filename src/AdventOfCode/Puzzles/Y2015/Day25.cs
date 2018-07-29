@@ -75,11 +75,14 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
 
             Code = GetCodeForWeatherMachine(row, column);
 
-            Console.WriteLine(
-                "The code for row {0:N0} and column {1:N0} is {2:N0}.",
-                row,
-                column,
-                Code);
+            if (Verbose)
+            {
+                Console.WriteLine(
+                    "The code for row {0:N0} and column {1:N0} is {2:N0}.",
+                    row,
+                    column,
+                    Code);
+            }
 
             return 0;
         }

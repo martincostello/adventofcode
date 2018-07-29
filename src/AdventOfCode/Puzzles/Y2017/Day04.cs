@@ -57,8 +57,11 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
             ValidPassphraseCountV1 = passphrases.Where((p) => IsPassphraseValid(p, 1)).Count();
             ValidPassphraseCountV2 = passphrases.Where((p) => IsPassphraseValid(p, 2)).Count();
 
-            Console.WriteLine($"There are {ValidPassphraseCountV1:N0} valid passphrases using version 1 of the policy.");
-            Console.WriteLine($"There are {ValidPassphraseCountV2:N0} valid passphrases using version 2 of the policy.");
+            if (Verbose)
+            {
+                Console.WriteLine($"There are {ValidPassphraseCountV1:N0} valid passphrases using version 1 of the policy.");
+                Console.WriteLine($"There are {ValidPassphraseCountV2:N0} valid passphrases using version 2 of the policy.");
+            }
 
             return 0;
         }

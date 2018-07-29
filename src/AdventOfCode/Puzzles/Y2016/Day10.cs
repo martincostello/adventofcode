@@ -1,4 +1,4 @@
-﻿// Copyright (c) Martin Costello, 2015. All rights reserved.
+// Copyright (c) Martin Costello, 2015. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2016
@@ -76,8 +76,11 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
             BotThatCompares61And17Microchips = result.Item1;
             ProductOfMicrochipsInBins012 = result.Item2;
 
-            Console.WriteLine($"The number of the bot that compares value-61 and value-17 microchips is {BotThatCompares61And17Microchips:N0}.");
-            Console.WriteLine($"The product of the microchips in output bins 0, 1 and 2 is {ProductOfMicrochipsInBins012:N0}.");
+            if (Verbose)
+            {
+                Console.WriteLine($"The number of the bot that compares value-61 and value-17 microchips is {BotThatCompares61And17Microchips:N0}.");
+                Console.WriteLine($"The product of the microchips in output bins 0, 1 and 2 is {ProductOfMicrochipsInBins012:N0}.");
+            }
 
             return 0;
         }
@@ -322,9 +325,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
             /// </returns>
             private Bin GetBin(int number)
             {
-                Bin bin;
-
-                if (!Bins.TryGetValue(number, out bin))
+                if (!Bins.TryGetValue(number, out Bin bin))
                 {
                     Bins[number] = bin = new Bin(number);
                 }

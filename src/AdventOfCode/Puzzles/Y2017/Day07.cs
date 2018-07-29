@@ -60,8 +60,11 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
             BottomProgramName = FindBottomProgramName(structure);
             DesiredWeightOfUnbalancedDisc = FindDesiredWeightOfUnbalancedDisc(structure);
 
-            Console.WriteLine($"The name of the bottom program is '{BottomProgramName}'.");
-            Console.WriteLine($"The desired weight of the program to balance the structure is {DesiredWeightOfUnbalancedDisc:N0}.");
+            if (Verbose)
+            {
+                Console.WriteLine($"The name of the bottom program is '{BottomProgramName}'.");
+                Console.WriteLine($"The desired weight of the program to balance the structure is {DesiredWeightOfUnbalancedDisc:N0}.");
+            }
 
             return 0;
         }

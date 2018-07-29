@@ -1,4 +1,4 @@
-﻿// Copyright (c) Martin Costello, 2015. All rights reserved.
+// Copyright (c) Martin Costello, 2015. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2016
@@ -43,7 +43,10 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
 
             ElfWithAllPresents = FindElfThatGetsAllPresents(count, version);
 
-            Console.WriteLine($"The elf that gets all the presents using version {version} of the rules is {ElfWithAllPresents:N0}.");
+            if (Verbose)
+            {
+                Console.WriteLine($"The elf that gets all the presents using version {version} of the rules is {ElfWithAllPresents:N0}.");
+            }
 
             return 0;
         }
@@ -117,7 +120,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         /// </returns>
         private static LinkedList<int> CreateCircle(int count)
         {
-            LinkedList<int> circle = new LinkedList<int>();
+            var circle = new LinkedList<int>();
             var current = circle.AddFirst(1);
 
             while (circle.Count < count)

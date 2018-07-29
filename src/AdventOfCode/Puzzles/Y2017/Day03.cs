@@ -180,8 +180,11 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
             Steps = ComputeSteps(square);
             FirstStorageLargerThanInput = ComputeFirstLargestWrittenValue(square);
 
-            Console.WriteLine($"The number of steps required to carry the data from square {square:N0} all the way to the access port is {Steps:N0}.");
-            Console.WriteLine($"The first value written that is larger than square {square:N0} is {FirstStorageLargerThanInput:N0}.");
+            if (Verbose)
+            {
+                Console.WriteLine($"The number of steps required to carry the data from square {square:N0} all the way to the access port is {Steps:N0}.");
+                Console.WriteLine($"The first value written that is larger than square {square:N0} is {FirstStorageLargerThanInput:N0}.");
+            }
 
             return 0;
         }

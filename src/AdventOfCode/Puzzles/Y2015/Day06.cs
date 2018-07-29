@@ -67,7 +67,10 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
                 }
             }
 
-            Console.WriteLine("Processing instructions using set {0}...", version);
+            if (Verbose)
+            {
+                Console.WriteLine("Processing instructions using set {0}...", version);
+            }
 
             var grid = new LightGrid(1000, 1000);
 
@@ -79,12 +82,20 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
             if (version == 1)
             {
                 LightsIlluminated = grid.Count;
-                Console.WriteLine("{0:N0} lights are illuminated.", LightsIlluminated);
+
+                if (Verbose)
+                {
+                    Console.WriteLine("{0:N0} lights are illuminated.", LightsIlluminated);
+                }
             }
             else
             {
                 TotalBrightness = grid.Brightness;
-                Console.WriteLine("The total brightness of the grid is {0:N0}.", TotalBrightness);
+
+                if (Verbose)
+                {
+                    Console.WriteLine("The total brightness of the grid is {0:N0}.", TotalBrightness);
+                }
             }
 
             return 0;

@@ -1,4 +1,4 @@
-﻿// Copyright (c) Martin Costello, 2015. All rights reserved.
+// Copyright (c) Martin Costello, 2015. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2016
@@ -28,7 +28,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
                 int lastSignal = 1;
                 int iterations = 0;
 
-                Func<int, bool> signal = (p) =>
+                bool Signal(int p)
                 {
                     // If the signal is not 0 or 1, then not of interest
                     bool stop = true;
@@ -60,12 +60,12 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
                     }
 
                     return stop;
-                };
+                }
 
                 Day12.Process(
                     instructions,
                     initialValueOfA: i,
-                    signal: signal);
+                    signal: Signal);
 
                 if (isRepeating)
                 {
@@ -74,7 +74,10 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
                 }
             }
 
-            Console.WriteLine($"The lowest positive integer that produces a clock signal is '{ClockSignalValue:N0}'.");
+            if (Verbose)
+            {
+                Console.WriteLine($"The lowest positive integer that produces a clock signal is '{ClockSignalValue:N0}'.");
+            }
 
             return 0;
         }

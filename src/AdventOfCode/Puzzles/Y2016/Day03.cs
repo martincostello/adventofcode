@@ -1,4 +1,4 @@
-﻿// Copyright (c) Martin Costello, 2015. All rights reserved.
+// Copyright (c) Martin Costello, 2015. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2016
@@ -61,8 +61,11 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
             PossibleTrianglesByRows = GetPossibleTriangleCount(dimensions, readAsColumns: false);
             PossibleTrianglesByColumns = GetPossibleTriangleCount(dimensions, readAsColumns: true);
 
-            Console.WriteLine("The number of possible triangles using rows is {0:N0}.", PossibleTrianglesByRows);
-            Console.WriteLine("The number of possible triangles using columns is {0:N0}.", PossibleTrianglesByColumns);
+            if (Verbose)
+            {
+                Console.WriteLine("The number of possible triangles using rows is {0:N0}.", PossibleTrianglesByRows);
+                Console.WriteLine("The number of possible triangles using columns is {0:N0}.", PossibleTrianglesByColumns);
+            }
 
             return 0;
         }

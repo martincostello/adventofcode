@@ -1,4 +1,4 @@
-﻿// Copyright (c) Martin Costello, 2015. All rights reserved.
+// Copyright (c) Martin Costello, 2015. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2015
@@ -142,13 +142,19 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
             int countInMemory = GetLiteralCharacterCount(input);
             int countEncoded = GetEncodedCharacterCount(input);
 
-            Console.WriteLine(
-                "The number of characters of code for string literals minus the number of characters in memory for the values of the strings is {0:N0}.",
-                FirstSolution = countForCode - countInMemory);
+            FirstSolution = countForCode - countInMemory;
+            SecondSolution = countEncoded - countForCode;
 
-            Console.WriteLine(
-                "The total number of characters to represent the newly encoded strings minus the number of characters of code in each original string literal is {0:N0}.",
-                SecondSolution = countEncoded - countForCode);
+            if (Verbose)
+            {
+                Console.WriteLine(
+                    "The number of characters of code for string literals minus the number of characters in memory for the values of the strings is {0:N0}.",
+                    FirstSolution);
+
+                Console.WriteLine(
+                    "The total number of characters to represent the newly encoded strings minus the number of characters of code in each original string literal is {0:N0}.",
+                    SecondSolution);
+            }
 
             return 0;
         }

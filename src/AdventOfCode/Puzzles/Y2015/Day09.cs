@@ -1,4 +1,4 @@
-﻿// Copyright (c) Martin Costello, 2015. All rights reserved.
+// Copyright (c) Martin Costello, 2015. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2015
@@ -121,13 +121,16 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
 
             Solution = GetDistanceBetweenPoints(ReadResourceAsLines(), findLongest);
 
-            if (findLongest)
+            if (Verbose)
             {
-                Console.WriteLine("The distance of the longest route is {0:N0}.", Solution);
-            }
-            else
-            {
-                Console.WriteLine("The distance of the shortest route is {0:N0}.", Solution);
+                if (findLongest)
+                {
+                    Console.WriteLine("The distance of the longest route is {0:N0}.", Solution);
+                }
+                else
+                {
+                    Console.WriteLine("The distance of the shortest route is {0:N0}.", Solution);
+                }
             }
 
             return 0;

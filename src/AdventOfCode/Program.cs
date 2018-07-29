@@ -1,4 +1,4 @@
-﻿// Copyright (c) Martin Costello, 2015. All rights reserved.
+// Copyright (c) Martin Costello, 2015. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 namespace MartinCostello.AdventOfCode
@@ -54,7 +54,7 @@ namespace MartinCostello.AdventOfCode
 
             args = args.Skip(1).ToArray();
 
-            return SolvePuzzle(type, year, day, args);
+            return SolvePuzzle(type, year, day, args, verbose: true);
         }
 
         /// <summary>
@@ -64,12 +64,14 @@ namespace MartinCostello.AdventOfCode
         /// <param name="year">The year associated with the puzzle.</param>
         /// <param name="day">The day associated with the puzzle.</param>
         /// <param name="args">The arguments to pass to the puzzle.</param>
+        /// <param name="verbose">Whether the puzzle should be run verbosely.</param>
         /// <returns>
         /// The value returned by <see cref="IPuzzle.Solve"/>.
         /// </returns>
-        internal static int SolvePuzzle(Type type, int year, int day, string[] args)
+        internal static int SolvePuzzle(Type type, int year, int day, string[] args, bool verbose = false)
         {
             IPuzzle puzzle = Activator.CreateInstance(type) as IPuzzle;
+            puzzle.Verbose = verbose;
 
             Console.WriteLine();
             Console.WriteLine("Advent of Code {0} - Day {1}", year, day);

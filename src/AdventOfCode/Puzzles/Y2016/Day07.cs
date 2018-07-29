@@ -4,6 +4,7 @@
 namespace MartinCostello.AdventOfCode.Puzzles.Y2016
 {
     using System;
+    using System.Buffers;
     using System.Collections.Generic;
     using System.Linq;
     using System.Text;
@@ -87,8 +88,11 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
             IPAddressesSupportingTls = addresses.Count(DoesIPAddressSupportTls);
             IPAddressesSupportingSsl = addresses.Count(DoesIPAddressSupportSsl);
 
-            Console.WriteLine("{0:N0} IPv7 addresses support TLS.", IPAddressesSupportingTls);
-            Console.WriteLine("{0:N0} IPv7 addresses support SSL.", IPAddressesSupportingSsl);
+            if (Verbose)
+            {
+                Console.WriteLine("{0:N0} IPv7 addresses support TLS.", IPAddressesSupportingTls);
+                Console.WriteLine("{0:N0} IPv7 addresses support SSL.", IPAddressesSupportingSsl);
+            }
 
             return 0;
         }
@@ -125,9 +129,9 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         /// <returns>
         /// An <see cref="IList{T}"/> containing the extracted ABA values.
         /// </returns>
-        private static IList<string> ExtractAbas(string value)
+        private static IList<string> ExtractAbas(ReadOnlySpan<char> value)
         {
-            IList<string> result = new List<string>();
+            var result = new List<string>();
 
             for (int i = 0; i < value.Length - 2; i++)
             {
@@ -135,9 +139,22 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
                 char ch2 = value[i + 1];
                 char ch3 = value[i + 2];
 
-                if (ch1 != ch2 && ch1 == ch3)
+                char[] shared = ArrayPool<char>.Shared.Rent(3);
+
+                try
                 {
-                    result.Add(new string(new[] { ch1, ch2, ch3 }));
+                    shared[0] = ch1;
+                    shared[1] = ch2;
+                    shared[2] = ch3;
+
+                    if (ch1 != ch2 && ch1 == ch3)
+                    {
+                        result.Add(new string(shared.AsSpan(0, 3)));
+                    }
+                }
+                finally
+                {
+                    ArrayPool<char>.Shared.Return(shared);
                 }
             }
 
@@ -155,7 +172,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
             supernets = new List<string>();
             hypernets = new List<string>();
 
-            StringBuilder builder = new StringBuilder();
+            var builder = new StringBuilder();
 
             bool isInHypernet = false;
 

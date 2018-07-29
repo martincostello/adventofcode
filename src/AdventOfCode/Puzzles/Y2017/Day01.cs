@@ -62,8 +62,11 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
             CaptchaSolutionNext = CalculateSum(digits, useOppositeDigit: false);
             CaptchaSolutionOpposite = CalculateSum(digits, useOppositeDigit: true);
 
-            Console.WriteLine($"The solution to the first captcha is {CaptchaSolutionNext:N0}.");
-            Console.WriteLine($"The solution to the second captcha is {CaptchaSolutionOpposite:N0}.");
+            if (Verbose)
+            {
+                Console.WriteLine($"The solution to the first captcha is {CaptchaSolutionNext:N0}.");
+                Console.WriteLine($"The solution to the second captcha is {CaptchaSolutionOpposite:N0}.");
+            }
 
             return 0;
         }

@@ -122,7 +122,10 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
 
             ScrambledResult = Scramble(text, instructions, reverse);
 
-            Console.WriteLine($"The result of {(reverse ? "un" : string.Empty)}scrambling '{text}' is '{ScrambledResult}'.");
+            if (Verbose)
+            {
+                Console.WriteLine($"The result of {(reverse ? "un" : string.Empty)}scrambling '{text}' is '{ScrambledResult}'.");
+            }
 
             return 0;
         }

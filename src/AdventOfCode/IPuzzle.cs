@@ -9,6 +9,11 @@ namespace MartinCostello.AdventOfCode
     public interface IPuzzle
     {
         /// <summary>
+        /// Gets or sets a value indicating whether the puzzle should be run verbosely.
+        /// </summary>
+        bool Verbose { get; set; }
+
+        /// <summary>
         /// Solves the puzzle given the specified input.
         /// </summary>
         /// <param name="args">The input arguments to the puzzle.</param>

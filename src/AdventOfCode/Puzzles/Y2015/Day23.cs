@@ -1,4 +1,4 @@
-﻿// Copyright (c) Martin Costello, 2015. All rights reserved.
+// Copyright (c) Martin Costello, 2015. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2015
@@ -32,12 +32,12 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
         /// </returns>
         internal static Tuple<uint, uint> ProcessInstructions(IList<string> instructions, uint initialValue)
         {
-            Register a = new Register()
+            var a = new Register()
             {
                 Value = initialValue,
             };
 
-            Register b = new Register();
+            var b = new Register();
 
             for (int i = 0; i >= 0 && i < instructions.Count;)
             {
@@ -85,13 +85,13 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
                         break;
 
                     default:
-                        Console.WriteLine("Instruction '{0}' is not defined.", operation);
+                        Console.Error.WriteLine("Instruction '{0}' is not defined.", operation);
                         return Tuple.Create(uint.MaxValue, uint.MaxValue);
                 }
 
                 if (next == i)
                 {
-                    Console.WriteLine("Instruction at line {0:N0} creates an infinite loop.", i + 1);
+                    Console.Error.WriteLine("Instruction at line {0:N0} creates an infinite loop.", i + 1);
                     break;
                 }
 
@@ -112,11 +112,14 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
             A = result.Item1;
             B = result.Item2;
 
-            Console.WriteLine(
-                "After processing {0:N0} instructions, the value of a is {1:N0} and the value of b is {2:N0}.",
-                instructions.Count,
-                A,
-                B);
+            if (Verbose)
+            {
+                Console.WriteLine(
+                    "After processing {0:N0} instructions, the value of a is {1:N0} and the value of b is {2:N0}.",
+                    instructions.Count,
+                    A,
+                    B);
+            }
 
             return 0;
         }
