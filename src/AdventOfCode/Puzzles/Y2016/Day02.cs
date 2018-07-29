@@ -126,13 +126,16 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
             BathroomCodeDigitKeypad = GetBathroomCode(instructions, DigitGrid);
             BathroomCodeAlphanumericKeypad = GetBathroomCode(instructions, AlphanumericGrid);
 
-            Console.WriteLine(
-                "The code for the bathroom with a digit keypad is {0}.",
-                BathroomCodeDigitKeypad);
+            if (Verbose)
+            {
+                Console.WriteLine(
+                    "The code for the bathroom with a digit keypad is {0}.",
+                    BathroomCodeDigitKeypad);
 
-            Console.WriteLine(
-                "The code for the bathroom with an alphanumeric keypad is {0}.",
-                BathroomCodeAlphanumericKeypad);
+                Console.WriteLine(
+                    "The code for the bathroom with an alphanumeric keypad is {0}.",
+                    BathroomCodeAlphanumericKeypad);
+            }
 
             return 0;
         }

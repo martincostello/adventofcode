@@ -1,4 +1,4 @@
-﻿// Copyright (c) Martin Costello, 2015. All rights reserved.
+// Copyright (c) Martin Costello, 2015. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2016
@@ -42,8 +42,11 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
             DecompressedLengthVersion1 = GetDecompressedLength(data, version: 1);
             DecompressedLengthVersion2 = GetDecompressedLength(data, version: 2);
 
-            Console.WriteLine($"The decompressed length of the data using version 1 of the algorithm is {DecompressedLengthVersion1:N0}.");
-            Console.WriteLine($"The decompressed length of the data using version 2 of the algorithm is {DecompressedLengthVersion2:N0}.");
+            if (Verbose)
+            {
+                Console.WriteLine($"The decompressed length of the data using version 1 of the algorithm is {DecompressedLengthVersion1:N0}.");
+                Console.WriteLine($"The decompressed length of the data using version 2 of the algorithm is {DecompressedLengthVersion2:N0}.");
+            }
 
             return 0;
         }

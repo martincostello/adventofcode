@@ -90,8 +90,11 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
 
             (MinimumSteps, MaximumDistance) = FindStepRange(path);
 
-            Console.WriteLine($"The minimum number of steps required to reach the child process is {MinimumSteps:N0}.");
-            Console.WriteLine($"The maximum distance reached by the child process was {MaximumDistance:N0}.");
+            if (Verbose)
+            {
+                Console.WriteLine($"The minimum number of steps required to reach the child process is {MinimumSteps:N0}.");
+                Console.WriteLine($"The maximum distance reached by the child process was {MaximumDistance:N0}.");
+            }
 
             return 0;
         }

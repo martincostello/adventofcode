@@ -5,7 +5,6 @@ namespace MartinCostello.AdventOfCode
 {
     using System;
     using System.Collections.Generic;
-    using System.Diagnostics;
     using System.Globalization;
     using System.IO;
     using System.Reflection;
@@ -15,6 +14,11 @@ namespace MartinCostello.AdventOfCode
     /// </summary>
     public abstract class Puzzle : IPuzzle
     {
+        /// <summary>
+        /// Gets or sets a value indicating whether the puzzle should be run verbosely.
+        /// </summary>
+        public bool Verbose { get; set; }
+
         /// <summary>
         /// Gets the minimum number of arguments required to solve the puzzle.
         /// </summary>
@@ -68,7 +72,7 @@ namespace MartinCostello.AdventOfCode
         /// <returns>
         /// The parsed value of <paramref name="s"/>.
         /// </returns>
-        protected internal static int ParseInt32(string s, NumberStyles style = NumberStyles.Integer)
+        protected internal static int ParseInt32(ReadOnlySpan<char> s, NumberStyles style = NumberStyles.Integer)
         {
             return int.Parse(s, style, CultureInfo.InvariantCulture);
         }
@@ -85,7 +89,7 @@ namespace MartinCostello.AdventOfCode
         /// <see langword="true"/> if <paramref name="s"/> was parsed
         /// successfully; otherwise <see langword="false"/>.
         /// </returns>
-        protected internal static bool TryParseInt32(string s, out int value)
+        protected internal static bool TryParseInt32(ReadOnlySpan<char> s, out int value)
         {
             return int.TryParse(s, NumberStyles.Integer, CultureInfo.InvariantCulture, out value);
         }
@@ -97,7 +101,7 @@ namespace MartinCostello.AdventOfCode
         /// <returns>
         /// The parsed value of <paramref name="s"/>.
         /// </returns>
-        protected internal static uint ParseUInt32(string s) => uint.Parse(s, CultureInfo.InvariantCulture);
+        protected internal static uint ParseUInt32(ReadOnlySpan<char> s) => uint.Parse(s, NumberStyles.Integer, CultureInfo.InvariantCulture);
 
         /// <summary>
         /// Ensures that the specified number of arguments are present.
@@ -111,29 +115,6 @@ namespace MartinCostello.AdventOfCode
         protected static bool EnsureArguments(ICollection<string> args, int minimumLength)
         {
             return args.Count >= minimumLength;
-        }
-
-        /// <summary>
-        /// Writes a line to the console.
-        /// </summary>
-        /// <param name="format">The format string to use.</param>
-        /// <param name="arg0">The first argument.</param>
-        [Conditional("BENCHMARKS")]
-        protected static void WriteLine(string format, object arg0)
-        {
-            Console.WriteLine(format, arg0);
-        }
-
-        /// <summary>
-        /// Writes a line to the console.
-        /// </summary>
-        /// <param name="format">The format string to use.</param>
-        /// <param name="arg0">The first argument.</param>
-        /// <param name="arg1">The second argument.</param>
-        [Conditional("BENCHMARKS")]
-        protected static void WriteLine(string format, object arg0, object arg1)
-        {
-            Console.WriteLine(format, arg0, arg1);
         }
 
         /// <summary>
@@ -162,7 +143,7 @@ namespace MartinCostello.AdventOfCode
 
             using (Stream stream = ReadResource())
             {
-                using (TextReader reader = new StreamReader(stream))
+                using (var reader = new StreamReader(stream))
                 {
                     string value = null;
 
@@ -186,7 +167,7 @@ namespace MartinCostello.AdventOfCode
         {
             using (Stream stream = ReadResource())
             {
-                using (TextReader reader = new StreamReader(stream))
+                using (var reader = new StreamReader(stream))
                 {
                     return reader.ReadToEnd();
                 }

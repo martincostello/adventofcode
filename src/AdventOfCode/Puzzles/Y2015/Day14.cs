@@ -1,4 +1,4 @@
-﻿// Copyright (c) Martin Costello, 2015. All rights reserved.
+// Copyright (c) Martin Costello, 2015. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2015
@@ -97,11 +97,17 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
 
             MaximumReindeerDistance = GetMaximumDistanceOfFastestReindeer(flightData, timeIndex);
 
-            Console.WriteLine("After {0:N0} seconds, the furthest reindeer is {1:N0} km away.", timeIndex, MaximumReindeerDistance);
+            if (Verbose)
+            {
+                Console.WriteLine("After {0:N0} seconds, the furthest reindeer is {1:N0} km away.", timeIndex, MaximumReindeerDistance);
+            }
 
             MaximumReindeerPoints = GetMaximumPointsOfFastestReindeer(flightData, timeIndex);
 
-            Console.WriteLine("After {0:N0} seconds, the reindeer in the lead has {1:N0} points.", timeIndex, MaximumReindeerPoints);
+            if (Verbose)
+            {
+                Console.WriteLine("After {0:N0} seconds, the reindeer in the lead has {1:N0} points.", timeIndex, MaximumReindeerPoints);
+            }
 
             return 0;
         }

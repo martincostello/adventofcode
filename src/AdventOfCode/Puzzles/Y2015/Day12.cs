@@ -1,4 +1,4 @@
-﻿// Copyright (c) Martin Costello, 2015. All rights reserved.
+// Copyright (c) Martin Costello, 2015. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2015
@@ -26,11 +26,9 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
         /// <returns>The sum of the tokens in <paramref name="token"/>.</returns>
         internal static long SumIntegerValues(JToken token, string valueToIgnore)
         {
-            JValue value = token as JValue;
-
             long sum = 0;
 
-            if (value != null && value.Type == JTokenType.Integer)
+            if (token is JValue value && value.Type == JTokenType.Integer)
             {
                 sum = (long)value.Value;
             }
@@ -75,7 +73,10 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
 
             Sum = SumIntegerValues(document, keyToIgnore);
 
-            Console.WriteLine("The sum of the integers in the JSON document is {0:N0}.", Sum);
+            if (Verbose)
+            {
+                Console.WriteLine("The sum of the integers in the JSON document is {0:N0}.", Sum);
+            }
 
             return 0;
         }

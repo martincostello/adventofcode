@@ -1,4 +1,4 @@
-﻿// Copyright (c) Martin Costello, 2015. All rights reserved.
+// Copyright (c) Martin Costello, 2015. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2016
@@ -59,8 +59,11 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
             TimeOfFirstButtonPress = FindTimeForCapsuleRelease(input);
             TimeOfFirstButtonPressWithExtraDisc = FindTimeForCapsuleRelease(input.Concat(extraDisc));
 
-            Console.WriteLine($"The first time the button can be pressed to get a capsule is {TimeOfFirstButtonPress:N0}.");
-            Console.WriteLine($"The first time the button can be pressed to get a capsule with the extra disc present is {TimeOfFirstButtonPressWithExtraDisc:N0}.");
+            if (Verbose)
+            {
+                Console.WriteLine($"The first time the button can be pressed to get a capsule is {TimeOfFirstButtonPress:N0}.");
+                Console.WriteLine($"The first time the button can be pressed to get a capsule with the extra disc present is {TimeOfFirstButtonPressWithExtraDisc:N0}.");
+            }
 
             return 0;
         }

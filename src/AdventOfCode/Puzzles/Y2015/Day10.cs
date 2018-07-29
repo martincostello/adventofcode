@@ -1,4 +1,4 @@
-﻿// Copyright (c) Martin Costello, 2015. All rights reserved.
+// Copyright (c) Martin Costello, 2015. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2015
@@ -61,11 +61,16 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
                 result = AsLookAndSay(result);
             }
 
-            Console.WriteLine(
-                "The length of the result for input '{0}' after {1:N0} iterations is {2:N0}.",
-                value,
-                iterations,
-                Solution = result.Length);
+            Solution = result.Length;
+
+            if (Verbose)
+            {
+                Console.WriteLine(
+                    "The length of the result for input '{0}' after {1:N0} iterations is {2:N0}.",
+                    value,
+                    iterations,
+                    result.Length);
+            }
 
             return 0;
         }

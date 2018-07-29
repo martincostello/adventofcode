@@ -1,4 +1,4 @@
-﻿// Copyright (c) Martin Costello, 2015. All rights reserved.
+// Copyright (c) Martin Costello, 2015. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2015
@@ -38,7 +38,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
             int total = weights.Sum() / compartments;
 
             var optimumConfiguration = Maths.GetCombinations(total, weights)
-                .Select((p) => new { Count = p.Count, QuantumEntanglement = p.Aggregate((x, y) => x * y) })
+                .Select((p) => new { p.Count, QuantumEntanglement = p.Aggregate((x, y) => x * y) })
                 .OrderBy((p) => p.Count)
                 .ThenBy((p) => p.QuantumEntanglement)
                 .First();
@@ -57,10 +57,13 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
 
             QuantumEntanglementOfFirstGroup = GetQuantumEntanglementOfIdealConfiguration(compartments, weights);
 
-            Console.WriteLine(
-                "The quantum entanglement of the ideal configuration of {0:N0} packages is {1:N0}.",
-                weights.Count,
-                QuantumEntanglementOfFirstGroup);
+            if (Verbose)
+            {
+                Console.WriteLine(
+                    "The quantum entanglement of the ideal configuration of {0:N0} packages is {1:N0}.",
+                    weights.Count,
+                    QuantumEntanglementOfFirstGroup);
+            }
 
             return 0;
         }

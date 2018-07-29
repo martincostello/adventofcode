@@ -1,4 +1,4 @@
-﻿// Copyright (c) Martin Costello, 2015. All rights reserved.
+// Copyright (c) Martin Costello, 2015. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2015
@@ -60,10 +60,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
                     if (words.Length == 1)
                     {
                         // "123 -> x" or " -> "lx -> a"
-                        ushort value;
-
                         // Is the instruction a value or a previously solved value?
-                        if (ushort.TryParse(firstOperand, out value) || result.TryGetValue(firstOperand, out value))
+                        if (ushort.TryParse(firstOperand, out ushort value) || result.TryGetValue(firstOperand, out value))
                         {
                             result[wireId] = value;
                         }
@@ -73,10 +71,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
                         // "NOT e -> f" or "NOT 1 -> g"
                         secondOperand = words.ElementAtOrDefault(1);
 
-                        ushort value;
-
                         // Is the second operand a value or a previously solved value?
-                        if (ushort.TryParse(secondOperand, out value) ||
+                        if (ushort.TryParse(secondOperand, out ushort value) ||
                             result.TryGetValue(secondOperand, out value))
                         {
                             result[wireId] = (ushort)~value;
@@ -86,12 +82,9 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
                     {
                         secondOperand = words.ElementAtOrDefault(2);
 
-                        ushort firstValue;
-                        ushort secondValue;
-
                         // Are both operands a value or a previously solved value?
-                        if ((ushort.TryParse(firstOperand, out firstValue) || result.TryGetValue(firstOperand, out firstValue)) &&
-                            (ushort.TryParse(secondOperand, out secondValue) || result.TryGetValue(secondOperand, out secondValue)))
+                        if ((ushort.TryParse(firstOperand, out ushort firstValue) || result.TryGetValue(firstOperand, out firstValue)) &&
+                            (ushort.TryParse(secondOperand, out ushort secondValue) || result.TryGetValue(secondOperand, out secondValue)))
                         {
                             string operation = words.ElementAtOrDefault(1);
                             solvedValue = TrySolveValueForOperation(operation, firstValue, secondValue);
@@ -119,7 +112,10 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
 
             FirstSignal = values["a"];
 
-            Console.WriteLine("The signal for wire a is {0:N0}.", FirstSignal);
+            if (Verbose)
+            {
+                Console.WriteLine("The signal for wire a is {0:N0}.", FirstSignal);
+            }
 
             // Replace the input value for b with the value for a, then re-calculate
             int indexForB = instructions.IndexOf("44430 -> b");
@@ -129,7 +125,10 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
 
             SecondSignal = values["a"];
 
-            Console.WriteLine("The new signal for wire a is {0:N0}.", SecondSignal);
+            if (Verbose)
+            {
+                Console.WriteLine("The new signal for wire a is {0:N0}.", SecondSignal);
+            }
 
             return 0;
         }

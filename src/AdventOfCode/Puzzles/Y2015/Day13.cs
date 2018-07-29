@@ -1,4 +1,4 @@
-﻿// Copyright (c) Martin Costello, 2015. All rights reserved.
+// Copyright (c) Martin Costello, 2015. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2015
@@ -63,7 +63,10 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
 
             MaximumTotalChangeInHappiness = GetMaximumTotalChangeInHappiness(potentialHappiness);
 
-            Console.WriteLine("The total change in happiness is {0:N0}.", MaximumTotalChangeInHappiness);
+            if (Verbose)
+            {
+                Console.WriteLine("The total change in happiness is {0:N0}.", MaximumTotalChangeInHappiness);
+            }
 
             // Create a new guest list which is the same as the previous one but with the current user added
             var potentialHappinessWithCurrentUser = new List<string>(potentialHappiness);
@@ -86,7 +89,10 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
 
             MaximumTotalChangeInHappinessWithCurrentUser = GetMaximumTotalChangeInHappiness(potentialHappinessWithCurrentUser);
 
-            Console.WriteLine("The total change in happiness with the current user seated is {0:N0}.", MaximumTotalChangeInHappinessWithCurrentUser);
+            if (Verbose)
+            {
+                Console.WriteLine("The total change in happiness with the current user seated is {0:N0}.", MaximumTotalChangeInHappinessWithCurrentUser);
+            }
 
             return 0;
         }

@@ -1,4 +1,4 @@
-﻿// Copyright (c) Martin Costello, 2015. All rights reserved.
+// Copyright (c) Martin Costello, 2015. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2015
@@ -116,10 +116,13 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
 
             LowestZeroHash = GetLowestPositiveNumberWithStartingZeroes(secretKey, zeroes);
 
-            Console.WriteLine(
-                "The lowest positive number for a hash starting with {0} zeroes is {1:N0}.",
-                zeroes,
-                LowestZeroHash);
+            if (Verbose)
+            {
+                Console.WriteLine(
+                    "The lowest positive number for a hash starting with {0} zeroes is {1:N0}.",
+                    zeroes,
+                    LowestZeroHash);
+            }
 
             return 0;
         }

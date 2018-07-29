@@ -67,8 +67,11 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
             StepsToExitV1 = Execute(program, 1);
             StepsToExitV2 = Execute(program, 2);
 
-            Console.WriteLine($"It takes {StepsToExitV1:N0} to reach the exit using version 1.");
-            Console.WriteLine($"It takes {StepsToExitV2:N0} to reach the exit using version 2.");
+            if (Verbose)
+            {
+                Console.WriteLine($"It takes {StepsToExitV1:N0} to reach the exit using version 1.");
+                Console.WriteLine($"It takes {StepsToExitV2:N0} to reach the exit using version 2.");
+            }
 
             return 0;
         }

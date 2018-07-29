@@ -1,4 +1,4 @@
-﻿// Copyright (c) Martin Costello, 2015. All rights reserved.
+// Copyright (c) Martin Costello, 2015. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2015
@@ -82,10 +82,13 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
             AuntSueNumber = WhichAuntSueSentTheGift(auntSueMetadata);
             RealAuntSueNumber = WhichAuntSueSentTheGift(auntSueMetadata, compensateForRetroEncabulator: true);
 
-            Console.WriteLine(
-                "The number of the Aunt Sue that got me the gift was originally thought to be {0}, but it was actually {1}.",
-                AuntSueNumber,
-                RealAuntSueNumber);
+            if (Verbose)
+            {
+                Console.WriteLine(
+                    "The number of the Aunt Sue that got me the gift was originally thought to be {0}, but it was actually {1}.",
+                    AuntSueNumber,
+                    RealAuntSueNumber);
+            }
 
             return 0;
         }

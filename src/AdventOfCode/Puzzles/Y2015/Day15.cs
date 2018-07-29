@@ -85,8 +85,11 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
             HighestTotalCookieScore = GetHighestTotalCookieScore(ingredients);
             HighestTotalCookieScoreWith500Calories = GetHighestTotalCookieScore(ingredients, 500);
 
-            Console.WriteLine("The highest total cookie score is {0:N0}.", HighestTotalCookieScore);
-            Console.WriteLine("The highest total cookie score for a cookie with 500 calories is {0:N0}.", HighestTotalCookieScoreWith500Calories);
+            if (Verbose)
+            {
+                Console.WriteLine("The highest total cookie score is {0:N0}.", HighestTotalCookieScore);
+                Console.WriteLine("The highest total cookie score for a cookie with 500 calories is {0:N0}.", HighestTotalCookieScoreWith500Calories);
+            }
 
             return 0;
         }

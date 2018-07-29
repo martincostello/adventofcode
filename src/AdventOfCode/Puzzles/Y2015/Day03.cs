@@ -85,13 +85,16 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
             HousesWithPresentsFromSanta = GetUniqueHousesVisitedBySanta(instructions);
             HousesWithPresentsFromSantaAndRoboSanta = GetUniqueHousesVisitedBySantaAndRoboSanta(instructions);
 
-            Console.WriteLine(
-                "In 2015, Santa delivered presents to {0:N0} houses.",
-                HousesWithPresentsFromSanta);
+            if (Verbose)
+            {
+                Console.WriteLine(
+                    "In 2015, Santa delivered presents to {0:N0} houses.",
+                    HousesWithPresentsFromSanta);
 
-            Console.WriteLine(
-                "In 2016, Santa and Robo-Santa delivered presents to {0:N0} houses.",
-                HousesWithPresentsFromSantaAndRoboSanta);
+                Console.WriteLine(
+                    "In 2016, Santa and Robo-Santa delivered presents to {0:N0} houses.",
+                    HousesWithPresentsFromSantaAndRoboSanta);
+            }
 
             return 0;
         }

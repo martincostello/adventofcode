@@ -129,13 +129,16 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
             MaximumCostToLose = costsToLose.Max();
             MinimumCostToWin = costsToWin.Min();
 
-            Console.WriteLine(
-                "The minimum amount of gold spent for the human to beat the boss is {0:N0}.",
-                MinimumCostToWin);
+            if (Verbose)
+            {
+                Console.WriteLine(
+                    "The minimum amount of gold spent for the human to beat the boss is {0:N0}.",
+                    MinimumCostToWin);
 
-            Console.WriteLine(
-                "The maximum amount of gold spent for the human to lose to the boss is {0:N0}.",
-                MaximumCostToLose);
+                Console.WriteLine(
+                    "The maximum amount of gold spent for the human to lose to the boss is {0:N0}.",
+                    MaximumCostToLose);
+            }
 
             return 0;
         }

@@ -97,8 +97,11 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
             IndexOfKey64 = GetOneTimePadKeyIndex(salt, 64, useKeyStretching: false);
             IndexOfKey64WithStretching = GetOneTimePadKeyIndex(salt, 64, useKeyStretching: true);
 
-            Console.WriteLine($"The index that produces the 64th one-time pad key is {IndexOfKey64:N0}.");
-            Console.WriteLine($"The index that produces the 64th one-time pad key when using key stretching is {IndexOfKey64WithStretching:N0}.");
+            if (Verbose)
+            {
+                Console.WriteLine($"The index that produces the 64th one-time pad key is {IndexOfKey64:N0}.");
+                Console.WriteLine($"The index that produces the 64th one-time pad key when using key stretching is {IndexOfKey64WithStretching:N0}.");
+            }
 
             return 0;
         }
@@ -214,7 +217,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
 
             foreach (byte b in collection)
             {
-                hash.AppendFormat(CultureInfo.InvariantCulture, "{0:x2}", b);
+                hash.Append(b.ToString("x2", CultureInfo.InvariantCulture));
             }
 
             return hash.ToString();

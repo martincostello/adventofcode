@@ -110,8 +110,11 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
             Severity = GetSeverityOfTrip(depthRanges);
             ShortestDelay = GetShortestDelayForNeverCaught(depthRanges);
 
-            Console.WriteLine($"The severity of the trip through the firewall is {Severity:N0}.");
-            Console.WriteLine($"The fewest number of picoseconds that the packet needs to be delayed by to pass through the firewall without being caught is {ShortestDelay:N0}.");
+            if (Verbose)
+            {
+                Console.WriteLine($"The severity of the trip through the firewall is {Severity:N0}.");
+                Console.WriteLine($"The fewest number of picoseconds that the packet needs to be delayed by to pass through the firewall without being caught is {ShortestDelay:N0}.");
+            }
 
             return 0;
         }

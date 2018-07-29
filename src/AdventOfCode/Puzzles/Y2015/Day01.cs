@@ -75,8 +75,11 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
             FinalFloor = result.Item1;
             FirstBasementInstruction = result.Item2;
 
-            WriteLine("Santa should go to floor {0}.", FinalFloor);
-            WriteLine("Santa first enters the basement after following instruction {0:N0}.", FirstBasementInstruction);
+            if (Verbose)
+            {
+                Console.WriteLine("Santa should go to floor {0}.", FinalFloor);
+                Console.WriteLine("Santa first enters the basement after following instruction {0:N0}.", FirstBasementInstruction);
+            }
 
             return 0;
         }

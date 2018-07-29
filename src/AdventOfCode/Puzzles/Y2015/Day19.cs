@@ -1,4 +1,4 @@
-﻿// Copyright (c) Martin Costello, 2015. All rights reserved.
+// Copyright (c) Martin Costello, 2015. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2015
@@ -31,7 +31,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
         /// </returns>
         internal static ICollection<string> GetPossibleMolecules(string molecule, ICollection<string> replacements)
         {
-            List<string> molecules = new List<string>();
+            var molecules = new List<string>();
 
             foreach (string replacement in replacements)
             {
@@ -145,7 +145,11 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
             if (fabricate)
             {
                 Solution = GetMinimumSteps(molecule, replacements);
-                Console.WriteLine("The target molecule can be made in a minimum of {0:N0} steps.", Solution);
+
+                if (Verbose)
+                {
+                    Console.WriteLine("The target molecule can be made in a minimum of {0:N0} steps.", Solution);
+                }
             }
             else
             {
@@ -153,10 +157,13 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
 
                 Solution = molecules.Count;
 
-                Console.WriteLine(
-                    "{0:N0} distinct molecules can be created from {1:N0} possible replacements.",
-                    Solution,
-                    replacements.Count);
+                if (Verbose)
+                {
+                    Console.WriteLine(
+                        "{0:N0} distinct molecules can be created from {1:N0} possible replacements.",
+                        Solution,
+                        replacements.Count);
+                }
             }
 
             return 0;

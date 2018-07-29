@@ -102,13 +102,16 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
             BlocksToEasterBunnyHQIgnoringDuplicates = CalculateDistance(instructions, ignoreDuplicates: true);
             BlocksToEasterBunnyHQ = CalculateDistance(instructions, ignoreDuplicates: false);
 
-            Console.WriteLine(
-                "The Easter Bunny's headquarters are {0:N0} blocks away.",
-                BlocksToEasterBunnyHQIgnoringDuplicates);
+            if (Verbose)
+            {
+                Console.WriteLine(
+                    "The Easter Bunny's headquarters are {0:N0} blocks away.",
+                    BlocksToEasterBunnyHQIgnoringDuplicates);
 
-            Console.WriteLine(
-                "The Easter Bunny's headquarters are {0:N0} blocks away if it is the first location visited twice.",
-                BlocksToEasterBunnyHQ);
+                Console.WriteLine(
+                    "The Easter Bunny's headquarters are {0:N0} blocks away if it is the first location visited twice.",
+                    BlocksToEasterBunnyHQ);
+            }
 
             return 0;
         }

@@ -1,4 +1,4 @@
-﻿// Copyright (c) Martin Costello, 2015. All rights reserved.
+// Copyright (c) Martin Costello, 2015. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2015
@@ -88,10 +88,13 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
 
             LowestHouseNumber = GetLowestHouseNumber(target, maximumVisits);
 
-            Console.WriteLine(
-                "The first house to receive at least {0:N0} presents is house number {1:N0}.",
-                target,
-                LowestHouseNumber);
+            if (Verbose)
+            {
+                Console.WriteLine(
+                    "The first house to receive at least {0:N0} presents is house number {1:N0}.",
+                    target,
+                    LowestHouseNumber);
+            }
 
             return 0;
         }

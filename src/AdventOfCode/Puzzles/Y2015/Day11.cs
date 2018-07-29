@@ -1,4 +1,4 @@
-﻿// Copyright (c) Martin Costello, 2015. All rights reserved.
+// Copyright (c) Martin Costello, 2015. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2015
@@ -86,9 +86,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
 
                 string pair = new string(new[] { first, second });
 
-                IList<int> indexes;
-
-                if (!letterPairs.TryGetValue(pair, out indexes))
+                if (!letterPairs.TryGetValue(pair, out IList<int> indexes))
                 {
                     indexes = letterPairs[pair] = new List<int>();
                 }
@@ -108,7 +106,10 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
             string current = args[0];
             NextPassword = GenerateNextPassword(current);
 
-            Console.WriteLine("Santa's new password should be '{0}'.", NextPassword);
+            if (Verbose)
+            {
+                Console.WriteLine("Santa's new password should be '{0}'.", NextPassword);
+            }
 
             return 0;
         }

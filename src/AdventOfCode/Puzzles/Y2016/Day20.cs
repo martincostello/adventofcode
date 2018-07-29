@@ -1,4 +1,4 @@
-﻿// Copyright (c) Martin Costello, 2015. All rights reserved.
+// Copyright (c) Martin Costello, 2015. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2016
@@ -125,13 +125,14 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         {
             IList<string> ranges = ReadResourceAsLines();
 
-            uint count;
-
-            LowestNonblockedIP = GetLowestNonblockedIP(uint.MaxValue, ranges, out count);
+            LowestNonblockedIP = GetLowestNonblockedIP(uint.MaxValue, ranges, out uint count);
             AllowedIPCount = count;
 
-            Console.WriteLine($"The lowest-valued IP that is not blocked is {LowestNonblockedIP}.");
-            Console.WriteLine($"The number of IP addresses allowed is {AllowedIPCount:N0}.");
+            if (Verbose)
+            {
+                Console.WriteLine($"The lowest-valued IP that is not blocked is {LowestNonblockedIP}.");
+                Console.WriteLine($"The number of IP addresses allowed is {AllowedIPCount:N0}.");
+            }
 
             return 0;
         }

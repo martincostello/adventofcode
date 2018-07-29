@@ -1,4 +1,4 @@
-﻿// Copyright (c) Martin Costello, 2015. All rights reserved.
+// Copyright (c) Martin Costello, 2015. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2016
@@ -23,10 +23,11 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         /// </summary>
         /// <param name="firstRowTiles">The map of tiles in the first row.</param>
         /// <param name="rows">The number of rows.</param>
+        /// <param name="printGrid">Whether to output the grid to the console.</param>
         /// <returns>
         /// The number of safe tiles in the map described by <paramref name="firstRowTiles"/>.
         /// </returns>
-        internal static int FindSafeTileCount(string firstRowTiles, int rows)
+        internal static int FindSafeTileCount(string firstRowTiles, int rows, bool printGrid = false)
         {
             int width = firstRowTiles.Length;
 
@@ -50,9 +51,12 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
                 }
             }
 
-            if (!Console.IsOutputRedirected && rows <= Console.WindowHeight)
+            if (printGrid)
             {
-                PrintGrid(tiles);
+                if (!Console.IsOutputRedirected && rows <= Console.WindowHeight)
+                {
+                    PrintGrid(tiles);
+                }
             }
 
             return (width * rows) - CountTrapTiles(tiles);
@@ -64,9 +68,12 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
             int rows = ParseInt32(args[0]);
             string firstRowTiles = args.Length > 1 ? args[1] : ReadResourceAsString().TrimEnd();
 
-            SafeTileCount = FindSafeTileCount(firstRowTiles, rows);
+            SafeTileCount = FindSafeTileCount(firstRowTiles, rows, Verbose);
 
-            Console.WriteLine($"The number of safe tiles is {SafeTileCount:N0}.");
+            if (Verbose)
+            {
+                Console.WriteLine($"The number of safe tiles is {SafeTileCount:N0}.");
+            }
 
             return 0;
         }
