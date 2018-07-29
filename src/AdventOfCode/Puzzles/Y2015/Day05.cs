@@ -1,4 +1,4 @@
-﻿// Copyright (c) Martin Costello, 2015. All rights reserved.
+// Copyright (c) Martin Costello, 2015. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2015
@@ -30,7 +30,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
         internal static bool IsNiceV1(string value)
         {
             // The string is not nice if it contain any of the following sequences
-            if (new[] { "ab", "cd", "pq", "xy" }.Any((p) => value.Contains(p)))
+            if (new[] { "ab", "cd", "pq", "xy" }.Any((p) => value.Contains(p, StringComparison.Ordinal)))
             {
                 return false;
             }
@@ -39,7 +39,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
             bool hasAnyConsecutiveLetters = false;
 
             // The string is nice if it has three or more vowels and at least two consecutive letters
-            Func<bool> isNice = () => hasAnyConsecutiveLetters && vowels > 2;
+            bool IsNice() => hasAnyConsecutiveLetters && vowels > 2;
 
             for (int i = 0; i < value.Length; i++)
             {
@@ -55,14 +55,14 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
                     hasAnyConsecutiveLetters = current == value[i - 1];
                 }
 
-                if (isNice())
+                if (IsNice())
                 {
                     // Criteria all met, no further analysis required
                     return true;
                 }
             }
 
-            return isNice();
+            return IsNice();
         }
 
         /// <summary>
@@ -98,9 +98,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
 
                 string pair = new string(new[] { first, second });
 
-                IList<int> indexes;
-
-                if (!letterPairs.TryGetValue(pair, out indexes))
+                if (!letterPairs.TryGetValue(pair, out IList<int> indexes))
                 {
                     indexes = letterPairs[pair] = new List<int>();
                 }

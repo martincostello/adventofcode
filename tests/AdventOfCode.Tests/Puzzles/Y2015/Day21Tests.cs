@@ -1,9 +1,9 @@
-﻿// Copyright (c) Martin Costello, 2015. All rights reserved.
+// Copyright (c) Martin Costello, 2015. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2015
 {
-    using System.Linq;
+    using System;
     using Xunit;
 
     /// <summary>
@@ -27,7 +27,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
         public static void Y2015_Day21_Solve_Returns_Correct_Solution()
         {
             // Arrange
-            string[] args = new string[0];
+            string[] args = Array.Empty<string>();
 
             // Act
             var puzzle = PuzzleTestHelpers.SolvePuzzle<Day21>(args);

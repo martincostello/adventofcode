@@ -133,7 +133,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
             }
             else
             {
-                cornerLights = new Point[0];
+                cornerLights = Array.Empty<Point>();
             }
 
             for (int x = 0; x < width; x++)

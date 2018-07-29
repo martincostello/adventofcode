@@ -1,4 +1,4 @@
-﻿// Copyright (c) Martin Costello, 2015. All rights reserved.
+// Copyright (c) Martin Costello, 2015. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2016
@@ -121,9 +121,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         {
             string key = string.Concat(value, useKeyStretching ? "|s" : "|u");
 
-            string result;
-
-            if (!cache.TryGetValue(key, out result))
+            if (!cache.TryGetValue(key, out string result))
             {
                 result = value;
 
@@ -158,7 +156,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         /// </returns>
         private static bool HasFiveRepeatitionsOfCharacter(string value, char ch)
         {
-            int start = value.IndexOf(ch);
+            int start = value.IndexOf(ch, StringComparison.Ordinal);
 
             if (start > -1)
             {
@@ -199,7 +197,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
                 }
             }
 
-            return default(char);
+            return default;
         }
 
         /// <summary>

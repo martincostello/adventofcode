@@ -1,4 +1,4 @@
-﻿// Copyright (c) Martin Costello, 2015. All rights reserved.
+// Copyright (c) Martin Costello, 2015. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2015
@@ -86,9 +86,10 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
             var potentialWeapons = Shop.PotentialWeapons.Keys.ToArray();
             var potentialArmor = Shop.PotentialArmor.Keys.Concat(new string[] { null }).ToArray();
 
-            var potentialRings = new List<ICollection<string>>();
-
-            potentialRings.Add(new string[0]);
+            var potentialRings = new List<ICollection<string>>()
+            {
+                Array.Empty<string>(),
+            };
 
             foreach (var ring in Shop.PotentialRings.Keys.ToArray())
             {
@@ -102,8 +103,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
                 potentialRings.Add(permutation.ToArray());
             }
 
-            List<int> costsToLose = new List<int>();
-            List<int> costsToWin = new List<int>();
+            var costsToLose = new List<int>();
+            var costsToWin = new List<int>();
 
             foreach (string weapon in potentialWeapons)
             {

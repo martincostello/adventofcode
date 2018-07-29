@@ -1,4 +1,4 @@
-﻿// Copyright (c) Martin Costello, 2015. All rights reserved.
+// Copyright (c) Martin Costello, 2015. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2015
@@ -80,7 +80,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
                 attacker = defender;
                 defender = player;
 
-                output(string.Empty, new object[0]);
+                output(string.Empty, Array.Empty<object>());
             }
             while (wizard.HitPoints > 0 && opponent.HitPoints > 0);
 
@@ -240,7 +240,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
 
                 // Get the spell
                 var info = availableSpells
-                    .Where((p) => string.Equals(spellToConjure, p.Key))
+                    .Where((p) => string.Equals(spellToConjure, p.Key, StringComparison.Ordinal))
                     .Select((p) => p.Value)
                     .Single();
 

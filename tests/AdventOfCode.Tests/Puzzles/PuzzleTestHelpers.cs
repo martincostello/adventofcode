@@ -3,6 +3,7 @@
 
 namespace MartinCostello.AdventOfCode.Puzzles
 {
+    using System;
     using Xunit;
 
     /// <summary>
@@ -20,7 +21,7 @@ namespace MartinCostello.AdventOfCode.Puzzles
         internal static T SolvePuzzle<T>()
             where T : IPuzzle, new()
         {
-            return SolvePuzzle<T>(new string[0]);
+            return SolvePuzzle<T>(Array.Empty<string>());
         }
 
         /// <summary>

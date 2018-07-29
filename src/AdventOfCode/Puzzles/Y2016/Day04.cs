@@ -1,4 +1,4 @@
-﻿// Copyright (c) Martin Costello, 2015. All rights reserved.
+// Copyright (c) Martin Costello, 2015. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2016
@@ -32,8 +32,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         /// </returns>
         internal static string DecryptRoomName(string name)
         {
-            string unused;
-            return DecryptRoomName(name, out unused);
+            return DecryptRoomName(name, out string _);
         }
 
         /// <summary>
@@ -45,10 +44,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         /// </returns>
         internal static bool IsRoomReal(string name)
         {
-            string unused1;
-            string unused2;
-
-            return IsRoomReal(name, out unused1, out unused2);
+            return IsRoomReal(name, out string _, out string _);
         }
 
         /// <summary>
@@ -64,8 +60,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
 
             foreach (string name in names)
             {
-                string sectorIdString;
-                string decryptedName = DecryptRoomName(name, out sectorIdString);
+                string decryptedName = DecryptRoomName(name, out string sectorIdString);
 
                 if (string.Equals("northpole object storage", decryptedName, StringComparison.OrdinalIgnoreCase))
                 {
@@ -89,10 +84,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
 
             foreach (string name in names)
             {
-                string encryptedName;
-                string sectorIdString;
-
-                if (IsRoomReal(name, out encryptedName, out sectorIdString))
+                if (IsRoomReal(name, out string encryptedName, out string sectorIdString))
                 {
                     sum += ParseInt32(sectorIdString);
                 }
@@ -127,9 +119,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         {
             var builder = new StringBuilder();
 
-            string encryptedName;
-
-            if (IsRoomReal(name, out encryptedName, out sectorId))
+            if (IsRoomReal(name, out string encryptedName, out sectorId))
             {
                 int sectorIdValue = ParseInt32(sectorId);
 
@@ -168,7 +158,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         /// </returns>
         private static bool IsRoomReal(string name, out string encryptedName, out string sectorId)
         {
-            int indexOfChecksum = name.IndexOf('[');
+            int indexOfChecksum = name.IndexOf('[', StringComparison.Ordinal);
 
             string checksum = name.Substring(indexOfChecksum + 1, 5);
 
@@ -177,7 +167,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
             sectorId = name.Substring(indexOfLastDash + 1, indexOfChecksum - indexOfLastDash - 1);
 
             encryptedName = name.Substring(0, indexOfLastDash);
-            string encryptedNameLetters = encryptedName.Replace("-", string.Empty);
+            string encryptedNameLetters = encryptedName.Replace("-", string.Empty, StringComparison.Ordinal);
 
             var top5Letters = encryptedNameLetters
                 .GroupBy((p) => p)

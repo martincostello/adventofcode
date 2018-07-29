@@ -1,0 +1,17 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <DefineConstants>$(DefineConstants);BENCHMARKS</DefineConstants>
+    <Description>Benchmarks for AdventOfCode.</Description>
+    <NoWarn>$(NoWarn);CA1056;CA1819;CA2007</NoWarn>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>MartinCostello.AdventOfCode.Benchmarks</RootNamespace>
+    <Summary>Benchmarks for AdventOfCode.</Summary>
+    <TargetFrameworks>netcoreapp2.1</TargetFrameworks>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\AdventOfCode\AdventOfCode.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="BenchmarkDotNet" Version="0.11.0" />
+  </ItemGroup>
+</Project>

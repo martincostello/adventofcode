@@ -1,4 +1,4 @@
-﻿// Copyright (c) Martin Costello, 2015. All rights reserved.
+// Copyright (c) Martin Costello, 2015. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2015
@@ -31,7 +31,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
         public static void Y2015_Day22_Solve_Returns_Correct_Solution_Easy()
         {
             // Arrange
-            string[] args = new string[0];
+            string[] args = Array.Empty<string>();
 
             // Act
             var puzzle = PuzzleTestHelpers.SolvePuzzle<Day22>(args);
@@ -60,9 +60,9 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
             IList<string> spellsToConjure = new[] { "Poison", "MagicMissile" };
             int index = 0;
 
-            Func<Day22.Wizard, ICollection<string>, string> spellSelector = (w, s) => spellsToConjure[index++];
+            string SpellSelector(Day22.Wizard w, ICollection<string> s) => spellsToConjure[index++];
 
-            var wizard = new Day22.Wizard(10, 250, spellSelector);
+            var wizard = new Day22.Wizard(10, 250, SpellSelector);
             var opponent = new Day22.Boss(13, 8);
             string difficulty = "easy";
 
@@ -90,9 +90,9 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
             IList<string> spellsToConjure = new[] { "Recharge", "Shield", "Drain", "Poison", "MagicMissile" };
             int index = 0;
 
-            Func<Day22.Wizard, ICollection<string>, string> spellSelector = (w, s) => spellsToConjure[index++];
+            string SpellSelector(Day22.Wizard w, ICollection<string> s) => spellsToConjure[index++];
 
-            var wizard = new Day22.Wizard(10, 250, spellSelector);
+            var wizard = new Day22.Wizard(10, 250, SpellSelector);
             var opponent = new Day22.Boss(14, 8);
             string difficulty = "easy";
 

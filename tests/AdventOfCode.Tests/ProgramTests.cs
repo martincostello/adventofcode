@@ -1,8 +1,9 @@
-﻿// Copyright (c) Martin Costello, 2015. All rights reserved.
+// Copyright (c) Martin Costello, 2015. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 namespace MartinCostello.AdventOfCode
 {
+    using System;
     using Xunit;
 
     /// <summary>
@@ -53,7 +54,7 @@ namespace MartinCostello.AdventOfCode
         public static void Program_Exits_If_No_Arguments()
         {
             // Arrange
-            string[] args = new string[0];
+            string[] args = Array.Empty<string>();
 
             // Act
             int actual = Program.Main(args);

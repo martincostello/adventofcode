@@ -5,6 +5,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
 {
     using System;
     using System.Collections.Generic;
+    using System.Globalization;
     using System.Linq;
     using System.Text;
 
@@ -172,7 +173,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
 
             foreach (int value in denseHash)
             {
-                builder.AppendFormat("{0:x2}", value);
+                builder.Append(value.ToString("x2", CultureInfo.InvariantCulture));
             }
 
             return builder.ToString();
