@@ -1,10 +1,11 @@
-﻿// Copyright (c) Martin Costello, 2015. All rights reserved.
+// Copyright (c) Martin Costello, 2015. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 namespace MartinCostello.AdventOfCode
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics;
     using System.Globalization;
     using System.IO;
     using System.Reflection;
@@ -12,7 +13,7 @@ namespace MartinCostello.AdventOfCode
     /// <summary>
     /// The base class for puzzles.
     /// </summary>
-    internal abstract class Puzzle : IPuzzle
+    public abstract class Puzzle : IPuzzle
     {
         /// <summary>
         /// Gets the minimum number of arguments required to solve the puzzle.
@@ -110,6 +111,29 @@ namespace MartinCostello.AdventOfCode
         protected static bool EnsureArguments(ICollection<string> args, int minimumLength)
         {
             return args.Count >= minimumLength;
+        }
+
+        /// <summary>
+        /// Writes a line to the console.
+        /// </summary>
+        /// <param name="format">The format string to use.</param>
+        /// <param name="arg0">The first argument.</param>
+        [Conditional("BENCHMARKS")]
+        protected static void WriteLine(string format, object arg0)
+        {
+            Console.WriteLine(format, arg0);
+        }
+
+        /// <summary>
+        /// Writes a line to the console.
+        /// </summary>
+        /// <param name="format">The format string to use.</param>
+        /// <param name="arg0">The first argument.</param>
+        /// <param name="arg1">The second argument.</param>
+        [Conditional("BENCHMARKS")]
+        protected static void WriteLine(string format, object arg0, object arg1)
+        {
+            Console.WriteLine(format, arg0, arg1);
         }
 
         /// <summary>
