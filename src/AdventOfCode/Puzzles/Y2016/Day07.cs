@@ -1,4 +1,4 @@
-﻿// Copyright (c) Martin Costello, 2015. All rights reserved.
+// Copyright (c) Martin Costello, 2015. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2016
@@ -32,10 +32,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         /// </returns>
         internal static bool DoesIPAddressSupportSsl(string address)
         {
-            IList<string> supernets;
-            IList<string> hypernets;
-
-            ParseIPAddress(address, out supernets, out hypernets);
+            ParseIPAddress(address, out IList<string> supernets, out IList<string> hypernets);
 
             List<string> abas = new List<string>();
 
@@ -55,7 +52,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
 
                 foreach (string hypernet in hypernets)
                 {
-                    if (hypernet.Contains(bab))
+                    if (hypernet.Contains(bab, StringComparison.Ordinal))
                     {
                         return true;
                     }
@@ -74,10 +71,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         /// </returns>
         internal static bool DoesIPAddressSupportTls(string address)
         {
-            IList<string> supernets;
-            IList<string> hypernets;
-
-            ParseIPAddress(address, out supernets, out hypernets);
+            ParseIPAddress(address, out IList<string> supernets, out IList<string> hypernets);
 
             bool foundAbbaInSupernet = supernets.Any(DoesStringContainAbba);
             bool foundAbbaInHypernet = hypernets.Any(DoesStringContainAbba);

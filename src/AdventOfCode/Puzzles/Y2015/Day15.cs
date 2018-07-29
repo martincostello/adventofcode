@@ -1,4 +1,4 @@
-﻿// Copyright (c) Martin Costello, 2015. All rights reserved.
+// Copyright (c) Martin Costello, 2015. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2015
@@ -101,7 +101,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
         /// </returns>
         private static IList<IList<int>> GetTeaspoonPermutations(int recipeCount)
         {
-            return GetTeaspoonPermutations(new int[0], 0, recipeCount);
+            return GetTeaspoonPermutations(Array.Empty<int>(), 0, recipeCount);
         }
 
         /// <summary>
@@ -126,8 +126,11 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
                 if (index == count - 1)
                 {
                     // This is the last ingredient so the only possible value is the remainder
-                    var next = new List<int>(seed);
-                    next.Add(MaxTeaspoons - seed.Sum());
+                    var next = new List<int>(seed)
+                    {
+                        MaxTeaspoons - seed.Sum(),
+                    };
+
                     thisLevel.Add(next);
                 }
                 else
@@ -141,8 +144,10 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
                     // looking for the highest score so we can immediately discount such recipes.
                     for (int i = 1; i < upperBound; i++)
                     {
-                        var next = new List<int>(seed);
-                        next.Add(i);
+                        var next = new List<int>(seed)
+                        {
+                            i,
+                        };
 
                         thisLevel.Add(next);
                     }
