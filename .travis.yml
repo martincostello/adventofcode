@@ -1,6 +1,10 @@
 sudo: required
 dist: trusty
 
+os:
+  - linux
+  - osx
+
 env:
   global:
     - DOTNET_SKIP_FIRST_TIME_EXPERIENCE=true
@@ -24,4 +28,4 @@ addons:
     - libunwind8
 
 script:
-  - ./build.sh --restore-packages
+  - ./build.sh
