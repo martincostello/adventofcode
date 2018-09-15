@@ -20,13 +20,6 @@ if ($OutputPath -eq "") {
     $OutputPath = Join-Path "$(Convert-Path "$PSScriptRoot")" "artifacts"
 }
 
-if ($null -ne $env:CI) {
-    if (($VersionSuffix -eq "" -and $env:APPVEYOR_REPO_TAG -eq "false" -and $env:APPVEYOR_BUILD_NUMBER -ne "") -eq $true) {
-        $ThisVersion = $env:APPVEYOR_BUILD_NUMBER -as [int]
-        $VersionSuffix = "beta" + $ThisVersion.ToString("0000")
-    }
-}
-
 $installDotNetSdk = $false;
 
 if (($null -eq (Get-Command "dotnet.exe" -ErrorAction SilentlyContinue)) -and ($null -eq (Get-Command "dotnet" -ErrorAction SilentlyContinue))) {
@@ -49,9 +42,12 @@ else {
 
 if ($installDotNetSdk -eq $true) {
     $env:DOTNET_INSTALL_DIR = Join-Path "$(Convert-Path "$PSScriptRoot")" ".dotnetcli"
+    $sdkPath = Join-Path $env:DOTNET_INSTALL_DIR "sdk\$dotnetVersion"
 
-    if (!(Test-Path $env:DOTNET_INSTALL_DIR)) {
-        mkdir $env:DOTNET_INSTALL_DIR | Out-Null
+    if (!(Test-Path $sdkPath)) {
+        if (!(Test-Path $env:DOTNET_INSTALL_DIR)) {
+            mkdir $env:DOTNET_INSTALL_DIR | Out-Null
+        }
         $installScript = Join-Path $env:DOTNET_INSTALL_DIR "install.ps1"
         Invoke-WebRequest "https://dot.net/v1/dotnet-install.ps1" -OutFile $installScript -UseBasicParsing
         & $installScript -Version "$dotnetVersion" -InstallDir "$env:DOTNET_INSTALL_DIR" -NoPath
@@ -71,6 +67,11 @@ Write-Host "Building solution..." -ForegroundColor Green
 if ($SkipTests -eq $false) {
     Write-Host "Running tests..." -ForegroundColor Green
     ForEach ($testProject in $testProjects) {
-        & $dotnet test $testProject --output $OutputPath --configuration $Configuration
+        if ($null -ne $env:TF_BUILD) {
+            & $dotnet test $testProject --output $OutputPath --configuration $Configuration --logger trx
+        }
+        else {
+            & $dotnet test $testProject --output $OutputPath --configuration $Configuration
+        }
     }
 }
