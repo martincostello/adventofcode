@@ -1,9 +1,9 @@
 # Advent of Code
 
-| | Linux | Windows |
-|:-:|:-:|:-:|
-| **Build Status** | [![Build status](https://img.shields.io/travis/martincostello/adventofcode/master.svg)](https://travis-ci.org/martincostello/adventofcode) | [![Build status](https://img.shields.io/appveyor/ci/martincostello/adventofcode/master.svg)](https://ci.appveyor.com/project/martincostello/adventofcode) |
-| **Build History** | [![Build history](https://buildstats.info/travisci/chart/martincostello/adventofcode?branch=master&includeBuildsFromPullRequest=false)](https://travis-ci.org/martincostello/adventofcode) |  [![Build history](https://buildstats.info/appveyor/chart/martincostello/adventofcode?branch=master&includeBuildsFromPullRequest=false)](https://ci.appveyor.com/project/martincostello/adventofcode) |
+| | Windows | Linux/OS X | Linux/macOS/Windows |
+|:-:|:-:|:-:|:-:|
+| **Build Status** | [![Build status](https://img.shields.io/travis/martincostello/adventofcode/master.svg)](https://travis-ci.org/martincostello/adventofcode) | [![Build status](https://img.shields.io/appveyor/ci/martincostello/adventofcode/master.svg)](https://ci.appveyor.com/project/martincostello/adventofcode) | [![Azure Pipelines build status](https://dev.azure.com/martincostello/adventofcode/_apis/build/status/CI)](https://dev.azure.com/martincostello/adventofcode/_build/latest?definitionId=69) |
+| **Build History** | [![Build history](https://buildstats.info/travisci/chart/martincostello/adventofcode?branch=master&includeBuildsFromPullRequest=false)](https://travis-ci.org/martincostello/adventofcode) |  [![Build history](https://buildstats.info/appveyor/chart/martincostello/adventofcode?branch=master&includeBuildsFromPullRequest=false)](https://ci.appveyor.com/project/martincostello/adventofcode) | _Not supported_ |
 
 ## Overview
 
@@ -33,6 +33,6 @@ To build and test the puzzles run one of the following commands:
 
 **Windows**
 
-```batchfile
+```powershell
 .\Build.ps1
 ```
