@@ -6,7 +6,7 @@
     <OutputType>Exe</OutputType>
     <RootNamespace>MartinCostello.AdventOfCode.Benchmarks</RootNamespace>
     <Summary>Benchmarks for AdventOfCode.</Summary>
-    <TargetFrameworks>netcoreapp2.1</TargetFrameworks>
+    <TargetFrameworks>netcoreapp2.2</TargetFrameworks>
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\src\AdventOfCode\AdventOfCode.csproj" />
