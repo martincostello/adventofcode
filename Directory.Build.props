@@ -12,7 +12,7 @@
   <PropertyGroup>
     <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
     <AssemblyOriginatorKeyFile>$(MSBuildThisFileDirectory)AdventOfCode.snk</AssemblyOriginatorKeyFile>
-    <Authors>Martin Costello</Authors>
+    <Authors>martin_costello</Authors>
     <CodeAnalysisRuleSet>$(MSBuildThisFileDirectory)AdventOfCode.ruleset</CodeAnalysisRuleSet>
     <Company>https://github.com/martincostello/adventofcode</Company>
     <Copyright>Martin Costello (c) 2015-$([System.DateTime]::UtcNow.ToString(yyyy))</Copyright>
@@ -25,8 +25,8 @@
     <NeutralLanguage>en-US</NeutralLanguage>
     <NoWarn>$(NoWarn);CA1814;CS1591</NoWarn>
     <PackageIconUrl>https://cdn.martincostello.com/favicon.ico</PackageIconUrl>
+    <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/martincostello/adventofcode</PackageProjectUrl>
-    <PackageLicenseUrl>$(PackageProjectUrl)/blob/master/LICENSE</PackageLicenseUrl>
     <PackageReleaseNotes>See $(PackageProjectUrl)/releases for details.</PackageReleaseNotes>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <PackageTags></PackageTags>
@@ -36,7 +36,7 @@
     <RepositoryUrl>$(PackageProjectUrl).git</RepositoryUrl>
     <SignAssembly>true</SignAssembly>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <VersionPrefix>2.1.0</VersionPrefix>
+    <VersionPrefix>2.2.0</VersionPrefix>
     <VersionSuffix></VersionSuffix>
   </PropertyGroup>
 </Project>

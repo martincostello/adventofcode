@@ -2,21 +2,18 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": ".NET Core Launch (console)",
+      "name": "Run tests",
       "type": "coreclr",
       "request": "launch",
       "preLaunchTask": "build",
-      "program": "${workspaceRoot}/src/AdventOfCode/bin/Debug/netcoreapp2.0/AdventOfCode.dll",
-      "args": [],
-      "cwd": "${workspaceRoot}",
+      "program": "dotnet",
+      "args": [
+        "test"
+      ],
+      "cwd": "${workspaceRoot}/tests/AdventOfCode.Tests",
+      "console": "internalConsole",
       "stopAtEntry": false,
       "internalConsoleOptions": "openOnSessionStart"
-    },
-    {
-      "name": ".NET Core Attach",
-      "type": "coreclr",
-      "request": "attach",
-      "processId": "${command:pickProcess}"
     }
   ]
 }

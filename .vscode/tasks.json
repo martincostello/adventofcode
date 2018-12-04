@@ -1,15 +1,14 @@
 {
-  "version": "0.1.0",
-  "command": "dotnet",
-  "isShellCommand": true,
-  "args": [],
+  "version": "2.0.0",
   "tasks": [
     {
-      "taskName": "build",
-      "args": [
-        "${workspaceRoot}/src/AdventOfCode/AdventOfCode.csproj"
-      ],
-      "isBuildCommand": true,
+      "label": "build",
+      "command": "dotnet build",
+      "type": "shell",
+      "group": "build",
+      "presentation": {
+        "reveal": "silent"
+      },
       "problemMatcher": "$msCompile"
     }
   ]
