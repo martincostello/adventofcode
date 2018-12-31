@@ -4,12 +4,22 @@
 namespace MartinCostello.AdventOfCode.Puzzles.Y2018
 {
     using Xunit;
+    using Xunit.Abstractions;
 
     /// <summary>
     /// A class containing tests for the <see cref="Day01"/> class. This class cannot be inherited.
     /// </summary>
-    public static class Day01Tests
+    public sealed class Day01Tests : PuzzleTest
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Day01Tests"/> class.
+        /// </summary>
+        /// <param name="outputHelper">The <see cref="ITestOutputHelper"/> to use.</param>
+        public Day01Tests(ITestOutputHelper outputHelper)
+            : base(outputHelper)
+        {
+        }
+
         [Theory]
         [InlineData(new[] { "+1", "-2", "+3", "+1" }, 3)]
         [InlineData(new[] { "+1", "+1", "+1" }, 3)]
@@ -44,10 +54,10 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2018
         }
 
         [Fact]
-        public static void Y2018_Day01_Solve_Returns_Correct_Solution()
+        public void Y2018_Day01_Solve_Returns_Correct_Solution()
         {
             // Act
-            var puzzle = PuzzleTestHelpers.SolvePuzzle<Day01>();
+            var puzzle = SolvePuzzle<Day01>();
 
             // Assert
             Assert.Equal(543, puzzle.Frequency);
