@@ -59,7 +59,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
 
             if (Verbose)
             {
-                Console.WriteLine(
+                Logger.WriteLine(
                     "The quantum entanglement of the ideal configuration of {0:N0} packages is {1:N0}.",
                     weights.Count,
                     QuantumEntanglementOfFirstGroup);

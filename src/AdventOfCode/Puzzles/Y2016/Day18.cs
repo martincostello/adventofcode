@@ -1,10 +1,8 @@
-// Copyright (c) Martin Costello, 2015. All rights reserved.
+﻿// Copyright (c) Martin Costello, 2015. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2016
 {
-    using System;
-
     /// <summary>
     /// A class representing the puzzle for <c>http://adventofcode.com/2016/day/18</c>. This class cannot be inherited.
     /// </summary>
@@ -53,7 +51,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
 
             if (printGrid)
             {
-                if (!Console.IsOutputRedirected && rows <= Console.WindowHeight)
+                if (!System.Console.IsOutputRedirected && rows <= System.Console.WindowHeight)
                 {
                     PrintGrid(tiles);
                 }
@@ -72,7 +70,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
 
             if (Verbose)
             {
-                Console.WriteLine($"The number of safe tiles is {SafeTileCount:N0}.");
+                Logger.WriteLine($"The number of safe tiles is {SafeTileCount:N0}.");
             }
 
             return 0;

@@ -100,8 +100,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
 
             if (Verbose)
             {
-                Console.WriteLine($"The checksum for the spreadsheet using differences is {ChecksumForDifference:N0}.");
-                Console.WriteLine($"The checksum for the spreadsheet using even division is {ChecksumForEvenlyDivisible:N0}.");
+                Logger.WriteLine($"The checksum for the spreadsheet using differences is {ChecksumForDifference:N0}.");
+                Logger.WriteLine($"The checksum for the spreadsheet using even division is {ChecksumForEvenlyDivisible:N0}.");
             }
 
             return 0;

@@ -49,7 +49,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
 
             if (version == -1)
             {
-                Console.WriteLine("The instruction set specified is invalid.");
+                Logger.WriteLine("The instruction set specified is invalid.");
                 return -1;
             }
 
@@ -69,7 +69,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
 
             if (Verbose)
             {
-                Console.WriteLine("Processing instructions using set {0}...", version);
+                Logger.WriteLine("Processing instructions using set {0}...", version);
             }
 
             var grid = new LightGrid(1000, 1000);
@@ -85,7 +85,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
 
                 if (Verbose)
                 {
-                    Console.WriteLine("{0:N0} lights are illuminated.", LightsIlluminated);
+                    Logger.WriteLine("{0:N0} lights are illuminated.", LightsIlluminated);
                 }
             }
             else
@@ -94,7 +94,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
 
                 if (Verbose)
                 {
-                    Console.WriteLine("The total brightness of the grid is {0:N0}.", TotalBrightness);
+                    Logger.WriteLine("The total brightness of the grid is {0:N0}.", TotalBrightness);
                 }
             }
 

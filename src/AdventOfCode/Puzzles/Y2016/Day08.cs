@@ -65,7 +65,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
 
             if (Verbose)
             {
-                Console.WriteLine($"There are {PixelsLit:N0} pixels lit.");
+                Logger.WriteLine($"There are {PixelsLit:N0} pixels lit.");
             }
 
             return 0;

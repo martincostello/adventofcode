@@ -78,8 +78,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
 
             if (Verbose)
             {
-                Console.WriteLine($"There are {ProgramsInGroupOfProgram0:N0} programs in the group that contains program ID 0.");
-                Console.WriteLine($"There are {NumberOfGroups:N0} groups in the network of pipes.");
+                Logger.WriteLine($"There are {ProgramsInGroupOfProgram0:N0} programs in the group that contains program ID 0.");
+                Logger.WriteLine($"There are {NumberOfGroups:N0} groups in the network of pipes.");
             }
 
             return 0;

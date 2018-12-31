@@ -77,7 +77,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
 
             if (Verbose)
             {
-                Console.WriteLine(
+                Logger.WriteLine(
                     "The code for row {0:N0} and column {1:N0} is {2:N0}.",
                     row,
                     column,

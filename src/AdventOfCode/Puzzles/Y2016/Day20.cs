@@ -130,8 +130,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
 
             if (Verbose)
             {
-                Console.WriteLine($"The lowest-valued IP that is not blocked is {LowestNonblockedIP}.");
-                Console.WriteLine($"The number of IP addresses allowed is {AllowedIPCount:N0}.");
+                Logger.WriteLine($"The lowest-valued IP that is not blocked is {LowestNonblockedIP}.");
+                Logger.WriteLine($"The number of IP addresses allowed is {AllowedIPCount:N0}.");
             }
 
             return 0;

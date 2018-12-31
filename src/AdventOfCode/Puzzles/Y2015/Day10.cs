@@ -65,7 +65,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
 
             if (Verbose)
             {
-                Console.WriteLine(
+                Logger.WriteLine(
                     "The length of the result for input '{0}' after {1:N0} iterations is {2:N0}.",
                     value,
                     iterations,

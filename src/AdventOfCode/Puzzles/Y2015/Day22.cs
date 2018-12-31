@@ -108,7 +108,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
 
             if (Verbose)
             {
-                Console.WriteLine(
+                Logger.WriteLine(
                     "The minimum amount of mana that can be spent to win on {0} difficulty is {1:N0}.",
                     difficulty,
                     MinimumCostToWin);

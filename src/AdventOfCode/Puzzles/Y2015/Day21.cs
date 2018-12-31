@@ -131,11 +131,11 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
 
             if (Verbose)
             {
-                Console.WriteLine(
+                Logger.WriteLine(
                     "The minimum amount of gold spent for the human to beat the boss is {0:N0}.",
                     MinimumCostToWin);
 
-                Console.WriteLine(
+                Logger.WriteLine(
                     "The maximum amount of gold spent for the human to lose to the boss is {0:N0}.",
                     MaximumCostToLose);
             }

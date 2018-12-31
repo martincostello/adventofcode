@@ -94,8 +94,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
 
             if (Verbose)
             {
-                Console.WriteLine($"The product of the first two elements of the hash is {ProductOfFirstTwoElements:N0}.");
-                Console.WriteLine($"The hexadecimal dense hash of the input is {DenseHash}.");
+                Logger.WriteLine($"The product of the first two elements of the hash is {ProductOfFirstTwoElements:N0}.");
+                Logger.WriteLine($"The hexadecimal dense hash of the input is {DenseHash}.");
             }
 
             return 0;

@@ -1,4 +1,4 @@
-// Copyright (c) Martin Costello, 2015. All rights reserved.
+﻿// Copyright (c) Martin Costello, 2015. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2015
@@ -70,13 +70,17 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
         /// </summary>
         /// <param name="molecule">The desired molecule.</param>
         /// <param name="replacements">The possible replacements.</param>
+        /// <param name="logger">The logger to use.</param>
         /// <returns>
         /// The minimum number of steps required to create <paramref name="molecule"/> using the possible
         /// replacements specified by <paramref name="replacements"/>.
         /// </returns>
-        internal static int GetMinimumSteps(string molecule, ICollection<string> replacements)
+        internal static int GetMinimumSteps(
+            string molecule,
+            ICollection<string> replacements,
+            ILogger logger = null)
         {
-            return GetMinimumSteps(molecule, replacements, "e", 1);
+            return GetMinimumSteps(molecule, replacements, "e", 1, logger);
         }
 
         /// <summary>
@@ -86,25 +90,31 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
         /// <param name="replacements">The possible replacements.</param>
         /// <param name="current">The current molecule being worked with.</param>
         /// <param name="step">The current step number.</param>
+        /// <param name="logger">The logger to use.</param>
         /// <returns>
         /// The minimum number of steps required to create <paramref name="molecule"/> using the possible
         /// replacements specified by <paramref name="replacements"/>.
         /// </returns>
-        internal static int GetMinimumSteps(string molecule, ICollection<string> replacements, string current, int step)
+        internal static int GetMinimumSteps(
+            string molecule,
+            ICollection<string> replacements,
+            string current,
+            int step,
+            ILogger logger)
         {
             ICollection<string> nextSteps = GetPossibleMolecules(current, replacements);
 
             if (nextSteps.Contains(molecule))
             {
-                Console.WriteLine("Found solution that takes {0:N0} steps.", step);
+                logger?.WriteLine($"Found solution that takes {step:N0} steps.");
                 return step;
             }
 
-            List<int> steps = new List<int>();
+            var steps = new List<int>();
 
             foreach (string next in nextSteps.Where((p) => p.Length < molecule.Length))
             {
-                steps.Add(GetMinimumSteps(molecule, replacements, next, step + 1));
+                steps.Add(GetMinimumSteps(molecule, replacements, next, step + 1, logger));
             }
 
             return steps
@@ -129,7 +139,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
                     break;
 
                 default:
-                    Console.WriteLine("The mode specified is invalid.");
+                    Logger.WriteLine("The mode specified is invalid.");
                     return -1;
             }
 
@@ -148,7 +158,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
 
                 if (Verbose)
                 {
-                    Console.WriteLine("The target molecule can be made in a minimum of {0:N0} steps.", Solution);
+                    Logger.WriteLine("The target molecule can be made in a minimum of {0:N0} steps.", Solution);
                 }
             }
             else
@@ -159,7 +169,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
 
                 if (Verbose)
                 {
-                    Console.WriteLine(
+                    Logger.WriteLine(
                         "{0:N0} distinct molecules can be created from {1:N0} possible replacements.",
                         Solution,
                         replacements.Count);

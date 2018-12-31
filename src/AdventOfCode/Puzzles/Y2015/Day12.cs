@@ -75,7 +75,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
 
             if (Verbose)
             {
-                Console.WriteLine("The sum of the integers in the JSON document is {0:N0}.", Sum);
+                Logger.WriteLine("The sum of the integers in the JSON document is {0:N0}.", Sum);
             }
 
             return 0;

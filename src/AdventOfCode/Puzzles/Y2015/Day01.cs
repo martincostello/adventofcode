@@ -1,4 +1,4 @@
-// Copyright (c) Martin Costello, 2015. All rights reserved.
+﻿// Copyright (c) Martin Costello, 2015. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2015
@@ -77,8 +77,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
 
             if (Verbose)
             {
-                Console.WriteLine("Santa should go to floor {0}.", FinalFloor);
-                Console.WriteLine("Santa first enters the basement after following instruction {0:N0}.", FirstBasementInstruction);
+                Logger.WriteLine("Santa should go to floor {0}.", FinalFloor);
+                Logger.WriteLine("Santa first enters the basement after following instruction {0:N0}.", FirstBasementInstruction);
             }
 
             return 0;

@@ -59,8 +59,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
 
             if (Verbose)
             {
-                Console.WriteLine($"There are {ValidPassphraseCountV1:N0} valid passphrases using version 1 of the policy.");
-                Console.WriteLine($"There are {ValidPassphraseCountV2:N0} valid passphrases using version 2 of the policy.");
+                Logger.WriteLine($"There are {ValidPassphraseCountV1:N0} valid passphrases using version 1 of the policy.");
+                Logger.WriteLine($"There are {ValidPassphraseCountV2:N0} valid passphrases using version 2 of the policy.");
             }
 
             return 0;

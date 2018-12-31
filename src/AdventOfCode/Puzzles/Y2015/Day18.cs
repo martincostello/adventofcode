@@ -95,7 +95,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
 
             if (Verbose)
             {
-                Console.WriteLine(
+                Logger.WriteLine(
                     "There are {0:N0} lights illuminated after {1:N0} steps.",
                     LightsIlluminated,
                     steps);

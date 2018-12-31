@@ -96,8 +96,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2018
 
             if (Verbose)
             {
-                Console.WriteLine($"The resulting frequency is {Frequency:N0}.");
-                Console.WriteLine($"The first repeated frequency is {FirstRepeatedFrequency:N0}.");
+                Logger.WriteLine($"The resulting frequency is {Frequency:N0}.");
+                Logger.WriteLine($"The first repeated frequency is {FirstRepeatedFrequency:N0}.");
             }
 
             return 0;

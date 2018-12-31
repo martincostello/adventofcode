@@ -64,8 +64,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
 
             if (Verbose)
             {
-                Console.WriteLine($"The solution to the first captcha is {CaptchaSolutionNext:N0}.");
-                Console.WriteLine($"The solution to the second captcha is {CaptchaSolutionOpposite:N0}.");
+                Logger.WriteLine($"The solution to the first captcha is {CaptchaSolutionNext:N0}.");
+                Logger.WriteLine($"The solution to the second captcha is {CaptchaSolutionOpposite:N0}.");
             }
 
             return 0;

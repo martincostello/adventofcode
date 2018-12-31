@@ -47,7 +47,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
 
             if (Verbose)
             {
-                Console.WriteLine($"The checksum for the generated disk data is '{Checksum}'.");
+                Logger.WriteLine($"The checksum for the generated disk data is '{Checksum}'.");
             }
 
             return 0;

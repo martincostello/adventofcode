@@ -58,8 +58,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
 
             if (Verbose)
             {
-                Console.WriteLine($"The largest value in any register after executing the input is {HighestRegisterValueAtEnd:N0}.");
-                Console.WriteLine($"The largest value in any register at any point while executing the input was {HighestRegisterValueDuring:N0}.");
+                Logger.WriteLine($"The largest value in any register after executing the input is {HighestRegisterValueAtEnd:N0}.");
+                Logger.WriteLine($"The largest value in any register at any point while executing the input was {HighestRegisterValueDuring:N0}.");
             }
 
             return 0;

@@ -92,8 +92,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
 
             if (Verbose)
             {
-                Console.WriteLine($"The password for door '{doorId}' is '{Password}'.");
-                Console.WriteLine($"The password for door '{doorId}' is '{PasswordWhenPositionIsIndicated}' when the position is specified in the hash.");
+                Logger.WriteLine($"The password for door '{doorId}' is '{Password}'.");
+                Logger.WriteLine($"The password for door '{doorId}' is '{PasswordWhenPositionIsIndicated}' when the position is specified in the hash.");
             }
 
             return 0;

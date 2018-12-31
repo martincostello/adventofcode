@@ -112,8 +112,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
 
             if (Verbose)
             {
-                Console.WriteLine($"The severity of the trip through the firewall is {Severity:N0}.");
-                Console.WriteLine($"The fewest number of picoseconds that the packet needs to be delayed by to pass through the firewall without being caught is {ShortestDelay:N0}.");
+                Logger.WriteLine($"The severity of the trip through the firewall is {Severity:N0}.");
+                Logger.WriteLine($"The fewest number of picoseconds that the packet needs to be delayed by to pass through the firewall without being caught is {ShortestDelay:N0}.");
             }
 
             return 0;

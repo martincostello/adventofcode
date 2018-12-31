@@ -55,8 +55,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
 
             if (Verbose)
             {
-                Console.WriteLine($"{CycleCount:N0} redistribution cycles must be completed before a configuration is produced that has been seen before.");
-                Console.WriteLine($"{LoopSize:N0} cycles are in the infinite loop that arises from the configuration in the input.");
+                Logger.WriteLine($"{CycleCount:N0} redistribution cycles must be completed before a configuration is produced that has been seen before.");
+                Logger.WriteLine($"{LoopSize:N0} cycles are in the infinite loop that arises from the configuration in the input.");
             }
 
             return 0;

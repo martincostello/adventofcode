@@ -114,7 +114,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
 
             if (Verbose)
             {
-                Console.WriteLine("The signal for wire a is {0:N0}.", FirstSignal);
+                Logger.WriteLine("The signal for wire a is {0:N0}.", FirstSignal);
             }
 
             // Replace the input value for b with the value for a, then re-calculate
@@ -127,7 +127,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
 
             if (Verbose)
             {
-                Console.WriteLine("The new signal for wire a is {0:N0}.", SecondSignal);
+                Logger.WriteLine("The new signal for wire a is {0:N0}.", SecondSignal);
             }
 
             return 0;

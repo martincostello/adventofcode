@@ -108,7 +108,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
 
             if (Verbose)
             {
-                Console.WriteLine("Santa's new password should be '{0}'.", NextPassword);
+                Logger.WriteLine("Santa's new password should be '{0}'.", NextPassword);
             }
 
             return 0;

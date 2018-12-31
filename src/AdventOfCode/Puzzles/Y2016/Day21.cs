@@ -124,7 +124,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
 
             if (Verbose)
             {
-                Console.WriteLine($"The result of {(reverse ? "un" : string.Empty)}scrambling '{text}' is '{ScrambledResult}'.");
+                Logger.WriteLine($"The result of {(reverse ? "un" : string.Empty)}scrambling '{text}' is '{ScrambledResult}'.");
             }
 
             return 0;

@@ -90,8 +90,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
 
             if (Verbose)
             {
-                Console.WriteLine("{0:N0} IPv7 addresses support TLS.", IPAddressesSupportingTls);
-                Console.WriteLine("{0:N0} IPv7 addresses support SSL.", IPAddressesSupportingSsl);
+                Logger.WriteLine("{0:N0} IPv7 addresses support TLS.", IPAddressesSupportingTls);
+                Logger.WriteLine("{0:N0} IPv7 addresses support SSL.", IPAddressesSupportingSsl);
             }
 
             return 0;
