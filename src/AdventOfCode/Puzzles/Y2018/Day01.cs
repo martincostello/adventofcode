@@ -18,6 +18,11 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2018
         public int Frequency { get; private set; }
 
         /// <summary>
+        /// Gets the frequency of the device calculated from the sequence that is repeated first.
+        /// </summary>
+        public int FirstRepeatedFrequency { get; private set; }
+
+        /// <summary>
         /// Calculates the resulting frequency after applying the specified sequence.
         /// </summary>
         /// <param name="sequence">A sequence of frequency shifts to apply.</param>
@@ -25,8 +30,58 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2018
         /// The resulting frequency from applying the sequence from <paramref name="sequence"/>.
         /// </returns>
         public static int CalculateFrequency(IEnumerable<string> sequence)
+            => CalculateFrequencyWithRepetition(sequence).frequency;
+
+        /// <summary>
+        /// Calculates the resulting frequency after applying the specified sequence.
+        /// </summary>
+        /// <param name="sequence">A sequence of frequency shifts to apply.</param>
+        /// <returns>
+        /// The resulting frequency from applying the sequence from <paramref name="sequence"/>.
+        /// </returns>
+        public static(int frequency, int firstRepeat) CalculateFrequencyWithRepetition(IEnumerable<string> sequence)
         {
-            return sequence.Select((p) => ParseInt32(p)).Sum();
+            IList<int> changes = sequence
+                .Select((p) => ParseInt32(p))
+                .ToList();
+
+            int current = 0;
+            int? frequency = null;
+            int? firstRepeat = null;
+
+            var history = new List<int>(changes.Count)
+            {
+                current,
+            };
+
+            while (!firstRepeat.HasValue && history.Count < changes.Count * 1000)
+            {
+                foreach (int shift in changes)
+                {
+                    int before = current;
+
+                    current += shift;
+
+                    int after = current;
+
+                    if (!firstRepeat.HasValue && history.Contains(after))
+                    {
+                        if (history[history.Count - 2] != before)
+                        {
+                            firstRepeat = after;
+                        }
+                    }
+
+                    history.Add(current);
+                }
+
+                if (!frequency.HasValue)
+                {
+                    frequency = current;
+                }
+            }
+
+            return (frequency.Value, firstRepeat ?? frequency.Value);
         }
 
         /// <inheritdoc />
@@ -34,11 +89,12 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2018
         {
             IList<string> sequence = ReadResourceAsLines();
 
-            Frequency = CalculateFrequency(sequence);
+            (Frequency, FirstRepeatedFrequency) = CalculateFrequencyWithRepetition(sequence);
 
             if (Verbose)
             {
                 Console.WriteLine($"The resulting frequency is {Frequency:N0}.");
+                Console.WriteLine($"The first repeated frequency is {FirstRepeatedFrequency:N0}.");
             }
 
             return 0;
