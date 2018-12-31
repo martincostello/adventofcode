@@ -33,6 +33,19 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2018
             Assert.Equal(expected, actual);
         }
 
+        [Theory]
+        [InlineData(new[] { "#1 @ 1,3: 4x4", "#2 @ 3,1: 4x4", "#3 @ 5,5: 2x2" }, "3")]
+        public static void Y2018_Day03_GetClaimWithNoOverlappingClaims_Returns_Correct_Solution(
+            string[] sequence,
+            string expected)
+        {
+            // Act
+            string actual = Day03.GetClaimWithNoOverlappingClaims(sequence);
+
+            // Assert
+            Assert.Equal(expected, actual);
+        }
+
         [Fact]
         public void Y2018_Day03_Solve_Returns_Correct_Solution()
         {
@@ -41,6 +54,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2018
 
             // Assert
             Assert.Equal(100595, puzzle.Area);
+            Assert.Equal("415", puzzle.IdOfUniqueClaim);
         }
     }
 }

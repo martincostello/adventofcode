@@ -17,6 +17,11 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2018
         public int Area { get; private set; }
 
         /// <summary>
+        /// Gets the Id of the claim with a unique area.
+        /// </summary>
+        public string IdOfUniqueClaim { get; private set; }
+
+        /// <summary>
         /// Calculates the number of square inches of fabric with two or more overlapping claims.
         /// </summary>
         /// <param name="claims">The claimed areas of the fabric.</param>
@@ -25,36 +30,57 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2018
         /// </returns>
         public static int GetAreaWithTwoOrMoreOverlappingClaims(IEnumerable<string> claims)
         {
-            IList<Claim> fabricClaims = claims
-                .Select(Claim.Parse)
-                .ToList();
+            (Square[,] fabric, var _) = ParseFabric(claims);
 
-            int totalWidth = fabricClaims.Max((p) => p.X + p.Width);
-            int totalHeight = fabricClaims.Max((p) => p.Y + p.Height);
+            int result = 0;
 
-            var fabric = new int[totalWidth, totalHeight];
-
-            foreach (var claim in fabricClaims)
+            for (int i = 0; i < fabric.GetLength(0); i++)
             {
-                for (int i = claim.X; i < claim.Width + claim.X; i++)
+                for (int j = 0; j < fabric.GetLength(1); j++)
                 {
-                    for (int j = claim.Y; j < claim.Height + claim.Y; j++)
+                    if (fabric[i, j].Claims.Count >= 2)
                     {
-                        fabric[i, j]++;
+                        result++;
                     }
                 }
             }
 
-            int result = 0;
+            return result;
+        }
 
-            for (int i = 0; i < totalWidth; i++)
+        /// <summary>
+        /// Gets the Id of the claim with no overlapping claims.
+        /// </summary>
+        /// <param name="claims">The claimed areas of the fabric.</param>
+        /// <returns>
+        /// The Id of the claim specified by <paramref name="claims"/> that is not overlapped by any others.
+        /// </returns>
+        public static string GetClaimWithNoOverlappingClaims(IEnumerable<string> claims)
+        {
+            (Square[,] fabric, IList<Claim> fabricClaims) = ParseFabric(claims);
+
+            string result = null;
+
+            foreach (var claim in fabricClaims)
             {
-                for (int j = 0; j < totalHeight; j++)
+                bool isCandidate = true;
+
+                for (int i = claim.X; i < claim.Width + claim.X && isCandidate; i++)
                 {
-                    if (fabric[i, j] >= 2)
+                    for (int j = claim.Y; j < claim.Height + claim.Y && isCandidate; j++)
                     {
-                        result++;
+                        var square = fabric[i, j];
+
+                        if (square.Claims.Count != 1 || square.Claims[0] != claim.Id)
+                        {
+                            isCandidate = false;
+                        }
                     }
+                }
+
+                if (isCandidate)
+                {
+                    result = claim.Id;
                 }
             }
 
@@ -67,13 +93,55 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2018
             IList<string> claims = ReadResourceAsLines();
 
             Area = GetAreaWithTwoOrMoreOverlappingClaims(claims);
+            IdOfUniqueClaim = GetClaimWithNoOverlappingClaims(claims);
 
             if (Verbose)
             {
                 Logger.WriteLine($"{Area:N0} square inches of fabric are within two or more claims.");
+                Logger.WriteLine($"The Id of the claim with no overlapping claims is {IdOfUniqueClaim}.");
             }
 
             return 0;
+        }
+
+        /// <summary>
+        /// Parses the grid of fabric from the claims.
+        /// </summary>
+        /// <param name="claims">The claimed areas of the fabric.</param>
+        /// <returns>
+        /// A two-dimensional array of squares representing the fabric and the claims for each square inch.
+        /// </returns>
+        private static(Square[,] fabric, IList<Claim> claims) ParseFabric(IEnumerable<string> claims)
+        {
+            IList<Claim> fabricClaims = claims
+                .Select(Claim.Parse)
+                .ToList();
+
+            int totalWidth = fabricClaims.Max((p) => p.X + p.Width);
+            int totalHeight = fabricClaims.Max((p) => p.Y + p.Height);
+
+            var fabric = new Square[totalWidth, totalHeight];
+
+            for (int i = 0; i < totalWidth; i++)
+            {
+                for (int j = 0; j < totalHeight; j++)
+                {
+                    fabric[i, j] = new Square();
+                }
+            }
+
+            foreach (var claim in fabricClaims)
+            {
+                for (int i = claim.X; i < claim.Width + claim.X; i++)
+                {
+                    for (int j = claim.Y; j < claim.Height + claim.Y; j++)
+                    {
+                        fabric[i, j].Claims.Add(claim.Id);
+                    }
+                }
+            }
+
+            return (fabric, fabricClaims);
         }
 
         /// <summary>
@@ -117,7 +185,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2018
             {
                 string[] split = claim.Split(Arrays.Space);
 
-                string id = split[0];
+                string id = split[0].TrimStart('#');
                 string offset = split[2].TrimEnd(':');
                 string area = split[3];
 
@@ -140,6 +208,17 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2018
                     Height = height,
                 };
             }
+        }
+
+        /// <summary>
+        /// A class representing a square of the fabric. This class cannot be inherited.
+        /// </summary>
+        private class Square
+        {
+            /// <summary>
+            /// Gets the Ids of the claims associated with the square.
+            /// </summary>
+            internal List<string> Claims { get; } = new List<string>();
         }
     }
 }
