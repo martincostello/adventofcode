@@ -1,4 +1,4 @@
-// Copyright (c) Martin Costello, 2015. All rights reserved.
+﻿// Copyright (c) Martin Costello, 2015. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2015
@@ -27,10 +27,14 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
         /// </summary>
         /// <param name="instructions">The instructions to process.</param>
         /// <param name="initialValue">The initial value to use for register a.</param>
+        /// <param name="logger">The logger to use.</param>
         /// <returns>
         /// A <see cref="Tuple{T1, T2}"/> that contains the values of the a and b registers.
         /// </returns>
-        internal static Tuple<uint, uint> ProcessInstructions(IList<string> instructions, uint initialValue)
+        internal static Tuple<uint, uint> ProcessInstructions(
+            IList<string> instructions,
+            uint initialValue,
+            ILogger logger = null)
         {
             var a = new Register()
             {
@@ -85,13 +89,13 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
                         break;
 
                     default:
-                        Console.Error.WriteLine("Instruction '{0}' is not defined.", operation);
+                        logger.WriteLine($"Instruction '{operation}' is not defined.");
                         return Tuple.Create(uint.MaxValue, uint.MaxValue);
                 }
 
                 if (next == i)
                 {
-                    Console.Error.WriteLine("Instruction at line {0:N0} creates an infinite loop.", i + 1);
+                    logger.WriteLine($"Instruction at line {i + 1:N0} creates an infinite loop.");
                     break;
                 }
 
@@ -107,14 +111,11 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
             IList<string> instructions = ReadResourceAsLines();
             uint initialValue = args.Length == 1 ? ParseUInt32(args[0]) : 0;
 
-            Tuple<uint, uint> result = ProcessInstructions(instructions, initialValue);
-
-            A = result.Item1;
-            B = result.Item2;
+            (A, B) = ProcessInstructions(instructions, initialValue, Logger);
 
             if (Verbose)
             {
-                Console.WriteLine(
+                Logger.WriteLine(
                     "After processing {0:N0} instructions, the value of a is {1:N0} and the value of b is {2:N0}.",
                     instructions.Count,
                     A,

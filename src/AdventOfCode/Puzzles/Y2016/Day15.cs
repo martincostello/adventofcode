@@ -61,8 +61,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
 
             if (Verbose)
             {
-                Console.WriteLine($"The first time the button can be pressed to get a capsule is {TimeOfFirstButtonPress:N0}.");
-                Console.WriteLine($"The first time the button can be pressed to get a capsule with the extra disc present is {TimeOfFirstButtonPressWithExtraDisc:N0}.");
+                Logger.WriteLine($"The first time the button can be pressed to get a capsule is {TimeOfFirstButtonPress:N0}.");
+                Logger.WriteLine($"The first time the button can be pressed to get a capsule with the extra disc present is {TimeOfFirstButtonPressWithExtraDisc:N0}.");
             }
 
             return 0;

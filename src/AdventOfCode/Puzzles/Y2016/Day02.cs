@@ -128,11 +128,11 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
 
             if (Verbose)
             {
-                Console.WriteLine(
+                Logger.WriteLine(
                     "The code for the bathroom with a digit keypad is {0}.",
                     BathroomCodeDigitKeypad);
 
-                Console.WriteLine(
+                Logger.WriteLine(
                     "The code for the bathroom with an alphanumeric keypad is {0}.",
                     BathroomCodeAlphanumericKeypad);
             }

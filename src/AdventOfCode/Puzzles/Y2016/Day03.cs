@@ -63,8 +63,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
 
             if (Verbose)
             {
-                Console.WriteLine("The number of possible triangles using rows is {0:N0}.", PossibleTrianglesByRows);
-                Console.WriteLine("The number of possible triangles using columns is {0:N0}.", PossibleTrianglesByColumns);
+                Logger.WriteLine("The number of possible triangles using rows is {0:N0}.", PossibleTrianglesByRows);
+                Logger.WriteLine("The number of possible triangles using columns is {0:N0}.", PossibleTrianglesByColumns);
             }
 
             return 0;

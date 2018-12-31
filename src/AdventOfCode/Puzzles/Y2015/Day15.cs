@@ -87,8 +87,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
 
             if (Verbose)
             {
-                Console.WriteLine("The highest total cookie score is {0:N0}.", HighestTotalCookieScore);
-                Console.WriteLine("The highest total cookie score for a cookie with 500 calories is {0:N0}.", HighestTotalCookieScoreWith500Calories);
+                Logger.WriteLine("The highest total cookie score is {0:N0}.", HighestTotalCookieScore);
+                Logger.WriteLine("The highest total cookie score for a cookie with 500 calories is {0:N0}.", HighestTotalCookieScoreWith500Calories);
             }
 
             return 0;

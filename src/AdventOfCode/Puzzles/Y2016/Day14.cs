@@ -99,8 +99,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
 
             if (Verbose)
             {
-                Console.WriteLine($"The index that produces the 64th one-time pad key is {IndexOfKey64:N0}.");
-                Console.WriteLine($"The index that produces the 64th one-time pad key when using key stretching is {IndexOfKey64WithStretching:N0}.");
+                Logger.WriteLine($"The index that produces the 64th one-time pad key is {IndexOfKey64:N0}.");
+                Logger.WriteLine($"The index that produces the 64th one-time pad key when using key stretching is {IndexOfKey64WithStretching:N0}.");
             }
 
             return 0;

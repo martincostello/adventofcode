@@ -185,8 +185,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
 
             if (Verbose)
             {
-                Console.WriteLine($"The value left in register a is {ValueInRegisterA:N0}.");
-                Console.WriteLine($"The value left in register a if c is initialized to 1 is {ValueInRegisterAWhenInitializedWithIgnitionKey:N0}.");
+                Logger.WriteLine($"The value left in register a is {ValueInRegisterA:N0}.");
+                Logger.WriteLine($"The value left in register a if c is initialized to 1 is {ValueInRegisterAWhenInitializedWithIgnitionKey:N0}.");
             }
 
             return 0;

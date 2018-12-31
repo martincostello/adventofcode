@@ -31,7 +31,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
 
             if (Verbose)
             {
-                Console.WriteLine($"The value to send to the safe for an input of {input:N0} is '{SafeValue}'.");
+                Logger.WriteLine($"The value to send to the safe for an input of {input:N0} is '{SafeValue}'.");
             }
 
             return 0;

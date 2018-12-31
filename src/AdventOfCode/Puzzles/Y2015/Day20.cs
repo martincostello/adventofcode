@@ -79,7 +79,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
         {
             if (args.Length != 1 && args.Length != 2)
             {
-                Console.WriteLine("No target value or maximum number of visits specified.");
+                Logger.WriteLine("No target value or maximum number of visits specified.");
                 return -1;
             }
 
@@ -90,7 +90,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
 
             if (Verbose)
             {
-                Console.WriteLine(
+                Logger.WriteLine(
                     "The first house to receive at least {0:N0} presents is house number {1:N0}.",
                     target,
                     LowestHouseNumber);

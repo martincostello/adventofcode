@@ -118,7 +118,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
 
             if (Verbose)
             {
-                Console.WriteLine(
+                Logger.WriteLine(
                     "The lowest positive number for a hash starting with {0} zeroes is {1:N0}.",
                     zeroes,
                     LowestZeroHash);

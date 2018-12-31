@@ -89,7 +89,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
 
             if (timeIndex < 0)
             {
-                Console.WriteLine("The time index specified is invalid.");
+                Logger.WriteLine("The time index specified is invalid.");
                 return -1;
             }
 
@@ -99,14 +99,14 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
 
             if (Verbose)
             {
-                Console.WriteLine("After {0:N0} seconds, the furthest reindeer is {1:N0} km away.", timeIndex, MaximumReindeerDistance);
+                Logger.WriteLine("After {0:N0} seconds, the furthest reindeer is {1:N0} km away.", timeIndex, MaximumReindeerDistance);
             }
 
             MaximumReindeerPoints = GetMaximumPointsOfFastestReindeer(flightData, timeIndex);
 
             if (Verbose)
             {
-                Console.WriteLine("After {0:N0} seconds, the reindeer in the lead has {1:N0} points.", timeIndex, MaximumReindeerPoints);
+                Logger.WriteLine("After {0:N0} seconds, the reindeer in the lead has {1:N0} points.", timeIndex, MaximumReindeerPoints);
             }
 
             return 0;

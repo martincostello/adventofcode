@@ -1,4 +1,4 @@
-// Copyright (c) Martin Costello, 2015. All rights reserved.
+﻿// Copyright (c) Martin Costello, 2015. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 namespace MartinCostello.AdventOfCode
@@ -20,6 +20,11 @@ namespace MartinCostello.AdventOfCode
         public bool Verbose { get; set; }
 
         /// <summary>
+        /// Gets or sets the logger to use.
+        /// </summary>
+        internal ILogger Logger { get; set; } = new ConsoleLogger();
+
+        /// <summary>
         /// Gets the minimum number of arguments required to solve the puzzle.
         /// </summary>
         protected virtual int MinimumArguments => 0;
@@ -34,7 +39,7 @@ namespace MartinCostello.AdventOfCode
         {
             if (!EnsureArguments(args, MinimumArguments))
             {
-                Console.WriteLine(
+                Logger.WriteLine(
                     "At least {0:N0} argument{1} {2} required.",
                     MinimumArguments,
                     MinimumArguments == 1 ? string.Empty : "s",
@@ -139,7 +144,7 @@ namespace MartinCostello.AdventOfCode
         /// </returns>
         protected IList<string> ReadResourceAsLines()
         {
-            List<string> lines = new List<string>();
+            var lines = new List<string>();
 
             using (Stream stream = ReadResource())
             {

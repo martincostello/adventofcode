@@ -44,8 +44,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
 
             if (Verbose)
             {
-                Console.WriteLine($"The decompressed length of the data using version 1 of the algorithm is {DecompressedLengthVersion1:N0}.");
-                Console.WriteLine($"The decompressed length of the data using version 2 of the algorithm is {DecompressedLengthVersion2:N0}.");
+                Logger.WriteLine($"The decompressed length of the data using version 1 of the algorithm is {DecompressedLengthVersion1:N0}.");
+                Logger.WriteLine($"The decompressed length of the data using version 2 of the algorithm is {DecompressedLengthVersion2:N0}.");
             }
 
             return 0;

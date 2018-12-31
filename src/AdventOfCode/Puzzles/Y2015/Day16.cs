@@ -84,7 +84,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
 
             if (Verbose)
             {
-                Console.WriteLine(
+                Logger.WriteLine(
                     "The number of the Aunt Sue that got me the gift was originally thought to be {0}, but it was actually {1}.",
                     AuntSueNumber,
                     RealAuntSueNumber);

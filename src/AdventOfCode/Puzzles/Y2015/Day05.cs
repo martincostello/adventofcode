@@ -159,7 +159,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
 
             if (version == -1)
             {
-                Console.WriteLine("The rules version specified is invalid.");
+                Logger.WriteLine("The rules version specified is invalid.");
                 return -1;
             }
 
@@ -187,7 +187,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
 
             if (Verbose)
             {
-                Console.WriteLine("{0:N0} strings are nice using version {1} of the rules.", NiceStringCount, version);
+                Logger.WriteLine("{0:N0} strings are nice using version {1} of the rules.", NiceStringCount, version);
             }
 
             return 0;

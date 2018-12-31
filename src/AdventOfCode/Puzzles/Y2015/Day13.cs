@@ -65,7 +65,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
 
             if (Verbose)
             {
-                Console.WriteLine("The total change in happiness is {0:N0}.", MaximumTotalChangeInHappiness);
+                Logger.WriteLine("The total change in happiness is {0:N0}.", MaximumTotalChangeInHappiness);
             }
 
             // Create a new guest list which is the same as the previous one but with the current user added
@@ -91,7 +91,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
 
             if (Verbose)
             {
-                Console.WriteLine("The total change in happiness with the current user seated is {0:N0}.", MaximumTotalChangeInHappinessWithCurrentUser);
+                Logger.WriteLine("The total change in happiness with the current user seated is {0:N0}.", MaximumTotalChangeInHappinessWithCurrentUser);
             }
 
             return 0;

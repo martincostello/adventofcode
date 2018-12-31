@@ -104,11 +104,11 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
 
             if (Verbose)
             {
-                Console.WriteLine(
+                Logger.WriteLine(
                     "The Easter Bunny's headquarters are {0:N0} blocks away.",
                     BlocksToEasterBunnyHQIgnoringDuplicates);
 
-                Console.WriteLine(
+                Logger.WriteLine(
                     "The Easter Bunny's headquarters are {0:N0} blocks away if it is the first location visited twice.",
                     BlocksToEasterBunnyHQ);
             }

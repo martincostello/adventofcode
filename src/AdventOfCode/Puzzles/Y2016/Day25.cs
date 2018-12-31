@@ -76,7 +76,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
 
             if (Verbose)
             {
-                Console.WriteLine($"The lowest positive integer that produces a clock signal is '{ClockSignalValue:N0}'.");
+                Logger.WriteLine($"The lowest positive integer that produces a clock signal is '{ClockSignalValue:N0}'.");
             }
 
             return 0;

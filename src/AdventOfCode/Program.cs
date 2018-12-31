@@ -1,4 +1,4 @@
-// Copyright (c) Martin Costello, 2015. All rights reserved.
+﻿// Copyright (c) Martin Costello, 2015. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 namespace MartinCostello.AdventOfCode
@@ -19,10 +19,19 @@ namespace MartinCostello.AdventOfCode
         /// <param name="args">The arguments to the application.</param>
         /// <returns>The exit code from the application.</returns>
         internal static int Main(string[] args)
+            => Run(args, new ConsoleLogger());
+
+        /// <summary>
+        /// Runs the application.
+        /// </summary>
+        /// <param name="args">The arguments to the application.</param>
+        /// <param name="logger">The logger to use.</param>
+        /// <returns>The exit code from the application.</returns>
+        internal static int Run(string[] args, ILogger logger)
         {
             if (args == null || args.Length < 1)
             {
-                Console.WriteLine("No day specified.");
+                logger.WriteLine("No day specified.");
                 return -1;
             }
 
@@ -48,13 +57,13 @@ namespace MartinCostello.AdventOfCode
                 year > DateTime.UtcNow.Year ||
                 (type = GetPuzzleType(year, day)) == null)
             {
-                Console.WriteLine("The year and/or puzzle number specified is invalid.");
+                logger.WriteLine("The year and/or puzzle number specified is invalid.");
                 return -1;
             }
 
             args = args.Skip(1).ToArray();
 
-            return SolvePuzzle(type, year, day, args, verbose: true);
+            return SolvePuzzle(type, year, day, args, logger, verbose: true);
         }
 
         /// <summary>
@@ -64,20 +73,27 @@ namespace MartinCostello.AdventOfCode
         /// <param name="year">The year associated with the puzzle.</param>
         /// <param name="day">The day associated with the puzzle.</param>
         /// <param name="args">The arguments to pass to the puzzle.</param>
+        /// <param name="logger">The logger to use.</param>
         /// <param name="verbose">Whether the puzzle should be run verbosely.</param>
         /// <returns>
         /// The value returned by <see cref="IPuzzle.Solve"/>.
         /// </returns>
-        internal static int SolvePuzzle(Type type, int year, int day, string[] args, bool verbose = false)
+        private static int SolvePuzzle(
+            Type type,
+            int year,
+            int day,
+            string[] args,
+            ILogger logger,
+            bool verbose = false)
         {
-            IPuzzle puzzle = Activator.CreateInstance(type) as IPuzzle;
+            var puzzle = Activator.CreateInstance(type) as IPuzzle;
             puzzle.Verbose = verbose;
 
-            Console.WriteLine();
-            Console.WriteLine("Advent of Code {0} - Day {1}", year, day);
-            Console.WriteLine();
+            logger.WriteLine();
+            logger.WriteLine($"Advent of Code {year} - Day {day}");
+            logger.WriteLine();
 
-            Stopwatch stopwatch = Stopwatch.StartNew();
+            var stopwatch = Stopwatch.StartNew();
 
             int result = puzzle.Solve(args);
 
@@ -85,16 +101,18 @@ namespace MartinCostello.AdventOfCode
             {
                 stopwatch.Stop();
 
+                logger.WriteLine();
+
                 if (stopwatch.Elapsed.TotalSeconds < 0.01f)
                 {
-                    Console.WriteLine("Took <0.01 seconds.");
+                    logger.WriteLine("Took <0.01 seconds.");
                 }
                 else
                 {
-                    Console.WriteLine("Took {0:N2} seconds.", stopwatch.Elapsed.TotalSeconds);
+                    logger.WriteLine($"Took {stopwatch.Elapsed.TotalSeconds:N2} seconds.");
                 }
 
-                Console.WriteLine();
+                logger.WriteLine();
             }
 
             return result;

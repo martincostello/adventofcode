@@ -103,8 +103,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
 
             if (Verbose)
             {
-                Console.WriteLine("The sum of the sector Ids of the real rooms is {0:N0}.", SumOfSectorIdsOfRealRooms);
-                Console.WriteLine("The sector ID of the room where North Pole objects are stored is {0:N0}.", SumOfSectorIdsOfRealRooms);
+                Logger.WriteLine("The sum of the sector Ids of the real rooms is {0:N0}.", SumOfSectorIdsOfRealRooms);
+                Logger.WriteLine("The sector ID of the room where North Pole objects are stored is {0:N0}.", SumOfSectorIdsOfRealRooms);
             }
 
             return 0;

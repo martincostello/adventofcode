@@ -125,11 +125,11 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
             {
                 if (findLongest)
                 {
-                    Console.WriteLine("The distance of the longest route is {0:N0}.", Solution);
+                    Logger.WriteLine("The distance of the longest route is {0:N0}.", Solution);
                 }
                 else
                 {
-                    Console.WriteLine("The distance of the shortest route is {0:N0}.", Solution);
+                    Logger.WriteLine("The distance of the shortest route is {0:N0}.", Solution);
                 }
             }
 

@@ -60,12 +60,12 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
 
             if (Verbose)
             {
-                Console.WriteLine(
+                Logger.WriteLine(
                     "There are {0:N0} combinations of containers that can store {1:0} liters of eggnog.",
                     Combinations,
                     volume);
 
-                Console.WriteLine(
+                Logger.WriteLine(
                     "There are {0:N0} combinations of containers that can store {1:0} liters of eggnog using {2} containers.",
                     CombinationsWithMinimumContainers,
                     volume,

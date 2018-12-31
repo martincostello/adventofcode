@@ -147,11 +147,11 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
 
             if (Verbose)
             {
-                Console.WriteLine(
+                Logger.WriteLine(
                     "The number of characters of code for string literals minus the number of characters in memory for the values of the strings is {0:N0}.",
                     FirstSolution);
 
-                Console.WriteLine(
+                Logger.WriteLine(
                     "The total number of characters to represent the newly encoded strings minus the number of characters of code in each original string literal is {0:N0}.",
                     SecondSolution);
             }

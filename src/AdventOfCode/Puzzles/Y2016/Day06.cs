@@ -66,8 +66,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
 
             if (Verbose)
             {
-                Console.WriteLine($"The error-corrected message using the most likley letters is: {ErrorCorrectedMessage}.");
-                Console.WriteLine($"The error-corrected message using the least likely letters is: {ModifiedErrorCorrectedMessage}.");
+                Logger.WriteLine($"The error-corrected message using the most likley letters is: {ErrorCorrectedMessage}.");
+                Logger.WriteLine($"The error-corrected message using the least likely letters is: {ModifiedErrorCorrectedMessage}.");
             }
 
             return 0;
