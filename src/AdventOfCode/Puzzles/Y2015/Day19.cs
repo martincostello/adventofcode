@@ -158,7 +158,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
 
                 if (Verbose)
                 {
-                    Logger.WriteLine("The target molecule can be made in a minimum of {0:N0} steps.", Solution);
+                    Logger.WriteLine($"The target molecule can be made in a minimum of {Solution:N0} steps.");
                 }
             }
             else
@@ -169,10 +169,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
 
                 if (Verbose)
                 {
-                    Logger.WriteLine(
-                        "{0:N0} distinct molecules can be created from {1:N0} possible replacements.",
-                        Solution,
-                        replacements.Count);
+                    Logger.WriteLine($"{Solution:N0} distinct molecules can be created from {replacements.Count:N0} possible replacements.");
                 }
             }
 

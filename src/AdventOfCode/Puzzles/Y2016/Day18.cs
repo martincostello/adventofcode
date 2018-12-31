@@ -21,11 +21,14 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         /// </summary>
         /// <param name="firstRowTiles">The map of tiles in the first row.</param>
         /// <param name="rows">The number of rows.</param>
-        /// <param name="printGrid">Whether to output the grid to the console.</param>
+        /// <param name="logger">The logger to use.</param>
         /// <returns>
         /// The number of safe tiles in the map described by <paramref name="firstRowTiles"/>.
         /// </returns>
-        internal static int FindSafeTileCount(string firstRowTiles, int rows, bool printGrid = false)
+        internal static int FindSafeTileCount(
+            string firstRowTiles,
+            int rows,
+            ILogger logger = null)
         {
             int width = firstRowTiles.Length;
 
@@ -49,13 +52,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
                 }
             }
 
-            if (printGrid)
-            {
-                if (!System.Console.IsOutputRedirected && rows <= System.Console.WindowHeight)
-                {
-                    PrintGrid(tiles);
-                }
-            }
+            logger?.WriteGrid(tiles, '.', '^');
 
             return (width * rows) - CountTrapTiles(tiles);
         }
@@ -66,7 +63,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
             int rows = ParseInt32(args[0]);
             string firstRowTiles = args.Length > 1 ? args[1] : ReadResourceAsString().TrimEnd();
 
-            SafeTileCount = FindSafeTileCount(firstRowTiles, rows, Verbose);
+            SafeTileCount = FindSafeTileCount(firstRowTiles, rows, Logger);
 
             if (Verbose)
             {
@@ -84,11 +81,5 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         /// The number of safe tiles in <paramref name="grid"/>.
         /// </returns>
         private static int CountTrapTiles(bool[,] grid) => Arrays.TrueCount(grid);
-
-        /// <summary>
-        /// Prints the message displayed in the grid to the console.
-        /// </summary>
-        /// <param name="grid">The grid to print to the console.</param>
-        private static void PrintGrid(bool[,] grid) => Arrays.Print(grid, '.', '^');
     }
 }

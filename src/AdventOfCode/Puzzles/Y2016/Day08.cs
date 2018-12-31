@@ -1,4 +1,4 @@
-// Copyright (c) Martin Costello, 2015. All rights reserved.
+﻿// Copyright (c) Martin Costello, 2015. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2016
@@ -23,16 +23,21 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         /// <param name="instructions">The instructions to use to manipulate the grid of lights.</param>
         /// <param name="width">The width of the grid.</param>
         /// <param name="height">The height of the grid.</param>
+        /// <param name="logger">The logger to use.</param>
         /// <returns>
         /// The number of pixels lit in the grid once the instructions are processed.
         /// </returns>
-        internal static int GetPixelsLit(IEnumerable<string> instructions, int width, int height)
+        internal static int GetPixelsLit(
+            IEnumerable<string> instructions,
+            int width,
+            int height,
+            ILogger logger = null)
         {
             IList<Instruction> operations = instructions.Select(ParseInstruction).ToArray();
 
             bool[,] grid = new bool[height, width];
 
-            foreach (Instruction instruction in operations)
+            foreach (var instruction in operations)
             {
                 if (instruction.IsRotation)
                 {
@@ -51,7 +56,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
                 }
             }
 
-            PrintGrid(grid);
+            logger?.WriteGrid(grid, ' ', 'X');
 
             return CountLitPixels(grid);
         }
@@ -61,7 +66,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         {
             IList<string> instructions = ReadResourceAsLines();
 
-            PixelsLit = GetPixelsLit(instructions, width: 50, height: 6);
+            PixelsLit = GetPixelsLit(instructions, width: 50, height: 6, Logger);
 
             if (Verbose)
             {
@@ -96,12 +101,6 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
                 }
             }
         }
-
-        /// <summary>
-        /// Prints the message displayed in the grid to the console.
-        /// </summary>
-        /// <param name="grid">The grid to print to the console.</param>
-        private static void PrintGrid(bool[,] grid) => Arrays.Print(grid, ' ', 'X');
 
         /// <summary>
         /// Rotates the specified column the specified number of pixels.
