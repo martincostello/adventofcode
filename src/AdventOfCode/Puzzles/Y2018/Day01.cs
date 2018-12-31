@@ -54,7 +54,9 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2018
                 current,
             };
 
-            while (!firstRepeat.HasValue && history.Count < changes.Count * 1000)
+            bool isInfinite = TendsToInfinity(changes);
+
+            do
             {
                 foreach (int shift in changes)
                 {
@@ -80,6 +82,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2018
                     frequency = current;
                 }
             }
+            while (!firstRepeat.HasValue && !isInfinite);
 
             return (frequency.Value, firstRepeat ?? frequency.Value);
         }
@@ -99,5 +102,15 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2018
 
             return 0;
         }
+
+        /// <summary>
+        /// Returns whether the specified sequences tends towards infinity.
+        /// </summary>
+        /// <param name="sequence">The sequence of integers.</param>
+        /// <returns>
+        /// <see langword="true"/> if the sequence tends towards positive or negative infinity.
+        /// </returns>
+        private static bool TendsToInfinity(IEnumerable<int> sequence)
+            => Math.Abs(sequence.Sum((p) => Math.Sign(p))) == sequence.Count((p) => p != 0);
     }
 }
