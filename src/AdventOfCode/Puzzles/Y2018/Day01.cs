@@ -60,18 +60,12 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2018
             {
                 foreach (int shift in changes)
                 {
-                    int before = current;
-
+                    int previous = current;
                     current += shift;
 
-                    int after = current;
-
-                    if (!firstRepeat.HasValue && history.Contains(after))
+                    if (!firstRepeat.HasValue && history.Contains(current) && history[history.Count - 2] != previous)
                     {
-                        if (history[history.Count - 2] != before)
-                        {
-                            firstRepeat = after;
-                        }
+                        firstRepeat = current;
                     }
 
                     history.Add(current);
