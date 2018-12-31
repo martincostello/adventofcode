@@ -20,6 +20,11 @@ namespace MartinCostello.AdventOfCode
         public bool Verbose { get; set; }
 
         /// <summary>
+        /// Gets or sets the logger to use.
+        /// </summary>
+        internal ILogger Logger { get; set; } = new ConsoleLogger();
+
+        /// <summary>
         /// Gets the minimum number of arguments required to solve the puzzle.
         /// </summary>
         protected virtual int MinimumArguments => 0;
@@ -28,11 +33,6 @@ namespace MartinCostello.AdventOfCode
         /// Gets the year associated with the puzzle.
         /// </summary>
         protected abstract int Year { get; }
-
-        /// <summary>
-        /// Gets or sets the logger to use.
-        /// </summary>
-        private protected ILogger Logger { get; set; } = new ConsoleLogger();
 
         /// <inheritdoc />
         public virtual int Solve(string[] args)
