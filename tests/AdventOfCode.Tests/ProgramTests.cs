@@ -1,102 +1,117 @@
-// Copyright (c) Martin Costello, 2015. All rights reserved.
+﻿// Copyright (c) Martin Costello, 2015. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 namespace MartinCostello.AdventOfCode
 {
     using System;
     using Xunit;
+    using Xunit.Abstractions;
 
     /// <summary>
     /// A class containing tests for the <see cref="Program"/> class. This class cannot be inherited.
     /// </summary>
-    public static class ProgramTests
+    public sealed class ProgramTests
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ProgramTests"/> class.
+        /// </summary>
+        /// <param name="outputHelper">The <see cref="ITestOutputHelper"/> to use.</param>
+        public ProgramTests(ITestOutputHelper outputHelper)
+        {
+            Logger = new TestLogger(outputHelper);
+        }
+
+        /// <summary>
+        /// Gets the <see cref="ILogger"/> to use.
+        /// </summary>
+        private ILogger Logger { get; }
+
         [Fact]
-        public static void Program_Returns_Zero_If_Input_Valid()
+        public void Program_Returns_Zero_If_Input_Valid()
         {
             // Arrange
             string[] args = new[] { "1", "2016" };
 
             // Act
-            int actual = Program.Main(args);
+            int actual = Program.Run(args, Logger);
 
             // Assert
             Assert.Equal(0, actual);
         }
 
         [Fact]
-        public static void Program_Returns_Zero_If_Input_Invalid()
+        public void Program_Returns_Zero_If_Input_Invalid()
         {
             // Arrange
             string[] args = new[] { "26", "a" };
 
             // Act
-            int actual = Program.Main(args);
+            int actual = Program.Run(args, Logger);
 
             // Assert
             Assert.Equal(-1, actual);
         }
 
         [Fact]
-        public static void Program_Exits_If_Null_Arguments()
+        public void Program_Exits_If_Null_Arguments()
         {
             // Arrange
             string[] args = null;
 
             // Act
-            int actual = Program.Main(args);
+            int actual = Program.Run(args, Logger);
 
             // Assert
             Assert.Equal(-1, actual);
         }
 
         [Fact]
-        public static void Program_Exits_If_No_Arguments()
+        public void Program_Exits_If_No_Arguments()
         {
             // Arrange
             string[] args = Array.Empty<string>();
 
             // Act
-            int actual = Program.Main(args);
+            int actual = Program.Run(args, Logger);
 
             // Assert
             Assert.Equal(-1, actual);
         }
 
         [Fact]
-        public static void Program_Exits_If_Invalid_Day()
+        public void Program_Exits_If_Invalid_Day()
         {
             // Arrange
             string[] args = new[] { "a" };
 
             // Act
-            int actual = Program.Main(args);
+            int actual = Program.Run(args, Logger);
 
             // Assert
             Assert.Equal(-1, actual);
         }
 
         [Fact]
-        public static void Program_Exits_If_Day_Too_Small()
+        public void Program_Exits_If_Day_Too_Small()
         {
             // Arrange
             string[] args = new[] { "0" };
 
             // Act
-            int actual = Program.Main(args);
+            int actual = Program.Run(args, Logger);
 
             // Assert
             Assert.Equal(-1, actual);
         }
 
         [Fact]
-        public static void Program_Exits_If_Day_Too_Large()
+        public void Program_Exits_If_Day_Too_Large()
         {
             // Arrange
             string[] args = new[] { "26" };
 
             // Act
-            int actual = Program.Main(args);
+            int actual = Program.Run(args, Logger);
 
             // Assert
             Assert.Equal(-1, actual);
