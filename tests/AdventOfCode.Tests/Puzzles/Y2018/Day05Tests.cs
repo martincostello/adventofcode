@@ -40,22 +40,6 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2018
         }
 
         [Theory]
-        [InlineData("dabAcCaCBAcCcaDA", "dabAaCBAcCcaDA")]
-        [InlineData("dabAaCBAcCcaDA", "dabCBAcCcaDA")]
-        [InlineData("dabCBAcCcaDA", "dabCBAcaDA")]
-        [InlineData("dabCBAcaDA", "dabCBAcaDA")]
-        public static void Y2018_Day05_ReduceOnce_Returns_Correct_Solution(
-            string polymer,
-            string expected)
-        {
-            // Act
-            string actual = Day05.ReduceOnce(polymer);
-
-            // Assert
-            Assert.Equal(expected, actual);
-        }
-
-        [Theory]
         [InlineData("dabAcCaCBAcCcaDA", "daDA")]
         public static void Y2018_Day05_ReduceWithOptimization_Returns_Correct_Solution(
             string polymer,

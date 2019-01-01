@@ -75,22 +75,6 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2018
             return optimized;
         }
 
-        /// <summary>
-        /// Reduces the specified polymer once.
-        /// </summary>
-        /// <param name="polymer">The polymer to reduce.</param>
-        /// <returns>
-        /// The polymer remaining after reducing the specified <paramref name="polymer"/> value.
-        /// </returns>
-        public static string ReduceOnce(string polymer)
-        {
-            var builder = new StringBuilder(polymer, polymer.Length);
-
-            ReduceOnce(builder);
-
-            return builder.ToString();
-        }
-
         /// <inheritdoc />
         protected override int SolveCore(string[] args)
         {
@@ -126,7 +110,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2018
 
                 if (Math.Abs(x - y) == Shift)
                 {
-                    return polymer.Remove(i, 2);
+                    polymer = polymer.Remove(i, 2);
                 }
             }
 
