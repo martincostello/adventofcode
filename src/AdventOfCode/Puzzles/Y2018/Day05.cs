@@ -4,6 +4,8 @@
 namespace MartinCostello.AdventOfCode.Puzzles.Y2018
 {
     using System;
+    using System.Globalization;
+    using System.Linq;
 
     /// <summary>
     /// A class representing the puzzle for <c>http://adventofcode.com/2018/day/5</c>. This class cannot be inherited.
@@ -14,6 +16,11 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2018
         /// Gets the number of remaining polymer units after the reduction.
         /// </summary>
         public int RemainingUnits { get; private set; }
+
+        /// <summary>
+        /// Gets the number of remaining polymer units after the reduction using optimization.
+        /// </summary>
+        public int RemainingUnitsOptimized { get; private set; }
 
         /// <summary>
         /// Reduces the specified polymer.
@@ -38,6 +45,31 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2018
             }
 
             return polymer;
+        }
+
+        /// <summary>
+        /// Reduces the specified polymer optimally.
+        /// </summary>
+        /// <param name="polymer">The polymer to reduce optimally.</param>
+        /// <returns>
+        /// The polymer remaining after reducing the specified <paramref name="polymer"/>
+        /// value until it can be reduced no further with optimizations in use.
+        /// </returns>
+        public static ReadOnlySpan<char> ReduceWithOptimization(string polymer)
+        {
+            string[] units = polymer
+                .Select((p) => char.ToLowerInvariant(p).ToString(CultureInfo.InvariantCulture))
+                .Distinct()
+                .OrderBy((p) => p)
+                .ToArray();
+
+            var optimized = units
+                .Select((p) => polymer.Replace(p, string.Empty, StringComparison.OrdinalIgnoreCase))
+                .Select((p) => new string(Reduce(p)))
+                .OrderBy((p) => p.Length)
+                .First();
+
+            return optimized;
         }
 
         /// <summary>
@@ -88,10 +120,12 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2018
             string polymer = ReadResourceAsString().Trim('\r', '\n');
 
             RemainingUnits = Reduce(polymer).Length;
+            RemainingUnitsOptimized = ReduceWithOptimization(polymer).Length;
 
             if (Verbose)
             {
                 Logger.WriteLine($"The number of units that remain after fully reacting the polymer is {RemainingUnits:N0}.");
+                Logger.WriteLine($"The number of units that remain after fully reacting the polymer with optimization is {RemainingUnitsOptimized:N0}.");
             }
 
             return 0;

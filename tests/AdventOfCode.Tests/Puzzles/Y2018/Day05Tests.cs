@@ -55,6 +55,19 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2018
             Assert.Equal(expected, new string(actual));
         }
 
+        [Theory]
+        [InlineData("dabAcCaCBAcCcaDA", "daDA")]
+        public static void Y2018_Day05_ReduceWithOptimization_Returns_Correct_Solution(
+            string polymer,
+            string expected)
+        {
+            // Act
+            var actual = Day05.ReduceWithOptimization(polymer);
+
+            // Assert
+            Assert.Equal(expected, new string(actual));
+        }
+
         [Fact]
         public void Y2018_Day01_Solve_Returns_Correct_Solution()
         {
@@ -63,6 +76,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2018
 
             // Assert
             Assert.Equal(10638, puzzle.RemainingUnits);
+            Assert.Equal(4944, puzzle.RemainingUnitsOptimized);
         }
     }
 }
