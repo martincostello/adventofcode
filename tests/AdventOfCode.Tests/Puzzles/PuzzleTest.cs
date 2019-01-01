@@ -36,9 +36,7 @@ namespace MartinCostello.AdventOfCode.Puzzles
         /// </returns>
         protected T SolvePuzzle<T>()
             where T : Puzzle, new()
-        {
-            return SolvePuzzle<T>(Array.Empty<string>());
-        }
+            => SolvePuzzle<T>(Array.Empty<string>());
 
         /// <summary>
         /// Solves the specified puzzle type with the specified arguments.

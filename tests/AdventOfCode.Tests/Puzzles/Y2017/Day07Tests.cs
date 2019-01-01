@@ -1,20 +1,30 @@
-// Copyright (c) Martin Costello, 2015. All rights reserved.
+﻿// Copyright (c) Martin Costello, 2015. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2017
 {
     using Xunit;
+    using Xunit.Abstractions;
 
     /// <summary>
     /// A class containing tests for the <see cref="Day07"/> class. This class cannot be inherited.
     /// </summary>
-    public static class Day07Tests
+    public sealed class Day07Tests : PuzzleTest
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Day07Tests"/> class.
+        /// </summary>
+        /// <param name="outputHelper">The <see cref="ITestOutputHelper"/> to use.</param>
+        public Day07Tests(ITestOutputHelper outputHelper)
+            : base(outputHelper)
+        {
+        }
+
         [Fact]
         public static void Y2017_Day07_FindBottomProgramName_Returns_Correct_Value()
         {
             // Arrange
-            var structure = new[]
+            string[] structure = new[]
             {
                 "pbga (66)",
                 "xhth (57)",
@@ -42,7 +52,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
         public static void Y2017_Day07_FindDesiredWeightOfUnbalancedDisc_Returns_Correct_Value()
         {
             // Arrange
-            var structure = new[]
+            string[] structure = new[]
             {
                 "pbga (66)",
                 "xhth (57)",
@@ -67,10 +77,10 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
         }
 
         [Fact]
-        public static void Y2017_Day07_Solve_Returns_Correct_Solution()
+        public void Y2017_Day07_Solve_Returns_Correct_Solution()
         {
             // Act
-            var puzzle = PuzzleTestHelpers.SolvePuzzle<Day07>();
+            var puzzle = SolvePuzzle<Day07>();
 
             // Assert
             Assert.Equal("fbgguv", puzzle.BottomProgramName);

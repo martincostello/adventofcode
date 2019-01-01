@@ -27,7 +27,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2018
             int expected1 = 240;
             int expected2 = 4455;
 
-            var log = new[]
+            string[] log = new[]
             {
                 "[1518-11-01 00:00] Guard #10 begins shift",
                 "[1518-11-01 00:05] falls asleep",

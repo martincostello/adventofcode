@@ -1,4 +1,4 @@
-// Copyright (c) Martin Costello, 2015. All rights reserved.
+﻿// Copyright (c) Martin Costello, 2015. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 namespace MartinCostello.AdventOfCode.Puzzles
@@ -20,9 +20,7 @@ namespace MartinCostello.AdventOfCode.Puzzles
         /// </returns>
         internal static T SolvePuzzle<T>()
             where T : IPuzzle, new()
-        {
-            return SolvePuzzle<T>(Array.Empty<string>());
-        }
+            => SolvePuzzle<T>(Array.Empty<string>());
 
         /// <summary>
         /// Solves the specified puzzle type with the specified arguments.
@@ -36,7 +34,7 @@ namespace MartinCostello.AdventOfCode.Puzzles
             where T : IPuzzle, new()
         {
             // Arrange
-            T puzzle = new T();
+            var puzzle = new T();
 
             // Act
             int result = puzzle.Solve(args);
