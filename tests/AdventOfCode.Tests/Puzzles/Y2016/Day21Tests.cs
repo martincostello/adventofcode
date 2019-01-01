@@ -5,12 +5,22 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
 {
     using System.Collections.Generic;
     using Xunit;
+    using Xunit.Abstractions;
 
     /// <summary>
     /// A class containing tests for the <see cref="Day21"/> class. This class cannot be inherited.
     /// </summary>
-    public static class Day21Tests
+    public sealed class Day21Tests : PuzzleTest
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Day21Tests"/> class.
+        /// </summary>
+        /// <param name="outputHelper">The <see cref="ITestOutputHelper"/> to use.</param>
+        public Day21Tests(ITestOutputHelper outputHelper)
+            : base(outputHelper)
+        {
+        }
+
         [Theory]
         [InlineData(new[] { 'a', 'b', 'c', 'd', 'f', 'e', 'g', 'h' }, 2, 5, new[] { 'a', 'b', 'e', 'f', 'd', 'c', 'g', 'h' })]
         public static void Y2016_Day21_Reverse_Returns_Correct_Solution(char[] values, int start, int end, char[] expected)
@@ -66,13 +76,13 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         }
 
         [Fact]
-        public static void Y2016_Day21_Solve_Returns_Correct_Solution()
+        public void Y2016_Day21_Solve_Returns_Correct_Solution()
         {
             // Arrange
             string[] args = { "abcdefgh" };
 
             // Act
-            var puzzle = PuzzleTestHelpers.SolvePuzzle<Day21>(args);
+            var puzzle = SolvePuzzle<Day21>(args);
 
             // Assert
             Assert.Equal("gcedfahb", puzzle.ScrambledResult);
@@ -81,7 +91,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
             args = new[] { "fbgdceah", bool.TrueString };
 
             // Act
-            puzzle = PuzzleTestHelpers.SolvePuzzle<Day21>(args);
+            puzzle = SolvePuzzle<Day21>(args);
 
             // Assert
             Assert.Equal("hegbdcfa", puzzle.ScrambledResult);

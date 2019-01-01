@@ -4,12 +4,22 @@
 namespace MartinCostello.AdventOfCode.Puzzles.Y2016
 {
     using Xunit;
+    using Xunit.Abstractions;
 
     /// <summary>
     /// A class containing tests for the <see cref="Day15"/> class. This class cannot be inherited.
     /// </summary>
-    public static class Day15Tests
+    public sealed class Day15Tests : PuzzleTest
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Day15Tests"/> class.
+        /// </summary>
+        /// <param name="outputHelper">The <see cref="ITestOutputHelper"/> to use.</param>
+        public Day15Tests(ITestOutputHelper outputHelper)
+            : base(outputHelper)
+        {
+        }
+
         [Fact]
         public static void Y2016_Day15_FindTimeForCapsuleRelease_Returns_Correct_Solution()
         {
@@ -28,10 +38,10 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         }
 
         [Fact]
-        public static void Y2016_Day15_Solve_Returns_Correct_Solution()
+        public void Y2016_Day15_Solve_Returns_Correct_Solution()
         {
             // Act
-            var puzzle = PuzzleTestHelpers.SolvePuzzle<Day15>();
+            var puzzle = SolvePuzzle<Day15>();
 
             // Assert
             Assert.Equal(16824, puzzle.TimeOfFirstButtonPress);

@@ -4,12 +4,22 @@
 namespace MartinCostello.AdventOfCode.Puzzles.Y2016
 {
     using Xunit;
+    using Xunit.Abstractions;
 
     /// <summary>
     /// A class containing tests for the <see cref="Day16"/> class. This class cannot be inherited.
     /// </summary>
-    public static class Day16Tests
+    public sealed class Day16Tests : PuzzleTest
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Day16Tests"/> class.
+        /// </summary>
+        /// <param name="outputHelper">The <see cref="ITestOutputHelper"/> to use.</param>
+        public Day16Tests(ITestOutputHelper outputHelper)
+            : base(outputHelper)
+        {
+        }
+
         [Theory]
         [InlineData("110010110100", 12, "100")]
         [InlineData("10000", 20, "01100")]
@@ -25,13 +35,13 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         [Theory]
         [InlineData("272", "10010110010011110")]
         [InlineData("35651584", "01101011101100011")]
-        public static void Y2016_Day16_Solve_Returns_Correct_Solution(string size, string expected)
+        public void Y2016_Day16_Solve_Returns_Correct_Solution(string size, string expected)
         {
             // Arrange
             string[] args = new[] { "10010000000110000", size };
 
             // Act
-            var puzzle = PuzzleTestHelpers.SolvePuzzle<Day16>(args);
+            var puzzle = SolvePuzzle<Day16>(args);
 
             // Assert
             Assert.Equal(expected, puzzle.Checksum);

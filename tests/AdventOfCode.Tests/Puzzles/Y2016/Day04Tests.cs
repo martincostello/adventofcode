@@ -4,12 +4,22 @@
 namespace MartinCostello.AdventOfCode.Puzzles.Y2016
 {
     using Xunit;
+    using Xunit.Abstractions;
 
     /// <summary>
     /// A class containing tests for the <see cref="Day04"/> class. This class cannot be inherited.
     /// </summary>
-    public static class Day04Tests
+    public sealed class Day04Tests : PuzzleTest
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Day04Tests"/> class.
+        /// </summary>
+        /// <param name="outputHelper">The <see cref="ITestOutputHelper"/> to use.</param>
+        public Day04Tests(ITestOutputHelper outputHelper)
+            : base(outputHelper)
+        {
+        }
+
         [Theory]
         [InlineData("qzmt-zixmtkozy-ivhz-343[zimth]", "very encrypted name")]
         public static void Y2016_Day04_DecryptRoomName_Returns_Correct_Solution(string name, string expected)
@@ -47,10 +57,10 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         }
 
         [Fact]
-        public static void Y2016_Day04_Solve_Returns_Correct_Solution()
+        public void Y2016_Day04_Solve_Returns_Correct_Solution()
         {
             // Act
-            var puzzle = PuzzleTestHelpers.SolvePuzzle<Day04>();
+            var puzzle = SolvePuzzle<Day04>();
 
             // Assert
             Assert.Equal(137896, puzzle.SumOfSectorIdsOfRealRooms);
