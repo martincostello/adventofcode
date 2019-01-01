@@ -14,18 +14,24 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2018
     internal sealed class Day04 : Puzzle2018
     {
         /// <summary>
-        /// Gets the product of the guard who slept the most and the minute they were asleep the most.
+        /// Gets the product of the Id of the guard who slept the most and the minute they were asleep the most.
         /// </summary>
         public int SleepiestGuardMinute { get; private set; }
+
+        /// <summary>
+        /// Gets the product of the minute a guard was most asleep and the Id of the guard most asleep in that minute.
+        /// </summary>
+        public int SleepiestMinuteGuard { get; private set; }
 
         /// <summary>
         /// Calculates the product of the guard who slept the most and the minute they were asleep the most from the specified log.
         /// </summary>
         /// <param name="log">The log of guard activity.</param>
         /// <returns>
-        /// The product of the guard who slept the most and the minute they were asleep the most as specified by <paramref name="log"/>.
+        /// The product of the guard who slept the most and the minute they were asleep the most as specified by <paramref name="log"/>
+        /// and the product of the minute a guard was most asleep and the guard's Id.
         /// </returns>
-        public static int GetSleepiestGuardMinute(IEnumerable<string> log)
+        public static(int guardMinute, int minuteGuard) GetSleepiestGuardsMinutes(IEnumerable<string> log)
         {
             var parsedAndSortedLog = log
                 .Select(LogEntry.Parse)
@@ -34,12 +40,12 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2018
 
             var groupedLog = parsedAndSortedLog.GroupBy((p) => p.Timestamp.Date);
 
-            var guardsAsleep = groupedLog
+            var guardsAsleepByMinute = groupedLog
                 .Select((p) => p.Key)
                 .Distinct()
                 .ToDictionary((k) => k, (v) => new int[60]);
 
-            var first = groupedLog.First().First();
+            var first = parsedAndSortedLog[0];
             int lastGuard = first.Id.Value;
             var lastTimestamp = first.Timestamp;
             bool isAwake = true;
@@ -57,7 +63,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2018
                         lastTimestamp.TimeOfDay < oneAM)
                     {
                         var time = lastTimestamp;
-                        var midnightHour = guardsAsleep[day.Key];
+                        var midnightHour = guardsAsleepByMinute[day.Key];
 
                         while (time.TimeOfDay < oneAM && time < entry.Timestamp)
                         {
@@ -85,7 +91,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2018
                 .Distinct()
                 .ToDictionary((k) => k, (v) => 0);
 
-            foreach (var activity in guardsAsleep)
+            foreach (var activity in guardsAsleepByMinute)
             {
                 foreach (int guard in activity.Value.Where((p) => p != 0))
                 {
@@ -98,32 +104,59 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2018
                 .Select((p) => p.Key)
                 .First();
 
-            var minutesWhereAsleep = new Dictionary<int, int>();
+            var minutesAsleepForSleepiestGuard = new Dictionary<int, int>();
+            var sleepiestGuardsByMinute = new Dictionary<int, Dictionary<int, int>>();
 
-            foreach (var pair in guardsAsleep)
+            foreach (var pair in guardsAsleepByMinute)
             {
                 for (int i = 0; i < pair.Value.Length; i++)
                 {
-                    bool isSleepiest = pair.Value[i] == sleepiestGuard;
+                    int guard = pair.Value[i];
+
+                    if (guard == 0)
+                    {
+                        continue;
+                    }
+
+                    bool isSleepiest = guard == sleepiestGuard;
 
                     if (isSleepiest)
                     {
-                        if (!minutesWhereAsleep.ContainsKey(i))
+                        if (!minutesAsleepForSleepiestGuard.ContainsKey(i))
                         {
-                            minutesWhereAsleep.Add(i, 0);
+                            minutesAsleepForSleepiestGuard.Add(i, 0);
                         }
 
-                        minutesWhereAsleep[i]++;
+                        minutesAsleepForSleepiestGuard[i]++;
                     }
+
+                    if (!sleepiestGuardsByMinute.TryGetValue(i, out var guardsAsleepInMinute))
+                    {
+                        guardsAsleepInMinute = sleepiestGuardsByMinute[i] = new Dictionary<int, int>();
+                    }
+
+                    if (!guardsAsleepInMinute.ContainsKey(guard))
+                    {
+                        guardsAsleepInMinute.Add(guard, 0);
+                    }
+
+                    guardsAsleepInMinute[guard]++;
                 }
             }
 
-            int sleepiestMinute = minutesWhereAsleep
+            int sleepiestMinute = minutesAsleepForSleepiestGuard
                 .OrderByDescending((p) => p.Value)
                 .Select((p) => p.Key)
                 .First();
 
-            return sleepiestGuard * sleepiestMinute;
+            int minuteGuard = sleepiestGuardsByMinute
+                .OrderByDescending((p) => p.Value.Values.Max())
+                .Select((p) => p.Key * p.Value.OrderByDescending((r) => r.Value).Select((r) => r.Key).First())
+                .First();
+
+            int guardMinute = sleepiestGuard * sleepiestMinute;
+
+            return (guardMinute, minuteGuard);
         }
 
         /// <inheritdoc />
@@ -131,11 +164,12 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2018
         {
             IList<string> log = ReadResourceAsLines();
 
-            SleepiestGuardMinute = GetSleepiestGuardMinute(log);
+            (SleepiestGuardMinute, SleepiestMinuteGuard) = GetSleepiestGuardsMinutes(log);
 
             if (Verbose)
             {
                 Logger.WriteLine($"The ID of the sleepiest guard multiplied by the most common minute is {SleepiestGuardMinute:N0}.");
+                Logger.WriteLine($"The most common minute a guard was asleep in multiplied by the guard's ID is {SleepiestMinuteGuard:N0}.");
             }
 
             return 0;

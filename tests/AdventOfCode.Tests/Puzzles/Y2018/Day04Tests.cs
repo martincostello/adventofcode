@@ -21,10 +21,11 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2018
         }
 
         [Fact]
-        public static void Y2018_Day04_GetSleepiestGuardMinute_Returns_Correct_Solution()
+        public static void Y2018_Day04_GetSleepiestGuardsMinutes_Returns_Correct_Solution()
         {
             // Arrange
-            int expected = 240;
+            int expected1 = 240;
+            int expected2 = 4455;
 
             var log = new[]
             {
@@ -48,10 +49,11 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2018
             };
 
             // Act
-            int actual = Day04.GetSleepiestGuardMinute(log);
+            (int actual1, int actual2) = Day04.GetSleepiestGuardsMinutes(log);
 
             // Assert
-            Assert.Equal(expected, actual);
+            Assert.Equal(expected1, actual1);
+            Assert.Equal(expected2, actual2);
         }
 
         [Fact]
@@ -62,6 +64,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2018
 
             // Assert
             Assert.Equal(4716, puzzle.SleepiestGuardMinute);
+            Assert.Equal(117061, puzzle.SleepiestMinuteGuard);
         }
     }
 }
