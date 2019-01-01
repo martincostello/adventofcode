@@ -1,4 +1,4 @@
-// Copyright (c) Martin Costello, 2015. All rights reserved.
+﻿// Copyright (c) Martin Costello, 2015. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2015
@@ -61,9 +61,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
         /// <param name="value">The array to test.</param>
         /// <returns><see langword="true"/> if <paramref name="value"/> meets the rule; otherwise <see langword="false"/>.</returns>
         internal static bool ContainsNoForbiddenCharacters(char[] value)
-        {
-            return !value.Contains('i') && !value.Contains('o') && !value.Contains('l');
-        }
+            => !value.Contains('i') && !value.Contains('o') && !value.Contains('l');
 
         /// <summary>
         /// Tests whether an array contains a pair of any two letters that appear at least twice in the string without overlapping.

@@ -1,4 +1,4 @@
-// Copyright (c) Martin Costello, 2015. All rights reserved.
+﻿// Copyright (c) Martin Costello, 2015. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2015
@@ -28,8 +28,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
         /// </returns>
         internal static Tuple<bool, int> Fight(Func<Wizard, ICollection<string>, string> spellSelector, string difficulty)
         {
-            Wizard wizard = new Wizard(spellSelector);
-            Boss boss = new Boss();
+            var wizard = new Wizard(spellSelector);
+            var boss = new Boss();
 
             Player winner = Fight(wizard, boss, difficulty, null);
 
@@ -76,7 +76,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
                     attacker.Attack(defender, output);
                 }
 
-                var player = attacker;
+                Player player = attacker;
                 attacker = defender;
                 defender = player;
 
@@ -92,8 +92,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
         {
             string difficulty = args.Length == 1 ? args[0] : "easy";
 
-            List<Tuple<bool, int>> solutions = new List<Tuple<bool, int>>();
-            Random random = new Random();
+            var solutions = new List<Tuple<bool, int>>();
+            var random = new Random();
 
             // Play the game 100,000 times with random choices of spells
             while (solutions.Count < 100000)
@@ -242,7 +242,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
                 string spellToConjure = _spellSelector(this, availableSpells.Select((p) => p.Key).ToList());
 
                 // Get the spell
-                var info = availableSpells
+                SpellInfo info = availableSpells
                     .Where((p) => string.Equals(spellToConjure, p.Key, StringComparison.Ordinal))
                     .Select((p) => p.Value)
                     .Single();
@@ -258,7 +258,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
             /// <param name="output">A delegate to a method to use to output messages.</param>
             internal void CastSpells(Player other, Action<string, object[]> output)
             {
-                foreach (var spell in _spells.Where((p) => p.TurnsLeft > 0))
+                foreach (Spell spell in _spells.Where((p) => p.TurnsLeft > 0))
                 {
                     spell.Cast(this, other, output);
                 }
@@ -524,9 +524,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
 
             /// <inheritdoc />
             protected override void Cast(Player other, Action<string, object[]> output)
-            {
-                other.HitPoints -= Delta;
-            }
+                => other.HitPoints -= Delta;
 
             /// <inheritdoc />
             protected override void Cast(Wizard wizard, Action<string, object[]> output)
@@ -556,15 +554,11 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
 
             /// <inheritdoc />
             protected override void Cast(Wizard wizard, Action<string, object[]> output)
-            {
-                output?.Invoke("{0} casts {1}, dealing {2} damage.", new object[] { wizard.Name, Name, Damage });
-            }
+                => output?.Invoke("{0} casts {1}, dealing {2} damage.", new object[] { wizard.Name, Name, Damage });
 
             /// <inheritdoc />
             protected override void Cast(Player other, Action<string, object[]> output)
-            {
-                other.HitPoints -= Damage;
-            }
+                => other.HitPoints -= Damage;
         }
 
         /// <summary>
@@ -587,22 +581,18 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
 
             /// <inheritdoc />
             protected override void Cast(Wizard wizard, Action<string, object[]> output)
-            {
-                output?.Invoke("{0} casts {1}.", new object[] { wizard.Name, Name });
-            }
+                => output?.Invoke("{0} casts {1}.", new object[] { wizard.Name, Name });
 
             /// <inheritdoc />
-            [System.Diagnostics.CodeAnalysis.SuppressMessage(
-                "Microsoft.Globalization",
-                "CA1308:NormalizeStringsToUppercase",
-                Justification = "Used for correct sentence casing for display.")]
             protected override void Affect(Player other, Action<string, object[]> output)
             {
                 other.HitPoints -= Damage;
 
                 if (other.HitPoints < 1)
                 {
+#pragma warning disable CA1308
                     output?.Invoke("{0} deals {1} damage. This kills the {2}, and the player wins.", new object[] { Name, Damage, other.Name.ToLowerInvariant() });
+#pragma warning restore CA1308
                 }
                 else
                 {
@@ -626,9 +616,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
 
             /// <inheritdoc />
             protected override void Cast(Wizard wizard, Action<string, object[]> output)
-            {
-                output?.Invoke("{0} casts {1}.", new object[] { wizard.Name, Name });
-            }
+                => output?.Invoke("{0} casts {1}.", new object[] { wizard.Name, Name });
 
             /// <inheritdoc />
             protected override void Affect(Wizard wizard, Action<string, object[]> output)
@@ -670,9 +658,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
 
             /// <inheritdoc />
             protected override void Affect(Wizard wizard, Action<string, object[]> output)
-            {
-                output?.Invoke("{0}'s timer is now {1}.", new object[] { Name, TurnsLeft - 1 });
-            }
+                => output?.Invoke("{0}'s timer is now {1}.", new object[] { Name, TurnsLeft - 1 });
 
             /// <inheritdoc />
             protected override void Reverse(Wizard wizard, Action<string, object[]> output)

@@ -1,4 +1,4 @@
-// Copyright (c) Martin Costello, 2015. All rights reserved.
+﻿// Copyright (c) Martin Costello, 2015. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2016
@@ -31,9 +31,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         /// The decrypted name of the room.
         /// </returns>
         internal static string DecryptRoomName(string name)
-        {
-            return DecryptRoomName(name, out string _);
-        }
+            => DecryptRoomName(name, out string _);
 
         /// <summary>
         /// Returns whether the specified room is real.
@@ -43,9 +41,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         /// <see langword="true"/> if <paramref name="name"/> is a real room; otherwise <see langword="false"/>.
         /// </returns>
         internal static bool IsRoomReal(string name)
-        {
-            return IsRoomReal(name, out string _, out string _);
-        }
+            => IsRoomReal(name, out string _, out string _);
 
         /// <summary>
         /// Returns the sum of the sector Ids of the specified room names which are real.
@@ -172,7 +168,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
             encryptedName = name.Substring(0, indexOfLastDash);
             string encryptedNameLetters = encryptedName.Replace("-", string.Empty, StringComparison.Ordinal);
 
-            var top5Letters = encryptedNameLetters
+            char[] top5Letters = encryptedNameLetters
                 .GroupBy((p) => p)
                 .OrderByDescending((p) => p.Count())
                 .ThenBy((p) => p.Key)

@@ -1,9 +1,8 @@
-// Copyright (c) Martin Costello, 2015. All rights reserved.
+﻿// Copyright (c) Martin Costello, 2015. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2015
 {
-    using System;
     using System.Collections.Generic;
     using System.Linq;
 
@@ -35,7 +34,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
                 .ToList();
 
             // Determine all of the possible seating arrangements
-            List<string> names = potentials
+            var names = potentials
                 .Select((p) => p.Name)
                 .Distinct()
                 .ToList();
@@ -135,7 +134,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
         {
             string[] split = value.Split(' ');
 
-            Potential result = new Potential()
+            var result = new Potential()
             {
                 Name = split.First(),
                 AdjacentName = split.Last().TrimEnd('.'),

@@ -37,7 +37,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
 
             bool[,] grid = new bool[height, width];
 
-            foreach (var instruction in operations)
+            foreach (Instruction instruction in operations)
             {
                 if (instruction.IsRotation)
                 {

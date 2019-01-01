@@ -1,4 +1,4 @@
-// Copyright (c) Martin Costello, 2015. All rights reserved.
+﻿// Copyright (c) Martin Costello, 2015. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2016
@@ -110,9 +110,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
             /// </summary>
             /// <param name="chip">The microchip to accept.</param>
             public override void Accept(Chip chip)
-            {
-                Microchip = chip;
-            }
+                => Microchip = chip;
         }
 
         /// <summary>
@@ -306,9 +304,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
             /// </returns>
             private Bot GetBot(int number)
             {
-                Bot bot;
-
-                if (!Bots.TryGetValue(number, out bot))
+                if (!Bots.TryGetValue(number, out Bot bot))
                 {
                     Bots[number] = bot = new Bot(number, OnCompare);
                 }

@@ -1,9 +1,8 @@
-// Copyright (c) Martin Costello, 2015. All rights reserved.
+﻿// Copyright (c) Martin Costello, 2015. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2016
 {
-    using System;
     using System.Collections.Generic;
     using System.Drawing;
     using System.Text;
@@ -82,7 +81,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         internal static string GetBathroomCode(ICollection<string> instructions, char[][] grid)
         {
             IList<IList<Direction>> directions = ParseInstructions(instructions);
-            StringBuilder code = new StringBuilder(instructions.Count);
+            var code = new StringBuilder(instructions.Count);
 
             var origin = Point.Empty;
 
@@ -98,7 +97,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
                 }
             }
 
-            var position = origin;
+            Point position = origin;
 
             foreach (IList<Direction> sequence in directions)
             {

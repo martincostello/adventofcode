@@ -1,4 +1,4 @@
-// Copyright (c) Martin Costello, 2015. All rights reserved.
+﻿// Copyright (c) Martin Costello, 2015. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2017
@@ -82,11 +82,11 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
                 .Select((p) => new ProgramDisc(p))
                 .ToDictionary((p) => p.Name, (p) => p);
 
-            foreach (var program in programs.Values)
+            foreach (ProgramDisc program in programs.Values)
             {
                 foreach (string name in program.ProgramsHeld)
                 {
-                    var child = programs[name];
+                    ProgramDisc child = programs[name];
 
                     child.Parent = program;
                     program.Children.Add(child);
@@ -170,14 +170,10 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
                 Name = split[0];
                 Weight = ParseInt32(split[1].Trim('(', ')'));
 
-                if (split.Length > 2)
-                {
-                    ProgramsHeld = split.Skip(3).Select((p) => p.Trim(',')).ToArray();
-                }
-                else
-                {
-                    ProgramsHeld = Array.Empty<string>();
-                }
+                ProgramsHeld =
+                    split.Length > 2 ?
+                    split.Skip(3).Select((p) => p.Trim(',')).ToArray() :
+                    Array.Empty<string>();
             }
 
             /// <summary>

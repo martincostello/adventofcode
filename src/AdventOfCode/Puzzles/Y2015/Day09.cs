@@ -1,4 +1,4 @@
-// Copyright (c) Martin Costello, 2015. All rights reserved.
+﻿// Copyright (c) Martin Costello, 2015. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2015
@@ -26,9 +26,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
         /// The shortest possible distance to visit all the specified locations exactly once.
         /// </returns>
         internal static int GetShortestDistanceBetweenPoints(ICollection<string> collection)
-        {
-            return GetDistanceBetweenPoints(collection, findLongest: false);
-        }
+            => GetDistanceBetweenPoints(collection, findLongest: false);
 
         /// <summary>
         /// Gets the distance to visit all of the specified locations exactly
@@ -102,8 +100,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
             int maxPathLength = paths.Max((p) => p.Steps.Count);
 
             // Discount any paths that did not visit all locations
-            var completePaths = paths
-                .Where((p) => p.Steps.Count == maxPathLength);
+            var completePaths = paths.Where((p) => p.Steps.Count == maxPathLength);
 
             var orderedPaths = completePaths.OrderBy((p) => p.PathDistance);
 
@@ -144,7 +141,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
         /// <returns>An <see cref="IList{T}"/> containing all the possible paths that start at <paramref name="origin"/>.</returns>
         private static IList<Path> WalkPaths(string origin, IDictionary<string, IDictionary<string, int>> pathsFromSources)
         {
-            Path path = new Path(origin);
+            var path = new Path(origin);
 
             var pathsWalked = new List<Path>()
             {

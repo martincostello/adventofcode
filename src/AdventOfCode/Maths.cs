@@ -23,9 +23,8 @@ namespace MartinCostello.AdventOfCode
         /// </returns>
         internal static IList<ICollection<long>> GetCombinations(long total, IList<int> values)
         {
-            List<ICollection<long>> result = new List<ICollection<long>>();
-
-            BitArray bits = new BitArray(values.Count);
+            var result = new List<ICollection<long>>();
+            var bits = new BitArray(values.Count);
 
             for (int i = 0; i < Math.Pow(2, bits.Length); i++)
             {
@@ -41,7 +40,7 @@ namespace MartinCostello.AdventOfCode
 
                 if (sum == total)
                 {
-                    List<long> combination = new List<long>();
+                    var combination = new List<long>();
 
                     for (int j = 0; j < bits.Length; j++)
                     {
@@ -95,9 +94,7 @@ namespace MartinCostello.AdventOfCode
         /// An <see cref="IEnumerable{T}"/> that returns the permutations of <paramref name="collection"/>.
         /// </returns>
         internal static IEnumerable<IEnumerable<T>> GetPermutations<T>(ICollection<T> collection)
-        {
-            return GetPermutations(collection, collection.Count);
-        }
+            => GetPermutations(collection, collection.Count);
 
         /// <summary>
         /// Returns all the permutations of the specified collection of values.

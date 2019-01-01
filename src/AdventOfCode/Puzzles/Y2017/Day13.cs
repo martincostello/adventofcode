@@ -1,9 +1,8 @@
-// Copyright (c) Martin Costello, 2015. All rights reserved.
+﻿// Copyright (c) Martin Costello, 2015. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2017
 {
-    using System;
     using System.Collections.Generic;
     using System.Linq;
 
@@ -36,8 +35,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
                 .Select((p) => new { layer = ParseInt32(p[0]), range = ParseInt32(p[1].Trim()) })
                 .ToList();
 
-            var depths = configuration.Select((p) => p.layer).ToArray();
-            var ranges = configuration.Select((p) => p.range).ToArray();
+            int[] depths = configuration.Select((p) => p.layer).ToArray();
+            int[] ranges = configuration.Select((p) => p.range).ToArray();
 
             int severity = 0;
 
@@ -72,8 +71,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
                 .Select((p) => new { layer = ParseInt32(p[0]), range = ParseInt32(p[1].Trim()) })
                 .ToList();
 
-            var depths = configuration.Select((p) => p.layer).ToArray();
-            var ranges = configuration.Select((p) => p.range).ToArray();
+            int[] depths = configuration.Select((p) => p.layer).ToArray();
+            int[] ranges = configuration.Select((p) => p.range).ToArray();
 
             bool caught = false;
             int delay = 0;

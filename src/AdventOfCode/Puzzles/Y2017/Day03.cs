@@ -1,4 +1,4 @@
-// Copyright (c) Martin Costello, 2015. All rights reserved.
+﻿// Copyright (c) Martin Costello, 2015. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2017
@@ -78,7 +78,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
                         currentSquare++;
                     }
 
-                    foreach (var direction in new[] { Left, Down, Right })
+                    foreach (Size direction in new[] { Left, Down, Right })
                     {
                         for (int i = 0; currentSquare != square && i < movesOther; i++)
                         {
@@ -145,7 +145,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
                     lastValueWritten = memory.Write(position);
                 }
 
-                foreach (var direction in new[] { Left, Down, Right })
+                foreach (Size direction in new[] { Left, Down, Right })
                 {
                     for (int i = 0; lastValueWritten <= square && i < movesOther; i++)
                     {
@@ -235,9 +235,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
             /// The value that was written for <paramref name="address"/>.
             /// </returns>
             public int Write(Point address)
-            {
-                return this[address] = GetSumOfAdjacentAddresses(address);
-            }
+                => this[address] = GetSumOfAdjacentAddresses(address);
 
             /// <summary>
             /// Gets the sum of the values stored in the adjacent addresses.
@@ -255,7 +253,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
 
                 int sum = 0;
 
-                foreach (var offset in Offsets)
+                foreach (Size offset in Offsets)
                 {
                     if (TryGetValue(address + offset, out int value))
                     {

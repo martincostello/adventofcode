@@ -1,9 +1,8 @@
-// Copyright (c) Martin Costello, 2015. All rights reserved.
+﻿// Copyright (c) Martin Costello, 2015. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2017
 {
-    using System;
     using System.Collections.Generic;
     using System.Linq;
 
@@ -116,8 +115,10 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
         /// </returns>
         private static ICollection<Node> GetMembersOfGroup(Node target)
         {
-            var members = new List<Node>();
-            members.Add(target);
+            var members = new List<Node>()
+            {
+                target,
+            };
 
             foreach (Node edge in target.Edges)
             {
@@ -139,7 +140,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
                 members.Add(node);
             }
 
-            foreach (var edge in node.Edges)
+            foreach (Node edge in node.Edges)
             {
                 if (!members.Contains(edge))
                 {

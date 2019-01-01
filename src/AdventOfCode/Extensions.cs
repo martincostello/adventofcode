@@ -19,8 +19,6 @@ namespace MartinCostello.AdventOfCode
         /// The next node from <paramref name="node"/> if the linked list is circular.
         /// </returns>
         internal static LinkedListNode<T> NextCircular<T>(this LinkedListNode<T> node)
-        {
-            return node.Next ?? node.List.First;
-        }
+            => node.Next ?? node.List.First;
     }
 }

@@ -62,9 +62,7 @@ namespace MartinCostello.AdventOfCode
         /// representation of the corresponding objects in args.
         /// </returns>
         protected internal static string Format(string format, params object[] args)
-        {
-            return string.Format(CultureInfo.InvariantCulture, format, args);
-        }
+            => string.Format(CultureInfo.InvariantCulture, format, args);
 
         /// <summary>
         /// Parses the specified <see cref="string"/> as an <see cref="int"/>.
@@ -78,9 +76,7 @@ namespace MartinCostello.AdventOfCode
         /// The parsed value of <paramref name="s"/>.
         /// </returns>
         protected internal static int ParseInt32(ReadOnlySpan<char> s, NumberStyles style = NumberStyles.Integer)
-        {
-            return int.Parse(s, style, CultureInfo.InvariantCulture);
-        }
+            => int.Parse(s, style, CultureInfo.InvariantCulture);
 
         /// <summary>
         /// Tries to parse the specified <see cref="string"/> as an <see cref="int"/>.
@@ -95,9 +91,7 @@ namespace MartinCostello.AdventOfCode
         /// successfully; otherwise <see langword="false"/>.
         /// </returns>
         protected internal static bool TryParseInt32(ReadOnlySpan<char> s, out int value)
-        {
-            return int.TryParse(s, NumberStyles.Integer, CultureInfo.InvariantCulture, out value);
-        }
+            => int.TryParse(s, NumberStyles.Integer, CultureInfo.InvariantCulture, out value);
 
         /// <summary>
         /// Parses the specified <see cref="string"/> as an <see cref="uint"/>.
@@ -118,9 +112,7 @@ namespace MartinCostello.AdventOfCode
         /// <paramref name="minimumLength"/> in length; otherwise <see langword="false"/>.
         /// </returns>
         protected static bool EnsureArguments(ICollection<string> args, int minimumLength)
-        {
-            return args.Count >= minimumLength;
-        }
+            => args.Count >= minimumLength;
 
         /// <summary>
         /// Returns the <see cref="Stream"/> associated with the resource for the puzzle.
@@ -130,7 +122,7 @@ namespace MartinCostello.AdventOfCode
         /// </returns>
         protected Stream ReadResource()
         {
-            var thisType = GetType().GetTypeInfo();
+            TypeInfo thisType = GetType().GetTypeInfo();
             string name = FormattableString.Invariant($"MartinCostello.{thisType.Assembly.GetName().Name}.Input.Y{Year}.{thisType.Name}.input.txt");
 
             return thisType.Assembly.GetManifestResourceStream(name);
