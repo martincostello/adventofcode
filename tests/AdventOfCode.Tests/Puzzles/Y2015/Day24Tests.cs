@@ -4,12 +4,22 @@
 namespace MartinCostello.AdventOfCode.Puzzles.Y2015
 {
     using Xunit;
+    using Xunit.Abstractions;
 
     /// <summary>
     /// A class containing tests for the <see cref="Day24"/> class. This class cannot be inherited.
     /// </summary>
-    public static class Day24Tests
+    public sealed class Day24Tests : PuzzleTest
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Day24Tests"/> class.
+        /// </summary>
+        /// <param name="outputHelper">The <see cref="ITestOutputHelper"/> to use.</param>
+        public Day24Tests(ITestOutputHelper outputHelper)
+            : base(outputHelper)
+        {
+        }
+
         [Fact]
         public static void Y2015_Day24_GetQuantumEntanglementOfIdealConfiguration()
         {
@@ -34,10 +44,10 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
         }
 
         [Fact(Skip = "Too slow.")]
-        public static void Y2015_Day24_Solve_Returns_Correct_Solution()
+        public void Y2015_Day24_Solve_Returns_Correct_Solution()
         {
             // Act
-            var puzzle = PuzzleTestHelpers.SolvePuzzle<Day24>();
+            var puzzle = SolvePuzzle<Day24>();
 
             // Assert
             Assert.Equal(11266889531, puzzle.QuantumEntanglementOfFirstGroup);
@@ -46,7 +56,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
             string[] args = new string[] { "4" };
 
             // Act
-            puzzle = PuzzleTestHelpers.SolvePuzzle<Day24>(args);
+            puzzle = SolvePuzzle<Day24>(args);
 
             // Assert
             Assert.Equal(77387711, puzzle.QuantumEntanglementOfFirstGroup);

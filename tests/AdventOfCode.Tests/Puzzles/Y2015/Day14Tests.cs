@@ -4,12 +4,22 @@
 namespace MartinCostello.AdventOfCode.Puzzles.Y2015
 {
     using Xunit;
+    using Xunit.Abstractions;
 
     /// <summary>
     /// A class containing tests for the <see cref="Day14"/> class. This class cannot be inherited.
     /// </summary>
-    public static class Day14Tests
+    public sealed class Day14Tests : PuzzleTest
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Day14Tests"/> class.
+        /// </summary>
+        /// <param name="outputHelper">The <see cref="ITestOutputHelper"/> to use.</param>
+        public Day14Tests(ITestOutputHelper outputHelper)
+            : base(outputHelper)
+        {
+        }
+
         [Theory]
         [InlineData(1, 14, 10, 127, 14)]
         [InlineData(1, 16, 11, 162, 16)]
@@ -80,13 +90,13 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
         }
 
         [Fact]
-        public static void Y2015_Day14_Solve_Returns_Correct_Solution()
+        public void Y2015_Day14_Solve_Returns_Correct_Solution()
         {
             // Arrange
             string[] args = new[] { "2503" };
 
             // Act
-            var puzzle = PuzzleTestHelpers.SolvePuzzle<Day14>(args);
+            var puzzle = SolvePuzzle<Day14>(args);
 
             // Assert
             Assert.Equal(2655, puzzle.MaximumReindeerDistance);

@@ -5,12 +5,22 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
 {
     using System.Collections.Generic;
     using Xunit;
+    using Xunit.Abstractions;
 
     /// <summary>
     /// A class containing tests for the <see cref="Day18"/> class. This class cannot be inherited.
     /// </summary>
-    public static class Day18Tests
+    public sealed class Day18Tests : PuzzleTest
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Day18Tests"/> class.
+        /// </summary>
+        /// <param name="outputHelper">The <see cref="ITestOutputHelper"/> to use.</param>
+        public Day18Tests(ITestOutputHelper outputHelper)
+            : base(outputHelper)
+        {
+        }
+
         [Fact]
         public static void Y2015_Day18_GetGridConfigurationAfterSteps()
         {
@@ -78,13 +88,13 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
         [Theory]
         [InlineData("false", 814)]
         [InlineData("true", 924)]
-        public static void Y2015_Day18_Solve_Returns_Correct_Solution(string areCornerLightsBroken, int lightsIlluminated)
+        public void Y2015_Day18_Solve_Returns_Correct_Solution(string areCornerLightsBroken, int lightsIlluminated)
         {
             // Arrange
             string[] args = new[] { "100", areCornerLightsBroken };
 
             // Act
-            var puzzle = PuzzleTestHelpers.SolvePuzzle<Day18>(args);
+            var puzzle = SolvePuzzle<Day18>(args);
 
             // Assert
             Assert.Equal(lightsIlluminated, puzzle.LightsIlluminated);

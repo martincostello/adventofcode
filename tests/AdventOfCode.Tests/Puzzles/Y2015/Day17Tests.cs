@@ -5,12 +5,22 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
 {
     using System.Linq;
     using Xunit;
+    using Xunit.Abstractions;
 
     /// <summary>
     /// A class containing tests for the <see cref="Day17"/> class. This class cannot be inherited.
     /// </summary>
-    public static class Day17Tests
+    public sealed class Day17Tests : PuzzleTest
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Day17Tests"/> class.
+        /// </summary>
+        /// <param name="outputHelper">The <see cref="ITestOutputHelper"/> to use.</param>
+        public Day17Tests(ITestOutputHelper outputHelper)
+            : base(outputHelper)
+        {
+        }
+
         [Fact]
         public static void Y2015_Day17_GetContainerCombinationCount()
         {
@@ -27,13 +37,13 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
         }
 
         [Fact]
-        public static void Y2015_Day17_Solve_Returns_Correct_Solution()
+        public void Y2015_Day17_Solve_Returns_Correct_Solution()
         {
             // Arrange
             string[] args = new[] { "150" };
 
             // Act
-            var puzzle = PuzzleTestHelpers.SolvePuzzle<Day17>(args);
+            var puzzle = SolvePuzzle<Day17>(args);
 
             // Assert
             Assert.Equal(1304, puzzle.Combinations);

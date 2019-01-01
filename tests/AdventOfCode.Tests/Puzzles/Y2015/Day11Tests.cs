@@ -4,12 +4,22 @@
 namespace MartinCostello.AdventOfCode.Puzzles.Y2015
 {
     using Xunit;
+    using Xunit.Abstractions;
 
     /// <summary>
     /// A class containing tests for the <see cref="Day11"/> class. This class cannot be inherited.
     /// </summary>
-    public static class Day11Tests
+    public sealed class Day11Tests : PuzzleTest
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Day11Tests"/> class.
+        /// </summary>
+        /// <param name="outputHelper">The <see cref="ITestOutputHelper"/> to use.</param>
+        public Day11Tests(ITestOutputHelper outputHelper)
+            : base(outputHelper)
+        {
+        }
+
         [Theory]
         [InlineData("abcdefgh", "abcdffaa")]
         [InlineData("ghijklmn", "ghjaabcc")]
@@ -36,13 +46,13 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
         }
 
         [Fact]
-        public static void Y2015_Day11_Solve_Returns_Correct_Solution()
+        public void Y2015_Day11_Solve_Returns_Correct_Solution()
         {
             // Arrange
             string[] args = new[] { "cqjxjnds" };
 
             // Act
-            var puzzle = PuzzleTestHelpers.SolvePuzzle<Day11>(args);
+            var puzzle = SolvePuzzle<Day11>(args);
 
             // Assert
             Assert.Equal("cqjxxyzz", puzzle.NextPassword);
@@ -51,7 +61,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
             args = new[] { puzzle.NextPassword };
 
             // Act
-            puzzle = PuzzleTestHelpers.SolvePuzzle<Day11>(args);
+            puzzle = SolvePuzzle<Day11>(args);
 
             // Assert
             Assert.Equal("cqkaabcc", puzzle.NextPassword);

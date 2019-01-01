@@ -18,8 +18,14 @@ namespace MartinCostello.AdventOfCode.Puzzles
         /// <param name="outputHelper">The <see cref="ITestOutputHelper"/> to use.</param>
         protected PuzzleTest(ITestOutputHelper outputHelper)
         {
-            Logger = new TestLogger(outputHelper);
+            OutputHelper = outputHelper;
+            Logger = new TestLogger(OutputHelper);
         }
+
+        /// <summary>
+        /// Gets the <see cref="ITestOutputHelper"/> to use.
+        /// </summary>
+        protected ITestOutputHelper OutputHelper { get; }
 
         /// <summary>
         /// Gets the <see cref="ILogger"/> to use.

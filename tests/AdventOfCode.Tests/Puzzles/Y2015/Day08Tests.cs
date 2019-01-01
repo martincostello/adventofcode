@@ -4,12 +4,22 @@
 namespace MartinCostello.AdventOfCode.Puzzles.Y2015
 {
     using Xunit;
+    using Xunit.Abstractions;
 
     /// <summary>
     /// A class containing tests for the <see cref="Day08"/> class. This class cannot be inherited.
     /// </summary>
-    public static class Day08Tests
+    public sealed class Day08Tests : PuzzleTest
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Day08Tests"/> class.
+        /// </summary>
+        /// <param name="outputHelper">The <see cref="ITestOutputHelper"/> to use.</param>
+        public Day08Tests(ITestOutputHelper outputHelper)
+            : base(outputHelper)
+        {
+        }
+
         [Theory]
         [InlineData("\"\"", 0)]
         [InlineData("\"abc\"", 3)]
@@ -79,10 +89,10 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
         }
 
         [Fact]
-        public static void Y2015_Day08_Solve_Returns_Correct_Solution()
+        public void Y2015_Day08_Solve_Returns_Correct_Solution()
         {
             // Act
-            var puzzle = PuzzleTestHelpers.SolvePuzzle<Day08>();
+            var puzzle = SolvePuzzle<Day08>();
 
             // Assert
             Assert.Equal(1342, puzzle.FirstSolution);

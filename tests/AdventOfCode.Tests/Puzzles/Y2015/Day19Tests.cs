@@ -6,12 +6,22 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
     using System.Collections.Generic;
     using System.Linq;
     using Xunit;
+    using Xunit.Abstractions;
 
     /// <summary>
     /// A class containing tests for the <see cref="Day19"/> class. This class cannot be inherited.
     /// </summary>
-    public static class Day19Tests
+    public sealed class Day19Tests : PuzzleTest
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Day19Tests"/> class.
+        /// </summary>
+        /// <param name="outputHelper">The <see cref="ITestOutputHelper"/> to use.</param>
+        public Day19Tests(ITestOutputHelper outputHelper)
+            : base(outputHelper)
+        {
+        }
+
         [Fact]
         public static void Y2015_Day19_GetPossibleMolecules()
         {
@@ -32,14 +42,14 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
         }
 
         [Fact]
-        public static void Y2015_Day19_GetMinimumSteps()
+        public void Y2015_Day19_GetMinimumSteps()
         {
             // Arrange
             string molecule = "HOH";
             string[] replacements = new[] { "e => H", "e => O", "H => HO", "H => OH", "O => HH" };
 
             // Act
-            int actual = Day19.GetMinimumSteps(molecule, replacements);
+            int actual = Day19.GetMinimumSteps(molecule, replacements, Logger);
 
             // Assert
             Assert.Equal(3, actual);
@@ -47,14 +57,14 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
 
         [Theory]
         [InlineData("calibrate", 576)]
-        ////[InlineData("fabricate", 207)]
-        public static void Y2015_Day19_Solve_Returns_Correct_Solution(string mode, int expected)
+        [InlineData("fabricate", 207, Skip = "Too slow.")]
+        public void Y2015_Day19_Solve_Returns_Correct_Solution(string mode, int expected)
         {
             // Arrange
             string[] args = new[] { mode };
 
             // Act
-            var puzzle = PuzzleTestHelpers.SolvePuzzle<Day19>(args);
+            var puzzle = SolvePuzzle<Day19>(args);
 
             // Assert
             Assert.Equal(expected, puzzle.Solution);

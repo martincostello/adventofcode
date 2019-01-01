@@ -34,7 +34,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
         internal static Tuple<uint, uint> ProcessInstructions(
             IList<string> instructions,
             uint initialValue,
-            ILogger logger = null)
+            ILogger logger)
         {
             var a = new Register()
             {
