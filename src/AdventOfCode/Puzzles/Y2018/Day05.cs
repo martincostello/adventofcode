@@ -6,6 +6,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2018
     using System;
     using System.Globalization;
     using System.Linq;
+    using System.Text;
 
     /// <summary>
     /// A class representing the puzzle for <c>http://adventofcode.com/2018/day/5</c>. This class cannot be inherited.
@@ -30,21 +31,23 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2018
         /// The polymer remaining after reducing the specified <paramref name="polymer"/>
         /// value until it can be reduced no further.
         /// </returns>
-        public static ReadOnlySpan<char> Reduce(ReadOnlySpan<char> polymer)
+        public static string Reduce(string polymer)
         {
+            var builder = new StringBuilder(polymer, polymer.Length);
+
             while (true)
             {
-                int before = polymer.Length;
+                int before = builder.Length;
 
-                polymer = ReduceOnce(polymer);
+                builder = ReduceOnce(builder);
 
-                if (before == polymer.Length)
+                if (before == builder.Length)
                 {
                     break;
                 }
             }
 
-            return polymer;
+            return builder.ToString();
         }
 
         /// <summary>
@@ -55,7 +58,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2018
         /// The polymer remaining after reducing the specified <paramref name="polymer"/>
         /// value until it can be reduced no further with optimizations in use.
         /// </returns>
-        public static ReadOnlySpan<char> ReduceWithOptimization(string polymer)
+        public static string ReduceWithOptimization(string polymer)
         {
             string[] units = polymer
                 .Select((p) => char.ToLowerInvariant(p).ToString(CultureInfo.InvariantCulture))
@@ -79,39 +82,13 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2018
         /// <returns>
         /// The polymer remaining after reducing the specified <paramref name="polymer"/> value.
         /// </returns>
-        public static ReadOnlySpan<char> ReduceOnce(ReadOnlySpan<char> polymer)
+        public static string ReduceOnce(string polymer)
         {
-            for (int i = 0; i < polymer.Length - 1; i++)
-            {
-                char x = polymer[i];
-                char y = polymer[i + 1];
+            var builder = new StringBuilder(polymer, polymer.Length);
 
-                if (Math.Abs(x - y) == ('a' - 'A'))
-                {
-                    if (i == 0)
-                    {
-                        polymer = polymer.Slice(2);
-                    }
-                    else
-                    {
-                        var prefix = polymer.Slice(0, i);
+            ReduceOnce(builder);
 
-                        if (i == polymer.Length - 2)
-                        {
-                            polymer = prefix;
-                        }
-                        else
-                        {
-                            var suffix = polymer.Slice(i + 2);
-                            polymer = new string(prefix) + new string(suffix);
-                        }
-                    }
-
-                    break;
-                }
-            }
-
-            return polymer;
+            return builder.ToString();
         }
 
         /// <inheritdoc />
@@ -129,6 +106,31 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2018
             }
 
             return 0;
+        }
+
+        /// <summary>
+        /// Reduces the specified polymer once.
+        /// </summary>
+        /// <param name="polymer">The polymer to reduce.</param>
+        /// <returns>
+        /// The polymer remaining after reducing the specified <paramref name="polymer"/> value.
+        /// </returns>
+        private static StringBuilder ReduceOnce(StringBuilder polymer)
+        {
+            const int Shift = 'a' - 'A';
+
+            for (int i = 0; i < polymer.Length - 1; i++)
+            {
+                char x = polymer[i];
+                char y = polymer[i + 1];
+
+                if (Math.Abs(x - y) == Shift)
+                {
+                    return polymer.Remove(i, 2);
+                }
+            }
+
+            return polymer;
         }
     }
 }
