@@ -68,7 +68,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2018
 
             var optimized = units
                 .Select((p) => polymer.Replace(p, string.Empty, StringComparison.OrdinalIgnoreCase))
-                .Select((p) => new string(Reduce(p)))
+                .Select((p) => Reduce(p))
                 .OrderBy((p) => p.Length)
                 .First();
 

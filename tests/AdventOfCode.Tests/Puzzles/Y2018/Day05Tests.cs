@@ -36,7 +36,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2018
             string actual = Day05.Reduce(polymer);
 
             // Assert
-            Assert.Equal(expected, new string(actual));
+            Assert.Equal(expected, actual);
         }
 
         [Theory]
@@ -52,7 +52,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2018
             string actual = Day05.ReduceOnce(polymer);
 
             // Assert
-            Assert.Equal(expected, new string(actual));
+            Assert.Equal(expected, actual);
         }
 
         [Theory]
@@ -65,7 +65,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2018
             string actual = Day05.ReduceWithOptimization(polymer);
 
             // Assert
-            Assert.Equal(expected, new string(actual));
+            Assert.Equal(expected, actual);
         }
 
         [Fact]
