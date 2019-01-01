@@ -269,7 +269,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
             /// <param name="instruction">The instruction to process.</param>
             private void Process(string instruction)
             {
-                string[] split = instruction.Split(Arrays.Space, StringSplitOptions.None);
+                string[] split = instruction.Split(' ', StringSplitOptions.None);
 
                 if (string.Equals(split[0], "value", StringComparison.Ordinal))
                 {

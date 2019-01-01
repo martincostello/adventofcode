@@ -165,7 +165,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
             /// <param name="description">The raw description of the program.</param>
             internal ProgramDisc(string description)
             {
-                string[] split = description.Split(Arrays.Space, StringSplitOptions.RemoveEmptyEntries);
+                string[] split = description.Split(' ', StringSplitOptions.RemoveEmptyEntries);
 
                 Name = split[0];
                 Weight = ParseInt32(split[1].Trim('(', ')'));

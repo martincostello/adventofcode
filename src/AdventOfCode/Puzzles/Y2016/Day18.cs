@@ -80,6 +80,6 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         /// <returns>
         /// The number of safe tiles in <paramref name="grid"/>.
         /// </returns>
-        private static int CountTrapTiles(bool[,] grid) => Arrays.TrueCount(grid);
+        private static int CountTrapTiles(bool[,] grid) => grid.TrueCount();
     }
 }

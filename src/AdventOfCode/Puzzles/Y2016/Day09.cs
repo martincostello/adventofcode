@@ -81,7 +81,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
                     {
                         isInMarker = false;
 
-                        string[] split = marker.ToString().Split(Arrays.X, StringSplitOptions.None);
+                        string[] split = marker.ToString().Split('x', StringSplitOptions.None);
 
                         repeatLength = ParseInt32(split[0]);
                         repeatCount = ParseInt32(split[1]);

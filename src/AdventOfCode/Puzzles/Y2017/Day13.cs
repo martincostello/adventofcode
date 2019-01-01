@@ -31,7 +31,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
         public static int GetSeverityOfTrip(ICollection<string> depthRanges)
         {
             var configuration = depthRanges
-                .Select((p) => p.Split(Arrays.Colon))
+                .Select((p) => p.Split(':'))
                 .Select((p) => new { layer = ParseInt32(p[0]), range = ParseInt32(p[1].Trim()) })
                 .ToList();
 
@@ -67,7 +67,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
         public static int GetShortestDelayForNeverCaught(ICollection<string> depthRanges)
         {
             var configuration = depthRanges
-                .Select((p) => p.Split(Arrays.Colon))
+                .Select((p) => p.Split(':'))
                 .Select((p) => new { layer = ParseInt32(p[0]), range = ParseInt32(p[1].Trim()) })
                 .ToList();
 

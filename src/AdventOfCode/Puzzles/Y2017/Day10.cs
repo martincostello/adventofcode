@@ -84,7 +84,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
             string rawLengths = ReadResourceAsString().Trim();
 
             ICollection<int> lengths = rawLengths
-                .Split(Arrays.Comma)
+                .Split(',')
                 .Select((p) => ParseInt32(p))
                 .ToList();
 

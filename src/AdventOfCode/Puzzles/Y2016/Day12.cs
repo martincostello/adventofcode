@@ -1,4 +1,4 @@
-// Copyright (c) Martin Costello, 2015. All rights reserved.
+﻿// Copyright (c) Martin Costello, 2015. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2016
@@ -57,7 +57,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
             for (int i = 0; i < instructions.Count; i++)
             {
                 string instruction = instructions[i];
-                string[] split = instruction.Split(Arrays.Space);
+                string[] split = instruction.Split(' ');
                 int value;
 
                 switch (split[0])
@@ -95,7 +95,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
                         if (target >= 0 && target < instructions.Count)
                         {
                             string otherInstruction = instructions[target];
-                            split = otherInstruction.Split(Arrays.Space);
+                            split = otherInstruction.Split(' ');
 
                             string toggled;
 

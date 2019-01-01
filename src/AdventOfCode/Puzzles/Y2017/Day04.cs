@@ -31,7 +31,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
         /// </returns>
         internal static bool IsPassphraseValid(string passphrase, int version)
         {
-            string[] words = passphrase.Split(Arrays.Space);
+            string[] words = passphrase.Split(' ');
             bool isValid = words.Distinct().Count() == words.Length;
 
             if (isValid && version == 2)

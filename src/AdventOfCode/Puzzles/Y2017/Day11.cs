@@ -158,7 +158,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
         /// </returns>
         private static IList<CardinalDirection> ParsePath(string path)
         {
-            string[] split = path.Split(Arrays.Comma);
+            string[] split = path.Split(',');
             var result = new List<CardinalDirection>(split.Length);
 
             foreach (string direction in split)

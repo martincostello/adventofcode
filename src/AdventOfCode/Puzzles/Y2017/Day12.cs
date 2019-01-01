@@ -160,13 +160,13 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
             /// <param name="pipe">A string describing the pipes connecting the node with its edges.</param>
             internal Node(string pipe)
             {
-                string[] split = pipe.Split(Arrays.Space);
+                string[] split = pipe.Split(' ');
 
                 Id = ParseInt32(split[0]);
 
                 EdgeIds = split
                     .Skip(2)
-                    .Select((p) => ParseInt32(p.TrimEnd(Arrays.Comma)))
+                    .Select((p) => ParseInt32(p.TrimEnd(',')))
                     .ToList();
             }
 

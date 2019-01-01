@@ -83,7 +83,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         /// <returns>
         /// The number of pixels lit in <paramref name="grid"/>.
         /// </returns>
-        private static int CountLitPixels(bool[,] grid) => Arrays.TrueCount(grid);
+        private static int CountLitPixels(bool[,] grid) => grid.TrueCount();
 
         /// <summary>
         /// Lights a rectangle of the specified size in the top-left of the specified grid.
@@ -165,12 +165,12 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         {
             var result = new Instruction();
 
-            string[] split = instruction.Split(Arrays.Space, StringSplitOptions.None);
+            string[] split = instruction.Split(' ', StringSplitOptions.None);
 
             switch (split[0])
             {
                 case "rect":
-                    split = split[1].Split(Arrays.X, StringSplitOptions.None);
+                    split = split[1].Split('x', StringSplitOptions.None);
                     result.A = ParseInt32(split[0]);
                     result.B = ParseInt32(split[1]);
                     break;
@@ -178,7 +178,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
                 case "rotate":
                     result.IsRotation = true;
                     result.IsColumn = string.Equals(split[1], "column", StringComparison.Ordinal);
-                    result.A = ParseInt32(split[2].Split(Arrays.EqualsSign, StringSplitOptions.None)[1]);
+                    result.A = ParseInt32(split[2].Split('=', StringSplitOptions.None)[1]);
                     result.B = ParseInt32(split[4]);
                     break;
 

@@ -170,7 +170,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
             /// <param name="instruction">The raw CPU instruction.</param>
             internal Instruction(string instruction)
             {
-                string[] split = instruction.Split(Arrays.Space);
+                string[] split = instruction.Split(' ');
 
                 TargetRegister = split[0];
                 TargetOperator = split[1] == "inc";
