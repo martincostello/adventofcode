@@ -4,17 +4,27 @@
 namespace MartinCostello.AdventOfCode.Puzzles.Y2015
 {
     using Xunit;
+    using Xunit.Abstractions;
 
     /// <summary>
     /// A class containing tests for the <see cref="Day09"/> class. This class cannot be inherited.
     /// </summary>
-    public static class Day09Tests
+    public sealed class Day09Tests : PuzzleTest
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Day09Tests"/> class.
+        /// </summary>
+        /// <param name="outputHelper">The <see cref="ITestOutputHelper"/> to use.</param>
+        public Day09Tests(ITestOutputHelper outputHelper)
+            : base(outputHelper)
+        {
+        }
+
         [Fact]
         public static void Y2015_Day09_Shortest_Distance_To_Visit_All_Points_Once_Is_Correct()
         {
             // Arrange
-            var distances = new[]
+            string[] distances = new[]
             {
                 "London to Dublin = 464",
                 "London to Belfast = 518",
@@ -32,7 +42,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
         public static void Y2015_Day09_Shortest_Distance_To_Visit_All_Points_Once_Is_Correct_If_Only_One_Point()
         {
             // Arrange
-            var distances = new[]
+            string[] distances = new[]
             {
                 "London to Dublin = 464",
             };
@@ -45,10 +55,10 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
         }
 
         [Fact]
-        public static void Y2015_Day09_Solve_Returns_Correct_Solution()
+        public void Y2015_Day09_Solve_Returns_Correct_Solution()
         {
             // Act
-            var puzzle = PuzzleTestHelpers.SolvePuzzle<Day09>();
+            var puzzle = SolvePuzzle<Day09>();
 
             // Assert
             Assert.Equal(207, puzzle.Solution);
@@ -57,7 +67,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
             string[] args = new[] { "true" };
 
             // Act
-            puzzle = PuzzleTestHelpers.SolvePuzzle<Day09>(args);
+            puzzle = SolvePuzzle<Day09>(args);
 
             // Assert
             Assert.Equal(804, puzzle.Solution);

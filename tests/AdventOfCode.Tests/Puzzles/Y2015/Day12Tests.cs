@@ -5,12 +5,22 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
 {
     using Newtonsoft.Json.Linq;
     using Xunit;
+    using Xunit.Abstractions;
 
     /// <summary>
     /// A class containing tests for the <see cref="Day12"/> class. This class cannot be inherited.
     /// </summary>
-    public static class Day12Tests
+    public sealed class Day12Tests : PuzzleTest
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Day12Tests"/> class.
+        /// </summary>
+        /// <param name="outputHelper">The <see cref="ITestOutputHelper"/> to use.</param>
+        public Day12Tests(ITestOutputHelper outputHelper)
+            : base(outputHelper)
+        {
+        }
+
         [Theory]
         [InlineData("[1,2,3]", null, 6)]
         [InlineData(@"{""a"":2,""b"":4}", null, 6)]
@@ -27,7 +37,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
         public static void Y2015_Day12_SumIntegerValues(string json, string keyToIgnore, long expected)
         {
             // Arrange
-            JToken token = JToken.Parse(json);
+            var token = JToken.Parse(json);
 
             // Act
             long actual = Day12.SumIntegerValues(token, keyToIgnore);
@@ -37,10 +47,10 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
         }
 
         [Fact]
-        public static void Y2015_Day12_Solve_Returns_Correct_Solution()
+        public void Y2015_Day12_Solve_Returns_Correct_Solution()
         {
             // Act
-            var puzzle = PuzzleTestHelpers.SolvePuzzle<Day12>();
+            var puzzle = SolvePuzzle<Day12>();
 
             // Assert
             Assert.Equal(191164, puzzle.Sum);
@@ -49,7 +59,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
             string[] args = new[] { "red" };
 
             // Act
-            puzzle = PuzzleTestHelpers.SolvePuzzle<Day12>(args);
+            puzzle = SolvePuzzle<Day12>(args);
 
             // Assert
             Assert.Equal(87842, puzzle.Sum);

@@ -4,12 +4,22 @@
 namespace MartinCostello.AdventOfCode.Puzzles.Y2015
 {
     using Xunit;
+    using Xunit.Abstractions;
 
     /// <summary>
     /// A class containing tests for the <see cref="Day20"/> class. This class cannot be inherited.
     /// </summary>
-    public static class Day20Tests
+    public sealed class Day20Tests : PuzzleTest
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Day20Tests"/> class.
+        /// </summary>
+        /// <param name="outputHelper">The <see cref="ITestOutputHelper"/> to use.</param>
+        public Day20Tests(ITestOutputHelper outputHelper)
+            : base(outputHelper)
+        {
+        }
+
         [Theory]
         [InlineData(1, 10, null)]
         [InlineData(2, 30, null)]
@@ -58,26 +68,26 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
         }
 
         [Fact]
-        public static void Y2015_Day20_Solve_Returns_Correct_Solution()
+        public void Y2015_Day20_Solve_Returns_Correct_Solution()
         {
             // Arrange
             string[] args = new[] { "34000000" };
 
             // Act
-            var puzzle = PuzzleTestHelpers.SolvePuzzle<Day20>(args);
+            var puzzle = SolvePuzzle<Day20>(args);
 
             // Assert
             Assert.Equal(786240, puzzle.LowestHouseNumber);
         }
 
         [Fact]
-        public static void Y2015_Day20_Solve_Returns_Correct_Solution_Maximum_Visits()
+        public void Y2015_Day20_Solve_Returns_Correct_Solution_Maximum_Visits()
         {
             // Arrange
             string[] args = new[] { "34000000", "50" };
 
             // Act
-            var puzzle = PuzzleTestHelpers.SolvePuzzle<Day20>(args);
+            var puzzle = SolvePuzzle<Day20>(args);
 
             // Assert
             Assert.Equal(831600, puzzle.LowestHouseNumber);

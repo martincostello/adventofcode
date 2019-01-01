@@ -1,4 +1,4 @@
-// Copyright (c) Martin Costello, 2015. All rights reserved.
+﻿// Copyright (c) Martin Costello, 2015. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2015
@@ -11,43 +11,38 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
     /// <summary>
     /// A class containing tests for the <see cref="Day22"/> class. This class cannot be inherited.
     /// </summary>
-    public class Day22Tests
+    public sealed class Day22Tests : PuzzleTest
     {
-        /// <summary>
-        /// The <see cref="ITestOutputHelper"/> to use.
-        /// </summary>
-        private readonly ITestOutputHelper _output;
-
         /// <summary>
         /// Initializes a new instance of the <see cref="Day22Tests"/> class.
         /// </summary>
-        /// <param name="output">The <see cref="ITestOutputHelper"/> to use.</param>
-        public Day22Tests(ITestOutputHelper output)
+        /// <param name="outputHelper">The <see cref="ITestOutputHelper"/> to use.</param>
+        public Day22Tests(ITestOutputHelper outputHelper)
+            : base(outputHelper)
         {
-            _output = output;
         }
 
         [Fact]
-        public static void Y2015_Day22_Solve_Returns_Correct_Solution_Easy()
+        public void Y2015_Day22_Solve_Returns_Correct_Solution_Easy()
         {
             // Arrange
             string[] args = Array.Empty<string>();
 
             // Act
-            var puzzle = PuzzleTestHelpers.SolvePuzzle<Day22>(args);
+            var puzzle = SolvePuzzle<Day22>(args);
 
             // Assert
             Assert.Equal(953, puzzle.MinimumCostToWin);
         }
 
         [Fact]
-        public static void Y2015_Day22_Solve_Returns_Correct_Solution_Hard()
+        public void Y2015_Day22_Solve_Returns_Correct_Solution_Hard()
         {
             // Arrange
             string[] args = new string[] { "hard" };
 
             // Act
-            var puzzle = PuzzleTestHelpers.SolvePuzzle<Day22>(args);
+            var puzzle = SolvePuzzle<Day22>(args);
 
             // Assert
             Assert.Equal(1289, puzzle.MinimumCostToWin);
@@ -123,8 +118,6 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
         /// An object array containing zero or more objects to format.
         /// </param>
         private void Output(string format, object[] args)
-        {
-            _output.WriteLine(format, args);
-        }
+            => OutputHelper.WriteLine(format, args);
     }
 }

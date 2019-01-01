@@ -5,17 +5,27 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
 {
     using System.Collections.Generic;
     using Xunit;
+    using Xunit.Abstractions;
 
     /// <summary>
     /// A class containing tests for the <see cref="Day07"/> class. This class cannot be inherited.
     /// </summary>
-    public static class Day07Tests
+    public sealed class Day07Tests : PuzzleTest
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Day07Tests"/> class.
+        /// </summary>
+        /// <param name="outputHelper">The <see cref="ITestOutputHelper"/> to use.</param>
+        public Day07Tests(ITestOutputHelper outputHelper)
+            : base(outputHelper)
+        {
+        }
+
         [Fact]
         public static void Y2015_Day07_InstructionsAreInterpretedCorrectly()
         {
             // Arrange
-            var instructions = new string[]
+            string[] instructions = new string[]
             {
                 "j -> k",
                 "123 -> x",
@@ -46,10 +56,10 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
         }
 
         [Fact]
-        public static void Y2015_Day07_Solve_Returns_Correct_Solution()
+        public void Y2015_Day07_Solve_Returns_Correct_Solution()
         {
             // Act
-            var puzzle = PuzzleTestHelpers.SolvePuzzle<Day07>();
+            var puzzle = SolvePuzzle<Day07>();
 
             // Assert
             Assert.Equal(3176, puzzle.FirstSignal);

@@ -1,4 +1,4 @@
-// Copyright (c) Martin Costello, 2015. All rights reserved.
+﻿// Copyright (c) Martin Costello, 2015. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2015
@@ -7,12 +7,22 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
     using System.Drawing;
     using System.Globalization;
     using Xunit;
+    using Xunit.Abstractions;
 
     /// <summary>
     /// A class containing tests for the <see cref="Day06"/> class. This class cannot be inherited.
     /// </summary>
-    public static class Day06Tests
+    public sealed class Day06Tests : PuzzleTest
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Day06Tests"/> class.
+        /// </summary>
+        /// <param name="outputHelper">The <see cref="ITestOutputHelper"/> to use.</param>
+        public Day06Tests(ITestOutputHelper outputHelper)
+            : base(outputHelper)
+        {
+        }
+
         [Theory]
         [InlineData("turn on 0,0 through 999,999", "ON", 0, 0, 1000, 1000)]
         [InlineData("toggle 0,0 through 999,0", "TOGGLE", 0, 0, 1000, 1)]
@@ -115,7 +125,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
             Assert.Equal(1, target.Brightness);
             Assert.Equal(1, target.Count);
 
-            Rectangle bounds = new Rectangle(0, 0, width, height);
+            var bounds = new Rectangle(0, 0, width, height);
 
             target.TurnOff(bounds);
             Assert.Equal(0, target[minimum]);
@@ -228,26 +238,26 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
         }
 
         [Fact]
-        public static void Y2015_Day06_Solve_Returns_Correct_Solution_Version_1()
+        public void Y2015_Day06_Solve_Returns_Correct_Solution_Version_1()
         {
             // Arrange
             string[] args = new[] { "1" };
 
             // Act
-            var puzzle = PuzzleTestHelpers.SolvePuzzle<Day06>(args);
+            var puzzle = SolvePuzzle<Day06>(args);
 
             // Assert
             Assert.Equal(543903, puzzle.LightsIlluminated);
         }
 
         [Fact]
-        public static void Y2015_Day06_Solve_Returns_Correct_Solution_Version_2()
+        public void Y2015_Day06_Solve_Returns_Correct_Solution_Version_2()
         {
             // Arrange
             string[] args = new[] { "2" };
 
             // Act
-            var puzzle = PuzzleTestHelpers.SolvePuzzle<Day06>(args);
+            var puzzle = SolvePuzzle<Day06>(args);
 
             // Assert
             Assert.Equal(14687245, puzzle.TotalBrightness);

@@ -6,12 +6,22 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
     using System;
     using System.Collections.Generic;
     using Xunit;
+    using Xunit.Abstractions;
 
     /// <summary>
     /// A class containing tests for the <see cref="Day23"/> class. This class cannot be inherited.
     /// </summary>
-    public static class Day23Tests
+    public sealed class Day23Tests : PuzzleTest
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Day23Tests"/> class.
+        /// </summary>
+        /// <param name="outputHelper">The <see cref="ITestOutputHelper"/> to use.</param>
+        public Day23Tests(ITestOutputHelper outputHelper)
+            : base(outputHelper)
+        {
+        }
+
         [Fact]
         public static void Y2015_Day23_ProcessInstructions()
         {
@@ -36,10 +46,10 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
         }
 
         [Fact]
-        public static void Y2015_Day23_Solve_Returns_Correct_Solution_1()
+        public void Y2015_Day23_Solve_Returns_Correct_Solution_1()
         {
             // Act
-            var puzzle = PuzzleTestHelpers.SolvePuzzle<Day23>();
+            var puzzle = SolvePuzzle<Day23>();
 
             // Assert
             Assert.Equal(1u, puzzle.A);
@@ -47,13 +57,13 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
         }
 
         [Fact]
-        public static void Y2015_Day23_Solve_Returns_Correct_Solution_2()
+        public void Y2015_Day23_Solve_Returns_Correct_Solution_2()
         {
             // Arrange
             string[] args = new string[] { "1" };
 
             // Act
-            var puzzle = PuzzleTestHelpers.SolvePuzzle<Day23>(args);
+            var puzzle = SolvePuzzle<Day23>(args);
 
             // Assert
             Assert.Equal(1u, puzzle.A);

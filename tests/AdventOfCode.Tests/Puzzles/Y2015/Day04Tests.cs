@@ -4,12 +4,22 @@
 namespace MartinCostello.AdventOfCode.Puzzles.Y2015
 {
     using Xunit;
+    using Xunit.Abstractions;
 
     /// <summary>
     /// A class containing tests for the <see cref="Day04"/> class. This class cannot be inherited.
     /// </summary>
-    public static class Day04Tests
+    public sealed class Day04Tests : PuzzleTest
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Day04Tests"/> class.
+        /// </summary>
+        /// <param name="outputHelper">The <see cref="ITestOutputHelper"/> to use.</param>
+        public Day04Tests(ITestOutputHelper outputHelper)
+            : base(outputHelper)
+        {
+        }
+
         [Theory]
         [InlineData("abcdef", 5, 609043)]
         [InlineData("pqrstuv", 5, 1048970)]
@@ -23,26 +33,26 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
         }
 
         [Fact]
-        public static void Y2015_Day04_Solve_Returns_Correct_Solution_5_Zeroes()
+        public void Y2015_Day04_Solve_Returns_Correct_Solution_5_Zeroes()
         {
             // Arrange
             string[] args = new[] { "iwrupvqb", "5" };
 
             // Act
-            var target = PuzzleTestHelpers.SolvePuzzle<Day04>(args);
+            var target = SolvePuzzle<Day04>(args);
 
             // Assert
             Assert.Equal(346386, target.LowestZeroHash);
         }
 
         [Fact]
-        public static void Y2015_Day04_Solve_Returns_Correct_Solution_6_Zeroes()
+        public void Y2015_Day04_Solve_Returns_Correct_Solution_6_Zeroes()
         {
             // Arrange
-            var args = new[] { "iwrupvqb", "6" };
+            string[] args = new[] { "iwrupvqb", "6" };
 
             // Act
-            var puzzle = PuzzleTestHelpers.SolvePuzzle<Day04>(args);
+            var puzzle = SolvePuzzle<Day04>(args);
 
             // Assert
             Assert.Equal(9958218, puzzle.LowestZeroHash);
