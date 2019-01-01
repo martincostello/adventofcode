@@ -86,7 +86,9 @@ namespace MartinCostello.AdventOfCode
             ILogger logger,
             bool verbose = false)
         {
-            var puzzle = Activator.CreateInstance(type) as IPuzzle;
+            var puzzle = Activator.CreateInstance(type) as Puzzle;
+
+            puzzle.Logger = logger;
             puzzle.Verbose = verbose;
 
             logger.WriteLine();
