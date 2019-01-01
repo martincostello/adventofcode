@@ -28,7 +28,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         internal static int FindSafeTileCount(
             string firstRowTiles,
             int rows,
-            ILogger logger = null)
+            ILogger logger)
         {
             int width = firstRowTiles.Length;
 
@@ -52,7 +52,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
                 }
             }
 
-            logger?.WriteGrid(tiles, '.', '^');
+            logger.WriteGrid(tiles, '.', '^');
 
             return (width * rows) - CountTrapTiles(tiles);
         }

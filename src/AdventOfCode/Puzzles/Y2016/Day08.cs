@@ -31,7 +31,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
             IEnumerable<string> instructions,
             int width,
             int height,
-            ILogger logger = null)
+            ILogger logger)
         {
             IList<Instruction> operations = instructions.Select(ParseInstruction).ToArray();
 
@@ -56,7 +56,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
                 }
             }
 
-            logger?.WriteGrid(grid, ' ', 'X');
+            logger.WriteGrid(grid, ' ', 'X');
 
             return CountLitPixels(grid);
         }

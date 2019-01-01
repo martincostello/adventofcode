@@ -24,7 +24,7 @@ namespace MartinCostello.AdventOfCode.Puzzles
         /// <summary>
         /// Gets the <see cref="ILogger"/> to use.
         /// </summary>
-        private ILogger Logger { get; }
+        private protected ILogger Logger { get; }
 
         /// <summary>
         /// Solves the specified puzzle type.
