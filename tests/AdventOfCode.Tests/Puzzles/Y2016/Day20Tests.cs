@@ -4,19 +4,28 @@
 namespace MartinCostello.AdventOfCode.Puzzles.Y2016
 {
     using Xunit;
+    using Xunit.Abstractions;
 
     /// <summary>
     /// A class containing tests for the <see cref="Day20"/> class. This class cannot be inherited.
     /// </summary>
-    public static class Day20Tests
+    public sealed class Day20Tests : PuzzleTest
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Day20Tests"/> class.
+        /// </summary>
+        /// <param name="outputHelper">The <see cref="ITestOutputHelper"/> to use.</param>
+        public Day20Tests(ITestOutputHelper outputHelper)
+            : base(outputHelper)
+        {
+        }
+
         [Theory]
         [InlineData(9, new[] { "5-8", "0-2", "4-7" }, 3, 2)]
         public static void Y2016_Day20_GetLowestNonblockedIP_Returns_Correct_Solution(uint maxValue, string[] blacklist, uint expectedIP, uint expectedCount)
         {
             // Act
-            uint count;
-            uint address = Day20.GetLowestNonblockedIP(maxValue, blacklist, out count);
+            uint address = Day20.GetLowestNonblockedIP(maxValue, blacklist, out uint count);
 
             // Assert
             Assert.Equal(expectedIP, address);
@@ -24,10 +33,10 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         }
 
         [Fact]
-        public static void Y2016_Day20_Solve_Returns_Correct_Solution()
+        public void Y2016_Day20_Solve_Returns_Correct_Solution()
         {
             // Act
-            var puzzle = PuzzleTestHelpers.SolvePuzzle<Day20>();
+            var puzzle = SolvePuzzle<Day20>();
 
             // Assert
             Assert.Equal(22887907u, puzzle.LowestNonblockedIP);

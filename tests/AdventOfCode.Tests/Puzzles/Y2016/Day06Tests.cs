@@ -4,12 +4,22 @@
 namespace MartinCostello.AdventOfCode.Puzzles.Y2016
 {
     using Xunit;
+    using Xunit.Abstractions;
 
     /// <summary>
     /// A class containing tests for the <see cref="Day06"/> class. This class cannot be inherited.
     /// </summary>
-    public static class Day06Tests
+    public sealed class Day06Tests : PuzzleTest
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Day06Tests"/> class.
+        /// </summary>
+        /// <param name="outputHelper">The <see cref="ITestOutputHelper"/> to use.</param>
+        public Day06Tests(ITestOutputHelper outputHelper)
+            : base(outputHelper)
+        {
+        }
+
         [Theory]
         [InlineData(new[] { "eedadn", "drvtee", "eandsr", "raavrd", "atevrs", "tsrnev", "sdttsa", "rasrtv", "nssdts", "ntnada", "svetve", "tesnvt", "vntsnd", "vrdear", "dvrsen", "enarar" }, false, "easter")]
         [InlineData(new[] { "eedadn", "drvtee", "eandsr", "raavrd", "atevrs", "tsrnev", "sdttsa", "rasrtv", "nssdts", "ntnada", "svetve", "tesnvt", "vntsnd", "vrdear", "dvrsen", "enarar" }, true, "advent")]
@@ -23,10 +33,10 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         }
 
         [Fact]
-        public static void Y2016_Day06_Solve_Returns_Correct_Solution()
+        public void Y2016_Day06_Solve_Returns_Correct_Solution()
         {
             // Act
-            var puzzle = PuzzleTestHelpers.SolvePuzzle<Day06>();
+            var puzzle = SolvePuzzle<Day06>();
 
             // Assert
             Assert.Equal("qzedlxso", puzzle.ErrorCorrectedMessage);

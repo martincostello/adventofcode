@@ -4,12 +4,22 @@
 namespace MartinCostello.AdventOfCode.Puzzles.Y2016
 {
     using Xunit;
+    using Xunit.Abstractions;
 
     /// <summary>
     /// A class containing tests for the <see cref="Day14"/> class. This class cannot be inherited.
     /// </summary>
-    public static class Day14Tests
+    public sealed class Day14Tests : PuzzleTest
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Day14Tests"/> class.
+        /// </summary>
+        /// <param name="outputHelper">The <see cref="ITestOutputHelper"/> to use.</param>
+        public Day14Tests(ITestOutputHelper outputHelper)
+            : base(outputHelper)
+        {
+        }
+
         [Theory]
         [InlineData("abc", 64, false, 22728)]
         [InlineData("abc", 64, true, 22551, Skip = "Too slow.")]
@@ -23,13 +33,13 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         }
 
         [Fact(Skip = "Too slow.")]
-        public static void Y2016_Day14_Solve_Returns_Correct_Solution()
+        public void Y2016_Day14_Solve_Returns_Correct_Solution()
         {
             // Arrange
             string[] args = new[] { "ihaygndm" };
 
             // Act
-            var puzzle = PuzzleTestHelpers.SolvePuzzle<Day14>(args);
+            var puzzle = SolvePuzzle<Day14>(args);
 
             // Assert
             Assert.Equal(15035, puzzle.IndexOfKey64);

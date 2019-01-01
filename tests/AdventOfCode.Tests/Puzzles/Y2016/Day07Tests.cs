@@ -4,12 +4,22 @@
 namespace MartinCostello.AdventOfCode.Puzzles.Y2016
 {
     using Xunit;
+    using Xunit.Abstractions;
 
     /// <summary>
     /// A class containing tests for the <see cref="Day07"/> class. This class cannot be inherited.
     /// </summary>
-    public static class Day07Tests
+    public sealed class Day07Tests : PuzzleTest
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Day07Tests"/> class.
+        /// </summary>
+        /// <param name="outputHelper">The <see cref="ITestOutputHelper"/> to use.</param>
+        public Day07Tests(ITestOutputHelper outputHelper)
+            : base(outputHelper)
+        {
+        }
+
         [Theory]
         [InlineData("aba[bab]xyz", true)]
         [InlineData("xyx[xyx]xyx", false)]
@@ -39,10 +49,10 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         }
 
         [Fact]
-        public static void Y2016_Day07_Solve_Returns_Correct_Solution()
+        public void Y2016_Day07_Solve_Returns_Correct_Solution()
         {
             // Act
-            var puzzle = PuzzleTestHelpers.SolvePuzzle<Day07>();
+            var puzzle = SolvePuzzle<Day07>();
 
             // Assert
             Assert.Equal(118, puzzle.IPAddressesSupportingTls);
