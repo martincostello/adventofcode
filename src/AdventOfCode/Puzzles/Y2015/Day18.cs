@@ -1,4 +1,4 @@
-// Copyright (c) Martin Costello, 2015. All rights reserved.
+﻿// Copyright (c) Martin Costello, 2015. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2015
@@ -51,14 +51,14 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
                 current = Animate(current, areCornerLightsBroken);
             }
 
-            List<string> result = new List<string>();
+            var result = new List<string>();
 
             int width = current.GetLength(0);
             int height = current.GetLength(1);
 
             for (int x = 0; x < width; x++)
             {
-                StringBuilder builder = new StringBuilder();
+                var builder = new StringBuilder();
 
                 for (int y = 0; y < height; y++)
                 {
@@ -148,7 +148,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
                     }
                     else
                     {
-                        List<Point> neighbors = new List<Point>()
+                        var neighbors = new List<Point>()
                         {
                             new Point(x - 1, y - 1),
                             new Point(x, y - 1),
@@ -162,7 +162,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
 
                         int neighborsOn = 0;
 
-                        foreach (var neighbor in neighbors)
+                        foreach (Point neighbor in neighbors)
                         {
                             if (neighbor.X >= 0 && neighbor.X < width && neighbor.Y >= 0 && neighbor.Y < height)
                             {

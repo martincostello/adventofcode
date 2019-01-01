@@ -4,19 +4,29 @@
 namespace MartinCostello.AdventOfCode.Puzzles.Y2016
 {
     using Xunit;
+    using Xunit.Abstractions;
 
     /// <summary>
     /// A class containing tests for the <see cref="Day18"/> class. This class cannot be inherited.
     /// </summary>
-    public static class Day18Tests
+    public sealed class Day18Tests : PuzzleTest
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Day18Tests"/> class.
+        /// </summary>
+        /// <param name="outputHelper">The <see cref="ITestOutputHelper"/> to use.</param>
+        public Day18Tests(ITestOutputHelper outputHelper)
+            : base(outputHelper)
+        {
+        }
+
         [Theory]
         [InlineData("..^^.", 3, 6)]
         [InlineData(".^^.^.^^^^", 10, 38)]
-        public static void Y2016_Day18_FindSafeTileCount_Returns_Correct_Solution(string firstRowTiles, int rows, int expected)
+        public void Y2016_Day18_FindSafeTileCount_Returns_Correct_Solution(string firstRowTiles, int rows, int expected)
         {
             // Act
-            int actual = Day18.FindSafeTileCount(firstRowTiles, rows);
+            int actual = Day18.FindSafeTileCount(firstRowTiles, rows, Logger);
 
             // Assert
             Assert.Equal(expected, actual);
@@ -25,13 +35,13 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         [Theory]
         [InlineData("40", 1987)]
         [InlineData("400000", 19984714)]
-        public static void Y2016_Day18_Solve_Returns_Correct_Solution(string rows, int expected)
+        public void Y2016_Day18_Solve_Returns_Correct_Solution(string rows, int expected)
         {
             // Arrange
             string[] args = new[] { rows };
 
             // Act
-            var puzzle = PuzzleTestHelpers.SolvePuzzle<Day18>(args);
+            var puzzle = SolvePuzzle<Day18>(args);
 
             // Assert
             Assert.Equal(expected, puzzle.SafeTileCount);

@@ -1,15 +1,25 @@
-// Copyright (c) Martin Costello, 2015. All rights reserved.
+﻿// Copyright (c) Martin Costello, 2015. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2017
 {
     using Xunit;
+    using Xunit.Abstractions;
 
     /// <summary>
     /// A class containing tests for the <see cref="Day02"/> class. This class cannot be inherited.
     /// </summary>
-    public static class Day02Tests
+    public sealed class Day02Tests : PuzzleTest
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Day02Tests"/> class.
+        /// </summary>
+        /// <param name="outputHelper">The <see cref="ITestOutputHelper"/> to use.</param>
+        public Day02Tests(ITestOutputHelper outputHelper)
+            : base(outputHelper)
+        {
+        }
+
         [Theory]
         [InlineData(new[] { 5, 1, 9, 5 }, 8)]
         [InlineData(new[] { 7, 5, 3 }, 4)]
@@ -40,7 +50,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
         public static void Y2017_Day02_CalculateChecksum_Returns_Correct_Solution_Using_Difference()
         {
             // Arrange
-            var spreadsheet = new[]
+            int[][] spreadsheet = new[]
             {
                 new[] { 5, 1, 9, 5 },
                 new[] { 7, 5, 3 },
@@ -58,7 +68,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
         public static void Y2017_Day02_CalculateChecksum_Returns_Correct_Solution_Using_Evenly_Divisible()
         {
             // Arrange
-            var spreadsheet = new[]
+            int[][] spreadsheet = new[]
             {
                 new[] { 5, 9, 2, 8 },
                 new[] { 9, 4, 7, 3 },
@@ -73,10 +83,10 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
         }
 
         [Fact]
-        public static void Y2017_Day02_Solve_Returns_Correct_Solution()
+        public void Y2017_Day02_Solve_Returns_Correct_Solution()
         {
             // Act
-            var puzzle = PuzzleTestHelpers.SolvePuzzle<Day02>();
+            var puzzle = SolvePuzzle<Day02>();
 
             // Assert
             Assert.Equal(36174, puzzle.ChecksumForDifference);

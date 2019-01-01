@@ -1,4 +1,4 @@
-// Copyright (c) Martin Costello, 2015. All rights reserved.
+﻿// Copyright (c) Martin Costello, 2015. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2015
@@ -33,8 +33,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
         /// </returns>
         internal static Tuple<bool, int> Fight(string weapon, string armor, ICollection<string> rings)
         {
-            Shop shop = new Shop();
-            Human human = new Human();
+            var shop = new Shop();
+            var human = new Human();
 
             int goldSpent = human.Upgrade(shop.PurchaseWeapon(weapon));
 
@@ -48,7 +48,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
                 goldSpent += human.Upgrade(shop.PurchaseRing(ring));
             }
 
-            Boss boss = new Boss();
+            var boss = new Boss();
 
             Player winner = Fight(human, boss);
 
@@ -83,15 +83,15 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
         /// <inheritdoc />
         protected override int SolveCore(string[] args)
         {
-            var potentialWeapons = Shop.PotentialWeapons.Keys.ToArray();
-            var potentialArmor = Shop.PotentialArmor.Keys.Concat(new string[] { null }).ToArray();
+            string[] potentialWeapons = Shop.PotentialWeapons.Keys.ToArray();
+            string[] potentialArmor = Shop.PotentialArmor.Keys.Concat(new string[] { null }).ToArray();
 
             var potentialRings = new List<ICollection<string>>()
             {
                 Array.Empty<string>(),
             };
 
-            foreach (var ring in Shop.PotentialRings.Keys.ToArray())
+            foreach (string ring in Shop.PotentialRings.Keys.ToArray())
             {
                 potentialRings.Add(new[] { ring });
             }

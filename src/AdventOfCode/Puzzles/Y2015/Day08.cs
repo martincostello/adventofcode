@@ -1,9 +1,8 @@
-// Copyright (c) Martin Costello, 2015. All rights reserved.
+﻿// Copyright (c) Martin Costello, 2015. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2015
 {
-    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Text;
@@ -37,7 +36,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
         /// <returns>The number of characters in <paramref name="value"/> when encoded.</returns>
         internal static int GetEncodedCharacterCount(string value)
         {
-            StringBuilder builder = new StringBuilder("\"");
+            var builder = new StringBuilder("\"");
 
             for (int i = 0; i < value.Length; i++)
             {

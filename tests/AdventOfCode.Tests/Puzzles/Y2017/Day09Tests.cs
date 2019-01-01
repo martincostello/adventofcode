@@ -1,15 +1,25 @@
-// Copyright (c) Martin Costello, 2015. All rights reserved.
+﻿// Copyright (c) Martin Costello, 2015. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2017
 {
     using Xunit;
+    using Xunit.Abstractions;
 
     /// <summary>
     /// A class containing tests for the <see cref="Day09"/> class. This class cannot be inherited.
     /// </summary>
-    public static class Day09Tests
+    public sealed class Day09Tests : PuzzleTest
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Day09Tests"/> class.
+        /// </summary>
+        /// <param name="outputHelper">The <see cref="ITestOutputHelper"/> to use.</param>
+        public Day09Tests(ITestOutputHelper outputHelper)
+            : base(outputHelper)
+        {
+        }
+
         [Theory]
         [InlineData("{}", 1)]
         [InlineData("{{{}}}", 6)]
@@ -46,10 +56,10 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
         }
 
         [Fact]
-        public static void Y2017_Day09_Solve_Returns_Correct_Solution()
+        public void Y2017_Day09_Solve_Returns_Correct_Solution()
         {
             // Act
-            var puzzle = PuzzleTestHelpers.SolvePuzzle<Day09>();
+            var puzzle = SolvePuzzle<Day09>();
 
             // Assert
             Assert.Equal(11898, puzzle.TotalScore);

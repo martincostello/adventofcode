@@ -1,4 +1,4 @@
-// Copyright (c) Martin Costello, 2015. All rights reserved.
+﻿// Copyright (c) Martin Costello, 2015. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2015
@@ -74,7 +74,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
 
             var grid = new LightGrid(1000, 1000);
 
-            foreach (var instruction in instructions)
+            foreach (Instruction instruction in instructions)
             {
                 instruction.Act(grid);
             }
@@ -264,9 +264,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
 
             /// <inheritdoc />
             public override void Act(LightGrid grid)
-            {
-                grid.IncrementBrightness(Bounds, Delta);
-            }
+                => grid.IncrementBrightness(Bounds, Delta);
 
             /// <summary>
             /// Parses the specified instruction.
@@ -424,7 +422,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
             /// <inheritdoc />
             public override string ToString()
             {
-                StringBuilder builder = new StringBuilder();
+                var builder = new StringBuilder();
 
                 for (int x = 0; x < _bounds.Width; x++)
                 {

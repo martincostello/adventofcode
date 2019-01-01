@@ -1,4 +1,4 @@
-// Copyright (c) Martin Costello, 2015. All rights reserved.
+﻿// Copyright (c) Martin Costello, 2015. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2016
@@ -30,9 +30,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         /// The length of the value from decompressing <paramref name="data"/>.
         /// </returns>
         internal static long GetDecompressedLength(string data, int version)
-        {
-            return GetDecompressedLength(data, 0, data.Length, version);
-        }
+            => GetDecompressedLength(data, 0, data.Length, version);
 
         /// <inheritdoc />
         protected override int SolveCore(string[] args)
@@ -83,7 +81,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
                     {
                         isInMarker = false;
 
-                        string[] split = marker.ToString().Split(Arrays.X, StringSplitOptions.None);
+                        string[] split = marker.ToString().Split('x', StringSplitOptions.None);
 
                         repeatLength = ParseInt32(split[0]);
                         repeatCount = ParseInt32(split[1]);
@@ -102,16 +100,10 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
                 }
                 else if (isInRepeat)
                 {
-                    long chunkLength;
-
-                    if (version == 2)
-                    {
-                        chunkLength = GetDecompressedLength(data, i, repeatLength, 2);
-                    }
-                    else
-                    {
-                        chunkLength = repeatLength;
-                    }
+                    long chunkLength =
+                        version == 2 ?
+                        GetDecompressedLength(data, i, repeatLength, 2) :
+                        repeatLength;
 
                     length += chunkLength * repeatCount;
 

@@ -1,4 +1,4 @@
-// Copyright (c) Martin Costello, 2015. All rights reserved.
+﻿// Copyright (c) Martin Costello, 2015. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2017
@@ -80,7 +80,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
 
             var cpu = new Cpu();
 
-            foreach (var instruction in program)
+            foreach (Instruction instruction in program)
             {
                 if (!cpu.TryGetValue(instruction.ConditionRegister, out int conditionRegisterValue))
                 {
@@ -170,7 +170,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
             /// <param name="instruction">The raw CPU instruction.</param>
             internal Instruction(string instruction)
             {
-                string[] split = instruction.Split(Arrays.Space);
+                string[] split = instruction.Split(' ');
 
                 TargetRegister = split[0];
                 TargetOperator = split[1] == "inc";

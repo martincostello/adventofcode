@@ -1,4 +1,4 @@
-// Copyright (c) Martin Costello, 2015. All rights reserved.
+﻿// Copyright (c) Martin Costello, 2015. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2015
@@ -103,9 +103,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
         /// at least one spoon of ingredient is required and no more than 100 teaspoons can be used.
         /// </returns>
         private static IList<IList<int>> GetTeaspoonPermutations(int recipeCount)
-        {
-            return GetTeaspoonPermutations(Array.Empty<int>(), 0, recipeCount);
-        }
+            => GetTeaspoonPermutations(Array.Empty<int>(), 0, recipeCount);
 
         /// <summary>
         /// Gets the permutation of teaspoon values for a recipe with the specified number of ingredients.
@@ -164,7 +162,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
             }
 
             // Find the permutations for the next ingredient from the ones we just found
-            List<IList<int>> result = new List<IList<int>>();
+            var result = new List<IList<int>>();
 
             foreach (var amount in thisLevel)
             {
@@ -196,7 +194,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
 
             foreach (var item in recipe.Where((p) => p.Value > 0))
             {
-                var ingredient = ingredients[item.Key];
+                Ingredient ingredient = ingredients[item.Key];
 
                 calories += ingredient.Calories * item.Value;
                 capacity += ingredient.Capacity * item.Value;
@@ -272,7 +270,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
             {
                 string[] split = value.Split(':');
 
-                Ingredient result = new Ingredient()
+                var result = new Ingredient()
                 {
                     Name = split[0],
                 };

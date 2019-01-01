@@ -1,4 +1,4 @@
-// Copyright (c) Martin Costello, 2015. All rights reserved.
+﻿// Copyright (c) Martin Costello, 2015. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2017
@@ -33,7 +33,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
         /// </returns>
         public static int CalculateChecksum(IEnumerable<IEnumerable<int>> spreadsheet, bool forEvenlyDivisible)
         {
-            var sequence =
+            IEnumerable<int> sequence =
                 forEvenlyDivisible ?
                 spreadsheet.Select(ComputeDivisionOfEvenlyDivisible) :
                 spreadsheet.Select(ComputeDifference);
@@ -92,7 +92,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
         /// <inheritdoc />
         protected override int SolveCore(string[] args)
         {
-            var lines = ReadResourceAsLines();
+            IList<string> lines = ReadResourceAsLines();
             var spreadsheet = ParseSpreadsheet(lines);
 
             ChecksumForDifference = CalculateChecksum(spreadsheet, forEvenlyDivisible: false);

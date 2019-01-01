@@ -183,7 +183,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2018
             /// </returns>
             internal static Claim Parse(string claim)
             {
-                string[] split = claim.Split(Arrays.Space);
+                string[] split = claim.Split(' ');
 
                 string id = split[0].TrimStart('#');
                 string offset = split[2].TrimEnd(':');

@@ -1,4 +1,4 @@
-// Copyright (c) Martin Costello, 2015. All rights reserved.
+﻿// Copyright (c) Martin Costello, 2015. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2015
@@ -89,7 +89,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
         /// </returns>
         internal static bool HasPairOfLettersWithMoreThanOneOccurence(string value)
         {
-            Dictionary<string, IList<int>> letterPairs = new Dictionary<string, IList<int>>();
+            var letterPairs = new Dictionary<string, IList<int>>();
 
             for (int i = 0; i < value.Length - 1; i++)
             {

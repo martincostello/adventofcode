@@ -1,4 +1,4 @@
-// Copyright (c) Martin Costello, 2015. All rights reserved.
+﻿// Copyright (c) Martin Costello, 2015. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2015
@@ -72,7 +72,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
         /// <returns>The length of ribbon, in feet, required to wrap the present.</returns>
         private static int GetRibbonLength(Present present)
         {
-            var perimetersOfSides = new[]
+            int[] perimetersOfSides = new[]
             {
                 (present.Length + present.Width) * 2,
                 (present.Width + present.Height) * 2,
@@ -98,7 +98,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
                 (2 * present.Width * present.Height) +
                 (2 * present.Height * present.Length);
 
-            var areasOfSides = new[]
+            int[] areasOfSides = new[]
             {
                 present.Length * present.Width,
                 present.Width * present.Height,

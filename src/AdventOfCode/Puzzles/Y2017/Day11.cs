@@ -1,4 +1,4 @@
-// Copyright (c) Martin Costello, 2015. All rights reserved.
+﻿// Copyright (c) Martin Costello, 2015. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2017
@@ -69,7 +69,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
             var vectors = new List<Vector2>();
             var distances = new List<int>();
 
-            foreach (var direction in directions)
+            foreach (CardinalDirection direction in directions)
             {
                 Vector2 vector = ToVector(direction);
                 vectors.Add(vector);
@@ -108,9 +108,9 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
         /// </returns>
         private static int GetSteps(IList<Vector2> path)
         {
-            var magnitude = path.Aggregate((i, j) => i + j);
-            var absoluteX = Math.Abs(magnitude.X);
-            var absoluteY = Math.Abs(magnitude.Y);
+            Vector2 magnitude = path.Aggregate((i, j) => i + j);
+            float absoluteX = Math.Abs(magnitude.X);
+            float absoluteY = Math.Abs(magnitude.Y);
 
             return (int)((Math.Abs(absoluteX - absoluteY) / 2) + Math.Min(absoluteX, absoluteY));
         }
@@ -158,7 +158,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
         /// </returns>
         private static IList<CardinalDirection> ParsePath(string path)
         {
-            var split = path.Split(Arrays.Comma);
+            string[] split = path.Split(',');
             var result = new List<CardinalDirection>(split.Length);
 
             foreach (string direction in split)

@@ -1,10 +1,8 @@
-// Copyright (c) Martin Costello, 2015. All rights reserved.
+﻿// Copyright (c) Martin Costello, 2015. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2017
 {
-    using System;
-
     /// <summary>
     /// A class representing the puzzle for <c>http://adventofcode.com/2017/day/9</c>. This class cannot be inherited.
     /// </summary>
