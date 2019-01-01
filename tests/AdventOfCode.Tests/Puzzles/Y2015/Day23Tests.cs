@@ -23,7 +23,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
         }
 
         [Fact]
-        public static void Y2015_Day23_ProcessInstructions()
+        public void Y2015_Day23_ProcessInstructions()
         {
             // Arrange
             IList<string> instructions = new[]
@@ -37,12 +37,11 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
             uint initialValue = 0;
 
             // Act
-            Tuple<uint, uint> actual = Day23.ProcessInstructions(instructions, initialValue);
+            (uint a, uint b) = Day23.ProcessInstructions(instructions, initialValue, Logger);
 
             // Assert
-            Assert.NotNull(actual);
-            Assert.Equal(2u, actual.Item1);
-            Assert.Equal(0u, actual.Item2);
+            Assert.Equal(2u, a);
+            Assert.Equal(0u, b);
         }
 
         [Fact]

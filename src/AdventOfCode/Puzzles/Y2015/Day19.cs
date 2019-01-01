@@ -75,7 +75,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
         /// The minimum number of steps required to create <paramref name="molecule"/> using the possible
         /// replacements specified by <paramref name="replacements"/>.
         /// </returns>
-        internal static int GetMinimumSteps(string molecule, ICollection<string> replacements, ILogger logger = null)
+        internal static int GetMinimumSteps(string molecule, ICollection<string> replacements, ILogger logger)
             => GetMinimumSteps(molecule, replacements, "e", 1, logger);
 
         /// <summary>
@@ -101,7 +101,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
 
             if (nextSteps.Contains(molecule))
             {
-                logger?.WriteLine($"Found solution that takes {step:N0} steps.");
+                logger.WriteLine($"Found solution that takes {step:N0} steps.");
                 return step;
             }
 
@@ -149,7 +149,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
 
             if (fabricate)
             {
-                Solution = GetMinimumSteps(molecule, replacements);
+                Solution = GetMinimumSteps(molecule, replacements, Logger);
 
                 if (Verbose)
                 {

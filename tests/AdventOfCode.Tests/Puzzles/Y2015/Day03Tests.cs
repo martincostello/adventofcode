@@ -24,10 +24,10 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
         [InlineData(">", 1)]
         [InlineData("^>v<", 4)]
         [InlineData("^v^v^v^v^v", 2)]
-        public static void Y2015_Day03_GetUniqueHousesVisitedBySanta(string instructions, int expected)
+        public void Y2015_Day03_GetUniqueHousesVisitedBySanta(string instructions, int expected)
         {
             // Act
-            int actual = Day03.GetUniqueHousesVisitedBySanta(instructions);
+            int actual = Day03.GetUniqueHousesVisitedBySanta(instructions, Logger);
 
             // Assert
             Assert.Equal(expected, actual);
@@ -37,10 +37,10 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
         [InlineData("^v", 3)]
         [InlineData("^>v<", 3)]
         [InlineData("^v^v^v^v^v", 11)]
-        public static void Y2015_Day03_GetUniqueHousesVisitedBySantaAndRoboSanta(string instructions, int expected)
+        public void Y2015_Day03_GetUniqueHousesVisitedBySantaAndRoboSanta(string instructions, int expected)
         {
             // Act
-            int actual = Day03.GetUniqueHousesVisitedBySantaAndRoboSanta(instructions);
+            int actual = Day03.GetUniqueHousesVisitedBySantaAndRoboSanta(instructions, Logger);
 
             // Assert
             Assert.Equal(expected, actual);

@@ -42,14 +42,14 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
         }
 
         [Fact]
-        public static void Y2015_Day19_GetMinimumSteps()
+        public void Y2015_Day19_GetMinimumSteps()
         {
             // Arrange
             string molecule = "HOH";
             string[] replacements = new[] { "e => H", "e => O", "H => HO", "H => OH", "O => HH" };
 
             // Act
-            int actual = Day19.GetMinimumSteps(molecule, replacements);
+            int actual = Day19.GetMinimumSteps(molecule, replacements, Logger);
 
             // Assert
             Assert.Equal(3, actual);

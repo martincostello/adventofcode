@@ -28,7 +28,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
         /// <param name="instructions">The instructions Santa should follow.</param>
         /// <param name="logger">The logger to use.</param>
         /// <returns>The number of unique houses that receive a delivery of at least one present.</returns>
-        internal static int GetUniqueHousesVisitedBySanta(string instructions, ILogger logger = null)
+        internal static int GetUniqueHousesVisitedBySanta(string instructions, ILogger logger)
         {
             ICollection<CardinalDirection> directions = GetDirections(instructions, logger);
 
@@ -54,7 +54,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
         /// <param name="instructions">The instructions that Santa and Robo-Santa should follow.</param>
         /// <param name="logger">The logger to use.</param>
         /// <returns>The number of unique houses that receive a delivery of at least one present.</returns>
-        internal static int GetUniqueHousesVisitedBySantaAndRoboSanta(string instructions, ILogger logger = null)
+        internal static int GetUniqueHousesVisitedBySantaAndRoboSanta(string instructions, ILogger logger)
         {
             ICollection<CardinalDirection> directions = GetDirections(instructions, logger);
 
@@ -107,7 +107,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
         /// <param name="instructions">The path of the file containing the directions.</param>
         /// <param name="logger">The logger to use.</param>
         /// <returns>An <see cref="ICollection{T}"/> containing the directions from from the specified file.</returns>
-        private static ICollection<CardinalDirection> GetDirections(string instructions, ILogger logger = null)
+        private static ICollection<CardinalDirection> GetDirections(string instructions, ILogger logger)
         {
             var directions = new List<CardinalDirection>();
 
@@ -134,7 +134,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
                         break;
 
                     default:
-                        logger?.WriteLine("Invalid direction: '{0}'.", instructions[i]);
+                        logger.WriteLine("Invalid direction: '{0}'.", instructions[i]);
                         continue;
                 }
 
