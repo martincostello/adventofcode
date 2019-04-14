@@ -31,7 +31,6 @@ namespace MartinCostello.AdventOfCode.Benchmarks
             yield return new PuzzleInput<Puzzles.Y2015.Day19>("calibrate");
             yield return new PuzzleInput<Puzzles.Y2015.Day21>();
             yield return new PuzzleInput<Puzzles.Y2015.Day23>();
-            yield return new PuzzleInput<Puzzles.Y2015.Day24>();
             yield return new PuzzleInput<Puzzles.Y2015.Day25>("2947", "3029");
             yield return new PuzzleInput<Puzzles.Y2016.Day01>();
             yield return new PuzzleInput<Puzzles.Y2016.Day02>();
