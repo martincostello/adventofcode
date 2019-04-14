@@ -1,4 +1,4 @@
-// Copyright (c) Martin Costello, 2015. All rights reserved.
+﻿// Copyright (c) Martin Costello, 2015. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2016
@@ -12,7 +12,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
     /// <summary>
     /// A class representing the puzzle for <c>http://adventofcode.com/2016/day/14</c>. This class cannot be inherited.
     /// </summary>
-    internal sealed class Day14 : Puzzle2016
+    public sealed class Day14 : Puzzle2016
     {
         /// <summary>
         /// Gets the index that produces the 64th one-time pad key.
@@ -130,13 +130,10 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
 
                 int rounds = useKeyStretching ? 2017 : 1;
 
-                byte[] buffer = null;
-                byte[] hash = null;
-
                 for (int i = 0; i < rounds; i++)
                 {
-                    buffer = Encoding.ASCII.GetBytes(result);
-                    hash = algorithm.ComputeHash(buffer);
+                    byte[] buffer = Encoding.ASCII.GetBytes(result);
+                    byte[] hash = algorithm.ComputeHash(buffer);
 
                     result = GetStringForHash(hash);
                 }

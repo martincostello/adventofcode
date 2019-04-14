@@ -6,7 +6,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
     /// <summary>
     /// A class representing the puzzle for <c>http://adventofcode.com/2016/day/18</c>. This class cannot be inherited.
     /// </summary>
-    internal sealed class Day18 : Puzzle2016
+    public sealed class Day18 : Puzzle2016
     {
         /// <summary>
         /// Gets the number of safe tiles in the puzzle input.

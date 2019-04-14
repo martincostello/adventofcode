@@ -10,7 +10,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
     /// <summary>
     /// A class representing the puzzle for <c>http://adventofcode.com/2017/day/3</c>. This class cannot be inherited.
     /// </summary>
-    internal sealed class Day03 : Puzzle2017
+    public sealed class Day03 : Puzzle2017
     {
         /// <summary>
         /// A move one unit left. This field is read-only.

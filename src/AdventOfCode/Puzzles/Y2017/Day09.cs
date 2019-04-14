@@ -6,7 +6,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
     /// <summary>
     /// A class representing the puzzle for <c>http://adventofcode.com/2017/day/9</c>. This class cannot be inherited.
     /// </summary>
-    internal sealed class Day09 : Puzzle2017
+    public sealed class Day09 : Puzzle2017
     {
         /// <summary>
         /// Gets the total score for all groups in the stream.

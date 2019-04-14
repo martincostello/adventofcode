@@ -10,7 +10,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
     /// <summary>
     /// A class representing the puzzle for <c>http://adventofcode.com/2015/day/16</c>. This class cannot be inherited.
     /// </summary>
-    internal sealed class Day16 : Puzzle2015
+    public sealed class Day16 : Puzzle2015
     {
         /// <summary>
         /// The result of the forensic analysis of the gift from Aunt Sue X

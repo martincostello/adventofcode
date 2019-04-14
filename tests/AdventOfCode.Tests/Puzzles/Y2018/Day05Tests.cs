@@ -53,7 +53,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2018
         }
 
         [Fact]
-        public void Y2018_Day01_Solve_Returns_Correct_Solution()
+        public void Y2018_Day05_Solve_Returns_Correct_Solution()
         {
             // Act
             var puzzle = SolvePuzzle<Day05>();

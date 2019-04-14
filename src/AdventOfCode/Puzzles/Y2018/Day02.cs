@@ -10,7 +10,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2018
     /// <summary>
     /// A class representing the puzzle for <c>http://adventofcode.com/2018/day/2</c>. This class cannot be inherited.
     /// </summary>
-    internal sealed class Day02 : Puzzle2018
+    public sealed class Day02 : Puzzle2018
     {
         /// <summary>
         /// Gets the checksum of the box Ids.
@@ -20,7 +20,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2018
         /// <summary>
         /// Gets the common letters between the two similar box Ids.
         /// </summary>
-        public string CommonLetters { get; private set; }
+        public string CommonLettersForBoxes { get; private set; }
 
         /// <summary>
         /// Calculates the checksum for the specified box Ids.
@@ -140,12 +140,12 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2018
             IList<string> ids = ReadResourceAsLines();
 
             Checksum = CalculateChecksum(ids);
-            CommonLetters = GetCommonLetters(ids);
+            CommonLettersForBoxes = GetCommonLetters(ids);
 
             if (Verbose)
             {
                 Logger.WriteLine($"The checksum is {Checksum:N0}.");
-                Logger.WriteLine($"The common letters are {CommonLetters}.");
+                Logger.WriteLine($"The common letters are {CommonLettersForBoxes}.");
             }
 
             return 0;

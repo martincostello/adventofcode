@@ -11,7 +11,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2018
     /// <summary>
     /// A class representing the puzzle for <c>http://adventofcode.com/2018/day/4</c>. This class cannot be inherited.
     /// </summary>
-    internal sealed class Day04 : Puzzle2018
+    public sealed class Day04 : Puzzle2018
     {
         /// <summary>
         /// Gets the product of the Id of the guard who slept the most and the minute they were asleep the most.
@@ -63,7 +63,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2018
                         lastTimestamp.TimeOfDay < oneAM)
                     {
                         var time = lastTimestamp;
-                        var midnightHour = guardsAsleepByMinute[day.Key];
+                        int[] midnightHour = guardsAsleepByMinute[day.Key];
 
                         while (time.TimeOfDay < oneAM && time < entry.Timestamp)
                         {

@@ -9,7 +9,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
     /// <summary>
     /// A class representing the puzzle for <c>http://adventofcode.com/2015/day/24</c>. This class cannot be inherited.
     /// </summary>
-    internal sealed class Day24 : Puzzle2015
+    public sealed class Day24 : Puzzle2015
     {
         /// <summary>
         /// Gets the quantum entanglement of the first group

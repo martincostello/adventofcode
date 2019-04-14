@@ -8,9 +8,9 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
     using System.Drawing;
 
     /// <summary>
-    /// A class representing the puzzle for <c>http://adventofcode.com/2015/day/3</c>. This class cannot be inherited.
+    /// A class representing the puzzle for <c>http://adventofcode.com/2015/day/3</c>.
     /// </summary>
-    internal sealed class Day03 : Puzzle2015
+    public class Day03 : Puzzle2015
     {
         /// <summary>
         /// Gets the number of houses with presents delivered to by Santa.
