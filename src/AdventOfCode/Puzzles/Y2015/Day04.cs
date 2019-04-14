@@ -47,32 +47,41 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
                     try
                     {
                         // Does this range start at a value greater than an already found value?
-                        if (solutions.Count > 0 && range.Item1 > solutions.Min())
+                        if (solutions.Count > 0)
                         {
                             int bestSolution = solutions.Min();
 
-                            var orderedRanges = searchedRanges.ToList();
-                            orderedRanges.Sort();
-
-                            // Have we searched the first possible range already?
-                            if (orderedRanges[0] == fromInclusive)
+                            if (range.Item1 > bestSolution)
                             {
-                                for (int i = 1; i < orderedRanges.Count; i++)
+                                var orderedRanges = searchedRanges.ToList();
+
+                                if (orderedRanges.Count == 0)
                                 {
-                                    int lastRange = orderedRanges[i - 1];
-                                    int thisRange = orderedRanges[i];
+                                    return;
+                                }
 
-                                    // Is this range the next range?
-                                    if (thisRange != lastRange + rangeSize)
-                                    {
-                                        // A range before the current best solution has not been searched yet
-                                        break;
-                                    }
+                                orderedRanges.Sort();
 
-                                    if (thisRange > bestSolution)
+                                // Have we searched the first possible range already?
+                                if (orderedRanges[0] == fromInclusive)
+                                {
+                                    for (int i = 1; i < orderedRanges.Count; i++)
                                     {
-                                        // We have found the best solution
-                                        state.Stop();
+                                        int lastRange = orderedRanges[i - 1];
+                                        int thisRange = orderedRanges[i];
+
+                                        // Is this range the next range?
+                                        if (thisRange != lastRange + rangeSize)
+                                        {
+                                            // A range before the current best solution has not been searched yet
+                                            break;
+                                        }
+
+                                        if (thisRange > bestSolution)
+                                        {
+                                            // We have found the best solution
+                                            state.Stop();
+                                        }
                                     }
                                 }
                             }
