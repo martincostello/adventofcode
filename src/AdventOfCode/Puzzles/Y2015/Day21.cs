@@ -10,7 +10,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
     /// <summary>
     /// A class representing the puzzle for <c>http://adventofcode.com/2015/day/21</c>. This class cannot be inherited.
     /// </summary>
-    internal sealed class Day21 : Puzzle2015
+    public sealed class Day21 : Puzzle2015
     {
         /// <summary>
         /// Gets the maximum cost of items that can be purchased for the human to lost to the boss.

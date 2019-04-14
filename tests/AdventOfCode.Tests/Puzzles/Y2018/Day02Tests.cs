@@ -62,7 +62,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2018
 
             // Assert
             Assert.Equal(5880, puzzle.Checksum);
-            Assert.Equal("tiwcdpbseqhxryfmgkvjujvza", puzzle.CommonLetters);
+            Assert.Equal("tiwcdpbseqhxryfmgkvjujvza", puzzle.CommonLettersForBoxes);
         }
     }
 }

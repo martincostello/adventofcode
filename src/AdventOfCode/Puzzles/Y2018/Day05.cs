@@ -11,7 +11,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2018
     /// <summary>
     /// A class representing the puzzle for <c>http://adventofcode.com/2018/day/5</c>. This class cannot be inherited.
     /// </summary>
-    internal sealed class Day05 : Puzzle2018
+    public sealed class Day05 : Puzzle2018
     {
         /// <summary>
         /// Gets the number of remaining polymer units after the reduction.
@@ -66,7 +66,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2018
                 .OrderBy((p) => p)
                 .ToArray();
 
-            var optimized = units
+            string optimized = units
                 .Select((p) => polymer.Replace(p, string.Empty, StringComparison.OrdinalIgnoreCase))
                 .Select((p) => Reduce(p))
                 .OrderBy((p) => p.Length)

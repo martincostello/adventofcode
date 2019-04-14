@@ -9,7 +9,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
     /// <summary>
     /// A class representing the puzzle for <c>http://adventofcode.com/2017/day/6</c>. This class cannot be inherited.
     /// </summary>
-    internal sealed class Day06 : Puzzle2017
+    public sealed class Day06 : Puzzle2017
     {
         /// <summary>
         /// Gets the count of redistribution cycles performed before a distribution of memory re-occurs.

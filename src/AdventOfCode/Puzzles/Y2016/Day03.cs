@@ -10,7 +10,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
     /// <summary>
     /// A class representing the puzzle for <c>http://adventofcode.com/2016/day/3</c>. This class cannot be inherited.
     /// </summary>
-    internal sealed class Day03 : Puzzle2016
+    public sealed class Day03 : Puzzle2016
     {
         /// <summary>
         /// Gets the number of possible triangles by columns.

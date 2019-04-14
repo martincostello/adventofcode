@@ -1,4 +1,4 @@
-// Copyright (c) Martin Costello, 2015. All rights reserved.
+﻿// Copyright (c) Martin Costello, 2015. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2016
@@ -13,7 +13,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
     /// <summary>
     /// A class representing the puzzle for <c>http://adventofcode.com/2016/day/5</c>. This class cannot be inherited.
     /// </summary>
-    internal sealed class Day05 : Puzzle2016
+    public sealed class Day05 : Puzzle2016
     {
         /// <summary>
         /// Gets the password for the door.

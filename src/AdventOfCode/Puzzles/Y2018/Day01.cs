@@ -10,7 +10,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2018
     /// <summary>
     /// A class representing the puzzle for <c>http://adventofcode.com/2018/day/1</c>. This class cannot be inherited.
     /// </summary>
-    internal sealed class Day01 : Puzzle2018
+    public sealed class Day01 : Puzzle2018
     {
         /// <summary>
         /// Gets the frequency of the device calculated from the sequence.

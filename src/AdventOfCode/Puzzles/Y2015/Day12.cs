@@ -9,7 +9,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
     /// <summary>
     /// A class representing the puzzle for <c>http://adventofcode.com/2015/day/12</c>. This class cannot be inherited.
     /// </summary>
-    internal sealed class Day12 : Puzzle2015
+    public sealed class Day12 : Puzzle2015
     {
         /// <summary>
         /// Gets the sum of the integers in the JSON document.

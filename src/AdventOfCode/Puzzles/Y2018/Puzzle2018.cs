@@ -6,7 +6,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2018
     /// <summary>
     /// The base class for puzzles for 2018.
     /// </summary>
-    internal abstract class Puzzle2018 : Puzzle
+    public abstract class Puzzle2018 : Puzzle
     {
         /// <inheritdoc />
         protected override int Year => 2018;

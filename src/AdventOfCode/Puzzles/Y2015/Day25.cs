@@ -8,7 +8,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
     /// <summary>
     /// A class representing the puzzle for <c>http://adventofcode.com/2015/day/25</c>. This class cannot be inherited.
     /// </summary>
-    internal sealed class Day25 : Puzzle2015
+    public sealed class Day25 : Puzzle2015
     {
         /// <summary>
         /// Gets the code for the weather machine.
