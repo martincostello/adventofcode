@@ -53,7 +53,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
 
             IList<string> extraDisc = new[]
             {
-                $"Disc #{input.Count + 1} has 11 positions; at time=0, it is at position 0."
+                $"Disc #{input.Count + 1} has 11 positions; at time=0, it is at position 0.",
             };
 
             TimeOfFirstButtonPress = FindTimeForCapsuleRelease(input);

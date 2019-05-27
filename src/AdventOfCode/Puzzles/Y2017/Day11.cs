@@ -62,7 +62,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
         /// The minimum number of steps required to traverse the path described by <paramref name="path"/>
         /// and the maximum number of steps taken from the origin point.
         /// </returns>
-        public static(int minimum, int maximum) FindStepRange(string path)
+        public static (int minimum, int maximum) FindStepRange(string path)
         {
             IList<CardinalDirection> directions = ParsePath(path);
 

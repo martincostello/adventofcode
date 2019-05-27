@@ -39,7 +39,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2018
         /// <returns>
         /// The resulting frequency from applying the sequence from <paramref name="sequence"/>.
         /// </returns>
-        public static(int frequency, int firstRepeat) CalculateFrequencyWithRepetition(IEnumerable<string> sequence)
+        public static (int frequency, int firstRepeat) CalculateFrequencyWithRepetition(IEnumerable<string> sequence)
         {
             IList<int> changes = sequence
                 .Select((p) => ParseInt32(p))

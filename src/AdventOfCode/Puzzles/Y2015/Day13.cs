@@ -100,7 +100,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
         /// Gets the total happiness for the specified place setting.
         /// </summary>
         /// <param name="setting">The place setting.</param>
-        /// <param name="happinesses">The potential happinesses</param>
+        /// <param name="happinesses">The potential happinesses.</param>
         /// <returns>The total change in happiness for the given place setting.</returns>
         private static int GetHappiness(IList<string> setting, IDictionary<string, Dictionary<string, int>> happinesses)
         {

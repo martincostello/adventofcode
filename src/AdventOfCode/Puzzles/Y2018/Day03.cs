@@ -111,7 +111,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2018
         /// <returns>
         /// A two-dimensional array of squares representing the fabric and the claims for each square inch.
         /// </returns>
-        private static(Square[,] fabric, IList<Claim> claims) ParseFabric(IEnumerable<string> claims)
+        private static (Square[,] fabric, IList<Claim> claims) ParseFabric(IEnumerable<string> claims)
         {
             IList<Claim> fabricClaims = claims
                 .Select(Claim.Parse)

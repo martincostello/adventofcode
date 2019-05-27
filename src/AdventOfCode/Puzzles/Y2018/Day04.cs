@@ -31,7 +31,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2018
         /// The product of the guard who slept the most and the minute they were asleep the most as specified by <paramref name="log"/>
         /// and the product of the minute a guard was most asleep and the guard's Id.
         /// </returns>
-        public static(int guardMinute, int minuteGuard) GetSleepiestGuardsMinutes(IEnumerable<string> log)
+        public static (int guardMinute, int minuteGuard) GetSleepiestGuardsMinutes(IEnumerable<string> log)
         {
             var parsedAndSortedLog = log
                 .Select(LogEntry.Parse)

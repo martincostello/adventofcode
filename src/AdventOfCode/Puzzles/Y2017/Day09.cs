@@ -25,7 +25,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
         /// <returns>
         /// The total score for the groups in the stream specified by <paramref name="stream"/>.
         /// </returns>
-        public static(int score, int garbageCount) ParseStream(string stream)
+        public static (int score, int garbageCount) ParseStream(string stream)
         {
             int score = 0;
             int level = 0;
