@@ -48,13 +48,13 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2018
         }
 
         /// <summary>
-        /// Gets the scores for the box with the specified Id
+        /// Gets the scores for the box with the specified Id.
         /// </summary>
         /// <param name="id">The box Id to get the score for.</param>
         /// <returns>
         /// The scores of the specified Id.
         /// </returns>
-        public static(int count2, int count3) GetBoxScore(string id)
+        public static (int count2, int count3) GetBoxScore(string id)
         {
             var counts = id.Distinct().ToDictionary((k) => k, (v) => 0);
 

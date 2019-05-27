@@ -29,7 +29,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
         /// The number of redistribution cycles that must be completed before a configuration is repeated and
         /// the number of loops in the infinite loop cycle caused by the distribution algorithm.
         /// </returns>
-        public static(int cycleCount, int loopSize) Debug(IList<int> memory)
+        public static (int cycleCount, int loopSize) Debug(IList<int> memory)
         {
             var copy = new List<int>(memory);
 
