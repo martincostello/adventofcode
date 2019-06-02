@@ -22,10 +22,12 @@ namespace MartinCostello.AdventOfCode
         internal static int TrueCount(this bool[,] array)
         {
             int result = 0;
+            int boundsX = array.GetLength(0);
+            int boundsY = array.GetLength(1);
 
-            for (int x = 0; x < array.GetLength(0); x++)
+            for (int x = 0; x < boundsX; x++)
             {
-                for (int y = 0; y < array.GetLength(1); y++)
+                for (int y = 0; y < boundsY; y++)
                 {
                     if (array[x, y])
                     {
