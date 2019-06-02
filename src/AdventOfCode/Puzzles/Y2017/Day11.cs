@@ -66,19 +66,23 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
         {
             IList<CardinalDirection> directions = ParsePath(path);
 
-            var vectors = new List<Vector2>();
-            var distances = new List<int>();
+            var vectors = new List<Vector2>(directions.Count);
+            var distances = new List<int>(directions.Count);
+
+            int maximum = 0;
 
             foreach (CardinalDirection direction in directions)
             {
                 Vector2 vector = ToVector(direction);
                 vectors.Add(vector);
 
-                distances.Add(GetSteps(vectors));
+                int distance = GetSteps(vectors);
+
+                distances.Add(distance);
+                maximum = Math.Max(maximum, distance);
             }
 
-            int minimum = GetSteps(vectors);
-            int maximum = distances.Max();
+            int minimum = distances[distances.Count - 1];
 
             return (minimum, maximum);
         }
