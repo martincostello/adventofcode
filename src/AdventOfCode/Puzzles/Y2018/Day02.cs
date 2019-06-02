@@ -31,12 +31,10 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2018
         /// </returns>
         public static int CalculateChecksum(IEnumerable<string> boxIds)
         {
-            var ids = boxIds.ToList();
-
             int count2 = 0;
             int count3 = 0;
 
-            foreach (string id in ids)
+            foreach (string id in boxIds)
             {
                 (int c2, int c3) = GetBoxScore(id);
 

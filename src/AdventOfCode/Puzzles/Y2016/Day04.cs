@@ -52,19 +52,17 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         /// </returns>
         internal static int GetSectorIdOfNorthPoleObjectsRoom(IEnumerable<string> names)
         {
-            int sectorId = -1;
-
             foreach (string name in names)
             {
                 string decryptedName = DecryptRoomName(name, out string sectorIdString);
 
-                if (string.Equals("northpole object storage", decryptedName, StringComparison.OrdinalIgnoreCase))
+                if (string.Equals("northpole object storage", decryptedName, StringComparison.Ordinal))
                 {
-                    sectorId = ParseInt32(sectorIdString);
+                    return ParseInt32(sectorIdString);
                 }
             }
 
-            return sectorId;
+            return -1;
         }
 
         /// <summary>
@@ -116,30 +114,31 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         /// </returns>
         private static string DecryptRoomName(string name, out string sectorId)
         {
-            var builder = new StringBuilder();
-
-            if (IsRoomReal(name, out string encryptedName, out sectorId))
+            if (!IsRoomReal(name, out string encryptedName, out sectorId))
             {
-                int sectorIdValue = ParseInt32(sectorId);
+                return string.Empty;
+            }
 
-                foreach (char ch in encryptedName)
+            var builder = new StringBuilder(encryptedName.Length);
+            int sectorIdValue = ParseInt32(sectorId);
+
+            foreach (char ch in encryptedName)
+            {
+                if (ch == '-')
                 {
-                    if (ch == '-')
-                    {
-                        builder.Append(' ');
-                    }
-                    else
-                    {
-                        int shift = sectorIdValue % 26;
-                        int shifted = ch + shift;
+                    builder.Append(' ');
+                }
+                else
+                {
+                    int shift = sectorIdValue % 26;
+                    int shifted = ch + shift;
 
-                        if (shifted > 'z')
-                        {
-                            shifted -= 26;
-                        }
-
-                        builder.Append((char)shifted);
+                    if (shifted > 'z')
+                    {
+                        shifted -= 26;
                     }
+
+                    builder.Append((char)shifted);
                 }
             }
 

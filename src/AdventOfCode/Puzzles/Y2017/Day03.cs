@@ -122,6 +122,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
             int ring = 2;
             int currentSquare = 1;
 
+            var bounds = new[] { Left, Down, Right };
             var memory = new Memory();
             int lastValueWritten = memory.Write(position);
 
@@ -145,7 +146,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
                     lastValueWritten = memory.Write(position);
                 }
 
-                foreach (Size direction in new[] { Left, Down, Right })
+                foreach (Size direction in bounds)
                 {
                     for (int i = 0; lastValueWritten <= square && i < movesOther; i++)
                     {

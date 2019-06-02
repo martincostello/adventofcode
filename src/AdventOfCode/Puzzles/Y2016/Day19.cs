@@ -4,6 +4,7 @@
 namespace MartinCostello.AdventOfCode.Puzzles.Y2016
 {
     using System.Collections.Generic;
+    using System.Linq;
 
     /// <summary>
     /// A class representing the puzzle for <c>http://adventofcode.com/2016/day/19</c>. This class cannot be inherited.
@@ -59,13 +60,18 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         /// </returns>
         private static int FindElfThatGetsAllPresentsV1(int count)
         {
-            LinkedList<int> circle = CreateCircle(count);
+            var circle = new LinkedList<int>(Enumerable.Range(1, count));
             var current = circle.First;
+
+            LinkedListNode<int> NextCircular(LinkedListNode<int> node)
+            {
+                return node.Next ?? circle.First;
+            }
 
             while (circle.Count > 1)
             {
-                circle.Remove(current.NextCircular());
-                current = current.NextCircular();
+                circle.Remove(NextCircular(current));
+                current = NextCircular(current);
             }
 
             return circle.First.Value;
@@ -80,54 +86,39 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         /// </returns>
         private static int FindElfThatGetsAllPresentsV2(int count)
         {
-            LinkedList<int> circle = CreateCircle(count);
+            var circle = new LinkedList<int>(Enumerable.Range(1, count));
             var current = circle.First;
             var opposite = current;
+
+            LinkedListNode<int> NextCircular(LinkedListNode<int> node)
+            {
+                return node.Next ?? circle.First;
+            }
 
             int steps = circle.Count / 2;
 
             for (int i = 0; i < steps; i++)
             {
-                opposite = opposite.NextCircular();
+                opposite = NextCircular(opposite);
             }
 
             while (circle.Count > 1)
             {
-                var next = opposite.NextCircular();
+                var next = NextCircular(opposite);
 
                 if (circle.Count % 2 == 1)
                 {
-                    next = next.NextCircular();
+                    next = NextCircular(next);
                 }
 
                 circle.Remove(opposite);
 
                 opposite = next;
 
-                current = current.NextCircular();
+                current = NextCircular(current);
             }
 
             return circle.First.Value;
-        }
-
-        /// <summary>
-        /// Creates the circle of elves.
-        /// </summary>
-        /// <param name="count">The number of elves in the circle.</param>
-        /// <returns>
-        /// The <see cref="LinkedList{T}"/> containing the number of elves specified by <paramref name="count"/>.
-        /// </returns>
-        private static LinkedList<int> CreateCircle(int count)
-        {
-            var circle = new LinkedList<int>();
-            var current = circle.AddFirst(1);
-
-            while (circle.Count < count)
-            {
-                current = circle.AddAfter(current, circle.Count + 1);
-            }
-
-            return circle;
         }
     }
 }

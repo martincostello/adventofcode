@@ -102,7 +102,14 @@ namespace MartinCostello.AdventOfCode.Benchmarks
                 string year = split[3];
                 string day = split[4].Replace("Day", string.Empty, StringComparison.Ordinal);
 
-                return $"{year}-{day}";
+                string name = $"{year}-{day}";
+
+                if (Args?.Length > 0)
+                {
+                    name += "-" + string.Join("-", Args);
+                }
+
+                return name;
             }
         }
     }

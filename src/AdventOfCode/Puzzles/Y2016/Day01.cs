@@ -52,7 +52,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
             var position = Point.Empty;
 
             IList<Instruction> instructions = ParseDirections(input);
-            IList<Point> positions = new List<Point>();
+            IList<Point> positions = new List<Point>(instructions.Count);
 
             foreach (Instruction instruction in instructions)
             {
@@ -127,7 +127,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         {
             string[] instructions = input.Split(new[] { ',', ' ' }, StringSplitOptions.RemoveEmptyEntries);
 
-            var result = new List<Instruction>();
+            var result = new List<Instruction>(instructions.Length);
 
             foreach (string rawInstruction in instructions)
             {

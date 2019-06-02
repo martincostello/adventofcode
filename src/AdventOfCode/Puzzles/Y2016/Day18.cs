@@ -36,7 +36,10 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
 
             for (int x = 0; x < width; x++)
             {
-                tiles[0, x] = firstRowTiles[x] == '^';
+                if (firstRowTiles[x] == '^')
+                {
+                    tiles[0, x] = true;
+                }
             }
 
             for (int y = 1; y < rows; y++)
@@ -48,7 +51,10 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
 
                     bool isTrap = left ^ right;
 
-                    tiles[y, x] = isTrap;
+                    if (isTrap)
+                    {
+                        tiles[y, x] = true;
+                    }
                 }
             }
 
