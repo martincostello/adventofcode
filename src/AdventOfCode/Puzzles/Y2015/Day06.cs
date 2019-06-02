@@ -53,9 +53,10 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
                 return -1;
             }
 
-            var instructions = new List<Instruction>();
+            var lines = ReadResourceAsLines();
+            var instructions = new List<Instruction>(lines.Count);
 
-            foreach (string line in ReadResourceAsLines())
+            foreach (string line in lines)
             {
                 if (version == 1)
                 {
@@ -422,7 +423,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
             /// <inheritdoc />
             public override string ToString()
             {
-                var builder = new StringBuilder();
+                var builder = new StringBuilder((_bounds.Width * _bounds.Height) + (_bounds.Width * Environment.NewLine.Length));
 
                 for (int x = 0; x < _bounds.Width; x++)
                 {
