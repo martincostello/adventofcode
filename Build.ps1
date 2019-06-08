@@ -64,6 +64,10 @@ Write-Host "Building solution..." -ForegroundColor Green
 
 & $dotnet build ./AdventOfCode.sln --output $OutputPath --configuration $Configuration
 
+if ($LASTEXITCODE -ne 0) {
+    throw "dotnet build failed with exit code $LASTEXITCODE"
+}
+
 if ($SkipTests -eq $false) {
     Write-Host "Running tests..." -ForegroundColor Green
     ForEach ($testProject in $testProjects) {
@@ -72,6 +76,10 @@ if ($SkipTests -eq $false) {
         }
         else {
             & $dotnet test $testProject --output $OutputPath --configuration $Configuration
+        }
+
+        if ($LASTEXITCODE -ne 0) {
+            throw "dotnet test failed with exit code $LASTEXITCODE"
         }
     }
 }
