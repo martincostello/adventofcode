@@ -89,7 +89,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
             {
                 if (right)
                 {
-                    char last = values[values.Length - 1];
+                    char last = values[^1];
 
                     for (int j = values.Length - 2; j >= 0; j--)
                     {
@@ -107,7 +107,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
                         values[j - 1] = values[j];
                     }
 
-                    values[values.Length - 1] = first;
+                    values[^1] = first;
                 }
             }
         }

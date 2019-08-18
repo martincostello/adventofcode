@@ -341,11 +341,11 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
             /// </summary>
             internal static readonly IDictionary<string, SpellInfo> Spells = new Dictionary<string, SpellInfo>()
             {
-                { "MagicMissile", new SpellInfo("MagicMissile", 53, () => new MagicMissile()) },
-                { "Drain", new SpellInfo("Drain", 73, () => new Drain()) },
-                { "Shield", new SpellInfo("Shield", 113, () => new Shield()) },
-                { "Poison", new SpellInfo("Poison", 173, () => new Poison()) },
-                { "Recharge", new SpellInfo("Recharge", 229, () => new Recharge()) },
+                ["MagicMissile"] = new SpellInfo("MagicMissile", 53, () => new MagicMissile()),
+                ["Drain"] = new SpellInfo("Drain", 73, () => new Drain()),
+                ["Shield"] = new SpellInfo("Shield", 113, () => new Shield()),
+                ["Poison"] = new SpellInfo("Poison", 173, () => new Poison()),
+                ["Recharge"] = new SpellInfo("Recharge", 229, () => new Recharge()),
             };
 
             /// <summary>

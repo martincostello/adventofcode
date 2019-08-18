@@ -100,7 +100,8 @@ namespace MartinCostello.AdventOfCode
         /// <returns>
         /// The parsed value of <paramref name="s"/>.
         /// </returns>
-        protected internal static uint ParseUInt32(ReadOnlySpan<char> s) => uint.Parse(s, NumberStyles.Integer, CultureInfo.InvariantCulture);
+        protected internal static uint ParseUInt32(ReadOnlySpan<char> s)
+            => uint.Parse(s, NumberStyles.Integer, CultureInfo.InvariantCulture);
 
         /// <summary>
         /// Ensures that the specified number of arguments are present.
@@ -138,17 +139,14 @@ namespace MartinCostello.AdventOfCode
         {
             var lines = new List<string>();
 
-            using (Stream stream = ReadResource())
-            {
-                using (var reader = new StreamReader(stream))
-                {
-                    string value = null;
+            using Stream stream = ReadResource();
+            using var reader = new StreamReader(stream);
 
-                    while ((value = reader.ReadLine()) != null)
-                    {
-                        lines.Add(value);
-                    }
-                }
+            string value = null;
+
+            while ((value = reader.ReadLine()) != null)
+            {
+                lines.Add(value);
             }
 
             return lines;
@@ -162,13 +160,10 @@ namespace MartinCostello.AdventOfCode
         /// </returns>
         protected string ReadResourceAsString()
         {
-            using (Stream stream = ReadResource())
-            {
-                using (var reader = new StreamReader(stream))
-                {
-                    return reader.ReadToEnd();
-                }
-            }
+            using Stream stream = ReadResource();
+            using var reader = new StreamReader(stream);
+
+            return reader.ReadToEnd();
         }
 
         /// <summary>

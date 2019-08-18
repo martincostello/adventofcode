@@ -6,7 +6,6 @@ namespace MartinCostello.AdventOfCode
     using System;
     using System.Diagnostics;
     using System.Globalization;
-    using System.Linq;
 
     /// <summary>
     /// A console application that solves puzzles for <c>http://adventofcode.com</c>. This class cannot be inherited.
@@ -49,7 +48,7 @@ namespace MartinCostello.AdventOfCode
                 year = DateTime.UtcNow.Year;
             }
 
-            Type type = null;
+            Type type;
 
             if (!int.TryParse(args[0], NumberStyles.Integer & ~NumberStyles.AllowLeadingSign, CultureInfo.InvariantCulture, out int day) ||
                 day < 1 ||
@@ -61,7 +60,7 @@ namespace MartinCostello.AdventOfCode
                 return -1;
             }
 
-            args = args.Skip(1).ToArray();
+            args = args[1..];
 
             return SolvePuzzle(type, year, day, args, logger, verbose: true);
         }

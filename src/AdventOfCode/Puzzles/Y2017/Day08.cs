@@ -123,29 +123,22 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
         /// </returns>
         private static bool Evaluate(int left, int right, string operation)
         {
-            switch (operation)
+            return operation switch
             {
-                case ">":
-                    return left > right;
+                ">" => left > right,
 
-                case "<":
-                    return left < right;
+                "<" => left < right,
 
-                case "!=":
-                    return left != right;
+                "!=" => left != right,
 
-                case "==":
-                    return left == right;
+                "==" => left == right,
 
-                case ">=":
-                    return left >= right;
+                ">=" => left >= right,
 
-                case "<=":
-                    return left <= right;
+                "<=" => left <= right,
 
-                default:
-                    throw new InvalidProgramException($"Unknown operation: {operation}");
-            }
+                _ => throw new InvalidProgramException($"Unknown operation: {operation}"),
+            };
         }
 
         /// <summary>

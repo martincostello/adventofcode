@@ -128,29 +128,22 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
         /// </returns>
         private static Vector2 ToVector(CardinalDirection direction)
         {
-            switch (direction)
+            return direction switch
             {
-                case CardinalDirection.North:
-                    return North;
+                CardinalDirection.North => North,
 
-                case CardinalDirection.NorthEast:
-                    return NorthEast;
+                CardinalDirection.NorthEast => NorthEast,
 
-                case CardinalDirection.NorthWest:
-                    return NorthWest;
+                CardinalDirection.NorthWest => NorthWest,
 
-                case CardinalDirection.South:
-                    return South;
+                CardinalDirection.South => South,
 
-                case CardinalDirection.SouthEast:
-                    return SouthEast;
+                CardinalDirection.SouthEast => SouthEast,
 
-                case CardinalDirection.SouthWest:
-                    return SouthWest;
+                CardinalDirection.SouthWest => SouthWest,
 
-                default:
-                    throw new InvalidOperationException("Invalid cardinal direction.");
-            }
+                _ => throw new InvalidOperationException("Invalid cardinal direction."),
+            };
         }
 
         /// <summary>
@@ -167,37 +160,22 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
 
             foreach (string direction in split)
             {
-                CardinalDirection parsed;
-
-                switch (direction)
+                var parsed = direction switch
                 {
-                    case "n":
-                        parsed = CardinalDirection.North;
-                        break;
+                    "n" => CardinalDirection.North,
 
-                    case "ne":
-                        parsed = CardinalDirection.NorthEast;
-                        break;
+                    "ne" => CardinalDirection.NorthEast,
 
-                    case "nw":
-                        parsed = CardinalDirection.NorthWest;
-                        break;
+                    "nw" => CardinalDirection.NorthWest,
 
-                    case "s":
-                        parsed = CardinalDirection.South;
-                        break;
+                    "s" => CardinalDirection.South,
 
-                    case "se":
-                        parsed = CardinalDirection.SouthEast;
-                        break;
+                    "se" => CardinalDirection.SouthEast,
 
-                    case "sw":
-                        parsed = CardinalDirection.SouthWest;
-                        break;
+                    "sw" => CardinalDirection.SouthWest,
 
-                    default:
-                        throw new InvalidProgramException($"Unknown direction: {direction}");
-                }
+                    _ => throw new InvalidOperationException($"Unknown direction: {direction}"),
+                };
 
                 result.Add(parsed);
             }

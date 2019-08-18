@@ -13,6 +13,11 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
     public sealed class Day15 : Puzzle2016
     {
         /// <summary>
+        /// The delimiters used when parsing the input. This field is read-only.
+        /// </summary>
+        private static readonly char[] Separators = new[] { ' ', ',', '.' };
+
+        /// <summary>
         /// Gets the value of T where the button can first be pressed to get a capsule.
         /// </summary>
         public int TimeOfFirstButtonPress { get; private set; }
@@ -110,7 +115,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
             /// </returns>
             public static Disc Parse(string value)
             {
-                string[] split = value.Split(new[] { ' ', ',', '.' }, StringSplitOptions.RemoveEmptyEntries);
+                string[] split = value.Split(Separators, StringSplitOptions.RemoveEmptyEntries);
 
                 int offset = ParseInt32(split[1].TrimStart('#'));
                 int positions = ParseInt32(split[3]);

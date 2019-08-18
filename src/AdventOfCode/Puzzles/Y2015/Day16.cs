@@ -18,16 +18,16 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
         /// </summary>
         private static readonly IDictionary<string, Tuple<int, int>> ForensicAnalysis = new Dictionary<string, Tuple<int, int>>()
         {
-            { "children", Tuple.Create(3, 0) },
-            { "cats", Tuple.Create(7, 1) },
-            { "samoyeds", Tuple.Create(2, 0) },
-            { "pomeranians", Tuple.Create(3, -1) },
-            { "akitas", Tuple.Create(0, 0) },
-            { "vizslas", Tuple.Create(0, 0) },
-            { "goldfish", Tuple.Create(5, -1) },
-            { "trees", Tuple.Create(3, 1) },
-            { "cars", Tuple.Create(2, 0) },
-            { "perfumes", Tuple.Create(1, 0) },
+            ["children"] = Tuple.Create(3, 0),
+            ["cats"] = Tuple.Create(7, 1),
+            ["samoyeds"] = Tuple.Create(2, 0),
+            ["pomeranians"] = Tuple.Create(3, -1),
+            ["akitas"] = Tuple.Create(0, 0),
+            ["vizslas"] = Tuple.Create(0, 0),
+            ["goldfish"] = Tuple.Create(5, -1),
+            ["trees"] = Tuple.Create(3, 1),
+            ["cars"] = Tuple.Create(2, 0),
+            ["perfumes"] = Tuple.Create(1, 0),
         };
 
         /// <summary>
