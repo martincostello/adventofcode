@@ -158,12 +158,12 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
             /// <summary>
             /// Gets or sets the name of the person.
             /// </summary>
-            internal string Name { get; set; }
+            internal string Name { get; set; } = string.Empty;
 
             /// <summary>
             /// Gets or sets the name of the adjacent person.
             /// </summary>
-            internal string AdjacentName { get; set; }
+            internal string AdjacentName { get; set; } = string.Empty;
 
             /// <summary>
             /// Gets or sets the potential happiness.

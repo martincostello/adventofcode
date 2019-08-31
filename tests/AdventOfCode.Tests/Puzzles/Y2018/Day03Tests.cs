@@ -40,7 +40,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2018
             string expected)
         {
             // Act
-            string actual = Day03.GetClaimWithNoOverlappingClaims(sequence);
+            string? actual = Day03.GetClaimWithNoOverlappingClaims(sequence);
 
             // Assert
             Assert.Equal(expected, actual);

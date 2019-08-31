@@ -15,7 +15,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
         /// <summary>
         /// Gets the next password.
         /// </summary>
-        internal string NextPassword { get; private set; }
+        internal string? NextPassword { get; private set; }
 
         /// <inheritdoc />
         protected override int MinimumArguments => 1;
@@ -84,7 +84,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
 
                 string pair = new string(new[] { first, second });
 
-                if (!letterPairs.TryGetValue(pair, out IList<int> indexes))
+                if (!letterPairs.TryGetValue(pair, out IList<int>? indexes))
                 {
                     indexes = letterPairs[pair] = new List<int>();
                 }

@@ -46,7 +46,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
         /// <returns>
         /// The player which won the fight.
         /// </returns>
-        internal static Player Fight(Wizard wizard, Player opponent, string difficulty, Action<string, object[]> output)
+        internal static Player Fight(Wizard wizard, Player opponent, string difficulty, Action<string, object[]>? output)
         {
             Player attacker = wizard;
             Player defender = opponent;
@@ -141,7 +141,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
             }
 
             /// <inheritdoc />
-            public override void Attack(Player other, Action<string, object[]> output)
+            public override void Attack(Player other, Action<string, object[]>? output)
             {
                 int damage = Damage - other.Armor;
 
@@ -225,7 +225,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
             /// </summary>
             /// <param name="other">The other player to attack with this player.</param>
             /// <param name="output">A delegate to a method to use to output messages.</param>
-            public override void Attack(Player other, Action<string, object[]> output)
+            public override void Attack(Player other, Action<string, object[]>? output)
             {
                 var availableSpells = SpellInfo.Spells
                     .Where((p) => p.Value.Cost <= Mana)
@@ -256,7 +256,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
             /// </summary>
             /// <param name="other">The other player to cast the spells on.</param>
             /// <param name="output">A delegate to a method to use to output messages.</param>
-            internal void CastSpells(Player other, Action<string, object[]> output)
+            internal void CastSpells(Player other, Action<string, object[]>? output)
             {
                 foreach (Spell spell in _spells.Where((p) => p.TurnsLeft > 0))
                 {
@@ -327,7 +327,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
             /// </summary>
             /// <param name="other">The other player to attack with this player.</param>
             /// <param name="output">A delegate to a method to use to output messages.</param>
-            public abstract void Attack(Player other, Action<string, object[]> output);
+            public abstract void Attack(Player other, Action<string, object[]>? output);
         }
 
         /// <summary>
@@ -425,7 +425,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
             /// <param name="wizard">The wizard casting the spell.</param>
             /// <param name="other">The player to cast the spell on.</param>
             /// <param name="output">A delegate to a method to use to output messages.</param>
-            internal virtual void Cast(Wizard wizard, Player other, Action<string, object[]> output)
+            internal virtual void Cast(Wizard wizard, Player other, Action<string, object[]>? output)
             {
                 if (!HasBeenCast)
                 {
@@ -454,7 +454,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
             /// </summary>
             /// <param name="other">The player to apply the effects of the spell on.</param>
             /// <param name="output">A delegate to a method to use to output messages.</param>
-            protected virtual void Affect(Player other, Action<string, object[]> output)
+            protected virtual void Affect(Player other, Action<string, object[]>? output)
             {
             }
 
@@ -463,7 +463,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
             /// </summary>
             /// <param name="wizard">The wizard to apply the effects of the spell on.</param>
             /// <param name="output">A delegate to a method to use to output messages.</param>
-            protected virtual void Affect(Wizard wizard, Action<string, object[]> output)
+            protected virtual void Affect(Wizard wizard, Action<string, object[]>? output)
             {
             }
 
@@ -472,7 +472,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
             /// </summary>
             /// <param name="other">The player to cast the spell on.</param>
             /// <param name="output">A delegate to a method to use to output messages.</param>
-            protected virtual void Cast(Player other, Action<string, object[]> output)
+            protected virtual void Cast(Player other, Action<string, object[]>? output)
             {
             }
 
@@ -481,7 +481,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
             /// </summary>
             /// <param name="wizard">The wizard to cast the spell on.</param>
             /// <param name="output">A delegate to a method to use to output messages.</param>
-            protected virtual void Cast(Wizard wizard, Action<string, object[]> output)
+            protected virtual void Cast(Wizard wizard, Action<string, object[]>? output)
             {
             }
 
@@ -490,7 +490,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
             /// </summary>
             /// <param name="other">The player to reverse the effects of the spell on.</param>
             /// <param name="output">A delegate to a method to use to output messages.</param>
-            protected virtual void Reverse(Player other, Action<string, object[]> output)
+            protected virtual void Reverse(Player other, Action<string, object[]>? output)
             {
             }
 
@@ -499,7 +499,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
             /// </summary>
             /// <param name="wizard">The wizard to reverse the effects of the spell on.</param>
             /// <param name="output">A delegate to a method to use to output messages.</param>
-            protected virtual void Reverse(Wizard wizard, Action<string, object[]> output)
+            protected virtual void Reverse(Wizard wizard, Action<string, object[]>? output)
             {
             }
         }
@@ -523,11 +523,11 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
             private static int Delta => 2;
 
             /// <inheritdoc />
-            protected override void Cast(Player other, Action<string, object[]> output)
+            protected override void Cast(Player other, Action<string, object[]>? output)
                 => other.HitPoints -= Delta;
 
             /// <inheritdoc />
-            protected override void Cast(Wizard wizard, Action<string, object[]> output)
+            protected override void Cast(Wizard wizard, Action<string, object[]>? output)
             {
                 wizard.HitPoints += Delta;
                 output?.Invoke("{0} casts Drain, dealing {1} damage, and healing {1} hit points.", new object[] { wizard.Name, Delta });
@@ -553,11 +553,11 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
             private static int Damage => 4;
 
             /// <inheritdoc />
-            protected override void Cast(Wizard wizard, Action<string, object[]> output)
+            protected override void Cast(Wizard wizard, Action<string, object[]>? output)
                 => output?.Invoke("{0} casts {1}, dealing {2} damage.", new object[] { wizard.Name, Name, Damage });
 
             /// <inheritdoc />
-            protected override void Cast(Player other, Action<string, object[]> output)
+            protected override void Cast(Player other, Action<string, object[]>? output)
                 => other.HitPoints -= Damage;
         }
 
@@ -580,11 +580,11 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
             private static int Damage => 3;
 
             /// <inheritdoc />
-            protected override void Cast(Wizard wizard, Action<string, object[]> output)
+            protected override void Cast(Wizard wizard, Action<string, object[]>? output)
                 => output?.Invoke("{0} casts {1}.", new object[] { wizard.Name, Name });
 
             /// <inheritdoc />
-            protected override void Affect(Player other, Action<string, object[]> output)
+            protected override void Affect(Player other, Action<string, object[]>? output)
             {
                 other.HitPoints -= Damage;
 
@@ -615,11 +615,11 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
             }
 
             /// <inheritdoc />
-            protected override void Cast(Wizard wizard, Action<string, object[]> output)
+            protected override void Cast(Wizard wizard, Action<string, object[]>? output)
                 => output?.Invoke("{0} casts {1}.", new object[] { wizard.Name, Name });
 
             /// <inheritdoc />
-            protected override void Affect(Wizard wizard, Action<string, object[]> output)
+            protected override void Affect(Wizard wizard, Action<string, object[]>? output)
             {
                 wizard.Mana += 101;
                 output?.Invoke("{0} provides 101 mana; its timer is now {1}.", new object[] { Name, TurnsLeft - 1 });
@@ -650,18 +650,18 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
             private static int ArmorIncrease => 7;
 
             /// <inheritdoc />
-            protected override void Cast(Wizard wizard, Action<string, object[]> output)
+            protected override void Cast(Wizard wizard, Action<string, object[]>? output)
             {
                 wizard.Armor += ArmorIncrease;
                 output?.Invoke("{0} casts {1}, increasing armor by {2}.", new object[] { wizard.Name, Name, ArmorIncrease });
             }
 
             /// <inheritdoc />
-            protected override void Affect(Wizard wizard, Action<string, object[]> output)
+            protected override void Affect(Wizard wizard, Action<string, object[]>? output)
                 => output?.Invoke("{0}'s timer is now {1}.", new object[] { Name, TurnsLeft - 1 });
 
             /// <inheritdoc />
-            protected override void Reverse(Wizard wizard, Action<string, object[]> output)
+            protected override void Reverse(Wizard wizard, Action<string, object[]>? output)
             {
                 wizard.Armor -= ArmorIncrease;
 

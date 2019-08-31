@@ -46,7 +46,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2018
                 .ToDictionary((k) => k, (v) => new int[60]);
 
             var first = parsedAndSortedLog[0];
-            int lastGuard = first.Id.Value;
+            int lastGuard = first.Id!.Value;
             var lastTimestamp = first.Timestamp;
             bool isAwake = true;
 
@@ -87,7 +87,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2018
 
             var sleepinessPerGuard = parsedAndSortedLog
                 .Where((p) => p.Id.HasValue)
-                .Select((p) => p.Id.Value)
+                .Select((p) => p.Id.GetValueOrDefault())
                 .Distinct()
                 .ToDictionary((k) => k, (v) => 0);
 

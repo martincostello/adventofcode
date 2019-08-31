@@ -198,9 +198,9 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
 
                 string firstWord = words.ElementAtOrDefault(0);
 
-                string action = null;
-                string origin = null;
-                string termination = null;
+                string? action = null;
+                string? origin = null;
+                string? termination = null;
 
                 // Determine the action to perform for this instruction (OFF, ON or TOGGLE)
                 if (string.Equals(firstWord, "turn", StringComparison.OrdinalIgnoreCase))
@@ -280,8 +280,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
                 string firstWord = words.ElementAtOrDefault(0);
 
                 int? delta = null;
-                string origin = null;
-                string termination = null;
+                string? origin = null;
+                string? termination = null;
 
                 // Determine the action to perform for this instruction (OFF, ON or TOGGLE)
                 if (string.Equals(firstWord, "turn", StringComparison.OrdinalIgnoreCase))

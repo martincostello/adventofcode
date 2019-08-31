@@ -126,7 +126,9 @@ namespace MartinCostello.AdventOfCode
             TypeInfo thisType = GetType().GetTypeInfo();
             string name = FormattableString.Invariant($"MartinCostello.{thisType.Assembly.GetName().Name}.Input.Y{Year}.{thisType.Name}.input.txt");
 
-            return thisType.Assembly.GetManifestResourceStream(name);
+            // HACK Work around https://github.com/DotNetAnalyzers/StyleCopAnalyzers/issues/2968
+            var stream = thisType.Assembly.GetManifestResourceStream(name);
+            return stream!;
         }
 
         /// <summary>
@@ -142,7 +144,7 @@ namespace MartinCostello.AdventOfCode
             using Stream stream = ReadResource();
             using var reader = new StreamReader(stream);
 
-            string value = null;
+            string? value = null;
 
             while ((value = reader.ReadLine()) != null)
             {

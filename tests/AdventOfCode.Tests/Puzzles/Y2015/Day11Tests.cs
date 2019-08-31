@@ -39,7 +39,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
         public static void Y2015_Day11_HasMoreThanOneDistinctPairOfLetters(string value, bool expected)
         {
             // Act
-            bool actual = Day11.HasMoreThanOneDistinctPairOfLetters(value?.ToCharArray());
+            bool actual = Day11.HasMoreThanOneDistinctPairOfLetters(value.ToCharArray());
 
             // Assert
             Assert.Equal(expected, actual);
@@ -58,7 +58,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
             Assert.Equal("cqjxxyzz", puzzle.NextPassword);
 
             // Arrange
-            args = new[] { puzzle.NextPassword };
+            args = new[] { puzzle.NextPassword! };
 
             // Act
             puzzle = SolvePuzzle<Day11>(args);

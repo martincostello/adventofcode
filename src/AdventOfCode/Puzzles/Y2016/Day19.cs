@@ -61,11 +61,11 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         private static int FindElfThatGetsAllPresentsV1(int count)
         {
             var circle = new LinkedList<int>(Enumerable.Range(1, count));
-            var current = circle.First;
+            var current = circle.First!;
 
             LinkedListNode<int> NextCircular(LinkedListNode<int> node)
             {
-                return node.Next ?? circle.First;
+                return node.Next ?? circle.First!;
             }
 
             while (circle.Count > 1)
@@ -74,7 +74,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
                 current = NextCircular(current);
             }
 
-            return circle.First.Value;
+            return circle.First!.Value;
         }
 
         /// <summary>
@@ -87,12 +87,12 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         private static int FindElfThatGetsAllPresentsV2(int count)
         {
             var circle = new LinkedList<int>(Enumerable.Range(1, count));
-            var current = circle.First;
+            var current = circle.First!;
             var opposite = current;
 
             LinkedListNode<int> NextCircular(LinkedListNode<int> node)
             {
-                return node.Next ?? circle.First;
+                return node.Next ?? circle.First!;
             }
 
             int steps = circle.Count / 2;
@@ -118,7 +118,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
                 current = NextCircular(current);
             }
 
-            return circle.First.Value;
+            return circle.First!.Value;
         }
     }
 }

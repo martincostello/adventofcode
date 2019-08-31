@@ -15,7 +15,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
         /// <summary>
         /// Gets the name of the bottom program.
         /// </summary>
-        public string BottomProgramName { get; private set; }
+        public string? BottomProgramName { get; private set; }
 
         /// <summary>
         /// Gets the weight that the disc that unbalances the structure should be to balance it.
@@ -138,7 +138,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
             }
 
             var childWeights = root.Children.GroupBy((p) => p.TotalWeight);
-            ProgramDisc unbalanced = childWeights.FirstOrDefault((p) => p.Count() == 1)?.FirstOrDefault();
+            ProgramDisc? unbalanced = childWeights.FirstOrDefault((p) => p.Count() == 1)?.FirstOrDefault();
 
             if (unbalanced == null)
             {
@@ -194,7 +194,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
             /// <summary>
             /// Gets or sets the parent of the program.
             /// </summary>
-            public ProgramDisc Parent { get; set; }
+            public ProgramDisc? Parent { get; set; }
 
             /// <summary>
             /// Gets the child programs of the program.

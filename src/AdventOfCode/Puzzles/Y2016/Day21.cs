@@ -16,7 +16,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         /// <summary>
         /// Gets the result of scrambling the puzzle input.
         /// </summary>
-        public string ScrambledResult { get; private set; }
+        public string? ScrambledResult { get; private set; }
 
         /// <inheritdoc />
         protected override int MinimumArguments => 1;

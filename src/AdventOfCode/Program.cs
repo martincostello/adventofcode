@@ -48,7 +48,7 @@ namespace MartinCostello.AdventOfCode
                 year = DateTime.UtcNow.Year;
             }
 
-            Type type;
+            Type? type;
 
             if (!int.TryParse(args[0], NumberStyles.Integer & ~NumberStyles.AllowLeadingSign, CultureInfo.InvariantCulture, out int day) ||
                 day < 1 ||
@@ -87,7 +87,7 @@ namespace MartinCostello.AdventOfCode
         {
             var puzzle = Activator.CreateInstance(type) as Puzzle;
 
-            puzzle.Logger = logger;
+            puzzle!.Logger = logger;
             puzzle.Verbose = verbose;
 
             logger.WriteLine();
@@ -127,7 +127,7 @@ namespace MartinCostello.AdventOfCode
         /// <returns>
         /// The <see cref="Type"/> for the specified year and puzzle number, if found; otherwise <see langword="null"/>.
         /// </returns>
-        private static Type GetPuzzleType(int year, int day)
+        private static Type? GetPuzzleType(int year, int day)
         {
             string typeName = string.Format(
                 CultureInfo.InvariantCulture,

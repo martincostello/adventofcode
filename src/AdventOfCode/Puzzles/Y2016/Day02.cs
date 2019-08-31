@@ -41,12 +41,12 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         /// <summary>
         /// Gets the code for the bathroom using an alphanumeric keypad.
         /// </summary>
-        public string BathroomCodeAlphanumericKeypad { get; private set; }
+        public string? BathroomCodeAlphanumericKeypad { get; private set; }
 
         /// <summary>
         /// Gets the code for the bathroom using a keypad with only digits.
         /// </summary>
-        public string BathroomCodeDigitKeypad { get; private set; }
+        public string? BathroomCodeDigitKeypad { get; private set; }
 
         /// <summary>
         /// Gets the keypad grid containing digits and letters.

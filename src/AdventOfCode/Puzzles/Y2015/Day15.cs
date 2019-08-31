@@ -232,7 +232,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
             /// <summary>
             /// Gets or sets the name of the ingredient.
             /// </summary>
-            internal string Name { get; set; }
+            internal string Name { get; set; } = string.Empty;
 
             /// <summary>
             /// Gets or sets the capacity.

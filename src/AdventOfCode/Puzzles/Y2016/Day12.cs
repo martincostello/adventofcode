@@ -42,7 +42,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
             IList<string> instructions,
             int initialValueOfA = 0,
             int initialValueOfC = 0,
-            Func<int, bool> signal = null)
+            Func<int, bool>? signal = null)
         {
             instructions = new List<string>(instructions); // Copy before possible modification
 

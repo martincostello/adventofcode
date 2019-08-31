@@ -31,7 +31,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
         /// <returns>
         /// A <see cref="Tuple{T1, T2}"/> that returns whether the human player won and the amount of gold spent.
         /// </returns>
-        internal static Tuple<bool, int> Fight(string weapon, string armor, ICollection<string> rings)
+        internal static Tuple<bool, int> Fight(string weapon, string? armor, ICollection<string>? rings)
         {
             var shop = new Shop();
             var human = new Human();
@@ -84,7 +84,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
         protected override int SolveCore(string[] args)
         {
             string[] potentialWeapons = Shop.PotentialWeapons.Keys.ToArray();
-            string[] potentialArmor = Shop.PotentialArmor.Keys.Concat(new string[] { null }).ToArray();
+            string?[] potentialArmor = Shop.PotentialArmor.Keys.Concat(new string?[] { null }).ToArray();
 
             var potentialRings = new List<ICollection<string>>()
             {
@@ -108,7 +108,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
 
             foreach (string weapon in potentialWeapons)
             {
-                foreach (string armor in potentialArmor)
+                foreach (string? armor in potentialArmor)
                 {
                     foreach (var rings in potentialRings)
                     {

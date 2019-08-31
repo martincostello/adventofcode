@@ -15,7 +15,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         /// <summary>
         /// Gets the value of the checksum for the disk.
         /// </summary>
-        public string Checksum { get; private set; }
+        public string? Checksum { get; private set; }
 
         /// <inheritdoc />
         protected override int MinimumArguments => 2;
@@ -61,7 +61,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         /// </returns>
         private static string ComputeChecksum(IList<char> data)
         {
-            string result = null;
+            string? result = null;
 
             while (result == null)
             {

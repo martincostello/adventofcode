@@ -106,7 +106,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
             /// <summary>
             /// Gets the metadata about this Aunt Sue.
             /// </summary>
-            internal IDictionary<string, int> Metadata { get; private set; }
+            internal IDictionary<string, int> Metadata { get; private set; } = new Dictionary<string, int>();
 
             /// <summary>
             /// Parses an instance of <see cref="AuntSue"/> from the specified <see cref="string"/>.
@@ -117,10 +117,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
             /// </returns>
             internal static AuntSue Parse(string value)
             {
-                var result = new AuntSue()
-                {
-                    Metadata = new Dictionary<string, int>(),
-                };
+                var result = new AuntSue();
 
                 string[] split = value.Split(' ');
 
