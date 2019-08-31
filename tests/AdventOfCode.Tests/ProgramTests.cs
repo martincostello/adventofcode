@@ -55,11 +55,8 @@ namespace MartinCostello.AdventOfCode
         [Fact]
         public void Program_Exits_If_Null_Arguments()
         {
-            // Arrange
-            string[] args = null;
-
             // Act
-            int actual = Program.Run(args, Logger);
+            int actual = Program.Run(null!, Logger);
 
             // Assert
             Assert.Equal(-1, actual);

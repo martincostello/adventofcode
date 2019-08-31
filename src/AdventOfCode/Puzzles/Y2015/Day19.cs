@@ -35,7 +35,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
 
             foreach (string replacement in replacements)
             {
-                string[] split = replacement.Split(new[] { " => " }, StringSplitOptions.None);
+                string[] split = replacement.Split(" => ", StringSplitOptions.None);
 
                 string source = split[0];
                 string target = split[1];

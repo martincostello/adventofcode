@@ -89,15 +89,14 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
                             return;
                         }
 
-                        using (HashAlgorithm algorithm = MD5.Create())
+                        using HashAlgorithm algorithm = MD5.Create();
+
+                        for (int i = range.Item1; !state.ShouldExitCurrentIteration && i < range.Item2; i++)
                         {
-                            for (int i = range.Item1; !state.ShouldExitCurrentIteration && i < range.Item2; i++)
+                            if (IsSolution(i, secretKey, zeroes, algorithm))
                             {
-                                if (IsSolution(i, secretKey, zeroes, algorithm))
-                                {
-                                    solutions.Add(i);
-                                    break;
-                                }
+                                solutions.Add(i);
+                                break;
                             }
                         }
                     }
@@ -112,9 +111,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
                 throw new ArgumentException("No answer was found for the specified secret key.", nameof(secretKey));
             }
 
-            return solutions
-                .ToArray()
-                .Min();
+            return solutions.Min();
         }
 
         /// <inheritdoc />

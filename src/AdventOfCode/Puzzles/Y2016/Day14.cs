@@ -124,7 +124,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         {
             string key = string.Concat(value, useKeyStretching ? "|s" : "|u");
 
-            if (!cache.TryGetValue(key, out string result))
+            if (!cache.TryGetValue(key, out string? result))
             {
                 result = value;
 

@@ -97,7 +97,7 @@ namespace MartinCostello.AdventOfCode.Benchmarks
             public override string ToString()
             {
                 var type = Puzzle.GetType();
-                string[] split = type.FullName.Split('.');
+                string[] split = type.FullName!.Split('.');
 
                 string year = split[3];
                 string day = split[4].Replace("Day", string.Empty, StringComparison.Ordinal);

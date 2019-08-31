@@ -20,7 +20,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2018
         /// <summary>
         /// Gets the common letters between the two similar box Ids.
         /// </summary>
-        public string CommonLettersForBoxes { get; private set; }
+        public string? CommonLettersForBoxes { get; private set; }
 
         /// <summary>
         /// Calculates the checksum for the specified box Ids.

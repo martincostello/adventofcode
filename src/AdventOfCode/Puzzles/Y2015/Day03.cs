@@ -161,27 +161,18 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
             /// <exception cref="ArgumentOutOfRangeException"><paramref name="direction"/> is invalid.</exception>
             internal void Move(CardinalDirection direction)
             {
-                switch (direction)
+                Location += direction switch
                 {
-                    case CardinalDirection.East:
-                        Location += new Size(1, 0);
-                        break;
+                    CardinalDirection.East => new Size(1, 0),
 
-                    case CardinalDirection.North:
-                        Location += new Size(0, 1);
-                        break;
+                    CardinalDirection.North => new Size(0, 1),
 
-                    case CardinalDirection.South:
-                        Location += new Size(0, -1);
-                        break;
+                    CardinalDirection.South => new Size(0, -1),
 
-                    case CardinalDirection.West:
-                        Location += new Size(-1, 0);
-                        break;
+                    CardinalDirection.West => new Size(-1, 0),
 
-                    default:
-                        throw new ArgumentOutOfRangeException(nameof(direction), direction, "The specified direction is invalid.");
-                }
+                    _ => throw new ArgumentOutOfRangeException(nameof(direction), direction, "The specified direction is invalid."),
+                };
             }
         }
     }

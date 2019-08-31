@@ -19,7 +19,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2018
         /// <summary>
         /// Gets the Id of the claim with a unique area.
         /// </summary>
-        public string IdOfUniqueClaim { get; private set; }
+        public string? IdOfUniqueClaim { get; private set; }
 
         /// <summary>
         /// Calculates the number of square inches of fabric with two or more overlapping claims.
@@ -55,11 +55,11 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2018
         /// <returns>
         /// The Id of the claim specified by <paramref name="claims"/> that is not overlapped by any others.
         /// </returns>
-        public static string GetClaimWithNoOverlappingClaims(IEnumerable<string> claims)
+        public static string? GetClaimWithNoOverlappingClaims(IEnumerable<string> claims)
         {
             (Square[,] fabric, IList<Claim> fabricClaims) = ParseFabric(claims);
 
-            string result = null;
+            string? result = null;
 
             foreach (var claim in fabricClaims)
             {
@@ -152,7 +152,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2018
             /// <summary>
             /// Gets the Id of the claim.
             /// </summary>
-            internal string Id { get; private set; }
+            internal string Id { get; private set; } = string.Empty;
 
             /// <summary>
             /// Gets the number of inches between the left edge of the fabric and the left edge of the rectangle.

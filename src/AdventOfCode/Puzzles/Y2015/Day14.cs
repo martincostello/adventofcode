@@ -119,7 +119,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
             /// <summary>
             /// Gets or sets the name of the reindeer.
             /// </summary>
-            internal string Name { get; set; }
+            internal string Name { get; set; } = string.Empty;
 
             /// <summary>
             /// Gets or sets the maximum speed of the reindeer.

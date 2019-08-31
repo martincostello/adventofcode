@@ -26,7 +26,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
         /// <summary>
         /// Gets the hexadecimal representation of the dense hash of the input.
         /// </summary>
-        public string DenseHash { get; private set; }
+        public string? DenseHash { get; private set; }
 
         /// <summary>
         /// Computes the hash of the specified sequence of ASCII-encoded bytes.

@@ -18,12 +18,12 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         /// <summary>
         /// Gets the password for the door.
         /// </summary>
-        public string Password { get; private set; }
+        public string? Password { get; private set; }
 
         /// <summary>
         /// Gets the password for the door when the hash indicates the position of password characters.
         /// </summary>
-        public string PasswordWhenPositionIsIndicated { get; private set; }
+        public string? PasswordWhenPositionIsIndicated { get; private set; }
 
         /// <inheritdoc />
         protected override int MinimumArguments => 1;

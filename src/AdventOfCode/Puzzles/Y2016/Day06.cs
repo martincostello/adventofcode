@@ -15,12 +15,12 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         /// <summary>
         /// Gets the error corrected message.
         /// </summary>
-        public string ErrorCorrectedMessage { get; private set; }
+        public string? ErrorCorrectedMessage { get; private set; }
 
         /// <summary>
         /// Gets the error corrected message when a modified repetition code is used.
         /// </summary>
-        public string ModifiedErrorCorrectedMessage { get; private set; }
+        public string? ModifiedErrorCorrectedMessage { get; private set; }
 
         /// <summary>
         /// Decrypts the specified message using a repetition code.

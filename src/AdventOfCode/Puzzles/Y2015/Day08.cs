@@ -80,7 +80,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
 
             // Remove quotes if present as first/last characters
             bool removeFirstQuote = value.Length > 0 && value[0] == '\"';
-            bool removeLastQuote = value.Length > 1 && value[value.Length - 1] == '\"';
+            bool removeLastQuote = value.Length > 1 && value[^1] == '\"';
 
             if (removeFirstQuote)
             {
@@ -89,7 +89,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
 
             if (removeLastQuote)
             {
-                value = value.Substring(0, value.Length - 1);
+                value = value[0..^1];
             }
 
             if (value.Length > 0)

@@ -3,7 +3,7 @@
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2015
 {
-    using Newtonsoft.Json.Linq;
+    using System.Text.Json;
     using Xunit;
     using Xunit.Abstractions;
 
@@ -37,10 +37,10 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
         public static void Y2015_Day12_SumIntegerValues(string json, string keyToIgnore, long expected)
         {
             // Arrange
-            var token = JToken.Parse(json);
+            using var document = JsonDocument.Parse(json);
 
             // Act
-            long actual = Day12.SumIntegerValues(token, keyToIgnore);
+            long actual = Day12.SumIntegerValues(document.RootElement, keyToIgnore);
 
             // Assert
             Assert.Equal(expected, actual);

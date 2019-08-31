@@ -50,6 +50,6 @@ if [ $skipTests == 0 ]; then
     if [ "$TF_BUILD" != "" ]; then
         dotnet test ./tests/AdventOfCode.Tests/AdventOfCode.Tests.csproj --output $artifacts --configuration $configuration --no-build --logger trx || exit 1
     else
-        dotnet test ./tests/AdventOfCode.Tests/AdventOfCode.Tests.csproj --output $artifacts --configuration $configuration --no-build || exit 1
+        dotnet test ./tests/AdventOfCode.Tests/AdventOfCode.Tests.csproj --output $artifacts --configuration $configuration --no-build '--logger:Console;noprogress=true' || exit 1
     fi
 fi

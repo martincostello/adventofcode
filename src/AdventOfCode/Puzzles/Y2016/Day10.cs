@@ -58,7 +58,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
             {
                 if (binsOfInterest.Contains(bin.Key))
                 {
-                    productOfBinsOfInterest *= bin.Value.Microchip.Value;
+                    productOfBinsOfInterest *= bin.Value.Microchip!.Value;
                 }
             }
 
@@ -143,12 +143,12 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
             /// <summary>
             /// Gets or sets the destination the high value microchip is passed to.
             /// </summary>
-            internal ChipDestination HighDestination { get; set; }
+            internal ChipDestination? HighDestination { get; set; }
 
             /// <summary>
             /// Gets or sets the destination the low value microchip is passed to.
             /// </summary>
-            internal ChipDestination LowDestination { get; set; }
+            internal ChipDestination? LowDestination { get; set; }
 
             /// <summary>
             /// Accepts a microchip.
@@ -167,8 +167,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
 
                     _onCompare(Number, low.Value, high.Value);
 
-                    LowDestination.Accept(low);
-                    HighDestination.Accept(high);
+                    LowDestination!.Accept(low);
+                    HighDestination!.Accept(high);
 
                     Microchip = null;
                 }
@@ -203,7 +203,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
             /// <summary>
             /// Gets or sets the microchip currently held by the holder, if any.
             /// </summary>
-            public Chip Microchip { get; set; }
+            public Chip? Microchip { get; set; }
 
             /// <summary>
             /// Accepts a microchip.
@@ -239,7 +239,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
             /// <summary>
             /// Gets or sets a delegate to a method to invoke when to microchips are compared by a bot.
             /// </summary>
-            private Action<int, int, int> OnCompare { get; set; }
+            private Action<int, int, int>? OnCompare { get; set; }
 
             /// <summary>
             /// Processes the specified instructions.
@@ -304,9 +304,9 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
             /// </returns>
             private Bot GetBot(int number)
             {
-                if (!Bots.TryGetValue(number, out Bot bot))
+                if (!Bots.TryGetValue(number, out Bot? bot))
                 {
-                    Bots[number] = bot = new Bot(number, OnCompare);
+                    Bots[number] = bot = new Bot(number, OnCompare!);
                 }
 
                 return bot;
@@ -321,7 +321,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
             /// </returns>
             private Bin GetBin(int number)
             {
-                if (!Bins.TryGetValue(number, out Bin bin))
+                if (!Bins.TryGetValue(number, out Bin? bin))
                 {
                     Bins[number] = bin = new Bin(number);
                 }

@@ -98,7 +98,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
 
                 string pair = new string(new[] { first, second });
 
-                if (!letterPairs.TryGetValue(pair, out IList<int> indexes))
+                if (!letterPairs.TryGetValue(pair, out IList<int>? indexes))
                 {
                     indexes = letterPairs[pair] = new List<int>();
                 }
