@@ -25,10 +25,23 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
         [InlineData("14", 2)]
         [InlineData("1969", 654)]
         [InlineData("100756", 33583)]
-        public static void Y2019_Day01_GetFuelRequirementsForModule(string mass, double expected)
+        public static void Y2019_Day01_GetFuelRequirementsForMass(string mass, int expected)
         {
             // Act
-            double actual = Day01.GetFuelRequirementsForModule(mass);
+            int actual = Day01.GetFuelRequirementsForMass(mass);
+
+            // Assert
+            Assert.Equal(expected, actual);
+        }
+
+        [Theory]
+        [InlineData("12", 2)]
+        [InlineData("1969", 966)]
+        [InlineData("100756", 50346)]
+        public static void Y2019_Day01_GetFuelRequirementsForMassWithFuel(string mass, int expected)
+        {
+            // Act
+            int actual = Day01.GetFuelRequirementsForMassWithFuel(mass);
 
             // Assert
             Assert.Equal(expected, actual);
@@ -41,7 +54,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
             var puzzle = SolvePuzzle<Day01>();
 
             // Assert
-            Assert.Equal(3226407, puzzle.TotalFuelRequired);
+            Assert.Equal(3226407, puzzle.TotalFuelRequiredForModules);
+            Assert.Equal(4836738, puzzle.TotalFuelRequiredForRocket);
         }
     }
 }
