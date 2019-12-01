@@ -3,6 +3,7 @@
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2016
 {
+    using Shouldly;
     using Xunit;
     using Xunit.Abstractions;
 
@@ -29,7 +30,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
             int actual = Day18.FindSafeTileCount(firstRowTiles, rows, Logger);
 
             // Assert
-            Assert.Equal(expected, actual);
+            actual.ShouldBe(expected);
         }
 
         [Theory]
@@ -44,7 +45,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
             var puzzle = SolvePuzzle<Day18>(args);
 
             // Assert
-            Assert.Equal(expected, puzzle.SafeTileCount);
+            puzzle.SafeTileCount.ShouldBe(expected);
         }
     }
 }

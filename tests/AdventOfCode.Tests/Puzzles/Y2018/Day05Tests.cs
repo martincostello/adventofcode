@@ -3,6 +3,7 @@
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2018
 {
+    using Shouldly;
     using Xunit;
     using Xunit.Abstractions;
 
@@ -36,7 +37,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2018
             string actual = Day05.Reduce(polymer);
 
             // Assert
-            Assert.Equal(expected, actual);
+            actual.ShouldBe(expected);
         }
 
         [Theory]
@@ -49,7 +50,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2018
             string actual = Day05.ReduceWithOptimization(polymer);
 
             // Assert
-            Assert.Equal(expected, actual);
+            actual.ShouldBe(expected);
         }
 
         [Fact]
@@ -59,8 +60,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2018
             var puzzle = SolvePuzzle<Day05>();
 
             // Assert
-            Assert.Equal(10638, puzzle.RemainingUnits);
-            Assert.Equal(4944, puzzle.RemainingUnitsOptimized);
+            puzzle.RemainingUnits.ShouldBe(10638);
+            puzzle.RemainingUnitsOptimized.ShouldBe(4944);
         }
     }
 }

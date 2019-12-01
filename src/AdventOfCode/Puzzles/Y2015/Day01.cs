@@ -26,10 +26,10 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
         /// </summary>
         /// <param name="value">A <see cref="ReadOnlySpan{T}"/> containing the instructions to follow.</param>
         /// <returns>
-        /// A <see cref="Tuple{T1, T2}"/> that returns the floor Santa is on when the instructions
+        /// A named tuple that returns the floor Santa is on when the instructions
         /// are followed and the number of the instruction that first causes the basement to be entered.
         /// </returns>
-        internal static Tuple<int, int> GetFinalFloorAndFirstInstructionBasementReached(ReadOnlySpan<char> value)
+        internal static (int floor, int instructionThatEntersBasement) GetFinalFloorAndFirstInstructionBasementReached(ReadOnlySpan<char> value)
         {
             int floor = 0;
             int instructionThatEntersBasement = -1;
@@ -62,7 +62,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
                 }
             }
 
-            return Tuple.Create(floor, instructionThatEntersBasement);
+            return (floor, instructionThatEntersBasement);
         }
 
         /// <inheritdoc />
@@ -70,10 +70,10 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
         {
             string value = ReadResourceAsString();
 
-            Tuple<int, int> result = GetFinalFloorAndFirstInstructionBasementReached(value);
+            (int floor, int instructionThatEntersBasement) = GetFinalFloorAndFirstInstructionBasementReached(value);
 
-            FinalFloor = result.Item1;
-            FirstBasementInstruction = result.Item2;
+            FinalFloor = floor;
+            FirstBasementInstruction = instructionThatEntersBasement;
 
             if (Verbose)
             {

@@ -3,6 +3,7 @@
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2017
 {
+    using Shouldly;
     using Xunit;
     using Xunit.Abstractions;
 
@@ -41,7 +42,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
             int actual = Day12.GetProgramsInGroup(programId, pipes);
 
             // Assert
-            Assert.Equal(6, actual);
+            actual.ShouldBe(6);
         }
 
         [Fact]
@@ -63,7 +64,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
             int actual = Day12.GetGroupsInNetwork(pipes);
 
             // Assert
-            Assert.Equal(2, actual);
+            actual.ShouldBe(2);
         }
 
         [Fact]
@@ -73,8 +74,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
             var puzzle = SolvePuzzle<Day12>();
 
             // Assert
-            Assert.Equal(113, puzzle.ProgramsInGroupOfProgram0);
-            Assert.Equal(202, puzzle.NumberOfGroups);
+            puzzle.ProgramsInGroupOfProgram0.ShouldBe(113);
+            puzzle.NumberOfGroups.ShouldBe(202);
         }
     }
 }

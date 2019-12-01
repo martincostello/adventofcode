@@ -4,6 +4,7 @@
 namespace MartinCostello.AdventOfCode.Puzzles.Y2015
 {
     using System.Collections.Generic;
+    using Shouldly;
     using Xunit;
     using Xunit.Abstractions;
 
@@ -42,14 +43,17 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
             IList<string> actual = Day18.GetGridConfigurationAfterSteps(initialState, steps, areCornerLightsBroken);
 
             // Assert
-            Assert.NotNull(actual);
-            Assert.Equal(6, actual.Count);
-            Assert.Equal(".#.#.#", actual[0]);
-            Assert.Equal("...##.", actual[1]);
-            Assert.Equal("#....#", actual[2]);
-            Assert.Equal("..#...", actual[3]);
-            Assert.Equal("#.#..#", actual[4]);
-            Assert.Equal("####..", actual[5]);
+            actual.ShouldNotBeNull();
+            actual.ShouldBe(
+                new[]
+                {
+                    ".#.#.#",
+                    "...##.",
+                    "#....#",
+                    "..#...",
+                    "#.#..#",
+                    "####..",
+                });
 
             // Arrange
             steps = 4;
@@ -58,14 +62,17 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
             actual = Day18.GetGridConfigurationAfterSteps(initialState, steps, areCornerLightsBroken);
 
             // Assert
-            Assert.NotNull(actual);
-            Assert.Equal(6, actual.Count);
-            Assert.Equal("......", actual[0]);
-            Assert.Equal("......", actual[1]);
-            Assert.Equal("..##..", actual[2]);
-            Assert.Equal("..##..", actual[3]);
-            Assert.Equal("......", actual[4]);
-            Assert.Equal("......", actual[5]);
+            actual.ShouldNotBeNull();
+            actual.ShouldBe(
+                new[]
+                {
+                    "......",
+                    "......",
+                    "..##..",
+                    "..##..",
+                    "......",
+                    "......",
+                });
 
             // Arrange
             steps = 5;
@@ -75,29 +82,29 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
             actual = Day18.GetGridConfigurationAfterSteps(initialState, steps, areCornerLightsBroken);
 
             // Assert
-            Assert.NotNull(actual);
-            Assert.Equal(6, actual.Count);
-            Assert.Equal("##.###", actual[0]);
-            Assert.Equal(".##..#", actual[1]);
-            Assert.Equal(".##...", actual[2]);
-            Assert.Equal(".##...", actual[3]);
-            Assert.Equal("#.#...", actual[4]);
-            Assert.Equal("##...#", actual[5]);
+            actual.ShouldNotBeNull();
+            actual.ShouldBe(
+                new[]
+                {
+                    "##.###",
+                    ".##..#",
+                    ".##...",
+                    ".##...",
+                    "#.#...",
+                    "##...#",
+                });
         }
 
         [Theory]
-        [InlineData("false", 814)]
-        [InlineData("true", 924)]
-        public void Y2015_Day18_Solve_Returns_Correct_Solution(string areCornerLightsBroken, int lightsIlluminated)
+        [InlineData(new[] { "100", "false" }, 814)]
+        [InlineData(new[] { "100", "true" }, 924)]
+        public void Y2015_Day18_Solve_Returns_Correct_Solution(string[] args, int expected)
         {
-            // Arrange
-            string[] args = new[] { "100", areCornerLightsBroken };
-
             // Act
             var puzzle = SolvePuzzle<Day18>(args);
 
             // Assert
-            Assert.Equal(lightsIlluminated, puzzle.LightsIlluminated);
+            puzzle.LightsIlluminated.ShouldBe(expected);
         }
     }
 }

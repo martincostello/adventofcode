@@ -3,6 +3,7 @@
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2016
 {
+    using Shouldly;
     using Xunit;
     using Xunit.Abstractions;
 
@@ -34,7 +35,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
             int actual = Day15.FindTimeForCapsuleRelease(input);
 
             // Assert
-            Assert.Equal(5, actual);
+            actual.ShouldBe(5);
         }
 
         [Fact]
@@ -44,8 +45,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
             var puzzle = SolvePuzzle<Day15>();
 
             // Assert
-            Assert.Equal(16824, puzzle.TimeOfFirstButtonPress);
-            Assert.Equal(3543984, puzzle.TimeOfFirstButtonPressWithExtraDisc);
+            puzzle.TimeOfFirstButtonPress.ShouldBe(16824);
+            puzzle.TimeOfFirstButtonPressWithExtraDisc.ShouldBe(3543984);
         }
     }
 }

@@ -3,6 +3,7 @@
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2015
 {
+    using Shouldly;
     using Xunit;
     using Xunit.Abstractions;
 
@@ -35,7 +36,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
             int actual = Day09.GetShortestDistanceBetweenPoints(distances);
 
             // Assert
-            Assert.Equal(605, actual);
+            actual.ShouldBe(605);
         }
 
         [Fact]
@@ -51,26 +52,19 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
             int actual = Day09.GetShortestDistanceBetweenPoints(distances);
 
             // Assert
-            Assert.Equal(464, actual);
+            actual.ShouldBe(464);
         }
 
-        [Fact]
-        public void Y2015_Day09_Solve_Returns_Correct_Solution()
+        [Theory]
+        [InlineData(new string[] { }, 207)]
+        [InlineData(new[] { "true" }, 804)]
+        public void Y2015_Day09_Solve_Returns_Correct_Solution(string[] args, int expected)
         {
             // Act
-            var puzzle = SolvePuzzle<Day09>();
+            var puzzle = SolvePuzzle<Day09>(args);
 
             // Assert
-            Assert.Equal(207, puzzle.Solution);
-
-            // Arrange
-            string[] args = new[] { "true" };
-
-            // Act
-            puzzle = SolvePuzzle<Day09>(args);
-
-            // Assert
-            Assert.Equal(804, puzzle.Solution);
+            puzzle.Solution.ShouldBe(expected);
         }
     }
 }

@@ -3,6 +3,7 @@
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2018
 {
+    using Shouldly;
     using Xunit;
     using Xunit.Abstractions;
 
@@ -30,7 +31,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2018
             int actual = Day03.GetAreaWithTwoOrMoreOverlappingClaims(sequence);
 
             // Assert
-            Assert.Equal(expected, actual);
+            actual.ShouldBe(expected);
         }
 
         [Theory]
@@ -43,7 +44,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2018
             string? actual = Day03.GetClaimWithNoOverlappingClaims(sequence);
 
             // Assert
-            Assert.Equal(expected, actual);
+            actual.ShouldBe(expected);
         }
 
         [Fact]
@@ -53,8 +54,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2018
             var puzzle = SolvePuzzle<Day03>();
 
             // Assert
-            Assert.Equal(100595, puzzle.Area);
-            Assert.Equal("415", puzzle.IdOfUniqueClaim);
+            puzzle.Area.ShouldBe(100595);
+            puzzle.IdOfUniqueClaim.ShouldBe("415");
         }
     }
 }

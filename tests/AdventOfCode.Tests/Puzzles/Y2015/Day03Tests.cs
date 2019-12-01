@@ -3,6 +3,7 @@
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2015
 {
+    using Shouldly;
     using Xunit;
     using Xunit.Abstractions;
 
@@ -30,7 +31,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
             int actual = Day03.GetUniqueHousesVisitedBySanta(instructions, Logger);
 
             // Assert
-            Assert.Equal(expected, actual);
+            actual.ShouldBe(expected);
         }
 
         [Theory]
@@ -43,7 +44,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
             int actual = Day03.GetUniqueHousesVisitedBySantaAndRoboSanta(instructions, Logger);
 
             // Assert
-            Assert.Equal(expected, actual);
+            actual.ShouldBe(expected);
         }
 
         [Fact]
@@ -53,8 +54,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
             var puzzle = SolvePuzzle<Day03>();
 
             // Assert
-            Assert.Equal(2565, puzzle.HousesWithPresentsFromSanta);
-            Assert.Equal(2639, puzzle.HousesWithPresentsFromSantaAndRoboSanta);
+            puzzle.HousesWithPresentsFromSanta.ShouldBe(2565);
+            puzzle.HousesWithPresentsFromSantaAndRoboSanta.ShouldBe(2639);
         }
     }
 }

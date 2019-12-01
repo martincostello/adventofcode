@@ -3,7 +3,7 @@
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2015
 {
-    using System;
+    using Shouldly;
     using Xunit;
     using Xunit.Abstractions;
 
@@ -22,19 +22,16 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
         }
 
         [Theory]
-        [InlineData("2x3x4", 58, 34)]
-        [InlineData("1x1x10", 43, 14)]
-        public static void Y2015_Day02_GetTotalWrappingPaperAreaAndRibbonLength(string dimension, int area, int length)
+        [InlineData(new[] { "2x3x4" }, 58, 34)]
+        [InlineData(new[] { "1x1x10" }, 43, 14)]
+        public static void Y2015_Day02_GetTotalWrappingPaperAreaAndRibbonLength(string[] dimensions, int expectedArea, int expectedLength)
         {
-            // Arrange
-            string[] dimensions = new[] { dimension };
-
             // Act
-            Tuple<int, int> result = Day02.GetTotalWrappingPaperAreaAndRibbonLength(dimensions);
+            (int actualArea, int actualLength) = Day02.GetTotalWrappingPaperAreaAndRibbonLength(dimensions);
 
             // Assert
-            Assert.Equal(area, result.Item1);
-            Assert.Equal(length, result.Item2);
+            actualArea.ShouldBe(expectedArea);
+            actualLength.ShouldBe(expectedLength);
         }
 
         [Fact]
@@ -44,8 +41,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
             var puzzle = SolvePuzzle<Day02>();
 
             // Assert
-            Assert.Equal(1598415, puzzle.TotalAreaOfPaper);
-            Assert.Equal(3812909, puzzle.TotalLengthOfRibbon);
+            puzzle.TotalAreaOfPaper.ShouldBe(1598415);
+            puzzle.TotalLengthOfRibbon.ShouldBe(3812909);
         }
     }
 }

@@ -4,7 +4,7 @@
 namespace MartinCostello.AdventOfCode.Puzzles
 {
     using System;
-    using Xunit;
+    using Shouldly;
     using Xunit.Abstractions;
 
     /// <summary>
@@ -65,7 +65,7 @@ namespace MartinCostello.AdventOfCode.Puzzles
             int result = puzzle.Solve(args);
 
             // Assert
-            Assert.Equal(0, result);
+            result.ShouldBe(0);
 
             return puzzle;
         }

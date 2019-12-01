@@ -3,6 +3,7 @@
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2016
 {
+    using Shouldly;
     using Xunit;
     using Xunit.Abstractions;
 
@@ -40,8 +41,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
             var actual = Day10.GetBotNumber(instructions, 5, 2, binsOfInterest);
 
             // Assert
-            Assert.Equal(2, actual.Item1);
-            Assert.Equal(30, actual.Item2);
+            actual.Item1.ShouldBe(2);
+            actual.Item2.ShouldBe(30);
         }
 
         [Fact]
@@ -51,8 +52,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
             var puzzle = SolvePuzzle<Day10>();
 
             // Assert
-            Assert.Equal(141, puzzle.BotThatCompares61And17Microchips);
-            Assert.Equal(1209, puzzle.ProductOfMicrochipsInBins012);
+            puzzle.BotThatCompares61And17Microchips.ShouldBe(141);
+            puzzle.ProductOfMicrochipsInBins012.ShouldBe(1209);
         }
     }
 }

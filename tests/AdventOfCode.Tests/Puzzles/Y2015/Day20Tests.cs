@@ -3,6 +3,7 @@
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2015
 {
+    using Shouldly;
     using Xunit;
     using Xunit.Abstractions;
 
@@ -42,7 +43,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
             int actual = Day20.GetPresentsDelivered(house, maximumVisits);
 
             // Assert
-            Assert.Equal(expected, actual);
+            actual.ShouldBe(expected);
         }
 
         [Theory]
@@ -64,33 +65,19 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
             int actual = Day20.GetLowestHouseNumber(target, maximumVisits);
 
             // Assert
-            Assert.Equal(expected, actual);
+            actual.ShouldBe(expected);
         }
 
-        [Fact]
-        public void Y2015_Day20_Solve_Returns_Correct_Solution()
+        [Theory]
+        [InlineData(new[] { "34000000" }, 786240)]
+        [InlineData(new[] { "34000000", "50" }, 831600)]
+        public void Y2015_Day20_Solve_Returns_Correct_Solution(string[] args, int expected)
         {
-            // Arrange
-            string[] args = new[] { "34000000" };
-
             // Act
             var puzzle = SolvePuzzle<Day20>(args);
 
             // Assert
-            Assert.Equal(786240, puzzle.LowestHouseNumber);
-        }
-
-        [Fact]
-        public void Y2015_Day20_Solve_Returns_Correct_Solution_Maximum_Visits()
-        {
-            // Arrange
-            string[] args = new[] { "34000000", "50" };
-
-            // Act
-            var puzzle = SolvePuzzle<Day20>(args);
-
-            // Assert
-            Assert.Equal(831600, puzzle.LowestHouseNumber);
+            puzzle.LowestHouseNumber.ShouldBe(expected);
         }
     }
 }

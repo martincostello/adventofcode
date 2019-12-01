@@ -3,6 +3,7 @@
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2016
 {
+    using Shouldly;
     using Xunit;
     using Xunit.Abstractions;
 
@@ -34,7 +35,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
             int actual = Day01.CalculateDistance(instructions, ignoreDuplicates);
 
             // Assert
-            Assert.Equal(expected, actual);
+            actual.ShouldBe(expected);
         }
 
         [Fact]
@@ -44,8 +45,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
             var puzzle = SolvePuzzle<Day01>();
 
             // Assert
-            Assert.Equal(287, puzzle.BlocksToEasterBunnyHQIgnoringDuplicates);
-            Assert.Equal(133, puzzle.BlocksToEasterBunnyHQ);
+            puzzle.BlocksToEasterBunnyHQIgnoringDuplicates.ShouldBe(287);
+            puzzle.BlocksToEasterBunnyHQ.ShouldBe(133);
         }
     }
 }

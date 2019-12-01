@@ -3,6 +3,7 @@
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2015
 {
+    using Shouldly;
     using Xunit;
     using Xunit.Abstractions;
 
@@ -44,7 +45,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
             int actual = Day13.GetMaximumTotalChangeInHappiness(potentialHappiness);
 
             // Assert
-            Assert.Equal(330, actual);
+            actual.ShouldBe(330);
         }
 
         [Fact]
@@ -54,8 +55,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
             var puzzle = SolvePuzzle<Day13>();
 
             // Assert
-            Assert.Equal(618, puzzle.MaximumTotalChangeInHappiness);
-            Assert.Equal(601, puzzle.MaximumTotalChangeInHappinessWithCurrentUser);
+            puzzle.MaximumTotalChangeInHappiness.ShouldBe(618);
+            puzzle.MaximumTotalChangeInHappinessWithCurrentUser.ShouldBe(601);
         }
     }
 }

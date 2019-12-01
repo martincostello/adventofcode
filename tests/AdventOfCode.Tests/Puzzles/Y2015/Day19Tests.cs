@@ -4,7 +4,7 @@
 namespace MartinCostello.AdventOfCode.Puzzles.Y2015
 {
     using System.Collections.Generic;
-    using System.Linq;
+    using Shouldly;
     using Xunit;
     using Xunit.Abstractions;
 
@@ -30,15 +30,11 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
             string[] replacements = new[] { "H => HO", "H => OH", "O => HH" };
 
             // Act
-            ICollection<string> result = Day19.GetPossibleMolecules(molecule, replacements);
+            ICollection<string> actual = Day19.GetPossibleMolecules(molecule, replacements);
 
             // Assert
-            Assert.NotNull(result);
-            Assert.Equal(4, result.Count);
-            Assert.Equal("HHHH", result.ElementAt(0));
-            Assert.Equal("HOHO", result.ElementAt(1));
-            Assert.Equal("HOOH", result.ElementAt(2));
-            Assert.Equal("OHOH", result.ElementAt(3));
+            actual.ShouldNotBeNull();
+            actual.ShouldBe(new[] { "HHHH", "HOHO", "HOOH", "OHOH" });
         }
 
         [Fact]
@@ -52,22 +48,19 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
             int actual = Day19.GetMinimumSteps(molecule, replacements, Logger);
 
             // Assert
-            Assert.Equal(3, actual);
+            actual.ShouldBe(3);
         }
 
         [Theory]
-        [InlineData("calibrate", 576)]
-        [InlineData("fabricate", 207, Skip = "Too slow.")]
-        public void Y2015_Day19_Solve_Returns_Correct_Solution(string mode, int expected)
+        [InlineData(new[] { "calibrate" }, 576)]
+        [InlineData(new[] { "fabricate" }, 207, Skip = "Too slow.")]
+        public void Y2015_Day19_Solve_Returns_Correct_Solution(string[] args, int expected)
         {
-            // Arrange
-            string[] args = new[] { mode };
-
             // Act
             var puzzle = SolvePuzzle<Day19>(args);
 
             // Assert
-            Assert.Equal(expected, puzzle.Solution);
+            puzzle.Solution.ShouldBe(expected);
         }
     }
 }

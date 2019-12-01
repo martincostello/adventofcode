@@ -3,6 +3,7 @@
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2015
 {
+    using Shouldly;
     using Xunit;
     using Xunit.Abstractions;
 
@@ -29,11 +30,6 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
         [InlineData(12, 16, 11, 162, 176)]
         [InlineData(1000, 14, 10, 127, 1120)]
         [InlineData(1000, 16, 11, 162, 1056)]
-        [System.Diagnostics.CodeAnalysis.SuppressMessage(
-            "Microsoft.Naming",
-            "CA1702:CompoundWordsShouldBeCasedCorrectly",
-            MessageId = "AfterTime",
-            Justification = "'After time' is correct.")]
         public static void Y2015_Day14_GetDistanceAfterTimeIndex(int timeIndex, int speed, int activityPeriod, int restPeriod, int expected)
         {
             // Arrange
@@ -48,7 +44,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
             int actual = target.GetDistanceAfterTimeIndex(timeIndex);
 
             // Assert
-            Assert.Equal(expected, actual);
+            actual.ShouldBe(expected);
         }
 
         [Fact]
@@ -67,7 +63,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
             int actual = Day14.GetMaximumDistanceOfFastestReindeer(flightData, timeIndex);
 
             // Assert
-            Assert.Equal(1120, actual);
+            actual.ShouldBe(1120);
         }
 
         [Fact]
@@ -86,7 +82,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
             int actual = Day14.GetMaximumPointsOfFastestReindeer(flightData, timeIndex);
 
             // Assert
-            Assert.Equal(689, actual);
+            actual.ShouldBe(689);
         }
 
         [Fact]
@@ -99,8 +95,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
             var puzzle = SolvePuzzle<Day14>(args);
 
             // Assert
-            Assert.Equal(2655, puzzle.MaximumReindeerDistance);
-            Assert.Equal(1059, puzzle.MaximumReindeerPoints);
+            puzzle.MaximumReindeerDistance.ShouldBe(2655);
+            puzzle.MaximumReindeerPoints.ShouldBe(1059);
         }
     }
 }

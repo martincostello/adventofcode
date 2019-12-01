@@ -3,6 +3,7 @@
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2015
 {
+    using Shouldly;
     using Xunit;
     using Xunit.Abstractions;
 
@@ -35,7 +36,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
             bool actual = Day05.IsNiceV1(value);
 
             // Assert
-            Assert.Equal(expected, actual);
+            actual.ShouldBe(expected);
         }
 
         [Theory]
@@ -49,7 +50,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
             bool actual = Day05.IsNiceV2(value);
 
             // Assert
-            Assert.Equal(expected, actual);
+            actual.ShouldBe(expected);
         }
 
         [Theory]
@@ -66,7 +67,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
             bool actual = Day05.HasPairOfLettersWithMoreThanOneOccurence(value);
 
             // Assert
-            Assert.Equal(expected, actual);
+            actual.ShouldBe(expected);
         }
 
         [Theory]
@@ -81,29 +82,19 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
             bool actual = Day05.HasLetterThatIsTheBreadOfALetterSandwich(value);
 
             // Assert
-            Assert.Equal(expected, actual);
+            actual.ShouldBe(expected);
         }
 
-        [Fact]
-        public void Y2015_Day05_Solve_Returns_Correct_Solution()
+        [Theory]
+        [InlineData(new[] { "1" }, 236)]
+        [InlineData(new[] { "2" }, 51)]
+        public void Y2015_Day05_Solve_Returns_Correct_Solution(string[] args, int expected)
         {
-            // Arrange
-            string[] args = new[] { "1" };
-
             // Act
             var puzzle = SolvePuzzle<Day05>(args);
 
             // Assert
-            Assert.Equal(236, puzzle.NiceStringCount);
-
-            // Arrange
-            args = new[] { "2" };
-
-            // Act
-            puzzle = SolvePuzzle<Day05>(args);
-
-            // Assert
-            Assert.Equal(51, puzzle.NiceStringCount);
+            puzzle.NiceStringCount.ShouldBe(expected);
         }
     }
 }

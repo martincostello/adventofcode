@@ -3,6 +3,7 @@
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2016
 {
+    using Shouldly;
     using Xunit;
     using Xunit.Abstractions;
 
@@ -31,7 +32,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
             bool actual = Day07.DoesIPAddressSupportSsl(address);
 
             // Assert
-            Assert.Equal(expected, actual);
+            actual.ShouldBe(expected);
         }
 
         [Theory]
@@ -45,7 +46,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
             bool actual = Day07.DoesIPAddressSupportTls(address);
 
             // Assert
-            Assert.Equal(expected, actual);
+            actual.ShouldBe(expected);
         }
 
         [Fact]
@@ -55,8 +56,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
             var puzzle = SolvePuzzle<Day07>();
 
             // Assert
-            Assert.Equal(118, puzzle.IPAddressesSupportingTls);
-            Assert.Equal(260, puzzle.IPAddressesSupportingSsl);
+            puzzle.IPAddressesSupportingTls.ShouldBe(118);
+            puzzle.IPAddressesSupportingSsl.ShouldBe(260);
         }
     }
 }

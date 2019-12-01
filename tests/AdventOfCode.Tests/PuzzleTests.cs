@@ -4,6 +4,7 @@
 namespace MartinCostello.AdventOfCode
 {
     using System;
+    using Shouldly;
     using Xunit;
     using Xunit.Abstractions;
 
@@ -41,7 +42,7 @@ namespace MartinCostello.AdventOfCode
             int actual = target.Solve(args);
 
             // Assert
-            Assert.Equal(-1, actual);
+            actual.ShouldBe(-1);
 
             // Arrange
             args = Array.Empty<string>();
@@ -51,7 +52,7 @@ namespace MartinCostello.AdventOfCode
             actual = target.Solve(args);
 
             // Assert
-            Assert.Equal(-1, actual);
+            actual.ShouldBe(-1);
 
             // Arrange
             target = new MyPuzzle(0);
@@ -60,8 +61,8 @@ namespace MartinCostello.AdventOfCode
             actual = target.Solve(args);
 
             // Assert
-            Assert.Equal(0, actual);
-            Assert.Equal(42, target.Answer);
+            actual.ShouldBe(0);
+            target.Answer.ShouldBe(42);
         }
 
         /// <summary>

@@ -3,7 +3,7 @@
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2015
 {
-    using System;
+    using Shouldly;
     using Xunit;
     using Xunit.Abstractions;
 
@@ -33,14 +33,14 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
         [InlineData(")())())", -3, 1)]
         [InlineData(")", -1, 1)]
         [InlineData("()())", -1, 5)]
-        public static void Y2015_Day01_GetFinalFloorAndFirstInstructionBasementReached(string value, int floor, int instruction)
+        public static void Y2015_Day01_GetFinalFloorAndFirstInstructionBasementReached(string value, int expectedFloor, int expectedInstruction)
         {
             // Act
-            Tuple<int, int> result = Day01.GetFinalFloorAndFirstInstructionBasementReached(value);
+            (int actualFloor, int actualInstruction) = Day01.GetFinalFloorAndFirstInstructionBasementReached(value);
 
             // Assert
-            Assert.Equal(floor, result.Item1);
-            Assert.Equal(instruction, result.Item2);
+            actualFloor.ShouldBe(expectedFloor);
+            actualInstruction.ShouldBe(expectedInstruction);
         }
 
         [Fact]
@@ -50,8 +50,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
             var puzzle = SolvePuzzle<Day01>();
 
             // Assert
-            Assert.Equal(232, puzzle.FinalFloor);
-            Assert.Equal(1783, puzzle.FirstBasementInstruction);
+            puzzle.FinalFloor.ShouldBe(232);
+            puzzle.FirstBasementInstruction.ShouldBe(1783);
         }
     }
 }

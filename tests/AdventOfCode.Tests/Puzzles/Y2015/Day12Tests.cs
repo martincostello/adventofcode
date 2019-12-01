@@ -4,6 +4,7 @@
 namespace MartinCostello.AdventOfCode.Puzzles.Y2015
 {
     using System.Text.Json;
+    using Shouldly;
     using Xunit;
     using Xunit.Abstractions;
 
@@ -43,26 +44,19 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
             long actual = Day12.SumIntegerValues(document.RootElement, keyToIgnore);
 
             // Assert
-            Assert.Equal(expected, actual);
+            actual.ShouldBe(expected);
         }
 
-        [Fact]
-        public void Y2015_Day12_Solve_Returns_Correct_Solution()
+        [Theory]
+        [InlineData(new string[] { }, 191164)]
+        [InlineData(new[] { "red" }, 87842)]
+        public void Y2015_Day12_Solve_Returns_Correct_Solution(string[] args, int expected)
         {
             // Act
-            var puzzle = SolvePuzzle<Day12>();
+            var puzzle = SolvePuzzle<Day12>(args);
 
             // Assert
-            Assert.Equal(191164, puzzle.Sum);
-
-            // Arrange
-            string[] args = new[] { "red" };
-
-            // Act
-            puzzle = SolvePuzzle<Day12>(args);
-
-            // Assert
-            Assert.Equal(87842, puzzle.Sum);
+            puzzle.Sum.ShouldBe(expected);
         }
     }
 }

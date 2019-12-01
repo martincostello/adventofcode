@@ -3,6 +3,7 @@
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2017
 {
+    using Shouldly;
     using Xunit;
     using Xunit.Abstractions;
 
@@ -31,7 +32,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
             (int actual, int _) = Day11.FindStepRange(path);
 
             // Assert
-            Assert.Equal(expected, actual);
+            actual.ShouldBe(expected);
         }
 
         [Fact]
@@ -41,8 +42,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
             var puzzle = SolvePuzzle<Day11>();
 
             // Assert
-            Assert.Equal(796, puzzle.MinimumSteps);
-            Assert.Equal(1585, puzzle.MaximumDistance);
+            puzzle.MinimumSteps.ShouldBe(796);
+            puzzle.MaximumDistance.ShouldBe(1585);
         }
     }
 }

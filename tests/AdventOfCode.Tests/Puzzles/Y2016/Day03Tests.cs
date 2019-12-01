@@ -3,6 +3,7 @@
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2016
 {
+    using Shouldly;
     using Xunit;
     using Xunit.Abstractions;
 
@@ -28,7 +29,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
             bool actual = Day03.IsValidTriangle(a, b, c);
 
             // Assert
-            Assert.Equal(expected, actual);
+            actual.ShouldBe(expected);
         }
 
         [Fact]
@@ -38,8 +39,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
             var puzzle = SolvePuzzle<Day03>();
 
             // Assert
-            Assert.Equal(983, puzzle.PossibleTrianglesByRows);
-            Assert.Equal(1836, puzzle.PossibleTrianglesByColumns);
+            puzzle.PossibleTrianglesByRows.ShouldBe(983);
+            puzzle.PossibleTrianglesByColumns.ShouldBe(1836);
         }
     }
 }

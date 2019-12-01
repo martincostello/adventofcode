@@ -3,6 +3,7 @@
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2016
 {
+    using Shouldly;
     using Xunit;
     using Xunit.Abstractions;
 
@@ -29,7 +30,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
             int actual = Day14.GetOneTimePadKeyIndex(salt, ordinal, useKeyStretching);
 
             // Assert
-            Assert.Equal(expected, actual);
+            actual.ShouldBe(expected);
         }
 
         [Fact(Skip = "Too slow.")]
@@ -42,8 +43,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
             var puzzle = SolvePuzzle<Day14>(args);
 
             // Assert
-            Assert.Equal(15035, puzzle.IndexOfKey64);
-            Assert.Equal(19968, puzzle.IndexOfKey64WithStretching);
+            puzzle.IndexOfKey64.ShouldBe(15035);
+            puzzle.IndexOfKey64WithStretching.ShouldBe(19968);
         }
     }
 }

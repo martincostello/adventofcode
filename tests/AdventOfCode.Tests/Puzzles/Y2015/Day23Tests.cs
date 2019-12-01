@@ -5,6 +5,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
 {
     using System;
     using System.Collections.Generic;
+    using Shouldly;
     using Xunit;
     using Xunit.Abstractions;
 
@@ -40,33 +41,21 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
             (uint a, uint b) = Day23.ProcessInstructions(instructions, initialValue, Logger);
 
             // Assert
-            Assert.Equal(2u, a);
-            Assert.Equal(0u, b);
+            a.ShouldBe(2u);
+            b.ShouldBe(0u);
         }
 
-        [Fact]
-        public void Y2015_Day23_Solve_Returns_Correct_Solution_1()
+        [Theory]
+        [InlineData(new string[] { }, 1u, 170u)]
+        [InlineData(new[] { "1" }, 1u, 247u)]
+        public void Y2015_Day23_Solve_Returns_Correct_Solution(string[] args, uint a, uint b)
         {
-            // Act
-            var puzzle = SolvePuzzle<Day23>();
-
-            // Assert
-            Assert.Equal(1u, puzzle.A);
-            Assert.Equal(170u, puzzle.B);
-        }
-
-        [Fact]
-        public void Y2015_Day23_Solve_Returns_Correct_Solution_2()
-        {
-            // Arrange
-            string[] args = new string[] { "1" };
-
             // Act
             var puzzle = SolvePuzzle<Day23>(args);
 
             // Assert
-            Assert.Equal(1u, puzzle.A);
-            Assert.Equal(247u, puzzle.B);
+            puzzle.A.ShouldBe(a);
+            puzzle.B.ShouldBe(b);
         }
     }
 }

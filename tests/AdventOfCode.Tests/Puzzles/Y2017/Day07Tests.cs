@@ -3,6 +3,7 @@
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2017
 {
+    using Shouldly;
     using Xunit;
     using Xunit.Abstractions;
 
@@ -45,7 +46,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
             string actual = Day07.FindBottomProgramName(structure);
 
             // Assert
-            Assert.Equal("tknk", actual);
+            actual.ShouldBe("tknk");
         }
 
         [Fact]
@@ -73,7 +74,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
             int actual = Day07.FindDesiredWeightOfUnbalancedDisc(structure);
 
             // Assert
-            Assert.Equal(60, actual);
+            actual.ShouldBe(60);
         }
 
         [Fact]
@@ -83,8 +84,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
             var puzzle = SolvePuzzle<Day07>();
 
             // Assert
-            Assert.Equal("fbgguv", puzzle.BottomProgramName);
-            Assert.Equal(1864, puzzle.DesiredWeightOfUnbalancedDisc);
+            puzzle.BottomProgramName.ShouldBe("fbgguv");
+            puzzle.DesiredWeightOfUnbalancedDisc.ShouldBe(1864);
         }
     }
 }

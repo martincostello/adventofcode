@@ -4,6 +4,7 @@
 namespace MartinCostello.AdventOfCode.Puzzles.Y2016
 {
     using System.Collections.Generic;
+    using Shouldly;
     using Xunit;
     using Xunit.Abstractions;
 
@@ -23,13 +24,13 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
 
         [Theory]
         [InlineData(new[] { 'a', 'b', 'c', 'd', 'f', 'e', 'g', 'h' }, 2, 5, new[] { 'a', 'b', 'e', 'f', 'd', 'c', 'g', 'h' })]
-        public static void Y2016_Day21_Reverse_Returns_Correct_Solution(char[] values, int start, int end, char[] expected)
+        public static void Y2016_Day21_Reverse_Returns_Correct_Solution(char[] values, int start, int end, IEnumerable<char> expected)
         {
             // Act
             Day21.Reverse(values, start, end);
 
             // Assert
-            Assert.Equal(expected as IEnumerable<char>, values as IEnumerable<char>);
+            values.ShouldBe(expected);
         }
 
         [Theory]
@@ -41,13 +42,13 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         [InlineData(new[] { 'a', 'b', 'c' }, true, 2, new[] { 'b', 'c', 'a' })]
         [InlineData(new[] { 'a', 'b', 'c' }, false, 3, new[] { 'a', 'b', 'c' })]
         [InlineData(new[] { 'a', 'b', 'c' }, true, 3, new[] { 'a', 'b', 'c' })]
-        public static void Y2016_Day21_RotateDirection_Returns_Correct_Solution(char[] values, bool right, int steps, char[] expected)
+        public static void Y2016_Day21_RotateDirection_Returns_Correct_Solution(char[] values, bool right, int steps, IEnumerable<char> expected)
         {
             // Act
             Day21.RotateDirection(values, right, steps, reverse: false);
 
             // Assert
-            Assert.Equal(expected as IEnumerable<char>, values as IEnumerable<char>);
+            values.ShouldBe(expected);
         }
 
         [Theory]
@@ -72,29 +73,19 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
             string actual = Day21.Scramble(text, instructions, reverse);
 
             // Assert
-            Assert.Equal(expected, actual);
+            actual.ShouldBe(expected);
         }
 
-        [Fact]
-        public void Y2016_Day21_Solve_Returns_Correct_Solution()
+        [Theory]
+        [InlineData(new[] { "abcdefgh" }, "gcedfahb")]
+        [InlineData(new[] { "fbgdceah", "true" }, "hegbdcfa")]
+        public void Y2016_Day21_Solve_Returns_Correct_Solution(string[] args, string expected)
         {
-            // Arrange
-            string[] args = { "abcdefgh" };
-
             // Act
             var puzzle = SolvePuzzle<Day21>(args);
 
             // Assert
-            Assert.Equal("gcedfahb", puzzle.ScrambledResult);
-
-            // Arrange
-            args = new[] { "fbgdceah", bool.TrueString };
-
-            // Act
-            puzzle = SolvePuzzle<Day21>(args);
-
-            // Assert
-            Assert.Equal("hegbdcfa", puzzle.ScrambledResult);
+            puzzle.ScrambledResult.ShouldBe(expected);
         }
     }
 }

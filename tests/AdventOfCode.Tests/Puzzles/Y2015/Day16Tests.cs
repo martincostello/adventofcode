@@ -3,6 +3,7 @@
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2015
 {
+    using Shouldly;
     using Xunit;
     using Xunit.Abstractions;
 
@@ -27,8 +28,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
             var puzzle = SolvePuzzle<Day16>();
 
             // Assert
-            Assert.Equal(373, puzzle.AuntSueNumber);
-            Assert.Equal(260, puzzle.RealAuntSueNumber);
+            puzzle.AuntSueNumber.ShouldBe(373);
+            puzzle.RealAuntSueNumber.ShouldBe(260);
         }
     }
 }

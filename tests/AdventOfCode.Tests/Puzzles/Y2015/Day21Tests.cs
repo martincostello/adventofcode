@@ -3,7 +3,7 @@
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2015
 {
-    using System;
+    using Shouldly;
     using Xunit;
     using Xunit.Abstractions;
 
@@ -30,21 +30,18 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
             var winner = Day21.Fight(player1, player2);
 
             // Assert
-            Assert.Same(player1, winner);
+            winner.ShouldBeSameAs(player1);
         }
 
         [Fact]
         public void Y2015_Day21_Solve_Returns_Correct_Solution()
         {
-            // Arrange
-            string[] args = Array.Empty<string>();
-
             // Act
-            var puzzle = SolvePuzzle<Day21>(args);
+            var puzzle = SolvePuzzle<Day21>();
 
             // Assert
-            Assert.Equal(148, puzzle.MaximumCostToLose);
-            Assert.Equal(78, puzzle.MinimumCostToWin);
+            puzzle.MaximumCostToLose.ShouldBe(148);
+            puzzle.MinimumCostToWin.ShouldBe(78);
         }
     }
 }

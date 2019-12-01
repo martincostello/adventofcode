@@ -28,10 +28,10 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
         /// </summary>
         /// <param name="dimensions">The dimensions of the presents to wrap.</param>
         /// <returns>
-        /// A <see cref="Tuple{T1, T2}"/> that returns the total area of wrapping paper
+        /// A named tuple that returns the total area of wrapping paper
         /// required in square feet and the total length of ribbon required in feet.
         /// </returns>
-        internal static Tuple<int, int> GetTotalWrappingPaperAreaAndRibbonLength(IEnumerable<string> dimensions)
+        internal static (int area, int length) GetTotalWrappingPaperAreaAndRibbonLength(IEnumerable<string> dimensions)
         {
             // Parse the dimensions of the presents
             var presents = dimensions
@@ -42,16 +42,16 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
             int totalArea = presents.Sum(GetWrappingPaperArea);
             int length = presents.Sum(GetRibbonLength);
 
-            return Tuple.Create(totalArea, length);
+            return (totalArea, length);
         }
 
         /// <inheritdoc />
         protected override int SolveCore(string[] args)
         {
-            Tuple<int, int> result = GetTotalWrappingPaperAreaAndRibbonLength(ReadResourceAsLines());
+            (int area, int length) = GetTotalWrappingPaperAreaAndRibbonLength(ReadResourceAsLines());
 
-            TotalAreaOfPaper = result.Item1;
-            TotalLengthOfRibbon = result.Item2;
+            TotalAreaOfPaper = area;
+            TotalLengthOfRibbon = length;
 
             if (Verbose)
             {

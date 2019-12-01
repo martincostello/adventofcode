@@ -3,6 +3,7 @@
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2015
 {
+    using Shouldly;
     using Xunit;
     using Xunit.Abstractions;
 
@@ -32,22 +33,19 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
             string actual = Day10.AsLookAndSay(value);
 
             // Assert
-            Assert.Equal(expected, actual);
+            actual.ShouldBe(expected);
         }
 
         [Theory]
-        [InlineData("40", 492982)]
-        [InlineData("50", 6989950)]
-        public void Y2015_Day10_Solve_Returns_Correct_Solution(string length, int expected)
+        [InlineData(new[] { "1321131112", "40" }, 492982)]
+        [InlineData(new[] { "1321131112", "50" }, 6989950)]
+        public void Y2015_Day10_Solve_Returns_Correct_Solution(string[] args, int expected)
         {
-            // Arrange
-            string[] args = new[] { "1321131112", length };
-
             // Act
             var puzzle = SolvePuzzle<Day10>(args);
 
             // Assert
-            Assert.Equal(expected, puzzle.Solution);
+            puzzle.Solution.ShouldBe(expected);
         }
     }
 }

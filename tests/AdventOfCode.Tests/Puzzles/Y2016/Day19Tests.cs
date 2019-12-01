@@ -3,6 +3,7 @@
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2016
 {
+    using Shouldly;
     using Xunit;
     using Xunit.Abstractions;
 
@@ -29,7 +30,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
             int actual = Day19.FindElfThatGetsAllPresents(count, version);
 
             // Assert
-            Assert.Equal(expected, actual);
+            actual.ShouldBe(expected);
         }
 
         [Theory]
@@ -46,7 +47,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
             var puzzle = SolvePuzzle<Day19>(args);
 
             // Assert
-            Assert.Equal(expected, puzzle.ElfWithAllPresents);
+            puzzle.ElfWithAllPresents.ShouldBe(expected);
         }
     }
 }

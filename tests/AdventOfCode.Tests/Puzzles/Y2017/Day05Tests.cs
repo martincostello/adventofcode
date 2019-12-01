@@ -3,6 +3,7 @@
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2017
 {
+    using Shouldly;
     using Xunit;
     using Xunit.Abstractions;
 
@@ -32,7 +33,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
             int actual = Day05.Execute(program, version);
 
             // Assert
-            Assert.Equal(expected, actual);
+            actual.ShouldBe(expected);
         }
 
         [Fact]
@@ -42,8 +43,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
             var puzzle = SolvePuzzle<Day05>();
 
             // Assert
-            Assert.Equal(373543, puzzle.StepsToExitV1);
-            Assert.Equal(27502966, puzzle.StepsToExitV2);
+            puzzle.StepsToExitV1.ShouldBe(373543);
+            puzzle.StepsToExitV2.ShouldBe(27502966);
         }
     }
 }

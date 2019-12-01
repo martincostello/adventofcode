@@ -3,6 +3,7 @@
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2016
 {
+    using Shouldly;
     using Xunit;
     using Xunit.Abstractions;
 
@@ -29,7 +30,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
             string actual = Day02.GetBathroomCode(instructions, Day02.DigitGrid);
 
             // Assert
-            Assert.Equal(expected, actual);
+            actual.ShouldBe(expected);
         }
 
         [Theory]
@@ -41,7 +42,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
             string actual = Day02.GetBathroomCode(instructions, Day02.AlphanumericGrid);
 
             // Assert
-            Assert.Equal(expected, actual);
+            actual.ShouldBe(expected);
         }
 
         [Fact]
@@ -51,8 +52,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
             var puzzle = SolvePuzzle<Day02>();
 
             // Assert
-            Assert.Equal("14894", puzzle.BathroomCodeDigitKeypad);
-            Assert.Equal("26B96", puzzle.BathroomCodeAlphanumericKeypad);
+            puzzle.BathroomCodeDigitKeypad.ShouldBe("14894");
+            puzzle.BathroomCodeAlphanumericKeypad.ShouldBe("26B96");
         }
     }
 }

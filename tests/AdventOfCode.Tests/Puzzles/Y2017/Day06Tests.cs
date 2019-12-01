@@ -3,6 +3,7 @@
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2017
 {
+    using Shouldly;
     using Xunit;
     using Xunit.Abstractions;
 
@@ -30,8 +31,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
             (int cycleCount, int loopSize) = Day06.Debug(memory);
 
             // Assert
-            Assert.Equal(5, cycleCount);
-            Assert.Equal(4, loopSize);
+            cycleCount.ShouldBe(5);
+            loopSize.ShouldBe(4);
         }
 
         [Fact]
@@ -41,8 +42,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
             var puzzle = SolvePuzzle<Day06>();
 
             // Assert
-            Assert.Equal(3156, puzzle.CycleCount);
-            Assert.Equal(1610, puzzle.LoopSize);
+            puzzle.CycleCount.ShouldBe(3156);
+            puzzle.LoopSize.ShouldBe(1610);
         }
     }
 }

@@ -3,6 +3,7 @@
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2016
 {
+    using Shouldly;
     using Xunit;
     using Xunit.Abstractions;
 
@@ -27,7 +28,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
             var puzzle = SolvePuzzle<Day25>();
 
             // Assert
-            Assert.Equal(198, puzzle.ClockSignalValue);
+            puzzle.ClockSignalValue.ShouldBe(198);
         }
     }
 }

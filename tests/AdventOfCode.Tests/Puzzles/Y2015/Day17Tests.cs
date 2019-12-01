@@ -4,6 +4,7 @@
 namespace MartinCostello.AdventOfCode.Puzzles.Y2015
 {
     using System.Linq;
+    using Shouldly;
     using Xunit;
     using Xunit.Abstractions;
 
@@ -32,8 +33,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
             var result = Day17.GetContainerCombinations(volume, containerVolumes);
 
             // Assert
-            Assert.Equal(4, result.Count);
-            Assert.Equal(3, result.GroupBy((p) => p.Count).OrderBy((p) => p.Key).First().Count());
+            result.Count.ShouldBe(4);
+            result.GroupBy((p) => p.Count).OrderBy((p) => p.Key).First().Count().ShouldBe(3);
         }
 
         [Fact]
@@ -46,8 +47,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
             var puzzle = SolvePuzzle<Day17>(args);
 
             // Assert
-            Assert.Equal(1304, puzzle.Combinations);
-            Assert.Equal(18, puzzle.CombinationsWithMinimumContainers);
+            puzzle.Combinations.ShouldBe(1304);
+            puzzle.CombinationsWithMinimumContainers.ShouldBe(18);
         }
     }
 }

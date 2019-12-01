@@ -3,6 +3,7 @@
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2017
 {
+    using Shouldly;
     using Xunit;
     using Xunit.Abstractions;
 
@@ -35,7 +36,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
             (int actual, int _) = Day09.ParseStream(stream);
 
             // Assert
-            Assert.Equal(expected, actual);
+            actual.ShouldBe(expected);
         }
 
         [Theory]
@@ -52,7 +53,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
             (int _, int actual) = Day09.ParseStream(stream);
 
             // Assert
-            Assert.Equal(expected, actual);
+            actual.ShouldBe(expected);
         }
 
         [Fact]
@@ -62,8 +63,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
             var puzzle = SolvePuzzle<Day09>();
 
             // Assert
-            Assert.Equal(11898, puzzle.TotalScore);
-            Assert.Equal(5601, puzzle.GarbageCount);
+            puzzle.TotalScore.ShouldBe(11898);
+            puzzle.GarbageCount.ShouldBe(5601);
         }
     }
 }
