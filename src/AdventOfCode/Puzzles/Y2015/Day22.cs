@@ -24,16 +24,16 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
         /// <param name="spellSelector">A delegate to a method to use to select the next spell to conjure.</param>
         /// <param name="difficulty">The difficulty to play with.</param>
         /// <returns>
-        /// A <see cref="Tuple{T1, T2}"/> that returns whether the wizard won and the amount of mana spent by the wizard.
+        /// A named tuple that returns whether the wizard won and the amount of mana spent by the wizard.
         /// </returns>
-        internal static Tuple<bool, int> Fight(Func<Wizard, ICollection<string>, string> spellSelector, string difficulty)
+        internal static (bool didWizardWin, int manaSpent) Fight(Func<Wizard, ICollection<string>, string> spellSelector, string difficulty)
         {
             var wizard = new Wizard(spellSelector);
             var boss = new Boss();
 
             Player winner = Fight(wizard, boss, difficulty, null);
 
-            return Tuple.Create(winner == wizard, wizard.ManaSpent);
+            return (winner == wizard, wizard.ManaSpent);
         }
 
         /// <summary>
@@ -92,19 +92,19 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
         {
             string difficulty = args.Length == 1 ? args[0] : "easy";
 
-            var solutions = new List<Tuple<bool, int>>();
+            var solutions = new List<(bool didWizardWin, int manaSpent)>();
             var random = new Random();
 
             // Play the game 100,000 times with random choices of spells
             while (solutions.Count < 100000)
             {
-                Tuple<bool, int> result = Fight((wizard, spells) => spells.ElementAt(random.Next(0, spells.Count)), difficulty);
-                solutions.Add(Tuple.Create(result.Item1, result.Item2));
+                var result = Fight((wizard, spells) => spells.ElementAt(random.Next(0, spells.Count)), difficulty);
+                solutions.Add(result);
             }
 
             MinimumCostToWin = solutions
-                .Where((p) => p.Item1)
-                .Min((p) => p.Item2);
+                .Where((p) => p.didWizardWin)
+                .Min((p) => p.manaSpent);
 
             if (Verbose)
             {

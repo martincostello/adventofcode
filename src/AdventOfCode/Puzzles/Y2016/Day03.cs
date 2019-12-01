@@ -32,8 +32,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         /// </returns>
         internal static int GetPossibleTriangleCount(ICollection<string> dimensions, bool readAsColumns)
         {
-            IList<Tuple<int, int, int>> triangles = ParseTriangles(dimensions, readAsColumns);
-            return triangles.Count((p) => IsValidTriangle(p.Item1, p.Item2, p.Item3));
+            IList<(int a, int b, int c)> triangles = ParseTriangles(dimensions, readAsColumns);
+            return triangles.Count((p) => IsValidTriangle(p.a, p.b, p.c));
         }
 
         /// <summary>
@@ -78,9 +78,9 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         /// <returns>
         /// An <see cref="IList{T}"/> containing the parsed triangle dimensions.
         /// </returns>
-        private static IList<Tuple<int, int, int>> ParseTriangles(ICollection<string> dimensions, bool readAsColumns)
+        private static IList<(int a, int b, int c)> ParseTriangles(ICollection<string> dimensions, bool readAsColumns)
         {
-            var result = new List<Tuple<int, int, int>>(dimensions.Count);
+            var result = new List<(int a, int b, int c)>(dimensions.Count);
 
             foreach (string dimension in dimensions)
             {
@@ -90,22 +90,22 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
                 int b = ParseInt32(components[1]);
                 int c = ParseInt32(components[2]);
 
-                result.Add(Tuple.Create(a, b, c));
+                result.Add((a, b, c));
             }
 
             if (readAsColumns)
             {
-                var resultFromColumns = new List<Tuple<int, int, int>>();
+                var resultFromColumns = new List<(int a, int b, int c)>();
 
                 for (int i = 0; i < result.Count; i += 3)
                 {
-                    var first = result[i];
+                    var (a, b, c) = result[i];
                     var second = result[i + 1];
                     var third = result[i + 2];
 
-                    resultFromColumns.Add(Tuple.Create(first.Item1, second.Item1, third.Item1));
-                    resultFromColumns.Add(Tuple.Create(first.Item2, second.Item2, third.Item2));
-                    resultFromColumns.Add(Tuple.Create(first.Item3, second.Item3, third.Item3));
+                    resultFromColumns.Add((a, second.a, third.a));
+                    resultFromColumns.Add((b, second.b, third.b));
+                    resultFromColumns.Add((c, second.c, third.c));
                 }
 
                 result = resultFromColumns;

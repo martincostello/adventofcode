@@ -3,7 +3,6 @@
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2016
 {
-    using System;
     using System.Collections.Generic;
     using System.Linq;
 
@@ -37,7 +36,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
             count = 0;
 
             // Parse the IP ranges for the blacklist and sort
-            IList<Tuple<uint, uint>> ranges = new List<Tuple<uint, uint>>();
+            var ranges = new List<(uint start, uint end)>();
 
             foreach (string range in blacklist)
             {
@@ -46,12 +45,12 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
                 uint low = ParseUInt32(split[0]);
                 uint high = ParseUInt32(split[1]);
 
-                ranges.Add(Tuple.Create(low, high));
+                ranges.Add((low, high));
             }
 
             ranges = ranges
-                .OrderBy((p) => p.Item1)
-                .ThenBy((p) => p.Item2)
+                .OrderBy((p) => p.start)
+                .ThenBy((p) => p.end)
                 .ToList();
 
             for (int i = 0; i < ranges.Count - 1; i++)
@@ -59,11 +58,11 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
                 var range1 = ranges[i];
                 var range2 = ranges[i + 1];
 
-                if (range1.Item2 > range2.Item1 ||
-                    range1.Item2 == range2.Item1 - 1)
+                if (range1.end > range2.start ||
+                    range1.end == range2.start - 1)
                 {
-                    if (range2.Item1 < range1.Item2 &&
-                        range2.Item2 < range1.Item2)
+                    if (range2.start < range1.end &&
+                        range2.end < range1.end)
                     {
                         // Exclude the second range if entirely within the first
                         ranges.RemoveAt(i + 1);
@@ -71,7 +70,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
                     else
                     {
                         // Create a new range that combines the existing ranges
-                        var composite = Tuple.Create(range1.Item1, range2.Item2);
+                        var composite = (range1.start, range2.end);
 
                         // Remove the original ranges and replace with the new one
                         ranges.RemoveAt(i);
@@ -79,8 +78,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
                         ranges.Insert(i, composite);
 
                         ranges = ranges
-                            .OrderBy((p) => p.Item1)
-                            .ThenBy((p) => p.Item2)
+                            .OrderBy((p) => p.start)
+                            .ThenBy((p) => p.end)
                             .ToList();
                     }
 
@@ -97,24 +96,24 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
                 var range1 = ranges[i];
                 var range2 = ranges[i + 1];
 
-                count += range2.Item1 - range1.Item2 - 1;
+                count += range2.start - range1.end - 1;
 
                 if (i == 0)
                 {
                     // As ranges are sorted and do not overlap,
                     // the lowest allowed IP is 1 more than the
                     // high value for the first blacklisted range.
-                    result = range1.Item2 + 1;
+                    result = range1.end + 1;
                 }
             }
 
             // Add on the remaining IPs if the last blacklist
             // does not run to the maximum allowed IP address.
-            var lastRange = ranges.Last();
+            var (start, end) = ranges.Last();
 
-            if (lastRange.Item2 != maxValue)
+            if (end != maxValue)
             {
-                count += maxValue - lastRange.Item2;
+                count += maxValue - end;
             }
 
             return result;
