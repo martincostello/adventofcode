@@ -7,6 +7,7 @@ namespace MartinCostello.AdventOfCode
     using System.Collections;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Runtime.CompilerServices;
 
     /// <summary>
     /// A class containing mathematics-related methods. This class cannot be inherited.
@@ -23,14 +24,17 @@ namespace MartinCostello.AdventOfCode
         /// </returns>
         internal static IList<ICollection<long>> GetCombinations(long total, IList<int> values)
         {
+            int length = values.Count;
+            var bits = new BitArray(length);
             var result = new List<ICollection<long>>();
-            var bits = new BitArray(values.Count);
 
-            for (int i = 0; i < Math.Pow(2, bits.Length); i++)
+            int limit = (int)Math.Pow(2, length);
+
+            for (int i = 0; i < limit; i++)
             {
                 int sum = 0;
 
-                for (int j = 0; j < bits.Length; j++)
+                for (int j = 0; j < length; j++)
                 {
                     if (bits[j])
                     {
@@ -42,7 +46,7 @@ namespace MartinCostello.AdventOfCode
                 {
                     var combination = new List<long>();
 
-                    for (int j = 0; j < bits.Length; j++)
+                    for (int j = 0; j < length; j++)
                     {
                         if (bits[j])
                         {
@@ -120,12 +124,15 @@ namespace MartinCostello.AdventOfCode
         /// Increments the value of the specified <see cref="BitArray"/>.
         /// </summary>
         /// <param name="value">The value to increment.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static void Increment(BitArray value)
         {
-            for (int i = 0; i < value.Length; i++)
+            int length = value.Length;
+
+            for (int i = 0; i < length; i++)
             {
-                bool previous = value[i];
-                value[i] = !previous;
+                bool previous = value.Get(i);
+                value.Set(i, !previous);
 
                 if (!previous)
                 {
