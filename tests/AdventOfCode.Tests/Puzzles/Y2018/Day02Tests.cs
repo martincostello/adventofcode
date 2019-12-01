@@ -3,6 +3,7 @@
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2018
 {
+    using Shouldly;
     using Xunit;
     using Xunit.Abstractions;
 
@@ -30,15 +31,15 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2018
         [InlineData("ababab", 0, 1)]
         public static void Y2018_Day02_GetBoxScore_Returns_Correct_Solution(
             string id,
-            int expected2,
-            int expected3)
+            int expectedCount2,
+            int expectedCount3)
         {
             // Act
-            (int actual2, int actual3) = Day02.GetBoxScore(id);
+            (int actualCount2, int actualCount3) = Day02.GetBoxScore(id);
 
             // Assert
-            Assert.Equal(expected2, actual2);
-            Assert.Equal(expected3, actual3);
+            actualCount2.ShouldBe(expectedCount2);
+            actualCount3.ShouldBe(expectedCount3);
         }
 
         [Theory]
@@ -51,7 +52,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2018
             int actual = Day02.CalculateChecksum(boxIds);
 
             // Assert
-            Assert.Equal(expected, actual);
+            actual.ShouldBe(expected);
         }
 
         [Fact]
@@ -61,8 +62,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2018
             var puzzle = SolvePuzzle<Day02>();
 
             // Assert
-            Assert.Equal(5880, puzzle.Checksum);
-            Assert.Equal("tiwcdpbseqhxryfmgkvjujvza", puzzle.CommonLettersForBoxes);
+            puzzle.Checksum.ShouldBe(5880);
+            puzzle.CommonLettersForBoxes.ShouldBe("tiwcdpbseqhxryfmgkvjujvza");
         }
     }
 }

@@ -30,11 +30,11 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         /// <param name="b">The second number to find the bot that compares it.</param>
         /// <param name="binsOfInterest">The numbers of the bins of interest for which to find the product of the microchip values.</param>
         /// <returns>
-        /// A <see cref="Tuple{T1, T2}"/> that returns the number of the bot that compares microchips
+        /// A named tuple that returns the number of the bot that compares microchips
         /// with the values specified by <paramref name="a"/> and <paramref name="b"/> and the product
         /// of the values of the microchips in the output bins with the numbers specified by <paramref name="binsOfInterest"/>.
         /// </returns>
-        internal static Tuple<int, int> GetBotNumber(IEnumerable<string> instructions, int a, int b, IEnumerable<int> binsOfInterest)
+        internal static (int bot, int product) GetBotNumber(IEnumerable<string> instructions, int a, int b, IEnumerable<int> binsOfInterest)
         {
             int max = Math.Max(a, b);
             int min = Math.Min(a, b);
@@ -62,7 +62,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
                 }
             }
 
-            return Tuple.Create(botOfInterest, productOfBinsOfInterest);
+            return (botOfInterest, productOfBinsOfInterest);
         }
 
         /// <inheritdoc />
@@ -71,10 +71,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
             IList<string> instructions = ReadResourceAsLines();
             IList<int> binsOfInterest = new[] { 0, 1, 2 };
 
-            var result = GetBotNumber(instructions, 61, 17, binsOfInterest);
-
-            BotThatCompares61And17Microchips = result.Item1;
-            ProductOfMicrochipsInBins012 = result.Item2;
+            (BotThatCompares61And17Microchips, ProductOfMicrochipsInBins012) = GetBotNumber(instructions, 61, 17, binsOfInterest);
 
             if (Verbose)
             {

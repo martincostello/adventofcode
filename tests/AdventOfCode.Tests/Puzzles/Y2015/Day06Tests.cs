@@ -6,6 +6,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
     using System;
     using System.Drawing;
     using System.Globalization;
+    using Shouldly;
     using Xunit;
     using Xunit.Abstractions;
 
@@ -31,11 +32,11 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
         {
             var actual = Day06.InstructionV1.Parse(value);
 
-            Assert.Equal(action, actual.Action);
-            Assert.Equal(x, actual.Bounds.X);
-            Assert.Equal(y, actual.Bounds.Y);
-            Assert.Equal(height, actual.Bounds.Height);
-            Assert.Equal(width, actual.Bounds.Width);
+            actual.Action.ShouldBe(action);
+            actual.Bounds.X.ShouldBe(x);
+            actual.Bounds.Y.ShouldBe(y);
+            actual.Bounds.Height.ShouldBe(height);
+            actual.Bounds.Width.ShouldBe(width);
         }
 
         [Theory]
@@ -46,11 +47,11 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
         {
             var actual = Day06.InstructionV2.Parse(value);
 
-            Assert.Equal(delta, actual.Delta);
-            Assert.Equal(x, actual.Bounds.X);
-            Assert.Equal(y, actual.Bounds.Y);
-            Assert.Equal(height, actual.Bounds.Height);
-            Assert.Equal(width, actual.Bounds.Width);
+            actual.Delta.ShouldBe(delta);
+            actual.Bounds.X.ShouldBe(x);
+            actual.Bounds.Y.ShouldBe(y);
+            actual.Bounds.Height.ShouldBe(height);
+            actual.Bounds.Width.ShouldBe(width);
         }
 
         [Theory]
@@ -58,16 +59,6 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
         [InlineData(2, 1)]
         [InlineData(2, 2)]
         [InlineData(100, 100)]
-        [System.Diagnostics.CodeAnalysis.SuppressMessage(
-            "Microsoft.Usage",
-            "CA2233:OperationsShouldNotOverflow",
-            MessageId = "height-1",
-            Justification = "Test values will not cause overflow.")]
-        [System.Diagnostics.CodeAnalysis.SuppressMessage(
-            "Microsoft.Usage",
-            "CA2233:OperationsShouldNotOverflow",
-            MessageId = "width-1",
-            Justification = "Test values will not cause overflow.")]
         public static void Y2015_Day06_LightGridExhibitsCorrectBehavior(int width, int height)
         {
             var target = new Day06.LightGrid(width, height);
@@ -75,110 +66,110 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
             var minimum = new Point(0, 0);
             var maximum = new Point(width - 1, height - 1);
 
-            Assert.Equal(0, target.Brightness);
-            Assert.Equal(0, target.Count);
-            Assert.Equal(0, target[minimum]);
-            Assert.Equal(0, target[maximum]);
+            target.Brightness.ShouldBe(0);
+            target.Count.ShouldBe(0);
+            target[minimum].ShouldBe(0);
+            target[maximum].ShouldBe(0);
 
-            Assert.True(target.Toggle(minimum));
-            Assert.Equal(1, target[minimum]);
-            Assert.Equal(1, target.Brightness);
-            Assert.Equal(1, target.Count);
+            target.Toggle(minimum).ShouldBeTrue();
+            target[minimum].ShouldBe(1);
+            target.Brightness.ShouldBe(1);
+            target.Count.ShouldBe(1);
 
-            Assert.True(target.Toggle(maximum));
-            Assert.Equal(1, target[maximum]);
-            Assert.Equal(2, target.Brightness);
-            Assert.Equal(2, target.Count);
+            target.Toggle(maximum).ShouldBeTrue();
+            target[maximum].ShouldBe(1);
+            target.Brightness.ShouldBe(2);
+            target.Count.ShouldBe(2);
 
             target.TurnOn(minimum);
-            Assert.Equal(1, target[minimum]);
-            Assert.Equal(2, target.Brightness);
-            Assert.Equal(2, target.Count);
+            target[minimum].ShouldBe(1);
+            target.Brightness.ShouldBe(2);
+            target.Count.ShouldBe(2);
 
             target.TurnOff(minimum);
-            Assert.Equal(0, target[minimum]);
-            Assert.Equal(1, target.Brightness);
-            Assert.Equal(1, target.Count);
+            target[minimum].ShouldBe(0);
+            target.Brightness.ShouldBe(1);
+            target.Count.ShouldBe(1);
 
             target.TurnOff(minimum);
-            Assert.Equal(0, target[minimum]);
-            Assert.Equal(1, target.Brightness);
-            Assert.Equal(1, target.Count);
+            target[minimum].ShouldBe(0);
+            target.Brightness.ShouldBe(1);
+            target.Count.ShouldBe(1);
 
             target.TurnOff(maximum);
-            Assert.Equal(0, target[maximum]);
-            Assert.Equal(0, target.Brightness);
-            Assert.Equal(0, target.Count);
+            target[maximum].ShouldBe(0);
+            target.Brightness.ShouldBe(0);
+            target.Count.ShouldBe(0);
 
             target.TurnOn(minimum);
-            Assert.Equal(1, target[minimum]);
-            Assert.Equal(1, target.Brightness);
-            Assert.Equal(1, target.Count);
+            target[minimum].ShouldBe(1);
+            target.Brightness.ShouldBe(1);
+            target.Count.ShouldBe(1);
 
-            Assert.False(target.Toggle(minimum));
-            Assert.Equal(0, target[minimum]);
-            Assert.Equal(0, target.Brightness);
-            Assert.Equal(0, target.Count);
+            target.Toggle(minimum).ShouldBeFalse();
+            target[minimum].ShouldBe(0);
+            target.Brightness.ShouldBe(0);
+            target.Count.ShouldBe(0);
 
-            Assert.True(target.Toggle(maximum));
-            Assert.Equal(1, target[maximum]);
-            Assert.Equal(1, target.Brightness);
-            Assert.Equal(1, target.Count);
+            target.Toggle(maximum).ShouldBeTrue();
+            target[maximum].ShouldBe(1);
+            target.Brightness.ShouldBe(1);
+            target.Count.ShouldBe(1);
 
             var bounds = new Rectangle(0, 0, width, height);
 
             target.TurnOff(bounds);
-            Assert.Equal(0, target[minimum]);
-            Assert.Equal(0, target[maximum]);
-            Assert.Equal(0, target.Brightness);
-            Assert.Equal(0, target.Count);
+            target[minimum].ShouldBe(0);
+            target[maximum].ShouldBe(0);
+            target.Brightness.ShouldBe(0);
+            target.Count.ShouldBe(0);
 
             target.TurnOff(bounds);
-            Assert.Equal(0, target[minimum]);
-            Assert.Equal(0, target[maximum]);
-            Assert.Equal(0, target.Brightness);
-            Assert.Equal(0, target.Count);
+            target[minimum].ShouldBe(0);
+            target[maximum].ShouldBe(0);
+            target.Brightness.ShouldBe(0);
+            target.Count.ShouldBe(0);
 
             target.TurnOn(bounds);
-            Assert.Equal(1, target[minimum]);
-            Assert.Equal(1, target[maximum]);
-            Assert.Equal(width * height, target.Brightness);
-            Assert.Equal(width * height, target.Count);
+            target[minimum].ShouldBe(1);
+            target[maximum].ShouldBe(1);
+            target.Brightness.ShouldBe(width * height);
+            target.Count.ShouldBe(width * height);
 
             target.TurnOn(bounds);
-            Assert.Equal(1, target[minimum]);
-            Assert.Equal(1, target[maximum]);
-            Assert.Equal(width * height, target.Brightness);
-            Assert.Equal(width * height, target.Count);
+            target[minimum].ShouldBe(1);
+            target[maximum].ShouldBe(1);
+            target.Brightness.ShouldBe(width * height);
+            target.Count.ShouldBe(width * height);
 
             target.Toggle(bounds);
-            Assert.Equal(0, target[minimum]);
-            Assert.Equal(0, target[maximum]);
-            Assert.Equal(0, target.Brightness);
-            Assert.Equal(0, target.Count);
+            target[minimum].ShouldBe(0);
+            target[maximum].ShouldBe(0);
+            target.Brightness.ShouldBe(0);
+            target.Count.ShouldBe(0);
 
             target.IncrementBrightness(minimum, 1);
             target.IncrementBrightness(minimum, 2);
             target.IncrementBrightness(minimum, 3);
             target.IncrementBrightness(minimum, -4);
 
-            Assert.Equal(2, target[minimum]);
-            Assert.Equal(2, target.Brightness);
-            Assert.Equal(1, target.Count);
+            target[minimum].ShouldBe(2);
+            target.Brightness.ShouldBe(2);
+            target.Count.ShouldBe(1);
 
             target.IncrementBrightness(maximum, 10);
 
-            Assert.Equal(2, target[minimum]);
-            Assert.Equal(10, target[maximum]);
-            Assert.Equal(12, target.Brightness);
-            Assert.Equal(2, target.Count);
+            target[minimum].ShouldBe(2);
+            target[maximum].ShouldBe(10);
+            target.Brightness.ShouldBe(12);
+            target.Count.ShouldBe(2);
 
             target.IncrementBrightness(minimum, -3);
 
-            Assert.Equal(0, target[minimum]);
-            Assert.Equal(10, target[maximum]);
-            Assert.Equal(10, target.Brightness);
-            Assert.Equal(1, target.Count);
+            target[minimum].ShouldBe(0);
+            target[maximum].ShouldBe(10);
+            target.Brightness.ShouldBe(10);
+            target.Count.ShouldBe(1);
         }
 
         [Fact]
@@ -199,7 +190,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
             string actual = target.ToString();
 
             // Assert
-            Assert.Equal(expected, actual);
+            actual.ShouldBe(expected);
 
             // Arrange
             target.TurnOff(new Rectangle(0, 0, 3, 3));
@@ -211,7 +202,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
             actual = target.ToString();
 
             // Assert
-            Assert.Equal(expected, actual);
+            actual.ShouldBe(expected);
 
             // Arrange
             target.TurnOff(new Rectangle(0, 0, 3, 3));
@@ -223,7 +214,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
             actual = target.ToString();
 
             // Assert
-            Assert.Equal(expected, actual);
+            actual.ShouldBe(expected);
 
             // Arrange
             target.IncrementBrightness(new Rectangle(1, 1, 2, 2), 2);
@@ -234,33 +225,20 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
             actual = target.ToString();
 
             // Assert
-            Assert.Equal(expected, actual);
+            actual.ShouldBe(expected);
         }
 
-        [Fact]
-        public void Y2015_Day06_Solve_Returns_Correct_Solution_Version_1()
+        [Theory]
+        [InlineData(new[] { "1" }, 543903, 0)]
+        [InlineData(new[] { "2" }, 0, 14687245)]
+        public void Y2015_Day06_Solve_Returns_Correct_Solution(string[] args, int lightsIlluminated, int totalBrightness)
         {
-            // Arrange
-            string[] args = new[] { "1" };
-
             // Act
             var puzzle = SolvePuzzle<Day06>(args);
 
             // Assert
-            Assert.Equal(543903, puzzle.LightsIlluminated);
-        }
-
-        [Fact]
-        public void Y2015_Day06_Solve_Returns_Correct_Solution_Version_2()
-        {
-            // Arrange
-            string[] args = new[] { "2" };
-
-            // Act
-            var puzzle = SolvePuzzle<Day06>(args);
-
-            // Assert
-            Assert.Equal(14687245, puzzle.TotalBrightness);
+            puzzle.LightsIlluminated.ShouldBe(lightsIlluminated);
+            puzzle.TotalBrightness.ShouldBe(totalBrightness);
         }
     }
 }

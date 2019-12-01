@@ -3,6 +3,7 @@
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2016
 {
+    using Shouldly;
     using Xunit;
     using Xunit.Abstractions;
 
@@ -37,7 +38,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
             long actual = Day09.GetDecompressedLength(data, version);
 
             // Assert
-            Assert.Equal(expected, actual);
+            actual.ShouldBe(expected);
         }
 
         [Fact]
@@ -47,8 +48,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
             var puzzle = SolvePuzzle<Day09>();
 
             // Assert
-            Assert.Equal(98135L, puzzle.DecompressedLengthVersion1);
-            Assert.Equal(10964557606L, puzzle.DecompressedLengthVersion2);
+            puzzle.DecompressedLengthVersion1.ShouldBe(98135);
+            puzzle.DecompressedLengthVersion2.ShouldBe(10964557606);
         }
     }
 }

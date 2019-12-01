@@ -3,6 +3,7 @@
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2016
 {
+    using Shouldly;
     using Xunit;
     using Xunit.Abstractions;
 
@@ -28,8 +29,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
             uint address = Day20.GetLowestNonblockedIP(maxValue, blacklist, out uint count);
 
             // Assert
-            Assert.Equal(expectedIP, address);
-            Assert.Equal(expectedCount, count);
+            address.ShouldBe(expectedIP);
+            count.ShouldBe(expectedCount);
         }
 
         [Fact]
@@ -39,8 +40,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
             var puzzle = SolvePuzzle<Day20>();
 
             // Assert
-            Assert.Equal(22887907u, puzzle.LowestNonblockedIP);
-            Assert.Equal(109u, puzzle.AllowedIPCount);
+            puzzle.LowestNonblockedIP.ShouldBe(22887907u);
+            puzzle.AllowedIPCount.ShouldBe(109u);
         }
     }
 }

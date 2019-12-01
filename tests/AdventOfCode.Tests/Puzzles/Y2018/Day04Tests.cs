@@ -3,6 +3,7 @@
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2018
 {
+    using Shouldly;
     using Xunit;
     using Xunit.Abstractions;
 
@@ -24,9 +25,6 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2018
         public static void Y2018_Day04_GetSleepiestGuardsMinutes_Returns_Correct_Solution()
         {
             // Arrange
-            int expected1 = 240;
-            int expected2 = 4455;
-
             string[] log = new[]
             {
                 "[1518-11-01 00:00] Guard #10 begins shift",
@@ -52,8 +50,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2018
             (int actual1, int actual2) = Day04.GetSleepiestGuardsMinutes(log);
 
             // Assert
-            Assert.Equal(expected1, actual1);
-            Assert.Equal(expected2, actual2);
+            actual1.ShouldBe(240);
+            actual2.ShouldBe(4455);
         }
 
         [Fact]
@@ -63,8 +61,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2018
             var puzzle = SolvePuzzle<Day04>();
 
             // Assert
-            Assert.Equal(4716, puzzle.SleepiestGuardMinute);
-            Assert.Equal(117061, puzzle.SleepiestMinuteGuard);
+            puzzle.SleepiestGuardMinute.ShouldBe(4716);
+            puzzle.SleepiestMinuteGuard.ShouldBe(117061);
         }
     }
 }

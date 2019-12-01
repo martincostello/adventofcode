@@ -3,6 +3,7 @@
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2015
 {
+    using Shouldly;
     using Xunit;
     using Xunit.Abstractions;
 
@@ -29,33 +30,19 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
             int actual = Day04.GetLowestPositiveNumberWithStartingZeroes(secretKey, zeroes);
 
             // Assert
-            Assert.Equal(expected, actual);
+            actual.ShouldBe(expected);
         }
 
-        [Fact]
-        public void Y2015_Day04_Solve_Returns_Correct_Solution_5_Zeroes()
+        [Theory]
+        [InlineData(new[] { "iwrupvqb", "5" }, 346386)]
+        [InlineData(new[] { "iwrupvqb", "6" }, 9958218)]
+        public void Y2015_Day04_Solve_Returns_Correct_Solution(string[] args, int expected)
         {
-            // Arrange
-            string[] args = new[] { "iwrupvqb", "5" };
-
             // Act
             var target = SolvePuzzle<Day04>(args);
 
             // Assert
-            Assert.Equal(346386, target.LowestZeroHash);
-        }
-
-        [Fact]
-        public void Y2015_Day04_Solve_Returns_Correct_Solution_6_Zeroes()
-        {
-            // Arrange
-            string[] args = new[] { "iwrupvqb", "6" };
-
-            // Act
-            var puzzle = SolvePuzzle<Day04>(args);
-
-            // Assert
-            Assert.Equal(9958218, puzzle.LowestZeroHash);
+            target.LowestZeroHash.ShouldBe(expected);
         }
     }
 }

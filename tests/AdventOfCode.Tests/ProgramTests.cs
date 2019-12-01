@@ -4,6 +4,7 @@
 namespace MartinCostello.AdventOfCode
 {
     using System;
+    using Shouldly;
     using Xunit;
     using Xunit.Abstractions;
 
@@ -36,7 +37,7 @@ namespace MartinCostello.AdventOfCode
             int actual = Program.Run(args, Logger);
 
             // Assert
-            Assert.Equal(0, actual);
+            actual.ShouldBe(0);
         }
 
         [Fact]
@@ -49,7 +50,7 @@ namespace MartinCostello.AdventOfCode
             int actual = Program.Run(args, Logger);
 
             // Assert
-            Assert.Equal(-1, actual);
+            actual.ShouldBe(-1);
         }
 
         [Fact]
@@ -59,7 +60,7 @@ namespace MartinCostello.AdventOfCode
             int actual = Program.Run(null!, Logger);
 
             // Assert
-            Assert.Equal(-1, actual);
+            actual.ShouldBe(-1);
         }
 
         [Fact]
@@ -72,7 +73,7 @@ namespace MartinCostello.AdventOfCode
             int actual = Program.Run(args, Logger);
 
             // Assert
-            Assert.Equal(-1, actual);
+            actual.ShouldBe(-1);
         }
 
         [Fact]
@@ -85,7 +86,7 @@ namespace MartinCostello.AdventOfCode
             int actual = Program.Run(args, Logger);
 
             // Assert
-            Assert.Equal(-1, actual);
+            actual.ShouldBe(-1);
         }
 
         [Fact]
@@ -98,7 +99,7 @@ namespace MartinCostello.AdventOfCode
             int actual = Program.Run(args, Logger);
 
             // Assert
-            Assert.Equal(-1, actual);
+            actual.ShouldBe(-1);
         }
 
         [Fact]
@@ -111,7 +112,7 @@ namespace MartinCostello.AdventOfCode
             int actual = Program.Run(args, Logger);
 
             // Assert
-            Assert.Equal(-1, actual);
+            actual.ShouldBe(-1);
         }
     }
 }

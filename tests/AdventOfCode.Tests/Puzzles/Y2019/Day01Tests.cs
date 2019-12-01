@@ -3,6 +3,7 @@
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2019
 {
+    using Shouldly;
     using Xunit;
     using Xunit.Abstractions;
 
@@ -31,7 +32,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
             int actual = Day01.GetFuelRequirementsForMass(mass);
 
             // Assert
-            Assert.Equal(expected, actual);
+            actual.ShouldBe(expected);
         }
 
         [Theory]
@@ -44,7 +45,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
             int actual = Day01.GetFuelRequirementsForMassWithFuel(mass);
 
             // Assert
-            Assert.Equal(expected, actual);
+            actual.ShouldBe(expected);
         }
 
         [Fact]
@@ -54,8 +55,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
             var puzzle = SolvePuzzle<Day01>();
 
             // Assert
-            Assert.Equal(3226407, puzzle.TotalFuelRequiredForModules);
-            Assert.Equal(4836738, puzzle.TotalFuelRequiredForRocket);
+            puzzle.TotalFuelRequiredForModules.ShouldBe(3226407);
+            puzzle.TotalFuelRequiredForRocket.ShouldBe(4836738);
         }
     }
 }

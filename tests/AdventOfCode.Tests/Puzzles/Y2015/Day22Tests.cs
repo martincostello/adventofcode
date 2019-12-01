@@ -3,8 +3,8 @@
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2015
 {
-    using System;
     using System.Collections.Generic;
+    using Shouldly;
     using Xunit;
     using Xunit.Abstractions;
 
@@ -22,30 +22,16 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
         {
         }
 
-        [Fact]
-        public void Y2015_Day22_Solve_Returns_Correct_Solution_Easy()
+        [Theory]
+        [InlineData(new string[] { }, 953)]
+        [InlineData(new[] { "hard" }, 1289)]
+        public void Y2015_Day22_Solve_Returns_Correct_Solution(string[] args, int expected)
         {
-            // Arrange
-            string[] args = Array.Empty<string>();
-
             // Act
             var puzzle = SolvePuzzle<Day22>(args);
 
             // Assert
-            Assert.Equal(953, puzzle.MinimumCostToWin);
-        }
-
-        [Fact]
-        public void Y2015_Day22_Solve_Returns_Correct_Solution_Hard()
-        {
-            // Arrange
-            string[] args = new string[] { "hard" };
-
-            // Act
-            var puzzle = SolvePuzzle<Day22>(args);
-
-            // Assert
-            Assert.Equal(1289, puzzle.MinimumCostToWin);
+            puzzle.MinimumCostToWin.ShouldBe(expected);
         }
 
         [Fact]
@@ -65,17 +51,18 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
             Day22.Player actual = Day22.Fight(wizard, opponent, difficulty, Output);
 
             // Assert
-            Assert.Same(wizard, actual);
-            Assert.Equal(0, opponent.Armor);
-            Assert.Equal(8, opponent.Damage);
-            Assert.Equal(0, opponent.HitPoints);
-            Assert.Equal(0, wizard.Armor);
-            Assert.Equal(0, wizard.Damage);
-            Assert.Equal(2, wizard.HitPoints);
-            Assert.Equal(24, wizard.Mana);
-            Assert.Equal(new[] { "Poison" }, wizard.ActiveSpells);
-            Assert.Equal(173 + 53, wizard.ManaSpent);
-            Assert.Equal(spellsToConjure, wizard.SpellsCast);
+            actual.ShouldNotBeNull();
+            actual.ShouldBeSameAs(wizard);
+            opponent.Armor.ShouldBe(0);
+            opponent.Damage.ShouldBe(8);
+            opponent.HitPoints.ShouldBe(0);
+            wizard.Armor.ShouldBe(0);
+            wizard.Damage.ShouldBe(0);
+            wizard.HitPoints.ShouldBe(2);
+            wizard.Mana.ShouldBe(24);
+            wizard.ActiveSpells.ShouldBe(new[] { "Poison" });
+            wizard.ManaSpent.ShouldBe(173 + 53);
+            wizard.SpellsCast.ShouldBe(spellsToConjure);
         }
 
         [Fact]
@@ -95,16 +82,17 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
             Day22.Player actual = Day22.Fight(wizard, opponent, difficulty, Output);
 
             // Assert
-            Assert.Same(wizard, actual);
-            Assert.Equal(0, opponent.Armor);
-            Assert.Equal(8, opponent.Damage);
-            Assert.Equal(-1, opponent.HitPoints);
-            Assert.Equal(0, wizard.Damage);
-            Assert.Equal(1, wizard.HitPoints);
-            Assert.Equal(114, wizard.Mana);
-            Assert.Equal(new[] { "Poison" }, wizard.ActiveSpells);
-            Assert.Equal(229 + 113 + 73 + 173 + 53, wizard.ManaSpent);
-            Assert.Equal(spellsToConjure, wizard.SpellsCast);
+            actual.ShouldNotBeNull();
+            actual.ShouldBeSameAs(wizard);
+            opponent.Armor.ShouldBe(0);
+            opponent.Damage.ShouldBe(8);
+            opponent.HitPoints.ShouldBe(-1);
+            wizard.Damage.ShouldBe(0);
+            wizard.HitPoints.ShouldBe(1);
+            wizard.Mana.ShouldBe(114);
+            wizard.ActiveSpells.ShouldBe(new[] { "Poison" });
+            wizard.ManaSpent.ShouldBe(229 + 113 + 73 + 173 + 53);
+            wizard.SpellsCast.ShouldBe(spellsToConjure);
         }
 
         /// <summary>

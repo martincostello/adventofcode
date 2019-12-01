@@ -3,6 +3,7 @@
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2015
 {
+    using Shouldly;
     using Xunit;
     using Xunit.Abstractions;
 
@@ -31,7 +32,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
             long actual = Day24.GetQuantumEntanglementOfIdealConfiguration(compartments, weights);
 
             // Assert
-            Assert.Equal(99, actual);
+            actual.ShouldBe(99);
 
             // Arrange
             compartments = 4;
@@ -40,26 +41,19 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
             actual = Day24.GetQuantumEntanglementOfIdealConfiguration(compartments, weights);
 
             // Assert
-            Assert.Equal(44, actual);
+            actual.ShouldBe(44);
         }
 
-        [Fact(Skip = "Too slow.")]
-        public void Y2015_Day24_Solve_Returns_Correct_Solution()
+        [Theory(Skip = "Too slow.")]
+        [InlineData(new string[] { }, 11266889531)]
+        [InlineData(new string[] { "4" }, 77387711)]
+        public void Y2015_Day24_Solve_Returns_Correct_Solution(string[] args, long expected)
         {
             // Act
-            var puzzle = SolvePuzzle<Day24>();
+            var puzzle = SolvePuzzle<Day24>(args);
 
             // Assert
-            Assert.Equal(11266889531, puzzle.QuantumEntanglementOfFirstGroup);
-
-            // Arrange
-            string[] args = new string[] { "4" };
-
-            // Act
-            puzzle = SolvePuzzle<Day24>(args);
-
-            // Assert
-            Assert.Equal(77387711, puzzle.QuantumEntanglementOfFirstGroup);
+            puzzle.QuantumEntanglementOfFirstGroup.ShouldBe(expected);
         }
     }
 }

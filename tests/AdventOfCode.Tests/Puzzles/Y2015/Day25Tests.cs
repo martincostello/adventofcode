@@ -3,6 +3,7 @@
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2015
 {
+    using Shouldly;
     using Xunit;
     using Xunit.Abstractions;
 
@@ -47,7 +48,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
             ulong actual = Day25.GenerateCode(value);
 
             // Assert
-            Assert.Equal(expected, actual);
+            actual.ShouldBe(expected);
         }
 
         [Theory]
@@ -77,7 +78,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
             ulong actual = Day25.GetCodeForWeatherMachine(row, column);
 
             // Assert
-            Assert.Equal(expected, actual);
+            actual.ShouldBe(expected);
         }
 
         [Fact]
@@ -90,7 +91,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
             var puzzle = SolvePuzzle<Day25>(args);
 
             // Assert
-            Assert.Equal(19980801u, puzzle.Code);
+            puzzle.Code.ShouldBe(19980801u);
         }
     }
 }

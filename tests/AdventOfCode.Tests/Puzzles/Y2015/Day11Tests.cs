@@ -3,6 +3,7 @@
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2015
 {
+    using Shouldly;
     using Xunit;
     using Xunit.Abstractions;
 
@@ -29,7 +30,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
             string actual = Day11.GenerateNextPassword(current);
 
             // Assert
-            Assert.Equal(expected, actual);
+            actual.ShouldBe(expected);
         }
 
         [Theory]
@@ -42,7 +43,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
             bool actual = Day11.HasMoreThanOneDistinctPairOfLetters(value.ToCharArray());
 
             // Assert
-            Assert.Equal(expected, actual);
+            actual.ShouldBe(expected);
         }
 
         [Fact]
@@ -55,7 +56,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
             var puzzle = SolvePuzzle<Day11>(args);
 
             // Assert
-            Assert.Equal("cqjxxyzz", puzzle.NextPassword);
+            puzzle.NextPassword.ShouldBe("cqjxxyzz");
 
             // Arrange
             args = new[] { puzzle.NextPassword! };
@@ -64,7 +65,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
             puzzle = SolvePuzzle<Day11>(args);
 
             // Assert
-            Assert.Equal("cqkaabcc", puzzle.NextPassword);
+            puzzle.NextPassword.ShouldBe("cqkaabcc");
         }
     }
 }

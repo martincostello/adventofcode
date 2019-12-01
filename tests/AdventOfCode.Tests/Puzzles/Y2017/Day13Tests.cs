@@ -3,6 +3,7 @@
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2017
 {
+    using Shouldly;
     using Xunit;
     using Xunit.Abstractions;
 
@@ -36,7 +37,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
             int actual = Day13.GetSeverityOfTrip(depthRanges);
 
             // Assert
-            Assert.Equal(24, actual);
+            actual.ShouldBe(24);
         }
 
         [Fact]
@@ -55,7 +56,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
             int actual = Day13.GetShortestDelayForNeverCaught(depthRanges);
 
             // Assert
-            Assert.Equal(10, actual);
+            actual.ShouldBe(10);
         }
 
         [Fact]
@@ -65,8 +66,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
             var puzzle = SolvePuzzle<Day13>();
 
             // Assert
-            Assert.Equal(1612, puzzle.Severity);
-            Assert.Equal(3907994, puzzle.ShortestDelay);
+            puzzle.Severity.ShouldBe(1612);
+            puzzle.ShortestDelay.ShouldBe(3907994);
         }
     }
 }

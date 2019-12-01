@@ -29,9 +29,9 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
         /// <param name="armor">The armor to purchase, if any.</param>
         /// <param name="rings">The rings to purchase, if any.</param>
         /// <returns>
-        /// A <see cref="Tuple{T1, T2}"/> that returns whether the human player won and the amount of gold spent.
+        /// A named tuple that returns whether the human player won and the amount of gold spent.
         /// </returns>
-        internal static Tuple<bool, int> Fight(string weapon, string? armor, ICollection<string>? rings)
+        internal static (bool didHumanWin, int goldSpent) Fight(string weapon, string? armor, ICollection<string>? rings)
         {
             var shop = new Shop();
             var human = new Human();
@@ -52,7 +52,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
 
             Player winner = Fight(human, boss);
 
-            return Tuple.Create(winner == human, goldSpent);
+            return (winner == human, goldSpent);
         }
 
         /// <summary>
@@ -112,15 +112,15 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
                 {
                     foreach (var rings in potentialRings)
                     {
-                        Tuple<bool, int> result = Fight(weapon, armor, rings);
+                        (bool didHumanWin, int goldSpent) = Fight(weapon, armor, rings);
 
-                        if (result.Item1)
+                        if (didHumanWin)
                         {
-                            costsToWin.Add(result.Item2);
+                            costsToWin.Add(goldSpent);
                         }
                         else
                         {
-                            costsToLose.Add(result.Item2);
+                            costsToLose.Add(goldSpent);
                         }
                     }
                 }

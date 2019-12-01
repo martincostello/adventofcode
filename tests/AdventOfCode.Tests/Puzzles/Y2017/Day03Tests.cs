@@ -3,6 +3,7 @@
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2017
 {
+    using Shouldly;
     using Xunit;
     using Xunit.Abstractions;
 
@@ -32,7 +33,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
             var puzzle = SolvePuzzle<Day03>(square);
 
             // Assert
-            Assert.Equal(expected, puzzle.Steps);
+            puzzle.Steps.ShouldBe(expected);
         }
 
         [Theory]
@@ -43,7 +44,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
             var puzzle = SolvePuzzle<Day03>(square);
 
             // Assert
-            Assert.Equal(expected, puzzle.FirstStorageLargerThanInput);
+            puzzle.FirstStorageLargerThanInput.ShouldBe(expected);
         }
     }
 }

@@ -3,6 +3,7 @@
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2016
 {
+    using Shouldly;
     using Xunit;
     using Xunit.Abstractions;
 
@@ -28,7 +29,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
             string actual = Day04.DecryptRoomName(name);
 
             // Assert
-            Assert.Equal(expected, actual);
+            actual.ShouldBe(expected);
         }
 
         [Theory]
@@ -42,7 +43,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
             bool actual = Day04.IsRoomReal(name);
 
             // Assert
-            Assert.Equal(expected, actual);
+            actual.ShouldBe(expected);
         }
 
         [Theory]
@@ -53,7 +54,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
             int actual = Day04.SumOfRealRoomSectorIds(names);
 
             // Assert
-            Assert.Equal(expected, actual);
+            actual.ShouldBe(expected);
         }
 
         [Fact]
@@ -63,8 +64,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
             var puzzle = SolvePuzzle<Day04>();
 
             // Assert
-            Assert.Equal(137896, puzzle.SumOfSectorIdsOfRealRooms);
-            Assert.Equal(501, puzzle.SectorIdOfNorthPoleObjectsRoom);
+            puzzle.SumOfSectorIdsOfRealRooms.ShouldBe(137896);
+            puzzle.SectorIdOfNorthPoleObjectsRoom.ShouldBe(501);
         }
     }
 }

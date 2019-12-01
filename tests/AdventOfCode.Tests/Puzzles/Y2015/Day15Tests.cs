@@ -3,6 +3,7 @@
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2015
 {
+    using Shouldly;
     using Xunit;
     using Xunit.Abstractions;
 
@@ -34,13 +35,13 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
             int actual = Day15.GetHighestTotalCookieScore(collection);
 
             // Assert
-            Assert.Equal(62842880, actual);
+            actual.ShouldBe(62842880);
 
             // Act
             actual = Day15.GetHighestTotalCookieScore(collection, 500);
 
             // Assert
-            Assert.Equal(57600000, actual);
+            actual.ShouldBe(57600000);
         }
 
         [Fact]
@@ -50,8 +51,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
             var puzzle = SolvePuzzle<Day15>();
 
             // Assert
-            Assert.Equal(222870, puzzle.HighestTotalCookieScore);
-            Assert.Equal(117936, puzzle.HighestTotalCookieScoreWith500Calories);
+            puzzle.HighestTotalCookieScore.ShouldBe(222870);
+            puzzle.HighestTotalCookieScoreWith500Calories.ShouldBe(117936);
         }
     }
 }

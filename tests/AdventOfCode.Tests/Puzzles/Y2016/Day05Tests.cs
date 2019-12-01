@@ -3,6 +3,7 @@
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2016
 {
+    using Shouldly;
     using Xunit;
     using Xunit.Abstractions;
 
@@ -29,7 +30,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
             string actual = Day05.GeneratePassword(doorId, isPositionSpecifiedByHash);
 
             // Assert
-            Assert.Equal(expected, actual);
+            actual.ShouldBe(expected);
         }
 
         [Fact]
@@ -42,8 +43,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
             var puzzle = SolvePuzzle<Day05>(args);
 
             // Assert
-            Assert.Equal("2414bc77", puzzle.Password);
-            Assert.Equal("437e60fc", puzzle.PasswordWhenPositionIsIndicated);
+            puzzle.Password.ShouldBe("2414bc77");
+            puzzle.PasswordWhenPositionIsIndicated.ShouldBe("437e60fc");
         }
     }
 }

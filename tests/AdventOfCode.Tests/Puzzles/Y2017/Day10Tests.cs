@@ -3,6 +3,7 @@
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2017
 {
+    using Shouldly;
     using Xunit;
     using Xunit.Abstractions;
 
@@ -31,7 +32,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
             int actual = Day10.FindProductOfFirstTwoHashElements(size, lengths);
 
             // Assert
-            Assert.Equal(expected, actual);
+            actual.ShouldBe(expected);
         }
 
         [Theory]
@@ -45,7 +46,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
             string actual = Day10.ComputeHash(asciiBytes);
 
             // Assert
-            Assert.Equal(expected, actual);
+            actual.ShouldBe(expected);
         }
 
         [Fact]
@@ -55,8 +56,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
             var puzzle = SolvePuzzle<Day10>();
 
             // Assert
-            Assert.Equal(11413, puzzle.ProductOfFirstTwoElements);
-            Assert.Equal("7adfd64c2a03a4968cf708d1b7fd418d", puzzle.DenseHash);
+            puzzle.ProductOfFirstTwoElements.ShouldBe(11413);
+            puzzle.DenseHash.ShouldBe("7adfd64c2a03a4968cf708d1b7fd418d");
         }
     }
 }

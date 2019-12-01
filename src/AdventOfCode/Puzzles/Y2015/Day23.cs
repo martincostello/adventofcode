@@ -3,7 +3,6 @@
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2015
 {
-    using System;
     using System.Collections.Generic;
     using System.Linq;
 
@@ -29,9 +28,9 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
         /// <param name="initialValue">The initial value to use for register a.</param>
         /// <param name="logger">The logger to use.</param>
         /// <returns>
-        /// A <see cref="Tuple{T1, T2}"/> that contains the values of the a and b registers.
+        /// A named tuple that contains the values of the a and b registers.
         /// </returns>
-        internal static Tuple<uint, uint> ProcessInstructions(
+        internal static (uint a, uint b) ProcessInstructions(
             IList<string> instructions,
             uint initialValue,
             ILogger logger)
@@ -90,7 +89,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
 
                     default:
                         logger.WriteLine($"Instruction '{operation}' is not defined.");
-                        return Tuple.Create(uint.MaxValue, uint.MaxValue);
+                        return (uint.MaxValue, uint.MaxValue);
                 }
 
                 if (next == i)
@@ -102,7 +101,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
                 i = next;
             }
 
-            return Tuple.Create(a.Value, b.Value);
+            return (a.Value, b.Value);
         }
 
         /// <inheritdoc />

@@ -3,6 +3,7 @@
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2017
 {
+    using Shouldly;
     using Xunit;
     using Xunit.Abstractions;
 
@@ -35,7 +36,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
             bool actual = Day04.IsPassphraseValid(passphrase, version);
 
             // Assert
-            Assert.Equal(expected, actual);
+            actual.ShouldBe(expected);
         }
 
         [Fact]
@@ -45,8 +46,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
             var puzzle = SolvePuzzle<Day04>();
 
             // Assert
-            Assert.Equal(383, puzzle.ValidPassphraseCountV1);
-            Assert.Equal(265, puzzle.ValidPassphraseCountV2);
+            puzzle.ValidPassphraseCountV1.ShouldBe(383);
+            puzzle.ValidPassphraseCountV2.ShouldBe(265);
         }
     }
 }

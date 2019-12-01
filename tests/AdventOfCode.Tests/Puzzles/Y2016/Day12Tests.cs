@@ -3,6 +3,7 @@
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2016
 {
+    using Shouldly;
     using Xunit;
     using Xunit.Abstractions;
 
@@ -40,12 +41,12 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
             var actual = Day12.Process(instructions, initialValueOfC: 0);
 
             // Assert
-            Assert.NotNull(actual);
-            Assert.Equal(4, actual.Count);
-            Assert.Equal(42, actual['a']);
-            Assert.Equal(0, actual['b']);
-            Assert.Equal(0, actual['c']);
-            Assert.Equal(0, actual['d']);
+            actual.ShouldNotBeNull();
+            actual.Count.ShouldBe(4);
+            actual.ShouldContainKeyAndValue('a', 42);
+            actual.ShouldContainKeyAndValue('b', 0);
+            actual.ShouldContainKeyAndValue('c', 0);
+            actual.ShouldContainKeyAndValue('d', 0);
         }
 
         [Fact]
@@ -69,12 +70,12 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
             var actual = Day12.Process(instructions, initialValueOfC: 0);
 
             // Assert
-            Assert.NotNull(actual);
-            Assert.Equal(4, actual.Count);
-            Assert.Equal(3, actual['a']);
-            Assert.Equal(0, actual['b']);
-            Assert.Equal(0, actual['c']);
-            Assert.Equal(0, actual['d']);
+            actual.ShouldNotBeNull();
+            actual.Count.ShouldBe(4);
+            actual.ShouldContainKeyAndValue('a', 3);
+            actual.ShouldContainKeyAndValue('b', 0);
+            actual.ShouldContainKeyAndValue('c', 0);
+            actual.ShouldContainKeyAndValue('d', 0);
         }
 
         [Fact]
@@ -84,8 +85,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
             var puzzle = SolvePuzzle<Day12>();
 
             // Assert
-            Assert.Equal(318020, puzzle.ValueInRegisterA);
-            Assert.Equal(9227674, puzzle.ValueInRegisterAWhenInitializedWithIgnitionKey);
+            puzzle.ValueInRegisterA.ShouldBe(318020);
+            puzzle.ValueInRegisterAWhenInitializedWithIgnitionKey.ShouldBe(9227674);
         }
     }
 }

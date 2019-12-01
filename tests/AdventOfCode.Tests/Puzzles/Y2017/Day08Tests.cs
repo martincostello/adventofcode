@@ -3,6 +3,7 @@
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2017
 {
+    using Shouldly;
     using Xunit;
     using Xunit.Abstractions;
 
@@ -36,7 +37,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
             int actual = Day08.FindHighestRegisterValueAtEnd(instructions);
 
             // Assert
-            Assert.Equal(1, actual);
+            actual.ShouldBe(1);
         }
 
         [Fact]
@@ -55,7 +56,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
             int actual = Day08.FindHighestRegisterValueDuring(instructions);
 
             // Assert
-            Assert.Equal(10, actual);
+            actual.ShouldBe(10);
         }
 
         [Fact]
@@ -65,8 +66,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
             var puzzle = SolvePuzzle<Day08>();
 
             // Assert
-            Assert.Equal(7296, puzzle.HighestRegisterValueAtEnd);
-            Assert.Equal(8186, puzzle.HighestRegisterValueDuring);
+            puzzle.HighestRegisterValueAtEnd.ShouldBe(7296);
+            puzzle.HighestRegisterValueDuring.ShouldBe(8186);
         }
     }
 }

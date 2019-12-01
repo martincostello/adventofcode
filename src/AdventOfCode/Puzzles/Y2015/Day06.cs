@@ -326,11 +326,6 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
             /// <summary>
             /// The brightnesses of lights by their position.
             /// </summary>
-            [System.Diagnostics.CodeAnalysis.SuppressMessage(
-                "Microsoft.Performance",
-                "CA1814:PreferJaggedArraysOverMultidimensional",
-                MessageId = "Member",
-                Justification = "The array is always square.")]
             private readonly int[,] _lightBrightnesses;
 
             /// <summary>

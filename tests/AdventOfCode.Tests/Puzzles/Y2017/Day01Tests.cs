@@ -3,6 +3,7 @@
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2017
 {
+    using Shouldly;
     using Xunit;
     using Xunit.Abstractions;
 
@@ -39,7 +40,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
             int actual = Day01.CalculateSum(digits, nextDigit);
 
             // Assert
-            Assert.Equal(expected, actual);
+            actual.ShouldBe(expected);
         }
 
         [Fact]
@@ -49,8 +50,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
             var puzzle = SolvePuzzle<Day01>();
 
             // Assert
-            Assert.Equal(1034, puzzle.CaptchaSolutionNext);
-            Assert.Equal(1356, puzzle.CaptchaSolutionOpposite);
+            puzzle.CaptchaSolutionNext.ShouldBe(1034);
+            puzzle.CaptchaSolutionOpposite.ShouldBe(1356);
         }
     }
 }

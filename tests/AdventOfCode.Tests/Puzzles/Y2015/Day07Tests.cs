@@ -4,6 +4,7 @@
 namespace MartinCostello.AdventOfCode.Puzzles.Y2015
 {
     using System.Collections.Generic;
+    using Shouldly;
     using Xunit;
     using Xunit.Abstractions;
 
@@ -43,16 +44,17 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
             IDictionary<string, ushort> actual = Day07.GetWireValues(instructions);
 
             // Assert
-            Assert.Equal(72, actual["d"]);
-            Assert.Equal(507, actual["e"]);
-            Assert.Equal(492, actual["f"]);
-            Assert.Equal(114, actual["g"]);
-            Assert.Equal(65412, actual["h"]);
-            Assert.Equal(65079, actual["i"]);
-            Assert.Equal(65079, actual["j"]);
-            Assert.Equal(65079, actual["k"]);
-            Assert.Equal(123, actual["x"]);
-            Assert.Equal(456, actual["y"]);
+            actual.ShouldNotBeNull();
+            actual.ShouldContainKeyAndValue<string, ushort>("d", 72);
+            actual.ShouldContainKeyAndValue<string, ushort>("e", 507);
+            actual.ShouldContainKeyAndValue<string, ushort>("f", 492);
+            actual.ShouldContainKeyAndValue<string, ushort>("g", 114);
+            actual.ShouldContainKeyAndValue<string, ushort>("h", 65412);
+            actual.ShouldContainKeyAndValue<string, ushort>("i", 65079);
+            actual.ShouldContainKeyAndValue<string, ushort>("j", 65079);
+            actual.ShouldContainKeyAndValue<string, ushort>("k", 65079);
+            actual.ShouldContainKeyAndValue<string, ushort>("x", 123);
+            actual.ShouldContainKeyAndValue<string, ushort>("y", 456);
         }
 
         [Fact]
@@ -62,8 +64,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
             var puzzle = SolvePuzzle<Day07>();
 
             // Assert
-            Assert.Equal(3176, puzzle.FirstSignal);
-            Assert.Equal(14710, puzzle.SecondSignal);
+            puzzle.FirstSignal.ShouldBe(3176);
+            puzzle.SecondSignal.ShouldBe(14710);
         }
     }
 }

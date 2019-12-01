@@ -3,6 +3,7 @@
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2015
 {
+    using Shouldly;
     using Xunit;
     using Xunit.Abstractions;
 
@@ -33,7 +34,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
             int actual = Day08.GetLiteralCharacterCount(value);
 
             // Assert
-            Assert.Equal(expected, actual);
+            actual.ShouldBe(expected);
         }
 
         [Fact]
@@ -52,7 +53,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
             int actual = Day08.GetLiteralCharacterCount(collection);
 
             // Assert
-            Assert.Equal(11, actual);
+            actual.ShouldBe(11);
         }
 
         [Theory]
@@ -66,7 +67,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
             int actual = Day08.GetEncodedCharacterCount(value);
 
             // Assert
-            Assert.Equal(expected, actual);
+            actual.ShouldBe(expected);
         }
 
         [Fact]
@@ -85,7 +86,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
             int actual = Day08.GetEncodedCharacterCount(collection);
 
             // Assert
-            Assert.Equal(42, actual);
+            actual.ShouldBe(42);
         }
 
         [Fact]
@@ -95,8 +96,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
             var puzzle = SolvePuzzle<Day08>();
 
             // Assert
-            Assert.Equal(1342, puzzle.FirstSolution);
-            Assert.Equal(2074, puzzle.SecondSolution);
+            puzzle.FirstSolution.ShouldBe(1342);
+            puzzle.SecondSolution.ShouldBe(2074);
         }
     }
 }
