@@ -5,7 +5,6 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
 {
     using System;
     using System.Collections.Generic;
-    using System.Globalization;
 
     /// <summary>
     /// A class representing the puzzle for <c>http://adventofcode.com/2016/day/12</c>. This class cannot be inherited.
@@ -64,7 +63,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
                 {
                     case "cpy":
 
-                        if (int.TryParse(split[1], NumberStyles.Integer, CultureInfo.InvariantCulture, out value))
+                        if (TryParseInt32(split[1], out value))
                         {
                             registers[split[2][0]] = value;
                         }
