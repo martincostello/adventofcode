@@ -48,10 +48,10 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
 
             IDictionary<char, int> registers = new Dictionary<char, int>()
             {
-                { 'a', initialValueOfA },
-                { 'b', 0 },
-                { 'c', initialValueOfC },
-                { 'd', 0 },
+                ['a'] = initialValueOfA,
+                ['b'] = 0,
+                ['c'] = initialValueOfC,
+                ['d'] = 0,
             };
 
             for (int i = 0; i < instructions.Count; i++)
