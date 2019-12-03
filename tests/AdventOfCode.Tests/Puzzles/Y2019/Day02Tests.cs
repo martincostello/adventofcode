@@ -4,6 +4,7 @@
 namespace MartinCostello.AdventOfCode.Puzzles.Y2019
 {
     using System.Collections.Generic;
+    using Shouldly;
     using Xunit;
     using Xunit.Abstractions;
 
@@ -33,7 +34,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
             IList<int> actual = Day02.RunProgram(program);
 
             // Assert
-            Assert.Equal(expected, actual);
+            actual.ShouldBe(expected);
         }
 
         [Fact]
@@ -43,9 +44,9 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
             var puzzle = SolvePuzzle<Day02>();
 
             // Assert
-            Assert.NotNull(puzzle.Output);
-            Assert.NotEmpty(puzzle.Output);
-            Assert.Equal(9581917, puzzle.Output[0]);
+            puzzle.Output.ShouldNotBeNull();
+            puzzle.Output.ShouldNotBeEmpty();
+            puzzle.Output[0].ShouldBe(9581917);
         }
     }
 }
