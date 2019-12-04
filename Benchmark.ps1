@@ -1,6 +1,6 @@
 param(
     [Parameter(Mandatory = $false)][string] $Configuration = "Release",
-    [Parameter(Mandatory = $false)][string] $Framework = "netcoreapp3.0"
+    [Parameter(Mandatory = $false)][string] $Framework = "netcoreapp3.1"
 )
 
 $ErrorActionPreference = "Stop"
