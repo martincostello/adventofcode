@@ -22,19 +22,22 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
         }
 
         [Theory]
-        [InlineData("111111", true)]
-        [InlineData("111123", true)]
-        [InlineData("122345", true)]
-        [InlineData("135679", false)]
-        [InlineData("123789", false)]
-        [InlineData("223450", false)]
-        public void Y2019_Day04_Is_Valid_Returns_Correct_Value(string password, bool expected)
+        [InlineData("111111", 1, true)]
+        [InlineData("111123", 1, true)]
+        [InlineData("122345", 1, true)]
+        [InlineData("135679", 1, false)]
+        [InlineData("123789", 1, false)]
+        [InlineData("223450", 1, false)]
+        [InlineData("112233", 2, true)]
+        [InlineData("123444", 2, false)]
+        [InlineData("111122", 2, true)]
+        public void Y2019_Day04_Is_Valid_Returns_Correct_Value(string password, int version, bool expected)
         {
             // Act
-            bool actual = Day04.IsValid(password);
+            bool actual = Day04.IsValid(password, version);
 
             // Assert
-            expected.ShouldBe(actual);
+            actual.ShouldBe(expected);
         }
 
         [Fact]
@@ -47,7 +50,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
             var puzzle = SolvePuzzle<Day04>(args);
 
             // Assert
-            puzzle.Count.ShouldBe(1890);
+            puzzle.CountV1.ShouldBe(1890);
+            puzzle.CountV2.ShouldBe(1277);
         }
     }
 }
