@@ -8,7 +8,7 @@ namespace MartinCostello.AdventOfCode
     using System.Globalization;
 
     /// <summary>
-    /// A console application that solves puzzles for <c>http://adventofcode.com</c>. This class cannot be inherited.
+    /// A console application that solves puzzles for <c>https://adventofcode.com</c>. This class cannot be inherited.
     /// </summary>
     internal static class Program
     {

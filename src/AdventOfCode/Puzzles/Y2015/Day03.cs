@@ -8,7 +8,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
     using System.Drawing;
 
     /// <summary>
-    /// A class representing the puzzle for <c>http://adventofcode.com/2015/day/3</c>.
+    /// A class representing the puzzle for <c>https://adventofcode.com/2015/day/3</c>.
     /// </summary>
     public class Day03 : Puzzle2015
     {
