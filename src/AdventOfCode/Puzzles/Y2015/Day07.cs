@@ -8,7 +8,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
     using System.Linq;
 
     /// <summary>
-    /// A class representing the puzzle for <c>http://adventofcode.com/2015/day/7</c>. This class cannot be inherited.
+    /// A class representing the puzzle for <c>https://adventofcode.com/2015/day/7</c>. This class cannot be inherited.
     /// </summary>
     public sealed class Day07 : Puzzle2015
     {

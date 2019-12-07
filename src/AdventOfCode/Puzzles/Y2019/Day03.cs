@@ -9,7 +9,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
     using System.Linq;
 
     /// <summary>
-    /// A class representing the puzzle for <c>http://adventofcode.com/2019/day/3</c>. This class cannot be inherited.
+    /// A class representing the puzzle for <c>https://adventofcode.com/2019/day/3</c>. This class cannot be inherited.
     /// </summary>
     public sealed class Day03 : Puzzle2019
     {
@@ -41,18 +41,25 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
         public int ManhattanDistance { get; private set; }
 
         /// <summary>
+        /// Gets the intersection that is reached in the minimum number of steps.
+        /// </summary>
+        public int MinimumSteps { get; private set; }
+
+        /// <summary>
         /// Gets the Manhattan distance of the central port to the closest intersection for the specified wires.
         /// </summary>
         /// <param name="wires">The wires to compute the intersection distance for.</param>
         /// <returns>
-        /// The Manhattan distance from the central port to the closest intersection.
+        /// The Manhattan distance from the central port to the closest intersection and the
+        /// minimum number of combined steps to reach an intersection.
         /// </returns>
-        public static int GetManhattanDistanceOfClosesIntersection(IList<string> wires)
+        public static (int manhattanDistance, int minimumSteps) GetManhattanDistanceOfClosesIntersection(IList<string> wires)
         {
             var grid = new Dictionary<Point, Wires>();
+            var stepsToIntersection = new Dictionary<Point, int[]>();
             var intersections = new List<Point>();
 
-            void MarkWire(Point point, Wires wire)
+            void MarkWire(Point point, Wires wire, int steps)
             {
                 Wires wiresSet = grid[point] = grid.GetValueOrDefault(point) | wire;
 
@@ -60,6 +67,21 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
                 {
                     intersections.Add(point);
                 }
+
+                int[] stepsForWires = Array.Empty<int>();
+
+                if (!stepsToIntersection.ContainsKey(point))
+                {
+                    stepsForWires = stepsToIntersection[point] = new int[2];
+                    Array.Fill(stepsForWires, int.MaxValue);
+                }
+                else
+                {
+                    stepsForWires = stepsToIntersection[point];
+                }
+
+                int index = (int)wire - 1;
+                stepsForWires[index] = Math.Min(steps, stepsForWires[index]);
             }
 
             for (int i = 0; i < wires.Count; i++)
@@ -69,6 +91,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
 
                 int x = 0;
                 int y = 0;
+                int steps = 0;
 
                 foreach (string instruction in path)
                 {
@@ -76,16 +99,16 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
 
                     int sign = Math.Sign(deltaX);
 
-                    for (int j = 0; j < Math.Abs(deltaX); j++)
+                    for (int j = 0; j < Math.Abs(deltaX); j++, steps++)
                     {
-                        MarkWire(new Point(x + (j * sign), y), (Wires)(i + 1));
+                        MarkWire(new Point(x + (j * sign), y), (Wires)(i + 1), steps);
                     }
 
                     sign = Math.Sign(deltaY);
 
-                    for (int j = 0; j < Math.Abs(deltaY); j++)
+                    for (int j = 0; j < Math.Abs(deltaY); j++, steps++)
                     {
-                        MarkWire(new Point(x, y + (j * sign)), (Wires)(i + 1));
+                        MarkWire(new Point(x, y + (j * sign)), (Wires)(i + 1), steps);
                     }
 
                     x += deltaX;
@@ -93,7 +116,15 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
                 }
             }
 
-            return intersections.Skip(1).Min((p) => Math.Abs(p.X) + Math.Abs(p.Y));
+            int manhattanDistance = intersections
+                .Skip(1)
+                .Min((p) => Math.Abs(p.X) + Math.Abs(p.Y));
+
+            int minimumSteps = stepsToIntersection
+                .Where((p) => p.Key != default && intersections.Contains(p.Key))
+                .Min((p) => p.Value.Sum());
+
+            return (manhattanDistance, minimumSteps);
         }
 
         /// <inheritdoc />
@@ -101,11 +132,12 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
         {
             IList<string> wires = ReadResourceAsLines();
 
-            ManhattanDistance = GetManhattanDistanceOfClosesIntersection(wires);
+            (ManhattanDistance, MinimumSteps) = GetManhattanDistanceOfClosesIntersection(wires);
 
             if (Verbose)
             {
                 Logger.WriteLine("The Manhattan distance from the central port to the closest intersection is {0}.", ManhattanDistance);
+                Logger.WriteLine("The minimum number of combined steps to get to an intersection is {0}.", MinimumSteps);
             }
 
             return 0;
