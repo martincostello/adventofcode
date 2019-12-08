@@ -6,12 +6,27 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
     using System;
     using System.Collections.Generic;
     using System.Globalization;
+    using System.Linq;
 
     /// <summary>
     /// A class representing an Intcode Virtual Machine. This class cannot be inherited.
     /// </summary>
-    internal static class IntcodeVM
+    internal sealed class IntcodeVM
     {
+        /// <summary>
+        /// The virtual machine's memory. This field is read-only.
+        /// </summary>
+        private readonly int[] _memory;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="IntcodeVM"/> class.
+        /// </summary>
+        /// <param name="instructions">The instructions of the program to run in the VM.</param>
+        internal IntcodeVM(IEnumerable<int> instructions)
+        {
+            _memory = instructions.ToArray();
+        }
+
         /// <summary>
         /// Runs the specified Intcode program.
         /// </summary>
@@ -21,57 +36,68 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
         /// <returns>
         /// The memory values of the program once run.
         /// </returns>
-        internal static IReadOnlyList<int> Run(ReadOnlySpan<int> program, IEnumerable<int> input, out int output)
+        internal static IReadOnlyList<int> Run(IEnumerable<int> program, IEnumerable<int> input, out int output)
         {
-            output = 0;
+            var vm = new IntcodeVM(program);
 
-            int[] memory = program.ToArray();
-            using var enumerator = input.GetEnumerator();
+            output = vm.Run(input);
 
+            return vm._memory;
+        }
+
+        /// <summary>
+        /// Runs the virtual machine's program.
+        /// </summary>
+        /// <param name="inputs">The inputs to the program.</param>
+        /// <returns>
+        /// The output from the program.
+        /// </returns>
+        internal int Run(IEnumerable<int> inputs)
+        {
             void Add(int current, int[] modes)
             {
-                int x = memory[current + 1];
-                int y = memory[current + 2];
-                int z = memory[current + 3];
+                int x = _memory[current + 1];
+                int y = _memory[current + 2];
+                int z = _memory[current + 3];
 
-                int left = modes[0] == 0 ? memory[x] : x;
-                int right = modes[1] == 0 ? memory[y] : y;
+                int left = modes[0] == 0 ? _memory[x] : x;
+                int right = modes[1] == 0 ? _memory[y] : y;
 
-                memory[z] = left + right;
+                _memory[z] = left + right;
             }
 
             void Multiply(int counter, int[] modes)
             {
-                int x = memory[counter + 1];
-                int y = memory[counter + 2];
-                int z = memory[counter + 3];
+                int x = _memory[counter + 1];
+                int y = _memory[counter + 2];
+                int z = _memory[counter + 3];
 
-                int left = modes[0] == 0 ? memory[x] : x;
-                int right = modes[1] == 0 ? memory[y] : y;
+                int left = modes[0] == 0 ? _memory[x] : x;
+                int right = modes[1] == 0 ? _memory[y] : y;
 
-                memory[z] = left * right;
+                _memory[z] = left * right;
             }
 
             void Input(int current, int value)
             {
-                int x = memory[current + 1];
-                memory[x] = value;
+                int x = _memory[current + 1];
+                _memory[x] = value;
             }
 
             int Output(int current, int[] modes)
             {
-                int x = memory[current + 1];
-                return modes[0] == 0 ? memory[x] : x;
+                int x = _memory[current + 1];
+                return modes[0] == 0 ? _memory[x] : x;
             }
 
             void JumpIfTrue(ref int current, int[] modes)
             {
-                int x = memory[current + 1];
+                int x = _memory[current + 1];
 
-                if ((modes[0] == 0 ? memory[x] : x) != 0)
+                if ((modes[0] == 0 ? _memory[x] : x) != 0)
                 {
-                    int y = memory[current + 2];
-                    current = modes[1] == 0 ? memory[y] : y;
+                    int y = _memory[current + 2];
+                    current = modes[1] == 0 ? _memory[y] : y;
                 }
                 else
                 {
@@ -81,12 +107,12 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
 
             void JumpIfFalse(ref int current, int[] modes)
             {
-                int x = memory[current + 1];
+                int x = _memory[current + 1];
 
-                if ((modes[0] == 0 ? memory[x] : x) == 0)
+                if ((modes[0] == 0 ? _memory[x] : x) == 0)
                 {
-                    int y = memory[current + 2];
-                    current = modes[1] == 0 ? memory[y] : y;
+                    int y = _memory[current + 2];
+                    current = modes[1] == 0 ? _memory[y] : y;
                 }
                 else
                 {
@@ -96,26 +122,26 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
 
             void LessThan(int current, int[] modes)
             {
-                int x = memory[current + 1];
-                int y = memory[current + 2];
-                int z = memory[current + 3];
+                int x = _memory[current + 1];
+                int y = _memory[current + 2];
+                int z = _memory[current + 3];
 
-                int left = modes[0] == 0 ? memory[x] : x;
-                int right = modes[1] == 0 ? memory[y] : y;
+                int left = modes[0] == 0 ? _memory[x] : x;
+                int right = modes[1] == 0 ? _memory[y] : y;
 
-                memory[z] = left < right ? 1 : 0;
+                _memory[z] = left < right ? 1 : 0;
             }
 
             void Equals(int current, int[] modes)
             {
-                int x = memory[current + 1];
-                int y = memory[current + 2];
-                int z = memory[current + 3];
+                int x = _memory[current + 1];
+                int y = _memory[current + 2];
+                int z = _memory[current + 3];
 
-                int left = modes[0] == 0 ? memory[x] : x;
-                int right = modes[1] == 0 ? memory[y] : y;
+                int left = modes[0] == 0 ? _memory[x] : x;
+                int right = modes[1] == 0 ? _memory[y] : y;
 
-                memory[z] = left == right ? 1 : 0;
+                _memory[z] = left == right ? 1 : 0;
             }
 
             static (int opcode, int[] modes, int length) Decode(int instruction)
@@ -159,9 +185,12 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
                 return (opcode, modes, length);
             }
 
-            for (int i = 0; i < memory.Length;)
+            int output = 0;
+            using var enumerator = inputs.GetEnumerator();
+
+            for (int i = 0; i < _memory.Length;)
             {
-                (int opcode, int[] modes, int length) = Decode(memory[i]);
+                (int opcode, int[] modes, int length) = Decode(_memory[i]);
 
                 if (opcode == 99)
                 {
@@ -214,7 +243,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
                 i += length;
             }
 
-            return memory;
+            return output;
         }
     }
 }
