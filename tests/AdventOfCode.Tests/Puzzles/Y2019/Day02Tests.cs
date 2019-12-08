@@ -31,7 +31,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
         public void Y2019_Day02_RunProgram_Returns_Correct_State(string program, int[] expected)
         {
             // Act
-            IList<int> actual = Day02.RunProgram(program);
+            IReadOnlyList<int> actual = Day02.RunProgram(program);
 
             // Assert
             actual.ShouldBe(expected);

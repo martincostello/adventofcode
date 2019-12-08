@@ -3,54 +3,51 @@
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2019
 {
-    using System;
-    using System.Collections.Generic;
     using System.Linq;
 
     /// <summary>
-    /// A class representing the puzzle for <c>https://adventofcode.com/2019/day/2</c>. This class cannot be inherited.
+    /// A class representing the puzzle for <c>https://adventofcode.com/2019/day/5</c>. This class cannot be inherited.
     /// </summary>
-    public sealed class Day02 : Puzzle2019
+    public sealed class Day05 : Puzzle2019
     {
         /// <summary>
-        /// Gets the output of the program.
+        /// Gets the diagnostic code output by the program.
         /// </summary>
-        public IReadOnlyList<int> Output { get; private set; } = Array.Empty<int>();
+        public int DiagnosticCode { get; private set; }
+
+        /// <inheritdoc />
+        protected override int MinimumArguments => 1;
 
         /// <summary>
         /// Runs the specified Intcode program.
         /// </summary>
         /// <param name="program">The Intcode program to run.</param>
-        /// <param name="adjust">Whether to adjust the state for <c>1202 program alarm</c> before running.</param>
+        /// <param name="input">The input to the program.</param>
         /// <returns>
-        /// The memory values of the program once run.
+        /// The diagnostic code output by the program.
         /// </returns>
-        public static IReadOnlyList<int> RunProgram(string program, bool adjust = false)
+        public static int RunProgram(string program, int input)
         {
             int[] instructions = program
                 .Split(',')
                 .Select((p) => ParseInt32(p))
                 .ToArray();
 
-            if (adjust)
-            {
-                instructions[1] = 12;
-                instructions[2] = 2;
-            }
-
-            return IntcodeVM.Run(instructions, 0, out int _);
+            _ = IntcodeVM.Run(instructions, input, out int output);
+            return output;
         }
 
         /// <inheritdoc />
         protected override int SolveCore(string[] args)
         {
+            int input = ParseInt32(args[0]);
             string program = ReadResourceAsString();
 
-            Output = RunProgram(program, adjust: true);
+            DiagnosticCode = RunProgram(program, input);
 
             if (Verbose)
             {
-                Logger.WriteLine("The value at position 0 after the program halts is {0}.", Output[0]);
+                Logger.WriteLine("The program produces diagnostic code {0}.", DiagnosticCode);
             }
 
             return 0;
