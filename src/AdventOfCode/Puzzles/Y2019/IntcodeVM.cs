@@ -21,11 +21,12 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
         /// <returns>
         /// The memory values of the program once run.
         /// </returns>
-        internal static IReadOnlyList<int> Run(ReadOnlySpan<int> program, int input, out int output)
+        internal static IReadOnlyList<int> Run(ReadOnlySpan<int> program, IEnumerable<int> input, out int output)
         {
             output = 0;
 
             int[] memory = program.ToArray();
+            using var enumerator = input.GetEnumerator();
 
             void Add(int current, int[] modes)
             {
@@ -178,7 +179,12 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
                         break;
 
                     case 3:
-                        Input(i, input);
+                        if (!enumerator.MoveNext())
+                        {
+                            throw new InvalidOperationException();
+                        }
+
+                        Input(i, enumerator.Current);
                         break;
 
                     case 4:
