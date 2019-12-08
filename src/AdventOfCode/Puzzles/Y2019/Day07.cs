@@ -39,10 +39,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
 
                     for (int i = 0; i < phases.Length; i++)
                     {
-                        int phase = phases[i];
-                        int[] amplifier = (int[])instructions.Clone();
-
-                        _ = IntcodeVM.Run(amplifier, new[] { phase, signal }, out signal);
+                        var amplifier = new IntcodeVM(instructions);
+                        signal = amplifier.Run(new[] { phases[i], signal });
                     }
 
                     return signal;
