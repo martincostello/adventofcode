@@ -15,6 +15,9 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
         /// </summary>
         public int DiagnosticCode { get; private set; }
 
+        /// <inheritdoc />
+        protected override int MinimumArguments => 1;
+
         /// <summary>
         /// Runs the specified Intcode program.
         /// </summary>
@@ -37,9 +40,10 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
         /// <inheritdoc />
         protected override int SolveCore(string[] args)
         {
+            int input = ParseInt32(args[0]);
             string program = ReadResourceAsString();
 
-            DiagnosticCode = RunProgram(program, 1);
+            DiagnosticCode = RunProgram(program, input);
 
             if (Verbose)
             {

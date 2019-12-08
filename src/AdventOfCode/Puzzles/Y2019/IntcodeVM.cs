@@ -27,36 +27,94 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
 
             int[] memory = program.ToArray();
 
-            int Add(int counter, int[] modes)
+            void Add(int current, int[] modes)
             {
-                int first = memory[counter + 1];
-                int second = memory[counter + 2];
-                int address = memory[counter + 3];
-                memory[address] = (modes[0] == 0 ? memory[first] : first) + (modes[1] == 0 ? memory[second] : second);
-                return 4;
+                int x = memory[current + 1];
+                int y = memory[current + 2];
+                int z = memory[current + 3];
+
+                int left = modes[0] == 0 ? memory[x] : x;
+                int right = modes[1] == 0 ? memory[y] : y;
+
+                memory[z] = left + right;
             }
 
-            int Multiply(int counter, int[] modes)
+            void Multiply(int counter, int[] modes)
             {
-                int first = memory[counter + 1];
-                int second = memory[counter + 2];
-                int address = memory[counter + 3];
-                memory[address] = (modes[0] == 0 ? memory[first] : first) * (modes[1] == 0 ? memory[second] : second);
-                return 4;
+                int x = memory[counter + 1];
+                int y = memory[counter + 2];
+                int z = memory[counter + 3];
+
+                int left = modes[0] == 0 ? memory[x] : x;
+                int right = modes[1] == 0 ? memory[y] : y;
+
+                memory[z] = left * right;
             }
 
-            int Input(int counter)
+            void Input(int current, int value)
             {
-                int address = memory[counter + 1];
-                memory[address] = input;
-                return 2;
+                int x = memory[current + 1];
+                memory[x] = value;
             }
 
-            int Output(int counter, out int result)
+            int Output(int current, int[] modes)
             {
-                int address = memory[counter + 1];
-                result = memory[address];
-                return 2;
+                int x = memory[current + 1];
+                return modes[0] == 0 ? memory[x] : x;
+            }
+
+            void JumpIfTrue(ref int current, int[] modes)
+            {
+                int x = memory[current + 1];
+
+                if ((modes[0] == 0 ? memory[x] : x) != 0)
+                {
+                    int y = memory[current + 2];
+                    current = modes[1] == 0 ? memory[y] : y;
+                }
+                else
+                {
+                    current += 3;
+                }
+            }
+
+            void JumpIfFalse(ref int current, int[] modes)
+            {
+                int x = memory[current + 1];
+
+                if ((modes[0] == 0 ? memory[x] : x) == 0)
+                {
+                    int y = memory[current + 2];
+                    current = modes[1] == 0 ? memory[y] : y;
+                }
+                else
+                {
+                    current += 3;
+                }
+            }
+
+            void LessThan(int current, int[] modes)
+            {
+                int x = memory[current + 1];
+                int y = memory[current + 2];
+                int z = memory[current + 3];
+
+                int left = modes[0] == 0 ? memory[x] : x;
+                int right = modes[1] == 0 ? memory[y] : y;
+
+                memory[z] = left < right ? 1 : 0;
+            }
+
+            void Equals(int current, int[] modes)
+            {
+                int x = memory[current + 1];
+                int y = memory[current + 2];
+                int z = memory[current + 3];
+
+                int left = modes[0] == 0 ? memory[x] : x;
+                int right = modes[1] == 0 ? memory[y] : y;
+
+                memory[z] = left == right ? 1 : 0;
             }
 
             static (int opcode, int[] modes, int length) Decode(int instruction)
@@ -69,22 +127,33 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
                 string digits = instruction.ToString(CultureInfo.InvariantCulture);
 
                 int opcode = digits[^1] - '0';
-                int length = opcode switch
+                int parameters = opcode switch
                 {
-                    1 => 4,
-                    2 => 4,
-                    3 => 2,
-                    4 => 2,
-                    _ => 1,
+                    1 => 3,
+                    2 => 3,
+                    3 => 1,
+                    4 => 1,
+                    5 => 3,
+                    6 => 3,
+                    7 => 3,
+                    8 => 3,
+                    _ => throw new InvalidOperationException($"{opcode} is not a supported opcode."),
                 };
 
-                int[] modes = new int[length - 1];
+                int[] modes = new int[parameters];
                 int j = 0;
 
                 for (int i = digits.Length - 3; i >= 0; i--, j++)
                 {
                     modes[j] = digits[i] - '0';
                 }
+
+                int length = opcode switch
+                {
+                    5 => 0,
+                    6 => 0,
+                    _ => parameters + 1,
+                };
 
                 return (opcode, modes, length);
             }
@@ -109,11 +178,27 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
                         break;
 
                     case 3:
-                        Input(i);
+                        Input(i, input);
                         break;
 
                     case 4:
-                        Output(i, out output);
+                        output = Output(i, modes);
+                        break;
+
+                    case 5:
+                        JumpIfTrue(ref i, modes);
+                        break;
+
+                    case 6:
+                        JumpIfFalse(ref i, modes);
+                        break;
+
+                    case 7:
+                        LessThan(i, modes);
+                        break;
+
+                    case 8:
+                        Equals(i, modes);
                         break;
 
                     default:
