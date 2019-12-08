@@ -33,7 +33,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
                 .Select((p) => ParseInt32(p))
                 .ToArray();
 
-            _ = IntcodeVM.Run(instructions, input, out int output);
+            _ = IntcodeVM.Run(instructions, new[] { input }, out int output);
             return output;
         }
 

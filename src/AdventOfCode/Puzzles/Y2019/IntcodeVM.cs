@@ -21,7 +21,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
         /// <returns>
         /// The memory values of the program once run.
         /// </returns>
-        internal static IReadOnlyList<int> Run(ReadOnlySpan<int> program, int input, out int output)
+        internal static IReadOnlyList<int> Run(ReadOnlySpan<int> program, int[] input, out int output)
         {
             output = 0;
 
@@ -158,7 +158,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
                 return (opcode, modes, length);
             }
 
-            for (int i = 0; i < memory.Length;)
+            for (int i = 0, j = 0; i < memory.Length;)
             {
                 (int opcode, int[] modes, int length) = Decode(memory[i]);
 
@@ -178,7 +178,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
                         break;
 
                     case 3:
-                        Input(i, input);
+                        Input(i, input[j++]);
                         break;
 
                     case 4:

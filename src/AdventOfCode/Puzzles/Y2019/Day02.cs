@@ -38,7 +38,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
                 instructions[2] = 2;
             }
 
-            return IntcodeVM.Run(instructions, 0, out int _);
+            return IntcodeVM.Run(instructions, new[] { 0 }, out int _);
         }
 
         /// <inheritdoc />
