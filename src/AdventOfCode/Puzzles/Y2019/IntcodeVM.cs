@@ -21,6 +21,11 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
         private readonly long[] _memory;
 
         /// <summary>
+        /// The virtual machine's output channel. This field is read-only.
+        /// </summary>
+        private readonly Channel<long> _output;
+
+        /// <summary>
         /// The instruction pointer.
         /// </summary>
         private long _instruction;
@@ -39,11 +44,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
                 Array.Resize(ref _memory, size.Value);
             }
 
-            var emptyChannel = Channel.CreateBounded<long>(1);
-            emptyChannel.Writer.Complete();
-
-            Input = emptyChannel.Reader;
-            Output = emptyChannel.Writer;
+            Input = Channel.CreateUnbounded<long>().Reader;
+            _output = Channel.CreateUnbounded<long>();
         }
 
         /// <summary>
@@ -57,9 +59,9 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
         internal ChannelReader<long> Input { get; set; }
 
         /// <summary>
-        /// Gets or sets the output channel for the VM.
+        /// Gets the output reader for the VM.
         /// </summary>
-        internal ChannelWriter<long> Output { get; set; }
+        internal ChannelReader<long> Output => _output.Reader;
 
         /// <summary>
         /// Parses the specified program.
@@ -85,25 +87,10 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
         /// The output of the program once run.
         /// </returns>
         internal static async Task<IReadOnlyList<long>> RunAsync(IEnumerable<long> program, params long[] input)
-            => await RunAsync(program, input as IEnumerable<long>);
-
-        /// <summary>
-        /// Runs the specified Intcode program as an asynchronous operation.
-        /// </summary>
-        /// <param name="program">The Intcode program to run.</param>
-        /// <param name="input">The optional input to the program.</param>
-        /// <returns>
-        /// The output of the program once run.
-        /// </returns>
-        internal static async Task<IReadOnlyList<long>> RunAsync(IEnumerable<long> program, IEnumerable<long>? input = null)
         {
-            var inputChannel = await ChannelHelpers.CreateReaderAsync(input);
-            var outputChannel = Channel.CreateUnbounded<long>();
-
             var vm = new IntcodeVM(program)
             {
-                Input = inputChannel,
-                Output = outputChannel.Writer,
+                Input = await ChannelHelpers.CreateReaderAsync(input),
             };
 
             if (!await vm.RunAsync())
@@ -111,64 +98,16 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
                 throw new InvalidProgramException();
             }
 
-            return await outputChannel.Reader.ToListAsync();
+            return await vm.Output.ToListAsync();
         }
 
         /// <summary>
-        /// Runs the specified Intcode program as an asynchronous operation.
+        /// Gets the current memory of the virtual machine.
         /// </summary>
-        /// <param name="program">The Intcode program to run.</param>
-        /// <param name="input">The input to the program.</param>
         /// <returns>
-        /// The memory values of the program once run.
+        /// A read-only view of the current memory of the virtual machine.
         /// </returns>
-        internal static async Task<IReadOnlyList<long>> RunAsync(
-            IEnumerable<long> program,
-            ChannelReader<long> input)
-        {
-            var output = Channel.CreateUnbounded<long>();
-
-            var vm = new IntcodeVM(program)
-            {
-                Input = input,
-                Output = output.Writer,
-            };
-
-            if (!await vm.RunAsync())
-            {
-                throw new System.InvalidProgramException();
-            }
-
-            return vm._memory;
-        }
-
-        /// <summary>
-        /// Runs the specified Intcode program as an asynchronous operation.
-        /// </summary>
-        /// <param name="program">The Intcode program to run.</param>
-        /// <param name="input">The input to the program.</param>
-        /// <param name="output">The output from the program.</param>
-        /// <returns>
-        /// The memory values of the program once run.
-        /// </returns>
-        internal static async Task<IReadOnlyList<long>> RunAsync(
-            IEnumerable<long> program,
-            ChannelReader<long> input,
-            ChannelWriter<long> output)
-        {
-            var vm = new IntcodeVM(program)
-            {
-                Input = input,
-                Output = output,
-            };
-
-            if (!await vm.RunAsync())
-            {
-                throw new System.InvalidProgramException();
-            }
-
-            return vm._memory;
-        }
+        internal ReadOnlySpan<long> Memory() => _memory;
 
         /// <summary>
         /// Runs the virtual machine's program as an asynchronous operation.
@@ -374,7 +313,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
 
                     case 4:
                         long output = ReadOutput(_instruction, offset, modes);
-                        await Output.WriteAsync(output);
+                        await _output.Writer.WriteAsync(output);
                         OnOutput?.Invoke(this, output);
                         break;
 
@@ -405,7 +344,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
                 _instruction += length;
             }
 
-            Output.Complete();
+            _output.Writer.Complete();
             return true;
         }
     }

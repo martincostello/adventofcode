@@ -3,7 +3,7 @@
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2019
 {
-    using System.Collections.Generic;
+    using System;
     using System.Threading.Tasks;
 
     /// <summary>
@@ -31,8 +31,17 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
         {
             long[] instructions = IntcodeVM.ParseProgram(program);
 
-            IReadOnlyList<long> outputs = await IntcodeVM.RunAsync(instructions, input);
+            var vm = new IntcodeVM(instructions)
+            {
+                Input = await ChannelHelpers.CreateReaderAsync(input),
+            };
 
+            if (!await vm.RunAsync())
+            {
+                throw new InvalidProgramException();
+            }
+
+            var outputs = await vm.Output.ToListAsync();
             return outputs.Count == 0 ? 0 : outputs[^1];
         }
 

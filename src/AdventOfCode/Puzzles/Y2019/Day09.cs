@@ -3,6 +3,7 @@
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2019
 {
+    using System;
     using System.Collections.Generic;
     using System.Threading.Channels;
     using System.Threading.Tasks;
@@ -32,28 +33,26 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
         {
             long[] instructions = IntcodeVM.ParseProgram(program);
 
-            var inputChannel = Channel.CreateUnbounded<long>();
-            var outputChannel = Channel.CreateUnbounded<long>();
+            var channel = Channel.CreateUnbounded<long>();
 
             if (input.HasValue)
             {
-                await inputChannel.Writer.WriteAsync(input.Value);
+                await channel.Writer.WriteAsync(input.Value);
             }
 
-            inputChannel.Writer.Complete();
+            channel.Writer.Complete();
 
             var vm = new IntcodeVM(instructions, 2_000)
             {
-                Input = inputChannel.Reader,
-                Output = outputChannel.Writer,
+                Input = channel.Reader,
             };
 
             if (!await vm.RunAsync())
             {
-                throw new System.InvalidProgramException();
+                throw new InvalidProgramException();
             }
 
-            return await outputChannel.Reader.ToListAsync();
+            return await vm.Output.ToListAsync();
         }
 
         /// <inheritdoc />

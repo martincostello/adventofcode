@@ -5,7 +5,6 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
 {
     using System;
     using System.Collections.Generic;
-    using System.Threading.Channels;
     using System.Threading.Tasks;
 
     /// <summary>
@@ -36,9 +35,17 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
                 instructions[2] = 2;
             }
 
-            ChannelReader<long> input = await ChannelHelpers.CreateReaderAsync(0L);
+            var vm = new IntcodeVM(instructions)
+            {
+                Input = await ChannelHelpers.CreateReaderAsync(0L),
+            };
 
-            return await IntcodeVM.RunAsync(instructions, input);
+            if (!await vm.RunAsync())
+            {
+                throw new InvalidProgramException();
+            }
+
+            return vm.Memory().ToArray();
         }
 
         /// <inheritdoc />

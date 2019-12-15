@@ -55,13 +55,11 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
                 {
                     var vms = new IntcodeVM[phases.Length];
                     var inputs = new Channel<long>[phases.Length];
-                    var outputs = new Channel<long>[phases.Length];
 
                     for (int i = 0; i < phases.Length; i++)
                     {
                         vms[i] = new IntcodeVM(instructions);
                         inputs[i] = Channel.CreateUnbounded<long>();
-                        outputs[i] = Channel.CreateUnbounded<long>();
 
                         await inputs[i].Writer.WriteAsync(phases[i]);
 
@@ -77,7 +75,6 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
                         int nextVM = i == phases.Length - 1 ? 0 : i + 1;
 
                         vms[thisVM].Input = inputs[thisVM].Reader;
-                        vms[thisVM].Output = outputs[thisVM].Writer;
                         vms[thisVM].OnOutput += async (_, value) =>
                         {
                             await inputs[nextVM].Writer.WriteAsync(value);
@@ -94,7 +91,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
                         }
                     }
 
-                    signal = (await ChannelHelpers.ToListAsync(outputs.Last().Reader))[^1];
+                    signal = (await ChannelHelpers.ToListAsync(vms.Last().Output))[^1];
                 }
 
                 signals.Add(signal);
