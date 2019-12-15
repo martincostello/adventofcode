@@ -23,6 +23,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
 
         [Theory]
         [InlineData("123456789012", 2, 3, 1)]
+        [InlineData("0222112222120000", 2, 2, 4)]
         public void Y2019_Day08_GetImageChecksum_Returns_Correct_Output(string program, int height, int width, int expected)
         {
             // Act
