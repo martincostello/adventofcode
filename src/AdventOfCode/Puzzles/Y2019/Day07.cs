@@ -22,25 +22,25 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
         /// <returns>
         /// The diagnostic code output by the program.
         /// </returns>
-        public static int RunProgram(string program)
+        public static long RunProgram(string program)
         {
             var permutations = Maths.GetPermutations(new[] { 0, 1, 2, 3, 4 });
 
-            int[] instructions = program
+            long[] instructions = program
                 .Split(',')
-                .Select((p) => ParseInt32(p))
+                .Select((p) => ParseInt64(p))
                 .ToArray();
 
             return permutations
                 .Select((p) =>
                 {
-                    int signal = 0;
-                    int[] phases = p.ToArray();
+                    long signal = 0;
+                    long[] phases = p.Select((p) => (long)p).ToArray();
 
                     for (int i = 0; i < phases.Length; i++)
                     {
                         var amplifier = new IntcodeVM(instructions);
-                        signal = amplifier.Run(new[] { phases[i], signal });
+                        signal = (int)amplifier.Run(new[] { phases[i], signal });
                     }
 
                     return signal;
@@ -53,7 +53,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
         {
             string program = ReadResourceAsString();
 
-            HighestSignal = RunProgram(program);
+            HighestSignal = (int)RunProgram(program);
 
             if (Verbose)
             {
