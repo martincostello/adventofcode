@@ -6,7 +6,7 @@ namespace MartinCostello.AdventOfCode
     /// <summary>
     /// Defines a logger.
     /// </summary>
-    internal interface ILogger
+    public interface ILogger
     {
         /// <summary>
         /// Writes a grid to the log.
