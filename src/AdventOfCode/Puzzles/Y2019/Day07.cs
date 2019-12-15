@@ -16,12 +16,12 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
         /// <summary>
         /// Gets the highest signal that can be sent to the thrusters.
         /// </summary>
-        public int HighestSignal { get; private set; }
+        public long HighestSignal { get; private set; }
 
         /// <summary>
         /// Gets the highest signal that can be sent to the thrusters using a feedback loop.
         /// </summary>
-        public int HighestSignalUsingFeedback { get; private set; }
+        public long HighestSignalUsingFeedback { get; private set; }
 
         /// <summary>
         /// Runs the specified Intcode program.
@@ -53,31 +53,35 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
                 }
                 else
                 {
-                    var vms = new IntcodeVM[phases.Length];
-                    var inputs = new Channel<long>[phases.Length];
+                    var amplifiers = new List<IntcodeVM>();
+                    var inputs = new List<Channel<long>>();
 
                     for (int i = 0; i < phases.Length; i++)
                     {
-                        vms[i] = new IntcodeVM(instructions);
-                        inputs[i] = Channel.CreateUnbounded<long>();
+                        amplifiers.Add(new IntcodeVM(instructions));
 
-                        await inputs[i].Writer.WriteAsync(phases[i]);
+                        var input = Channel.CreateUnbounded<long>();
+                        await input.Writer.WriteAsync(phases[i]);
 
                         if (i == 0)
                         {
-                            await inputs[i].Writer.WriteAsync(0);
+                            await input.Writer.WriteAsync(0);
                         }
+
+                        inputs.Add(input);
                     }
 
                     for (int i = 0; i < phases.Length; i++)
                     {
-                        int thisVM = i;
-                        int nextVM = i == phases.Length - 1 ? 0 : i + 1;
+                        int nextAmp = i == phases.Length - 1 ? 0 : i + 1;
 
-                        vms[thisVM].Input = inputs[thisVM].Reader;
-                        vms[thisVM].OnOutput += async (_, value) =>
+                        var thisAmp = amplifiers[i];
+                        var nextInput = inputs[nextAmp];
+
+                        thisAmp.Input = inputs[i].Reader;
+                        thisAmp.OnOutput += async (_, value) =>
                         {
-                            await inputs[nextVM].Writer.WriteAsync(value);
+                            await nextInput.Writer.WriteAsync(value);
                         };
                     }
 
@@ -85,13 +89,13 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
 
                     while (!completed)
                     {
-                        for (int i = 0; i < phases.Length; i++)
+                        foreach (var amp in amplifiers)
                         {
-                            completed = await vms[i].RunAsync();
+                            completed = await amp.RunAsync();
                         }
                     }
 
-                    signal = (await ChannelHelpers.ToListAsync(vms.Last().Output))[^1];
+                    signal = (await amplifiers.Last().Output.ToListAsync())[^1];
                 }
 
                 signals.Add(signal);
@@ -105,8 +109,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
         {
             string program = ReadResourceAsString();
 
-            HighestSignal = (int)RunProgramAsync(program, useFeedback: false).Result;
-            HighestSignalUsingFeedback = (int)RunProgramAsync(program, useFeedback: true).GetAwaiter().GetResult();
+            HighestSignal = RunProgramAsync(program, useFeedback: false).Result;
+            HighestSignalUsingFeedback = RunProgramAsync(program, useFeedback: true).Result;
 
             if (Verbose)
             {
