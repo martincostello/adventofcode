@@ -44,14 +44,16 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
             }
         }
 
-        [Fact]
-        public void Y2019_Day09_Solve_Returns_Correct_Solution()
+        [Theory]
+        [InlineData(new[] { "1" }, 2494485073)]
+        [InlineData(new[] { "2" }, 44997)]
+        public void Y2019_Day09_Solve_Returns_Correct_Solution(string[] args, long expected)
         {
             // Act
-            var puzzle = SolvePuzzle<Day09>();
+            var puzzle = SolvePuzzle<Day09>(args);
 
             // Assert
-            puzzle.Keycode.ShouldBe(2494485073);
+            puzzle.Keycode.ShouldBe(expected);
         }
     }
 }

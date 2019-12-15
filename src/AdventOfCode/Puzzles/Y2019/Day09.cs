@@ -41,9 +41,10 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
         /// <inheritdoc />
         protected override int SolveCore(string[] args)
         {
+            long input = ParseInt64(args[0]);
             string program = ReadResourceAsString();
 
-            (Keycode, _) = RunProgram(program, 1);
+            (Keycode, _) = RunProgram(program, input);
 
             if (Verbose)
             {
