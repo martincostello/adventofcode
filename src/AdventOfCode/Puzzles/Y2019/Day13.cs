@@ -4,6 +4,9 @@
 namespace MartinCostello.AdventOfCode.Puzzles.Y2019
 {
     using System;
+    using System.Collections.Generic;
+    using System.Drawing;
+    using System.Linq;
     using System.Threading.Tasks;
 
     /// <summary>
@@ -17,17 +20,25 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
         public long BlockTileCount { get; private set; }
 
         /// <summary>
+        /// Gets the score when the game ends.
+        /// </summary>
+        public long Score { get; private set; }
+
+        /// <summary>
         /// Gets the number of block tiles on the screen after the game is run.
         /// </summary>
         /// <param name="program">The Intcode program to run.</param>
         /// <returns>
         /// The number of block tiles on the screen.
         /// </returns>
-        public static async Task<long> GetBlockTileCountAsync(string program)
+        public static async Task<(long blockTileCount, long score)> PlayGameAsync(string program)
         {
             long[] instructions = IntcodeVM.ParseProgram(program);
 
-            var vm = new IntcodeVM(instructions, 10_000);
+            var vm = new IntcodeVM(instructions, 10_000)
+            {
+                Input = await ChannelHelpers.CreateReaderAsync(2L),
+            };
 
             if (!await vm.RunAsync())
             {
@@ -36,19 +47,29 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
 
             var outputs = await vm.Output.ToListAsync();
 
-            int blockTiles = 0;
+            var grid = new Dictionary<Point, int>();
+
+            long score = 0;
 
             for (int i = 0; i < outputs.Count; i += 3)
             {
-                long tileId = outputs[i + 2];
+                int x = (int)outputs[i];
+                int y = (int)outputs[i + 1];
+                int tileId = (int)outputs[i + 2];
 
-                if (tileId == 2)
+                if (x == 1 && y == 0)
                 {
-                    blockTiles++;
+                    score = tileId;
+                }
+                else
+                {
+                    grid[new Point(x, y)] = tileId;
                 }
             }
 
-            return blockTiles;
+            int initialBlockCount = grid.Values.Count((p) => p == 2);
+
+            return (initialBlockCount, score);
         }
 
         /// <inheritdoc />
@@ -56,11 +77,12 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
         {
             string program = ReadResourceAsString();
 
-            BlockTileCount = GetBlockTileCountAsync(program).Result;
+            (BlockTileCount, Score) = PlayGameAsync(program).Result;
 
             if (Verbose)
             {
                 Logger.WriteLine("There are {0} block tiles on the screen when the game exits.", BlockTileCount);
+                Logger.WriteLine("The score after the last block is broken is {0}", Score);
             }
 
             return 0;
