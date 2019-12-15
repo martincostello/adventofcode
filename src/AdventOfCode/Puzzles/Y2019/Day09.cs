@@ -3,20 +3,19 @@
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2019
 {
+    using System;
+    using System.Collections.Generic;
     using System.Linq;
 
     /// <summary>
-    /// A class representing the puzzle for <c>https://adventofcode.com/2019/day/5</c>. This class cannot be inherited.
+    /// A class representing the puzzle for <c>https://adventofcode.com/2019/day/9</c>. This class cannot be inherited.
     /// </summary>
-    public sealed class Day05 : Puzzle2019
+    public sealed class Day09 : Puzzle2019
     {
         /// <summary>
-        /// Gets the diagnostic code output by the program.
+        /// Gets the key code output by the program.
         /// </summary>
-        public long DiagnosticCode { get; private set; }
-
-        /// <inheritdoc />
-        protected override int MinimumArguments => 1;
+        public long Keycode { get; private set; }
 
         /// <summary>
         /// Runs the specified Intcode program.
@@ -26,28 +25,30 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
         /// <returns>
         /// The diagnostic code output by the program.
         /// </returns>
-        public static long RunProgram(string program, long input)
+        public static (long output, IReadOnlyList<long> memory) RunProgram(string program, long? input)
         {
             long[] instructions = program
                 .Split(',')
                 .Select((p) => ParseInt64(p))
                 .ToArray();
 
-            _ = IntcodeVM.Run(instructions, new[] { input }, out long output);
-            return output;
+            var vm = new IntcodeVM(instructions, 2_000);
+            long output = vm.Run(input == null ? Array.Empty<long>() : new[] { input.Value });
+
+            return (output, vm.Memory());
         }
 
         /// <inheritdoc />
         protected override int SolveCore(string[] args)
         {
-            int input = ParseInt32(args[0]);
+            long input = ParseInt64(args[0]);
             string program = ReadResourceAsString();
 
-            DiagnosticCode = RunProgram(program, input);
+            (Keycode, _) = RunProgram(program, input);
 
             if (Verbose)
             {
-                Logger.WriteLine("The program produces diagnostic code {0}.", DiagnosticCode);
+                Logger.WriteLine("The program produces BOOST keycode {0}.", Keycode);
             }
 
             return 0;

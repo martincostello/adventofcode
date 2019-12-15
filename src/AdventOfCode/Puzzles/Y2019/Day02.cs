@@ -15,7 +15,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
         /// <summary>
         /// Gets the output of the program.
         /// </summary>
-        public IReadOnlyList<int> Output { get; private set; } = Array.Empty<int>();
+        public IReadOnlyList<long> Output { get; private set; } = Array.Empty<long>();
 
         /// <summary>
         /// Runs the specified Intcode program.
@@ -25,11 +25,11 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
         /// <returns>
         /// The memory values of the program once run.
         /// </returns>
-        public static IReadOnlyList<int> RunProgram(string program, bool adjust = false)
+        public static IReadOnlyList<long> RunProgram(string program, bool adjust = false)
         {
-            int[] instructions = program
+            long[] instructions = program
                 .Split(',')
-                .Select((p) => ParseInt32(p))
+                .Select((p) => ParseInt64(p))
                 .ToArray();
 
             if (adjust)
@@ -38,7 +38,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
                 instructions[2] = 2;
             }
 
-            return IntcodeVM.Run(instructions, new[] { 0 }, out int _);
+            return IntcodeVM.Run(instructions, new[] { 0L }, out long _);
         }
 
         /// <inheritdoc />

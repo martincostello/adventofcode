@@ -16,15 +16,21 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
         /// <summary>
         /// The virtual machine's memory. This field is read-only.
         /// </summary>
-        private readonly int[] _memory;
+        private readonly long[] _memory;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="IntcodeVM"/> class.
         /// </summary>
         /// <param name="instructions">The instructions of the program to run in the VM.</param>
-        internal IntcodeVM(IEnumerable<int> instructions)
+        /// <param name="size">The optional amount of memory to allocate.</param>
+        internal IntcodeVM(IEnumerable<long> instructions, int? size = null)
         {
             _memory = instructions.ToArray();
+
+            if (size.HasValue)
+            {
+                Array.Resize(ref _memory, size.Value);
+            }
         }
 
         /// <summary>
@@ -36,7 +42,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
         /// <returns>
         /// The memory values of the program once run.
         /// </returns>
-        internal static IReadOnlyList<int> Run(IEnumerable<int> program, IEnumerable<int> input, out int output)
+        internal static IReadOnlyList<long> Run(IEnumerable<long> program, IEnumerable<long> input, out long output)
         {
             var vm = new IntcodeVM(program);
 
@@ -46,58 +52,90 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
         }
 
         /// <summary>
+        /// Gets a copy of the current memory of the VM.
+        /// </summary>
+        /// <returns>
+        /// A copy of the virtual machine's memory.
+        /// </returns>
+        internal long[] Memory() => (long[])_memory.Clone();
+
+        /// <summary>
         /// Runs the virtual machine's program.
         /// </summary>
         /// <param name="inputs">The inputs to the program.</param>
         /// <returns>
         /// The output from the program.
         /// </returns>
-        internal int Run(IEnumerable<int> inputs)
+        internal long Run(IEnumerable<long> inputs)
         {
-            void Add(int current, int[] modes)
+            long Read(long index, long offset, int mode)
             {
-                int x = _memory[current + 1];
-                int y = _memory[current + 2];
-                int z = _memory[current + 3];
-
-                int left = modes[0] == 0 ? _memory[x] : x;
-                int right = modes[1] == 0 ? _memory[y] : y;
-
-                _memory[z] = left + right;
-            }
-
-            void Multiply(int counter, int[] modes)
-            {
-                int x = _memory[counter + 1];
-                int y = _memory[counter + 2];
-                int z = _memory[counter + 3];
-
-                int left = modes[0] == 0 ? _memory[x] : x;
-                int right = modes[1] == 0 ? _memory[y] : y;
-
-                _memory[z] = left * right;
-            }
-
-            void Input(int current, int value)
-            {
-                int x = _memory[current + 1];
-                _memory[x] = value;
-            }
-
-            int Output(int current, int[] modes)
-            {
-                int x = _memory[current + 1];
-                return modes[0] == 0 ? _memory[x] : x;
-            }
-
-            void JumpIfTrue(ref int current, int[] modes)
-            {
-                int x = _memory[current + 1];
-
-                if ((modes[0] == 0 ? _memory[x] : x) != 0)
+                return mode switch
                 {
-                    int y = _memory[current + 2];
-                    current = modes[1] == 0 ? _memory[y] : y;
+                    0 => _memory[index],
+                    1 => index,
+                    2 => _memory[index + offset],
+                    _ => throw new InvalidProgramException(),
+                };
+            }
+
+            void Write(long index, long offset, int mode, long value)
+            {
+                long address = mode switch
+                {
+                    0 => index,
+                    2 => index + offset,
+                    _ => throw new InvalidProgramException(),
+                };
+
+                _memory[address] = value;
+            }
+
+            void Add(long current, long offset, int[] modes)
+            {
+                long x = _memory[current + 1];
+                long y = _memory[current + 2];
+                long z = _memory[current + 3];
+
+                long left = Read(x, offset, modes[0]);
+                long right = Read(y, offset, modes[1]);
+
+                Write(z, offset, modes[2], left + right);
+            }
+
+            void Multiply(long counter, long offset, int[] modes)
+            {
+                long x = _memory[counter + 1];
+                long y = _memory[counter + 2];
+                long z = _memory[counter + 3];
+
+                long left = Read(x, offset, modes[0]);
+                long right = Read(y, offset, modes[1]);
+
+                Write(z, offset, modes[2], left * right);
+            }
+
+            void Input(long current, long offset, long value, int[] modes)
+            {
+                long x = _memory[current + 1];
+                Write(x, offset, modes[0], value);
+            }
+
+            long Output(long current, long offset, int[] modes)
+            {
+                long x = _memory[current + 1];
+                return Read(x, offset, modes[0]);
+            }
+
+            void JumpIfTrue(ref long current, long offset, int[] modes)
+            {
+                long x = _memory[current + 1];
+                long value = Read(x, offset, modes[0]);
+
+                if (value != 0)
+                {
+                    long y = _memory[current + 2];
+                    current = Read(y, offset, modes[1]);
                 }
                 else
                 {
@@ -105,14 +143,15 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
                 }
             }
 
-            void JumpIfFalse(ref int current, int[] modes)
+            void JumpIfFalse(ref long current, long offset, int[] modes)
             {
-                int x = _memory[current + 1];
+                long x = _memory[current + 1];
+                long value = Read(x, offset, modes[0]);
 
-                if ((modes[0] == 0 ? _memory[x] : x) == 0)
+                if (value == 0)
                 {
-                    int y = _memory[current + 2];
-                    current = modes[1] == 0 ? _memory[y] : y;
+                    long y = _memory[current + 2];
+                    current = Read(y, offset, modes[1]);
                 }
                 else
                 {
@@ -120,31 +159,37 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
                 }
             }
 
-            void LessThan(int current, int[] modes)
+            void LessThan(long current, long offset, int[] modes)
             {
-                int x = _memory[current + 1];
-                int y = _memory[current + 2];
-                int z = _memory[current + 3];
+                long x = _memory[current + 1];
+                long y = _memory[current + 2];
+                long z = _memory[current + 3];
 
-                int left = modes[0] == 0 ? _memory[x] : x;
-                int right = modes[1] == 0 ? _memory[y] : y;
+                long left = Read(x, offset, modes[0]);
+                long right = Read(y, offset, modes[1]);
 
-                _memory[z] = left < right ? 1 : 0;
+                Write(z, offset, modes[2], left < right ? 1 : 0);
             }
 
-            void Equals(int current, int[] modes)
+            void Equals(long current, long offset, int[] modes)
             {
-                int x = _memory[current + 1];
-                int y = _memory[current + 2];
-                int z = _memory[current + 3];
+                long x = _memory[current + 1];
+                long y = _memory[current + 2];
+                long z = _memory[current + 3];
 
-                int left = modes[0] == 0 ? _memory[x] : x;
-                int right = modes[1] == 0 ? _memory[y] : y;
+                long left = Read(x, offset, modes[0]);
+                long right = Read(y, offset, modes[1]);
 
-                _memory[z] = left == right ? 1 : 0;
+                Write(z, offset, modes[2], left == right ? 1 : 0);
             }
 
-            static (int opcode, int[] modes, int length) Decode(int instruction)
+            void Offset(long current, ref long offset, int[] modes)
+            {
+                long x = _memory[current + 1];
+                offset += Read(x, offset, modes[0]);
+            }
+
+            static (int opcode, int[] modes, int length) Decode(long instruction)
             {
                 if (instruction == 99)
                 {
@@ -164,6 +209,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
                     6 => 3,
                     7 => 3,
                     8 => 3,
+                    9 => 1,
                     _ => throw new InvalidOperationException($"{opcode} is not a supported opcode."),
                 };
 
@@ -185,10 +231,11 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
                 return (opcode, modes, length);
             }
 
-            int output = 0;
+            long offset = 0;
+            long output = 0;
             using var enumerator = inputs.GetEnumerator();
 
-            for (int i = 0; i < _memory.Length;)
+            for (long i = 0; i < _memory.Length;)
             {
                 (int opcode, int[] modes, int length) = Decode(_memory[i]);
 
@@ -200,11 +247,11 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
                 switch (opcode)
                 {
                     case 1:
-                        Add(i, modes);
+                        Add(i, offset, modes);
                         break;
 
                     case 2:
-                        Multiply(i, modes);
+                        Multiply(i, offset, modes);
                         break;
 
                     case 3:
@@ -213,27 +260,31 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
                             throw new InvalidOperationException();
                         }
 
-                        Input(i, enumerator.Current);
+                        Input(i, offset, enumerator.Current, modes);
                         break;
 
                     case 4:
-                        output = Output(i, modes);
+                        output = Output(i, offset, modes);
                         break;
 
                     case 5:
-                        JumpIfTrue(ref i, modes);
+                        JumpIfTrue(ref i, offset, modes);
                         break;
 
                     case 6:
-                        JumpIfFalse(ref i, modes);
+                        JumpIfFalse(ref i, offset, modes);
                         break;
 
                     case 7:
-                        LessThan(i, modes);
+                        LessThan(i, offset, modes);
                         break;
 
                     case 8:
-                        Equals(i, modes);
+                        Equals(i, offset, modes);
+                        break;
+
+                    case 9:
+                        Offset(i, ref offset, modes);
                         break;
 
                     default:

@@ -79,6 +79,20 @@ namespace MartinCostello.AdventOfCode
             => int.Parse(s, style, CultureInfo.InvariantCulture);
 
         /// <summary>
+        /// Parses the specified <see cref="string"/> as an <see cref="long"/>.
+        /// </summary>
+        /// <param name="s">The value to parse.</param>
+        /// <param name="style">
+        /// A bitwise combination of enumeration values that indicates
+        /// the style elements that can be present in <paramref name="s"/>.
+        /// </param>
+        /// <returns>
+        /// The parsed value of <paramref name="s"/>.
+        /// </returns>
+        protected internal static long ParseInt64(ReadOnlySpan<char> s, NumberStyles style = NumberStyles.Integer)
+            => long.Parse(s, style, CultureInfo.InvariantCulture);
+
+        /// <summary>
         /// Tries to parse the specified <see cref="string"/> as an <see cref="int"/>.
         /// </summary>
         /// <param name="s">The value to parse.</param>
