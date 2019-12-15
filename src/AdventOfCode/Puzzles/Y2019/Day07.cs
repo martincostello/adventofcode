@@ -63,13 +63,10 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
                         var input = Channel.CreateUnbounded<long>();
                         await input.Writer.WriteAsync(phases[i]);
 
-                        if (i == 0)
-                        {
-                            await input.Writer.WriteAsync(0);
-                        }
-
                         inputs.Add(input);
                     }
+
+                    await inputs[0].Writer.WriteAsync(0);
 
                     for (int i = 0; i < phases.Length; i++)
                     {
