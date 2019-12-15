@@ -3,6 +3,7 @@
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2019
 {
+    using System.Threading.Tasks;
     using Shouldly;
     using Xunit;
     using Xunit.Abstractions;
@@ -48,10 +49,10 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
         [InlineData("3,21,1008,21,8,20,1005,20,22,107,8,21,20,1006,20,31,1106,0,36,98,0,0,1002,21,125,20,4,20,1105,1,46,104,999,1105,1,46,1101,1000,1,20,4,20,1105,1,46,98,99", 7, 999)]
         [InlineData("3,21,1008,21,8,20,1005,20,22,107,8,21,20,1006,20,31,1106,0,36,98,0,0,1002,21,125,20,4,20,1105,1,46,104,999,1105,1,46,1101,1000,1,20,4,20,1105,1,46,98,99", 8, 1000)]
         [InlineData("3,21,1008,21,8,20,1005,20,22,107,8,21,20,1006,20,31,1106,0,36,98,0,0,1002,21,125,20,4,20,1105,1,46,104,999,1105,1,46,1101,1000,1,20,4,20,1105,1,46,98,99", 9, 1001)]
-        public void Y2019_Day05_RunProgram_Returns_Correct_Output(string program, int input, long expected)
+        public async Task Y2019_Day05_RunProgram_Returns_Correct_Output(string program, int input, long expected)
         {
             // Act
-            long actual = Day05.RunProgram(program, input);
+            long actual = await Day05.RunProgramAsync(program, input);
 
             // Assert
             actual.ShouldBe(expected);

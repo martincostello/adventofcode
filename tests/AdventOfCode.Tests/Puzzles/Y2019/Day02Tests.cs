@@ -4,6 +4,7 @@
 namespace MartinCostello.AdventOfCode.Puzzles.Y2019
 {
     using System.Collections.Generic;
+    using System.Threading.Tasks;
     using Shouldly;
     using Xunit;
     using Xunit.Abstractions;
@@ -28,10 +29,10 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
         [InlineData("2,3,0,3,99", new[] { 2, 3, 0, 6, 99L })]
         [InlineData("2,4,4,5,99,0", new[] { 2, 4, 4, 5, 99, 9801L })]
         [InlineData("1,1,1,4,99,5,6,0,99", new[] { 30, 1, 1, 4, 2, 5, 6, 0, 99L })]
-        public void Y2019_Day02_RunProgram_Returns_Correct_State(string program, long[] expected)
+        public async Task Y2019_Day02_RunProgram_Returns_Correct_State(string program, long[] expected)
         {
             // Act
-            IReadOnlyList<long> actual = Day02.RunProgram(program);
+            IReadOnlyList<long> actual = await Day02.RunProgramAsync(program);
 
             // Assert
             actual.ShouldBe(expected);

@@ -7,6 +7,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
     using System.Collections.Generic;
     using System.Globalization;
     using System.Linq;
+    using System.Threading.Channels;
+    using System.Threading.Tasks;
 
     /// <summary>
     /// A class representing an Intcode Virtual Machine. This class cannot be inherited.
@@ -34,7 +36,75 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
         }
 
         /// <summary>
-        /// Runs the specified Intcode program.
+        /// Runs the specified Intcode program as an asynchronous operation.
+        /// </summary>
+        /// <param name="program">The Intcode program to run.</param>
+        /// <param name="input">The input to the program.</param>
+        /// <returns>
+        /// The output of the program once run.
+        /// </returns>
+        internal static async Task<IReadOnlyList<long>> RunAsync(IEnumerable<long> program, params long[] input)
+            => await RunAsync(program, input as IEnumerable<long>);
+
+        /// <summary>
+        /// Runs the specified Intcode program as an asynchronous operation.
+        /// </summary>
+        /// <param name="program">The Intcode program to run.</param>
+        /// <param name="input">The optional input to the program.</param>
+        /// <returns>
+        /// The output of the program once run.
+        /// </returns>
+        internal static async Task<IReadOnlyList<long>> RunAsync(IEnumerable<long> program, IEnumerable<long>? input = null)
+        {
+            var inputChannel = Channel.CreateUnbounded<long>();
+
+            if (input != null)
+            {
+                foreach (long value in input)
+                {
+                    await inputChannel.Writer.WriteAsync(value);
+                }
+            }
+
+            var outputChannel = Channel.CreateUnbounded<long>();
+
+            var vm = new IntcodeVM(program);
+
+            await vm.RunAsync(inputChannel.Reader, outputChannel.Writer);
+
+            var outputs = new List<long>();
+
+            await foreach (long output in outputChannel.Reader.ReadAllAsync())
+            {
+                outputs.Add(output);
+            }
+
+            return outputs;
+        }
+
+        /// <summary>
+        /// Runs the specified Intcode program as an asynchronous operation.
+        /// </summary>
+        /// <param name="program">The Intcode program to run.</param>
+        /// <param name="input">The input to the program.</param>
+        /// <returns>
+        /// The memory values of the program once run.
+        /// </returns>
+        internal static async Task<IReadOnlyList<long>> RunAsync(
+            IEnumerable<long> program,
+            ChannelReader<long> input)
+        {
+            var output = Channel.CreateBounded<long>(1);
+
+            var vm = new IntcodeVM(program);
+
+            await vm.RunAsync(input, output.Writer);
+
+            return vm._memory;
+        }
+
+        /// <summary>
+        /// Runs the specified Intcode program as an asynchronous operation.
         /// </summary>
         /// <param name="program">The Intcode program to run.</param>
         /// <param name="input">The input to the program.</param>
@@ -42,31 +112,27 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
         /// <returns>
         /// The memory values of the program once run.
         /// </returns>
-        internal static IReadOnlyList<long> Run(IEnumerable<long> program, IEnumerable<long> input, out long output)
+        internal static async Task<IReadOnlyList<long>> RunAsync(
+            IEnumerable<long> program,
+            ChannelReader<long> input,
+            ChannelWriter<long> output)
         {
             var vm = new IntcodeVM(program);
 
-            output = vm.Run(input);
+            await vm.RunAsync(input, output);
 
             return vm._memory;
         }
 
         /// <summary>
-        /// Gets a copy of the current memory of the VM.
+        /// Runs the virtual machine's program as an asynchronous operation.
         /// </summary>
+        /// <param name="input">The input channel to the program.</param>
+        /// <param name="output">The output channel from the program.</param>
         /// <returns>
-        /// A copy of the virtual machine's memory.
+        /// A <see cref="Task"/> that completes when the program exits.
         /// </returns>
-        internal long[] Memory() => (long[])_memory.Clone();
-
-        /// <summary>
-        /// Runs the virtual machine's program.
-        /// </summary>
-        /// <param name="inputs">The inputs to the program.</param>
-        /// <returns>
-        /// The output from the program.
-        /// </returns>
-        internal long Run(IEnumerable<long> inputs)
+        internal async Task RunAsync(ChannelReader<long> input, ChannelWriter<long> output)
         {
             long Read(long index, long offset, int mode)
             {
@@ -232,8 +298,6 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
             }
 
             long offset = 0;
-            long output = 0;
-            using var enumerator = inputs.GetEnumerator();
 
             for (long i = 0; i < _memory.Length;)
             {
@@ -255,16 +319,11 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
                         break;
 
                     case 3:
-                        if (!enumerator.MoveNext())
-                        {
-                            throw new InvalidOperationException();
-                        }
-
-                        Input(i, offset, enumerator.Current, modes);
+                        Input(i, offset, await input.ReadAsync(), modes);
                         break;
 
                     case 4:
-                        output = Output(i, offset, modes);
+                        await output.WriteAsync(Output(i, offset, modes));
                         break;
 
                     case 5:
@@ -294,7 +353,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
                 i += length;
             }
 
-            return output;
+            output.Complete();
         }
     }
 }

@@ -3,9 +3,10 @@
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2019
 {
-    using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Threading.Channels;
+    using System.Threading.Tasks;
 
     /// <summary>
     /// A class representing the puzzle for <c>https://adventofcode.com/2019/day/9</c>. This class cannot be inherited.
@@ -28,7 +29,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
         /// <returns>
         /// The keycode output by the program.
         /// </returns>
-        public static (long output, IReadOnlyList<long> memory) RunProgram(string program, long? input)
+        public static async Task<IReadOnlyList<long>> RunProgramAsync(string program, long? input = null)
         {
             long[] instructions = program
                 .Split(',')
@@ -36,9 +37,26 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
                 .ToArray();
 
             var vm = new IntcodeVM(instructions, 2_000);
-            long output = vm.Run(input == null ? Array.Empty<long>() : new[] { input.Value });
 
-            return (output, vm.Memory());
+            var inputChannel = Channel.CreateBounded<long>(1);
+
+            if (input.HasValue)
+            {
+                await inputChannel.Writer.WriteAsync(input.Value);
+            }
+
+            var outputChannel = Channel.CreateUnbounded<long>();
+
+            await vm.RunAsync(inputChannel, outputChannel);
+
+            var outputs = new List<long>();
+
+            await foreach (long output in outputChannel.Reader.ReadAllAsync())
+            {
+                outputs.Add(output);
+            }
+
+            return outputs;
         }
 
         /// <inheritdoc />
@@ -47,7 +65,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
             long input = ParseInt64(args[0]);
             string program = ReadResourceAsString();
 
-            (Keycode, _) = RunProgram(program, input);
+            Keycode = RunProgramAsync(program, input).Result[0];
 
             if (Verbose)
             {

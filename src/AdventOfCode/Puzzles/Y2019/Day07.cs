@@ -32,19 +32,20 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
                 .ToArray();
 
             return permutations
-                .Select((p) =>
+                .Select(async (p) =>
                 {
                     long signal = 0;
                     long[] phases = p.Select((p) => (long)p).ToArray();
 
                     for (int i = 0; i < phases.Length; i++)
                     {
-                        var amplifier = new IntcodeVM(instructions);
-                        signal = (int)amplifier.Run(new[] { phases[i], signal });
+                        var outputs = await IntcodeVM.RunAsync(instructions, phases[i], signal);
+                        signal = outputs[0];
                     }
 
                     return signal;
                 })
+                .Select((p) => p.Result)
                 .Max();
         }
 
