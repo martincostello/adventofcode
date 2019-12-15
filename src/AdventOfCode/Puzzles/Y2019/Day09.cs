@@ -17,13 +17,16 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
         /// </summary>
         public long Keycode { get; private set; }
 
+        /// <inheritdoc />
+        protected override int MinimumArguments => 1;
+
         /// <summary>
         /// Runs the specified Intcode program.
         /// </summary>
         /// <param name="program">The Intcode program to run.</param>
         /// <param name="input">The input to the program.</param>
         /// <returns>
-        /// The diagnostic code output by the program.
+        /// The keycode output by the program.
         /// </returns>
         public static (long output, IReadOnlyList<long> memory) RunProgram(string program, long? input)
         {
