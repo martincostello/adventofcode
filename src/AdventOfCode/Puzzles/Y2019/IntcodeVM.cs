@@ -186,7 +186,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
             void Offset(long current, ref long offset, int[] modes)
             {
                 long x = _memory[current + 1];
-                offset = Read(x, offset, modes[0]);
+                offset += Read(x, offset, modes[0]);
             }
 
             static (int opcode, int[] modes, int length) Decode(long instruction)
