@@ -48,7 +48,10 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
                 Output = outputChannel.Writer,
             };
 
-            await vm.RunAsync();
+            if (!await vm.RunAsync())
+            {
+                throw new System.InvalidProgramException();
+            }
 
             return await outputChannel.Reader.ToListAsync();
         }

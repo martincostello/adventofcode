@@ -21,6 +21,11 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
         private readonly long[] _memory;
 
         /// <summary>
+        /// The instruction pointer.
+        /// </summary>
+        private long _instruction;
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="IntcodeVM"/> class.
         /// </summary>
         /// <param name="instructions">The instructions of the program to run in the VM.</param>
@@ -40,6 +45,11 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
             Input = emptyChannel.Reader;
             Output = emptyChannel.Writer;
         }
+
+        /// <summary>
+        /// Occurs when the a value is output.
+        /// </summary>
+        internal event EventHandler<long>? OnOutput;
 
         /// <summary>
         /// Gets or sets the input channel for the VM.
@@ -96,7 +106,10 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
                 Output = outputChannel.Writer,
             };
 
-            await vm.RunAsync();
+            if (!await vm.RunAsync())
+            {
+                throw new InvalidProgramException();
+            }
 
             return await outputChannel.Reader.ToListAsync();
         }
@@ -121,7 +134,10 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
                 Output = output.Writer,
             };
 
-            await vm.RunAsync();
+            if (!await vm.RunAsync())
+            {
+                throw new System.InvalidProgramException();
+            }
 
             return vm._memory;
         }
@@ -146,7 +162,10 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
                 Output = output,
             };
 
-            await vm.RunAsync();
+            if (!await vm.RunAsync())
+            {
+                throw new System.InvalidProgramException();
+            }
 
             return vm._memory;
         }
@@ -155,9 +174,10 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
         /// Runs the virtual machine's program as an asynchronous operation.
         /// </summary>
         /// <returns>
-        /// A <see cref="Task"/> that completes when the program exits.
+        /// A <see cref="Task{TResult}"/> that completes when the program exits
+        /// or there is not yet any input available to read.
         /// </returns>
-        internal async Task RunAsync()
+        internal async Task<bool> RunAsync()
         {
             long Read(long index, long offset, int mode)
             {
@@ -324,9 +344,9 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
 
             long offset = 0;
 
-            for (long i = 0; i < _memory.Length;)
+            for (; _instruction < _memory.Length;)
             {
-                (int opcode, int[] modes, int length) = Decode(_memory[i]);
+                (int opcode, int[] modes, int length) = Decode(_memory[_instruction]);
 
                 if (opcode == 99)
                 {
@@ -336,49 +356,57 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
                 switch (opcode)
                 {
                     case 1:
-                        Add(i, offset, modes);
+                        Add(_instruction, offset, modes);
                         break;
 
                     case 2:
-                        Multiply(i, offset, modes);
+                        Multiply(_instruction, offset, modes);
                         break;
 
                     case 3:
-                        WriteInput(i, offset, await Input.ReadAsync(), modes);
+                        if (!Input.TryRead(out long input))
+                        {
+                            return false;
+                        }
+
+                        WriteInput(_instruction, offset, input, modes);
                         break;
 
                     case 4:
-                        await Output.WriteAsync(ReadOutput(i, offset, modes));
+                        long output = ReadOutput(_instruction, offset, modes);
+                        await Output.WriteAsync(output);
+                        OnOutput?.Invoke(this, output);
                         break;
 
                     case 5:
-                        JumpIfTrue(ref i, offset, modes);
+                        JumpIfTrue(ref _instruction, offset, modes);
                         break;
 
                     case 6:
-                        JumpIfFalse(ref i, offset, modes);
+                        JumpIfFalse(ref _instruction, offset, modes);
                         break;
 
                     case 7:
-                        LessThan(i, offset, modes);
+                        LessThan(_instruction, offset, modes);
                         break;
 
                     case 8:
-                        Equals(i, offset, modes);
+                        Equals(_instruction, offset, modes);
                         break;
 
                     case 9:
-                        Offset(i, ref offset, modes);
+                        Offset(_instruction, ref offset, modes);
                         break;
 
                     default:
                         throw new InvalidOperationException($"{opcode} is not a supported opcode.");
                 }
 
-                i += length;
+                _instruction += length;
             }
 
             Output.Complete();
+            return true;
         }
     }
 }
