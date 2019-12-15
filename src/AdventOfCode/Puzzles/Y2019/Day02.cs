@@ -5,7 +5,6 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
 {
     using System;
     using System.Collections.Generic;
-    using System.Linq;
     using System.Threading.Channels;
     using System.Threading.Tasks;
 
@@ -29,10 +28,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
         /// </returns>
         public static async Task<IReadOnlyList<long>> RunProgramAsync(string program, bool adjust = false)
         {
-            long[] instructions = program
-                .Split(',')
-                .Select((p) => ParseInt64(p))
-                .ToArray();
+            long[] instructions = IntcodeVM.ParseProgram(program);
 
             if (adjust)
             {
@@ -40,10 +36,9 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
                 instructions[2] = 2;
             }
 
-            var inputChannel = Channel.CreateBounded<long>(1);
-            await inputChannel.Writer.WriteAsync(0L);
+            ChannelReader<long> input = await ChannelHelpers.CreateReaderAsync(0L);
 
-            return await IntcodeVM.RunAsync(instructions, inputChannel.Reader);
+            return await IntcodeVM.RunAsync(instructions, input);
         }
 
         /// <inheritdoc />

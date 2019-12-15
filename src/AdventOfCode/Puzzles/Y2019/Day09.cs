@@ -4,7 +4,6 @@
 namespace MartinCostello.AdventOfCode.Puzzles.Y2019
 {
     using System.Collections.Generic;
-    using System.Linq;
     using System.Threading.Channels;
     using System.Threading.Tasks;
 
@@ -31,32 +30,27 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
         /// </returns>
         public static async Task<IReadOnlyList<long>> RunProgramAsync(string program, long? input = null)
         {
-            long[] instructions = program
-                .Split(',')
-                .Select((p) => ParseInt64(p))
-                .ToArray();
+            long[] instructions = IntcodeVM.ParseProgram(program);
 
-            var vm = new IntcodeVM(instructions, 2_000);
-
-            var inputChannel = Channel.CreateBounded<long>(1);
+            var inputChannel = Channel.CreateUnbounded<long>();
+            var outputChannel = Channel.CreateUnbounded<long>();
 
             if (input.HasValue)
             {
                 await inputChannel.Writer.WriteAsync(input.Value);
             }
 
-            var outputChannel = Channel.CreateUnbounded<long>();
+            inputChannel.Writer.Complete();
 
-            await vm.RunAsync(inputChannel, outputChannel);
-
-            var outputs = new List<long>();
-
-            await foreach (long output in outputChannel.Reader.ReadAllAsync())
+            var vm = new IntcodeVM(instructions, 2_000)
             {
-                outputs.Add(output);
-            }
+                Input = inputChannel.Reader,
+                Output = outputChannel.Writer,
+            };
 
-            return outputs;
+            await vm.RunAsync();
+
+            return await outputChannel.Reader.ToListAsync();
         }
 
         /// <inheritdoc />

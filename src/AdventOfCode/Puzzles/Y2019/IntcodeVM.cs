@@ -33,6 +33,37 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
             {
                 Array.Resize(ref _memory, size.Value);
             }
+
+            var emptyChannel = Channel.CreateBounded<long>(1);
+            emptyChannel.Writer.Complete();
+
+            Input = emptyChannel.Reader;
+            Output = emptyChannel.Writer;
+        }
+
+        /// <summary>
+        /// Gets or sets the input channel for the VM.
+        /// </summary>
+        internal ChannelReader<long> Input { get; set; }
+
+        /// <summary>
+        /// Gets or sets the output channel for the VM.
+        /// </summary>
+        internal ChannelWriter<long> Output { get; set; }
+
+        /// <summary>
+        /// Parses the specified program.
+        /// </summary>
+        /// <param name="program">The Intcode program to parse.</param>
+        /// <returns>
+        /// The instructions of the program to run.
+        /// </returns>
+        internal static long[] ParseProgram(string program)
+        {
+            return program
+                .Split(',')
+                .Select((p) => Puzzle.ParseInt64(p))
+                .ToArray();
         }
 
         /// <summary>
@@ -56,30 +87,18 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
         /// </returns>
         internal static async Task<IReadOnlyList<long>> RunAsync(IEnumerable<long> program, IEnumerable<long>? input = null)
         {
-            var inputChannel = Channel.CreateUnbounded<long>();
-
-            if (input != null)
-            {
-                foreach (long value in input)
-                {
-                    await inputChannel.Writer.WriteAsync(value);
-                }
-            }
-
+            var inputChannel = await ChannelHelpers.CreateReaderAsync(input);
             var outputChannel = Channel.CreateUnbounded<long>();
 
-            var vm = new IntcodeVM(program);
-
-            await vm.RunAsync(inputChannel.Reader, outputChannel.Writer);
-
-            var outputs = new List<long>();
-
-            await foreach (long output in outputChannel.Reader.ReadAllAsync())
+            var vm = new IntcodeVM(program)
             {
-                outputs.Add(output);
-            }
+                Input = inputChannel,
+                Output = outputChannel.Writer,
+            };
 
-            return outputs;
+            await vm.RunAsync();
+
+            return await outputChannel.Reader.ToListAsync();
         }
 
         /// <summary>
@@ -94,11 +113,15 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
             IEnumerable<long> program,
             ChannelReader<long> input)
         {
-            var output = Channel.CreateBounded<long>(1);
+            var output = Channel.CreateUnbounded<long>();
 
-            var vm = new IntcodeVM(program);
+            var vm = new IntcodeVM(program)
+            {
+                Input = input,
+                Output = output.Writer,
+            };
 
-            await vm.RunAsync(input, output.Writer);
+            await vm.RunAsync();
 
             return vm._memory;
         }
@@ -117,9 +140,13 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
             ChannelReader<long> input,
             ChannelWriter<long> output)
         {
-            var vm = new IntcodeVM(program);
+            var vm = new IntcodeVM(program)
+            {
+                Input = input,
+                Output = output,
+            };
 
-            await vm.RunAsync(input, output);
+            await vm.RunAsync();
 
             return vm._memory;
         }
@@ -127,12 +154,10 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
         /// <summary>
         /// Runs the virtual machine's program as an asynchronous operation.
         /// </summary>
-        /// <param name="input">The input channel to the program.</param>
-        /// <param name="output">The output channel from the program.</param>
         /// <returns>
         /// A <see cref="Task"/> that completes when the program exits.
         /// </returns>
-        internal async Task RunAsync(ChannelReader<long> input, ChannelWriter<long> output)
+        internal async Task RunAsync()
         {
             long Read(long index, long offset, int mode)
             {
@@ -181,13 +206,13 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
                 Write(z, offset, modes[2], left * right);
             }
 
-            void Input(long current, long offset, long value, int[] modes)
+            void WriteInput(long current, long offset, long value, int[] modes)
             {
                 long x = _memory[current + 1];
                 Write(x, offset, modes[0], value);
             }
 
-            long Output(long current, long offset, int[] modes)
+            long ReadOutput(long current, long offset, int[] modes)
             {
                 long x = _memory[current + 1];
                 return Read(x, offset, modes[0]);
@@ -319,11 +344,11 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
                         break;
 
                     case 3:
-                        Input(i, offset, await input.ReadAsync(), modes);
+                        WriteInput(i, offset, await Input.ReadAsync(), modes);
                         break;
 
                     case 4:
-                        await output.WriteAsync(Output(i, offset, modes));
+                        await Output.WriteAsync(ReadOutput(i, offset, modes));
                         break;
 
                     case 5:
@@ -353,7 +378,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
                 i += length;
             }
 
-            output.Complete();
+            Output.Complete();
         }
     }
 }

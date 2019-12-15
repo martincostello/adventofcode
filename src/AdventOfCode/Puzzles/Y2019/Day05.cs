@@ -3,7 +3,7 @@
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2019
 {
-    using System.Linq;
+    using System.Collections.Generic;
     using System.Threading.Tasks;
 
     /// <summary>
@@ -29,12 +29,9 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
         /// </returns>
         public static async Task<long> RunProgramAsync(string program, long input)
         {
-            long[] instructions = program
-                .Split(',')
-                .Select((p) => ParseInt64(p))
-                .ToArray();
+            long[] instructions = IntcodeVM.ParseProgram(program);
 
-            var outputs = await IntcodeVM.RunAsync(instructions, input);
+            IReadOnlyList<long> outputs = await IntcodeVM.RunAsync(instructions, input);
 
             return outputs.Count == 0 ? 0 : outputs[^1];
         }

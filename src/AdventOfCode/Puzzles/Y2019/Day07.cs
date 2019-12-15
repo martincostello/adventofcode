@@ -24,14 +24,9 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
         /// </returns>
         public static long RunProgram(string program)
         {
-            var permutations = Maths.GetPermutations(new[] { 0, 1, 2, 3, 4 });
+            long[] instructions = IntcodeVM.ParseProgram(program);
 
-            long[] instructions = program
-                .Split(',')
-                .Select((p) => ParseInt64(p))
-                .ToArray();
-
-            return permutations
+            return Maths.GetPermutations(new[] { 0, 1, 2, 3, 4 })
                 .Select(async (p) =>
                 {
                     long signal = 0;
@@ -39,8 +34,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
 
                     for (int i = 0; i < phases.Length; i++)
                     {
-                        var outputs = await IntcodeVM.RunAsync(instructions, phases[i], signal);
-                        signal = outputs[0];
+                        signal = (await IntcodeVM.RunAsync(instructions, phases[i], signal))[0];
                     }
 
                     return signal;
