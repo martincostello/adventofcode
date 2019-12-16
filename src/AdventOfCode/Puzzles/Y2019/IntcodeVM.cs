@@ -7,6 +7,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
     using System.Collections.Generic;
     using System.Globalization;
     using System.Linq;
+    using System.Threading.Channels;
+    using System.Threading.Tasks;
 
     /// <summary>
     /// A class representing an Intcode Virtual Machine. This class cannot be inherited.
@@ -17,6 +19,16 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
         /// The virtual machine's memory. This field is read-only.
         /// </summary>
         private readonly long[] _memory;
+
+        /// <summary>
+        /// The virtual machine's output channel. This field is read-only.
+        /// </summary>
+        private readonly Channel<long> _output;
+
+        /// <summary>
+        /// The instruction pointer.
+        /// </summary>
+        private long _instruction;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="IntcodeVM"/> class.
@@ -31,42 +43,80 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
             {
                 Array.Resize(ref _memory, size.Value);
             }
+
+            Input = Channel.CreateUnbounded<long>().Reader;
+            _output = Channel.CreateUnbounded<long>();
         }
 
         /// <summary>
-        /// Runs the specified Intcode program.
+        /// Occurs when the a value is output.
+        /// </summary>
+        internal event EventHandler<long>? OnOutput;
+
+        /// <summary>
+        /// Gets or sets the input channel for the VM.
+        /// </summary>
+        internal ChannelReader<long> Input { get; set; }
+
+        /// <summary>
+        /// Gets the output reader for the VM.
+        /// </summary>
+        internal ChannelReader<long> Output => _output.Reader;
+
+        /// <summary>
+        /// Parses the specified program.
+        /// </summary>
+        /// <param name="program">The Intcode program to parse.</param>
+        /// <returns>
+        /// The instructions of the program to run.
+        /// </returns>
+        internal static long[] ParseProgram(string program)
+        {
+            return program
+                .Split(',')
+                .Select((p) => Puzzle.ParseInt64(p))
+                .ToArray();
+        }
+
+        /// <summary>
+        /// Runs the specified Intcode program as an asynchronous operation.
         /// </summary>
         /// <param name="program">The Intcode program to run.</param>
         /// <param name="input">The input to the program.</param>
-        /// <param name="output">The output from the program.</param>
         /// <returns>
-        /// The memory values of the program once run.
+        /// The output of the program once run.
         /// </returns>
-        internal static IReadOnlyList<long> Run(IEnumerable<long> program, IEnumerable<long> input, out long output)
+        internal static async Task<IReadOnlyList<long>> RunAsync(IEnumerable<long> program, params long[] input)
         {
-            var vm = new IntcodeVM(program);
+            var vm = new IntcodeVM(program)
+            {
+                Input = await ChannelHelpers.CreateReaderAsync(input),
+            };
 
-            output = vm.Run(input);
+            if (!await vm.RunAsync())
+            {
+                throw new InvalidProgramException();
+            }
 
-            return vm._memory;
+            return await vm.Output.ToListAsync();
         }
 
         /// <summary>
-        /// Gets a copy of the current memory of the VM.
+        /// Gets the current memory of the virtual machine.
         /// </summary>
         /// <returns>
-        /// A copy of the virtual machine's memory.
+        /// A read-only view of the current memory of the virtual machine.
         /// </returns>
-        internal long[] Memory() => (long[])_memory.Clone();
+        internal ReadOnlySpan<long> Memory() => _memory;
 
         /// <summary>
-        /// Runs the virtual machine's program.
+        /// Runs the virtual machine's program as an asynchronous operation.
         /// </summary>
-        /// <param name="inputs">The inputs to the program.</param>
         /// <returns>
-        /// The output from the program.
+        /// A <see cref="Task{TResult}"/> that completes when the program exits
+        /// or there is not yet any input available to read.
         /// </returns>
-        internal long Run(IEnumerable<long> inputs)
+        internal async Task<bool> RunAsync()
         {
             long Read(long index, long offset, int mode)
             {
@@ -115,13 +165,13 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
                 Write(z, offset, modes[2], left * right);
             }
 
-            void Input(long current, long offset, long value, int[] modes)
+            void WriteInput(long current, long offset, long value, int[] modes)
             {
                 long x = _memory[current + 1];
                 Write(x, offset, modes[0], value);
             }
 
-            long Output(long current, long offset, int[] modes)
+            long ReadOutput(long current, long offset, int[] modes)
             {
                 long x = _memory[current + 1];
                 return Read(x, offset, modes[0]);
@@ -232,12 +282,10 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
             }
 
             long offset = 0;
-            long output = 0;
-            using var enumerator = inputs.GetEnumerator();
 
-            for (long i = 0; i < _memory.Length;)
+            for (; _instruction < _memory.Length;)
             {
-                (int opcode, int[] modes, int length) = Decode(_memory[i]);
+                (int opcode, int[] modes, int length) = Decode(_memory[_instruction]);
 
                 if (opcode == 99)
                 {
@@ -247,54 +295,57 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
                 switch (opcode)
                 {
                     case 1:
-                        Add(i, offset, modes);
+                        Add(_instruction, offset, modes);
                         break;
 
                     case 2:
-                        Multiply(i, offset, modes);
+                        Multiply(_instruction, offset, modes);
                         break;
 
                     case 3:
-                        if (!enumerator.MoveNext())
+                        if (!Input.TryRead(out long input))
                         {
-                            throw new InvalidOperationException();
+                            return false;
                         }
 
-                        Input(i, offset, enumerator.Current, modes);
+                        WriteInput(_instruction, offset, input, modes);
                         break;
 
                     case 4:
-                        output = Output(i, offset, modes);
+                        long output = ReadOutput(_instruction, offset, modes);
+                        await _output.Writer.WriteAsync(output);
+                        OnOutput?.Invoke(this, output);
                         break;
 
                     case 5:
-                        JumpIfTrue(ref i, offset, modes);
+                        JumpIfTrue(ref _instruction, offset, modes);
                         break;
 
                     case 6:
-                        JumpIfFalse(ref i, offset, modes);
+                        JumpIfFalse(ref _instruction, offset, modes);
                         break;
 
                     case 7:
-                        LessThan(i, offset, modes);
+                        LessThan(_instruction, offset, modes);
                         break;
 
                     case 8:
-                        Equals(i, offset, modes);
+                        Equals(_instruction, offset, modes);
                         break;
 
                     case 9:
-                        Offset(i, ref offset, modes);
+                        Offset(_instruction, ref offset, modes);
                         break;
 
                     default:
                         throw new InvalidOperationException($"{opcode} is not a supported opcode.");
                 }
 
-                i += length;
+                _instruction += length;
             }
 
-            return output;
+            _output.Writer.Complete();
+            return true;
         }
     }
 }

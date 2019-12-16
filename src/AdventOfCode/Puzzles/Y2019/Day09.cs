@@ -5,7 +5,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
 {
     using System;
     using System.Collections.Generic;
-    using System.Linq;
+    using System.Threading.Channels;
+    using System.Threading.Tasks;
 
     /// <summary>
     /// A class representing the puzzle for <c>https://adventofcode.com/2019/day/9</c>. This class cannot be inherited.
@@ -17,25 +18,41 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
         /// </summary>
         public long Keycode { get; private set; }
 
+        /// <inheritdoc />
+        protected override int MinimumArguments => 1;
+
         /// <summary>
         /// Runs the specified Intcode program.
         /// </summary>
         /// <param name="program">The Intcode program to run.</param>
         /// <param name="input">The input to the program.</param>
         /// <returns>
-        /// The diagnostic code output by the program.
+        /// The keycode output by the program.
         /// </returns>
-        public static (long output, IReadOnlyList<long> memory) RunProgram(string program, long? input)
+        public static async Task<IReadOnlyList<long>> RunProgramAsync(string program, long? input = null)
         {
-            long[] instructions = program
-                .Split(',')
-                .Select((p) => ParseInt64(p))
-                .ToArray();
+            long[] instructions = IntcodeVM.ParseProgram(program);
 
-            var vm = new IntcodeVM(instructions, 2_000);
-            long output = vm.Run(input == null ? Array.Empty<long>() : new[] { input.Value });
+            var channel = Channel.CreateUnbounded<long>();
 
-            return (output, vm.Memory());
+            if (input.HasValue)
+            {
+                await channel.Writer.WriteAsync(input.Value);
+            }
+
+            channel.Writer.Complete();
+
+            var vm = new IntcodeVM(instructions, 2_000)
+            {
+                Input = channel.Reader,
+            };
+
+            if (!await vm.RunAsync())
+            {
+                throw new InvalidProgramException();
+            }
+
+            return await vm.Output.ToListAsync();
         }
 
         /// <inheritdoc />
@@ -44,7 +61,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
             long input = ParseInt64(args[0]);
             string program = ReadResourceAsString();
 
-            (Keycode, _) = RunProgram(program, input);
+            Keycode = RunProgramAsync(program, input).Result[0];
 
             if (Verbose)
             {

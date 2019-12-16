@@ -3,7 +3,8 @@
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2019
 {
-    using System.Linq;
+    using System.Collections.Generic;
+    using System.Threading.Tasks;
     using Shouldly;
     using Xunit;
     using Xunit.Abstractions;
@@ -23,25 +24,18 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
         }
 
         [Theory]
-        [InlineData("109,1,204,-1,1001,100,1,100,1008,100,16,101,1006,101,0,99", 0, 99, new[] { 109, 1, 204, -1, 1001, 100, 1, 100, 1008, 100, 16, 101, 1006, 101, 0, 99L })]
-        [InlineData("1102,34915192,34915192,7,4,7,99,0", 0, 1219070632396864, null)]
-        [InlineData("104,1125899906842624,99", 0, 1125899906842624, null)]
-        public void Y2019_Day09_RunProgram_Returns_Correct_Output(
+        [InlineData("109,1,204,-1,1001,100,1,100,1008,100,16,101,1006,101,0,99", new[] { 109, 1, 204, -1, 1001, 100, 1, 100, 1008, 100, 16, 101, 1006, 101, 0, 99L })]
+        [InlineData("1102,34915192,34915192,7,4,7,99,0", new[] { 1219070632396864 })]
+        [InlineData("104,1125899906842624,99", new[] { 1125899906842624 })]
+        public async Task Y2019_Day09_RunProgram_Returns_Correct_Output(
             string program,
-            int input,
-            long expectedOutput,
-            long[] expectedMemory)
+            long[] expected)
         {
             // Act
-            (long actualOutput, var actualMemory) = Day09.RunProgram(program, input);
+            IReadOnlyList<long> actual = await Day09.RunProgramAsync(program);
 
             // Assert
-            actualOutput.ShouldBe(expectedOutput);
-
-            if (expectedMemory != null)
-            {
-                actualMemory.Take(expectedMemory.Length).ToArray().ShouldBe(expectedMemory);
-            }
+            actual.ShouldBe(expected);
         }
 
         [Theory]

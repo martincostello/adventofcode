@@ -3,7 +3,8 @@
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2019
 {
-    using System.Linq;
+    using System;
+    using System.Threading.Tasks;
 
     /// <summary>
     /// A class representing the puzzle for <c>https://adventofcode.com/2019/day/5</c>. This class cannot be inherited.
@@ -26,15 +27,22 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
         /// <returns>
         /// The diagnostic code output by the program.
         /// </returns>
-        public static long RunProgram(string program, long input)
+        public static async Task<long> RunProgramAsync(string program, long input)
         {
-            long[] instructions = program
-                .Split(',')
-                .Select((p) => ParseInt64(p))
-                .ToArray();
+            long[] instructions = IntcodeVM.ParseProgram(program);
 
-            _ = IntcodeVM.Run(instructions, new[] { input }, out long output);
-            return output;
+            var vm = new IntcodeVM(instructions)
+            {
+                Input = await ChannelHelpers.CreateReaderAsync(input),
+            };
+
+            if (!await vm.RunAsync())
+            {
+                throw new InvalidProgramException();
+            }
+
+            var outputs = await vm.Output.ToListAsync();
+            return outputs.Count == 0 ? 0 : outputs[^1];
         }
 
         /// <inheritdoc />
@@ -43,7 +51,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
             int input = ParseInt32(args[0]);
             string program = ReadResourceAsString();
 
-            DiagnosticCode = RunProgram(program, input);
+            DiagnosticCode = RunProgramAsync(program, input).Result;
 
             if (Verbose)
             {

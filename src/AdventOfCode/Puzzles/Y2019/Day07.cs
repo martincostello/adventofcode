@@ -3,7 +3,10 @@
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2019
 {
+    using System.Collections.Generic;
     using System.Linq;
+    using System.Threading.Channels;
+    using System.Threading.Tasks;
 
     /// <summary>
     /// A class representing the puzzle for <c>https://adventofcode.com/2019/day/7</c>. This class cannot be inherited.
@@ -13,39 +16,89 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
         /// <summary>
         /// Gets the highest signal that can be sent to the thrusters.
         /// </summary>
-        public int HighestSignal { get; private set; }
+        public long HighestSignal { get; private set; }
+
+        /// <summary>
+        /// Gets the highest signal that can be sent to the thrusters using a feedback loop.
+        /// </summary>
+        public long HighestSignalUsingFeedback { get; private set; }
 
         /// <summary>
         /// Runs the specified Intcode program.
         /// </summary>
         /// <param name="program">The Intcode program to run.</param>
+        /// <param name="useFeedback">Whether to arrange the amplifiers in a feedback loop.</param>
         /// <returns>
         /// The diagnostic code output by the program.
         /// </returns>
-        public static long RunProgram(string program)
+        public static async Task<long> RunProgramAsync(string program, bool useFeedback = false)
         {
-            var permutations = Maths.GetPermutations(new[] { 0, 1, 2, 3, 4 });
+            long[] instructions = IntcodeVM.ParseProgram(program);
 
-            long[] instructions = program
-                .Split(',')
-                .Select((p) => ParseInt64(p))
-                .ToArray();
+            int[] seed = useFeedback ? new[] { 5, 6, 7, 8, 9 } : new[] { 0, 1, 2, 3, 4 };
 
-            return permutations
-                .Select((p) =>
+            var signals = new List<long>();
+
+            foreach (var permutation in Maths.GetPermutations(seed))
+            {
+                long signal = 0;
+                long[] phases = permutation.Select((p) => (long)p).ToArray();
+
+                if (!useFeedback)
                 {
-                    long signal = 0;
-                    long[] phases = p.Select((p) => (long)p).ToArray();
+                    for (int i = 0; i < phases.Length; i++)
+                    {
+                        signal = (await IntcodeVM.RunAsync(instructions, phases[i], signal))[0];
+                    }
+                }
+                else
+                {
+                    var amplifiers = new List<IntcodeVM>();
+                    var inputs = new List<Channel<long>>();
 
                     for (int i = 0; i < phases.Length; i++)
                     {
-                        var amplifier = new IntcodeVM(instructions);
-                        signal = (int)amplifier.Run(new[] { phases[i], signal });
+                        amplifiers.Add(new IntcodeVM(instructions));
+
+                        var input = Channel.CreateUnbounded<long>();
+                        await input.Writer.WriteAsync(phases[i]);
+
+                        inputs.Add(input);
                     }
 
-                    return signal;
-                })
-                .Max();
+                    await inputs[0].Writer.WriteAsync(0);
+
+                    for (int i = 0; i < phases.Length; i++)
+                    {
+                        int nextAmp = i == phases.Length - 1 ? 0 : i + 1;
+
+                        var thisAmp = amplifiers[i];
+                        var nextInput = inputs[nextAmp];
+
+                        thisAmp.Input = inputs[i].Reader;
+                        thisAmp.OnOutput += async (_, value) =>
+                        {
+                            await nextInput.Writer.WriteAsync(value);
+                        };
+                    }
+
+                    bool completed = false;
+
+                    while (!completed)
+                    {
+                        foreach (var amp in amplifiers)
+                        {
+                            completed = await amp.RunAsync();
+                        }
+                    }
+
+                    signal = (await amplifiers.Last().Output.ToListAsync())[^1];
+                }
+
+                signals.Add(signal);
+            }
+
+            return signals.Max();
         }
 
         /// <inheritdoc />
@@ -53,11 +106,13 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
         {
             string program = ReadResourceAsString();
 
-            HighestSignal = (int)RunProgram(program);
+            HighestSignal = RunProgramAsync(program, useFeedback: false).Result;
+            HighestSignalUsingFeedback = RunProgramAsync(program, useFeedback: true).Result;
 
             if (Verbose)
             {
                 Logger.WriteLine("The highest signal that can be sent to the thrusters is {0}.", HighestSignal);
+                Logger.WriteLine("The highest signal that can be sent to the thrusters using a feedback loop is {0}.", HighestSignalUsingFeedback);
             }
 
             return 0;

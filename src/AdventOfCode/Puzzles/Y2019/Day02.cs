@@ -5,7 +5,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
 {
     using System;
     using System.Collections.Generic;
-    using System.Linq;
+    using System.Threading.Tasks;
 
     /// <summary>
     /// A class representing the puzzle for <c>https://adventofcode.com/2019/day/2</c>. This class cannot be inherited.
@@ -25,12 +25,9 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
         /// <returns>
         /// The memory values of the program once run.
         /// </returns>
-        public static IReadOnlyList<long> RunProgram(string program, bool adjust = false)
+        public static async Task<IReadOnlyList<long>> RunProgramAsync(string program, bool adjust = false)
         {
-            long[] instructions = program
-                .Split(',')
-                .Select((p) => ParseInt64(p))
-                .ToArray();
+            long[] instructions = IntcodeVM.ParseProgram(program);
 
             if (adjust)
             {
@@ -38,7 +35,17 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
                 instructions[2] = 2;
             }
 
-            return IntcodeVM.Run(instructions, new[] { 0L }, out long _);
+            var vm = new IntcodeVM(instructions)
+            {
+                Input = await ChannelHelpers.CreateReaderAsync(0L),
+            };
+
+            if (!await vm.RunAsync())
+            {
+                throw new InvalidProgramException();
+            }
+
+            return vm.Memory().ToArray();
         }
 
         /// <inheritdoc />
@@ -46,7 +53,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
         {
             string program = ReadResourceAsString();
 
-            Output = RunProgram(program, adjust: true);
+            Output = RunProgramAsync(program, adjust: true).Result;
 
             if (Verbose)
             {
