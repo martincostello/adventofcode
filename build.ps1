@@ -1,3 +1,4 @@
+#! /usr/bin/pwsh
 param(
     [Parameter(Mandatory = $false)][string] $Configuration = "Release",
     [Parameter(Mandatory = $false)][string] $VersionSuffix = "",
@@ -22,7 +23,7 @@ if ($OutputPath -eq "") {
 
 $installDotNetSdk = $false;
 
-if (($null -eq (Get-Command "dotnet.exe" -ErrorAction SilentlyContinue)) -and ($null -eq (Get-Command "dotnet" -ErrorAction SilentlyContinue))) {
+if (($null -eq (Get-Command "dotnet" -ErrorAction SilentlyContinue)) -and ($null -eq (Get-Command "dotnet.exe" -ErrorAction SilentlyContinue))) {
     Write-Host "The .NET Core SDK is not installed."
     $installDotNetSdk = $true
 }
@@ -54,10 +55,10 @@ if ($installDotNetSdk -eq $true) {
     }
 
     $env:PATH = "$env:DOTNET_INSTALL_DIR;$env:PATH"
-    $dotnet = Join-Path "$env:DOTNET_INSTALL_DIR" "dotnet.exe"
+    $dotnet = Join-Path "$env:DOTNET_INSTALL_DIR" "dotnet"
 }
 else {
-    $dotnet = "dotnet.exe"
+    $dotnet = "dotnet"
 }
 
 Write-Host "Building solution..." -ForegroundColor Green
@@ -71,12 +72,8 @@ if ($LASTEXITCODE -ne 0) {
 if ($SkipTests -eq $false) {
     Write-Host "Running tests..." -ForegroundColor Green
     ForEach ($testProject in $testProjects) {
-        if ($null -ne $env:TF_BUILD) {
-            & $dotnet test $testProject --output $OutputPath --configuration $Configuration --logger trx
-        }
-        else {
-            & $dotnet test $testProject --output $OutputPath --configuration $Configuration
-        }
+
+        & $dotnet test $testProject --output $OutputPath --configuration $Configuration
 
         if ($LASTEXITCODE -ne 0) {
             throw "dotnet test failed with exit code $LASTEXITCODE"

@@ -1,3 +1,4 @@
+#! /usr/bin/pwsh
 param(
     [Parameter(Mandatory = $false)][string] $Configuration = "Release",
     [Parameter(Mandatory = $false)][string] $Framework = "netcoreapp3.1"
@@ -12,13 +13,13 @@ $dotnetVersion = (Get-Content $sdkFile | Out-String | ConvertFrom-Json).sdk.vers
 
 $installDotNetSdk = $false;
 
-if (($null -eq (Get-Command "dotnet.exe" -ErrorAction SilentlyContinue)) -and ($null -eq (Get-Command "dotnet" -ErrorAction SilentlyContinue))) {
+if (($null -eq (Get-Command "dotnet" -ErrorAction SilentlyContinue)) -and ($null -eq (Get-Command "dotnet.exe" -ErrorAction SilentlyContinue))) {
     Write-Host "The .NET Core SDK is not installed."
     $installDotNetSdk = $true
 }
 else {
     Try {
-        $installedDotNetVersion = (dotnet.exe --version 2>&1 | Out-String).Trim()
+        $installedDotNetVersion = (dotnet --version 2>&1 | Out-String).Trim()
     }
     Catch {
         $installedDotNetVersion = "?"
@@ -44,10 +45,10 @@ if ($installDotNetSdk -eq $true) {
     }
 
     $env:PATH = "$env:DOTNET_INSTALL_DIR;$env:PATH"
-    $dotnet = Join-Path "$env:DOTNET_INSTALL_DIR" "dotnet.exe"
+    $dotnet = Join-Path "$env:DOTNET_INSTALL_DIR" "dotnet"
 }
 else {
-    $dotnet = "dotnet.exe"
+    $dotnet = "dotnet"
 }
 
 $benchmarks = (Join-Path $solutionPath "tests\AdventOfCode.Benchmarks\AdventOfCode.Benchmarks.csproj")

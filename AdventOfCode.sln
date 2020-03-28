@@ -1,23 +1,19 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27130.2010
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29920.165
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{A16BB7EB-64BE-4E3B-B1E3-6AC44D46CAAF}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
 		.gitattributes = .gitattributes
 		.gitignore = .gitignore
-		.travis.yml = .travis.yml
 		AdventOfCode.ruleset = AdventOfCode.ruleset
 		AdventOfCode.snk = AdventOfCode.snk
-		appveyor.yml = appveyor.yml
-		Benchmark.ps1 = Benchmark.ps1
-		Build.ps1 = Build.ps1
-		build.sh = build.sh
+		benchmark.ps1 = benchmark.ps1
+		build.ps1 = build.ps1
 		CODE_OF_CONDUCT.md = CODE_OF_CONDUCT.md
 		CommonAssemblyInfo.cs = CommonAssemblyInfo.cs
 		Directory.Build.props = Directory.Build.props
-		Directory.Build.targets = Directory.Build.targets
 		global.json = global.json
 		LICENSE = LICENSE
 		NuGet.config = NuGet.config
@@ -43,10 +39,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".github", ".github", "{69E6
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AdventOfCode.Benchmarks", "tests\AdventOfCode.Benchmarks\AdventOfCode.Benchmarks.csproj", "{6F0D9802-4B4A-4450-857C-459C8AD35588}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".azure-pipelines", ".azure-pipelines", "{A32C1089-3888-4D7C-8183-8E212B03F8FE}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{F8B9BBE9-B047-466F-8E3C-42D625F27C85}"
 	ProjectSection(SolutionItems) = preProject
-		.azure-pipelines\build-template.yml = .azure-pipelines\build-template.yml
-		.azure-pipelines\build.yml = .azure-pipelines\build.yml
+		.github\workflows\build.yml = .github\workflows\build.yml
 	EndProjectSection
 EndProject
 Global
@@ -76,7 +71,7 @@ Global
 		{2BB833A0-9436-4F50-AE90-F31449DD03E1} = {BC7347DF-3D60-4150-B245-7E836674DF8C}
 		{69E6E803-EFAD-4E12-BC44-4646244E26AF} = {A16BB7EB-64BE-4E3B-B1E3-6AC44D46CAAF}
 		{6F0D9802-4B4A-4450-857C-459C8AD35588} = {BC7347DF-3D60-4150-B245-7E836674DF8C}
-		{A32C1089-3888-4D7C-8183-8E212B03F8FE} = {A16BB7EB-64BE-4E3B-B1E3-6AC44D46CAAF}
+		{F8B9BBE9-B047-466F-8E3C-42D625F27C85} = {69E6E803-EFAD-4E12-BC44-4646244E26AF}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C690654F-56C1-4E71-9835-4C5ED66BD059}
