@@ -1,9 +1,6 @@
 # Advent of Code
 
-| | Windows | Linux/OS X | Linux/macOS/Windows |
-|:-:|:-:|:-:|:-:|
-| **Build Status** | [![Build status](https://img.shields.io/travis/martincostello/adventofcode/master.svg)](https://travis-ci.org/martincostello/adventofcode) | [![Build status](https://img.shields.io/appveyor/ci/martincostello/adventofcode/master.svg)](https://ci.appveyor.com/project/martincostello/adventofcode) | [![Azure Pipelines build status](https://dev.azure.com/martincostello/adventofcode/_apis/build/status/CI)](https://dev.azure.com/martincostello/adventofcode/_build/latest?definitionId=69) |
-| **Build History** | [![Build history](https://buildstats.info/travisci/chart/martincostello/adventofcode?branch=master&includeBuildsFromPullRequest=false)](https://travis-ci.org/martincostello/adventofcode) |  [![Build history](https://buildstats.info/appveyor/chart/martincostello/adventofcode?branch=master&includeBuildsFromPullRequest=false)](https://ci.appveyor.com/project/martincostello/adventofcode) | [![Build history](https://buildstats.info/azurepipelines/chart/martincostello/adventofcode/69?branch=master&includeBuildsFromPullRequest=false)](https://dev.azure.com/martincostello/adventofcode/_build?definitionId=69) |
+[![Build status](https://github.com/martincostello/adventofcode/workflows/build/badge.svg?branch=master&event=push)](https://github.com/martincostello/adventofcode/actions?query=workflow%3Abuild+branch%3Amaster+event%3Apush)
 
 ## Overview
 
@@ -23,16 +20,8 @@ This project is licensed under the [Apache 2.0](https://github.com/martincostell
 
 ## Building and Testing
 
-To build and test the puzzles run one of the following commands:
-
-**Linux/OS X**
-
-```sh
-./build.sh
-```
-
-**Windows**
+To build and test the puzzles run the following command:
 
 ```powershell
-.\build.ps1
+./build.ps1
 ```
