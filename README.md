@@ -34,5 +34,5 @@ To build and test the puzzles run one of the following commands:
 **Windows**
 
 ```powershell
-.\Build.ps1
+.\build.ps1
 ```
