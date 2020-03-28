@@ -71,12 +71,8 @@ if ($LASTEXITCODE -ne 0) {
 if ($SkipTests -eq $false) {
     Write-Host "Running tests..." -ForegroundColor Green
     ForEach ($testProject in $testProjects) {
-        if ($null -ne $env:TF_BUILD) {
-            & $dotnet test $testProject --output $OutputPath --configuration $Configuration --logger trx
-        }
-        else {
-            & $dotnet test $testProject --output $OutputPath --configuration $Configuration
-        }
+
+        & $dotnet test $testProject --output $OutputPath --configuration $Configuration
 
         if ($LASTEXITCODE -ne 0) {
             throw "dotnet test failed with exit code $LASTEXITCODE"
