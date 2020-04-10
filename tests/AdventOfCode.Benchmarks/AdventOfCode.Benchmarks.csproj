@@ -7,6 +7,8 @@
     <RootNamespace>MartinCostello.AdventOfCode.Benchmarks</RootNamespace>
     <Summary>$(Description)</Summary>
     <TargetFrameworks>netcoreapp3.1</TargetFrameworks>
+    <!-- Workaround for https://github.com/dotnet/BenchmarkDotNet/pull/1420 -->
+    <LangVersion>8.0</LangVersion>
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\src\AdventOfCode\AdventOfCode.csproj" />
