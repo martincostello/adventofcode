@@ -6,7 +6,9 @@ namespace MartinCostello.AdventOfCode.Benchmarks
     using System;
     using System.Collections.Generic;
     using BenchmarkDotNet.Attributes;
+    using BenchmarkDotNet.Diagnosers;
 
+    [EventPipeProfiler(EventPipeProfile.CpuSampling)]
     [MemoryDiagnoser]
     public class PuzzleBenchmarks
     {
