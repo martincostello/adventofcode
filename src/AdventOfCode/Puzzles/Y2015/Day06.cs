@@ -196,7 +196,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
                 // Split the instructions into 'words'
                 string[] words = value.Split(' ');
 
-                string firstWord = words.ElementAtOrDefault(0);
+                string? firstWord = words.ElementAtOrDefault(0);
 
                 string? action = null;
                 string? origin = null;
@@ -205,7 +205,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
                 // Determine the action to perform for this instruction (OFF, ON or TOGGLE)
                 if (string.Equals(firstWord, "turn", StringComparison.OrdinalIgnoreCase))
                 {
-                    string secondWord = words.ElementAtOrDefault(1);
+                    string? secondWord = words.ElementAtOrDefault(1);
 
                     if (string.Equals(secondWord, "off", StringComparison.OrdinalIgnoreCase))
                     {
@@ -277,7 +277,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
                 // Split the instructions into 'words'
                 string[] words = value.Split(' ');
 
-                string firstWord = words.ElementAtOrDefault(0);
+                string? firstWord = words.ElementAtOrDefault(0);
 
                 int? delta = null;
                 string? origin = null;
@@ -286,7 +286,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
                 // Determine the action to perform for this instruction (OFF, ON or TOGGLE)
                 if (string.Equals(firstWord, "turn", StringComparison.OrdinalIgnoreCase))
                 {
-                    string secondWord = words.ElementAtOrDefault(1);
+                    string? secondWord = words.ElementAtOrDefault(1);
 
                     if (string.Equals(secondWord, "off", StringComparison.OrdinalIgnoreCase))
                     {

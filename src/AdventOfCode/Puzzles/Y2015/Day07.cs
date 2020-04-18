@@ -54,14 +54,14 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
                     string[] words = pair.Value;
                     ushort? solvedValue = null;
 
-                    string firstOperand = words.FirstOrDefault();
-                    string secondOperand;
+                    string? firstOperand = words.FirstOrDefault();
+                    string? secondOperand;
 
                     if (words.Length == 1)
                     {
                         // "123 -> x" or " -> "lx -> a"
                         // Is the instruction a value or a previously solved value?
-                        if (ushort.TryParse(firstOperand, out ushort value) || result.TryGetValue(firstOperand, out value))
+                        if (ushort.TryParse(firstOperand, out ushort value) || result.TryGetValue(firstOperand!, out value))
                         {
                             result[wireId] = value;
                         }
@@ -73,7 +73,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
 
                         // Is the second operand a value or a previously solved value?
                         if (ushort.TryParse(secondOperand, out ushort value) ||
-                            result.TryGetValue(secondOperand, out value))
+                            result.TryGetValue(secondOperand!, out value))
                         {
                             result[wireId] = (ushort)~value;
                         }
@@ -83,11 +83,11 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
                         secondOperand = words.ElementAtOrDefault(2);
 
                         // Are both operands a value or a previously solved value?
-                        if ((ushort.TryParse(firstOperand, out ushort firstValue) || result.TryGetValue(firstOperand, out firstValue)) &&
-                            (ushort.TryParse(secondOperand, out ushort secondValue) || result.TryGetValue(secondOperand, out secondValue)))
+                        if ((ushort.TryParse(firstOperand, out ushort firstValue) || result.TryGetValue(firstOperand!, out firstValue)) &&
+                            (ushort.TryParse(secondOperand, out ushort secondValue) || result.TryGetValue(secondOperand!, out secondValue)))
                         {
-                            string operation = words.ElementAtOrDefault(1);
-                            solvedValue = TrySolveValueForOperation(operation, firstValue, secondValue);
+                            string? operation = words.ElementAtOrDefault(1);
+                            solvedValue = TrySolveValueForOperation(operation!, firstValue, secondValue);
                         }
                     }
 

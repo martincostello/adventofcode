@@ -47,9 +47,9 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
                 string instruction = instructions[i];
                 string[] split = instruction.Split(' ');
 
-                string operation = split.ElementAtOrDefault(0);
-                string registerOrOffset = split.ElementAtOrDefault(1);
-                string offset = split.ElementAtOrDefault(2);
+                string? operation = split.ElementAtOrDefault(0);
+                string? registerOrOffset = split.ElementAtOrDefault(1);
+                string? offset = split.ElementAtOrDefault(2);
 
                 int next = i + 1;
 
@@ -72,7 +72,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
                         break;
 
                     case "jie":
-                        if ((registerOrOffset.Split(',')[0].Trim() == "a" ? a : b).Value % 2 == 0)
+                        if ((registerOrOffset!.Split(',')[0].Trim() == "a" ? a : b).Value % 2 == 0)
                         {
                             next = i + ParseInt32(offset);
                         }
@@ -80,7 +80,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
                         break;
 
                     case "jio":
-                        if ((registerOrOffset.Split(',')[0].Trim() == "a" ? a : b).Value == 1)
+                        if ((registerOrOffset!.Split(',')[0].Trim() == "a" ? a : b).Value == 1)
                         {
                             next = i + ParseInt32(offset);
                         }
