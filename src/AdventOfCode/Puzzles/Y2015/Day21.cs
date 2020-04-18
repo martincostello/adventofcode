@@ -43,7 +43,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
                 goldSpent += human.Upgrade(shop.PurchaseArmor(armor));
             }
 
-            foreach (string ring in rings.Distinct().Take(2))
+            foreach (string ring in rings!.Distinct().Take(2))
             {
                 goldSpent += human.Upgrade(shop.PurchaseRing(ring));
             }
