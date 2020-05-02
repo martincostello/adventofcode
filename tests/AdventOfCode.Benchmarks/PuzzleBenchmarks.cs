@@ -88,9 +88,15 @@ namespace MartinCostello.AdventOfCode.Benchmarks
             public PuzzleInput(params string[] args)
                 : base(args)
             {
+                Puzzle = new T() { Verbose = false };
+
+                if (Puzzle is Puzzle puzzle)
+                {
+                    puzzle.Logger = new NullLogger();
+                }
             }
 
-            public override IPuzzle Puzzle { get; } = new T();
+            public override IPuzzle Puzzle { get; }
         }
 
         public abstract class PuzzleInput
@@ -120,6 +126,19 @@ namespace MartinCostello.AdventOfCode.Benchmarks
                 }
 
                 return name;
+            }
+        }
+
+        private sealed class NullLogger : ILogger
+        {
+            public void WriteGrid(bool[,] array, char falseChar, char trueChar)
+            {
+                // No-op
+            }
+
+            public void WriteLine(string format, params object[] args)
+            {
+                // No-op
             }
         }
     }
