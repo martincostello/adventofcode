@@ -153,7 +153,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
         private static (int x, int y) GetDelta(string instruction)
         {
             char direction = instruction[0];
-            int distance = ParseInt32(instruction[1..]);
+            int distance = ParseInt32(instruction.AsSpan(1));
 
             return direction switch
             {

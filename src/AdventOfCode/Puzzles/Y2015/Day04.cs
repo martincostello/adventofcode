@@ -47,7 +47,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
                     try
                     {
                         // Does this range start at a value greater than an already found value?
-                        if (solutions.Count > 0)
+                        if (!solutions.IsEmpty)
                         {
                             int bestSolution = solutions.Min();
 
@@ -106,7 +106,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
                     }
                 });
 
-            if (solutions.Count < 1)
+            if (solutions.IsEmpty)
             {
                 throw new ArgumentException("No answer was found for the specified secret key.", nameof(secretKey));
             }

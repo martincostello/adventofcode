@@ -47,7 +47,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
                     case '\"':
                     case '\\':
                     case '\'':
-                        builder.Append("\\");
+                        builder.Append('\\');
                         break;
 
                     default:
@@ -57,7 +57,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
                 builder.Append(current);
             }
 
-            builder.Append("\"");
+            builder.Append('\"');
 
             return builder.Length;
         }
