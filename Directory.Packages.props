@@ -1,6 +1,6 @@
 <Project>
   <PropertyGroup>
-    <AnalyzersVersion>3.0.0</AnalyzersVersion>
+    <AnalyzersVersion>3.3.0</AnalyzersVersion>
   </PropertyGroup>
   <ItemGroup>
     <PackageVersion Include="BenchmarkDotNet" Version="0.12.1" />
