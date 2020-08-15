@@ -201,18 +201,19 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         }
 
         /// <summary>
-        /// Converts the specified <see cref="IEnumerable{T}"/> of <see cref="byte"/> to a
+        /// Converts the specified <see cref="ReadOnlySpan{T}"/> of <see cref="byte"/> to a
         /// hexadecimal <see cref="string"/> representation of the hash.
         /// </summary>
-        /// <param name="collection">The hash bytes to generate the string representation of.</param>
+        /// <param name="bytes">The hash bytes to generate the string representation of.</param>
         /// <returns>
-        /// A <see cref="string"/> containing the hexadecimal representation of <paramref name="collection"/>.
+        /// A <see cref="string"/> containing the hexadecimal representation of <paramref name="bytes"/>.
         /// </returns>
-        private static string GetStringForHash(IEnumerable<byte> collection)
+        private static string GetStringForHash(ReadOnlySpan<byte> bytes)
         {
-            var hash = new StringBuilder();
+            // TODO Use Convert.ToHexString() from 5.0 preview 8
+            var hash = new StringBuilder(bytes.Length);
 
-            foreach (byte b in collection)
+            foreach (byte b in bytes)
             {
                 hash.Append(b.ToString("x2", CultureInfo.InvariantCulture));
             }
