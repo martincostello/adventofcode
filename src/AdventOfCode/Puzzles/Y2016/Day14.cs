@@ -43,6 +43,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
             int current = 0;
             var cache = new Dictionary<string, string>();
 
+            // TODO Use MD5.HashData() in 5.0 preview 8
             using (HashAlgorithm algorithm = MD5.Create())
             {
                 for (int i = 0; current < ordinal; i++)

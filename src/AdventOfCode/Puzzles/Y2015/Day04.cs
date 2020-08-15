@@ -90,6 +90,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
                             return;
                         }
 
+                        // TODO Use MD5.HashData() in 5.0 preview 8
                         using HashAlgorithm algorithm = MD5.Create();
 
                         for (int i = range.Item1; !state.ShouldExitCurrentIteration && i < range.Item2; i++)

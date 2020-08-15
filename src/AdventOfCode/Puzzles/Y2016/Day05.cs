@@ -45,6 +45,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
 
             byte[] doorIdAsBytes = Encoding.ASCII.GetBytes(doorId);
 
+            // TODO Use MD5.HashData() in 5.0 preview 8
             using (HashAlgorithm algorithm = MD5.Create())
             {
                 while (characters.Count < PasswordLength)
