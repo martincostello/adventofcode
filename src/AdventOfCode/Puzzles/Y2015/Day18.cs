@@ -51,14 +51,14 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
                 current = Animate(current, areCornerLightsBroken);
             }
 
-            var result = new List<string>();
-
             int width = current.GetLength(0);
             int height = current.GetLength(1);
 
+            var result = new List<string>(width);
+
             for (int x = 0; x < width; x++)
             {
-                var builder = new StringBuilder();
+                var builder = new StringBuilder(height);
 
                 for (int y = 0; y < height; y++)
                 {

@@ -28,7 +28,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
         internal static string AsLookAndSay(string value)
         {
             var input = new Queue<char>(value);
-            var output = new StringBuilder();
+            var output = new StringBuilder(input.Count);
 
             while (input.Count > 0)
             {
@@ -41,7 +41,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
                     count++;
                 }
 
-                output.AppendFormat(CultureInfo.InvariantCulture, "{0}{1}", count, current);
+                output.Append(count);
+                output.Append(current);
             }
 
             return output.ToString();

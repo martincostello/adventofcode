@@ -5,6 +5,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
 {
     using System;
     using System.Collections.Concurrent;
+    using System.Globalization;
     using System.Linq;
     using System.Security.Cryptography;
     using System.Text;
@@ -145,8 +146,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
         /// </returns>
         private static bool IsSolution(int value, string secretKey, int zeroes, HashAlgorithm algorithm)
         {
-            string formattted = Format("{0}{1}", secretKey, value);
-            byte[] buffer = Encoding.UTF8.GetBytes(formattted);
+            string formatted = secretKey + value.ToString(CultureInfo.InvariantCulture);
+            byte[] buffer = Encoding.UTF8.GetBytes(formatted);
             byte[] hash = algorithm.ComputeHash(buffer);
 
             int wholeBytes = zeroes / 2;

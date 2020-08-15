@@ -47,7 +47,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
             {
                 for (int i = 0; current < ordinal; i++)
                 {
-                    string value = string.Format(CultureInfo.InvariantCulture, "{0}{1}", salt, i);
+                    string value = salt + i.ToString(CultureInfo.InvariantCulture);
                     string key = GenerateKey(value, algorithm, useKeyStretching, cache);
 
                     char triple = GetTripleCharacter(key);
@@ -64,7 +64,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
 
                     for (int j = next; j <= last; j++)
                     {
-                        value = string.Format(CultureInfo.InvariantCulture, "{0}{1}", salt, j);
+                        value = salt + j.ToString(CultureInfo.InvariantCulture);
                         key = GenerateKey(value, algorithm, useKeyStretching, cache);
 
                         if (HasFiveRepeatitionsOfCharacter(key, triple))

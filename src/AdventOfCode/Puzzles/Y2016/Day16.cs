@@ -65,9 +65,10 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
 
             while (result == null)
             {
-                var builder = new StringBuilder();
+                int length = data.Count - 1;
+                var builder = new StringBuilder(length / 2);
 
-                for (int i = 0; i < data.Count - 1; i += 2)
+                for (int i = 0; i < length; i += 2)
                 {
                     char next = data[i] == data[i + 1] ? '1' : '0';
                     builder.Append(next);
