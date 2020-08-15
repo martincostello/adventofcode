@@ -82,7 +82,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
                 maximum = Math.Max(maximum, distance);
             }
 
-            int minimum = distances[distances.Count - 1];
+            int minimum = distances[^1];
 
             return (minimum, maximum);
         }

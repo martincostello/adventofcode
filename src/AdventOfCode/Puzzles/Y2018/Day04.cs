@@ -50,8 +50,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2018
             var lastTimestamp = first.Timestamp;
             bool isAwake = true;
 
-            var midnight = new TimeSpan(0, 0, 0);
-            var oneAM = new TimeSpan(1, 0, 0);
+            var midnight = TimeSpan.Zero;
+            var oneAM = TimeSpan.FromHours(1);
             var oneMinute = TimeSpan.FromMinutes(1);
 
             foreach (var day in groupedLog)

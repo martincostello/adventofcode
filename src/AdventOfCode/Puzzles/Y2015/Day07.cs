@@ -144,28 +144,14 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
         /// </returns>
         private static ushort? TrySolveValueForOperation(string operation, ushort firstValue, ushort secondValue)
         {
-            if (operation == "AND")
+            return operation switch
             {
-                // "x AND y -> z"
-                return (ushort)(firstValue & secondValue);
-            }
-            else if (operation == "OR")
-            {
-                // "i OR j => k"
-                return (ushort)(firstValue | secondValue);
-            }
-            else if (operation == "LSHIFT")
-            {
-                // "p LSHIFT 2"
-                return (ushort)(firstValue << secondValue);
-            }
-            else if (operation == "RSHIFT")
-            {
-                // "q RSHIFT 3"
-                return (ushort)(firstValue >> secondValue);
-            }
-
-            return null;
+                "AND" => (ushort)(firstValue & secondValue), // "x AND y -> z"
+                "OR" => (ushort)(firstValue | secondValue), // "i OR j => k"
+                "LSHIFT" => (ushort)(firstValue << secondValue), // "p LSHIFT 2"
+                "RSHIFT" => (ushort)(firstValue >> secondValue), // "q RSHIFT 3"
+                _ => null,
+            };
         }
     }
 }

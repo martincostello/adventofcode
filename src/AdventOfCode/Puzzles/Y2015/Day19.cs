@@ -104,7 +104,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
                 return step;
             }
 
-            var steps = new List<int>();
+            var steps = new List<int>(nextSteps.Count);
 
             foreach (string next in nextSteps.Where((p) => p.Length < molecule.Length))
             {

@@ -254,8 +254,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
             char first = x[0];
             char second = y[0];
 
-            IList<int> indexesOfX = new List<int>();
-            IList<int> indexesOfY = new List<int>();
+            var indexesOfX = new List<int>(values.Length / 2);
+            var indexesOfY = new List<int>(indexesOfX.Capacity);
 
             for (int i = 0; i < values.Length; i++)
             {

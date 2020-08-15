@@ -40,7 +40,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         {
             const int PasswordLength = 8;
 
-            var characters = new Dictionary<int, char>();
+            var characters = new Dictionary<int, char>(PasswordLength);
             int index = 0;
 
             byte[] doorIdAsBytes = Encoding.ASCII.GetBytes(doorId);

@@ -86,25 +86,27 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
             string[] potentialWeapons = Shop.PotentialWeapons.Keys.ToArray();
             string?[] potentialArmor = Shop.PotentialArmor.Keys.Concat(new string?[] { null }).ToArray();
 
-            var potentialRings = new List<ICollection<string>>()
+            ICollection<string> keys = Shop.PotentialRings.Keys.ToArray();
+
+            var potentialRings = new List<ICollection<string>>((keys.Count * 2) + 1)
             {
                 Array.Empty<string>(),
             };
 
-            foreach (string ring in Shop.PotentialRings.Keys.ToArray())
+            foreach (string ring in keys)
             {
                 potentialRings.Add(new[] { ring });
             }
 
-            var permutations = Maths.GetPermutations(Shop.PotentialRings.Keys, 2);
+            var permutations = Maths.GetPermutations(keys, 2);
 
             foreach (var permutation in permutations)
             {
                 potentialRings.Add(permutation.ToArray());
             }
 
-            var costsToLose = new List<int>();
-            var costsToWin = new List<int>();
+            var costsToLose = new List<int>((potentialArmor.Length + potentialRings.Count + potentialWeapons.Length) / 2);
+            var costsToWin = new List<int>(costsToLose.Capacity);
 
             foreach (string weapon in potentialWeapons)
             {

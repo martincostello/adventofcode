@@ -33,7 +33,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
             ICollection<CardinalDirection> directions = GetDirections(instructions, logger);
 
             var santa = new SantaGps();
-            var coordinates = new List<Point>();
+            var coordinates = new HashSet<Point>();
 
             foreach (var direction in directions)
             {
@@ -62,7 +62,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
             var roboSanta = new SantaGps();
             var current = santa;
 
-            var coordinates = new List<Point>();
+            var coordinates = new HashSet<Point>();
 
             foreach (var direction in directions)
             {
@@ -109,7 +109,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
         /// <returns>An <see cref="ICollection{T}"/> containing the directions from from the specified file.</returns>
         private static ICollection<CardinalDirection> GetDirections(string instructions, ILogger logger)
         {
-            var directions = new List<CardinalDirection>();
+            var directions = new List<CardinalDirection>(instructions.Length);
 
             for (int i = 0; i < instructions.Length; i++)
             {

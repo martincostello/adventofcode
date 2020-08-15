@@ -46,8 +46,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
             {
                 for (int x = 0; x < width; x++)
                 {
-                    bool left = x == 0 ? false : tiles[y - 1, x - 1];
-                    bool right = x == width - 1 ? false : tiles[y - 1, x + 1];
+                    bool left = x != 0 && tiles[y - 1, x - 1];
+                    bool right = x != width - 1 && tiles[y - 1, x + 1];
 
                     bool isTrap = left ^ right;
 

@@ -53,8 +53,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
                 }
                 else
                 {
-                    var amplifiers = new List<IntcodeVM>();
-                    var inputs = new List<Channel<long>>();
+                    var amplifiers = new List<IntcodeVM>(phases.Length);
+                    var inputs = new List<Channel<long>>(phases.Length);
 
                     for (int i = 0; i < phases.Length; i++)
                     {

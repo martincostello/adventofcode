@@ -47,7 +47,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
 
             var outputs = await vm.Output.ToListAsync();
 
-            var grid = new Dictionary<Point, int>();
+            var grid = new Dictionary<Point, int>(outputs.Count);
 
             long score = 0;
 

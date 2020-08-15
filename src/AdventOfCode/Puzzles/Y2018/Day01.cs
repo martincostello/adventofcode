@@ -63,7 +63,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2018
                     int previous = current;
                     current += shift;
 
-                    if (!firstRepeat.HasValue && history.Contains(current) && history[history.Count - 2] != previous)
+                    if (!firstRepeat.HasValue && history.Contains(current) && history[^2] != previous)
                     {
                         firstRepeat = current;
                     }
@@ -105,6 +105,6 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2018
         /// <see langword="true"/> if the sequence tends towards positive or negative infinity.
         /// </returns>
         private static bool TendsToInfinity(IEnumerable<int> sequence)
-            => Math.Abs(sequence.Sum((p) => Math.Sign(p))) == sequence.Count((p) => p != 0);
+            => Math.Abs(sequence.Sum(Math.Sign)) == sequence.Count((p) => p != 0);
     }
 }

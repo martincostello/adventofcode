@@ -43,7 +43,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
             // Get all the permutations which the ingredients could be ordered by
             var ingredientPermutations = Maths.GetPermutations(ingredientProperties.Keys).ToList();
 
-            var recipies = new List<IDictionary<string, int>>();
+            var recipies = new List<IDictionary<string, int>>(ingredientPermutations.Count * teaspoonPermutations.Count);
 
             // For each permutation of ingredients, create a recipe for each
             // permutation of the number of teaspoons of each one there is.
@@ -53,7 +53,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
 
                 foreach (IList<int> teaspoons in teaspoonPermutations)
                 {
-                    var recipe = new Dictionary<string, int>();
+                    var recipe = new Dictionary<string, int>(ingredients.Count);
 
                     for (int i = 0; i < ingredients.Count; i++)
                     {
@@ -65,7 +65,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
             }
 
             // Calculate the total score for each possible recipe
-            var scores = new List<int>();
+            var scores = new List<int>(recipies.Count);
 
             foreach (var recipe in recipies)
             {
@@ -120,7 +120,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
             const int MaxTeaspoons = 100;
 
             // Holds the permutations of teaspoons for the number of ingredients at this index (i.e. count - index)
-            IList<IList<int>> thisLevel = new List<IList<int>>();
+            IList<IList<int>> thisLevel = new List<IList<int>>(seed.Count);
 
             if (seed.Count < index + 1)
             {
@@ -162,7 +162,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
             }
 
             // Find the permutations for the next ingredient from the ones we just found
-            var result = new List<IList<int>>();
+            var result = new List<IList<int>>(thisLevel.Count);
 
             foreach (var amount in thisLevel)
             {

@@ -148,7 +148,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
                     }
                     else
                     {
-                        var neighbors = new List<Point>()
+                        var neighbors = new List<Point>(8)
                         {
                             new Point(x - 1, y - 1),
                             new Point(x, y - 1),

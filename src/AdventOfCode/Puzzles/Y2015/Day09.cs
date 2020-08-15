@@ -58,7 +58,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
                 .ToList();
 
             // Get the possible next destination and the distance to it from each unique location
-            var possibleDestinations = new Dictionary<string, IDictionary<string, int>>();
+            var possibleDestinations = new Dictionary<string, IDictionary<string, int>>(uniqueLocations.Count);
 
             foreach (string location in uniqueLocations)
             {
@@ -66,7 +66,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
                     .Where((p) => p.Locations.Contains(location))
                     .ToList();
 
-                var destinations = new Dictionary<string, int>();
+                var destinations = new Dictionary<string, int>(distancesFeaturingLocation.Count);
 
                 foreach (var distancePair in distancesFeaturingLocation)
                 {
@@ -88,7 +88,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
             }
 
             // Get the distance of each possible path
-            var paths = new List<Path>();
+            var paths = new List<Path>(uniqueLocations.Count);
 
             // Walk the paths from all of the possible origin points
             foreach (string origin in uniqueLocations)
