@@ -35,7 +35,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         {
             ParseIPAddress(address, out IList<string> supernets, out IList<string> hypernets);
 
-            var abas = new List<string>();
+            var abas = new List<string>(supernets.Count);
 
             foreach (string value in supernets)
             {
@@ -131,7 +131,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         /// </returns>
         private static IList<string> ExtractAbas(ReadOnlySpan<char> value)
         {
-            var result = new List<string>();
+            var result = new List<string>(value.Length);
 
             for (int i = 0; i < value.Length - 2; i++)
             {

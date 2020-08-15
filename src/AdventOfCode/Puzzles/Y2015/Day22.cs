@@ -92,11 +92,13 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
         {
             string difficulty = args.Length == 1 ? args[0] : "easy";
 
-            var solutions = new List<(bool didWizardWin, int manaSpent)>();
+            // Play the game 100,000 times with random choices of spells
+            const int Iterations = 100000;
+
+            var solutions = new List<(bool didWizardWin, int manaSpent)>(Iterations);
             var random = new Random();
 
-            // Play the game 100,000 times with random choices of spells
-            while (solutions.Count < 100000)
+            while (solutions.Count < Iterations)
             {
                 var result = Fight((wizard, spells) => spells.ElementAt(random.Next(0, spells.Count)), difficulty);
                 solutions.Add(result);

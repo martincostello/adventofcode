@@ -70,7 +70,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
         /// </returns>
         private static int GetRepeatCount(List<int> memory)
         {
-            var patterns = new List<string>();
+            var patterns = new HashSet<string>();
             string pattern = string.Join(",", memory);
 
             int count = 0;

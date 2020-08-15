@@ -43,11 +43,12 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
             int current = 0;
             var cache = new Dictionary<string, string>();
 
+            // TODO Use MD5.HashData() in 5.0 preview 8
             using (HashAlgorithm algorithm = MD5.Create())
             {
                 for (int i = 0; current < ordinal; i++)
                 {
-                    string value = string.Format(CultureInfo.InvariantCulture, "{0}{1}", salt, i);
+                    string value = salt + i.ToString(CultureInfo.InvariantCulture);
                     string key = GenerateKey(value, algorithm, useKeyStretching, cache);
 
                     char triple = GetTripleCharacter(key);
@@ -64,7 +65,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
 
                     for (int j = next; j <= last; j++)
                     {
-                        value = string.Format(CultureInfo.InvariantCulture, "{0}{1}", salt, j);
+                        value = salt + j.ToString(CultureInfo.InvariantCulture);
                         key = GenerateKey(value, algorithm, useKeyStretching, cache);
 
                         if (HasFiveRepeatitionsOfCharacter(key, triple))
@@ -201,18 +202,19 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         }
 
         /// <summary>
-        /// Converts the specified <see cref="IEnumerable{T}"/> of <see cref="byte"/> to a
+        /// Converts the specified <see cref="ReadOnlySpan{T}"/> of <see cref="byte"/> to a
         /// hexadecimal <see cref="string"/> representation of the hash.
         /// </summary>
-        /// <param name="collection">The hash bytes to generate the string representation of.</param>
+        /// <param name="bytes">The hash bytes to generate the string representation of.</param>
         /// <returns>
-        /// A <see cref="string"/> containing the hexadecimal representation of <paramref name="collection"/>.
+        /// A <see cref="string"/> containing the hexadecimal representation of <paramref name="bytes"/>.
         /// </returns>
-        private static string GetStringForHash(IEnumerable<byte> collection)
+        private static string GetStringForHash(ReadOnlySpan<byte> bytes)
         {
-            var hash = new StringBuilder();
+            // TODO Use Convert.ToHexString() from 5.0 preview 8
+            var hash = new StringBuilder(bytes.Length);
 
-            foreach (byte b in collection)
+            foreach (byte b in bytes)
             {
                 hash.Append(b.ToString("x2", CultureInfo.InvariantCulture));
             }

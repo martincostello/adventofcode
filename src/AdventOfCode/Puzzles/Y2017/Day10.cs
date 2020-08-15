@@ -171,7 +171,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
                 denseHash.Add(part);
             }
 
-            var builder = new StringBuilder();
+            // TODO Use Convert.ToHexString() from 5.0 preview 8
+            var builder = new StringBuilder(denseHash.Count);
 
             foreach (int value in denseHash)
             {

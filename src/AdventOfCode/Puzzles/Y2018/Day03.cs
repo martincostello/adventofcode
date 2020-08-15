@@ -34,9 +34,12 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2018
 
             int result = 0;
 
-            for (int i = 0; i < fabric.GetLength(0); i++)
+            int height = fabric.GetLength(0);
+            int width = fabric.GetLength(1);
+
+            for (int i = 0; i < height; i++)
             {
-                for (int j = 0; j < fabric.GetLength(1); j++)
+                for (int j = 0; j < width; j++)
                 {
                     if (fabric[i, j].Claims.Count >= 2)
                     {

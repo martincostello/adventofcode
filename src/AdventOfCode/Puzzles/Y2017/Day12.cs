@@ -32,7 +32,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
         {
             IDictionary<int, Node> graph = BuildGraph(pipes);
 
-            var groups = new List<string>();
+            var groups = new HashSet<string>();
 
             foreach (Node target in graph.Values)
             {

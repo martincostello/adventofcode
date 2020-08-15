@@ -1,7 +1,7 @@
 #! /usr/bin/pwsh
 param(
     [Parameter(Mandatory = $false)][string] $Configuration = "Release",
-    [Parameter(Mandatory = $false)][string] $Framework = "netcoreapp3.1"
+    [Parameter(Mandatory = $false)][string] $Framework = "net5.0"
 )
 
 $ErrorActionPreference = "Stop"

@@ -23,10 +23,10 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
 
         [Theory]
         [InlineData(9, new[] { "5-8", "0-2", "4-7" }, 3, 2)]
-        public static void Y2016_Day20_GetLowestNonblockedIP_Returns_Correct_Solution(uint maxValue, string[] blacklist, uint expectedIP, uint expectedCount)
+        public static void Y2016_Day20_GetLowestNonblockedIP_Returns_Correct_Solution(uint maxValue, string[] denyList, uint expectedIP, uint expectedCount)
         {
             // Act
-            uint address = Day20.GetLowestNonblockedIP(maxValue, blacklist, out uint count);
+            uint address = Day20.GetLowestNonblockedIP(maxValue, denyList, out uint count);
 
             // Assert
             address.ShouldBe(expectedIP);

@@ -26,9 +26,9 @@ namespace MartinCostello.AdventOfCode
         {
             int length = values.Count;
             var bits = new BitArray(length);
-            var result = new List<ICollection<long>>();
 
             int limit = (int)Math.Pow(2, length);
+            var result = new List<ICollection<long>>(limit);
 
             for (int i = 0; i < limit; i++)
             {

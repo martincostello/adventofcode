@@ -202,18 +202,15 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
         /// </returns>
         private static bool IsVowel(char letter)
         {
-            switch (letter)
+            return letter switch
             {
-                case 'a':
-                case 'e':
-                case 'i':
-                case 'o':
-                case 'u':
-                    return true;
-
-                default:
-                    return false;
-            }
+                'a' => true,
+                'e' => true,
+                'i' => true,
+                'o' => true,
+                'u' => true,
+                _ => false,
+            };
         }
     }
 }

@@ -51,14 +51,14 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
                 current = Animate(current, areCornerLightsBroken);
             }
 
-            var result = new List<string>();
-
             int width = current.GetLength(0);
             int height = current.GetLength(1);
 
+            var result = new List<string>(width);
+
             for (int x = 0; x < width; x++)
             {
-                var builder = new StringBuilder();
+                var builder = new StringBuilder(height);
 
                 for (int y = 0; y < height; y++)
                 {
@@ -148,7 +148,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
                     }
                     else
                     {
-                        var neighbors = new List<Point>()
+                        var neighbors = new List<Point>(8)
                         {
                             new Point(x - 1, y - 1),
                             new Point(x, y - 1),

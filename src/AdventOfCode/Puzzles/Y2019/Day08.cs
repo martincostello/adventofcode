@@ -167,7 +167,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
 
             for (int y = 0; y < height; y++)
             {
-                var builder = new StringBuilder();
+                var builder = new StringBuilder(width);
 
                 for (int x = 0; x < width; x++)
                 {

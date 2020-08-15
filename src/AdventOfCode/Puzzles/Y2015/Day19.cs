@@ -31,7 +31,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
         /// </returns>
         internal static ICollection<string> GetPossibleMolecules(string molecule, ICollection<string> replacements)
         {
-            var molecules = new List<string>();
+            var molecules = new HashSet<string>();
 
             foreach (string replacement in replacements)
             {
@@ -46,11 +46,10 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
 
                     if (index > -1)
                     {
-                        string newMolecule = Format(
-                            "{0}{1}{2}",
-                            index == 0 ? string.Empty : molecule.Substring(0, index),
-                            target,
-                            molecule.Substring(index + source.Length));
+                        string newMolecule =
+                            (index == 0 ? string.Empty : molecule.Substring(0, index)) +
+                            target +
+                            molecule.Substring(index + source.Length);
 
                         if (!molecules.Contains(newMolecule))
                         {
@@ -105,7 +104,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
                 return step;
             }
 
-            var steps = new List<int>();
+            var steps = new List<int>(nextSteps.Count);
 
             foreach (string next in nextSteps.Where((p) => p.Length < molecule.Length))
             {

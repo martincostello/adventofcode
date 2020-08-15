@@ -23,22 +23,22 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
 
         /// <summary>
         /// Returns the value of the lowest IP address that is not
-        /// blocked by the specified IP address range blacklist.
+        /// blocked by the specified IP address range deny-list.
         /// </summary>
         /// <param name="maxValue">The maximum possible IP address value.</param>
-        /// <param name="blacklist">The IP address ranges that form the blacklist.</param>
+        /// <param name="denyList">The IP address ranges that form the deny-list.</param>
         /// <param name="count">When the method returns contains the number of allowed IP addresses.</param>
         /// <returns>
         /// The lowest IP address that is not blocked, as a 32-bit integer.
         /// </returns>
-        internal static uint GetLowestNonblockedIP(uint maxValue, IEnumerable<string> blacklist, out uint count)
+        internal static uint GetLowestNonblockedIP(uint maxValue, ICollection<string> denyList, out uint count)
         {
             count = 0;
 
-            // Parse the IP ranges for the blacklist and sort
-            var ranges = new List<(uint start, uint end)>();
+            // Parse the IP ranges for the deny-list and sort
+            var ranges = new List<(uint start, uint end)>(denyList.Count);
 
-            foreach (string range in blacklist)
+            foreach (string range in denyList)
             {
                 string[] split = range.Split('-');
 
@@ -90,7 +90,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
 
             uint result = 0;
 
-            // Count the number of IPs not in the blacklist ranges
+            // Count the number of IPs not in the deny-list ranges
             for (int i = 0; i < ranges.Count - 1; i++)
             {
                 var range1 = ranges[i];
@@ -102,12 +102,12 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
                 {
                     // As ranges are sorted and do not overlap,
                     // the lowest allowed IP is 1 more than the
-                    // high value for the first blacklisted range.
+                    // high value for the first deny-listed range.
                     result = range1.end + 1;
                 }
             }
 
-            // Add on the remaining IPs if the last blacklist
+            // Add on the remaining IPs if the last deny-list
             // does not run to the maximum allowed IP address.
             var (start, end) = ranges.Last();
 

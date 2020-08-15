@@ -95,7 +95,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
 
             if (readAsColumns)
             {
-                var resultFromColumns = new List<(int a, int b, int c)>();
+                var resultFromColumns = new List<(int a, int b, int c)>(result.Count);
 
                 for (int i = 0; i < result.Count; i += 3)
                 {

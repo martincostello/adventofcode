@@ -40,11 +40,12 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         {
             const int PasswordLength = 8;
 
-            var characters = new Dictionary<int, char>();
+            var characters = new Dictionary<int, char>(PasswordLength);
             int index = 0;
 
             byte[] doorIdAsBytes = Encoding.ASCII.GetBytes(doorId);
 
+            // TODO Use MD5.HashData() in 5.0 preview 8
             using (HashAlgorithm algorithm = MD5.Create())
             {
                 while (characters.Count < PasswordLength)
@@ -123,18 +124,19 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         /// Converts the specified <see cref="Array"/> of <see cref="byte"/> to a
         /// hexadecimal <see cref="string"/> representation of the hash.
         /// </summary>
-        /// <param name="hashBytes">The hash bytes to generate the string representation of.</param>
+        /// <param name="bytes">The hash bytes to generate the string representation of.</param>
         /// <returns>
-        /// A <see cref="string"/> containing the hexadecimal representation of <paramref name="hashBytes"/>.
+        /// A <see cref="string"/> containing the hexadecimal representation of <paramref name="bytes"/>.
         /// </returns>
-        private static string GetStringForHash(ReadOnlySpan<byte> hashBytes)
+        private static string GetStringForHash(ReadOnlySpan<byte> bytes)
         {
-            var hash = new StringBuilder("0000");
+            // TODO Use Convert.ToHexString() from 5.0 preview 8
+            var hash = new StringBuilder("0000", bytes.Length + 4);
 
             // Skip the first 2 bytes as they should already have been checked to be zero
-            for (int i = 2; i < hashBytes.Length; i++)
+            for (int i = 2; i < bytes.Length; i++)
             {
-                hash.Append(hashBytes[i].ToString("x2", CultureInfo.InvariantCulture));
+                hash.Append(bytes[i].ToString("x2", CultureInfo.InvariantCulture));
             }
 
             return hash.ToString();
