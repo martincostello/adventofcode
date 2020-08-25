@@ -43,46 +43,42 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
             int current = 0;
             var cache = new Dictionary<string, string>();
 
-            // TODO Use MD5.HashData() in 5.0 preview 8
-            using (HashAlgorithm algorithm = MD5.Create())
+            for (int i = 0; current < ordinal; i++)
             {
-                for (int i = 0; current < ordinal; i++)
+                string value = salt + i.ToString(CultureInfo.InvariantCulture);
+                string key = GenerateKey(value, useKeyStretching, cache);
+
+                char triple = GetTripleCharacter(key);
+
+                if (triple == default(char))
                 {
-                    string value = salt + i.ToString(CultureInfo.InvariantCulture);
-                    string key = GenerateKey(value, algorithm, useKeyStretching, cache);
+                    continue;
+                }
 
-                    char triple = GetTripleCharacter(key);
+                int next = i + 1;
+                int last = next + 1000;
 
-                    if (triple == default(char))
+                bool found5InARow = false;
+
+                for (int j = next; j <= last; j++)
+                {
+                    value = salt + j.ToString(CultureInfo.InvariantCulture);
+                    key = GenerateKey(value, useKeyStretching, cache);
+
+                    if (HasFiveRepeatitionsOfCharacter(key, triple))
                     {
-                        continue;
+                        found5InARow = true;
+                        break;
                     }
+                }
 
-                    int next = i + 1;
-                    int last = next + 1000;
+                if (found5InARow)
+                {
+                    current++;
 
-                    bool found5InARow = false;
-
-                    for (int j = next; j <= last; j++)
+                    if (current == ordinal)
                     {
-                        value = salt + j.ToString(CultureInfo.InvariantCulture);
-                        key = GenerateKey(value, algorithm, useKeyStretching, cache);
-
-                        if (HasFiveRepeatitionsOfCharacter(key, triple))
-                        {
-                            found5InARow = true;
-                            break;
-                        }
-                    }
-
-                    if (found5InARow)
-                    {
-                        current++;
-
-                        if (current == ordinal)
-                        {
-                            return i;
-                        }
+                        return i;
                     }
                 }
             }
@@ -111,7 +107,6 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         /// Generates a one-time pad key for the specified value.
         /// </summary>
         /// <param name="value">The value to generate the one-time pad key for.</param>
-        /// <param name="algorithm">The hash algorithm to use to generate the key.</param>
         /// <param name="useKeyStretching">Whether to use key stretching.</param>
         /// <param name="cache">A cache of pre-generated hashes.</param>
         /// <returns>
@@ -119,7 +114,6 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         /// </returns>
         private static string GenerateKey(
             string value,
-            HashAlgorithm algorithm,
             bool useKeyStretching,
             IDictionary<string, string> cache)
         {
@@ -134,7 +128,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
                 for (int i = 0; i < rounds; i++)
                 {
                     byte[] buffer = Encoding.ASCII.GetBytes(result);
-                    byte[] hash = algorithm.ComputeHash(buffer);
+                    byte[] hash = MD5.HashData(buffer);
 
                     result = GetStringForHash(hash);
                 }
@@ -210,16 +204,6 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         /// A <see cref="string"/> containing the hexadecimal representation of <paramref name="bytes"/>.
         /// </returns>
         private static string GetStringForHash(ReadOnlySpan<byte> bytes)
-        {
-            // TODO Use Convert.ToHexString() from 5.0 preview 8
-            var hash = new StringBuilder(bytes.Length);
-
-            foreach (byte b in bytes)
-            {
-                hash.Append(b.ToString("x2", CultureInfo.InvariantCulture));
-            }
-
-            return hash.ToString();
-        }
+            => Convert.ToHexString(bytes);
     }
 }
