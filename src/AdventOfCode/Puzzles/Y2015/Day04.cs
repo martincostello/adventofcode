@@ -90,12 +90,9 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
                             return;
                         }
 
-                        // TODO Use MD5.HashData() in 5.0 preview 8
-                        using HashAlgorithm algorithm = MD5.Create();
-
                         for (int i = range.Item1; !state.ShouldExitCurrentIteration && i < range.Item2; i++)
                         {
-                            if (IsSolution(i, secretKey, zeroes, algorithm))
+                            if (IsSolution(i, secretKey, zeroes))
                             {
                                 solutions.Add(i);
                                 break;
@@ -141,15 +138,14 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
         /// <param name="value">The value to test.</param>
         /// <param name="secretKey">The secret key to use.</param>
         /// <param name="zeroes">The number of zeroes to get the value for.</param>
-        /// <param name="algorithm">The <see cref="HashAlgorithm"/> to use.</param>
         /// <returns>
         /// <see langword="true"/> if <paramref name="value"/> is a solution; otherwise <see langword="false"/>.
         /// </returns>
-        private static bool IsSolution(int value, string secretKey, int zeroes, HashAlgorithm algorithm)
+        private static bool IsSolution(int value, string secretKey, int zeroes)
         {
             string formatted = secretKey + value.ToString(CultureInfo.InvariantCulture);
             byte[] buffer = Encoding.UTF8.GetBytes(formatted);
-            byte[] hash = algorithm.ComputeHash(buffer);
+            byte[] hash = MD5.HashData(buffer);
 
             int wholeBytes = zeroes / 2;
             bool hasHalfByte = zeroes % 2 == 1;

@@ -45,39 +45,35 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
 
             byte[] doorIdAsBytes = Encoding.ASCII.GetBytes(doorId);
 
-            // TODO Use MD5.HashData() in 5.0 preview 8
-            using (HashAlgorithm algorithm = MD5.Create())
+            while (characters.Count < PasswordLength)
             {
-                while (characters.Count < PasswordLength)
+                byte[] buffer = GenerateBytesToHash(doorIdAsBytes, index);
+                byte[] hashBytes = MD5.HashData(buffer);
+
+                // Are the first four characters 0?
+                if (hashBytes[0] == 0 && hashBytes[1] == 0)
                 {
-                    byte[] buffer = GenerateBytesToHash(doorIdAsBytes, index);
-                    byte[] hashBytes = algorithm.ComputeHash(buffer);
+                    string hash = GetStringForHash(hashBytes);
 
-                    // Are the first four characters 0?
-                    if (hashBytes[0] == 0 && hashBytes[1] == 0)
+                    if (hash[4] == '0')
                     {
-                        string hash = GetStringForHash(hashBytes);
-
-                        if (hash[4] == '0')
+                        if (isPositionSpecifiedByHash)
                         {
-                            if (isPositionSpecifiedByHash)
-                            {
-                                int position = hash[5] - '0';
+                            int position = hash[5] - '0';
 
-                                if (position < PasswordLength && !characters.ContainsKey(position))
-                                {
-                                    characters[position] = hash[6];
-                                }
-                            }
-                            else
+                            if (position < PasswordLength && !characters.ContainsKey(position))
                             {
-                                characters[characters.Count] = hash[5];
+                                characters[position] = hash[6];
                             }
                         }
+                        else
+                        {
+                            characters[characters.Count] = hash[5];
+                        }
                     }
-
-                    index++;
                 }
+
+                index++;
             }
 
             return string.Join(string.Empty, characters.OrderBy((p) => p.Key).Select((p) => p.Value));
@@ -130,7 +126,6 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         /// </returns>
         private static string GetStringForHash(ReadOnlySpan<byte> bytes)
         {
-            // TODO Use Convert.ToHexString() from 5.0 preview 8
             var hash = new StringBuilder("0000", bytes.Length + 4);
 
             // Skip the first 2 bytes as they should already have been checked to be zero
