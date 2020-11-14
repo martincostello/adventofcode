@@ -20,7 +20,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		NuGet.config = NuGet.config
 		README.md = README.md
 		stylecop.json = stylecop.json
-		update-dotnet-sdk.ps1 = update-dotnet-sdk.ps1
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{42E4BE8A-65DC-4DCF-AF2D-4B39239FEAA3}"
