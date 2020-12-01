@@ -14,50 +14,34 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
         /// <summary>
         /// Gets the product of the two input values that sum to a value of 2020.
         /// </summary>
-        public int ProductOf2020Sum { get; private set; }
+        public int ProductOf2020SumFrom2 { get; private set; }
 
         /// <summary>
-        /// Gets the product of two values from the specified set of values that
-        /// which when added together equal 2020.
+        /// Gets the product of the three input values that sum to a value of 2020.
+        /// </summary>
+        public int ProductOf2020SumFrom3 { get; private set; }
+
+        /// <summary>
+        /// Gets the product of a number of values from the specified set of values
+        /// that which when added together equal 2020.
         /// </summary>
         /// <param name="values">The values to find the 2020 sum's product from.</param>
+        /// <param name="take">The number of values to use to reach the 2020 target.</param>
         /// <returns>
-        /// The product of the two values that sum to a value of 2020.
+        /// The product of the specified number of values that sum to a value of 2020.
         /// </returns>
-        public static int Get2020Product(IEnumerable<string> values)
+        public static int Get2020Product(IEnumerable<string> values, int take)
         {
             int[] expenses = values
                 .Select((p) => ParseInt32(p))
                 .ToArray();
 
-            const int Limit = 2020;
+            var result = Maths.GetPermutations(expenses, take);
 
-            for (int i = 0; i < expenses.Length; i++)
-            {
-                int x = expenses[i];
-
-                if (x > Limit)
-                {
-                    continue;
-                }
-
-                for (int j = 0; j < expenses.Length; j++)
-                {
-                    if (j == i)
-                    {
-                        continue;
-                    }
-
-                    int y = expenses[j];
-
-                    if (x + y == Limit)
-                    {
-                        return x * y;
-                    }
-                }
-            }
-
-            return -1;
+            return result
+                .Where((p) => p.Sum() == 2020)
+                .Select((p) => p.Aggregate((x, y) => x * y))
+                .First();
         }
 
         /// <inheritdoc />
@@ -65,11 +49,13 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
         {
             IList<string> values = ReadResourceAsLines();
 
-            ProductOf2020Sum = Get2020Product(values);
+            ProductOf2020SumFrom2 = Get2020Product(values, 2);
+            ProductOf2020SumFrom3 = Get2020Product(values, 3);
 
             if (Verbose)
             {
-                Logger.WriteLine("The product of the two entries that sum to 2020 is {0}.", ProductOf2020Sum);
+                Logger.WriteLine("The product of the two entries that sum to 2020 is {0}.", ProductOf2020SumFrom2);
+                Logger.WriteLine("The product of the three entries that sum to 2020 is {0}.", ProductOf2020SumFrom3);
             }
 
             return 0;

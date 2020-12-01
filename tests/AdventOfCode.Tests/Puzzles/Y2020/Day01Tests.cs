@@ -21,8 +21,10 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
         {
         }
 
-        [Fact]
-        public void Y2020_Day01_Get2020Product_Returns_Correct_Value()
+        [Theory]
+        [InlineData(2, 514579)]
+        [InlineData(3, 241861950)]
+        public void Y2020_Day01_Get2020Product_Returns_Correct_Value(int take, int expected)
         {
             string[] values = new[]
             {
@@ -35,10 +37,10 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
             };
 
             // Act
-            int actual = Day01.Get2020Product(values);
+            int actual = Day01.Get2020Product(values, take);
 
             // Assert
-            actual.ShouldBe(514579);
+            actual.ShouldBe(expected);
         }
 
         [Fact]
@@ -48,7 +50,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
             var puzzle = SolvePuzzle<Day01>();
 
             // Assert
-            puzzle.ProductOf2020Sum.ShouldBe(63616);
+            puzzle.ProductOf2020SumFrom2.ShouldBe(63616);
+            puzzle.ProductOf2020SumFrom3.ShouldBe(67877784);
         }
     }
 }
