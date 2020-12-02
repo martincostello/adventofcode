@@ -26,6 +26,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
         [InlineData(3, 241861950)]
         public void Y2020_Day01_Get2020Product_Returns_Correct_Value(int take, int expected)
         {
+            // Arrange
             string[] values = new[]
             {
                 "1721",
