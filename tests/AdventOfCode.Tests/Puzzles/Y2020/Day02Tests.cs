@@ -22,20 +22,25 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
         }
 
         [Theory]
-        [InlineData("1-3 a: abcde", true)]
-        [InlineData("1-3 b: cdefg", false)]
-        [InlineData("2-9 c: ccccccccc", true)]
-        public void Y2020_Day02_IsPasswordValid_Returns_Correct_Value(string value, bool expected)
+        [InlineData("1-3 a: abcde", 1, true)]
+        [InlineData("1-3 b: cdefg", 1, false)]
+        [InlineData("2-9 c: ccccccccc", 1, true)]
+        [InlineData("1-3 a: abcde", 2, true)]
+        [InlineData("1-3 b: cdefg", 2, false)]
+        [InlineData("2-9 c: ccccccccc", 2, false)]
+        public void Y2020_Day02_IsPasswordValid_Returns_Correct_Value(string value, int policyVersion, bool expected)
         {
             // Act
-            bool actual = Day02.IsPasswordValid(value);
+            bool actual = Day02.IsPasswordValid(value, policyVersion);
 
             // Assert
             actual.ShouldBe(expected);
         }
 
-        [Fact]
-        public void Y2020_Day02_GetValidPasswordCount_Returns_Correct_Value()
+        [Theory]
+        [InlineData(1, 2)]
+        [InlineData(2, 1)]
+        public void Y2020_Day02_GetValidPasswordCount_Returns_Correct_Value(int policyVersion, int expected)
         {
             // Arrange
             string[] values = new[]
@@ -46,10 +51,10 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
             };
 
             // Act
-            int actual = Day02.GetValidPasswordCount(values);
+            int actual = Day02.GetValidPasswordCount(values, policyVersion);
 
             // Assert
-            actual.ShouldBe(2);
+            actual.ShouldBe(expected);
         }
 
         [Fact]
@@ -59,7 +64,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
             var puzzle = SolvePuzzle<Day02>();
 
             // Assert
-            puzzle.ValidPasswords.ShouldBe(542);
+            puzzle.ValidPasswordsV1.ShouldBe(542);
+            puzzle.ValidPasswordsV2.ShouldBe(360);
         }
     }
 }
