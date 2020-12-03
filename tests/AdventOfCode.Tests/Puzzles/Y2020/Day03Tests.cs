@@ -55,6 +55,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
 
             // Assert
             puzzle.TreeCollisions.ShouldBe(216);
+            puzzle.ProductOfTreeCollisions.ShouldBe(6708199680L);
         }
     }
 }

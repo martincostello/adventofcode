@@ -14,7 +14,12 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
         /// <summary>
         /// Gets the number of trees collided with when traversing the grid.
         /// </summary>
-        public int TreeCollisions { get; private set; }
+        public long TreeCollisions { get; private set; }
+
+        /// <summary>
+        /// Gets the product of the number of trees collided with when traversing the grids.
+        /// </summary>
+        public long ProductOfTreeCollisions { get; private set; }
 
         /// <summary>
         /// Gets the number of trees that would be collided with by
@@ -77,11 +82,30 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
         {
             IList<string> grid = ReadResourceAsLines();
 
+            var slopes = new[]
+            {
+                new Point(1, 1),
+                new Point(5, 1),
+                new Point(7, 1),
+                new Point(1, 2),
+            };
+
             TreeCollisions = GetTreeCollisionCount(grid, 3, 1);
+
+            long product = TreeCollisions;
+
+            for (int i = 0; i < slopes.Length; i++)
+            {
+                var slope = slopes[i];
+                product *= GetTreeCollisionCount(grid, slope.X, slope.Y);
+            }
+
+            ProductOfTreeCollisions = product;
 
             if (Verbose)
             {
                 Logger.WriteLine("{0} trees would be encountered using a right-3/down-1 slope.", TreeCollisions);
+                Logger.WriteLine("The product of the collisions from traversing the slopes is {0}.", ProductOfTreeCollisions);
             }
 
             return 0;
