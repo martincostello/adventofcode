@@ -84,7 +84,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
 
             if (removeFirstQuote)
             {
-                value = value.Substring(1);
+                value = value[1..];
             }
 
             if (removeLastQuote)

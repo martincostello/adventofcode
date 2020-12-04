@@ -126,17 +126,11 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
             return operation switch
             {
                 ">" => left > right,
-
                 "<" => left < right,
-
                 "!=" => left != right,
-
                 "==" => left == right,
-
                 ">=" => left >= right,
-
                 "<=" => left <= right,
-
                 _ => throw new InvalidProgramException($"Unknown operation: {operation}"),
             };
         }

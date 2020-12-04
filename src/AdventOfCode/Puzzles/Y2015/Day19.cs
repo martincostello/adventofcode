@@ -47,9 +47,9 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
                     if (index > -1)
                     {
                         string newMolecule =
-                            (index == 0 ? string.Empty : molecule.Substring(0, index)) +
+                            (index == 0 ? string.Empty : molecule[0..index]) +
                             target +
-                            molecule.Substring(index + source.Length);
+                            molecule[(index + source.Length) ..];
 
                         if (!molecules.Contains(newMolecule))
                         {

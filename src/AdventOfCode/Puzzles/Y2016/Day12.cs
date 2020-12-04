@@ -45,7 +45,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         {
             instructions = new List<string>(instructions); // Copy before possible modification
 
-            IDictionary<char, int> registers = new Dictionary<char, int>()
+            var registers = new Dictionary<char, int>()
             {
                 ['a'] = initialValueOfA,
                 ['b'] = 0,
