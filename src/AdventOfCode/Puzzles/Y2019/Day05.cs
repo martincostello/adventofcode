@@ -4,6 +4,7 @@
 namespace MartinCostello.AdventOfCode.Puzzles.Y2019
 {
     using System;
+    using System.Threading;
     using System.Threading.Tasks;
 
     /// <summary>
@@ -24,24 +25,28 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
         /// </summary>
         /// <param name="program">The Intcode program to run.</param>
         /// <param name="input">The input to the program.</param>
+        /// <param name="cancellationToken">The optional cancellation token to use.</param>
         /// <returns>
         /// The diagnostic code output by the program.
         /// </returns>
-        public static async Task<long> RunProgramAsync(string program, long input)
+        public static async Task<long> RunProgramAsync(
+            string program,
+            long input,
+            CancellationToken cancellationToken = default)
         {
             long[] instructions = IntcodeVM.ParseProgram(program);
 
             var vm = new IntcodeVM(instructions)
             {
-                Input = await ChannelHelpers.CreateReaderAsync(input),
+                Input = await ChannelHelpers.CreateReaderAsync(new[] { input }, cancellationToken),
             };
 
-            if (!await vm.RunAsync())
+            if (!await vm.RunAsync(cancellationToken))
             {
                 throw new InvalidProgramException();
             }
 
-            var outputs = await vm.Output.ToListAsync();
+            var outputs = await vm.Output.ToListAsync(cancellationToken);
             return outputs.Count == 0 ? 0 : outputs[^1];
         }
 
@@ -51,7 +56,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
             int input = ParseInt32(args[0]);
             string program = ReadResourceAsString();
 
-            DiagnosticCode = RunProgramAsync(program, input).Result;
+            DiagnosticCode = RunProgramAsync(program, input, CancellationToken.None).Result;
 
             if (Verbose)
             {

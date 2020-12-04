@@ -5,6 +5,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
 {
     using System;
     using System.Collections.Generic;
+    using System.Threading;
     using System.Threading.Channels;
     using System.Threading.Tasks;
 
@@ -26,10 +27,14 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
         /// </summary>
         /// <param name="program">The Intcode program to run.</param>
         /// <param name="input">The input to the program.</param>
+        /// <param name="cancellationToken">The optional cancellation token to use.</param>
         /// <returns>
         /// The keycode output by the program.
         /// </returns>
-        public static async Task<IReadOnlyList<long>> RunProgramAsync(string program, long? input = null)
+        public static async Task<IReadOnlyList<long>> RunProgramAsync(
+            string program,
+            long? input = null,
+            CancellationToken cancellationToken = default)
         {
             long[] instructions = IntcodeVM.ParseProgram(program);
 
@@ -37,7 +42,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
 
             if (input.HasValue)
             {
-                await channel.Writer.WriteAsync(input.Value);
+                await channel.Writer.WriteAsync(input.Value, cancellationToken);
             }
 
             channel.Writer.Complete();
@@ -47,12 +52,12 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
                 Input = channel.Reader,
             };
 
-            if (!await vm.RunAsync())
+            if (!await vm.RunAsync(cancellationToken))
             {
                 throw new InvalidProgramException();
             }
 
-            return await vm.Output.ToListAsync();
+            return await vm.Output.ToListAsync(cancellationToken);
         }
 
         /// <inheritdoc />

@@ -4,6 +4,7 @@
 namespace MartinCostello.AdventOfCode
 {
     using System.Collections.Generic;
+    using System.Threading;
     using System.Threading.Channels;
     using System.Threading.Tasks;
 
@@ -17,21 +18,13 @@ namespace MartinCostello.AdventOfCode
         /// </summary>
         /// <typeparam name="T">The type of the values in the channel.</typeparam>
         /// <param name="values">The values to return from the reader.</param>
+        /// <param name="cancellationToken">The cancellation token to use.</param>
         /// <returns>
         /// A <see cref="Task{TResult}"/> that returns a channel reader that returned the specified values.
         /// </returns>
-        internal static async Task<ChannelReader<T>> CreateReaderAsync<T>(params T[] values)
-            => await CreateReaderAsync(values as IEnumerable<T>);
-
-        /// <summary>
-        /// Creates a channel reader for the specified values as an asynchronous operation.
-        /// </summary>
-        /// <typeparam name="T">The type of the values in the channel.</typeparam>
-        /// <param name="values">The values to return from the reader.</param>
-        /// <returns>
-        /// A <see cref="Task{TResult}"/> that returns a channel reader that returned the specified values.
-        /// </returns>
-        internal static async Task<ChannelReader<T>> CreateReaderAsync<T>(IEnumerable<T>? values)
+        internal static async Task<ChannelReader<T>> CreateReaderAsync<T>(
+            IEnumerable<T>? values,
+            CancellationToken cancellationToken)
         {
             var channel = Channel.CreateUnbounded<T>();
 
@@ -39,7 +32,7 @@ namespace MartinCostello.AdventOfCode
             {
                 foreach (T value in values)
                 {
-                    await channel.Writer.WriteAsync(value);
+                    await channel.Writer.WriteAsync(value, cancellationToken);
                 }
             }
 
@@ -53,14 +46,17 @@ namespace MartinCostello.AdventOfCode
         /// </summary>
         /// <typeparam name="T">The type of the values in the channel.</typeparam>
         /// <param name="reader">The reader to read the values from .</param>
+        /// <param name="cancellationToken">The cancellation token to use.</param>
         /// <returns>
         /// A <see cref="Task{TResult}"/> that returns a list containing the values read from the channel.
         /// </returns>
-        internal static async Task<IReadOnlyList<T>> ToListAsync<T>(this ChannelReader<T> reader)
+        internal static async Task<IReadOnlyList<T>> ToListAsync<T>(
+            this ChannelReader<T> reader,
+            CancellationToken cancellationToken)
         {
             var values = new List<T>();
 
-            await foreach (T output in reader.ReadAllAsync())
+            await foreach (T output in reader.ReadAllAsync(cancellationToken))
             {
                 values.Add(output);
             }

@@ -5,6 +5,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
 {
     using System;
     using System.Collections.Generic;
+    using System.Threading;
     using System.Threading.Tasks;
 
     /// <summary>
@@ -22,10 +23,14 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
         /// </summary>
         /// <param name="program">The Intcode program to run.</param>
         /// <param name="adjust">Whether to adjust the state for <c>1202 program alarm</c> before running.</param>
+        /// <param name="cancellationToken">The optional cancellation token to use.</param>
         /// <returns>
         /// The memory values of the program once run.
         /// </returns>
-        public static async Task<IReadOnlyList<long>> RunProgramAsync(string program, bool adjust = false)
+        public static async Task<IReadOnlyList<long>> RunProgramAsync(
+            string program,
+            bool adjust = false,
+            CancellationToken cancellationToken = default)
         {
             long[] instructions = IntcodeVM.ParseProgram(program);
 
@@ -37,10 +42,10 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
 
             var vm = new IntcodeVM(instructions)
             {
-                Input = await ChannelHelpers.CreateReaderAsync(0L),
+                Input = await ChannelHelpers.CreateReaderAsync(new[] { 0L }, cancellationToken),
             };
 
-            if (!await vm.RunAsync())
+            if (!await vm.RunAsync(cancellationToken))
             {
                 throw new InvalidProgramException();
             }

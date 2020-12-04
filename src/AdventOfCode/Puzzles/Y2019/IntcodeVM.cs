@@ -7,6 +7,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
     using System.Collections.Generic;
     using System.Globalization;
     using System.Linq;
+    using System.Threading;
     using System.Threading.Channels;
     using System.Threading.Tasks;
 
@@ -83,22 +84,26 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
         /// </summary>
         /// <param name="program">The Intcode program to run.</param>
         /// <param name="input">The input to the program.</param>
+        /// <param name="cancellationToken">The cancellation token to use.</param>
         /// <returns>
         /// The output of the program once run.
         /// </returns>
-        internal static async Task<IReadOnlyList<long>> RunAsync(IEnumerable<long> program, params long[] input)
+        internal static async Task<IReadOnlyList<long>> RunAsync(
+            IEnumerable<long> program,
+            long[] input,
+            CancellationToken cancellationToken)
         {
             var vm = new IntcodeVM(program)
             {
-                Input = await ChannelHelpers.CreateReaderAsync(input),
+                Input = await ChannelHelpers.CreateReaderAsync(input, cancellationToken),
             };
 
-            if (!await vm.RunAsync())
+            if (!await vm.RunAsync(cancellationToken))
             {
                 throw new InvalidProgramException();
             }
 
-            return await vm.Output.ToListAsync();
+            return await vm.Output.ToListAsync(cancellationToken);
         }
 
         /// <summary>
@@ -112,11 +117,12 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
         /// <summary>
         /// Runs the virtual machine's program as an asynchronous operation.
         /// </summary>
+        /// <param name="cancellationToken">The optional cancellation token to use.</param>
         /// <returns>
         /// A <see cref="Task{TResult}"/> that completes when the program exits
         /// or there is not yet any input available to read.
         /// </returns>
-        internal async Task<bool> RunAsync()
+        internal async Task<bool> RunAsync(CancellationToken cancellationToken = default)
         {
             long Read(long index, long offset, int mode)
             {
@@ -313,7 +319,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
 
                     case 4:
                         long output = ReadOutput(_instruction, offset, modes);
-                        await _output.Writer.WriteAsync(output);
+                        await _output.Writer.WriteAsync(output, cancellationToken);
                         OnOutput?.Invoke(this, output);
                         break;
 
