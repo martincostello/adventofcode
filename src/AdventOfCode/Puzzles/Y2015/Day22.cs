@@ -7,6 +7,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
     using System.Collections.Generic;
     using System.Diagnostics;
     using System.Linq;
+    using System.Security.Cryptography;
 
     /// <summary>
     /// A class representing the puzzle for <c>https://adventofcode.com/2015/day/22</c>. This class cannot be inherited.
@@ -96,11 +97,10 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
             const int Iterations = 100000;
 
             var solutions = new List<(bool didWizardWin, int manaSpent)>(Iterations);
-            var random = new Random();
 
             while (solutions.Count < Iterations)
             {
-                var result = Fight((wizard, spells) => spells.ElementAt(random.Next(0, spells.Count)), difficulty);
+                var result = Fight((wizard, spells) => spells.ElementAt(RandomNumberGenerator.GetInt32(0, spells.Count)), difficulty);
                 solutions.Add(result);
             }
 
