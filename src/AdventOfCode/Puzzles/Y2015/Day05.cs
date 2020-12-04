@@ -13,6 +13,11 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
     public sealed class Day05 : Puzzle2015
     {
         /// <summary>
+        /// The sequences of characters that are not considered nice. This field is read-only.
+        /// </summary>
+        private static readonly string[] NotNiceSequences = { "ab", "cd", "pq", "xy" };
+
+        /// <summary>
         /// Gets the number of 'nice' strings.
         /// </summary>
         internal int NiceStringCount { get; private set; }
@@ -30,7 +35,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
         internal static bool IsNiceV1(string value)
         {
             // The string is not nice if it contain any of the following sequences
-            if (new[] { "ab", "cd", "pq", "xy" }.Any((p) => value.Contains(p, StringComparison.Ordinal)))
+            if (NotNiceSequences.Any((p) => value.Contains(p, StringComparison.Ordinal)))
             {
                 return false;
             }
@@ -141,21 +146,12 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
         /// <inheritdoc />
         protected override int SolveCore(string[] args)
         {
-            int version = -1;
-
-            switch (args[0])
+            int version = args[0] switch
             {
-                case "1":
-                    version = 1;
-                    break;
-
-                case "2":
-                    version = 2;
-                    break;
-
-                default:
-                    break;
-            }
+                "1" => 1,
+                "2" => 2,
+                _ => -1,
+            };
 
             if (version == -1)
             {

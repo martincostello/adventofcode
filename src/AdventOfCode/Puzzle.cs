@@ -68,8 +68,18 @@ namespace MartinCostello.AdventOfCode
         /// Parses the specified <see cref="string"/> as an <see cref="int"/>.
         /// </summary>
         /// <param name="s">The value to parse.</param>
+        /// <returns>
+        /// The parsed value of <paramref name="s"/>.
+        /// </returns>
+        protected internal static int ParseInt32(string s)
+            => ParseInt32(s, NumberStyles.Integer);
+
+        /// <summary>
+        /// Parses the specified <see cref="ReadOnlySpan{T}"/> as an <see cref="int"/>.
+        /// </summary>
+        /// <param name="s">The value to parse.</param>
         /// <param name="style">
-        /// A bitwise combination of enumeration values that indicates
+        /// An optional bitwise combination of enumeration values that indicates
         /// the style elements that can be present in <paramref name="s"/>.
         /// </param>
         /// <returns>

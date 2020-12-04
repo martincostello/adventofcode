@@ -164,13 +164,9 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
                 Location += direction switch
                 {
                     CardinalDirection.East => new Size(1, 0),
-
                     CardinalDirection.North => new Size(0, 1),
-
                     CardinalDirection.South => new Size(0, -1),
-
                     CardinalDirection.West => new Size(-1, 0),
-
                     _ => throw new ArgumentOutOfRangeException(nameof(direction), direction, "The specified direction is invalid."),
                 };
             }

@@ -68,13 +68,13 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
                         break;
 
                     case "jmp":
-                        next = i + ParseInt32(registerOrOffset);
+                        next = i + ParseInt32(registerOrOffset!);
                         break;
 
                     case "jie":
                         if ((registerOrOffset!.Split(',')[0].Trim() == "a" ? a : b).Value % 2 == 0)
                         {
-                            next = i + ParseInt32(offset);
+                            next = i + ParseInt32(offset!);
                         }
 
                         break;
@@ -82,7 +82,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
                     case "jio":
                         if ((registerOrOffset!.Split(',')[0].Trim() == "a" ? a : b).Value == 1)
                         {
-                            next = i + ParseInt32(offset);
+                            next = i + ParseInt32(offset!);
                         }
 
                         break;

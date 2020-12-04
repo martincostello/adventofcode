@@ -148,28 +148,14 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         /// </returns>
         private static Size SizeFromDirection(Direction direction)
         {
-            var result = default(Size);
-
-            switch (direction)
+            return direction switch
             {
-                case Direction.Down:
-                    result = new Size(0, 1);
-                    break;
-
-                case Direction.Left:
-                    result = new Size(-1, 0);
-                    break;
-
-                case Direction.Right:
-                    result = new Size(1, 0);
-                    break;
-
-                case Direction.Up:
-                    result = new Size(0, -1);
-                    break;
-            }
-
-            return result;
+                Direction.Down => new Size(0, 1),
+                Direction.Left => new Size(-1, 0),
+                Direction.Right => new Size(1, 0),
+                Direction.Up => new Size(0, -1),
+                _ => default,
+            };
         }
 
         /// <summary>
@@ -207,26 +193,14 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
 
                 foreach (char ch in instruction)
                 {
-                    Direction direction = default;
-
-                    switch (ch)
+                    Direction direction = ch switch
                     {
-                        case 'D':
-                            direction = Direction.Down;
-                            break;
-
-                        case 'L':
-                            direction = Direction.Left;
-                            break;
-
-                        case 'R':
-                            direction = Direction.Right;
-                            break;
-
-                        case 'U':
-                            direction = Direction.Up;
-                            break;
-                    }
+                        'D' => Direction.Down,
+                        'L' => Direction.Left,
+                        'R' => Direction.Right,
+                        'U' => Direction.Up,
+                        _ => default,
+                    };
 
                     instructionsForDigit.Add(direction);
                 }

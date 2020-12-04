@@ -31,21 +31,12 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
         /// <inheritdoc />
         protected override int SolveCore(string[] args)
         {
-            int version = -1;
-
-            switch (args[0])
+            int version = args[0] switch
             {
-                case "1":
-                    version = 1;
-                    break;
-
-                case "2":
-                    version = 2;
-                    break;
-
-                default:
-                    break;
-            }
+                "1" => 1,
+                "2" => 2,
+                _ => -1,
+            };
 
             if (version == -1)
             {

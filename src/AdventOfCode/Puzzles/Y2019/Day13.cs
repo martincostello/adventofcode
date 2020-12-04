@@ -7,6 +7,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
     using System.Collections.Generic;
     using System.Drawing;
     using System.Linq;
+    using System.Threading;
     using System.Threading.Tasks;
 
     /// <summary>
@@ -28,24 +29,27 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
         /// Gets the number of block tiles on the screen after the game is run.
         /// </summary>
         /// <param name="program">The Intcode program to run.</param>
+        /// <param name="cancellationToken">The cancellation token to use.</param>
         /// <returns>
         /// The number of block tiles on the screen.
         /// </returns>
-        public static async Task<(long blockTileCount, long score)> PlayGameAsync(string program)
+        public static async Task<(long blockTileCount, long score)> PlayGameAsync(
+            string program,
+            CancellationToken cancellationToken = default)
         {
             long[] instructions = IntcodeVM.ParseProgram(program);
 
             var vm = new IntcodeVM(instructions, 10_000)
             {
-                Input = await ChannelHelpers.CreateReaderAsync(2L),
+                Input = await ChannelHelpers.CreateReaderAsync(new[] { 2L }, cancellationToken),
             };
 
-            if (!await vm.RunAsync())
+            if (!await vm.RunAsync(cancellationToken))
             {
                 throw new InvalidProgramException();
             }
 
-            var outputs = await vm.Output.ToListAsync();
+            var outputs = await vm.Output.ToListAsync(cancellationToken);
 
             var grid = new Dictionary<Point, int>(outputs.Count);
 

@@ -5,6 +5,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
 {
     using System.Collections.Generic;
     using System.Linq;
+    using System.Threading;
     using System.Threading.Channels;
     using System.Threading.Tasks;
 
@@ -28,10 +29,14 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
         /// </summary>
         /// <param name="program">The Intcode program to run.</param>
         /// <param name="useFeedback">Whether to arrange the amplifiers in a feedback loop.</param>
+        /// <param name="cancellationToken">The optional cancellation to oken to use.</param>
         /// <returns>
         /// The diagnostic code output by the program.
         /// </returns>
-        public static async Task<long> RunProgramAsync(string program, bool useFeedback = false)
+        public static async Task<long> RunProgramAsync(
+            string program,
+            bool useFeedback = false,
+            CancellationToken cancellationToken = default)
         {
             long[] instructions = IntcodeVM.ParseProgram(program);
 
@@ -48,7 +53,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
                 {
                     for (int i = 0; i < phases.Length; i++)
                     {
-                        signal = (await IntcodeVM.RunAsync(instructions, phases[i], signal))[0];
+                        signal = (await IntcodeVM.RunAsync(instructions, new[] { phases[i], signal }, cancellationToken))[0];
                     }
                 }
                 else
@@ -61,12 +66,12 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
                         amplifiers.Add(new IntcodeVM(instructions));
 
                         var input = Channel.CreateUnbounded<long>();
-                        await input.Writer.WriteAsync(phases[i]);
+                        await input.Writer.WriteAsync(phases[i], cancellationToken);
 
                         inputs.Add(input);
                     }
 
-                    await inputs[0].Writer.WriteAsync(0);
+                    await inputs[0].Writer.WriteAsync(0, cancellationToken);
 
                     for (int i = 0; i < phases.Length; i++)
                     {
@@ -78,7 +83,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
                         thisAmp.Input = inputs[i].Reader;
                         thisAmp.OnOutput += async (_, value) =>
                         {
-                            await nextInput.Writer.WriteAsync(value);
+                            await nextInput.Writer.WriteAsync(value, cancellationToken);
                         };
                     }
 
@@ -88,11 +93,11 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
                     {
                         foreach (var amp in amplifiers)
                         {
-                            completed = await amp.RunAsync();
+                            completed = await amp.RunAsync(cancellationToken);
                         }
                     }
 
-                    signal = (await amplifiers.Last().Output.ToListAsync())[^1];
+                    signal = (await amplifiers.Last().Output.ToListAsync(cancellationToken))[^1];
                 }
 
                 signals.Add(signal);

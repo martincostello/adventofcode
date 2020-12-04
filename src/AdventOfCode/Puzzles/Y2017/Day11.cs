@@ -131,17 +131,11 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
             return direction switch
             {
                 CardinalDirection.North => North,
-
                 CardinalDirection.NorthEast => NorthEast,
-
                 CardinalDirection.NorthWest => NorthWest,
-
                 CardinalDirection.South => South,
-
                 CardinalDirection.SouthEast => SouthEast,
-
                 CardinalDirection.SouthWest => SouthWest,
-
                 _ => throw new InvalidOperationException("Invalid cardinal direction."),
             };
         }
@@ -163,17 +157,11 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
                 var parsed = direction switch
                 {
                     "n" => CardinalDirection.North,
-
                     "ne" => CardinalDirection.NorthEast,
-
                     "nw" => CardinalDirection.NorthWest,
-
                     "s" => CardinalDirection.South,
-
                     "se" => CardinalDirection.SouthEast,
-
                     "sw" => CardinalDirection.SouthWest,
-
                     _ => throw new InvalidOperationException($"Unknown direction: {direction}"),
                 };
 

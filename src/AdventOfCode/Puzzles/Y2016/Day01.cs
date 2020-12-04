@@ -70,24 +70,16 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
                         positions.Add(position);
                     }
 
-                    switch (bearing)
+                    Size delta = bearing switch
                     {
-                        case CardinalDirection.East:
-                            position += new Size(1, 0);
-                            break;
+                        CardinalDirection.North => new Size(0, 1),
+                        CardinalDirection.South => new Size(0, -1),
+                        CardinalDirection.East => new Size(1, 0),
+                        CardinalDirection.West => new Size(-1, 0),
+                        _ => throw new InvalidOperationException($"The bearing {bearing} is not known."),
+                    };
 
-                        case CardinalDirection.North:
-                            position += new Size(0, 1);
-                            break;
-
-                        case CardinalDirection.South:
-                            position += new Size(0, -1);
-                            break;
-
-                        case CardinalDirection.West:
-                            position += new Size(-1, 0);
-                            break;
-                    }
+                    position += delta;
                 }
             }
 
@@ -134,7 +126,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
                 var instruction = new Instruction()
                 {
                     Direction = rawInstruction[0] == 'L' ? Direction.Left : Direction.Right,
-                    Distance = ParseInt32(rawInstruction.Substring(1)),
+                    Distance = ParseInt32(rawInstruction[1..]),
                 };
 
                 result.Add(instruction);
@@ -153,28 +145,14 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         /// </returns>
         private static CardinalDirection Turn(CardinalDirection bearing, Direction direction)
         {
-            CardinalDirection result = CardinalDirection.North;
-
-            switch (bearing)
+            return bearing switch
             {
-                case CardinalDirection.East:
-                    result = direction == Direction.Left ? CardinalDirection.North : CardinalDirection.South;
-                    break;
-
-                case CardinalDirection.North:
-                    result = direction == Direction.Left ? CardinalDirection.West : CardinalDirection.East;
-                    break;
-
-                case CardinalDirection.South:
-                    result = direction == Direction.Left ? CardinalDirection.East : CardinalDirection.West;
-                    break;
-
-                case CardinalDirection.West:
-                    result = direction == Direction.Left ? CardinalDirection.South : CardinalDirection.North;
-                    break;
-            }
-
-            return result;
+                CardinalDirection.East => direction == Direction.Left ? CardinalDirection.North : CardinalDirection.South,
+                CardinalDirection.North => direction == Direction.Left ? CardinalDirection.West : CardinalDirection.East,
+                CardinalDirection.South => direction == Direction.Left ? CardinalDirection.East : CardinalDirection.West,
+                CardinalDirection.West => direction == Direction.Left ? CardinalDirection.South : CardinalDirection.North,
+                _ => throw new ArgumentOutOfRangeException(nameof(bearing), bearing, "Invalid bearing."),
+            };
         }
 
         /// <summary>
