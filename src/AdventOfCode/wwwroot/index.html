@@ -63,6 +63,36 @@
     </nav>
     <main class="container body-content">
         <h1>Advent of Code as a Service</h1>
+        <div>
+            <select id="year" name="year">
+            </select>
+            <select id="day" name="day">
+            </select>
+            <div class="form-group">
+                <label for="arguments">Argument(s)</label>
+                <textarea class="form-control" id="arguments" rows="3"></textarea>
+            </div>
+            <form id="form" action="" method="get">
+                <div id="puzzle-day"></div>
+                <div id="puzzle-minimum-arguments"></div>
+                <div id="puzzle-requires-data"></div>
+                <div id="puzzle-year"></div>
+                <div class="input-group mb-3">
+                    <div class="custom-file">
+                        <input type="file" class="custom-file-input" id="resource">
+                        <label class="custom-file-label" for="resource">Choose file</label>
+                    </div>
+                </div>
+                <input id="solve" type="submit" value="Solve!" />
+            </form>
+            <div id="error" class="text-danger"></div>
+            <div>
+                Solutions: <div id="solution" class="text-success"></div>
+            </div>
+            <div>
+                Time to solve: <div id="time-to-solve" class="text-success"></div>
+            </div>
+        </div>
         <hr />
         <footer>
             <p>&copy; Martin Costello 2020</p>
@@ -71,5 +101,157 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootswatch/4.5.2/slate/bootstrap.min.css" integrity="sha384-8iuq0iaMHpnH2vSyvZMSIqQuUnQA7QM+f6srIdlgBrTSEyd//AWNMyEaSF2yPzNQ" crossorigin="anonymous">
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous" async></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous" async></script>
+    <script>
+
+        const data = {
+        };
+
+        const arguments = document.getElementById('arguments');
+        const days = document.getElementById('day');
+        const error = document.getElementById('error');
+        const form = document.getElementById('form');
+        const resource = document.getElementById('resource');
+        const solve = document.getElementById('solve');
+        const solution = document.getElementById('solution');
+        const timeToSolve = document.getElementById('time-to-solve');
+        const years = document.getElementById('year');
+
+        years.addEventListener('change', () => {
+
+            days.innerHTML = '';
+
+            const puzzlesForYear = data[years.value];
+
+            for (let i = 0; i < puzzlesForYear.length; i++) {
+
+                const element = document.createElement('option');
+                const puzzle = puzzlesForYear[i];
+
+                element.setAttribute('data-day', puzzle.day);
+                element.setAttribute('data-location', puzzle.location);
+                element.setAttribute('data-minimum-arguments', puzzle.minimumArguments);
+                element.setAttribute('data-requires-data', puzzle.requiresData);
+                element.setAttribute('data-year', puzzle.year);
+
+                element.setAttribute('value', puzzle.day);
+                element.text = puzzle.day;
+
+                days.appendChild(element);
+
+                const now = new Date();
+
+                if (puzzle.year == now.getFullYear() && puzzle.day == now.getDate() && now.getMonth() == 11) {
+                    element.selected = true;
+                }
+            }
+
+            days.dispatchEvent(new Event('change'));
+        });
+
+        days.addEventListener('change', () => {
+
+            const option = days.selectedOptions[0];
+
+            document.querySelector('#puzzle-day').textContent = option.getAttribute('data-day');
+            document.querySelector('#puzzle-minimum-arguments').textContent = option.getAttribute('data-minimum-arguments');
+            document.querySelector('#puzzle-requires-data').textContent = option.getAttribute('data-requires-data');
+            document.querySelector('#puzzle-year').textContent = option.getAttribute('data-year');
+
+            arguments.setAttribute('rows', option.getAttribute('data-minimum-arguments'));
+            form.setAttribute('action', option.getAttribute('data-location'));
+
+            error.textContent = '';
+            solution.textContent = '';
+            timeToSolve.textContent = '';
+            resource.value = '';
+        });
+
+        solve.addEventListener('click', () => {
+
+            const url = form.getAttribute('action');
+            const formData = new FormData();
+
+            if (arguments.value) {
+                const split = arguments.value.split('\n');
+
+                split.forEach((value) => {
+                    formData.append('arguments', value);
+                });
+            }
+
+            const solveIt = async () => {
+                error.textContent = '';
+                solution.textContent = '';
+                timeToSolve.textContent = '';
+                fetch(url, { method: 'POST', body: formData }).then(async (response) => {
+                    if (!response.ok) {
+                        var errorResponse = await response.json();
+                        error.textContent = `${errorResponse.status}: ${errorResponse.detail}`;
+                    }
+                    return response.json();
+                }).then(async (json) => {
+                    timeToSolve.textContent = `${json.timeToSolve} milliseconds`;
+                    solution.textContent = `${JSON.stringify(json.solutions, null, 2)}`;
+                });
+            };
+
+            if (resource.files.length === 1) {
+                const file = resource.files[0];
+                const reader = new FileReader();
+
+                reader.readAsText(file, 'UTF-8');
+
+                reader.onload = (event) => {
+                    formData.append('resource', event.target.result);
+                    solveIt();
+                };
+            }
+            else {
+                solveIt();
+            }
+        });
+
+        form.addEventListener('submit', (event) => {
+            event.preventDefault();
+            return false;
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            fetch('/api/puzzles').then(async (response) => {
+                if (!response.ok) {
+                    throw new Error(response.status);
+                }
+                return response.json();
+            }).then(async (puzzles) => {
+                puzzles.forEach((puzzle) => {
+
+                    const year = puzzle.year.toString();
+
+                    if (data[year] == null) {
+                        data[year] = [];
+                    }
+
+                    data[puzzle.year].push(puzzle);
+
+                    if (data[puzzle.year].length === 1) {
+                        const element = document.createElement('option');
+
+                        element.setAttribute('data-year', puzzle.year);
+                        element.setAttribute('value', puzzle.year);
+
+                        element.text = puzzle.year;
+
+                        years.appendChild(element);
+
+                        if (puzzle.year == new Date().getFullYear()) {
+                            element.selected = true;
+                        }
+                    }
+                });
+
+                years.dispatchEvent(new Event('change'));
+            });
+        }, false);
+    </script>
 </body>
 </html>
