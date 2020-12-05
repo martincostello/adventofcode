@@ -34,11 +34,14 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
             var rowRange = new Range(0, 127);
             var columnRange = new Range(0, 7);
 
+            static int Midpoint(Range value)
+                => value.Start.Value + ((value.End.Value - value.Start.Value) / 2);
+
             static void High(ref Range value)
-                => value = new Range(value.Start, value.Start.Value + ((value.End.Value - value.Start.Value) / 2));
+                => value = new Range(value.Start, Midpoint(value));
 
             static void Low(ref Range value)
-                => value = new Range(value.Start.Value + ((value.End.Value - value.Start.Value) / 2) + 1, value.End.Value);
+                => value = new Range(Midpoint(value) + 1, value.End);
 
             for (int i = 0; i < boardingPass.Length; i++)
             {
