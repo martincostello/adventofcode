@@ -18,6 +18,11 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
         public int HighestSeatId { get; private set; }
 
         /// <summary>
+        /// Gets my seat Id from the scanned boarding passes.
+        /// </summary>
+        public int MySeatId { get; private set; }
+
+        /// <summary>
         /// Scans the specified boarding pass to get the seat information.
         /// </summary>
         /// <param name="boardingPass">The boarding pass to scan.</param>
@@ -83,7 +88,22 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
                 ids.Add(id);
             }
 
-            HighestSeatId = ids.Max();
+            ids.Sort();
+
+            int last = ids[0];
+
+            foreach (int id in ids.Skip(1))
+            {
+                if (id != last + 1)
+                {
+                    MySeatId = id - 1;
+                    break;
+                }
+
+                last = id;
+            }
+
+            HighestSeatId = ids[^1];
 
             if (Verbose)
             {

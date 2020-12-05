@@ -49,6 +49,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
 
             // Assert
             puzzle.HighestSeatId.ShouldBe(878);
+            puzzle.MySeatId.ShouldBe(504);
         }
     }
 }
