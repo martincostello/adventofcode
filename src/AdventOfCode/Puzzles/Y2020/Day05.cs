@@ -67,7 +67,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
                         break;
 
                     default:
-                        throw new InvalidOperationException($"Invalid character '{ch}'.");
+                        throw new PuzzleException($"Invalid character '{ch}'.");
                 }
             }
 

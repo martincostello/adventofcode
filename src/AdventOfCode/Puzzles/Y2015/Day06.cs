@@ -41,7 +41,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
 
             if (version == -1)
             {
-                throw new PuzzleException("The instruction set specified is invalid.");
+                throw new PuzzleException("The specified instruction set is invalid.");
             }
 
             var lines = ReadResourceAsLines();
@@ -177,7 +177,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
                         break;
 
                     default:
-                        throw new InvalidOperationException("The current instruction is invalid.");
+                        throw new PuzzleException($"The current instruction '{Action}' is invalid.");
                 }
             }
 
@@ -223,7 +223,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
 
                 if (action == null || origin == null || termination == null)
                 {
-                    throw new ArgumentException("The specified instruction is invalid.", nameof(value));
+                    throw new PuzzleException("The specified instruction is invalid.");
                 }
 
                 Rectangle bounds = ParseBounds(origin, termination);
@@ -304,7 +304,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
 
                 if (delta == null || origin == null || termination == null)
                 {
-                    throw new ArgumentException("The specified instruction is invalid.", nameof(value));
+                    throw new PuzzleException("The specified instruction is invalid.");
                 }
 
                 Rectangle bounds = ParseBounds(origin, termination);
@@ -343,18 +343,12 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
             {
                 if (width < 1)
                 {
-                    throw new ArgumentOutOfRangeException(
-                        nameof(width),
-                        width,
-                        FormattableString.Invariant($"{nameof(width)} cannot be less than zero."));
+                    throw new PuzzleException("Width cannot be less than zero.");
                 }
 
                 if (height < 1)
                 {
-                    throw new ArgumentOutOfRangeException(
-                        nameof(height),
-                        height,
-                        FormattableString.Invariant($"{nameof(height)} cannot be less than zero."));
+                    throw new PuzzleException("Height cannot be less than zero.");
                 }
 
                 _bounds = new Rectangle(0, 0, width, height);

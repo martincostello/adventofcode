@@ -141,7 +141,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
                 CardinalDirection.South => South,
                 CardinalDirection.SouthEast => SouthEast,
                 CardinalDirection.SouthWest => SouthWest,
-                _ => throw new InvalidOperationException("Invalid cardinal direction."),
+                _ => throw new PuzzleException($"Invalid cardinal direction '{direction}'."),
             };
         }
 
@@ -167,7 +167,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
                     "s" => CardinalDirection.South,
                     "se" => CardinalDirection.SouthEast,
                     "sw" => CardinalDirection.SouthWest,
-                    _ => throw new InvalidOperationException($"Unknown direction: {direction}"),
+                    _ => throw new PuzzleException($"Unknown direction '{direction}'."),
                 };
 
                 result.Add(parsed);

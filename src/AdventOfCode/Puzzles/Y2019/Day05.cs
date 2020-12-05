@@ -41,7 +41,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
 
             if (!await vm.RunAsync(cancellationToken))
             {
-                throw new InvalidProgramException();
+                throw new PuzzleException("Failed to run program.");
             }
 
             var outputs = await vm.Output.ToListAsync(cancellationToken);

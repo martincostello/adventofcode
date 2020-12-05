@@ -100,7 +100,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
 
             if (!await vm.RunAsync(cancellationToken))
             {
-                throw new InvalidProgramException();
+                throw new PuzzleException("Failed to run program.");
             }
 
             return await vm.Output.ToListAsync(cancellationToken);
@@ -131,7 +131,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
                     0 => _memory[index],
                     1 => index,
                     2 => _memory[index + offset],
-                    _ => throw new InvalidProgramException(),
+                    _ => throw new PuzzleException($"The mode '{mode}' is not supported."),
                 };
             }
 
@@ -141,7 +141,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
                 {
                     0 => index,
                     2 => index + offset,
-                    _ => throw new InvalidProgramException(),
+                    _ => throw new PuzzleException($"The mode '{mode}' is not supported."),
                 };
 
                 _memory[address] = value;
@@ -266,7 +266,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
                     7 => 3,
                     8 => 3,
                     9 => 1,
-                    _ => throw new InvalidOperationException($"{opcode} is not a supported opcode."),
+                    _ => throw new PuzzleException($"{opcode} is not a supported opcode."),
                 };
 
                 int[] modes = new int[parameters];
@@ -344,7 +344,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
                         break;
 
                     default:
-                        throw new InvalidOperationException($"{opcode} is not a supported opcode.");
+                        throw new PuzzleException($"{opcode} is not a supported opcode.");
                 }
 
                 _instruction += length;

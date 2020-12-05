@@ -166,7 +166,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
                 'L' => (-distance, 0),
                 'R' => (distance, 0),
                 'U' => (0, distance),
-                _ => throw new NotSupportedException($"The direction '{direction}' is invalid."),
+                _ => throw new PuzzleException($"The direction '{direction}' is invalid."),
             };
         }
     }

@@ -108,7 +108,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
 
             if (solutions.IsEmpty)
             {
-                throw new ArgumentException("No answer was found for the specified secret key.", nameof(secretKey));
+                throw new PuzzleException("No answer was found for the specified secret key.");
             }
 
             return solutions.Min();

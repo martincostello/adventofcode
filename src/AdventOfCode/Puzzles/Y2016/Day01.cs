@@ -77,7 +77,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
                         CardinalDirection.South => new Size(0, -1),
                         CardinalDirection.East => new Size(1, 0),
                         CardinalDirection.West => new Size(-1, 0),
-                        _ => throw new InvalidOperationException($"The bearing {bearing} is not known."),
+                        _ => throw new PuzzleException($"The bearing {bearing} is not known."),
                     };
 
                     position += delta;
@@ -156,7 +156,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
                 CardinalDirection.North => direction == Direction.Left ? CardinalDirection.West : CardinalDirection.East,
                 CardinalDirection.South => direction == Direction.Left ? CardinalDirection.East : CardinalDirection.West,
                 CardinalDirection.West => direction == Direction.Left ? CardinalDirection.South : CardinalDirection.North,
-                _ => throw new ArgumentOutOfRangeException(nameof(bearing), bearing, "Invalid bearing."),
+                _ => throw new PuzzleException($"Invalid bearing '{bearing}'."),
             };
         }
 

@@ -136,7 +136,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
                 "==" => left == right,
                 ">=" => left >= right,
                 "<=" => left <= right,
-                _ => throw new InvalidProgramException($"Unknown operation: {operation}"),
+                _ => throw new PuzzleException($"Unknown operation '{operation}'."),
             };
         }
 
