@@ -7,13 +7,17 @@ namespace MartinCostello.AdventOfCode
     using System.Collections.Generic;
     using System.Globalization;
     using System.IO;
-    using System.Reflection;
 
     /// <summary>
     /// The base class for puzzles.
     /// </summary>
     public abstract class Puzzle : IPuzzle
     {
+        /// <summary>
+        /// Gets or sets the optional resource stream associated with the puzzle.
+        /// </summary>
+        public Stream? Resource { get; set; }
+
         /// <summary>
         /// Gets or sets a value indicating whether the puzzle should be run verbosely.
         /// </summary>
@@ -147,12 +151,10 @@ namespace MartinCostello.AdventOfCode
         /// </returns>
         protected Stream ReadResource()
         {
-            TypeInfo thisType = GetType().GetTypeInfo();
+            var thisType = GetType();
             string name = FormattableString.Invariant($"MartinCostello.{thisType.Assembly.GetName().Name}.Input.Y{Year}.{thisType.Name}.input.txt");
 
-            // HACK Work around https://github.com/DotNetAnalyzers/StyleCopAnalyzers/issues/2968
-            var stream = thisType.Assembly.GetManifestResourceStream(name);
-            return stream!;
+            return thisType.Assembly.GetManifestResourceStream(name) !;
         }
 
         /// <summary>
@@ -165,8 +167,7 @@ namespace MartinCostello.AdventOfCode
         {
             var lines = new List<string>();
 
-            using Stream stream = ReadResource();
-            using var reader = new StreamReader(stream);
+            using var reader = new StreamReader(Resource ?? ReadResource(), leaveOpen: Resource is not null);
 
             string? value = null;
 
@@ -186,9 +187,7 @@ namespace MartinCostello.AdventOfCode
         /// </returns>
         protected string ReadResourceAsString()
         {
-            using Stream stream = ReadResource();
-            using var reader = new StreamReader(stream);
-
+            using var reader = new StreamReader(Resource ?? ReadResource(), leaveOpen: Resource is not null);
             return reader.ReadToEnd();
         }
 

@@ -3,6 +3,7 @@
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2015
 {
+    using System.IO;
     using System.Text.Json;
 
     /// <summary>
@@ -57,14 +58,26 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
         /// <inheritdoc />
         protected override int SolveCore(string[] args)
         {
-            using var document = JsonDocument.Parse(ReadResource());
-            string keyToIgnore = args.Length > 0 ? args[0] : string.Empty;
+            Stream resource = Resource ?? ReadResource();
 
-            Sum = SumIntegerValues(document.RootElement, keyToIgnore);
-
-            if (Verbose)
+            try
             {
-                Logger.WriteLine("The sum of the integers in the JSON document is {0:N0}.", Sum);
+                using var document = JsonDocument.Parse(resource);
+                string keyToIgnore = args.Length > 0 ? args[0] : string.Empty;
+
+                Sum = SumIntegerValues(document.RootElement, keyToIgnore);
+
+                if (Verbose)
+                {
+                    Logger.WriteLine("The sum of the integers in the JSON document is {0:N0}.", Sum);
+                }
+            }
+            finally
+            {
+                if (Resource is null)
+                {
+                    resource.Dispose();
+                }
             }
 
             return 0;

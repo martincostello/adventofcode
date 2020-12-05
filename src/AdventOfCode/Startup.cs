@@ -93,12 +93,18 @@ namespace MartinCostello.AdventOfCode
         /// </returns>
         private static async Task PuzzleAsync(HttpContext context)
         {
+            ////if (!context.Request.HasJsonContentType())
+            ////{
+            ////    context.Response.StatusCode = StatusCodes.Status415UnsupportedMediaType;
+            ////    return;
+            ////}
+
             int year = int.Parse((string)context.Request.RouteValues["year"] !, CultureInfo.InvariantCulture);
             int day = int.Parse((string)context.Request.RouteValues["day"] !, CultureInfo.InvariantCulture);
 
             var factory = context.RequestServices.GetRequiredService<PuzzleFactory>();
 
-            IPuzzle puzzle;
+            Puzzle puzzle;
 
             try
             {
@@ -106,15 +112,29 @@ namespace MartinCostello.AdventOfCode
             }
             catch (PuzzleException ex)
             {
-                await WriteErrorAsync(context, StatusCodes.Status400BadRequest, "Invalid Request", ex.Message);
+                await WriteErrorAsync(context, StatusCodes.Status400BadRequest, "Bad Request", ex.Message);
                 return;
             }
+
+            ////var syncIOFeature = context.Features.Get<IHttpBodyControlFeature>();
+            ////
+            ////if (syncIOFeature != null)
+            ////{
+            ////    syncIOFeature.AllowSynchronousIO = true;
+            ////}
+            ////
+            ////puzzle.Resource = context.Request.Body;
 
             var stopwatch = Stopwatch.StartNew();
 
             try
             {
                 puzzle.Solve(Array.Empty<string>());
+            }
+            catch (PuzzleException ex)
+            {
+                await WriteErrorAsync(context, StatusCodes.Status400BadRequest, "Bad Request", ex.Message);
+                return;
             }
 #pragma warning disable CA1031
             catch (Exception ex)
