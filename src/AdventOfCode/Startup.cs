@@ -231,7 +231,7 @@ namespace MartinCostello.AdventOfCode
                 year,
                 day,
                 solutions,
-                timeToSolve = stopwatch.Elapsed.ToString("g", CultureInfo.InvariantCulture),
+                timeToSolve = stopwatch.Elapsed.TotalMilliseconds.ToString("g", CultureInfo.InvariantCulture),
             };
 
             await context.Response.WriteAsJsonAsync(result);
