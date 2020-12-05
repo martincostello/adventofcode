@@ -59,8 +59,8 @@ namespace MartinCostello.AdventOfCode
         /// <returns>
         /// The puzzle's metadata.
         /// </returns>
-        internal PuzzleAttribute? Metadata()
-            => GetType().GetCustomAttribute<PuzzleAttribute>();
+        internal PuzzleAttribute Metadata()
+            => GetType().GetCustomAttribute<PuzzleAttribute>() !;
 
         /// <summary>
         /// Replaces the format items in a specified string with the string representations

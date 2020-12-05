@@ -164,7 +164,7 @@ namespace MartinCostello.AdventOfCode
 
             var form = await context.Request.ReadFormAsync(context.RequestAborted);
 
-            var metadata = puzzle.Metadata() !;
+            var metadata = puzzle.Metadata();
 
             if (metadata.RequiresData)
             {
