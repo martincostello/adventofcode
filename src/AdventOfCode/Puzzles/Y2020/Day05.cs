@@ -108,6 +108,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
             if (Verbose)
             {
                 Logger.WriteLine("The highest seat Id from a boarding pass is {0}.", HighestSeatId);
+                Logger.WriteLine("My seat Id is {0}.", MySeatId);
             }
 
             return 0;
