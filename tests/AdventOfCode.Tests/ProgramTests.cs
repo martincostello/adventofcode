@@ -3,7 +3,6 @@
 
 namespace MartinCostello.AdventOfCode
 {
-    using System;
     using Shouldly;
     using Xunit;
     using Xunit.Abstractions;
@@ -45,29 +44,6 @@ namespace MartinCostello.AdventOfCode
         {
             // Arrange
             string[] args = new[] { "26", "a" };
-
-            // Act
-            int actual = Program.Run(args, Logger);
-
-            // Assert
-            actual.ShouldBe(-1);
-        }
-
-        [Fact]
-        public void Program_Exits_If_Null_Arguments()
-        {
-            // Act
-            int actual = Program.Run(null!, Logger);
-
-            // Assert
-            actual.ShouldBe(-1);
-        }
-
-        [Fact]
-        public void Program_Exits_If_No_Arguments()
-        {
-            // Arrange
-            string[] args = Array.Empty<string>();
 
             // Act
             int actual = Program.Run(args, Logger);
