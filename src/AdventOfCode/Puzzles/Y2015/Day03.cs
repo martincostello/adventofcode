@@ -10,6 +10,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
     /// <summary>
     /// A class representing the puzzle for <c>https://adventofcode.com/2015/day/3</c>.
     /// </summary>
+    [Puzzle(2015, 03, RequiresData = true)]
     public class Day03 : Puzzle
     {
         /// <summary>
