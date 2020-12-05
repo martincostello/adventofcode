@@ -92,7 +92,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2018
         }
 
         /// <inheritdoc />
-        protected override int SolveCore(string[] args)
+        protected override object[] SolveCore(string[] args)
         {
             IList<string> claims = ReadResourceAsLines();
 
@@ -105,7 +105,11 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2018
                 Logger.WriteLine($"The Id of the claim with no overlapping claims is {IdOfUniqueClaim}.");
             }
 
-            return 0;
+            return new object[]
+            {
+                Area,
+                IdOfUniqueClaim!,
+            };
         }
 
         /// <summary>

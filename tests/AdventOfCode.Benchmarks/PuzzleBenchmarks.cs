@@ -84,7 +84,7 @@ namespace MartinCostello.AdventOfCode.Benchmarks
 
         [Benchmark]
         [ArgumentsSource(nameof(Puzzles))]
-        public int Solve(PuzzleInput input)
+        public object[] Solve(PuzzleInput input)
             => input.Puzzle.Solve(input.Args);
 
         public sealed class PuzzleInput<T> : PuzzleInput

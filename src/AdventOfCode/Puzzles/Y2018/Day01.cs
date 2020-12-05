@@ -83,7 +83,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2018
         }
 
         /// <inheritdoc />
-        protected override int SolveCore(string[] args)
+        protected override object[] SolveCore(string[] args)
         {
             IList<string> sequence = ReadResourceAsLines();
 
@@ -95,7 +95,11 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2018
                 Logger.WriteLine($"The first repeated frequency is {FirstRepeatedFrequency:N0}.");
             }
 
-            return 0;
+            return new object[]
+            {
+                Frequency,
+                FirstRepeatedFrequency,
+            };
         }
 
         /// <summary>

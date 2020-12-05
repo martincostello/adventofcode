@@ -54,7 +54,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
         }
 
         /// <inheritdoc />
-        protected override int SolveCore(string[] args)
+        protected override object[] SolveCore(string[] args)
         {
             string digits = ReadResourceAsString().TrimEnd();
 
@@ -67,7 +67,11 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
                 Logger.WriteLine($"The solution to the second captcha is {CaptchaSolutionOpposite:N0}.");
             }
 
-            return 0;
+            return new object[]
+            {
+                CaptchaSolutionNext,
+                CaptchaSolutionOpposite,
+            };
         }
     }
 }

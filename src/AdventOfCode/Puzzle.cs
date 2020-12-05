@@ -36,7 +36,7 @@ namespace MartinCostello.AdventOfCode
             => Metadata()?.MinimumArguments ?? 0;
 
         /// <inheritdoc />
-        public virtual int Solve(string[] args)
+        public virtual object[] Solve(string[] args)
         {
             if (!EnsureArguments(args, MinimumArguments))
             {
@@ -206,7 +206,9 @@ namespace MartinCostello.AdventOfCode
         /// Solves the puzzle given the specified arguments.
         /// </summary>
         /// <param name="args">The input arguments to the puzzle.</param>
-        /// <returns>The exit code the application should return.</returns>
-        protected abstract int SolveCore(string[] args);
+        /// <returns>
+        /// The solution(s) to the puzzle.
+        /// </returns>
+        protected abstract object[] SolveCore(string[] args);
     }
 }

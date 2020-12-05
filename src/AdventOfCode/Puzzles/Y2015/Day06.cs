@@ -30,7 +30,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
         protected override int MinimumArguments => 1;
 
         /// <inheritdoc />
-        protected override int SolveCore(string[] args)
+        protected override object[] SolveCore(string[] args)
         {
             int version = args[0] switch
             {
@@ -41,8 +41,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
 
             if (version == -1)
             {
-                Logger.WriteLine("The instruction set specified is invalid.");
-                return -1;
+                throw new PuzzleException("The instruction set specified is invalid.");
             }
 
             var lines = ReadResourceAsLines();
@@ -91,7 +90,11 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
                 }
             }
 
-            return 0;
+            return new object[]
+            {
+                LightsIlluminated,
+                TotalBrightness,
+            };
         }
 
         /// <summary>

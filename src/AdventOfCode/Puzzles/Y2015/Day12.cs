@@ -57,7 +57,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
         }
 
         /// <inheritdoc />
-        protected override int SolveCore(string[] args)
+        protected override object[] SolveCore(string[] args)
         {
             Stream resource = Resource ?? ReadResource();
 
@@ -81,7 +81,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
                 }
             }
 
-            return 0;
+            return new object[] { Sum };
         }
     }
 }

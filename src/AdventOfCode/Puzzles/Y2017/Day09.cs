@@ -99,14 +99,11 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
         }
 
         /// <inheritdoc />
-        protected override int SolveCore(string[] args)
+        protected override object[] SolveCore(string[] args)
         {
             string stream = ReadResourceAsString().Trim();
 
-            (int score, int garbageCount) = ParseStream(stream);
-
-            TotalScore = score;
-            GarbageCount = garbageCount;
+            (TotalScore, GarbageCount) = ParseStream(stream);
 
             if (Verbose)
             {
@@ -114,7 +111,11 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
                 Logger.WriteLine($"There are {GarbageCount:N0} non-canceled characters within the garbage.");
             }
 
-            return 0;
+            return new object[]
+            {
+                TotalScore,
+                GarbageCount,
+            };
         }
     }
 }

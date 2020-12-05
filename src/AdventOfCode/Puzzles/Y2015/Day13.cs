@@ -57,7 +57,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
         }
 
         /// <inheritdoc />
-        protected override int SolveCore(string[] args)
+        protected override object[] SolveCore(string[] args)
         {
             IList<string> potentialHappiness = ReadResourceAsLines();
 
@@ -94,7 +94,11 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
                 Logger.WriteLine("The total change in happiness with the current user seated is {0:N0}.", MaximumTotalChangeInHappinessWithCurrentUser);
             }
 
-            return 0;
+            return new object[]
+            {
+                MaximumTotalChangeInHappiness,
+                MaximumTotalChangeInHappinessWithCurrentUser,
+            };
         }
 
         /// <summary>

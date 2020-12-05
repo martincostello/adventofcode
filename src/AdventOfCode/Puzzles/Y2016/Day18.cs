@@ -65,7 +65,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         }
 
         /// <inheritdoc />
-        protected override int SolveCore(string[] args)
+        protected override object[] SolveCore(string[] args)
         {
             int rows = ParseInt32(args[0]);
             string firstRowTiles = args.Length > 1 ? args[1] : ReadResourceAsString().TrimEnd();
@@ -77,7 +77,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
                 Logger.WriteLine($"The number of safe tiles is {SafeTileCount:N0}.");
             }
 
-            return 0;
+            return new object[] { SafeTileCount };
         }
 
         /// <summary>

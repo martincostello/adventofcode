@@ -34,7 +34,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
             => GetDecompressedLength(data, 0, data.Length, version);
 
         /// <inheritdoc />
-        protected override int SolveCore(string[] args)
+        protected override object[] SolveCore(string[] args)
         {
             string data = ReadResourceAsString();
 
@@ -47,7 +47,11 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
                 Logger.WriteLine($"The decompressed length of the data using version 2 of the algorithm is {DecompressedLengthVersion2:N0}.");
             }
 
-            return 0;
+            return new object[]
+            {
+                DecompressedLengthVersion1,
+                DecompressedLengthVersion2,
+            };
         }
 
         /// <summary>

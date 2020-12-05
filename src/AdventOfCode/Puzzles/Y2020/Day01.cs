@@ -46,7 +46,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
         }
 
         /// <inheritdoc />
-        protected override int SolveCore(string[] args)
+        protected override object[] SolveCore(string[] args)
         {
             IList<string> values = ReadResourceAsLines();
 
@@ -59,7 +59,11 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
                 Logger.WriteLine("The product of the three entries that sum to 2020 is {0}.", ProductOf2020SumFrom3);
             }
 
-            return 0;
+            return new object[]
+            {
+                ProductOf2020SumFrom2,
+                ProductOf2020SumFrom3,
+            };
         }
     }
 }

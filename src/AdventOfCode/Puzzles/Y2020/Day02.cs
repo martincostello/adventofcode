@@ -74,7 +74,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
         }
 
         /// <inheritdoc />
-        protected override int SolveCore(string[] args)
+        protected override object[] SolveCore(string[] args)
         {
             IList<string> values = ReadResourceAsLines();
 
@@ -87,7 +87,11 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
                 Logger.WriteLine("There are {0} valid passwords using policy version 2.", ValidPasswordsV2);
             }
 
-            return 0;
+            return new object[]
+            {
+                ValidPasswordsV1,
+                ValidPasswordsV2,
+            };
         }
     }
 }

@@ -43,7 +43,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
             => GetFuelRequirementsForMassWithFuel(ParseInt32(mass));
 
         /// <inheritdoc />
-        protected override int SolveCore(string[] args)
+        protected override object[] SolveCore(string[] args)
         {
             IList<string> masses = ReadResourceAsLines();
 
@@ -56,7 +56,11 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
                 Logger.WriteLine("{0} fuel is required for the fully-fuelled rocket.", TotalFuelRequiredForRocket);
             }
 
-            return 0;
+            return new object[]
+            {
+                TotalFuelRequiredForModules,
+                TotalFuelRequiredForRocket,
+            };
         }
 
         /// <summary>

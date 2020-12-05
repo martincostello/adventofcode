@@ -129,7 +129,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
         }
 
         /// <inheritdoc />
-        protected override int SolveCore(string[] args)
+        protected override object[] SolveCore(string[] args)
         {
             IList<string> wires = ReadResourceAsLines();
 
@@ -141,7 +141,11 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
                 Logger.WriteLine("The minimum number of combined steps to get to an intersection is {0}.", MinimumSteps);
             }
 
-            return 0;
+            return new object[]
+            {
+                ManhattanDistance,
+                MinimumSteps,
+            };
         }
 
         /// <summary>

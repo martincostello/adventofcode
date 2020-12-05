@@ -87,7 +87,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
         }
 
         /// <inheritdoc />
-        protected override int SolveCore(string[] args)
+        protected override object[] SolveCore(string[] args)
         {
             IList<string> batch = ReadResourceAsLines();
 
@@ -99,7 +99,11 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
                 Logger.WriteLine("There are {0} verified passports.", VerifiedPassports);
             }
 
-            return 0;
+            return new object[]
+            {
+                ValidPassports,
+                VerifiedPassports,
+            };
         }
 
         /// <summary>

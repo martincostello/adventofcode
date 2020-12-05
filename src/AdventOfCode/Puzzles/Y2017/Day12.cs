@@ -69,7 +69,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
         }
 
         /// <inheritdoc />
-        protected override int SolveCore(string[] args)
+        protected override object[] SolveCore(string[] args)
         {
             IList<string> pipes = ReadResourceAsLines();
 
@@ -82,7 +82,11 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
                 Logger.WriteLine($"There are {NumberOfGroups:N0} groups in the network of pipes.");
             }
 
-            return 0;
+            return new object[]
+            {
+                ProgramsInGroupOfProgram0,
+                NumberOfGroups,
+            };
         }
 
         /// <summary>

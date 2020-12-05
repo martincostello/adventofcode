@@ -47,7 +47,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
         }
 
         /// <inheritdoc />
-        protected override int SolveCore(string[] args)
+        protected override object[] SolveCore(string[] args)
         {
             IList<int> weights = ReadResourceAsLines()
                 .Select((p) => ParseInt32(p))
@@ -65,7 +65,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
                     QuantumEntanglementOfFirstGroup);
             }
 
-            return 0;
+            return new object[] { QuantumEntanglementOfFirstGroup };
         }
     }
 }

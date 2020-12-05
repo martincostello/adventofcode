@@ -109,7 +109,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
         }
 
         /// <inheritdoc />
-        protected override int SolveCore(string[] args)
+        protected override object[] SolveCore(string[] args)
         {
             string image = ReadResourceAsString().TrimEnd('\n');
 
@@ -120,7 +120,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
                 Logger.WriteLine("The checksum of the image data is {0}.", Checksum);
             }
 
-            return 0;
+            return new object[] { Checksum };
         }
 
         /// <summary>

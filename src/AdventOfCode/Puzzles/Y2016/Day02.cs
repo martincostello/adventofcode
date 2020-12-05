@@ -119,7 +119,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         }
 
         /// <inheritdoc />
-        protected override int SolveCore(string[] args)
+        protected override object[] SolveCore(string[] args)
         {
             ICollection<string> instructions = ReadResourceAsLines();
 
@@ -137,7 +137,11 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
                     BathroomCodeAlphanumericKeypad);
             }
 
-            return 0;
+            return new object[]
+            {
+                BathroomCodeDigitKeypad,
+                BathroomCodeAlphanumericKeypad,
+            };
         }
 
         /// <summary>

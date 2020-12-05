@@ -54,7 +54,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
         }
 
         /// <inheritdoc />
-        protected override int SolveCore(string[] args)
+        protected override object[] SolveCore(string[] args)
         {
             IList<string> structure = ReadResourceAsLines();
 
@@ -67,7 +67,11 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
                 Logger.WriteLine($"The desired weight of the program to balance the structure is {DesiredWeightOfUnbalancedDisc:N0}.");
             }
 
-            return 0;
+            return new object[]
+            {
+                BottomProgramName,
+                DesiredWeightOfUnbalancedDisc,
+            };
         }
 
         /// <summary>

@@ -81,7 +81,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
         }
 
         /// <inheritdoc />
-        protected override int SolveCore(string[] args)
+        protected override object[] SolveCore(string[] args)
         {
             string instructions = ReadResourceAsString();
 
@@ -99,7 +99,11 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
                     HousesWithPresentsFromSantaAndRoboSanta);
             }
 
-            return 0;
+            return new object[]
+            {
+                HousesWithPresentsFromSanta,
+                HousesWithPresentsFromSantaAndRoboSanta,
+            };
         }
 
         /// <summary>

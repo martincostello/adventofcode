@@ -90,7 +90,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
         }
 
         /// <inheritdoc />
-        protected override int SolveCore(string[] args)
+        protected override object[] SolveCore(string[] args)
         {
             string difficulty = args.Length == 1 ? args[0] : "easy";
 
@@ -117,7 +117,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
                     MinimumCostToWin);
             }
 
-            return 0;
+            return new object[] { MinimumCostToWin };
         }
 
         /// <summary>

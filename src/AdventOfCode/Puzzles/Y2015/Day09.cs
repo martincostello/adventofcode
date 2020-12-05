@@ -111,7 +111,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
         }
 
         /// <inheritdoc />
-        protected override int SolveCore(string[] args)
+        protected override object[] SolveCore(string[] args)
         {
             bool findLongest =
                 args.Length == 1 &&
@@ -131,7 +131,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
                 }
             }
 
-            return 0;
+            return new object[] { Solution };
         }
 
         /// <summary>

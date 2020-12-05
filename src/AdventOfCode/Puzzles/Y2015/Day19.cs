@@ -119,24 +119,14 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
         }
 
         /// <inheritdoc />
-        protected override int SolveCore(string[] args)
+        protected override object[] SolveCore(string[] args)
         {
-            bool fabricate;
-
-            switch (args[0].ToUpperInvariant())
+            bool fabricate = args[0].ToUpperInvariant() switch
             {
-                case "CALIBRATE":
-                    fabricate = false;
-                    break;
-
-                case "FABRICATE":
-                    fabricate = true;
-                    break;
-
-                default:
-                    Logger.WriteLine("The mode specified is invalid.");
-                    return -1;
-            }
+                "CALIBRATE" => false,
+                "FABRICATE" => true,
+                _ => throw new PuzzleException("The mode specified is invalid."),
+            };
 
             IList<string> lines = ReadResourceAsLines();
 
@@ -168,7 +158,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
                 }
             }
 
-            return 0;
+            return new object[] { Solution };
         }
     }
 }

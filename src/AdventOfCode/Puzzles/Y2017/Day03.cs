@@ -175,7 +175,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
         }
 
         /// <inheritdoc />
-        protected override int SolveCore(string[] args)
+        protected override object[] SolveCore(string[] args)
         {
             int square = ParseInt32(args[0]);
 
@@ -188,7 +188,11 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
                 Logger.WriteLine($"The first value written that is larger than square {square:N0} is {FirstStorageLargerThanInput:N0}.");
             }
 
-            return 0;
+            return new object[]
+            {
+                Steps,
+                FirstStorageLargerThanInput,
+            };
         }
 
         /// <summary>

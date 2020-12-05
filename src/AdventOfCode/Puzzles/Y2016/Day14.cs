@@ -88,7 +88,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         }
 
         /// <inheritdoc />
-        protected override int SolveCore(string[] args)
+        protected override object[] SolveCore(string[] args)
         {
             string salt = args[0];
 
@@ -101,7 +101,11 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
                 Logger.WriteLine($"The index that produces the 64th one-time pad key when using key stretching is {IndexOfKey64WithStretching:N0}.");
             }
 
-            return 0;
+            return new object[]
+            {
+                IndexOfKey64,
+                IndexOfKey64WithStretching,
+            };
         }
 
         /// <summary>

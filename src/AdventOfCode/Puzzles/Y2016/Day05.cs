@@ -81,7 +81,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         }
 
         /// <inheritdoc />
-        protected override int SolveCore(string[] args)
+        protected override object[] SolveCore(string[] args)
         {
             string doorId = args[0];
 
@@ -94,7 +94,11 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
                 Logger.WriteLine($"The password for door '{doorId}' is '{PasswordWhenPositionIsIndicated}' when the position is specified in the hash.");
             }
 
-            return 0;
+            return new object[]
+            {
+                Password,
+                PasswordWhenPositionIsIndicated,
+            };
         }
 
         /// <summary>

@@ -82,7 +82,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
         }
 
         /// <inheritdoc />
-        protected override int SolveCore(string[] args)
+        protected override object[] SolveCore(string[] args)
         {
             string[] potentialWeapons = Shop.PotentialWeapons.Keys.ToArray();
             string?[] potentialArmor = Shop.PotentialArmor.Keys.Concat(new string?[] { null }).ToArray();
@@ -143,7 +143,11 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
                     MaximumCostToLose);
             }
 
-            return 0;
+            return new object[]
+            {
+                MaximumCostToLose,
+                MinimumCostToWin,
+            };
         }
 
         /// <summary>

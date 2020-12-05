@@ -106,7 +106,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
         }
 
         /// <inheritdoc />
-        protected override int SolveCore(string[] args)
+        protected override object[] SolveCore(string[] args)
         {
             IList<string> instructions = ReadResourceAsLines();
             uint initialValue = args.Length == 1 ? ParseUInt32(args[0]) : 0;
@@ -122,7 +122,11 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
                     B);
             }
 
-            return 0;
+            return new object[]
+            {
+                A,
+                B,
+            };
         }
 
         /// <summary>

@@ -59,7 +59,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
         }
 
         /// <inheritdoc />
-        protected override int SolveCore(string[] args)
+        protected override object[] SolveCore(string[] args)
         {
             long input = ParseInt64(args[0]);
             string program = ReadResourceAsString();
@@ -71,7 +71,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
                 Logger.WriteLine("The program produces BOOST keycode {0}.", Keycode);
             }
 
-            return 0;
+            return new object[] { Keycode };
         }
     }
 }

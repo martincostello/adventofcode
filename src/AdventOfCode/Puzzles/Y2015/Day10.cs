@@ -50,7 +50,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
         }
 
         /// <inheritdoc />
-        protected override int SolveCore(string[] args)
+        protected override object[] SolveCore(string[] args)
         {
             string value = args[0];
             int iterations = ParseInt32(args[1], NumberStyles.Integer & ~NumberStyles.AllowLeadingSign);
@@ -73,7 +73,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
                     result.Length);
             }
 
-            return 0;
+            return new object[] { Solution };
         }
     }
 }

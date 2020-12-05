@@ -67,7 +67,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
         }
 
         /// <inheritdoc />
-        protected override int SolveCore(string[] args)
+        protected override object[] SolveCore(string[] args)
         {
             string value = ReadResourceAsString();
 
@@ -82,7 +82,11 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
                 Logger.WriteLine("Santa first enters the basement after following instruction {0:N0}.", FirstBasementInstruction);
             }
 
-            return 0;
+            return new object[]
+            {
+                FinalFloor,
+                FirstBasementInstruction,
+            };
         }
     }
 }

@@ -79,7 +79,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
         }
 
         /// <inheritdoc />
-        protected override int SolveCore(string[] args)
+        protected override object[] SolveCore(string[] args)
         {
             IList<string> grid = ReadResourceAsLines();
 
@@ -109,7 +109,11 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
                 Logger.WriteLine("The product of the collisions from traversing the slopes is {0}.", ProductOfTreeCollisions);
             }
 
-            return 0;
+            return new object[]
+            {
+                TreeCollisions,
+                ProductOfTreeCollisions,
+            };
         }
     }
 }

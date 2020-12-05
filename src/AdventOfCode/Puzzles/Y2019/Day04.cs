@@ -114,7 +114,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
         }
 
         /// <inheritdoc />
-        protected override int SolveCore(string[] args)
+        protected override object[] SolveCore(string[] args)
         {
             CountV1 = GetPasswordsInRange(args[0], rulesVersion: 1);
             CountV2 = GetPasswordsInRange(args[0], rulesVersion: 2);
@@ -125,7 +125,11 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
                 Logger.WriteLine("{0} different passwords within the range meet the criteria for version 2.", CountV2);
             }
 
-            return 0;
+            return new object[]
+            {
+                CountV1,
+                CountV2,
+            };
         }
     }
 }

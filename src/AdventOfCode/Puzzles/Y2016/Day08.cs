@@ -63,7 +63,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         }
 
         /// <inheritdoc />
-        protected override int SolveCore(string[] args)
+        protected override object[] SolveCore(string[] args)
         {
             IList<string> instructions = ReadResourceAsLines();
 
@@ -74,7 +74,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
                 Logger.WriteLine($"There are {PixelsLit:N0} pixels lit.");
             }
 
-            return 0;
+            return new object[] { PixelsLit };
         }
 
         /// <summary>

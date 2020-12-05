@@ -82,7 +82,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         }
 
         /// <inheritdoc />
-        protected override int SolveCore(string[] args)
+        protected override object[] SolveCore(string[] args)
         {
             IList<string> addresses = ReadResourceAsLines();
 
@@ -95,7 +95,11 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
                 Logger.WriteLine("{0:N0} IPv7 addresses support SSL.", IPAddressesSupportingSsl);
             }
 
-            return 0;
+            return new object[]
+            {
+                IPAddressesSupportingTls,
+                IPAddressesSupportingSsl,
+            };
         }
 
         /// <summary>

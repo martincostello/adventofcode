@@ -57,7 +57,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         }
 
         /// <inheritdoc />
-        protected override int SolveCore(string[] args)
+        protected override object[] SolveCore(string[] args)
         {
             IList<string> messages = ReadResourceAsLines();
 
@@ -70,7 +70,11 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
                 Logger.WriteLine($"The error-corrected message using the least likely letters is: {ModifiedErrorCorrectedMessage}.");
             }
 
-            return 0;
+            return new object[]
+            {
+                ErrorCorrectedMessage,
+                ModifiedErrorCorrectedMessage,
+            };
         }
     }
 }

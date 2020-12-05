@@ -49,7 +49,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
         }
 
         /// <inheritdoc />
-        protected override int SolveCore(string[] args)
+        protected override object[] SolveCore(string[] args)
         {
             int input = ParseInt32(args[0]);
             string program = ReadResourceAsString();
@@ -61,7 +61,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
                 Logger.WriteLine("The program produces diagnostic code {0}.", DiagnosticCode);
             }
 
-            return 0;
+            return new object[] { DiagnosticCode };
         }
     }
 }

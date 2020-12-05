@@ -77,7 +77,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2018
         }
 
         /// <inheritdoc />
-        protected override int SolveCore(string[] args)
+        protected override object[] SolveCore(string[] args)
         {
             string polymer = ReadResourceAsString().Trim('\r', '\n');
 
@@ -90,7 +90,11 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2018
                 Logger.WriteLine($"The number of units that remain after fully reacting the polymer with optimization is {RemainingUnitsOptimized:N0}.");
             }
 
-            return 0;
+            return new object[]
+            {
+                RemainingUnits,
+                RemainingUnitsOptimized,
+            };
         }
 
         /// <summary>

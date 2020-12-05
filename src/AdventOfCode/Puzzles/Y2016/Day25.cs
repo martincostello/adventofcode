@@ -17,7 +17,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         public int ClockSignalValue { get; private set; }
 
         /// <inheritdoc />
-        protected override int SolveCore(string[] args)
+        protected override object[] SolveCore(string[] args)
         {
             IList<string> instructions = ReadResourceAsLines();
 
@@ -79,7 +79,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
                 Logger.WriteLine($"The lowest positive integer that produces a clock signal is '{ClockSignalValue:N0}'.");
             }
 
-            return 0;
+            return new object[] { ClockSignalValue };
         }
     }
 }

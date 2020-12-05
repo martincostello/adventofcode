@@ -55,7 +55,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         }
 
         /// <inheritdoc />
-        protected override int SolveCore(string[] args)
+        protected override object[] SolveCore(string[] args)
         {
             IList<string> dimensions = ReadResourceAsLines();
 
@@ -68,7 +68,11 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
                 Logger.WriteLine("The number of possible triangles using columns is {0:N0}.", PossibleTrianglesByColumns);
             }
 
-            return 0;
+            return new object[]
+            {
+                PossibleTrianglesByRows,
+                PossibleTrianglesByColumns,
+            };
         }
 
         /// <summary>

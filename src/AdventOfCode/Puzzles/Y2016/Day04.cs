@@ -89,7 +89,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         }
 
         /// <inheritdoc />
-        protected override int SolveCore(string[] args)
+        protected override object[] SolveCore(string[] args)
         {
             IList<string> names = ReadResourceAsLines();
 
@@ -99,10 +99,14 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
             if (Verbose)
             {
                 Logger.WriteLine("The sum of the sector Ids of the real rooms is {0:N0}.", SumOfSectorIdsOfRealRooms);
-                Logger.WriteLine("The sector ID of the room where North Pole objects are stored is {0:N0}.", SumOfSectorIdsOfRealRooms);
+                Logger.WriteLine("The sector ID of the room where North Pole objects are stored is {0:N0}.", SectorIdOfNorthPoleObjectsRoom);
             }
 
-            return 0;
+            return new object[]
+            {
+                SumOfSectorIdsOfRealRooms,
+                SectorIdOfNorthPoleObjectsRoom,
+            };
         }
 
         /// <summary>

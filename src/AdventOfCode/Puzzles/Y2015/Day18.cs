@@ -73,7 +73,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
         }
 
         /// <inheritdoc />
-        protected override int SolveCore(string[] args)
+        protected override object[] SolveCore(string[] args)
         {
             IList<string> initial = ReadResourceAsLines();
             int steps = ParseInt32(args[0]);
@@ -102,7 +102,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
                     steps);
             }
 
-            return 0;
+            return new object[] { LightsIlluminated };
         }
 
         /// <summary>

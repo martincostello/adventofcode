@@ -104,7 +104,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
         }
 
         /// <inheritdoc />
-        protected override int SolveCore(string[] args)
+        protected override object[] SolveCore(string[] args)
         {
             IList<string> instructions = ReadResourceAsLines();
 
@@ -131,7 +131,11 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
                 Logger.WriteLine("The new signal for wire a is {0:N0}.", SecondSignal);
             }
 
-            return 0;
+            return new object[]
+            {
+                FirstSignal,
+                SecondSignal,
+            };
         }
 
         /// <summary>

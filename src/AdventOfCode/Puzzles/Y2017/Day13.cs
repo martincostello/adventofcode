@@ -103,7 +103,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
         }
 
         /// <inheritdoc />
-        protected override int SolveCore(string[] args)
+        protected override object[] SolveCore(string[] args)
         {
             IList<string> depthRanges = ReadResourceAsLines();
 
@@ -116,7 +116,11 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
                 Logger.WriteLine($"The fewest number of picoseconds that the packet needs to be delayed by to pass through the firewall without being caught is {ShortestDelay:N0}.");
             }
 
-            return 0;
+            return new object[]
+            {
+                Severity,
+                ShortestDelay,
+            };
         }
     }
 }

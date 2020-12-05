@@ -20,7 +20,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         protected override int MinimumArguments => 1;
 
         /// <inheritdoc />
-        protected override int SolveCore(string[] args)
+        protected override object[] SolveCore(string[] args)
         {
             int input = ParseInt32(args[0]);
 
@@ -34,7 +34,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
                 Logger.WriteLine($"The value to send to the safe for an input of {input:N0} is '{SafeValue}'.");
             }
 
-            return 0;
+            return new object[] { SafeValue };
         }
     }
 }

@@ -134,7 +134,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
         }
 
         /// <inheritdoc />
-        protected override int SolveCore(string[] args)
+        protected override object[] SolveCore(string[] args)
         {
             IList<string> input = ReadResourceAsLines();
 
@@ -156,7 +156,11 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
                     SecondSolution);
             }
 
-            return 0;
+            return new object[]
+            {
+                FirstSolution,
+                SecondSolution,
+            };
         }
     }
 }

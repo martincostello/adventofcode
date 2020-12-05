@@ -80,7 +80,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
         }
 
         /// <inheritdoc />
-        protected override int SolveCore(string[] args)
+        protected override object[] SolveCore(string[] args)
         {
             IList<string> boardingPasses = ReadResourceAsLines();
 
@@ -115,7 +115,11 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
                 Logger.WriteLine("My seat Id is {0}.", MySeatId);
             }
 
-            return 0;
+            return new object[]
+            {
+                HighestSeatId,
+                MySeatId,
+            };
         }
     }
 }

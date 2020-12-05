@@ -38,7 +38,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         }
 
         /// <inheritdoc />
-        protected override int SolveCore(string[] args)
+        protected override object[] SolveCore(string[] args)
         {
             string initial = args[0];
             int size = ParseInt32(args[1]);
@@ -50,7 +50,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
                 Logger.WriteLine($"The checksum for the generated disk data is '{Checksum}'.");
             }
 
-            return 0;
+            return new object[] { Checksum };
         }
 
         /// <summary>

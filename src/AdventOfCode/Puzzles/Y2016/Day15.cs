@@ -53,7 +53,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         }
 
         /// <inheritdoc />
-        protected override int SolveCore(string[] args)
+        protected override object[] SolveCore(string[] args)
         {
             IList<string> input = ReadResourceAsLines();
 
@@ -71,7 +71,11 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
                 Logger.WriteLine($"The first time the button can be pressed to get a capsule with the extra disc present is {TimeOfFirstButtonPressWithExtraDisc:N0}.");
             }
 
-            return 0;
+            return new object[]
+            {
+                TimeOfFirstButtonPress,
+                TimeOfFirstButtonPressWithExtraDisc,
+            };
         }
 
         /// <summary>

@@ -50,7 +50,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
         }
 
         /// <inheritdoc />
-        protected override int SolveCore(string[] args)
+        protected override object[] SolveCore(string[] args)
         {
             IList<string> instructions = ReadResourceAsLines();
 
@@ -63,7 +63,11 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
                 Logger.WriteLine($"The largest value in any register at any point while executing the input was {HighestRegisterValueDuring:N0}.");
             }
 
-            return 0;
+            return new object[]
+            {
+                HighestRegisterValueAtEnd,
+                HighestRegisterValueDuring,
+            };
         }
 
         /// <summary>

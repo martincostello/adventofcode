@@ -173,7 +173,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         }
 
         /// <inheritdoc />
-        protected override int SolveCore(string[] args)
+        protected override object[] SolveCore(string[] args)
         {
             IList<string> instructions = ReadResourceAsLines();
 
@@ -189,7 +189,11 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
                 Logger.WriteLine($"The value left in register a if c is initialized to 1 is {ValueInRegisterAWhenInitializedWithIgnitionKey:N0}.");
             }
 
-            return 0;
+            return new object[]
+            {
+                ValueInRegisterA,
+                ValueInRegisterAWhenInitializedWithIgnitionKey,
+            };
         }
     }
 }

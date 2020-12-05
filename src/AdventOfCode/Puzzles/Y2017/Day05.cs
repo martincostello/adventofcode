@@ -58,7 +58,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
         }
 
         /// <inheritdoc />
-        protected override int SolveCore(string[] args)
+        protected override object[] SolveCore(string[] args)
         {
             IList<int> program = ReadResourceAsLines()
                 .Select((p) => ParseInt32(p))
@@ -73,7 +73,11 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
                 Logger.WriteLine($"It takes {StepsToExitV2:N0} to reach the exit using version 2.");
             }
 
-            return 0;
+            return new object[]
+            {
+                StepsToExitV1,
+                StepsToExitV2,
+            };
         }
     }
 }

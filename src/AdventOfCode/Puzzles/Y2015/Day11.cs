@@ -100,7 +100,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
         }
 
         /// <inheritdoc />
-        protected override int SolveCore(string[] args)
+        protected override object[] SolveCore(string[] args)
         {
             string current = args[0];
             NextPassword = GenerateNextPassword(current);
@@ -110,7 +110,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
                 Logger.WriteLine("Santa's new password should be '{0}'.", NextPassword);
             }
 
-            return 0;
+            return new object[] { NextPassword };
         }
 
         /// <summary>

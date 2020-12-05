@@ -191,10 +191,12 @@ namespace MartinCostello.AdventOfCode
 
             var stopwatch = Stopwatch.StartNew();
 
+            object[] solutions;
+
             try
             {
                 // TODO Make async and pass through CancellationToken
-                puzzle.Solve(arguments);
+                solutions = puzzle.Solve(arguments);
             }
             catch (OperationCanceledException)
             {
@@ -228,6 +230,7 @@ namespace MartinCostello.AdventOfCode
             {
                 year,
                 day,
+                solutions,
                 timeToSolve = stopwatch.Elapsed.ToString("g", CultureInfo.InvariantCulture),
             };
 

@@ -52,10 +52,12 @@ namespace MartinCostello.AdventOfCode
             target = new MyPuzzle(0);
 
             // Act
-            int actual = target.Solve(args);
+            object[] actual = target.Solve(args);
 
             // Assert
-            actual.ShouldBe(0);
+            actual.ShouldNotBeNull();
+            actual.Length.ShouldBe(1);
+            actual[0].ShouldBe(42);
             target.Answer.ShouldBe(42);
         }
 
@@ -87,10 +89,10 @@ namespace MartinCostello.AdventOfCode
             protected override int MinimumArguments => _minimumArguments;
 
             /// <inheritdoc />
-            protected override int SolveCore(string[] args)
+            protected override object[] SolveCore(string[] args)
             {
                 Answer = 42;
-                return 0;
+                return new object[] { Answer };
             }
         }
     }

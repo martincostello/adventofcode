@@ -89,7 +89,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
         }
 
         /// <inheritdoc />
-        protected override int SolveCore(string[] args)
+        protected override object[] SolveCore(string[] args)
         {
             string path = ReadResourceAsString().Trim();
 
@@ -101,7 +101,11 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
                 Logger.WriteLine($"The maximum distance reached by the child process was {MaximumDistance:N0}.");
             }
 
-            return 0;
+            return new object[]
+            {
+                MinimumSteps,
+                MaximumDistance,
+            };
         }
 
         /// <summary>

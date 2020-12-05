@@ -91,7 +91,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
         }
 
         /// <inheritdoc />
-        protected override int SolveCore(string[] args)
+        protected override object[] SolveCore(string[] args)
         {
             IList<string> lines = ReadResourceAsLines();
             var spreadsheet = ParseSpreadsheet(lines);
@@ -105,7 +105,11 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
                 Logger.WriteLine($"The checksum for the spreadsheet using even division is {ChecksumForEvenlyDivisible:N0}.");
             }
 
-            return 0;
+            return new object[]
+            {
+                ChecksumForDifference,
+                ChecksumForEvenlyDivisible,
+            };
         }
 
         /// <summary>

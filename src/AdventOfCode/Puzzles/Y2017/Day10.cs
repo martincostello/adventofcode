@@ -80,7 +80,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
         }
 
         /// <inheritdoc />
-        protected override int SolveCore(string[] args)
+        protected override object[] SolveCore(string[] args)
         {
             string rawLengths = ReadResourceAsString().Trim();
 
@@ -98,7 +98,11 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
                 Logger.WriteLine($"The hexadecimal dense hash of the input is {DenseHash}.");
             }
 
-            return 0;
+            return new object[]
+            {
+                ProductOfFirstTwoElements,
+                DenseHash,
+            };
         }
 
         /// <summary>

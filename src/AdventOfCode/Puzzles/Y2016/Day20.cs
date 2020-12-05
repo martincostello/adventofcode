@@ -121,7 +121,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         }
 
         /// <inheritdoc />
-        protected override int SolveCore(string[] args)
+        protected override object[] SolveCore(string[] args)
         {
             IList<string> ranges = ReadResourceAsLines();
 
@@ -134,7 +134,11 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
                 Logger.WriteLine($"The number of IP addresses allowed is {AllowedIPCount:N0}.");
             }
 
-            return 0;
+            return new object[]
+            {
+                LowestNonblockedIP,
+                AllowedIPCount,
+            };
         }
     }
 }

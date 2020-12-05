@@ -79,7 +79,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
         }
 
         /// <inheritdoc />
-        protected override int SolveCore(string[] args)
+        protected override object[] SolveCore(string[] args)
         {
             IList<string> ingredients = ReadResourceAsLines();
 
@@ -92,7 +92,11 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
                 Logger.WriteLine("The highest total cookie score for a cookie with 500 calories is {0:N0}.", HighestTotalCookieScoreWith500Calories);
             }
 
-            return 0;
+            return new object[]
+            {
+                HighestTotalCookieScore,
+                HighestTotalCookieScoreWith500Calories,
+            };
         }
 
         /// <summary>

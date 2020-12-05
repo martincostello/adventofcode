@@ -108,7 +108,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
         }
 
         /// <inheritdoc />
-        protected override int SolveCore(string[] args)
+        protected override object[] SolveCore(string[] args)
         {
             string program = ReadResourceAsString();
 
@@ -121,7 +121,11 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
                 Logger.WriteLine("The highest signal that can be sent to the thrusters using a feedback loop is {0}.", HighestSignalUsingFeedback);
             }
 
-            return 0;
+            return new object[]
+            {
+                HighestSignal,
+                HighestSignalUsingFeedback,
+            };
         }
     }
 }

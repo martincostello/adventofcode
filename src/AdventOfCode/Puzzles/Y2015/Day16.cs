@@ -76,7 +76,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
         }
 
         /// <inheritdoc />
-        protected override int SolveCore(string[] args)
+        protected override object[] SolveCore(string[] args)
         {
             IList<string> auntSueMetadata = ReadResourceAsLines();
 
@@ -91,7 +91,11 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
                     RealAuntSueNumber);
             }
 
-            return 0;
+            return new object[]
+            {
+                AuntSueNumber,
+                RealAuntSueNumber,
+            };
         }
 
         /// <summary>

@@ -47,7 +47,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
         }
 
         /// <inheritdoc />
-        protected override int SolveCore(string[] args)
+        protected override object[] SolveCore(string[] args)
         {
             (int area, int length) = GetTotalWrappingPaperAreaAndRibbonLength(ReadResourceAsLines());
 
@@ -63,7 +63,11 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
                     TotalLengthOfRibbon);
             }
 
-            return 0;
+            return new object[]
+            {
+                TotalAreaOfPaper,
+                TotalLengthOfRibbon,
+            };
         }
 
         /// <summary>

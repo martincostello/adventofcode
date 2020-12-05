@@ -68,7 +68,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
         }
 
         /// <inheritdoc />
-        protected override int SolveCore(string[] args)
+        protected override object[] SolveCore(string[] args)
         {
             int row = ParseInt32(args[0]);
             int column = ParseInt32(args[1]);
@@ -84,7 +84,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
                     Code);
             }
 
-            return 0;
+            return new object[] { Code };
         }
     }
 }

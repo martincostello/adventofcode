@@ -67,7 +67,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         }
 
         /// <inheritdoc />
-        protected override int SolveCore(string[] args)
+        protected override object[] SolveCore(string[] args)
         {
             IList<string> instructions = ReadResourceAsLines();
             IList<int> binsOfInterest = new[] { 0, 1, 2 };
@@ -80,7 +80,11 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
                 Logger.WriteLine($"The product of the microchips in output bins 0, 1 and 2 is {ProductOfMicrochipsInBins012:N0}.");
             }
 
-            return 0;
+            return new object[]
+            {
+                BotThatCompares61And17Microchips,
+                ProductOfMicrochipsInBins012,
+            };
         }
 
         /// <summary>

@@ -41,17 +41,14 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
         }
 
         /// <inheritdoc />
-        protected override int SolveCore(string[] args)
+        protected override object[] SolveCore(string[] args)
         {
             IList<int> memory = ReadResourceAsString().Trim()
                 .Split('\t')
                 .Select((p) => ParseInt32(p))
                 .ToList();
 
-            (int cycleCount, int loopSize) = Debug(memory);
-
-            CycleCount = cycleCount;
-            LoopSize = loopSize;
+            (CycleCount, LoopSize) = Debug(memory);
 
             if (Verbose)
             {
@@ -59,7 +56,11 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
                 Logger.WriteLine($"{LoopSize:N0} cycles are in the infinite loop that arises from the configuration in the input.");
             }
 
-            return 0;
+            return new object[]
+            {
+                CycleCount,
+                LoopSize,
+            };
         }
 
         /// <summary>

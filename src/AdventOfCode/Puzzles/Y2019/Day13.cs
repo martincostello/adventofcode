@@ -78,7 +78,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
         }
 
         /// <inheritdoc />
-        protected override int SolveCore(string[] args)
+        protected override object[] SolveCore(string[] args)
         {
             string program = ReadResourceAsString();
 
@@ -90,7 +90,11 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
                 Logger.WriteLine("The score after the last block is broken is {0}", Score);
             }
 
-            return 0;
+            return new object[]
+            {
+                BlockTileCount,
+                Score,
+            };
         }
     }
 }

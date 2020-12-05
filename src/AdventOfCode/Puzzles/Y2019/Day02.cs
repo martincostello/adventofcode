@@ -55,7 +55,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
         }
 
         /// <inheritdoc />
-        protected override int SolveCore(string[] args)
+        protected override object[] SolveCore(string[] args)
         {
             string program = ReadResourceAsString();
 
@@ -66,7 +66,10 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
                 Logger.WriteLine("The value at position 0 after the program halts is {0}.", Output[0]);
             }
 
-            return 0;
+            return new object[]
+            {
+                Output[0],
+            };
         }
     }
 }

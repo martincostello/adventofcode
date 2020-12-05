@@ -161,7 +161,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2018
         }
 
         /// <inheritdoc />
-        protected override int SolveCore(string[] args)
+        protected override object[] SolveCore(string[] args)
         {
             IList<string> log = ReadResourceAsLines();
 
@@ -173,7 +173,11 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2018
                 Logger.WriteLine($"The most common minute a guard was asleep in multiplied by the guard's ID is {SleepiestMinuteGuard:N0}.");
             }
 
-            return 0;
+            return new object[]
+            {
+                SleepiestGuardMinute,
+                SleepiestMinuteGuard,
+            };
         }
 
         /// <summary>

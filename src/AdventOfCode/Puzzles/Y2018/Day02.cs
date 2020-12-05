@@ -134,7 +134,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2018
         }
 
         /// <inheritdoc />
-        protected override int SolveCore(string[] args)
+        protected override object[] SolveCore(string[] args)
         {
             IList<string> ids = ReadResourceAsLines();
 
@@ -147,7 +147,11 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2018
                 Logger.WriteLine($"The common letters are {CommonLettersForBoxes}.");
             }
 
-            return 0;
+            return new object[]
+            {
+                Checksum,
+                CommonLettersForBoxes,
+            };
         }
     }
 }
