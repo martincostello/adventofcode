@@ -3,6 +3,7 @@ param(
     [Parameter(Mandatory = $false)][string] $Configuration = "Release",
     [Parameter(Mandatory = $false)][string] $VersionSuffix = "",
     [Parameter(Mandatory = $false)][string] $OutputPath = "",
+    [Parameter(Mandatory = $false)][switch] $SkipPublish,
     [Parameter(Mandatory = $false)][switch] $SkipTests
 )
 
@@ -92,5 +93,18 @@ if ($SkipTests -eq $false) {
         if ($LASTEXITCODE -ne 0) {
             throw "dotnet test failed with exit code $LASTEXITCODE"
         }
+    }
+}
+
+if ($SkipPublish -eq $false) {
+
+    Write-Host "Publishing application..." -ForegroundColor Green
+
+    $project = (Join-Path $solutionPath "src\AdventOfCode\AdventOfCode.csproj")
+    $publishPath = (Join-Path $OutputPath "publish")
+
+    & $dotnet publish $project --output $publishPath --configuration $Configuration
+    if ($LASTEXITCODE -ne 0) {
+        throw "dotnet publish failed with exit code $LASTEXITCODE"
     }
 }
