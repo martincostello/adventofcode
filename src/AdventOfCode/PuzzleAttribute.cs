@@ -28,6 +28,11 @@ namespace MartinCostello.AdventOfCode
         public int Day { get; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether the puzzle is hidden.
+        /// </summary>
+        public bool IsHidden { get; set; }
+
+        /// <summary>
         /// Gets or sets the minimum number of arguments required to solve the puzzle.
         /// </summary>
         public int MinimumArguments { get; set; }

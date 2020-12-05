@@ -76,6 +76,7 @@ namespace MartinCostello.AdventOfCode
                 .Where((p) => p.IsAssignableTo(typeof(Puzzle)))
                 .Select((p) => p.GetCustomAttribute<PuzzleAttribute>())
                 .Where((p) => p is not null)
+                .Where((p) => !p!.IsHidden)
                 .ToList();
 
             foreach (var puzzle in puzzles)
