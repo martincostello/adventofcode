@@ -40,12 +40,8 @@ namespace MartinCostello.AdventOfCode
             if (day < 1 ||
                 year < 2015 ||
                 year > DateTime.UtcNow.Year ||
-                (type = GetPuzzleType(year, day)) == null)
-            {
-                throw new PuzzleException("The year and/or puzzle number specified is invalid.");
-            }
-
-            if (Activator.CreateInstance(type) is not Puzzle puzzle)
+                (type = GetPuzzleType(year, day)) == null ||
+                Activator.CreateInstance(type) is not Puzzle puzzle)
             {
                 throw new PuzzleException("The year and/or puzzle number specified is invalid.");
             }

@@ -66,10 +66,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
                 Logger.WriteLine("The value at position 0 after the program halts is {0}.", Output[0]);
             }
 
-            return new object[]
-            {
-                Output[0],
-            };
+            return new object[] { Output[0] };
         }
     }
 }
