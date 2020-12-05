@@ -6,8 +6,11 @@ namespace MartinCostello.AdventOfCode
     using System;
     using System.Diagnostics;
     using System.Globalization;
+    using System.IO;
     using System.Linq;
     using System.Reflection;
+    using System.Text;
+    using System.Threading;
     using System.Threading.Tasks;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
@@ -51,7 +54,7 @@ namespace MartinCostello.AdventOfCode
                 {
                     endpoints.MapGet("/error", ErrorAsync);
                     endpoints.MapGet("/api/puzzles", GetPuzzlesAsync);
-                    endpoints.MapGet("/api/puzzles/{year:int}/{day:int}/solve", SolvePuzzleAsync);
+                    endpoints.MapPost("/api/puzzles/{year:int}/{day:int}/solve", SolvePuzzleAsync);
                 });
         }
 
@@ -136,11 +139,11 @@ namespace MartinCostello.AdventOfCode
         /// </returns>
         private static async Task SolvePuzzleAsync(HttpContext context)
         {
-            ////if (!context.Request.HasJsonContentType())
-            ////{
-            ////    context.Response.StatusCode = StatusCodes.Status415UnsupportedMediaType;
-            ////    return;
-            ////}
+            if (!context.Request.HasFormContentType)
+            {
+                context.Response.StatusCode = StatusCodes.Status415UnsupportedMediaType;
+                return;
+            }
 
             int year = int.Parse((string)context.Request.RouteValues["year"] !, CultureInfo.InvariantCulture);
             int day = int.Parse((string)context.Request.RouteValues["day"] !, CultureInfo.InvariantCulture);
@@ -159,20 +162,50 @@ namespace MartinCostello.AdventOfCode
                 return;
             }
 
-            ////var syncIOFeature = context.Features.Get<IHttpBodyControlFeature>();
-            ////
-            ////if (syncIOFeature != null)
-            ////{
-            ////    syncIOFeature.AllowSynchronousIO = true;
-            ////}
-            ////
-            ////puzzle.Resource = context.Request.Body;
+            var form = await context.Request.ReadFormAsync(context.RequestAborted);
+
+            var metadata = puzzle.Metadata() !;
+
+            if (metadata.RequiresData)
+            {
+                if (!form.TryGetValue("resource", out var resource))
+                {
+                    await WriteErrorAsync(context, StatusCodes.Status400BadRequest, "Bad Request", "No puzzle resource provided.");
+                    return;
+                }
+
+                puzzle.Resource = new MemoryStream(Encoding.UTF8.GetBytes(resource));
+            }
+
+            string[] arguments = Array.Empty<string>();
+
+            if (form.TryGetValue("arguments", out var values))
+            {
+                arguments = values.Select((p) => p).ToArray();
+            }
+
+            if (arguments.Length < metadata.MinimumArguments)
+            {
+                await WriteErrorAsync(context, StatusCodes.Status400BadRequest, "Bad Request", $"The puzzle requires at least {metadata.MinimumArguments} argument(s).");
+                return;
+            }
+
+            var timeout = TimeSpan.FromMinutes(1);
+
+            using var cts = CancellationTokenSource.CreateLinkedTokenSource(context.RequestAborted);
+            cts.CancelAfter(timeout);
 
             var stopwatch = Stopwatch.StartNew();
 
             try
             {
-                puzzle.Solve(Array.Empty<string>());
+                // TODO Make async and pass through CancellationToken
+                puzzle.Solve(arguments);
+            }
+            catch (OperationCanceledException)
+            {
+                await WriteErrorAsync(context, StatusCodes.Status408RequestTimeout, "Request Timeout", $"The puzzle was not solved within {timeout}.");
+                return;
             }
             catch (PuzzleException ex)
             {
