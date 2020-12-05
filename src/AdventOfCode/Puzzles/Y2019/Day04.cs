@@ -10,6 +10,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
     /// <summary>
     /// A class representing the puzzle for <c>https://adventofcode.com/2019/day/4</c>. This class cannot be inherited.
     /// </summary>
+    [Puzzle(2019, 04, MinimumArguments = 1)]
     public sealed class Day04 : Puzzle
     {
         /// <summary>
@@ -21,9 +22,6 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
         /// Gets the number of valid passwords in the given range for version 2 of the rules.
         /// </summary>
         public int CountV2 { get; private set; }
-
-        /// <inheritdoc />
-        protected override int MinimumArguments => 1;
 
         /// <summary>
         /// Gets the number of valid passwords in the specified range.

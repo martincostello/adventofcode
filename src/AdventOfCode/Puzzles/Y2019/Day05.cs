@@ -10,15 +10,13 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
     /// <summary>
     /// A class representing the puzzle for <c>https://adventofcode.com/2019/day/5</c>. This class cannot be inherited.
     /// </summary>
+    [Puzzle(2019, 05, MinimumArguments = 1, RequiresData = true)]
     public sealed class Day05 : Puzzle
     {
         /// <summary>
         /// Gets the diagnostic code output by the program.
         /// </summary>
         public long DiagnosticCode { get; private set; }
-
-        /// <inheritdoc />
-        protected override int MinimumArguments => 1;
 
         /// <summary>
         /// Runs the specified Intcode program.
