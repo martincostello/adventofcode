@@ -64,61 +64,55 @@ namespace MartinCostello.AdventOfCode
                 }
             }
 
-            int year;
-
-            if (args.Length == 2)
+            if (!int.TryParse(args[0], NumberStyles.Integer & ~NumberStyles.AllowLeadingSign, CultureInfo.InvariantCulture, out int day))
             {
-                if (!int.TryParse(args[1], NumberStyles.Integer & ~NumberStyles.AllowLeadingSign, CultureInfo.InvariantCulture, out year))
-                {
-                    year = 0;
-                }
+                day = 0;
+            }
+
+            if (args.Length == 2 &&
+                !int.TryParse(args[1], NumberStyles.Integer & ~NumberStyles.AllowLeadingSign, CultureInfo.InvariantCulture, out int year))
+            {
+                year = 0;
             }
             else
             {
                 year = DateTime.UtcNow.Year;
             }
 
-            Type? type;
-
-            if (!int.TryParse(args[0], NumberStyles.Integer & ~NumberStyles.AllowLeadingSign, CultureInfo.InvariantCulture, out int day) ||
-                day < 1 ||
-                year < 2015 ||
-                year > DateTime.UtcNow.Year ||
-                (type = GetPuzzleType(year, day)) == null)
-            {
-                logger.WriteLine("The year and/or puzzle number specified is invalid.");
-                return -1;
-            }
-
             args = args[1..];
 
-            return SolvePuzzle(type, year, day, args, logger, verbose: true);
+            return SolvePuzzle(year, day, args, logger);
         }
 
         /// <summary>
-        /// Solves the puzzle associated with the specified type.
+        /// Solves the puzzle associated with the specified year and day.
         /// </summary>
-        /// <param name="type">The type of the puzzle.</param>
         /// <param name="year">The year associated with the puzzle.</param>
         /// <param name="day">The day associated with the puzzle.</param>
         /// <param name="args">The arguments to pass to the puzzle.</param>
         /// <param name="logger">The logger to use.</param>
-        /// <param name="verbose">Whether the puzzle should be run verbosely.</param>
         /// <returns>
         /// The value returned by <see cref="IPuzzle.Solve"/>.
         /// </returns>
         private static int SolvePuzzle(
-            Type type,
             int year,
             int day,
             string[] args,
-            ILogger logger,
-            bool verbose = false)
+            ILogger logger)
         {
-            var puzzle = Activator.CreateInstance(type) as Puzzle;
+            var factory = new PuzzleFactory(logger);
 
-            puzzle!.Logger = logger;
-            puzzle.Verbose = verbose;
+            Puzzle puzzle;
+
+            try
+            {
+                puzzle = factory.Create(year, day);
+            }
+            catch (PuzzleException ex)
+            {
+                logger.WriteLine(ex.Message);
+                return -1;
+            }
 
             logger.WriteLine();
             logger.WriteLine($"Advent of Code {year} - Day {day}");
@@ -147,25 +141,6 @@ namespace MartinCostello.AdventOfCode
             }
 
             return result;
-        }
-
-        /// <summary>
-        /// Gets the puzzle type to use for the specified number.
-        /// </summary>
-        /// <param name="year">The year to get the puzzle for.</param>
-        /// <param name="day">The day to get the puzzle for.</param>
-        /// <returns>
-        /// The <see cref="Type"/> for the specified year and puzzle number, if found; otherwise <see langword="null"/>.
-        /// </returns>
-        private static Type? GetPuzzleType(int year, int day)
-        {
-            string typeName = string.Format(
-                CultureInfo.InvariantCulture,
-                "MartinCostello.AdventOfCode.Puzzles.Y{0}.Day{1:00}",
-                year,
-                day);
-
-            return Type.GetType(typeName);
         }
     }
 }

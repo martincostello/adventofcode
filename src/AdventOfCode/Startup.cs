@@ -3,6 +3,8 @@
 
 namespace MartinCostello.AdventOfCode
 {
+    using System;
+    using System.Diagnostics;
     using System.Globalization;
     using System.Threading.Tasks;
     using Microsoft.AspNetCore.Builder;
@@ -11,6 +13,7 @@ namespace MartinCostello.AdventOfCode
     using Microsoft.AspNetCore.Http.Json;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Hosting;
+    using Microsoft.Extensions.Logging;
 
     /// <summary>
     /// A class representing the startup logic for the application.
@@ -62,6 +65,9 @@ namespace MartinCostello.AdventOfCode
                     p.LowercaseUrls = true;
                 });
 
+            services.AddSingleton<ILogger, WebLogger>();
+            services.AddSingleton<PuzzleFactory>();
+
             services.Configure<JsonOptions>(options => options.SerializerOptions.WriteIndented = true);
         }
 
@@ -90,13 +96,80 @@ namespace MartinCostello.AdventOfCode
             int year = int.Parse((string)context.Request.RouteValues["year"] !, CultureInfo.InvariantCulture);
             int day = int.Parse((string)context.Request.RouteValues["day"] !, CultureInfo.InvariantCulture);
 
+            var factory = context.RequestServices.GetRequiredService<PuzzleFactory>();
+
+            IPuzzle puzzle;
+
+            try
+            {
+                puzzle = factory.Create(year, day);
+            }
+            catch (PuzzleException ex)
+            {
+                await WriteErrorAsync(context, StatusCodes.Status400BadRequest, "Invalid Request", ex.Message);
+                return;
+            }
+
+            var stopwatch = Stopwatch.StartNew();
+
+            try
+            {
+                puzzle.Solve(Array.Empty<string>());
+            }
+#pragma warning disable CA1031
+            catch (Exception ex)
+#pragma warning restore CA1031
+            {
+                var logger = context.RequestServices.GetRequiredService<ILogger<Startup>>();
+                logger.LogError(ex, "Failed to solve puzzle for year {Year} and day {Day}.", year, day);
+
+                await WriteErrorAsync(
+                    context,
+                    StatusCodes.Status500InternalServerError,
+                    "Internal Server Error",
+                    "Failed to solve puzzle.");
+
+                return;
+            }
+
+            stopwatch.Stop();
+
             var result = new
             {
                 year,
                 day,
+                timeToSolve = stopwatch.Elapsed.ToString("g", CultureInfo.InvariantCulture),
             };
 
             await context.Response.WriteAsJsonAsync(result);
+        }
+
+        /// <summary>
+        /// Writes an HTTP error response as an asynchronous operation.
+        /// </summary>
+        /// <param name="context">The HTTP context to write to.</param>
+        /// <param name="statusCode">The HTTP status code to return.</param>
+        /// <param name="title">The error title.</param>
+        /// <param name="detail">The error detail.</param>
+        /// <returns>
+        /// A <see cref="Task"/> representing the asynchronous operation to write the error response.
+        /// </returns>
+        private static async Task WriteErrorAsync(
+            HttpContext context,
+            int statusCode,
+            string title,
+            string detail)
+        {
+            context.Response.StatusCode = statusCode;
+
+            var error = new Microsoft.AspNetCore.Mvc.ProblemDetails()
+            {
+                Detail = detail,
+                Status = statusCode,
+                Title = title,
+            };
+
+            await context.Response.WriteAsJsonAsync(error);
         }
     }
 }
