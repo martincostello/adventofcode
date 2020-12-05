@@ -184,12 +184,6 @@ namespace MartinCostello.AdventOfCode
                 arguments = values.Select((p) => p).ToArray();
             }
 
-            if (arguments.Length < metadata.MinimumArguments)
-            {
-                await WriteErrorAsync(context, StatusCodes.Status400BadRequest, "Bad Request", $"The puzzle requires at least {metadata.MinimumArguments} argument(s).");
-                return;
-            }
-
             var timeout = TimeSpan.FromMinutes(1);
 
             using var cts = CancellationTokenSource.CreateLinkedTokenSource(context.RequestAborted);

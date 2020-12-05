@@ -120,27 +120,32 @@ namespace MartinCostello.AdventOfCode
 
             var stopwatch = Stopwatch.StartNew();
 
-            int result = puzzle.Solve(args);
-
-            if (result == 0)
+            try
             {
-                stopwatch.Stop();
-
-                logger.WriteLine();
-
-                if (stopwatch.Elapsed.TotalSeconds < 0.01f)
-                {
-                    logger.WriteLine("Took <0.01 seconds.");
-                }
-                else
-                {
-                    logger.WriteLine($"Took {stopwatch.Elapsed.TotalSeconds:N2} seconds.");
-                }
-
-                logger.WriteLine();
+                puzzle.Solve(args);
+            }
+            catch (PuzzleException ex)
+            {
+                logger.WriteLine(ex.Message);
+                return -1;
             }
 
-            return result;
+            stopwatch.Stop();
+
+            logger.WriteLine();
+
+            if (stopwatch.Elapsed.TotalSeconds < 0.01f)
+            {
+                logger.WriteLine("Took <0.01 seconds.");
+            }
+            else
+            {
+                logger.WriteLine($"Took {stopwatch.Elapsed.TotalSeconds:N2} seconds.");
+            }
+
+            logger.WriteLine();
+
+            return 0;
         }
     }
 }

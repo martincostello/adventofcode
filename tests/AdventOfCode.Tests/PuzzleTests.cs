@@ -38,27 +38,21 @@ namespace MartinCostello.AdventOfCode
                 Logger = Logger,
             };
 
-            // Act
-            int actual = target.Solve(args);
-
-            // Assert
-            actual.ShouldBe(-1);
+            // Act and Assert
+            Assert.Throws<PuzzleException>(() => target.Solve(args));
 
             // Arrange
             args = Array.Empty<string>();
             target = new MyPuzzle(1);
 
-            // Act
-            actual = target.Solve(args);
-
-            // Assert
-            actual.ShouldBe(-1);
+            // Act and Assert
+            Assert.Throws<PuzzleException>(() => target.Solve(args));
 
             // Arrange
             target = new MyPuzzle(0);
 
             // Act
-            actual = target.Solve(args);
+            int actual = target.Solve(args);
 
             // Assert
             actual.ShouldBe(0);

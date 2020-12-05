@@ -40,13 +40,14 @@ namespace MartinCostello.AdventOfCode
         {
             if (!EnsureArguments(args, MinimumArguments))
             {
-                Logger.WriteLine(
+                string message = string.Format(
+                    CultureInfo.InvariantCulture,
                     "At least {0:N0} argument{1} {2} required.",
                     MinimumArguments,
                     MinimumArguments == 1 ? string.Empty : "s",
                     MinimumArguments == 1 ? "is" : "are");
 
-                return -1;
+                throw new PuzzleException(message);
             }
 
             return SolveCore(args);
