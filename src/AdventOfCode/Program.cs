@@ -6,19 +6,39 @@ namespace MartinCostello.AdventOfCode
     using System;
     using System.Diagnostics;
     using System.Globalization;
+    using Microsoft.AspNetCore.Hosting;
+    using Microsoft.Extensions.Hosting;
 
     /// <summary>
-    /// A console application that solves puzzles for <c>https://adventofcode.com</c>. This class cannot be inherited.
+    /// An application that solves puzzles for <c>https://adventofcode.com</c>. This class cannot be inherited.
     /// </summary>
-    internal static class Program
+    public static class Program
     {
         /// <summary>
         /// The main entry-point to the application.
         /// </summary>
         /// <param name="args">The arguments to the application.</param>
         /// <returns>The exit code from the application.</returns>
-        internal static int Main(string[] args)
+        public static int Main(string[] args)
             => Run(args, new ConsoleLogger());
+
+        /// <summary>
+        /// Creates the host builder to use for the application.
+        /// </summary>
+        /// <param name="args">The arguments to the application.</param>
+        /// <returns>
+        /// A <see cref="IHostBuilder"/> to use.
+        /// </returns>
+        public static IHostBuilder CreateHostBuilder(string[] args)
+        {
+            return Host.CreateDefaultBuilder(args)
+                       .ConfigureWebHostDefaults((webBuilder) =>
+                       {
+                           webBuilder.CaptureStartupErrors(true)
+                                     .ConfigureKestrel((p) => p.AddServerHeader = false)
+                                     .UseStartup<Startup>();
+                       });
+        }
 
         /// <summary>
         /// Runs the application.
@@ -30,8 +50,18 @@ namespace MartinCostello.AdventOfCode
         {
             if (args == null || args.Length < 1)
             {
-                logger.WriteLine("No day specified.");
-                return -1;
+                try
+                {
+                    CreateHostBuilder(Array.Empty<string>()).Build().Run();
+                    return 0;
+                }
+#pragma warning disable CA1031
+                catch (Exception ex)
+#pragma warning restore CA1031
+                {
+                    logger.WriteLine($"Unhandled exception: {ex}");
+                    return -1;
+                }
             }
 
             int year;

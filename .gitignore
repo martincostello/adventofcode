@@ -13,6 +13,7 @@ bin
 Bin
 obj
 packages
+profile.arm.json
 project.lock.json
 TestResults
 UpgradeLog*.htm
@@ -22,6 +23,7 @@ UpgradeLog*.XML
 *.log
 *.nupkg
 *.[Pp]ublish.xml
+*.pubxml
 *.sln.cache
 *.sln.docstates
 *.sln.ide
