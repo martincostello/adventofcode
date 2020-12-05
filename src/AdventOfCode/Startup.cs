@@ -6,6 +6,8 @@ namespace MartinCostello.AdventOfCode
     using System;
     using System.Diagnostics;
     using System.Globalization;
+    using System.Linq;
+    using System.Reflection;
     using System.Threading.Tasks;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
@@ -48,7 +50,8 @@ namespace MartinCostello.AdventOfCode
                 (endpoints) =>
                 {
                     endpoints.MapGet("/error", ErrorAsync);
-                    endpoints.MapGet("/api/puzzle/{year:int}/{day:int}/solve", PuzzleAsync);
+                    endpoints.MapGet("/api/puzzles", GetPuzzlesAsync);
+                    endpoints.MapGet("/api/puzzles/{year:int}/{day:int}/solve", SolvePuzzleAsync);
                 });
         }
 
@@ -68,6 +71,18 @@ namespace MartinCostello.AdventOfCode
             services.AddSingleton<ILogger, WebLogger>();
             services.AddSingleton<PuzzleFactory>();
 
+            var puzzles = GetType().Assembly
+                .GetTypes()
+                .Where((p) => p.IsAssignableTo(typeof(Puzzle)))
+                .Select((p) => p.GetCustomAttribute<PuzzleAttribute>())
+                .Where((p) => p is not null)
+                .ToList();
+
+            foreach (var puzzle in puzzles)
+            {
+                services.AddSingleton(puzzle!);
+            }
+
             services.Configure<JsonOptions>(options => options.SerializerOptions.WriteIndented = true);
         }
 
@@ -85,13 +100,38 @@ namespace MartinCostello.AdventOfCode
         }
 
         /// <summary>
+        /// Gets the available puzzles as an asynchronous operation.
+        /// </summary>
+        /// <param name="context">The HTTP context.</param>
+        /// <returns>
+        /// A <see cref="Task"/> representing the asynchronous operation to solve the puzzle.
+        /// </returns>
+        private static async Task GetPuzzlesAsync(HttpContext context)
+        {
+            var puzzles = context.RequestServices
+                .GetServices<PuzzleAttribute>()
+                .Select((p) =>
+                new
+                {
+                    p.Year,
+                    p.Day,
+                    p.MinimumArguments,
+                    p.RequiresData,
+                    Location = FormattableString.Invariant($"/api/puzzles/{p.Year}/{p.Day}/solve"),
+                })
+                .ToList();
+
+            await context.Response.WriteAsJsonAsync(puzzles);
+        }
+
+        /// <summary>
         /// Solves the puzzle associated with the specified HTTP request as an asynchronous operation.
         /// </summary>
         /// <param name="context">The HTTP context.</param>
         /// <returns>
         /// A <see cref="Task"/> representing the asynchronous operation to solve the puzzle.
         /// </returns>
-        private static async Task PuzzleAsync(HttpContext context)
+        private static async Task SolvePuzzleAsync(HttpContext context)
         {
             ////if (!context.Request.HasJsonContentType())
             ////{

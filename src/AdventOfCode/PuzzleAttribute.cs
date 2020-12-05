@@ -14,9 +14,18 @@ namespace MartinCostello.AdventOfCode
         /// <summary>
         /// Initializes a new instance of the <see cref="PuzzleAttribute"/> class.
         /// </summary>
-        public PuzzleAttribute()
+        /// <param name="year">The year associated with the puzzle.</param>
+        /// <param name="day">The day associated with the puzzle.</param>
+        public PuzzleAttribute(int year, int day)
         {
+            Year = year;
+            Day = day;
         }
+
+        /// <summary>
+        /// Gets the day associated with the puzzle.
+        /// </summary>
+        public int Day { get; }
 
         /// <summary>
         /// Gets or sets the minimum number of arguments required to solve the puzzle.
@@ -27,5 +36,10 @@ namespace MartinCostello.AdventOfCode
         /// Gets or sets a value indicating whether the puzzle requires input data.
         /// </summary>
         public bool RequiresData { get; set; }
+
+        /// <summary>
+        /// Gets the year associated with the puzzle.
+        /// </summary>
+        public int Year { get; }
     }
 }
