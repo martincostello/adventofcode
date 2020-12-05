@@ -9,7 +9,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
     /// <summary>
     /// A class representing the puzzle for <c>https://adventofcode.com/2016/day/9</c>. This class cannot be inherited.
     /// </summary>
-    public sealed class Day09 : Puzzle2016
+    public sealed class Day09 : Puzzle
     {
         /// <summary>
         /// Gets the decompressed length of the data using version 1 of the decompression algorithm.

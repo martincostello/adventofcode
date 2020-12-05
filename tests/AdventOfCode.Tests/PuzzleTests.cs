@@ -93,9 +93,6 @@ namespace MartinCostello.AdventOfCode
             protected override int MinimumArguments => _minimumArguments;
 
             /// <inheritdoc />
-            protected override int Year => DateTime.UtcNow.Year;
-
-            /// <inheritdoc />
             protected override int SolveCore(string[] args)
             {
                 Answer = 42;

@@ -9,7 +9,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
     /// <summary>
     /// A class representing the puzzle for <c>https://adventofcode.com/2016/day/20</c>. This class cannot be inherited.
     /// </summary>
-    public sealed class Day20 : Puzzle2016
+    public sealed class Day20 : Puzzle
     {
         /// <summary>
         /// Gets the number of IP addresses that are not blocked.

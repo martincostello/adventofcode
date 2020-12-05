@@ -12,7 +12,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
     /// <summary>
     /// A class representing the puzzle for <c>https://adventofcode.com/2020/day/4</c>. This class cannot be inherited.
     /// </summary>
-    public sealed class Day04 : Puzzle2020
+    public sealed class Day04 : Puzzle
     {
         /// <summary>
         /// The required keys for passports. This field is read-only.

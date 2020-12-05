@@ -11,7 +11,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
     /// <summary>
     /// A class representing the puzzle for <c>https://adventofcode.com/2019/day/3</c>. This class cannot be inherited.
     /// </summary>
-    public sealed class Day03 : Puzzle2019
+    public sealed class Day03 : Puzzle
     {
         /// <summary>
         /// Represents the wires passing through a grid square.

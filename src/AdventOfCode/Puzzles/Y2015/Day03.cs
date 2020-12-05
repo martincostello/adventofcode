@@ -10,7 +10,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
     /// <summary>
     /// A class representing the puzzle for <c>https://adventofcode.com/2015/day/3</c>.
     /// </summary>
-    public class Day03 : Puzzle2015
+    public class Day03 : Puzzle
     {
         /// <summary>
         /// Gets the number of houses with presents delivered to by Santa.

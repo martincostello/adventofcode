@@ -9,7 +9,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
     /// <summary>
     /// A class representing the puzzle for <c>https://adventofcode.com/2020/day/1</c>. This class cannot be inherited.
     /// </summary>
-    public sealed class Day01 : Puzzle2020
+    public sealed class Day01 : Puzzle
     {
         /// <summary>
         /// Gets the product of the two input values that sum to a value of 2020.

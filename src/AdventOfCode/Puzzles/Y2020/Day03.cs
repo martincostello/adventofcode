@@ -9,7 +9,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
     /// <summary>
     /// A class representing the puzzle for <c>https://adventofcode.com/2020/day/3</c>. This class cannot be inherited.
     /// </summary>
-    public sealed class Day03 : Puzzle2020
+    public sealed class Day03 : Puzzle
     {
         /// <summary>
         /// Gets the number of trees collided with when traversing the grid.

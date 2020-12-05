@@ -9,7 +9,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
     /// <summary>
     /// A class representing the puzzle for <c>https://adventofcode.com/2015/day/23</c>. This class cannot be inherited.
     /// </summary>
-    public sealed class Day23 : Puzzle2015
+    public sealed class Day23 : Puzzle
     {
         /// <summary>
         /// Gets the final value of the <c>a</c> register.

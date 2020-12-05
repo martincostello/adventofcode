@@ -11,7 +11,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2018
     /// <summary>
     /// A class representing the puzzle for <c>https://adventofcode.com/2018/day/5</c>. This class cannot be inherited.
     /// </summary>
-    public sealed class Day05 : Puzzle2018
+    public sealed class Day05 : Puzzle
     {
         /// <summary>
         /// Gets the number of remaining polymer units after the reduction.

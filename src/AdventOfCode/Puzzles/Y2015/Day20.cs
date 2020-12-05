@@ -8,7 +8,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
     /// <summary>
     /// A class representing the puzzle for <c>https://adventofcode.com/2015/day/20</c>. This class cannot be inherited.
     /// </summary>
-    public sealed class Day20 : Puzzle2015
+    public sealed class Day20 : Puzzle
     {
         /// <summary>
         /// Gets the lowest house number that gets at least the specified number of presents.

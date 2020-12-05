@@ -12,7 +12,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
     /// <summary>
     /// A class representing the puzzle for <c>https://adventofcode.com/2019/day/7</c>. This class cannot be inherited.
     /// </summary>
-    public sealed class Day07 : Puzzle2019
+    public sealed class Day07 : Puzzle
     {
         /// <summary>
         /// Gets the highest signal that can be sent to the thrusters.

@@ -9,7 +9,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
     /// <summary>
     /// A class representing the puzzle for <c>https://adventofcode.com/2016/day/19</c>. This class cannot be inherited.
     /// </summary>
-    public sealed class Day19 : Puzzle2016
+    public sealed class Day19 : Puzzle
     {
         /// <summary>
         /// Gets the number of the elf who receives all the presents.

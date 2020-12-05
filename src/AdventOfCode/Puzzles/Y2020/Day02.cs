@@ -9,7 +9,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
     /// <summary>
     /// A class representing the puzzle for <c>https://adventofcode.com/2020/day/2</c>. This class cannot be inherited.
     /// </summary>
-    public sealed class Day02 : Puzzle2020
+    public sealed class Day02 : Puzzle
     {
         /// <summary>
         /// Gets the number of valid passwords using policy version 1.

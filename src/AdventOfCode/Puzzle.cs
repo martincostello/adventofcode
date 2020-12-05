@@ -7,6 +7,7 @@ namespace MartinCostello.AdventOfCode
     using System.Collections.Generic;
     using System.Globalization;
     using System.IO;
+    using System.Reflection;
 
     /// <summary>
     /// The base class for puzzles.
@@ -31,12 +32,8 @@ namespace MartinCostello.AdventOfCode
         /// <summary>
         /// Gets the minimum number of arguments required to solve the puzzle.
         /// </summary>
-        protected virtual int MinimumArguments => 0;
-
-        /// <summary>
-        /// Gets the year associated with the puzzle.
-        /// </summary>
-        protected abstract int Year { get; }
+        protected virtual int MinimumArguments
+            => GetType().GetCustomAttribute<PuzzleAttribute>()?.MinimumArguments ?? 0;
 
         /// <inheritdoc />
         public virtual int Solve(string[] args)
@@ -152,7 +149,11 @@ namespace MartinCostello.AdventOfCode
         protected Stream ReadResource()
         {
             var thisType = GetType();
-            string name = FormattableString.Invariant($"MartinCostello.{thisType.Assembly.GetName().Name}.Input.Y{Year}.{thisType.Name}.input.txt");
+
+            string year = thisType.Namespace!.Split('.')[^1];
+
+            string name = FormattableString.Invariant(
+                $"MartinCostello.{thisType.Assembly.GetName().Name}.Input.{year}.{thisType.Name}.input.txt");
 
             return thisType.Assembly.GetManifestResourceStream(name) !;
         }

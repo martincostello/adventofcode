@@ -14,7 +14,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
     /// <summary>
     /// A class representing the puzzle for <c>https://adventofcode.com/2015/day/4</c>. This class cannot be inherited.
     /// </summary>
-    public sealed class Day04 : Puzzle2015
+    public sealed class Day04 : Puzzle
     {
         /// <summary>
         /// Gets the lowest value that produces a hash that starts with the required number of zeroes.

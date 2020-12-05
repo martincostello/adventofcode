@@ -10,7 +10,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
     /// <summary>
     /// A class representing the puzzle for <c>https://adventofcode.com/2015/day/5</c>. This class cannot be inherited.
     /// </summary>
-    public sealed class Day05 : Puzzle2015
+    public sealed class Day05 : Puzzle
     {
         /// <summary>
         /// The sequences of characters that are not considered nice. This field is read-only.

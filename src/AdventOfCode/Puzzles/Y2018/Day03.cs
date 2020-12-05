@@ -9,7 +9,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2018
     /// <summary>
     /// A class representing the puzzle for <c>https://adventofcode.com/2018/day/3</c>. This class cannot be inherited.
     /// </summary>
-    public sealed class Day03 : Puzzle2018
+    public sealed class Day03 : Puzzle
     {
         /// <summary>
         /// Gets the area, in square inches, of fabric with two or more claims.
