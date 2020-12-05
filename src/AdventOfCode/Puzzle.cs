@@ -33,7 +33,7 @@ namespace MartinCostello.AdventOfCode
         /// Gets the minimum number of arguments required to solve the puzzle.
         /// </summary>
         protected virtual int MinimumArguments
-            => GetType().GetCustomAttribute<PuzzleAttribute>()?.MinimumArguments ?? 0;
+            => Metadata()?.MinimumArguments ?? 0;
 
         /// <inheritdoc />
         public virtual int Solve(string[] args)
@@ -51,6 +51,15 @@ namespace MartinCostello.AdventOfCode
 
             return SolveCore(args);
         }
+
+        /// <summary>
+        /// Returns the metadata for the puzzle.
+        /// </summary>
+        /// <returns>
+        /// The puzzle's metadata.
+        /// </returns>
+        internal PuzzleAttribute? Metadata()
+            => GetType().GetCustomAttribute<PuzzleAttribute>();
 
         /// <summary>
         /// Replaces the format items in a specified string with the string representations
