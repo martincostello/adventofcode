@@ -38,10 +38,10 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
                 => value.Start.Value + ((value.End.Value - value.Start.Value) / 2);
 
             static void High(ref Range value)
-                => value = new Range(value.Start, Midpoint(value));
+                => value = new Range(Midpoint(value) + 1, value.End);
 
             static void Low(ref Range value)
-                => value = new Range(Midpoint(value) + 1, value.End);
+                => value = new Range(value.Start, Midpoint(value));
 
             for (int i = 0; i < boardingPass.Length; i++)
             {
@@ -50,19 +50,19 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
                 switch (ch)
                 {
                     case 'F':
-                        High(ref rowRange);
-                        break;
-
-                    case 'B':
                         Low(ref rowRange);
                         break;
 
+                    case 'B':
+                        High(ref rowRange);
+                        break;
+
                     case 'L':
-                        High(ref columnRange);
+                        Low(ref columnRange);
                         break;
 
                     case 'R':
-                        Low(ref columnRange);
+                        High(ref columnRange);
                         break;
 
                     default:
