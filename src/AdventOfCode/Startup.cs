@@ -111,6 +111,8 @@ namespace MartinCostello.AdventOfCode
         {
             var puzzles = context.RequestServices
                 .GetServices<PuzzleAttribute>()
+                .OrderBy((p) => p.Year)
+                .ThenBy((p) => p.Day)
                 .Select((p) =>
                 new
                 {
