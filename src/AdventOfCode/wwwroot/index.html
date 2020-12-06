@@ -239,9 +239,13 @@
             }
 
             const solveIt = async () => {
+
+                error.classList.add(hideClass);
+                solution.innerHTML = '';
+                solutionContainer.classList.add(hideClass);
                 error.textContent = '';
-                solution.textContent = '';
                 timeToSolve.textContent = '';
+
                 fetch(url, { method: 'POST', body: formData }).then(async (response) => {
                     var body = await response.json();
                     if (!response.ok) {
