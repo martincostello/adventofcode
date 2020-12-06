@@ -136,9 +136,9 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
         }
 
         /// <inheritdoc />
-        protected override Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
+        protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
         {
-            IList<string> input = ReadResourceAsLines();
+            IList<string> input = await ReadResourceAsLinesAsync();
 
             int countForCode = input.Sum((p) => p.Length);
             int countInMemory = GetLiteralCharacterCount(input);

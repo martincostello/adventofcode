@@ -121,9 +121,9 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         }
 
         /// <inheritdoc />
-        protected override Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
+        protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
         {
-            ICollection<string> instructions = ReadResourceAsLines();
+            ICollection<string> instructions = await ReadResourceAsLinesAsync();
 
             BathroomCodeDigitKeypad = GetBathroomCode(instructions, DigitGrid);
             BathroomCodeAlphanumericKeypad = GetBathroomCode(instructions, AlphanumericGrid);

@@ -121,7 +121,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
         }
 
         /// <inheritdoc />
-        protected override Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
+        protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
         {
             bool fabricate = args[0].ToUpperInvariant() switch
             {
@@ -130,7 +130,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
                 _ => throw new PuzzleException("The mode specified is invalid."),
             };
 
-            IList<string> lines = ReadResourceAsLines();
+            IList<string> lines = await ReadResourceAsLinesAsync();
 
             string molecule = lines.Last();
 

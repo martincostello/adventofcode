@@ -51,7 +51,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
         protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
         {
             int input = ParseInt32(args[0]);
-            string program = ReadResourceAsString();
+            string program = await ReadResourceAsStringAsync();
 
             DiagnosticCode = await RunProgramAsync(program, input, cancellationToken);
 

@@ -147,7 +147,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
         }
 
         /// <inheritdoc />
-        protected override Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
+        protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
         {
             int version = args[0] switch
             {
@@ -173,7 +173,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
                 rule = IsNiceV2;
             }
 
-            foreach (string value in ReadResourceAsLines())
+            foreach (string value in await ReadResourceAsLinesAsync())
             {
                 if (rule(value))
                 {

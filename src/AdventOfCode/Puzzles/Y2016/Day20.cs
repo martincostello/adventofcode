@@ -123,9 +123,9 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         }
 
         /// <inheritdoc />
-        protected override Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
+        protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
         {
-            IList<string> ranges = ReadResourceAsLines();
+            IList<string> ranges = await ReadResourceAsLinesAsync();
 
             LowestNonblockedIP = GetLowestNonblockedIP(uint.MaxValue, ranges, out uint count);
             AllowedIPCount = count;

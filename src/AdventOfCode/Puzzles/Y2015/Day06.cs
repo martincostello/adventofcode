@@ -32,7 +32,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
         protected override int MinimumArguments => 1;
 
         /// <inheritdoc />
-        protected override Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
+        protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
         {
             int version = args[0] switch
             {
@@ -46,7 +46,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
                 throw new PuzzleException("The specified instruction set is invalid.");
             }
 
-            var lines = ReadResourceAsLines();
+            var lines = await ReadResourceAsLinesAsync();
             var instructions = new List<Instruction>(lines.Count);
 
             foreach (string line in lines)

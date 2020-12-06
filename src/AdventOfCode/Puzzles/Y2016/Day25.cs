@@ -19,9 +19,9 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         public int ClockSignalValue { get; private set; }
 
         /// <inheritdoc />
-        protected override Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
+        protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
         {
-            IList<string> instructions = ReadResourceAsLines();
+            IList<string> instructions = await ReadResourceAsLinesAsync();
 
             for (int i = 1; i < int.MaxValue; i++)
             {

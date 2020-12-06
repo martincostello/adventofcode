@@ -84,9 +84,9 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         }
 
         /// <inheritdoc />
-        protected override Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
+        protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
         {
-            IList<string> addresses = ReadResourceAsLines();
+            IList<string> addresses = await ReadResourceAsLinesAsync();
 
             IPAddressesSupportingTls = addresses.Count(DoesIPAddressSupportTls);
             IPAddressesSupportingSsl = addresses.Count(DoesIPAddressSupportSsl);

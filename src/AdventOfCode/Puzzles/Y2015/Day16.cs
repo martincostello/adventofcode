@@ -78,9 +78,9 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
         }
 
         /// <inheritdoc />
-        protected override Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
+        protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
         {
-            IList<string> auntSueMetadata = ReadResourceAsLines();
+            IList<string> auntSueMetadata = await ReadResourceAsLinesAsync();
 
             AuntSueNumber = WhichAuntSueSentTheGift(auntSueMetadata);
             RealAuntSueNumber = WhichAuntSueSentTheGift(auntSueMetadata, compensateForRetroEncabulator: true);

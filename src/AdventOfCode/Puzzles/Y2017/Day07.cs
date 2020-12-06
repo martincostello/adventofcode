@@ -56,9 +56,9 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
         }
 
         /// <inheritdoc />
-        protected override Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
+        protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
         {
-            IList<string> structure = ReadResourceAsLines();
+            IList<string> structure = await ReadResourceAsLinesAsync();
 
             BottomProgramName = FindBottomProgramName(structure);
             DesiredWeightOfUnbalancedDisc = FindDesiredWeightOfUnbalancedDisc(structure);

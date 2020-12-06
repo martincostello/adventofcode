@@ -82,9 +82,9 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
         }
 
         /// <inheritdoc />
-        protected override Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
+        protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
         {
-            string rawLengths = ReadResourceAsString().Trim();
+            string rawLengths = (await ReadResourceAsStringAsync()).Trim();
 
             ICollection<int> lengths = rawLengths
                 .Split(',')

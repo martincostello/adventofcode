@@ -83,9 +83,9 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
         }
 
         /// <inheritdoc />
-        protected override Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
+        protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
         {
-            string instructions = ReadResourceAsString();
+            string instructions = await ReadResourceAsStringAsync();
 
             HousesWithPresentsFromSanta = GetUniqueHousesVisitedBySanta(instructions, Logger);
             HousesWithPresentsFromSantaAndRoboSanta = GetUniqueHousesVisitedBySantaAndRoboSanta(instructions, Logger);

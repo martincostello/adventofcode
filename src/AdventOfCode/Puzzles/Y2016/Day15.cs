@@ -55,9 +55,9 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         }
 
         /// <inheritdoc />
-        protected override Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
+        protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
         {
-            IList<string> input = ReadResourceAsLines();
+            IList<string> input = await ReadResourceAsLinesAsync();
 
             IList<string> extraDisc = new[]
             {

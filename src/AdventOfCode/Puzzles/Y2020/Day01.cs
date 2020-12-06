@@ -48,9 +48,9 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
         }
 
         /// <inheritdoc />
-        protected override Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
+        protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
         {
-            IList<string> values = ReadResourceAsLines();
+            IList<string> values = await ReadResourceAsLinesAsync();
 
             ProductOf2020SumFrom2 = Get2020Product(values, 2);
             ProductOf2020SumFrom3 = Get2020Product(values, 3);

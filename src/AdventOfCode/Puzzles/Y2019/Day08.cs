@@ -111,9 +111,9 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
         }
 
         /// <inheritdoc />
-        protected override Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
+        protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
         {
-            string image = ReadResourceAsString().TrimEnd('\n');
+            string image = (await ReadResourceAsStringAsync()).TrimEnd('\n');
 
             Checksum = GetImageChecksum(image, 6, 25, Logger);
 

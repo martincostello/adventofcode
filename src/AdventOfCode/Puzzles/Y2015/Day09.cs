@@ -113,13 +113,15 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
         }
 
         /// <inheritdoc />
-        protected override Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
+        protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
         {
             bool findLongest =
                 args.Length == 1 &&
                 string.Equals(args[0], bool.TrueString, StringComparison.OrdinalIgnoreCase);
 
-            Solution = GetDistanceBetweenPoints(ReadResourceAsLines(), findLongest);
+            var collection = await ReadResourceAsLinesAsync();
+
+            Solution = GetDistanceBetweenPoints(collection, findLongest);
 
             if (Verbose)
             {

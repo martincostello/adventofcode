@@ -82,9 +82,9 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
         }
 
         /// <inheritdoc />
-        protected override Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
+        protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
         {
-            IList<string> boardingPasses = ReadResourceAsLines();
+            IList<string> boardingPasses = await ReadResourceAsLinesAsync();
 
             var ids = new List<int>(boardingPasses.Count);
 

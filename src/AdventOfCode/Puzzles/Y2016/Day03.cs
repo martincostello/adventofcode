@@ -57,9 +57,9 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         }
 
         /// <inheritdoc />
-        protected override Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
+        protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
         {
-            IList<string> dimensions = ReadResourceAsLines();
+            IList<string> dimensions = await ReadResourceAsLinesAsync();
 
             PossibleTrianglesByRows = GetPossibleTriangleCount(dimensions, readAsColumns: false);
             PossibleTrianglesByColumns = GetPossibleTriangleCount(dimensions, readAsColumns: true);

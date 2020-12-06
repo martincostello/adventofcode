@@ -42,7 +42,6 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
                 .Distinct()
                 .ToList();
 
-            // TODO Remove all permutations which are equal when considering the table is circular
             IList<IList<string>> permutations = Maths.GetPermutations(names)
                 .Select((p) => new List<string>(p) as IList<string>)
                 .ToList();
@@ -59,9 +58,9 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
         }
 
         /// <inheritdoc />
-        protected override Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
+        protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
         {
-            IList<string> potentialHappiness = ReadResourceAsLines();
+            IList<string> potentialHappiness = await ReadResourceAsLinesAsync();
 
             MaximumTotalChangeInHappiness = GetMaximumTotalChangeInHappiness(potentialHappiness);
 

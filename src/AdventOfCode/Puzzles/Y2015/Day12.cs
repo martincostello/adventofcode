@@ -59,13 +59,13 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
         }
 
         /// <inheritdoc />
-        protected override Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
+        protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
         {
             Stream resource = Resource ?? ReadResource();
 
             try
             {
-                using var document = JsonDocument.Parse(resource);
+                using var document = await JsonDocument.ParseAsync(resource, cancellationToken: cancellationToken);
                 string keyToIgnore = args.Length > 0 ? args[0] : string.Empty;
 
                 Sum = SumIntegerValues(document.RootElement, keyToIgnore);

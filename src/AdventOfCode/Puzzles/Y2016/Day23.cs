@@ -22,11 +22,11 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         protected override int MinimumArguments => 1;
 
         /// <inheritdoc />
-        protected override Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
+        protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
         {
             int input = ParseInt32(args[0]);
 
-            IList<string> instructions = ReadResourceAsLines();
+            IList<string> instructions = await ReadResourceAsLinesAsync();
 
             IDictionary<char, int> registers = Day12.Process(instructions, initialValueOfA: input);
             SafeValue = registers['a'];

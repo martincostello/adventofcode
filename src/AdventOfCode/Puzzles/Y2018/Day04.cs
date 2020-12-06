@@ -163,9 +163,9 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2018
         }
 
         /// <inheritdoc />
-        protected override Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
+        protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
         {
-            IList<string> log = ReadResourceAsLines();
+            IList<string> log = await ReadResourceAsLinesAsync();
 
             (SleepiestGuardMinute, SleepiestMinuteGuard) = GetSleepiestGuardsMinutes(log);
 

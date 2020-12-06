@@ -85,9 +85,9 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2018
         }
 
         /// <inheritdoc />
-        protected override Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
+        protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
         {
-            IList<string> sequence = ReadResourceAsLines();
+            IList<string> sequence = await ReadResourceAsLinesAsync();
 
             (Frequency, FirstRepeatedFrequency) = CalculateFrequencyWithRepetition(sequence);
 

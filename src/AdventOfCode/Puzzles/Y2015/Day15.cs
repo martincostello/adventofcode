@@ -81,9 +81,9 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
         }
 
         /// <inheritdoc />
-        protected override Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
+        protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
         {
-            IList<string> ingredients = ReadResourceAsLines();
+            IList<string> ingredients = await ReadResourceAsLinesAsync();
 
             HighestTotalCookieScore = GetHighestTotalCookieScore(ingredients);
             HighestTotalCookieScoreWith500Calories = GetHighestTotalCookieScore(ingredients, 500);

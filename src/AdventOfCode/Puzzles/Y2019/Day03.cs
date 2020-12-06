@@ -131,9 +131,9 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
         }
 
         /// <inheritdoc />
-        protected override Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
+        protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
         {
-            IList<string> wires = ReadResourceAsLines();
+            IList<string> wires = await ReadResourceAsLinesAsync();
 
             (ManhattanDistance, MinimumSteps) = GetManhattanDistanceOfClosesIntersection(wires);
 

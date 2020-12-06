@@ -36,9 +36,9 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
             => GetDecompressedLength(data, 0, data.Length, version);
 
         /// <inheritdoc />
-        protected override Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
+        protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
         {
-            string data = ReadResourceAsString();
+            string data = await ReadResourceAsStringAsync();
 
             DecompressedLengthVersion1 = GetDecompressedLength(data, version: 1);
             DecompressedLengthVersion2 = GetDecompressedLength(data, version: 2);

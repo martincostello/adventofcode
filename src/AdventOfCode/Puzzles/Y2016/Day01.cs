@@ -90,9 +90,9 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         }
 
         /// <inheritdoc />
-        protected override Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
+        protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
         {
-            string instructions = ReadResourceAsString();
+            string instructions = await ReadResourceAsStringAsync();
 
             BlocksToEasterBunnyHQIgnoringDuplicates = CalculateDistance(instructions, ignoreDuplicates: true);
             BlocksToEasterBunnyHQ = CalculateDistance(instructions, ignoreDuplicates: false);

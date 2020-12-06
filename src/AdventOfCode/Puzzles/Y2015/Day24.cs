@@ -49,9 +49,9 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
         }
 
         /// <inheritdoc />
-        protected override Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
+        protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
         {
-            IList<int> weights = ReadResourceAsLines()
+            IList<int> weights = (await ReadResourceAsLinesAsync())
                 .Select((p) => ParseInt32(p))
                 .ToList();
 

@@ -61,7 +61,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
         protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
         {
             long input = ParseInt64(args[0]);
-            string program = ReadResourceAsString();
+            string program = await ReadResourceAsStringAsync();
 
             Keycode = (await RunProgramAsync(program, input, cancellationToken))[0];
 

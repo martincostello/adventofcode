@@ -52,9 +52,9 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
         }
 
         /// <inheritdoc />
-        protected override Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
+        protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
         {
-            ICollection<string> passphrases = ReadResourceAsLines();
+            ICollection<string> passphrases = await ReadResourceAsLinesAsync();
 
             ValidPassphraseCountV1 = passphrases.Where((p) => IsPassphraseValid(p, 1)).Count();
             ValidPassphraseCountV2 = passphrases.Where((p) => IsPassphraseValid(p, 2)).Count();

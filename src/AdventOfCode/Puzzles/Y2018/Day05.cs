@@ -79,9 +79,9 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2018
         }
 
         /// <inheritdoc />
-        protected override Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
+        protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
         {
-            string polymer = ReadResourceAsString().Trim('\r', '\n');
+            string polymer = (await ReadResourceAsStringAsync()).Trim('\r', '\n');
 
             RemainingUnits = Reduce(polymer).Length;
             RemainingUnitsOptimized = ReduceWithOptimization(polymer).Length;

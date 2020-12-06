@@ -59,9 +59,9 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         }
 
         /// <inheritdoc />
-        protected override Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
+        protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
         {
-            IList<string> messages = ReadResourceAsLines();
+            IList<string> messages = await ReadResourceAsLinesAsync();
 
             ErrorCorrectedMessage = DecryptMessage(messages, leastLikely: false);
             ModifiedErrorCorrectedMessage = DecryptMessage(messages, leastLikely: true);

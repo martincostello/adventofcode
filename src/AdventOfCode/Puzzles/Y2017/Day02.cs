@@ -93,9 +93,9 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
         }
 
         /// <inheritdoc />
-        protected override Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
+        protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
         {
-            IList<string> lines = ReadResourceAsLines();
+            IList<string> lines = await ReadResourceAsLinesAsync();
             var spreadsheet = ParseSpreadsheet(lines);
 
             ChecksumForDifference = CalculateChecksum(spreadsheet, forEvenlyDivisible: false);

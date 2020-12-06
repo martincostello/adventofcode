@@ -91,9 +91,9 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
         }
 
         /// <inheritdoc />
-        protected override Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
+        protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
         {
-            string path = ReadResourceAsString().Trim();
+            string path = (await ReadResourceAsStringAsync()).Trim();
 
             (MinimumSteps, MaximumDistance) = FindStepRange(path);
 

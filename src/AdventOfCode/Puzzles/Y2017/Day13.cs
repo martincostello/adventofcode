@@ -105,9 +105,9 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
         }
 
         /// <inheritdoc />
-        protected override Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
+        protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
         {
-            IList<string> depthRanges = ReadResourceAsLines();
+            IList<string> depthRanges = await ReadResourceAsLinesAsync();
 
             Severity = GetSeverityOfTrip(depthRanges);
             ShortestDelay = GetShortestDelayForNeverCaught(depthRanges);

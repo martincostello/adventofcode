@@ -68,10 +68,10 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         }
 
         /// <inheritdoc />
-        protected override Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
+        protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
         {
             int rows = ParseInt32(args[0]);
-            string firstRowTiles = args.Length > 1 ? args[1] : ReadResourceAsString().TrimEnd();
+            string firstRowTiles = args.Length > 1 ? args[1] : (await ReadResourceAsStringAsync()).TrimEnd();
 
             SafeTileCount = FindSafeTileCount(firstRowTiles, rows, Logger);
 

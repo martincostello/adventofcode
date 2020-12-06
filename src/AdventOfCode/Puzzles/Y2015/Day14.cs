@@ -85,7 +85,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
         }
 
         /// <inheritdoc />
-        protected override Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
+        protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
         {
             int timeIndex = ParseInt32(args[0], NumberStyles.Integer & ~NumberStyles.AllowLeadingSign);
 
@@ -94,7 +94,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
                 throw new PuzzleException("The time index specified is invalid.");
             }
 
-            IList<string> flightData = ReadResourceAsLines();
+            IList<string> flightData = await ReadResourceAsLinesAsync();
 
             MaximumReindeerDistance = GetMaximumDistanceOfFastestReindeer(flightData, timeIndex);
 

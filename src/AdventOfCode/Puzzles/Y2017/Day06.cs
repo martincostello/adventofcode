@@ -43,9 +43,9 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
         }
 
         /// <inheritdoc />
-        protected override Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
+        protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
         {
-            IList<int> memory = ReadResourceAsString().Trim()
+            IList<int> memory = (await ReadResourceAsStringAsync()).Trim()
                 .Split('\t')
                 .Select((p) => ParseInt32(p))
                 .ToList();

@@ -136,9 +136,9 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2018
         }
 
         /// <inheritdoc />
-        protected override Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
+        protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
         {
-            IList<string> ids = ReadResourceAsLines();
+            IList<string> ids = await ReadResourceAsLinesAsync();
 
             Checksum = CalculateChecksum(ids);
             CommonLettersForBoxes = GetCommonLetters(ids);

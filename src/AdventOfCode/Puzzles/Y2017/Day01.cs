@@ -57,9 +57,9 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
         }
 
         /// <inheritdoc />
-        protected override Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
+        protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
         {
-            string digits = ReadResourceAsString().TrimEnd();
+            string digits = (await ReadResourceAsStringAsync()).TrimEnd();
 
             CaptchaSolutionNext = CalculateSum(digits, useOppositeDigit: false);
             CaptchaSolutionOpposite = CalculateSum(digits, useOppositeDigit: true);

@@ -45,9 +45,9 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
             => GetFuelRequirementsForMassWithFuel(ParseInt32(mass));
 
         /// <inheritdoc />
-        protected override Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
+        protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
         {
-            IList<string> masses = ReadResourceAsLines();
+            IList<string> masses = await ReadResourceAsLinesAsync();
 
             TotalFuelRequiredForModules = GetFuelRequirementsForMasses(masses);
             TotalFuelRequiredForRocket = GetFuelRequirementsForRocket(masses);
