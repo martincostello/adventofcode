@@ -88,7 +88,14 @@ namespace MartinCostello.AdventOfCode.Api
                 object? expected = expectedSolutions[i];
                 var actual = actualSolutions[i];
 
-                actual.GetRawText().ShouldBe(expected.ToString());
+                if (expected is string valueAsString)
+                {
+                    actual.GetString().ShouldBe(valueAsString);
+                }
+                else
+                {
+                    actual.GetRawText().ShouldBe(expected.ToString());
+                }
             }
         }
 
