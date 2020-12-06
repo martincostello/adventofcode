@@ -28,7 +28,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
         public void Y2019_Day08_GetImageChecksum_Returns_Correct_Output(string program, int height, int width, int expected)
         {
             // Act
-            int actual = Day08.GetImageChecksum(program, height, width);
+            (int actual, _) = Day08.GetImageChecksum(program, height, width);
 
             // Assert
             actual.ShouldBe(expected);

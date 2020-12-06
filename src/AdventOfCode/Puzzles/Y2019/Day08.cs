@@ -29,7 +29,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
         /// <returns>
         /// The checksum of the image data.
         /// </returns>
-        public static int GetImageChecksum(string image, int height, int width, ILogger? logger = null)
+        public static (int checksum, string visualization) GetImageChecksum(string image, int height, int width, ILogger? logger = null)
         {
             var layers = new List<int[,]>();
             int[,] current = new int[0, 0];
@@ -105,9 +105,9 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
                 }
             }
 
-            WriteMessage(finalLayer, logger);
+            string visualization = WriteMessage(finalLayer, logger);
 
-            return checksum;
+            return (checksum, visualization);
         }
 
         /// <inheritdoc />
@@ -115,14 +115,21 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
         {
             string image = (await ReadResourceAsStringAsync()).TrimEnd('\n');
 
-            Checksum = GetImageChecksum(image, 6, 25, Logger);
+            (int checksum, string visualization) = GetImageChecksum(image, 6, 25, Logger);
+
+            Checksum = checksum;
 
             if (Verbose)
             {
                 Logger.WriteLine("The checksum of the image data is {0}.", Checksum);
             }
 
-            return PuzzleResult.Create(Checksum);
+            var result = new PuzzleResult();
+
+            result.Solutions.Add(Checksum);
+            result.Visualizations.Add(visualization);
+
+            return result;
         }
 
         /// <summary>
@@ -158,27 +165,31 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
         /// </summary>
         /// <param name="message">The message to write.</param>
         /// <param name="logger">The logger to write the message to.</param>
-        private static void WriteMessage(int[,] message, ILogger? logger)
+        /// <returns>
+        /// The visualization of the data.
+        /// </returns>
+        private static string WriteMessage(int[,] message, ILogger? logger)
         {
-            if (logger == null)
-            {
-                return;
-            }
-
             int width = message.GetLength(0);
             int height = message.GetLength(1);
 
+            var builder = new StringBuilder((width + 2) * height);
+
             for (int y = 0; y < height; y++)
             {
-                var builder = new StringBuilder(width);
-
                 for (int x = 0; x < width; x++)
                 {
                     builder.Append(message[x, y] == 1 ? 'x' : ' ');
                 }
 
-                logger.WriteLine(builder.ToString());
+                builder.AppendLine();
             }
+
+            string visualization = builder.ToString();
+
+            logger?.WriteLine(visualization);
+
+            return visualization;
         }
     }
 }
