@@ -37,11 +37,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         [Fact]
         public async Task Y2016_Day05_Solve_Returns_Correct_Solution()
         {
-            // Arrange
-            string[] args = new[] { "wtnhxymk" };
-
             // Act
-            var puzzle = await SolvePuzzleAsync<Day05>(args);
+            var puzzle = await SolvePuzzleAsync<Day05>("wtnhxymk");
 
             // Assert
             puzzle.Password.ShouldBe("2414bc77");
