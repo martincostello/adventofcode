@@ -140,7 +140,7 @@ namespace MartinCostello.AdventOfCode.Api
         {
             // Arrange
             using var client = Fixture.CreateClient();
-            client.Timeout = TimeSpan.FromSeconds(30);
+            client.Timeout = TimeSpan.FromSeconds(45);
 
             using var content = new MultipartFormDataContent();
 
