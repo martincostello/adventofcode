@@ -41,11 +41,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
         [Fact]
         public async Task Y2015_Day17_Solve_Returns_Correct_Solution()
         {
-            // Arrange
-            string[] args = new[] { "150" };
-
             // Act
-            var puzzle = await SolvePuzzleAsync<Day17>(args);
+            var puzzle = await SolvePuzzleAsync<Day17>("150");
 
             // Assert
             puzzle.Combinations.ShouldBe(1304);

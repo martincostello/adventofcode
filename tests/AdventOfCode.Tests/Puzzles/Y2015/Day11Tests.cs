@@ -50,20 +50,14 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
         [Fact]
         public async Task Y2015_Day11_Solve_Returns_Correct_Solution()
         {
-            // Arrange
-            string[] args = new[] { "cqjxjnds" };
-
             // Act
-            var puzzle = await SolvePuzzleAsync<Day11>(args);
+            var puzzle = await SolvePuzzleAsync<Day11>("cqjxjnds");
 
             // Assert
             puzzle.NextPassword.ShouldBe("cqjxxyzz");
 
-            // Arrange
-            args = new[] { puzzle.NextPassword! };
-
             // Act
-            puzzle = await SolvePuzzleAsync<Day11>(args);
+            puzzle = await SolvePuzzleAsync<Day11>(puzzle.NextPassword!);
 
             // Assert
             puzzle.NextPassword.ShouldBe("cqkaabcc");
