@@ -162,9 +162,15 @@ namespace MartinCostello.AdventOfCode
                 return;
             }
 
-            var form = await context.Request.ReadFormAsync(context.RequestAborted);
-
             var metadata = puzzle.Metadata();
+
+            if (metadata.IsHidden)
+            {
+                await WriteErrorAsync(context, StatusCodes.Status403Forbidden, "Forbidden", "This puzzle cannot be solved.");
+                return;
+            }
+
+            var form = await context.Request.ReadFormAsync(context.RequestAborted);
 
             if (metadata.RequiresData)
             {
