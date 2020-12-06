@@ -58,7 +58,7 @@ namespace MartinCostello.AdventOfCode
         {
             if (!context.Request.HasFormContentType)
             {
-                context.Response.StatusCode = StatusCodes.Status415UnsupportedMediaType;
+                await WriteErrorAsync(context, StatusCodes.Status415UnsupportedMediaType, "Unsupported Media Type", "The specified media type is not supported.");
                 return;
             }
 
