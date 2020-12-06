@@ -214,6 +214,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         /// A <see cref="string"/> containing the hexadecimal representation of <paramref name="bytes"/>.
         /// </returns>
         private static string GetStringForHash(ReadOnlySpan<byte> bytes)
-            => Convert.ToHexString(bytes);
+#pragma warning disable CA1308
+            => Convert.ToHexString(bytes).ToLowerInvariant();
+#pragma warning restore CA1308
     }
 }
