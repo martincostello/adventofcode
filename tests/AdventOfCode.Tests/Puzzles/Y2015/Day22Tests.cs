@@ -24,12 +24,12 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
         }
 
         [Theory]
-        [InlineData(new string[0], 953)]
-        [InlineData(new[] { "hard" }, 1289)]
-        public async Task Y2015_Day22_Solve_Returns_Correct_Solution(string[] args, int expected)
+        [InlineData("easy", 953)]
+        [InlineData("hard", 1289)]
+        public async Task Y2015_Day22_Solve_Returns_Correct_Solution(string difficulty, int expected)
         {
             // Act
-            var puzzle = await SolvePuzzleAsync<Day22>(args);
+            var puzzle = await SolvePuzzleAsync<Day22>(difficulty);
 
             // Assert
             puzzle.MinimumCostToWin.ShouldBe(expected);
