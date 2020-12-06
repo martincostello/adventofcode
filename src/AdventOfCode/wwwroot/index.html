@@ -280,8 +280,14 @@
                         body.visualizations.forEach((value) => {
 
                             const pre = document.createElement('pre');
-                            //pre.classList.add('pre-scrollable');
                             pre.textContent = value;
+
+                            if (value.split('\n').length > 100) {
+                                pre.classList.add('pre-scrollable');
+                            }
+                            else {
+                                pre.classList.remove('pre-scrollable');
+                            }
 
                             const code = document.createElement('code');
                             code.appendChild(pre);
