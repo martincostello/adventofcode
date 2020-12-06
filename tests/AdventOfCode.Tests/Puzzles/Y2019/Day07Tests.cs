@@ -38,10 +38,10 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
         }
 
         [Fact]
-        public void Y2019_Day07_Solve_Returns_Correct_Solution()
+        public async Task Y2019_Day07_Solve_Returns_Correct_Solution()
         {
             // Act
-            var puzzle = SolvePuzzle<Day07>();
+            var puzzle = await SolvePuzzleAsync<Day07>();
 
             // Assert
             puzzle.HighestSignal.ShouldBe(77500);

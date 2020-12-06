@@ -61,13 +61,13 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
         [Theory]
         [InlineData("1", 6745903)]
         [InlineData("5", 9168267)]
-        public void Y2019_Day05_Solve_Returns_Correct_Solution(string input, int expected)
+        public async Task Y2019_Day05_Solve_Returns_Correct_Solution(string input, int expected)
         {
             // Arrange
             string[] args = { input };
 
             // Act
-            var puzzle = SolvePuzzle<Day05>(args);
+            var puzzle = await SolvePuzzleAsync<Day05>(args);
 
             // Assert
             puzzle.DiagnosticCode.ShouldBe(expected);

@@ -3,6 +3,7 @@
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2017
 {
+    using System.Threading.Tasks;
     using Shouldly;
     using Xunit;
     using Xunit.Abstractions;
@@ -50,10 +51,10 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
         }
 
         [Fact]
-        public void Y2017_Day10_Solve_Returns_Correct_Solution()
+        public async Task Y2017_Day10_Solve_Returns_Correct_Solution()
         {
             // Act
-            var puzzle = SolvePuzzle<Day10>();
+            var puzzle = await SolvePuzzleAsync<Day10>();
 
             // Assert
             puzzle.ProductOfFirstTwoElements.ShouldBe(11413);

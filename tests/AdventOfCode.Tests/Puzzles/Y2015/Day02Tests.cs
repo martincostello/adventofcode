@@ -3,6 +3,7 @@
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2015
 {
+    using System.Threading.Tasks;
     using Shouldly;
     using Xunit;
     using Xunit.Abstractions;
@@ -35,10 +36,10 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
         }
 
         [Fact]
-        public void Y2015_Day02_Solve_Returns_Correct_Solution()
+        public async Task Y2015_Day02_Solve_Returns_Correct_Solution()
         {
             // Act
-            var puzzle = SolvePuzzle<Day02>();
+            var puzzle = await SolvePuzzleAsync<Day02>();
 
             // Assert
             puzzle.TotalAreaOfPaper.ShouldBe(1598415);

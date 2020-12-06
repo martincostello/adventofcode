@@ -3,6 +3,7 @@
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2016
 {
+    using System.Threading.Tasks;
     using Shouldly;
     using Xunit;
     using Xunit.Abstractions;
@@ -34,13 +35,13 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         }
 
         [Fact(Skip = "Too slow.")]
-        public void Y2016_Day14_Solve_Returns_Correct_Solution()
+        public async Task Y2016_Day14_Solve_Returns_Correct_Solution()
         {
             // Arrange
             string[] args = new[] { "ihaygndm" };
 
             // Act
-            var puzzle = SolvePuzzle<Day14>(args);
+            var puzzle = await SolvePuzzleAsync<Day14>(args);
 
             // Assert
             puzzle.IndexOfKey64.ShouldBe(15035);

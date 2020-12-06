@@ -3,6 +3,7 @@
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2020
 {
+    using System.Threading.Tasks;
     using Shouldly;
     using Xunit;
     using Xunit.Abstractions;
@@ -42,10 +43,10 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
         }
 
         [Fact]
-        public void Y2020_Day05_Solve_Returns_Correct_Solution()
+        public async Task Y2020_Day05_Solve_Returns_Correct_Solution()
         {
             // Act
-            var puzzle = SolvePuzzle<Day05>();
+            var puzzle = await SolvePuzzleAsync<Day05>();
 
             // Assert
             puzzle.HighestSeatId.ShouldBe(878);

@@ -3,6 +3,7 @@
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2016
 {
+    using System.Threading.Tasks;
     using Shouldly;
     using Xunit;
     using Xunit.Abstractions;
@@ -36,13 +37,13 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         [Theory]
         [InlineData("272", "10010110010011110")]
         [InlineData("35651584", "01101011101100011")]
-        public void Y2016_Day16_Solve_Returns_Correct_Solution(string size, string expected)
+        public async Task Y2016_Day16_Solve_Returns_Correct_Solution(string size, string expected)
         {
             // Arrange
             string[] args = new[] { "10010000000110000", size };
 
             // Act
-            var puzzle = SolvePuzzle<Day16>(args);
+            var puzzle = await SolvePuzzleAsync<Day16>(args);
 
             // Assert
             puzzle.Checksum.ShouldBe(expected);

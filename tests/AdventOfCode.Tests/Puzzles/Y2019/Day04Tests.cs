@@ -3,6 +3,7 @@
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2019
 {
+    using System.Threading.Tasks;
     using Shouldly;
     using Xunit;
     using Xunit.Abstractions;
@@ -41,13 +42,13 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
         }
 
         [Fact]
-        public void Y2019_Day04_Solve_Returns_Correct_Solution()
+        public async Task Y2019_Day04_Solve_Returns_Correct_Solution()
         {
             // Arrange
             string[] args = new[] { "138241-674034" };
 
             // Act
-            var puzzle = SolvePuzzle<Day04>(args);
+            var puzzle = await SolvePuzzleAsync<Day04>(args);
 
             // Assert
             puzzle.CountV1.ShouldBe(1890);

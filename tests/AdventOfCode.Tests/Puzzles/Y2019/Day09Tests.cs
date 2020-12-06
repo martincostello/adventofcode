@@ -41,10 +41,10 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
         [Theory]
         [InlineData(new[] { "1" }, 2494485073)]
         [InlineData(new[] { "2" }, 44997)]
-        public void Y2019_Day09_Solve_Returns_Correct_Solution(string[] args, long expected)
+        public async Task Y2019_Day09_Solve_Returns_Correct_Solution(string[] args, long expected)
         {
             // Act
-            var puzzle = SolvePuzzle<Day09>(args);
+            var puzzle = await SolvePuzzleAsync<Day09>(args);
 
             // Assert
             puzzle.Keycode.ShouldBe(expected);

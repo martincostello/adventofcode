@@ -4,6 +4,8 @@
 namespace MartinCostello.AdventOfCode.Puzzles
 {
     using System;
+    using System.Threading;
+    using System.Threading.Tasks;
     using Shouldly;
     using Xunit.Abstractions;
 
@@ -33,25 +35,25 @@ namespace MartinCostello.AdventOfCode.Puzzles
         private protected ILogger Logger { get; }
 
         /// <summary>
-        /// Solves the specified puzzle type.
+        /// Solves the specified puzzle type asynchronously.
         /// </summary>
         /// <typeparam name="T">The type of the puzzle to solve.</typeparam>
         /// <returns>
         /// The solved puzzle of the type specified by <typeparamref name="T"/>.
         /// </returns>
-        protected T SolvePuzzle<T>()
+        protected async Task<T> SolvePuzzleAsync<T>()
             where T : Puzzle, new()
-            => SolvePuzzle<T>(Array.Empty<string>());
+            => await SolvePuzzleAsync<T>(Array.Empty<string>());
 
         /// <summary>
-        /// Solves the specified puzzle type with the specified arguments.
+        /// Solves the specified puzzle type with the specified arguments asynchronously.
         /// </summary>
         /// <typeparam name="T">The type of the puzzle to solve.</typeparam>
         /// <param name="args">The arguments to pass to the puzzle.</param>
         /// <returns>
         /// The solved puzzle of the type specified by <typeparamref name="T"/>.
         /// </returns>
-        protected T SolvePuzzle<T>(params string[] args)
+        protected async Task<T> SolvePuzzleAsync<T>(params string[] args)
             where T : Puzzle, new()
         {
             // Arrange
@@ -61,8 +63,10 @@ namespace MartinCostello.AdventOfCode.Puzzles
                 Verbose = true,
             };
 
+            using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(90));
+
             // Act
-            PuzzleResult result = puzzle.SolveAsync(args).Result; // TODO Make async
+            PuzzleResult result = await puzzle.SolveAsync(args, cts.Token);
 
             // Assert
             result.ShouldNotBeNull();

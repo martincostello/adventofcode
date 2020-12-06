@@ -3,6 +3,7 @@
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2019
 {
+    using System.Threading.Tasks;
     using Shouldly;
     using Xunit;
     using Xunit.Abstractions;
@@ -39,10 +40,10 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
         }
 
         [Fact]
-        public void Y2019_Day03_Solve_Returns_Correct_Solution()
+        public async Task Y2019_Day03_Solve_Returns_Correct_Solution()
         {
             // Act
-            var puzzle = SolvePuzzle<Day03>();
+            var puzzle = await SolvePuzzleAsync<Day03>();
 
             // Assert
             puzzle.ManhattanDistance.ShouldBe(855);

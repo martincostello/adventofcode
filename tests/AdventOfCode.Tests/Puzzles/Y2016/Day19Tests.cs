@@ -3,6 +3,7 @@
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2016
 {
+    using System.Threading.Tasks;
     using Shouldly;
     using Xunit;
     using Xunit.Abstractions;
@@ -38,13 +39,13 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         [InlineData("5", "2", 2)]
         [InlineData("3014387", "1", 1834471)]
         [InlineData("3014387", "2", 1420064)]
-        public void Y2016_Day19_Solve_Returns_Correct_Solution(string elves, string version, int expected)
+        public async Task Y2016_Day19_Solve_Returns_Correct_Solution(string elves, string version, int expected)
         {
             // Arrange
             string[] args = new[] { elves, version };
 
             // Act
-            var puzzle = SolvePuzzle<Day19>(args);
+            var puzzle = await SolvePuzzleAsync<Day19>(args);
 
             // Assert
             puzzle.ElfWithAllPresents.ShouldBe(expected);

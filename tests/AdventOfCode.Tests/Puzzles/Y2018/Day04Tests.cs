@@ -3,6 +3,7 @@
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2018
 {
+    using System.Threading.Tasks;
     using Shouldly;
     using Xunit;
     using Xunit.Abstractions;
@@ -55,10 +56,10 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2018
         }
 
         [Fact]
-        public void Y2018_Day04_Solve_Returns_Correct_Solution()
+        public async Task Y2018_Day04_Solve_Returns_Correct_Solution()
         {
             // Act
-            var puzzle = SolvePuzzle<Day04>();
+            var puzzle = await SolvePuzzleAsync<Day04>();
 
             // Assert
             puzzle.SleepiestGuardMinute.ShouldBe(4716);

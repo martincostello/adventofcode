@@ -3,6 +3,7 @@
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2015
 {
+    using System.Threading.Tasks;
     using Shouldly;
     using Xunit;
     using Xunit.Abstractions;
@@ -22,10 +23,10 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
         }
 
         [Fact]
-        public void Y2015_Day16_Solve_Returns_Correct_Solution()
+        public async Task Y2015_Day16_Solve_Returns_Correct_Solution()
         {
             // Act
-            var puzzle = SolvePuzzle<Day16>();
+            var puzzle = await SolvePuzzleAsync<Day16>();
 
             // Assert
             puzzle.AuntSueNumber.ShouldBe(373);

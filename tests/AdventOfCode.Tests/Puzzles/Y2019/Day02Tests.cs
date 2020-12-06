@@ -39,10 +39,10 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
         }
 
         [Fact]
-        public void Y2019_Day02_Solve_Returns_Correct_Solution()
+        public async Task Y2019_Day02_Solve_Returns_Correct_Solution()
         {
             // Act
-            var puzzle = SolvePuzzle<Day02>();
+            var puzzle = await SolvePuzzleAsync<Day02>();
 
             // Assert
             puzzle.Output.ShouldNotBeNull();
