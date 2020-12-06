@@ -96,14 +96,10 @@
                         <label class="custom-file-label" for="resource" id="resource-label">Puzzle input file</label>
                     </div>
                 </div>
-                <div class="btn-group" role="group">
-                    <button type="submit" class="btn btn-secondary btn-lg" id="solve">Solve!</button>
-                </div>
-                <div class="btn-group" role="group">
-                    <div class="spinner-border d-none" role="status" id="spinner">
-                        <span class="sr-only">Solving...</span>
-                    </div>
-                </div>
+                <button type="submit" class="btn btn-secondary btn-lg" id="solve">
+                    <placeholder id="solve-text">Solve!</placeholder>
+                    <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true" id="spinner"></span>
+                </button>
             </form>
         </div>
         <hr />
@@ -166,7 +162,10 @@
         const days = document.getElementById('day');
         const error = document.getElementById('error');
         const form = document.getElementById('form');
+
         const solve = document.getElementById('solve');
+        const solveText = document.getElementById('solve-text');
+
         const timeToSolve = document.getElementById('time-to-solve');
         const years = document.getElementById('year');
 
@@ -246,6 +245,7 @@
         solve.addEventListener('click', () => {
 
             solve.disabled = true;
+            solveText.innerText = 'Solving...';
             spinner.classList.remove(hideClass);
 
             const url = form.getAttribute('action');
@@ -314,6 +314,7 @@
                     }
 
                     spinner.classList.add(hideClass);
+                    solveText.innerText = 'Solve!';
                     solve.disabled = false;
                 });
             };
