@@ -4,7 +4,6 @@
 namespace MartinCostello.AdventOfCode.Api
 {
     using System;
-    using System.Collections.Generic;
     using System.IO;
     using System.Linq;
     using System.Net;
@@ -43,14 +42,23 @@ namespace MartinCostello.AdventOfCode.Api
             // Arrange
             using var client = Fixture.CreateClient();
 
-            var parameters = new Dictionary<string, string>()
+            using var content = new MultipartFormDataContent();
+
+            if (arguments is not null)
             {
-                ["arguments"] = string.Join(Environment.NewLine, arguments),
-            };
+                foreach (string argument in arguments)
+                {
+#pragma warning disable CA2000
+                    content.Add(new StringContent(argument), "arguments");
+#pragma warning restore CA2000
+                }
+            }
 
             if (sendResource)
             {
-                parameters["resource"] = GetPuzzleInput(year, day);
+#pragma warning disable CA2000
+                content.Add(new StringContent(GetPuzzleInput(year, day)), "resource");
+#pragma warning restore CA2000
             }
 
             // Act
