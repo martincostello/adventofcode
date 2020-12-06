@@ -81,6 +81,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
                 {
                     Logger.WriteLine("{0:N0} lights are illuminated.", LightsIlluminated);
                 }
+
+                return PuzzleResult.Create(LightsIlluminated);
             }
             else
             {
@@ -90,9 +92,9 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
                 {
                     Logger.WriteLine("The total brightness of the grid is {0:N0}.", TotalBrightness);
                 }
-            }
 
-            return PuzzleResult.Create(LightsIlluminated, TotalBrightness);
+                return PuzzleResult.Create(TotalBrightness);
+            }
         }
 
         /// <summary>
