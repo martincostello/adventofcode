@@ -4,6 +4,7 @@
 namespace MartinCostello.AdventOfCode.Puzzles.Y2019
 {
     using System.Collections.Generic;
+    using System.Threading;
     using System.Threading.Tasks;
     using Shouldly;
     using Xunit;
@@ -32,7 +33,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
             long[] expected)
         {
             // Act
-            IReadOnlyList<long> actual = await Day09.RunProgramAsync(program);
+            IReadOnlyList<long> actual = await Day09.RunProgramAsync(program, cancellationToken: CancellationToken.None);
 
             // Assert
             actual.ShouldBe(expected);

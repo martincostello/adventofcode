@@ -20,11 +20,11 @@ namespace MartinCostello.AdventOfCode
         /// Solves the puzzle given the specified input as an asynchronous operation.
         /// </summary>
         /// <param name="args">The input arguments to the puzzle.</param>
-        /// <param name="cancellationToken">The optional cancellation token to use.</param>
+        /// <param name="cancellationToken">The cancellation token to use.</param>
         /// <returns>
         /// A <see cref="Task{TResult}"/> representing the asynchronous
         /// operation which returns the solution to the puzzle.
         /// </returns>
-        Task<PuzzleResult> SolveAsync(string[] args, CancellationToken cancellationToken = default);
+        Task<PuzzleResult> SolveAsync(string[] args, CancellationToken cancellationToken);
     }
 }

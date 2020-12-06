@@ -6,6 +6,7 @@ namespace MartinCostello.AdventOfCode
     using System;
     using System.Diagnostics;
     using System.Globalization;
+    using System.Threading;
     using System.Threading.Tasks;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.Extensions.Hosting;
@@ -82,7 +83,15 @@ namespace MartinCostello.AdventOfCode
 
             args = args[1..];
 
-            return await SolvePuzzleAsync(year, day, args, logger);
+            using var cts = new CancellationTokenSource();
+
+            Console.CancelKeyPress += (_, e) =>
+            {
+                e.Cancel = true;
+                cts.Cancel();
+            };
+
+            return await SolvePuzzleAsync(year, day, args, logger, cts.Token);
         }
 
         /// <summary>
@@ -92,6 +101,7 @@ namespace MartinCostello.AdventOfCode
         /// <param name="day">The day associated with the puzzle.</param>
         /// <param name="args">The arguments to pass to the puzzle.</param>
         /// <param name="logger">The logger to use.</param>
+        /// <param name="cancellationToken">The cancellation token to use.</param>
         /// <returns>
         /// The solution to the puzzle.
         /// </returns>
@@ -99,7 +109,8 @@ namespace MartinCostello.AdventOfCode
             int year,
             int day,
             string[] args,
-            ILogger logger)
+            ILogger logger,
+            CancellationToken cancellationToken)
         {
             var factory = new PuzzleFactory(logger);
 
@@ -123,7 +134,12 @@ namespace MartinCostello.AdventOfCode
 
             try
             {
-                _ = await puzzle.SolveAsync(args);
+                _ = await puzzle.SolveAsync(args, cancellationToken);
+            }
+            catch (OperationCanceledException)
+            {
+                logger.WriteLine("Solution canceled.");
+                return -1;
             }
             catch (PuzzleException ex)
             {

@@ -34,6 +34,7 @@ namespace MartinCostello.AdventOfCode
         {
             // Arrange
             string[] args = new[] { "1" };
+            var cancellationToken = CancellationToken.None;
 
             var target = new MyPuzzle(2)
             {
@@ -41,20 +42,20 @@ namespace MartinCostello.AdventOfCode
             };
 
             // Act and Assert
-            await Assert.ThrowsAsync<PuzzleException>(() => target.SolveAsync(args));
+            await Assert.ThrowsAsync<PuzzleException>(() => target.SolveAsync(args, cancellationToken));
 
             // Arrange
             args = Array.Empty<string>();
             target = new MyPuzzle(1);
 
             // Act and Assert
-            await Assert.ThrowsAsync<PuzzleException>(() => target.SolveAsync(args));
+            await Assert.ThrowsAsync<PuzzleException>(() => target.SolveAsync(args, cancellationToken));
 
             // Arrange
             target = new MyPuzzle(0);
 
             // Act
-            PuzzleResult actual = await target.SolveAsync(args);
+            PuzzleResult actual = await target.SolveAsync(args, cancellationToken);
 
             // Assert
             actual.ShouldNotBeNull();
@@ -92,7 +93,7 @@ namespace MartinCostello.AdventOfCode
             protected override int MinimumArguments => _minimumArguments;
 
             /// <inheritdoc />
-            protected override Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken = default)
+            protected override Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
             {
                 Answer = 42;
                 return PuzzleResult.Create(Answer);

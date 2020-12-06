@@ -35,7 +35,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
         /// </returns>
         public static async Task<(long blockTileCount, long score)> PlayGameAsync(
             string program,
-            CancellationToken cancellationToken = default)
+            CancellationToken cancellationToken)
         {
             long[] instructions = IntcodeVM.ParseProgram(program);
 

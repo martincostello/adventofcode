@@ -38,7 +38,7 @@ namespace MartinCostello.AdventOfCode
             => Metadata()?.MinimumArguments ?? 0;
 
         /// <inheritdoc />
-        public async Task<PuzzleResult> SolveAsync(string[] args, CancellationToken cancellationToken = default)
+        public async Task<PuzzleResult> SolveAsync(string[] args, CancellationToken cancellationToken)
         {
             if (!EnsureArguments(args, MinimumArguments))
             {

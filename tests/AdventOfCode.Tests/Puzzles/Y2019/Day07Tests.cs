@@ -3,6 +3,7 @@
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2019
 {
+    using System.Threading;
     using System.Threading.Tasks;
     using Shouldly;
     using Xunit;
@@ -31,7 +32,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
         public async Task Y2019_Day07_RunProgram_Returns_Correct_Output(string program, bool useFeedback, long expected)
         {
             // Act
-            long actual = await Day07.RunProgramAsync(program, useFeedback);
+            long actual = await Day07.RunProgramAsync(program, useFeedback, CancellationToken.None);
 
             // Assert
             actual.ShouldBe(expected);

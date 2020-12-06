@@ -22,14 +22,14 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
         /// </summary>
         /// <param name="program">The Intcode program to run.</param>
         /// <param name="input">The input to the program.</param>
-        /// <param name="cancellationToken">The optional cancellation token to use.</param>
+        /// <param name="cancellationToken">The cancellation token to use.</param>
         /// <returns>
         /// The diagnostic code output by the program.
         /// </returns>
         public static async Task<long> RunProgramAsync(
             string program,
             long input,
-            CancellationToken cancellationToken = default)
+            CancellationToken cancellationToken)
         {
             long[] instructions = IntcodeVM.ParseProgram(program);
 
