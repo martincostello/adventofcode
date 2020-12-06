@@ -80,6 +80,7 @@ namespace MartinCostello.AdventOfCode.Benchmarks
             yield return new PuzzleInput<Puzzles.Y2020.Day03>();
             yield return new PuzzleInput<Puzzles.Y2020.Day04>();
             yield return new PuzzleInput<Puzzles.Y2020.Day05>();
+            yield return new PuzzleInput<Puzzles.Y2020.Day06>();
         }
 
         [Benchmark]
