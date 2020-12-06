@@ -28,7 +28,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         public void Y2016_Day18_FindSafeTileCount_Returns_Correct_Solution(string firstRowTiles, int rows, int expected)
         {
             // Act
-            int actual = Day18.FindSafeTileCount(firstRowTiles, rows, Logger);
+            (int actual, _) = Day18.FindSafeTileCount(firstRowTiles, rows, Logger);
 
             // Assert
             actual.ShouldBe(expected);

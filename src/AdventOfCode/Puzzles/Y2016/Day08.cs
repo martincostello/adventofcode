@@ -30,7 +30,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         /// <returns>
         /// The number of pixels lit in the grid once the instructions are processed.
         /// </returns>
-        internal static int GetPixelsLit(
+        internal static (int pixelsLit, string visualization) GetPixelsLit(
             IEnumerable<string> instructions,
             int width,
             int height,
@@ -59,9 +59,9 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
                 }
             }
 
-            logger.WriteGrid(grid, ' ', 'X');
+            string visualization = logger.WriteGrid(grid, ' ', 'X');
 
-            return CountLitPixels(grid);
+            return (CountLitPixels(grid), visualization);
         }
 
         /// <inheritdoc />
@@ -69,14 +69,21 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         {
             IList<string> instructions = await ReadResourceAsLinesAsync();
 
-            PixelsLit = GetPixelsLit(instructions, width: 50, height: 6, Logger);
+            (int pixelsLit, string visualization) = GetPixelsLit(instructions, width: 50, height: 6, Logger);
+
+            PixelsLit = pixelsLit;
 
             if (Verbose)
             {
                 Logger.WriteLine($"There are {PixelsLit:N0} pixels lit.");
             }
 
-            return PuzzleResult.Create(PixelsLit);
+            var result = new PuzzleResult();
+
+            result.Solutions.Add(PixelsLit);
+            result.Visualizations.Add(visualization);
+
+            return result;
         }
 
         /// <summary>

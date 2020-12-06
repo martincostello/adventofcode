@@ -27,7 +27,7 @@ namespace MartinCostello.AdventOfCode
         private ITestOutputHelper OutputHelper { get; }
 
         /// <inheritdoc />
-        public void WriteGrid(bool[,] array, char falseChar, char trueChar)
+        public string WriteGrid(bool[,] array, char falseChar, char trueChar)
         {
             var builder = new StringBuilder().AppendLine();
 
@@ -43,7 +43,11 @@ namespace MartinCostello.AdventOfCode
 
             builder.AppendLine();
 
-            OutputHelper.WriteLine(builder.ToString());
+            string result = builder.ToString();
+
+            OutputHelper.WriteLine(result);
+
+            return result;
         }
 
         /// <inheritdoc />

@@ -229,7 +229,8 @@ namespace MartinCostello.AdventOfCode
             {
                 year,
                 day,
-                solution.Solutions,
+                solutions = solution.Solutions,
+                visualizations = solution.Visualizations,
                 timeToSolve = stopwatch.Elapsed.TotalMilliseconds.ToString("g", CultureInfo.InvariantCulture),
             };
 

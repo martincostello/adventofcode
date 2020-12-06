@@ -31,7 +31,10 @@ namespace MartinCostello.AdventOfCode
         /// <param name="array">The array to write to the log.</param>
         /// <param name="falseChar">The character to display for <see langword="false"/>.</param>
         /// <param name="trueChar">The character to display for <see langword="true"/>.</param>
-        public void WriteGrid(bool[,] array, char falseChar, char trueChar)
+        /// <returns>
+        /// The visualization of the grid.
+        /// </returns>
+        public string WriteGrid(bool[,] array, char falseChar, char trueChar)
         {
             var builder = new StringBuilder();
 
@@ -47,7 +50,11 @@ namespace MartinCostello.AdventOfCode
 
             builder.AppendLine();
 
-            _logger.LogInformation(builder.ToString());
+            string result = builder.ToString();
+
+            _logger.LogInformation(result);
+
+            return result;
         }
 
         /// <summary>

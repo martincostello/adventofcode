@@ -27,7 +27,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         public void Y2016_Day08_GetPixelsLit_Returns_Correct_Solution(string[] instructions, int width, int height, int expected)
         {
             // Act
-            int actual = Day08.GetPixelsLit(instructions, width, height, Logger);
+            (int actual, _) = Day08.GetPixelsLit(instructions, width, height, Logger);
 
             // Assert
             actual.ShouldBe(expected);

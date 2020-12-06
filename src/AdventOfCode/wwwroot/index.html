@@ -113,6 +113,8 @@
                     <p class="card-text">
                         <ul id="solution">
                         </ul>
+                        <ul id="visualization">
+                        </ul>
                     </p>
                 </div>
                 <div class="card-footer">
@@ -149,6 +151,8 @@
         const solution = document.getElementById('solution');
         const solutionContainer = document.getElementById('solution-container');
         const solutionHeader = document.getElementById('solution-header');
+
+        const visualization = document.getElementById('visualization');
 
         const days = document.getElementById('day');
         const error = document.getElementById('error');
@@ -193,10 +197,15 @@
 
             const option = days.selectedOptions[0];
 
-            error.textContent = '';
-            solution.textContent = '';
-            timeToSolve.textContent = '';
             inputFile.value = '';
+
+            error.classList.add(hideClass);
+            error.textContent = '';
+
+            solutionContainer.classList.add(hideClass);
+            solution.innerHTML = '';
+            timeToSolve.textContent = '';
+            visualization.innerHTML = '';
 
             form.setAttribute('action', option.getAttribute('data-location'));
 
@@ -241,10 +250,11 @@
             const solveIt = async () => {
 
                 error.classList.add(hideClass);
+                error.textContent = '';
                 solution.innerHTML = '';
                 solutionContainer.classList.add(hideClass);
-                error.textContent = '';
                 timeToSolve.textContent = '';
+                visualization.innerHTML = '';
 
                 fetch(url, { method: 'POST', body: formData }).then(async (response) => {
                     var body = await response.json();
@@ -265,6 +275,21 @@
                             element.classList.add('text-monospace');
                             element.textContent = value;
                             solution.appendChild(element);
+                        });
+
+                        body.visualizations.forEach((value) => {
+
+                            const pre = document.createElement('pre');
+                            //pre.classList.add('pre-scrollable');
+                            pre.textContent = value;
+
+                            const code = document.createElement('code');
+                            code.appendChild(pre);
+
+                            const li = document.createElement('li');
+                            li.appendChild(code);
+
+                            solution.appendChild(li);
                         });
 
                         solutionContainer.classList.remove(hideClass);

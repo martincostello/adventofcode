@@ -29,7 +29,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         /// <returns>
         /// The number of safe tiles in the map described by <paramref name="firstRowTiles"/>.
         /// </returns>
-        internal static int FindSafeTileCount(
+        internal static (int safeTileCount, string visualization) FindSafeTileCount(
             string firstRowTiles,
             int rows,
             ILogger logger)
@@ -62,9 +62,9 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
                 }
             }
 
-            logger.WriteGrid(tiles, '.', '^');
+            string visualization = logger.WriteGrid(tiles, '.', '^');
 
-            return (width * rows) - CountTrapTiles(tiles);
+            return ((width * rows) - CountTrapTiles(tiles), visualization);
         }
 
         /// <inheritdoc />
@@ -73,14 +73,21 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
             int rows = ParseInt32(args[0]);
             string firstRowTiles = args.Length > 1 ? args[1] : (await ReadResourceAsStringAsync()).TrimEnd();
 
-            SafeTileCount = FindSafeTileCount(firstRowTiles, rows, Logger);
+            (int safeTileCount, string visualization) = FindSafeTileCount(firstRowTiles, rows, Logger);
+
+            SafeTileCount = safeTileCount;
 
             if (Verbose)
             {
                 Logger.WriteLine($"The number of safe tiles is {SafeTileCount:N0}.");
             }
 
-            return PuzzleResult.Create(SafeTileCount);
+            var result = new PuzzleResult();
+
+            result.Solutions.Add(SafeTileCount);
+            result.Visualizations.Add(visualization);
+
+            return result;
         }
 
         /// <summary>

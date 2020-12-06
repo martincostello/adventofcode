@@ -139,10 +139,8 @@ namespace MartinCostello.AdventOfCode.Benchmarks
 
         private sealed class NullLogger : ILogger
         {
-            public void WriteGrid(bool[,] array, char falseChar, char trueChar)
-            {
-                // No-op
-            }
+            public string WriteGrid(bool[,] array, char falseChar, char trueChar)
+                => string.Empty;
 
             public void WriteLine(string format, params object[] args)
             {
