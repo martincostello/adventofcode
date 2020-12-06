@@ -89,7 +89,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
                 Logger.WriteLine("The score after the last block is broken is {0}", Score);
             }
 
-            return PuzzleResult.Create(BlockTileCount, Score);
+            return PuzzleResult.Create(BlockTileCount/*, Score*/);
         }
     }
 }
