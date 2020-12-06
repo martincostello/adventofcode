@@ -57,7 +57,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
         }
 
         [Theory]
-        [InlineData(new string[] { }, 207)]
+        [InlineData(new string[0], 207)]
         [InlineData(new[] { "true" }, 804)]
         public async Task Y2015_Day09_Solve_Returns_Correct_Solution(string[] args, int expected)
         {

@@ -49,7 +49,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
         }
 
         [Theory]
-        [InlineData(new string[] { }, 191164)]
+        [InlineData(new string[0], 191164)]
         [InlineData(new[] { "red" }, 87842)]
         public async Task Y2015_Day12_Solve_Returns_Correct_Solution(string[] args, int expected)
         {

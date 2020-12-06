@@ -46,7 +46,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
         }
 
         [Theory(Skip = "Too slow.")]
-        [InlineData(new string[] { }, 11266889531)]
+        [InlineData(new string[0], 11266889531)]
         [InlineData(new string[] { "4" }, 77387711)]
         public async Task Y2015_Day24_Solve_Returns_Correct_Solution(string[] args, long expected)
         {
