@@ -108,7 +108,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
                     BlocksToEasterBunnyHQ);
             }
 
-            return PuzzleResult.Create(BlocksToEasterBunnyHQ, BlocksToEasterBunnyHQIgnoringDuplicates);
+            return PuzzleResult.Create(BlocksToEasterBunnyHQIgnoringDuplicates, BlocksToEasterBunnyHQ);
         }
 
         /// <summary>
