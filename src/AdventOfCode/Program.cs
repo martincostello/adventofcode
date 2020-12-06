@@ -71,17 +71,22 @@ namespace MartinCostello.AdventOfCode
                 day = 0;
             }
 
-            if (args.Length == 2 &&
-                !int.TryParse(args[1], NumberStyles.Integer & ~NumberStyles.AllowLeadingSign, CultureInfo.InvariantCulture, out int year))
+            int year = 0;
+
+            if (args.Length > 1)
             {
-                year = 0;
+                if (!int.TryParse(args[1], NumberStyles.Integer & ~NumberStyles.AllowLeadingSign, CultureInfo.InvariantCulture, out year))
+                {
+                    year = 0;
+                }
+
+                args = args[2..];
             }
             else
             {
                 year = DateTime.UtcNow.Year;
+                args = args[1..];
             }
-
-            args = args[1..];
 
             using var cts = new CancellationTokenSource();
 
