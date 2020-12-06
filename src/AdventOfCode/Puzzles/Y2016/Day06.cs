@@ -6,6 +6,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
     using System.Collections.Generic;
     using System.Linq;
     using System.Text;
+    using System.Threading;
+    using System.Threading.Tasks;
 
     /// <summary>
     /// A class representing the puzzle for <c>https://adventofcode.com/2016/day/6</c>. This class cannot be inherited.
@@ -57,7 +59,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         }
 
         /// <inheritdoc />
-        protected override object[] SolveCore(string[] args)
+        protected override Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
         {
             IList<string> messages = ReadResourceAsLines();
 
@@ -70,11 +72,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
                 Logger.WriteLine($"The error-corrected message using the least likely letters is: {ModifiedErrorCorrectedMessage}.");
             }
 
-            return new object[]
-            {
-                ErrorCorrectedMessage,
-                ModifiedErrorCorrectedMessage,
-            };
+            return PuzzleResult.Create(ErrorCorrectedMessage, ModifiedErrorCorrectedMessage);
         }
     }
 }

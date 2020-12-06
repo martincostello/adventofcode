@@ -5,6 +5,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
 {
     using System;
     using System.Collections.Generic;
+    using System.Threading;
+    using System.Threading.Tasks;
 
     /// <summary>
     /// A class representing the puzzle for <c>https://adventofcode.com/2016/day/12</c>. This class cannot be inherited.
@@ -173,7 +175,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         }
 
         /// <inheritdoc />
-        protected override object[] SolveCore(string[] args)
+        protected override Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
         {
             IList<string> instructions = ReadResourceAsLines();
 
@@ -189,11 +191,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
                 Logger.WriteLine($"The value left in register a if c is initialized to 1 is {ValueInRegisterAWhenInitializedWithIgnitionKey:N0}.");
             }
 
-            return new object[]
-            {
-                ValueInRegisterA,
-                ValueInRegisterAWhenInitializedWithIgnitionKey,
-            };
+            return PuzzleResult.Create(ValueInRegisterA, ValueInRegisterAWhenInitializedWithIgnitionKey);
         }
     }
 }

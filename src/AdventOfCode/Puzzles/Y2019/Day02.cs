@@ -55,18 +55,18 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
         }
 
         /// <inheritdoc />
-        protected override object[] SolveCore(string[] args)
+        protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
         {
             string program = ReadResourceAsString();
 
-            Output = RunProgramAsync(program, adjust: true).Result;
+            Output = await RunProgramAsync(program, adjust: true, cancellationToken);
 
             if (Verbose)
             {
                 Logger.WriteLine("The value at position 0 after the program halts is {0}.", Output[0]);
             }
 
-            return new object[] { Output[0] };
+            return PuzzleResult.Create(Output[0]);
         }
     }
 }

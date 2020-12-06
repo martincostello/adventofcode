@@ -6,6 +6,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Threading;
+    using System.Threading.Tasks;
 
     /// <summary>
     /// A class representing the puzzle for <c>https://adventofcode.com/2016/day/10</c>. This class cannot be inherited.
@@ -67,7 +69,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         }
 
         /// <inheritdoc />
-        protected override object[] SolveCore(string[] args)
+        protected override Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
         {
             IList<string> instructions = ReadResourceAsLines();
             IList<int> binsOfInterest = new[] { 0, 1, 2 };
@@ -80,11 +82,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
                 Logger.WriteLine($"The product of the microchips in output bins 0, 1 and 2 is {ProductOfMicrochipsInBins012:N0}.");
             }
 
-            return new object[]
-            {
-                BotThatCompares61And17Microchips,
-                ProductOfMicrochipsInBins012,
-            };
+            return PuzzleResult.Create(BotThatCompares61And17Microchips, ProductOfMicrochipsInBins012);
         }
 
         /// <summary>

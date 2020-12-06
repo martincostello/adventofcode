@@ -7,6 +7,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
     using System.Collections.Generic;
     using System.Drawing;
     using System.Linq;
+    using System.Threading;
+    using System.Threading.Tasks;
 
     /// <summary>
     /// A class representing the puzzle for <c>https://adventofcode.com/2019/day/3</c>. This class cannot be inherited.
@@ -129,7 +131,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
         }
 
         /// <inheritdoc />
-        protected override object[] SolveCore(string[] args)
+        protected override Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
         {
             IList<string> wires = ReadResourceAsLines();
 
@@ -141,11 +143,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
                 Logger.WriteLine("The minimum number of combined steps to get to an intersection is {0}.", MinimumSteps);
             }
 
-            return new object[]
-            {
-                ManhattanDistance,
-                MinimumSteps,
-            };
+            return PuzzleResult.Create(ManhattanDistance, MinimumSteps);
         }
 
         /// <summary>

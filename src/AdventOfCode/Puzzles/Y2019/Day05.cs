@@ -3,7 +3,6 @@
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2019
 {
-    using System;
     using System.Threading;
     using System.Threading.Tasks;
 
@@ -49,19 +48,19 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
         }
 
         /// <inheritdoc />
-        protected override object[] SolveCore(string[] args)
+        protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
         {
             int input = ParseInt32(args[0]);
             string program = ReadResourceAsString();
 
-            DiagnosticCode = RunProgramAsync(program, input, CancellationToken.None).Result;
+            DiagnosticCode = await RunProgramAsync(program, input, cancellationToken);
 
             if (Verbose)
             {
                 Logger.WriteLine("The program produces diagnostic code {0}.", DiagnosticCode);
             }
 
-            return new object[] { DiagnosticCode };
+            return PuzzleResult.Create(DiagnosticCode);
         }
     }
 }

@@ -6,6 +6,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Threading;
+    using System.Threading.Tasks;
 
     /// <summary>
     /// A class representing the puzzle for <c>https://adventofcode.com/2015/day/21</c>. This class cannot be inherited.
@@ -82,7 +84,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
         }
 
         /// <inheritdoc />
-        protected override object[] SolveCore(string[] args)
+        protected override Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
         {
             string[] potentialWeapons = Shop.PotentialWeapons.Keys.ToArray();
             string?[] potentialArmor = Shop.PotentialArmor.Keys.Concat(new string?[] { null }).ToArray();
@@ -143,11 +145,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
                     MaximumCostToLose);
             }
 
-            return new object[]
-            {
-                MaximumCostToLose,
-                MinimumCostToWin,
-            };
+            return PuzzleResult.Create(MaximumCostToLose, MinimumCostToWin);
         }
 
         /// <summary>

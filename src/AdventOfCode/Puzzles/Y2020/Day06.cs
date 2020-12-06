@@ -5,6 +5,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
 {
     using System.Collections.Generic;
     using System.Linq;
+    using System.Threading;
+    using System.Threading.Tasks;
 
     /// <summary>
     /// A class representing the puzzle for <c>https://adventofcode.com/2020/day/6</c>. This class cannot be inherited.
@@ -67,7 +69,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
         }
 
         /// <inheritdoc />
-        protected override object[] SolveCore(string[] args)
+        protected override Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
         {
             IList<string> values = ReadResourceAsLines();
 
@@ -80,11 +82,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
                 Logger.WriteLine("The sum of the questions answered \"yes\" by everyone in the groups is {0}.", SumOfQuestionsEveryoneYes);
             }
 
-            return new object[]
-            {
-                SumOfQuestionsAnyoneYes,
-                SumOfQuestionsEveryoneYes,
-            };
+            return PuzzleResult.Create(SumOfQuestionsAnyoneYes, SumOfQuestionsEveryoneYes);
         }
     }
 }

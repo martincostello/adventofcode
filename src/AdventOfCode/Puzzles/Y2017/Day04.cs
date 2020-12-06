@@ -5,6 +5,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
 {
     using System.Collections.Generic;
     using System.Linq;
+    using System.Threading;
+    using System.Threading.Tasks;
 
     /// <summary>
     /// A class representing the puzzle for <c>https://adventofcode.com/2017/day/4</c>. This class cannot be inherited.
@@ -50,7 +52,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
         }
 
         /// <inheritdoc />
-        protected override object[] SolveCore(string[] args)
+        protected override Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
         {
             ICollection<string> passphrases = ReadResourceAsLines();
 
@@ -63,11 +65,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
                 Logger.WriteLine($"There are {ValidPassphraseCountV2:N0} valid passphrases using version 2 of the policy.");
             }
 
-            return new object[]
-            {
-                ValidPassphraseCountV1,
-                ValidPassphraseCountV2,
-            };
+            return PuzzleResult.Create(ValidPassphraseCountV1, ValidPassphraseCountV2);
         }
     }
 }

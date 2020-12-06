@@ -5,6 +5,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
 {
     using System.Collections.Generic;
     using System.Linq;
+    using System.Threading;
+    using System.Threading.Tasks;
 
     /// <summary>
     /// A class representing the puzzle for <c>https://adventofcode.com/2016/day/19</c>. This class cannot be inherited.
@@ -37,7 +39,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         }
 
         /// <inheritdoc />
-        protected override object[] SolveCore(string[] args)
+        protected override Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
         {
             int count = ParseInt32(args[0]);
             int version = args.Length > 1 ? ParseInt32(args[1]) : 1;
@@ -49,7 +51,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
                 Logger.WriteLine($"The elf that gets all the presents using version {version} of the rules is {ElfWithAllPresents:N0}.");
             }
 
-            return new object[] { ElfWithAllPresents };
+            return PuzzleResult.Create(ElfWithAllPresents);
         }
 
         /// <summary>

@@ -5,6 +5,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
 {
     using System.Collections.Generic;
     using System.Text;
+    using System.Threading;
+    using System.Threading.Tasks;
 
     /// <summary>
     /// A class representing the puzzle for <c>https://adventofcode.com/2019/day/8</c>. This class cannot be inherited.
@@ -109,7 +111,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
         }
 
         /// <inheritdoc />
-        protected override object[] SolveCore(string[] args)
+        protected override Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
         {
             string image = ReadResourceAsString().TrimEnd('\n');
 
@@ -120,7 +122,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
                 Logger.WriteLine("The checksum of the image data is {0}.", Checksum);
             }
 
-            return new object[] { Checksum };
+            return PuzzleResult.Create(Checksum);
         }
 
         /// <summary>

@@ -8,6 +8,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
     using System.Globalization;
     using System.Security.Cryptography;
     using System.Text;
+    using System.Threading;
+    using System.Threading.Tasks;
 
     /// <summary>
     /// A class representing the puzzle for <c>https://adventofcode.com/2016/day/14</c>. This class cannot be inherited.
@@ -88,7 +90,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         }
 
         /// <inheritdoc />
-        protected override object[] SolveCore(string[] args)
+        protected override Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
         {
             string salt = args[0];
 
@@ -101,11 +103,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
                 Logger.WriteLine($"The index that produces the 64th one-time pad key when using key stretching is {IndexOfKey64WithStretching:N0}.");
             }
 
-            return new object[]
-            {
-                IndexOfKey64,
-                IndexOfKey64WithStretching,
-            };
+            return PuzzleResult.Create(IndexOfKey64, IndexOfKey64WithStretching);
         }
 
         /// <summary>

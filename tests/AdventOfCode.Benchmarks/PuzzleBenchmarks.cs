@@ -5,6 +5,7 @@ namespace MartinCostello.AdventOfCode.Benchmarks
 {
     using System;
     using System.Collections.Generic;
+    using System.Threading.Tasks;
     using BenchmarkDotNet.Attributes;
     using BenchmarkDotNet.Diagnosers;
 
@@ -85,8 +86,8 @@ namespace MartinCostello.AdventOfCode.Benchmarks
 
         [Benchmark]
         [ArgumentsSource(nameof(Puzzles))]
-        public object[] Solve(PuzzleInput input)
-            => input.Puzzle.Solve(input.Args);
+        public async Task<PuzzleResult> Solve(PuzzleInput input)
+            => await input.Puzzle.SolveAsync(input.Args);
 
         public sealed class PuzzleInput<T> : PuzzleInput
             where T : IPuzzle, new()

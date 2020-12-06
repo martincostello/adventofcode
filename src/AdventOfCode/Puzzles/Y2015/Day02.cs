@@ -6,6 +6,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Threading;
+    using System.Threading.Tasks;
 
     /// <summary>
     /// A class representing the puzzle for <c>https://adventofcode.com/2015/day/2</c>. This class cannot be inherited.
@@ -47,12 +49,9 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
         }
 
         /// <inheritdoc />
-        protected override object[] SolveCore(string[] args)
+        protected override Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
         {
-            (int area, int length) = GetTotalWrappingPaperAreaAndRibbonLength(ReadResourceAsLines());
-
-            TotalAreaOfPaper = area;
-            TotalLengthOfRibbon = length;
+            (TotalAreaOfPaper, TotalLengthOfRibbon) = GetTotalWrappingPaperAreaAndRibbonLength(ReadResourceAsLines());
 
             if (Verbose)
             {
@@ -63,11 +62,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
                     TotalLengthOfRibbon);
             }
 
-            return new object[]
-            {
-                TotalAreaOfPaper,
-                TotalLengthOfRibbon,
-            };
+            return PuzzleResult.Create(TotalAreaOfPaper, TotalLengthOfRibbon);
         }
 
         /// <summary>

@@ -8,6 +8,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
     using System.Collections.Generic;
     using System.Linq;
     using System.Text;
+    using System.Threading;
+    using System.Threading.Tasks;
 
     /// <summary>
     /// A class representing the puzzle for <c>https://adventofcode.com/2016/day/4</c>. This class cannot be inherited.
@@ -82,7 +84,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         }
 
         /// <inheritdoc />
-        protected override object[] SolveCore(string[] args)
+        protected override Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
         {
             IList<string> addresses = ReadResourceAsLines();
 
@@ -95,11 +97,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
                 Logger.WriteLine("{0:N0} IPv7 addresses support SSL.", IPAddressesSupportingSsl);
             }
 
-            return new object[]
-            {
-                IPAddressesSupportingTls,
-                IPAddressesSupportingSsl,
-            };
+            return PuzzleResult.Create(IPAddressesSupportingTls, IPAddressesSupportingSsl);
         }
 
         /// <summary>

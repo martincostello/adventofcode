@@ -6,6 +6,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
     using System;
     using System.Collections.Generic;
     using System.Drawing;
+    using System.Threading;
+    using System.Threading.Tasks;
 
     /// <summary>
     /// A class representing the puzzle for <c>https://adventofcode.com/2017/day/3</c>. This class cannot be inherited.
@@ -175,7 +177,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
         }
 
         /// <inheritdoc />
-        protected override object[] SolveCore(string[] args)
+        protected override Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
         {
             int square = ParseInt32(args[0]);
 
@@ -188,11 +190,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
                 Logger.WriteLine($"The first value written that is larger than square {square:N0} is {FirstStorageLargerThanInput:N0}.");
             }
 
-            return new object[]
-            {
-                Steps,
-                FirstStorageLargerThanInput,
-            };
+            return PuzzleResult.Create(Steps, FirstStorageLargerThanInput);
         }
 
         /// <summary>

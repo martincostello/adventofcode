@@ -117,12 +117,12 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
         /// <summary>
         /// Runs the virtual machine's program as an asynchronous operation.
         /// </summary>
-        /// <param name="cancellationToken">The optional cancellation token to use.</param>
+        /// <param name="cancellationToken">The cancellation token to use.</param>
         /// <returns>
         /// A <see cref="Task{TResult}"/> that completes when the program exits
         /// or there is not yet any input available to read.
         /// </returns>
-        internal async Task<bool> RunAsync(CancellationToken cancellationToken = default)
+        internal async Task<bool> RunAsync(CancellationToken cancellationToken)
         {
             long Read(long index, long offset, int mode)
             {

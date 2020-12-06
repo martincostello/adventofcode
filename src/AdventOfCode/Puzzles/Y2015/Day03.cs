@@ -6,6 +6,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
     using System;
     using System.Collections.Generic;
     using System.Drawing;
+    using System.Threading;
+    using System.Threading.Tasks;
 
     /// <summary>
     /// A class representing the puzzle for <c>https://adventofcode.com/2015/day/3</c>.
@@ -81,7 +83,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
         }
 
         /// <inheritdoc />
-        protected override object[] SolveCore(string[] args)
+        protected override Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
         {
             string instructions = ReadResourceAsString();
 
@@ -99,11 +101,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
                     HousesWithPresentsFromSantaAndRoboSanta);
             }
 
-            return new object[]
-            {
-                HousesWithPresentsFromSanta,
-                HousesWithPresentsFromSantaAndRoboSanta,
-            };
+            return PuzzleResult.Create(HousesWithPresentsFromSanta, HousesWithPresentsFromSantaAndRoboSanta);
         }
 
         /// <summary>

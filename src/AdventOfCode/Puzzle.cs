@@ -8,6 +8,8 @@ namespace MartinCostello.AdventOfCode
     using System.Globalization;
     using System.IO;
     using System.Reflection;
+    using System.Threading;
+    using System.Threading.Tasks;
 
     /// <summary>
     /// The base class for puzzles.
@@ -36,7 +38,7 @@ namespace MartinCostello.AdventOfCode
             => Metadata()?.MinimumArguments ?? 0;
 
         /// <inheritdoc />
-        public virtual object[] Solve(string[] args)
+        public async Task<PuzzleResult> SolveAsync(string[] args, CancellationToken cancellationToken = default)
         {
             if (!EnsureArguments(args, MinimumArguments))
             {
@@ -50,7 +52,7 @@ namespace MartinCostello.AdventOfCode
                 throw new PuzzleException(message);
             }
 
-            return SolveCore(args);
+            return await SolveCoreAsync(args, cancellationToken);
         }
 
         /// <summary>
@@ -182,6 +184,7 @@ namespace MartinCostello.AdventOfCode
 
             string? value = null;
 
+            // TODO Make async
             while ((value = reader.ReadLine()) != null)
             {
                 lines.Add(value);
@@ -199,16 +202,20 @@ namespace MartinCostello.AdventOfCode
         protected string ReadResourceAsString()
         {
             using var reader = new StreamReader(Resource ?? ReadResource(), leaveOpen: Resource is not null);
+
+            // TODO Make async
             return reader.ReadToEnd();
         }
 
         /// <summary>
-        /// Solves the puzzle given the specified arguments.
+        /// Solves the puzzle given the specified arguments as an asynchronous operation.
         /// </summary>
         /// <param name="args">The input arguments to the puzzle.</param>
+        /// <param name="cancellationToken">The cancellation token to use.</param>
         /// <returns>
-        /// The solution(s) to the puzzle.
+        /// A <see cref="Task{TResult}"/> representing the asynchronous
+        /// operation which returns the solution to the puzzle.
         /// </returns>
-        protected abstract object[] SolveCore(string[] args);
+        protected abstract Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken);
     }
 }

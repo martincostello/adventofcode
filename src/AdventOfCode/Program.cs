@@ -6,6 +6,7 @@ namespace MartinCostello.AdventOfCode
     using System;
     using System.Diagnostics;
     using System.Globalization;
+    using System.Threading.Tasks;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.Extensions.Hosting;
 
@@ -19,8 +20,8 @@ namespace MartinCostello.AdventOfCode
         /// </summary>
         /// <param name="args">The arguments to the application.</param>
         /// <returns>The exit code from the application.</returns>
-        public static int Main(string[] args)
-            => Run(args, new ConsoleLogger());
+        public static async Task<int> Main(string[] args)
+            => await RunAsync(args, new ConsoleLogger());
 
         /// <summary>
         /// Creates the host builder to use for the application.
@@ -46,13 +47,13 @@ namespace MartinCostello.AdventOfCode
         /// <param name="args">The arguments to the application.</param>
         /// <param name="logger">The logger to use.</param>
         /// <returns>The exit code from the application.</returns>
-        internal static int Run(string[] args, ILogger logger)
+        internal static async Task<int> RunAsync(string[] args, ILogger logger)
         {
             if (args == null || args.Length < 1)
             {
                 try
                 {
-                    CreateHostBuilder(Array.Empty<string>()).Build().Run();
+                    await CreateHostBuilder(Array.Empty<string>()).Build().RunAsync();
                     return 0;
                 }
 #pragma warning disable CA1031
@@ -81,20 +82,20 @@ namespace MartinCostello.AdventOfCode
 
             args = args[1..];
 
-            return SolvePuzzle(year, day, args, logger);
+            return await SolvePuzzleAsync(year, day, args, logger);
         }
 
         /// <summary>
-        /// Solves the puzzle associated with the specified year and day.
+        /// Solves the puzzle associated with the specified year and day as an asychronous operation.
         /// </summary>
         /// <param name="year">The year associated with the puzzle.</param>
         /// <param name="day">The day associated with the puzzle.</param>
         /// <param name="args">The arguments to pass to the puzzle.</param>
         /// <param name="logger">The logger to use.</param>
         /// <returns>
-        /// The value returned by <see cref="IPuzzle.Solve"/>.
+        /// The solution to the puzzle.
         /// </returns>
-        private static int SolvePuzzle(
+        private static async Task<int> SolvePuzzleAsync(
             int year,
             int day,
             string[] args,
@@ -122,7 +123,7 @@ namespace MartinCostello.AdventOfCode
 
             try
             {
-                puzzle.Solve(args);
+                _ = await puzzle.SolveAsync(args);
             }
             catch (PuzzleException ex)
             {

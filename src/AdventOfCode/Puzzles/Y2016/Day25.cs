@@ -4,6 +4,8 @@
 namespace MartinCostello.AdventOfCode.Puzzles.Y2016
 {
     using System.Collections.Generic;
+    using System.Threading;
+    using System.Threading.Tasks;
 
     /// <summary>
     /// A class representing the puzzle for <c>https://adventofcode.com/2016/day/25</c>. This class cannot be inherited.
@@ -17,7 +19,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         public int ClockSignalValue { get; private set; }
 
         /// <inheritdoc />
-        protected override object[] SolveCore(string[] args)
+        protected override Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
         {
             IList<string> instructions = ReadResourceAsLines();
 
@@ -79,7 +81,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
                 Logger.WriteLine($"The lowest positive integer that produces a clock signal is '{ClockSignalValue:N0}'.");
             }
 
-            return new object[] { ClockSignalValue };
+            return PuzzleResult.Create(ClockSignalValue);
         }
     }
 }

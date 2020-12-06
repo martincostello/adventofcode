@@ -8,6 +8,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
     using System.Diagnostics;
     using System.Linq;
     using System.Security.Cryptography;
+    using System.Threading;
+    using System.Threading.Tasks;
 
     /// <summary>
     /// A class representing the puzzle for <c>https://adventofcode.com/2015/day/22</c>. This class cannot be inherited.
@@ -90,7 +92,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
         }
 
         /// <inheritdoc />
-        protected override object[] SolveCore(string[] args)
+        protected override Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
         {
             string difficulty = args.Length == 1 ? args[0] : "easy";
 
@@ -117,7 +119,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
                     MinimumCostToWin);
             }
 
-            return new object[] { MinimumCostToWin };
+            return PuzzleResult.Create(MinimumCostToWin);
         }
 
         /// <summary>

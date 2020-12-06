@@ -62,11 +62,12 @@ namespace MartinCostello.AdventOfCode.Puzzles
             };
 
             // Act
-            object[] result = puzzle.Solve(args);
+            PuzzleResult result = puzzle.SolveAsync(args).Result; // TODO Make async
 
             // Assert
             result.ShouldNotBeNull();
-            result.Length.ShouldBeGreaterThan(0);
+            result.Solutions.ShouldNotBeNull();
+            result.Solutions.Count.ShouldBeGreaterThan(0);
 
             return puzzle;
         }

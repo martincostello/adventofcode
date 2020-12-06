@@ -5,6 +5,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
 {
     using System.Collections.Generic;
     using System.Linq;
+    using System.Threading;
+    using System.Threading.Tasks;
 
     /// <summary>
     /// A class representing the puzzle for <c>https://adventofcode.com/2017/day/13</c>. This class cannot be inherited.
@@ -103,7 +105,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
         }
 
         /// <inheritdoc />
-        protected override object[] SolveCore(string[] args)
+        protected override Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
         {
             IList<string> depthRanges = ReadResourceAsLines();
 
@@ -116,11 +118,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
                 Logger.WriteLine($"The fewest number of picoseconds that the packet needs to be delayed by to pass through the firewall without being caught is {ShortestDelay:N0}.");
             }
 
-            return new object[]
-            {
-                Severity,
-                ShortestDelay,
-            };
+            return PuzzleResult.Create(Severity, ShortestDelay);
         }
     }
 }

@@ -5,6 +5,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
 {
     using System.Collections.Generic;
     using System.Linq;
+    using System.Threading;
+    using System.Threading.Tasks;
 
     /// <summary>
     /// A class representing the puzzle for <c>https://adventofcode.com/2017/day/6</c>. This class cannot be inherited.
@@ -41,7 +43,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
         }
 
         /// <inheritdoc />
-        protected override object[] SolveCore(string[] args)
+        protected override Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
         {
             IList<int> memory = ReadResourceAsString().Trim()
                 .Split('\t')
@@ -56,11 +58,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
                 Logger.WriteLine($"{LoopSize:N0} cycles are in the infinite loop that arises from the configuration in the input.");
             }
 
-            return new object[]
-            {
-                CycleCount,
-                LoopSize,
-            };
+            return PuzzleResult.Create(CycleCount, LoopSize);
         }
 
         /// <summary>

@@ -8,6 +8,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
     using System.Drawing;
     using System.Linq;
     using System.Text;
+    using System.Threading;
+    using System.Threading.Tasks;
 
     /// <summary>
     /// A class representing the puzzle for <c>https://adventofcode.com/2015/day/18</c>. This class cannot be inherited.
@@ -73,7 +75,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
         }
 
         /// <inheritdoc />
-        protected override object[] SolveCore(string[] args)
+        protected override Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
         {
             IList<string> initial = ReadResourceAsLines();
             int steps = ParseInt32(args[0]);
@@ -102,7 +104,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
                     steps);
             }
 
-            return new object[] { LightsIlluminated };
+            return PuzzleResult.Create(LightsIlluminated);
         }
 
         /// <summary>

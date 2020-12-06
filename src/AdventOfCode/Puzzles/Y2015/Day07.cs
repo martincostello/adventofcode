@@ -6,6 +6,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Threading;
+    using System.Threading.Tasks;
 
     /// <summary>
     /// A class representing the puzzle for <c>https://adventofcode.com/2015/day/7</c>. This class cannot be inherited.
@@ -104,7 +106,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
         }
 
         /// <inheritdoc />
-        protected override object[] SolveCore(string[] args)
+        protected override Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
         {
             IList<string> instructions = ReadResourceAsLines();
 
@@ -131,11 +133,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
                 Logger.WriteLine("The new signal for wire a is {0:N0}.", SecondSignal);
             }
 
-            return new object[]
-            {
-                FirstSignal,
-                SecondSignal,
-            };
+            return PuzzleResult.Create(FirstSignal, SecondSignal);
         }
 
         /// <summary>

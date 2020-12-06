@@ -3,6 +3,9 @@
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2016
 {
+    using System.Threading;
+    using System.Threading.Tasks;
+
     /// <summary>
     /// A class representing the puzzle for <c>https://adventofcode.com/2016/day/18</c>. This class cannot be inherited.
     /// </summary>
@@ -65,7 +68,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         }
 
         /// <inheritdoc />
-        protected override object[] SolveCore(string[] args)
+        protected override Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
         {
             int rows = ParseInt32(args[0]);
             string firstRowTiles = args.Length > 1 ? args[1] : ReadResourceAsString().TrimEnd();
@@ -77,7 +80,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
                 Logger.WriteLine($"The number of safe tiles is {SafeTileCount:N0}.");
             }
 
-            return new object[] { SafeTileCount };
+            return PuzzleResult.Create(SafeTileCount);
         }
 
         /// <summary>

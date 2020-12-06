@@ -6,6 +6,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Threading;
+    using System.Threading.Tasks;
 
     /// <summary>
     /// A class representing the puzzle for <c>https://adventofcode.com/2016/day/15</c>. This class cannot be inherited.
@@ -53,7 +55,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         }
 
         /// <inheritdoc />
-        protected override object[] SolveCore(string[] args)
+        protected override Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
         {
             IList<string> input = ReadResourceAsLines();
 
@@ -71,11 +73,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
                 Logger.WriteLine($"The first time the button can be pressed to get a capsule with the extra disc present is {TimeOfFirstButtonPressWithExtraDisc:N0}.");
             }
 
-            return new object[]
-            {
-                TimeOfFirstButtonPress,
-                TimeOfFirstButtonPressWithExtraDisc,
-            };
+            return PuzzleResult.Create(TimeOfFirstButtonPress, TimeOfFirstButtonPressWithExtraDisc);
         }
 
         /// <summary>

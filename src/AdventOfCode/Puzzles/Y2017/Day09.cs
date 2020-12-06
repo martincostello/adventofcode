@@ -3,6 +3,9 @@
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2017
 {
+    using System.Threading;
+    using System.Threading.Tasks;
+
     /// <summary>
     /// A class representing the puzzle for <c>https://adventofcode.com/2017/day/9</c>. This class cannot be inherited.
     /// </summary>
@@ -99,7 +102,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
         }
 
         /// <inheritdoc />
-        protected override object[] SolveCore(string[] args)
+        protected override Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
         {
             string stream = ReadResourceAsString().Trim();
 
@@ -111,11 +114,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
                 Logger.WriteLine($"There are {GarbageCount:N0} non-canceled characters within the garbage.");
             }
 
-            return new object[]
-            {
-                TotalScore,
-                GarbageCount,
-            };
+            return PuzzleResult.Create(TotalScore, GarbageCount);
         }
     }
 }

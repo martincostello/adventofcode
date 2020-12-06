@@ -9,6 +9,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
     using System.Linq;
     using System.Security.Cryptography;
     using System.Text;
+    using System.Threading;
+    using System.Threading.Tasks;
 
     /// <summary>
     /// A class representing the puzzle for <c>https://adventofcode.com/2016/day/5</c>. This class cannot be inherited.
@@ -81,7 +83,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         }
 
         /// <inheritdoc />
-        protected override object[] SolveCore(string[] args)
+        protected override Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
         {
             string doorId = args[0];
 
@@ -94,11 +96,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
                 Logger.WriteLine($"The password for door '{doorId}' is '{PasswordWhenPositionIsIndicated}' when the position is specified in the hash.");
             }
 
-            return new object[]
-            {
-                Password,
-                PasswordWhenPositionIsIndicated,
-            };
+            return PuzzleResult.Create(Password, PasswordWhenPositionIsIndicated);
         }
 
         /// <summary>

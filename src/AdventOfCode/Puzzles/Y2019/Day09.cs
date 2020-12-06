@@ -3,7 +3,6 @@
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2019
 {
-    using System;
     using System.Collections.Generic;
     using System.Threading;
     using System.Threading.Channels;
@@ -59,19 +58,19 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
         }
 
         /// <inheritdoc />
-        protected override object[] SolveCore(string[] args)
+        protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
         {
             long input = ParseInt64(args[0]);
             string program = ReadResourceAsString();
 
-            Keycode = RunProgramAsync(program, input).Result[0];
+            Keycode = (await RunProgramAsync(program, input, cancellationToken))[0];
 
             if (Verbose)
             {
                 Logger.WriteLine("The program produces BOOST keycode {0}.", Keycode);
             }
 
-            return new object[] { Keycode };
+            return PuzzleResult.Create(Keycode);
         }
     }
 }

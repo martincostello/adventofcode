@@ -6,6 +6,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Threading;
+    using System.Threading.Tasks;
 
     /// <summary>
     /// A class representing the puzzle for <c>https://adventofcode.com/2015/day/19</c>. This class cannot be inherited.
@@ -119,7 +121,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
         }
 
         /// <inheritdoc />
-        protected override object[] SolveCore(string[] args)
+        protected override Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
         {
             bool fabricate = args[0].ToUpperInvariant() switch
             {
@@ -158,7 +160,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
                 }
             }
 
-            return new object[] { Solution };
+            return PuzzleResult.Create(Solution);
         }
     }
 }

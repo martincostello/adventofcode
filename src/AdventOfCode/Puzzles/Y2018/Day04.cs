@@ -7,6 +7,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2018
     using System.Collections.Generic;
     using System.Globalization;
     using System.Linq;
+    using System.Threading;
+    using System.Threading.Tasks;
 
     /// <summary>
     /// A class representing the puzzle for <c>https://adventofcode.com/2018/day/4</c>. This class cannot be inherited.
@@ -161,7 +163,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2018
         }
 
         /// <inheritdoc />
-        protected override object[] SolveCore(string[] args)
+        protected override Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
         {
             IList<string> log = ReadResourceAsLines();
 
@@ -173,11 +175,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2018
                 Logger.WriteLine($"The most common minute a guard was asleep in multiplied by the guard's ID is {SleepiestMinuteGuard:N0}.");
             }
 
-            return new object[]
-            {
-                SleepiestGuardMinute,
-                SleepiestMinuteGuard,
-            };
+            return PuzzleResult.Create(SleepiestGuardMinute, SleepiestMinuteGuard);
         }
 
         /// <summary>
