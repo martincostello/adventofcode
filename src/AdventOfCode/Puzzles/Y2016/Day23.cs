@@ -28,7 +28,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
 
             IList<string> instructions = await ReadResourceAsLinesAsync();
 
-            IDictionary<char, int> registers = Day12.Process(instructions, initialValueOfA: input);
+            IDictionary<char, int> registers = Day12.Process(instructions, initialValueOfA: input, cancellationToken: cancellationToken);
             SafeValue = registers['a'];
 
             if (Verbose)

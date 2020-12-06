@@ -67,7 +67,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
                 Day12.Process(
                     instructions,
                     initialValueOfA: i,
-                    signal: Signal);
+                    signal: Signal,
+                    cancellationToken: cancellationToken);
 
                 if (isRepeating)
                 {

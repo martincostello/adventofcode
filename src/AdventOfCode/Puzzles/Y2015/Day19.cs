@@ -28,16 +28,22 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
         /// </summary>
         /// <param name="molecule">The input molecule.</param>
         /// <param name="replacements">The possible replacements.</param>
+        /// <param name="cancellationToken">The cancellation token to use.</param>
         /// <returns>
         /// The distinct molecules that can be created from <paramref name="molecule"/> using all of the
         /// possible replacements specified by <paramref name="replacements"/>.
         /// </returns>
-        internal static ICollection<string> GetPossibleMolecules(string molecule, ICollection<string> replacements)
+        internal static ICollection<string> GetPossibleMolecules(
+            string molecule,
+            ICollection<string> replacements,
+            CancellationToken cancellationToken)
         {
             var molecules = new HashSet<string>();
 
             foreach (string replacement in replacements)
             {
+                cancellationToken.ThrowIfCancellationRequested();
+
                 string[] split = replacement.Split(" => ", StringSplitOptions.None);
 
                 string source = split[0];
@@ -73,12 +79,13 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
         /// <param name="molecule">The desired molecule.</param>
         /// <param name="replacements">The possible replacements.</param>
         /// <param name="logger">The logger to use.</param>
+        /// <param name="cancellationToken">The cancellation token to use.</param>
         /// <returns>
         /// The minimum number of steps required to create <paramref name="molecule"/> using the possible
         /// replacements specified by <paramref name="replacements"/>.
         /// </returns>
-        internal static int GetMinimumSteps(string molecule, ICollection<string> replacements, ILogger logger)
-            => GetMinimumSteps(molecule, replacements, "e", 1, logger);
+        internal static int GetMinimumSteps(string molecule, ICollection<string> replacements, ILogger logger, CancellationToken cancellationToken)
+            => GetMinimumSteps(molecule, replacements, "e", 1, logger, cancellationToken);
 
         /// <summary>
         /// Gets the minimum number of steps that can be performed to make the specified molecule using the specified replacements.
@@ -88,6 +95,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
         /// <param name="current">The current molecule being worked with.</param>
         /// <param name="step">The current step number.</param>
         /// <param name="logger">The logger to use.</param>
+        /// <param name="cancellationToken">The cancellation token to use.</param>
         /// <returns>
         /// The minimum number of steps required to create <paramref name="molecule"/> using the possible
         /// replacements specified by <paramref name="replacements"/>.
@@ -97,9 +105,10 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
             ICollection<string> replacements,
             string current,
             int step,
-            ILogger logger)
+            ILogger logger,
+            CancellationToken cancellationToken)
         {
-            ICollection<string> nextSteps = GetPossibleMolecules(current, replacements);
+            ICollection<string> nextSteps = GetPossibleMolecules(current, replacements, cancellationToken);
 
             if (nextSteps.Contains(molecule))
             {
@@ -111,7 +120,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
 
             foreach (string next in nextSteps.Where((p) => p.Length < molecule.Length))
             {
-                steps.Add(GetMinimumSteps(molecule, replacements, next, step + 1, logger));
+                steps.Add(GetMinimumSteps(molecule, replacements, next, step + 1, logger, cancellationToken));
             }
 
             return steps
@@ -141,7 +150,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
 
             if (fabricate)
             {
-                Solution = GetMinimumSteps(molecule, replacements, Logger);
+                Solution = GetMinimumSteps(molecule, replacements, Logger, cancellationToken);
 
                 if (Verbose)
                 {
@@ -150,7 +159,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
             }
             else
             {
-                ICollection<string> molecules = GetPossibleMolecules(molecule, replacements);
+                ICollection<string> molecules = GetPossibleMolecules(molecule, replacements, cancellationToken);
 
                 Solution = molecules.Count;
 

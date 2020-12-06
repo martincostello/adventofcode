@@ -4,6 +4,7 @@
 namespace MartinCostello.AdventOfCode.Puzzles.Y2015
 {
     using System.Collections.Generic;
+    using System.Threading;
     using System.Threading.Tasks;
     using Shouldly;
     using Xunit;
@@ -31,7 +32,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
             string[] replacements = new[] { "H => HO", "H => OH", "O => HH" };
 
             // Act
-            ICollection<string> actual = Day19.GetPossibleMolecules(molecule, replacements);
+            ICollection<string> actual = Day19.GetPossibleMolecules(molecule, replacements, CancellationToken.None);
 
             // Assert
             actual.ShouldNotBeNull();
@@ -46,7 +47,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
             string[] replacements = new[] { "e => H", "e => O", "H => HO", "H => OH", "O => HH" };
 
             // Act
-            int actual = Day19.GetMinimumSteps(molecule, replacements, Logger);
+            int actual = Day19.GetMinimumSteps(molecule, replacements, Logger, CancellationToken.None);
 
             // Assert
             actual.ShouldBe(3);

@@ -37,17 +37,24 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         /// <param name="salt">The salt to use to generate the one-time pad key.</param>
         /// <param name="ordinal">The ordinal of the key to return the index of.</param>
         /// <param name="useKeyStretching">Whether to use key stretching.</param>
+        /// <param name="cancellationToken">The cancellation token to use.</param>
         /// <returns>
         /// The index of the one-time pad key generated using <paramref name="salt"/>
         /// with the ordinal value specified by <paramref name="ordinal"/>.
         /// </returns>
-        internal static int GetOneTimePadKeyIndex(string salt, int ordinal, bool useKeyStretching)
+        internal static int GetOneTimePadKeyIndex(
+            string salt,
+            int ordinal,
+            bool useKeyStretching,
+            CancellationToken cancellationToken)
         {
             int current = 0;
             var cache = new Dictionary<string, string>();
 
             for (int i = 0; current < ordinal; i++)
             {
+                cancellationToken.ThrowIfCancellationRequested();
+
                 string value = salt + i.ToString(CultureInfo.InvariantCulture);
                 string key = GenerateKey(value, useKeyStretching, cache);
 
@@ -94,8 +101,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         {
             string salt = args[0];
 
-            IndexOfKey64 = GetOneTimePadKeyIndex(salt, 64, useKeyStretching: false);
-            IndexOfKey64WithStretching = GetOneTimePadKeyIndex(salt, 64, useKeyStretching: true);
+            IndexOfKey64 = GetOneTimePadKeyIndex(salt, 64, useKeyStretching: false, cancellationToken);
+            IndexOfKey64WithStretching = GetOneTimePadKeyIndex(salt, 64, useKeyStretching: true, cancellationToken);
 
             if (Verbose)
             {
