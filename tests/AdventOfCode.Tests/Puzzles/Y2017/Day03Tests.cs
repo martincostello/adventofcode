@@ -37,15 +37,15 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
             puzzle.Steps.ShouldBe(expected);
         }
 
-        [Theory]
-        [InlineData("312051", 312453)]
-        public async Task Y2017_Day03_Solve_Returns_Correct_Solution_For_Storage(string square, int expected)
+        [Fact]
+        public async Task Y2017_Day03_Solve_Returns_Correct_Solution_For_Storage()
         {
             // Act
-            var puzzle = await SolvePuzzleAsync<Day03>(square);
+            var puzzle = await SolvePuzzleAsync<Day03>("312051");
 
             // Assert
-            puzzle.FirstStorageLargerThanInput.ShouldBe(expected);
+            puzzle.Steps.ShouldBe(430);
+            puzzle.FirstStorageLargerThanInput.ShouldBe(312453);
         }
     }
 }
