@@ -154,7 +154,7 @@ namespace MartinCostello.AdventOfCode
                 day,
                 solutions = solution.Solutions,
                 visualizations = solution.Visualizations,
-                timeToSolve = stopwatch.Elapsed.TotalMilliseconds.ToString("g", CultureInfo.InvariantCulture),
+                timeToSolve = stopwatch.Elapsed.TotalMilliseconds,
             };
 
             await context.Response.WriteAsJsonAsync(result);
