@@ -158,7 +158,7 @@ namespace MartinCostello.AdventOfCode
             }
             catch (PuzzleException ex)
             {
-                await WriteErrorAsync(context, StatusCodes.Status400BadRequest, "Bad Request", ex.Message);
+                await WriteErrorAsync(context, StatusCodes.Status404NotFound, "Not Found", ex.Message);
                 return;
             }
 
