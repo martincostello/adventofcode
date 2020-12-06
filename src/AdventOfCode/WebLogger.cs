@@ -36,11 +36,14 @@ namespace MartinCostello.AdventOfCode
         /// </returns>
         public string WriteGrid(bool[,] array, char falseChar, char trueChar)
         {
-            var builder = new StringBuilder();
+            int lengthX = array.GetLength(0);
+            int lengthY = array.GetLength(1);
 
-            for (int x = 0; x < array.GetLength(0); x++)
+            var builder = new StringBuilder((lengthX + 2) * lengthY);
+
+            for (int x = 0; x < lengthX; x++)
             {
-                for (int y = 0; y < array.GetLength(1); y++)
+                for (int y = 0; y < lengthY; y++)
                 {
                     builder.Append(array[x, y] ? trueChar : falseChar);
                 }
