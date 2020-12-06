@@ -6,6 +6,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Threading;
+    using System.Threading.Tasks;
 
     /// <summary>
     /// A class representing the puzzle for <c>https://adventofcode.com/2016/day/8</c>. This class cannot be inherited.
@@ -28,7 +30,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         /// <returns>
         /// The number of pixels lit in the grid once the instructions are processed.
         /// </returns>
-        internal static int GetPixelsLit(
+        internal static (int pixelsLit, string visualization) GetPixelsLit(
             IEnumerable<string> instructions,
             int width,
             int height,
@@ -57,24 +59,31 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
                 }
             }
 
-            logger.WriteGrid(grid, ' ', 'X');
+            string visualization = logger.WriteGrid(grid, ' ', 'X');
 
-            return CountLitPixels(grid);
+            return (CountLitPixels(grid), visualization);
         }
 
         /// <inheritdoc />
-        protected override object[] SolveCore(string[] args)
+        protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
         {
-            IList<string> instructions = ReadResourceAsLines();
+            IList<string> instructions = await ReadResourceAsLinesAsync();
 
-            PixelsLit = GetPixelsLit(instructions, width: 50, height: 6, Logger);
+            (int pixelsLit, string visualization) = GetPixelsLit(instructions, width: 50, height: 6, Logger);
+
+            PixelsLit = pixelsLit;
 
             if (Verbose)
             {
                 Logger.WriteLine($"There are {PixelsLit:N0} pixels lit.");
             }
 
-            return new object[] { PixelsLit };
+            var result = new PuzzleResult();
+
+            result.Solutions.Add(PixelsLit);
+            result.Visualizations.Add(visualization);
+
+            return result;
         }
 
         /// <summary>

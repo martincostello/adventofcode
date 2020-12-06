@@ -3,6 +3,7 @@
 
 namespace MartinCostello.AdventOfCode
 {
+    using System.Threading.Tasks;
     using Shouldly;
     using Xunit;
     using Xunit.Abstractions;
@@ -27,65 +28,65 @@ namespace MartinCostello.AdventOfCode
         private ILogger Logger { get; }
 
         [Fact]
-        public void Program_Returns_Zero_If_Input_Valid()
+        public async Task Program_Returns_Zero_If_Input_Valid()
         {
             // Arrange
             string[] args = new[] { "1", "2016" };
 
             // Act
-            int actual = Program.Run(args, Logger);
+            int actual = await Program.RunAsync(args, Logger);
 
             // Assert
             actual.ShouldBe(0);
         }
 
         [Fact]
-        public void Program_Returns_Zero_If_Input_Invalid()
+        public async Task Program_Returns_Zero_If_Input_Invalid()
         {
             // Arrange
             string[] args = new[] { "26", "a" };
 
             // Act
-            int actual = Program.Run(args, Logger);
+            int actual = await Program.RunAsync(args, Logger);
 
             // Assert
             actual.ShouldBe(-1);
         }
 
         [Fact]
-        public void Program_Exits_If_Invalid_Day()
+        public async Task Program_Exits_If_Invalid_Day()
         {
             // Arrange
             string[] args = new[] { "a" };
 
             // Act
-            int actual = Program.Run(args, Logger);
+            int actual = await Program.RunAsync(args, Logger);
 
             // Assert
             actual.ShouldBe(-1);
         }
 
         [Fact]
-        public void Program_Exits_If_Day_Too_Small()
+        public async Task Program_Exits_If_Day_Too_Small()
         {
             // Arrange
             string[] args = new[] { "0" };
 
             // Act
-            int actual = Program.Run(args, Logger);
+            int actual = await Program.RunAsync(args, Logger);
 
             // Assert
             actual.ShouldBe(-1);
         }
 
         [Fact]
-        public void Program_Exits_If_Day_Too_Large()
+        public async Task Program_Exits_If_Day_Too_Large()
         {
             // Arrange
             string[] args = new[] { "26" };
 
             // Act
-            int actual = Program.Run(args, Logger);
+            int actual = await Program.RunAsync(args, Logger);
 
             // Assert
             actual.ShouldBe(-1);

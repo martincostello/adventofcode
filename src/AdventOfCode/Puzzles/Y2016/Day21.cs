@@ -7,6 +7,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
     using System.Collections.Generic;
     using System.Globalization;
     using System.Linq;
+    using System.Threading;
+    using System.Threading.Tasks;
 
     /// <summary>
     /// A class representing the puzzle for <c>https://adventofcode.com/2016/day/21</c>. This class cannot be inherited.
@@ -114,12 +116,12 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         }
 
         /// <inheritdoc />
-        protected override object[] SolveCore(string[] args)
+        protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
         {
             string text = args[0];
             bool reverse = args.Length > 1 && string.Equals(args[1], bool.TrueString, StringComparison.OrdinalIgnoreCase);
 
-            IList<string> instructions = ReadResourceAsLines();
+            IList<string> instructions = await ReadResourceAsLinesAsync();
 
             ScrambledResult = Scramble(text, instructions, reverse);
 
@@ -128,7 +130,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
                 Logger.WriteLine($"The result of {(reverse ? "un" : string.Empty)}scrambling '{text}' is '{ScrambledResult}'.");
             }
 
-            return new object[] { ScrambledResult };
+            return PuzzleResult.Create(ScrambledResult);
         }
 
         /// <summary>

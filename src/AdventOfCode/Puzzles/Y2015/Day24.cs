@@ -5,6 +5,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
 {
     using System.Collections.Generic;
     using System.Linq;
+    using System.Threading;
+    using System.Threading.Tasks;
 
     /// <summary>
     /// A class representing the puzzle for <c>https://adventofcode.com/2015/day/24</c>. This class cannot be inherited.
@@ -47,9 +49,9 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
         }
 
         /// <inheritdoc />
-        protected override object[] SolveCore(string[] args)
+        protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
         {
-            IList<int> weights = ReadResourceAsLines()
+            IList<int> weights = (await ReadResourceAsLinesAsync())
                 .Select((p) => ParseInt32(p))
                 .ToList();
 
@@ -65,7 +67,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
                     QuantumEntanglementOfFirstGroup);
             }
 
-            return new object[] { QuantumEntanglementOfFirstGroup };
+            return PuzzleResult.Create(QuantumEntanglementOfFirstGroup);
         }
     }
 }

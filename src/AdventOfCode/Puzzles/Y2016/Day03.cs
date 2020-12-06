@@ -6,6 +6,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Threading;
+    using System.Threading.Tasks;
 
     /// <summary>
     /// A class representing the puzzle for <c>https://adventofcode.com/2016/day/3</c>. This class cannot be inherited.
@@ -55,9 +57,9 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         }
 
         /// <inheritdoc />
-        protected override object[] SolveCore(string[] args)
+        protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
         {
-            IList<string> dimensions = ReadResourceAsLines();
+            IList<string> dimensions = await ReadResourceAsLinesAsync();
 
             PossibleTrianglesByRows = GetPossibleTriangleCount(dimensions, readAsColumns: false);
             PossibleTrianglesByColumns = GetPossibleTriangleCount(dimensions, readAsColumns: true);
@@ -68,11 +70,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
                 Logger.WriteLine("The number of possible triangles using columns is {0:N0}.", PossibleTrianglesByColumns);
             }
 
-            return new object[]
-            {
-                PossibleTrianglesByRows,
-                PossibleTrianglesByColumns,
-            };
+            return PuzzleResult.Create(PossibleTrianglesByRows, PossibleTrianglesByColumns);
         }
 
         /// <summary>

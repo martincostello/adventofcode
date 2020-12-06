@@ -5,6 +5,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
 {
     using System.Collections.Generic;
     using System.Linq;
+    using System.Threading;
+    using System.Threading.Tasks;
 
     /// <summary>
     /// A class representing the puzzle for <c>https://adventofcode.com/2020/day/2</c>. This class cannot be inherited.
@@ -74,9 +76,9 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
         }
 
         /// <inheritdoc />
-        protected override object[] SolveCore(string[] args)
+        protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
         {
-            IList<string> values = ReadResourceAsLines();
+            IList<string> values = await ReadResourceAsLinesAsync();
 
             ValidPasswordsV1 = GetValidPasswordCount(values, policyVersion: 1);
             ValidPasswordsV2 = GetValidPasswordCount(values, policyVersion: 2);
@@ -87,11 +89,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
                 Logger.WriteLine("There are {0} valid passwords using policy version 2.", ValidPasswordsV2);
             }
 
-            return new object[]
-            {
-                ValidPasswordsV1,
-                ValidPasswordsV2,
-            };
+            return PuzzleResult.Create(ValidPasswordsV1, ValidPasswordsV2);
         }
     }
 }

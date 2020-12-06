@@ -7,6 +7,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
     using System.Collections.Generic;
     using System.Globalization;
     using System.Linq;
+    using System.Threading;
+    using System.Threading.Tasks;
 
     /// <summary>
     /// A class representing the puzzle for <c>https://adventofcode.com/2017/day/2</c>. This class cannot be inherited.
@@ -91,9 +93,9 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
         }
 
         /// <inheritdoc />
-        protected override object[] SolveCore(string[] args)
+        protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
         {
-            IList<string> lines = ReadResourceAsLines();
+            IList<string> lines = await ReadResourceAsLinesAsync();
             var spreadsheet = ParseSpreadsheet(lines);
 
             ChecksumForDifference = CalculateChecksum(spreadsheet, forEvenlyDivisible: false);
@@ -105,11 +107,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
                 Logger.WriteLine($"The checksum for the spreadsheet using even division is {ChecksumForEvenlyDivisible:N0}.");
             }
 
-            return new object[]
-            {
-                ChecksumForDifference,
-                ChecksumForEvenlyDivisible,
-            };
+            return PuzzleResult.Create(ChecksumForDifference, ChecksumForEvenlyDivisible);
         }
 
         /// <summary>

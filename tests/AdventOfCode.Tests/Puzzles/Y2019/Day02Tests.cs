@@ -4,6 +4,7 @@
 namespace MartinCostello.AdventOfCode.Puzzles.Y2019
 {
     using System.Collections.Generic;
+    using System.Threading;
     using System.Threading.Tasks;
     using Shouldly;
     using Xunit;
@@ -32,17 +33,17 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
         public async Task Y2019_Day02_RunProgram_Returns_Correct_State(string program, long[] expected)
         {
             // Act
-            IReadOnlyList<long> actual = await Day02.RunProgramAsync(program);
+            IReadOnlyList<long> actual = await Day02.RunProgramAsync(program, cancellationToken: CancellationToken.None);
 
             // Assert
             actual.ShouldBe(expected);
         }
 
         [Fact]
-        public void Y2019_Day02_Solve_Returns_Correct_Solution()
+        public async Task Y2019_Day02_Solve_Returns_Correct_Solution()
         {
             // Act
-            var puzzle = SolvePuzzle<Day02>();
+            var puzzle = await SolvePuzzleAsync<Day02>();
 
             // Assert
             puzzle.Output.ShouldNotBeNull();

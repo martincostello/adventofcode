@@ -7,6 +7,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
     using System.Globalization;
     using System.Linq;
     using System.Text;
+    using System.Threading;
+    using System.Threading.Tasks;
 
     /// <summary>
     /// A class representing the puzzle for <c>https://adventofcode.com/2017/day/10</c>. This class cannot be inherited.
@@ -80,9 +82,9 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
         }
 
         /// <inheritdoc />
-        protected override object[] SolveCore(string[] args)
+        protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
         {
-            string rawLengths = ReadResourceAsString().Trim();
+            string rawLengths = (await ReadResourceAsStringAsync()).Trim();
 
             ICollection<int> lengths = rawLengths
                 .Split(',')
@@ -98,11 +100,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
                 Logger.WriteLine($"The hexadecimal dense hash of the input is {DenseHash}.");
             }
 
-            return new object[]
-            {
-                ProductOfFirstTwoElements,
-                DenseHash,
-            };
+            return PuzzleResult.Create(ProductOfFirstTwoElements, DenseHash);
         }
 
         /// <summary>

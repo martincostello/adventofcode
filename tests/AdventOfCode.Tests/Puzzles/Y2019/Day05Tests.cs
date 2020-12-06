@@ -3,6 +3,7 @@
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2019
 {
+    using System.Threading;
     using System.Threading.Tasks;
     using Shouldly;
     using Xunit;
@@ -52,7 +53,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
         public async Task Y2019_Day05_RunProgram_Returns_Correct_Output(string program, int input, long expected)
         {
             // Act
-            long actual = await Day05.RunProgramAsync(program, input);
+            long actual = await Day05.RunProgramAsync(program, input, CancellationToken.None);
 
             // Assert
             actual.ShouldBe(expected);
@@ -61,13 +62,13 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
         [Theory]
         [InlineData("1", 6745903)]
         [InlineData("5", 9168267)]
-        public void Y2019_Day05_Solve_Returns_Correct_Solution(string input, int expected)
+        public async Task Y2019_Day05_Solve_Returns_Correct_Solution(string input, int expected)
         {
             // Arrange
             string[] args = { input };
 
             // Act
-            var puzzle = SolvePuzzle<Day05>(args);
+            var puzzle = await SolvePuzzleAsync<Day05>(args);
 
             // Assert
             puzzle.DiagnosticCode.ShouldBe(expected);

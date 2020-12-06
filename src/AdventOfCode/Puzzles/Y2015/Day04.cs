@@ -9,6 +9,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
     using System.Linq;
     using System.Security.Cryptography;
     using System.Text;
+    using System.Threading;
     using System.Threading.Tasks;
 
     /// <summary>
@@ -115,7 +116,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
         }
 
         /// <inheritdoc />
-        protected override object[] SolveCore(string[] args)
+        protected override Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
         {
             string secretKey = args[0];
             int zeroes = ParseInt32(args[1]);
@@ -130,7 +131,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
                     LowestZeroHash);
             }
 
-            return new object[] { LowestZeroHash };
+            return PuzzleResult.Create(LowestZeroHash);
         }
 
         /// <summary>

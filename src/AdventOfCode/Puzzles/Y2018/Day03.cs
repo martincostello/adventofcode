@@ -5,6 +5,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2018
 {
     using System.Collections.Generic;
     using System.Linq;
+    using System.Threading;
+    using System.Threading.Tasks;
 
     /// <summary>
     /// A class representing the puzzle for <c>https://adventofcode.com/2018/day/3</c>. This class cannot be inherited.
@@ -92,9 +94,9 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2018
         }
 
         /// <inheritdoc />
-        protected override object[] SolveCore(string[] args)
+        protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
         {
-            IList<string> claims = ReadResourceAsLines();
+            IList<string> claims = await ReadResourceAsLinesAsync();
 
             Area = GetAreaWithTwoOrMoreOverlappingClaims(claims);
             IdOfUniqueClaim = GetClaimWithNoOverlappingClaims(claims);
@@ -105,11 +107,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2018
                 Logger.WriteLine($"The Id of the claim with no overlapping claims is {IdOfUniqueClaim}.");
             }
 
-            return new object[]
-            {
-                Area,
-                IdOfUniqueClaim!,
-            };
+            return PuzzleResult.Create(Area, IdOfUniqueClaim!);
         }
 
         /// <summary>

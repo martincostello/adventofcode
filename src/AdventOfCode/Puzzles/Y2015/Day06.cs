@@ -9,6 +9,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
     using System.Globalization;
     using System.Linq;
     using System.Text;
+    using System.Threading;
+    using System.Threading.Tasks;
 
     /// <summary>
     /// A class representing the puzzle for <c>https://adventofcode.com/2015/day/6</c>. This class cannot be inherited.
@@ -30,7 +32,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
         protected override int MinimumArguments => 1;
 
         /// <inheritdoc />
-        protected override object[] SolveCore(string[] args)
+        protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
         {
             int version = args[0] switch
             {
@@ -44,7 +46,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
                 throw new PuzzleException("The specified instruction set is invalid.");
             }
 
-            var lines = ReadResourceAsLines();
+            var lines = await ReadResourceAsLinesAsync();
             var instructions = new List<Instruction>(lines.Count);
 
             foreach (string line in lines)
@@ -79,6 +81,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
                 {
                     Logger.WriteLine("{0:N0} lights are illuminated.", LightsIlluminated);
                 }
+
+                return PuzzleResult.Create(LightsIlluminated);
             }
             else
             {
@@ -88,13 +92,9 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
                 {
                     Logger.WriteLine("The total brightness of the grid is {0:N0}.", TotalBrightness);
                 }
-            }
 
-            return new object[]
-            {
-                LightsIlluminated,
-                TotalBrightness,
-            };
+                return PuzzleResult.Create(TotalBrightness);
+            }
         }
 
         /// <summary>

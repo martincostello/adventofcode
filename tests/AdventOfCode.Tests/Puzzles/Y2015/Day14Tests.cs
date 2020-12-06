@@ -3,6 +3,7 @@
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2015
 {
+    using System.Threading.Tasks;
     using Shouldly;
     using Xunit;
     using Xunit.Abstractions;
@@ -86,13 +87,10 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
         }
 
         [Fact]
-        public void Y2015_Day14_Solve_Returns_Correct_Solution()
+        public async Task Y2015_Day14_Solve_Returns_Correct_Solution()
         {
-            // Arrange
-            string[] args = new[] { "2503" };
-
             // Act
-            var puzzle = SolvePuzzle<Day14>(args);
+            var puzzle = await SolvePuzzleAsync<Day14>("2503");
 
             // Assert
             puzzle.MaximumReindeerDistance.ShouldBe(2655);

@@ -4,6 +4,8 @@
 namespace MartinCostello.AdventOfCode.Puzzles.Y2015
 {
     using System;
+    using System.Threading;
+    using System.Threading.Tasks;
 
     /// <summary>
     /// A class representing the puzzle for <c>https://adventofcode.com/2015/day/1</c>. This class cannot be inherited.
@@ -67,14 +69,11 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
         }
 
         /// <inheritdoc />
-        protected override object[] SolveCore(string[] args)
+        protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
         {
-            string value = ReadResourceAsString();
+            string value = await ReadResourceAsStringAsync();
 
-            (int floor, int instructionThatEntersBasement) = GetFinalFloorAndFirstInstructionBasementReached(value);
-
-            FinalFloor = floor;
-            FirstBasementInstruction = instructionThatEntersBasement;
+            (FinalFloor, FirstBasementInstruction) = GetFinalFloorAndFirstInstructionBasementReached(value);
 
             if (Verbose)
             {
@@ -82,11 +81,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
                 Logger.WriteLine("Santa first enters the basement after following instruction {0:N0}.", FirstBasementInstruction);
             }
 
-            return new object[]
-            {
-                FinalFloor,
-                FirstBasementInstruction,
-            };
+            return PuzzleResult.Create(FinalFloor, FirstBasementInstruction);
         }
     }
 }

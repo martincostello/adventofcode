@@ -6,6 +6,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Threading;
+    using System.Threading.Tasks;
 
     /// <summary>
     /// A class representing the puzzle for <c>https://adventofcode.com/2015/day/5</c>. This class cannot be inherited.
@@ -145,7 +147,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
         }
 
         /// <inheritdoc />
-        protected override object[] SolveCore(string[] args)
+        protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
         {
             int version = args[0] switch
             {
@@ -171,7 +173,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
                 rule = IsNiceV2;
             }
 
-            foreach (string value in ReadResourceAsLines())
+            foreach (string value in await ReadResourceAsLinesAsync())
             {
                 if (rule(value))
                 {
@@ -186,7 +188,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
                 Logger.WriteLine("{0:N0} strings are nice using version {1} of the rules.", NiceStringCount, version);
             }
 
-            return new object[] { NiceStringCount };
+            return PuzzleResult.Create(NiceStringCount);
         }
 
         /// <summary>

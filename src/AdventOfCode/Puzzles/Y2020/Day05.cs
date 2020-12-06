@@ -6,6 +6,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Threading;
+    using System.Threading.Tasks;
 
     /// <summary>
     /// A class representing the puzzle for <c>https://adventofcode.com/2020/day/5</c>. This class cannot be inherited.
@@ -80,9 +82,9 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
         }
 
         /// <inheritdoc />
-        protected override object[] SolveCore(string[] args)
+        protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
         {
-            IList<string> boardingPasses = ReadResourceAsLines();
+            IList<string> boardingPasses = await ReadResourceAsLinesAsync();
 
             var ids = new List<int>(boardingPasses.Count);
 
@@ -115,11 +117,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
                 Logger.WriteLine("My seat Id is {0}.", MySeatId);
             }
 
-            return new object[]
-            {
-                HighestSeatId,
-                MySeatId,
-            };
+            return PuzzleResult.Create(HighestSeatId, MySeatId);
         }
     }
 }

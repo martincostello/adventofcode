@@ -8,6 +8,8 @@ namespace MartinCostello.AdventOfCode
     using System.Globalization;
     using System.IO;
     using System.Reflection;
+    using System.Threading;
+    using System.Threading.Tasks;
 
     /// <summary>
     /// The base class for puzzles.
@@ -36,7 +38,7 @@ namespace MartinCostello.AdventOfCode
             => Metadata()?.MinimumArguments ?? 0;
 
         /// <inheritdoc />
-        public virtual object[] Solve(string[] args)
+        public async Task<PuzzleResult> SolveAsync(string[] args, CancellationToken cancellationToken)
         {
             if (!EnsureArguments(args, MinimumArguments))
             {
@@ -50,7 +52,7 @@ namespace MartinCostello.AdventOfCode
                 throw new PuzzleException(message);
             }
 
-            return SolveCore(args);
+            return await SolveCoreAsync(args, cancellationToken);
         }
 
         /// <summary>
@@ -172,9 +174,10 @@ namespace MartinCostello.AdventOfCode
         /// Returns the lines associated with the resource for the puzzle as a <see cref="string"/>.
         /// </summary>
         /// <returns>
-        /// An <see cref="IList{T}"/> containing the lines of the resource associated with the puzzle.
+        /// A <see cref="Task{TResult}"/> that represents the asynchronous operation which returns an
+        /// <see cref="IList{T}"/> containing the lines of the resource associated with the puzzle.
         /// </returns>
-        protected IList<string> ReadResourceAsLines()
+        protected async Task<IList<string>> ReadResourceAsLinesAsync()
         {
             var lines = new List<string>();
 
@@ -182,7 +185,7 @@ namespace MartinCostello.AdventOfCode
 
             string? value = null;
 
-            while ((value = reader.ReadLine()) != null)
+            while ((value = await reader.ReadLineAsync()) != null)
             {
                 lines.Add(value);
             }
@@ -191,24 +194,29 @@ namespace MartinCostello.AdventOfCode
         }
 
         /// <summary>
-        /// Returns a <see cref="string"/> containing the content of the resource associated with the puzzle..
+        /// Returns a <see cref="string"/> containing the content of the
+        /// resource associated with the puzzle as an asynchronous operation.
         /// </summary>
         /// <returns>
-        /// A <see cref="string"/> containing the content of the resource associated with the puzzle.
+        /// A <see cref="Task{TResult}"/> that represents the asynchronous operation
+        /// to return a <see cref="string"/> containing the content of the resource
+        /// associated with the puzzle.
         /// </returns>
-        protected string ReadResourceAsString()
+        protected async Task<string> ReadResourceAsStringAsync()
         {
             using var reader = new StreamReader(Resource ?? ReadResource(), leaveOpen: Resource is not null);
-            return reader.ReadToEnd();
+            return await reader.ReadToEndAsync();
         }
 
         /// <summary>
-        /// Solves the puzzle given the specified arguments.
+        /// Solves the puzzle given the specified arguments as an asynchronous operation.
         /// </summary>
         /// <param name="args">The input arguments to the puzzle.</param>
+        /// <param name="cancellationToken">The cancellation token to use.</param>
         /// <returns>
-        /// The solution(s) to the puzzle.
+        /// A <see cref="Task{TResult}"/> representing the asynchronous
+        /// operation which returns the solution to the puzzle.
         /// </returns>
-        protected abstract object[] SolveCore(string[] args);
+        protected abstract Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken);
     }
 }

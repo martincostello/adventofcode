@@ -5,6 +5,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
 {
     using System.Collections.Generic;
     using System.Linq;
+    using System.Threading;
+    using System.Threading.Tasks;
 
     /// <summary>
     /// A class representing the puzzle for <c>https://adventofcode.com/2017/day/12</c>. This class cannot be inherited.
@@ -69,9 +71,9 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
         }
 
         /// <inheritdoc />
-        protected override object[] SolveCore(string[] args)
+        protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
         {
-            IList<string> pipes = ReadResourceAsLines();
+            IList<string> pipes = await ReadResourceAsLinesAsync();
 
             ProgramsInGroupOfProgram0 = GetProgramsInGroup(0, pipes);
             NumberOfGroups = GetGroupsInNetwork(pipes);
@@ -82,11 +84,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
                 Logger.WriteLine($"There are {NumberOfGroups:N0} groups in the network of pipes.");
             }
 
-            return new object[]
-            {
-                ProgramsInGroupOfProgram0,
-                NumberOfGroups,
-            };
+            return PuzzleResult.Create(ProgramsInGroupOfProgram0, NumberOfGroups);
         }
 
         /// <summary>

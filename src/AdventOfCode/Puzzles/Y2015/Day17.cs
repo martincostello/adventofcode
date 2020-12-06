@@ -5,6 +5,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
 {
     using System.Collections.Generic;
     using System.Linq;
+    using System.Threading;
+    using System.Threading.Tasks;
 
     /// <summary>
     /// A class representing the puzzle for <c>https://adventofcode.com/2015/day/17</c>. This class cannot be inherited.
@@ -44,9 +46,9 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
         }
 
         /// <inheritdoc />
-        protected override object[] SolveCore(string[] args)
+        protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
         {
-            var containerVolumes = ReadResourceAsLines()
+            var containerVolumes = (await ReadResourceAsLinesAsync())
                 .Select((p) => ParseInt32(p))
                 .ToList();
 
@@ -72,11 +74,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
                     combinationsWithLeastContainers.Key);
             }
 
-            return new object[]
-            {
-                Combinations,
-                CombinationsWithMinimumContainers,
-            };
+            return PuzzleResult.Create(Combinations, CombinationsWithMinimumContainers);
         }
     }
 }

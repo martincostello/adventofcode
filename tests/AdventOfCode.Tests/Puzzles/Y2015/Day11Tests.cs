@@ -3,6 +3,7 @@
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2015
 {
+    using System.Threading.Tasks;
     using Shouldly;
     using Xunit;
     using Xunit.Abstractions;
@@ -47,22 +48,16 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
         }
 
         [Fact]
-        public void Y2015_Day11_Solve_Returns_Correct_Solution()
+        public async Task Y2015_Day11_Solve_Returns_Correct_Solution()
         {
-            // Arrange
-            string[] args = new[] { "cqjxjnds" };
-
             // Act
-            var puzzle = SolvePuzzle<Day11>(args);
+            var puzzle = await SolvePuzzleAsync<Day11>("cqjxjnds");
 
             // Assert
             puzzle.NextPassword.ShouldBe("cqjxxyzz");
 
-            // Arrange
-            args = new[] { puzzle.NextPassword! };
-
             // Act
-            puzzle = SolvePuzzle<Day11>(args);
+            puzzle = await SolvePuzzleAsync<Day11>(puzzle.NextPassword!);
 
             // Assert
             puzzle.NextPassword.ShouldBe("cqkaabcc");

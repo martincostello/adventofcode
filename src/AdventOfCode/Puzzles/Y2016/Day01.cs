@@ -6,6 +6,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
     using System;
     using System.Collections.Generic;
     using System.Drawing;
+    using System.Threading;
+    using System.Threading.Tasks;
 
     /// <summary>
     /// A class representing the puzzle for <c>https://adventofcode.com/2016/day/1</c>. This class cannot be inherited.
@@ -88,9 +90,9 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         }
 
         /// <inheritdoc />
-        protected override object[] SolveCore(string[] args)
+        protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
         {
-            string instructions = ReadResourceAsString();
+            string instructions = await ReadResourceAsStringAsync();
 
             BlocksToEasterBunnyHQIgnoringDuplicates = CalculateDistance(instructions, ignoreDuplicates: true);
             BlocksToEasterBunnyHQ = CalculateDistance(instructions, ignoreDuplicates: false);
@@ -106,11 +108,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
                     BlocksToEasterBunnyHQ);
             }
 
-            return new object[]
-            {
-                BlocksToEasterBunnyHQ,
-                BlocksToEasterBunnyHQIgnoringDuplicates,
-            };
+            return PuzzleResult.Create(BlocksToEasterBunnyHQIgnoringDuplicates, BlocksToEasterBunnyHQ);
         }
 
         /// <summary>

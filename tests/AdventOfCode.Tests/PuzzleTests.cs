@@ -4,6 +4,8 @@
 namespace MartinCostello.AdventOfCode
 {
     using System;
+    using System.Threading;
+    using System.Threading.Tasks;
     using Shouldly;
     using Xunit;
     using Xunit.Abstractions;
@@ -28,10 +30,11 @@ namespace MartinCostello.AdventOfCode
         private ILogger Logger { get; }
 
         [Fact]
-        public void Puzzle_Solve_Returns_Correct_Value_Based_On_Args_Length()
+        public async Task Puzzle_Solve_Returns_Correct_Value_Based_On_Args_Length()
         {
             // Arrange
             string[] args = new[] { "1" };
+            var cancellationToken = CancellationToken.None;
 
             var target = new MyPuzzle(2)
             {
@@ -39,25 +42,26 @@ namespace MartinCostello.AdventOfCode
             };
 
             // Act and Assert
-            Assert.Throws<PuzzleException>(() => target.Solve(args));
+            await Assert.ThrowsAsync<PuzzleException>(() => target.SolveAsync(args, cancellationToken));
 
             // Arrange
             args = Array.Empty<string>();
             target = new MyPuzzle(1);
 
             // Act and Assert
-            Assert.Throws<PuzzleException>(() => target.Solve(args));
+            await Assert.ThrowsAsync<PuzzleException>(() => target.SolveAsync(args, cancellationToken));
 
             // Arrange
             target = new MyPuzzle(0);
 
             // Act
-            object[] actual = target.Solve(args);
+            PuzzleResult actual = await target.SolveAsync(args, cancellationToken);
 
             // Assert
             actual.ShouldNotBeNull();
-            actual.Length.ShouldBe(1);
-            actual[0].ShouldBe(42);
+            actual.Solutions.ShouldNotBeNull();
+            actual.Solutions.Count.ShouldBe(1);
+            actual.Solutions[0].ShouldBe(42);
             target.Answer.ShouldBe(42);
         }
 
@@ -89,10 +93,10 @@ namespace MartinCostello.AdventOfCode
             protected override int MinimumArguments => _minimumArguments;
 
             /// <inheritdoc />
-            protected override object[] SolveCore(string[] args)
+            protected override Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
             {
                 Answer = 42;
-                return new object[] { Answer };
+                return PuzzleResult.Create(Answer);
             }
         }
     }

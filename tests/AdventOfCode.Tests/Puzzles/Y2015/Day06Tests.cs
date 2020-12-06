@@ -6,6 +6,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
     using System;
     using System.Drawing;
     using System.Globalization;
+    using System.Threading.Tasks;
     using Shouldly;
     using Xunit;
     using Xunit.Abstractions;
@@ -231,10 +232,10 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
         [Theory]
         [InlineData(new[] { "1" }, 543903, 0)]
         [InlineData(new[] { "2" }, 0, 14687245)]
-        public void Y2015_Day06_Solve_Returns_Correct_Solution(string[] args, int lightsIlluminated, int totalBrightness)
+        public async Task Y2015_Day06_Solve_Returns_Correct_Solution(string[] args, int lightsIlluminated, int totalBrightness)
         {
             // Act
-            var puzzle = SolvePuzzle<Day06>(args);
+            var puzzle = await SolvePuzzleAsync<Day06>(args);
 
             // Assert
             puzzle.LightsIlluminated.ShouldBe(lightsIlluminated);

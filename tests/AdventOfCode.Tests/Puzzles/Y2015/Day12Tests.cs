@@ -4,6 +4,7 @@
 namespace MartinCostello.AdventOfCode.Puzzles.Y2015
 {
     using System.Text.Json;
+    using System.Threading.Tasks;
     using Shouldly;
     using Xunit;
     using Xunit.Abstractions;
@@ -48,12 +49,12 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
         }
 
         [Theory]
-        [InlineData(new string[] { }, 191164)]
+        [InlineData(new string[0], 191164)]
         [InlineData(new[] { "red" }, 87842)]
-        public void Y2015_Day12_Solve_Returns_Correct_Solution(string[] args, int expected)
+        public async Task Y2015_Day12_Solve_Returns_Correct_Solution(string[] args, int expected)
         {
             // Act
-            var puzzle = SolvePuzzle<Day12>(args);
+            var puzzle = await SolvePuzzleAsync<Day12>(args);
 
             // Assert
             puzzle.Sum.ShouldBe(expected);

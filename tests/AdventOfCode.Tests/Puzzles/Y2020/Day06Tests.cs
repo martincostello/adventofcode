@@ -3,6 +3,7 @@
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2020
 {
+    using System.Threading.Tasks;
     using Shouldly;
     using Xunit;
     using Xunit.Abstractions;
@@ -56,10 +57,10 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
         }
 
         [Fact]
-        public void Y2020_Day06_Solve_Returns_Correct_Solution()
+        public async Task Y2020_Day06_Solve_Returns_Correct_Solution()
         {
             // Act
-            var puzzle = SolvePuzzle<Day06>();
+            var puzzle = await SolvePuzzleAsync<Day06>();
 
             // Assert
             puzzle.SumOfQuestionsAnyoneYes.ShouldBe(6542);

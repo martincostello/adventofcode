@@ -2,17 +2,26 @@
   <PropertyGroup>
     <Description>Tests for AdventOfCode.</Description>
     <GenerateDocumentationFile>false</GenerateDocumentationFile>
-    <NoWarn>$(NoWarn);CA1707;CA1812;CA2007;SA1600</NoWarn>
+    <NoWarn>$(NoWarn);CA1707;CA1711;CA1812;CA2007;CA2234;SA1600</NoWarn>
     <RootNamespace>MartinCostello.AdventOfCode</RootNamespace>
     <TargetFramework>net5.0</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
-    <None Update="xunit.runner.json" CopyToOutputDirectory="PreserveNewest" />
+    <None Update="localhost-dev.pfx;xunit.runner.json" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\src\AdventOfCode\AdventOfCode.csproj" />
+    <WebApplicationFactoryContentRootAttribute
+      Include="AdventOfCode"
+      AssemblyName="AdventOfCode"
+      ContentRootPath="$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)../../src/AdventOfCode'))"
+      ContentRootTest="AdventOfCode.csproj"
+      Priority="-1" />
   </ItemGroup>
   <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+    <PackageReference Include="MartinCostello.Logging.XUnit" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" />
     <PackageReference Include="Shouldly" />
     <PackageReference Include="xunit" />

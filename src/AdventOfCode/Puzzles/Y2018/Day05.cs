@@ -7,6 +7,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2018
     using System.Globalization;
     using System.Linq;
     using System.Text;
+    using System.Threading;
+    using System.Threading.Tasks;
 
     /// <summary>
     /// A class representing the puzzle for <c>https://adventofcode.com/2018/day/5</c>. This class cannot be inherited.
@@ -77,9 +79,9 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2018
         }
 
         /// <inheritdoc />
-        protected override object[] SolveCore(string[] args)
+        protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
         {
-            string polymer = ReadResourceAsString().Trim('\r', '\n');
+            string polymer = (await ReadResourceAsStringAsync()).Trim('\r', '\n');
 
             RemainingUnits = Reduce(polymer).Length;
             RemainingUnitsOptimized = ReduceWithOptimization(polymer).Length;
@@ -90,11 +92,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2018
                 Logger.WriteLine($"The number of units that remain after fully reacting the polymer with optimization is {RemainingUnitsOptimized:N0}.");
             }
 
-            return new object[]
-            {
-                RemainingUnits,
-                RemainingUnitsOptimized,
-            };
+            return PuzzleResult.Create(RemainingUnits, RemainingUnitsOptimized);
         }
 
         /// <summary>

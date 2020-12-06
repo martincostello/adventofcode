@@ -6,6 +6,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
     using System.Collections.Generic;
     using System.Globalization;
     using System.Linq;
+    using System.Threading;
+    using System.Threading.Tasks;
 
     /// <summary>
     /// A class representing the puzzle for <c>https://adventofcode.com/2015/day/14</c>. This class cannot be inherited.
@@ -83,7 +85,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
         }
 
         /// <inheritdoc />
-        protected override object[] SolveCore(string[] args)
+        protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
         {
             int timeIndex = ParseInt32(args[0], NumberStyles.Integer & ~NumberStyles.AllowLeadingSign);
 
@@ -92,7 +94,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
                 throw new PuzzleException("The time index specified is invalid.");
             }
 
-            IList<string> flightData = ReadResourceAsLines();
+            IList<string> flightData = await ReadResourceAsLinesAsync();
 
             MaximumReindeerDistance = GetMaximumDistanceOfFastestReindeer(flightData, timeIndex);
 
@@ -108,11 +110,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
                 Logger.WriteLine("After {0:N0} seconds, the reindeer in the lead has {1:N0} points.", timeIndex, MaximumReindeerPoints);
             }
 
-            return new object[]
-            {
-                MaximumReindeerDistance,
-                MaximumReindeerPoints,
-            };
+            return PuzzleResult.Create(MaximumReindeerDistance, MaximumReindeerPoints);
         }
 
         /// <summary>

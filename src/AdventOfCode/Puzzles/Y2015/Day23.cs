@@ -5,6 +5,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
 {
     using System.Collections.Generic;
     using System.Linq;
+    using System.Threading;
+    using System.Threading.Tasks;
 
     /// <summary>
     /// A class representing the puzzle for <c>https://adventofcode.com/2015/day/23</c>. This class cannot be inherited.
@@ -106,9 +108,9 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
         }
 
         /// <inheritdoc />
-        protected override object[] SolveCore(string[] args)
+        protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
         {
-            IList<string> instructions = ReadResourceAsLines();
+            IList<string> instructions = await ReadResourceAsLinesAsync();
             uint initialValue = args.Length == 1 ? ParseUInt32(args[0]) : 0;
 
             (A, B) = ProcessInstructions(instructions, initialValue, Logger);
@@ -122,11 +124,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
                     B);
             }
 
-            return new object[]
-            {
-                A,
-                B,
-            };
+            return PuzzleResult.Create(A, B);
         }
 
         /// <summary>

@@ -8,6 +8,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
     using System.Collections.Specialized;
     using System.Linq;
     using System.Text.RegularExpressions;
+    using System.Threading;
+    using System.Threading.Tasks;
 
     /// <summary>
     /// A class representing the puzzle for <c>https://adventofcode.com/2020/day/4</c>. This class cannot be inherited.
@@ -87,9 +89,9 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
         }
 
         /// <inheritdoc />
-        protected override object[] SolveCore(string[] args)
+        protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
         {
-            IList<string> batch = ReadResourceAsLines();
+            IList<string> batch = await ReadResourceAsLinesAsync();
 
             (ValidPassports, VerifiedPassports) = VerifyPassports(batch);
 
@@ -99,11 +101,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
                 Logger.WriteLine("There are {0} verified passports.", VerifiedPassports);
             }
 
-            return new object[]
-            {
-                ValidPassports,
-                VerifiedPassports,
-            };
+            return PuzzleResult.Create(ValidPassports, VerifiedPassports);
         }
 
         /// <summary>

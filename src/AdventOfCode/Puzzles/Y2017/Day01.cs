@@ -3,6 +3,9 @@
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2017
 {
+    using System.Threading;
+    using System.Threading.Tasks;
+
     /// <summary>
     /// A class representing the puzzle for <c>https://adventofcode.com/2017/day/1</c>. This class cannot be inherited.
     /// </summary>
@@ -54,9 +57,9 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
         }
 
         /// <inheritdoc />
-        protected override object[] SolveCore(string[] args)
+        protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
         {
-            string digits = ReadResourceAsString().TrimEnd();
+            string digits = (await ReadResourceAsStringAsync()).TrimEnd();
 
             CaptchaSolutionNext = CalculateSum(digits, useOppositeDigit: false);
             CaptchaSolutionOpposite = CalculateSum(digits, useOppositeDigit: true);
@@ -67,11 +70,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
                 Logger.WriteLine($"The solution to the second captcha is {CaptchaSolutionOpposite:N0}.");
             }
 
-            return new object[]
-            {
-                CaptchaSolutionNext,
-                CaptchaSolutionOpposite,
-            };
+            return PuzzleResult.Create(CaptchaSolutionNext, CaptchaSolutionOpposite);
         }
     }
 }

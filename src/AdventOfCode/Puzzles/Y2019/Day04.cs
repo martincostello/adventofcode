@@ -6,6 +6,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
     using System.Collections.Generic;
     using System.Globalization;
     using System.Linq;
+    using System.Threading;
+    using System.Threading.Tasks;
 
     /// <summary>
     /// A class representing the puzzle for <c>https://adventofcode.com/2019/day/4</c>. This class cannot be inherited.
@@ -114,7 +116,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
         }
 
         /// <inheritdoc />
-        protected override object[] SolveCore(string[] args)
+        protected override Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
         {
             CountV1 = GetPasswordsInRange(args[0], rulesVersion: 1);
             CountV2 = GetPasswordsInRange(args[0], rulesVersion: 2);
@@ -125,11 +127,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
                 Logger.WriteLine("{0} different passwords within the range meet the criteria for version 2.", CountV2);
             }
 
-            return new object[]
-            {
-                CountV1,
-                CountV2,
-            };
+            return PuzzleResult.Create(CountV1, CountV2);
         }
     }
 }

@@ -3,6 +3,7 @@
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2015
 {
+    using System.Threading.Tasks;
     using Shouldly;
     using Xunit;
     using Xunit.Abstractions;
@@ -45,10 +46,10 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
         }
 
         [Fact]
-        public void Y2015_Day15_Solve_Returns_Correct_Solution()
+        public async Task Y2015_Day15_Solve_Returns_Correct_Solution()
         {
             // Act
-            var puzzle = SolvePuzzle<Day15>();
+            var puzzle = await SolvePuzzleAsync<Day15>();
 
             // Assert
             puzzle.HighestTotalCookieScore.ShouldBe(222870);

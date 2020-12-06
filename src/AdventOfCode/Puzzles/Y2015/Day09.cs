@@ -6,6 +6,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Threading;
+    using System.Threading.Tasks;
 
     /// <summary>
     /// A class representing the puzzle for <c>https://adventofcode.com/2015/day/9</c>. This class cannot be inherited.
@@ -111,13 +113,15 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
         }
 
         /// <inheritdoc />
-        protected override object[] SolveCore(string[] args)
+        protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
         {
             bool findLongest =
                 args.Length == 1 &&
                 string.Equals(args[0], bool.TrueString, StringComparison.OrdinalIgnoreCase);
 
-            Solution = GetDistanceBetweenPoints(ReadResourceAsLines(), findLongest);
+            var collection = await ReadResourceAsLinesAsync();
+
+            Solution = GetDistanceBetweenPoints(collection, findLongest);
 
             if (Verbose)
             {
@@ -131,7 +135,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
                 }
             }
 
-            return new object[] { Solution };
+            return PuzzleResult.Create(Solution);
         }
 
         /// <summary>

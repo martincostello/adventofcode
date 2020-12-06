@@ -3,6 +3,9 @@
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2016
 {
+    using System;
+    using System.Threading;
+    using System.Threading.Tasks;
     using Shouldly;
     using Xunit;
     using Xunit.Abstractions;
@@ -24,23 +27,30 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         [Theory]
         [InlineData("abc", 64, false, 22728)]
         [InlineData("abc", 64, true, 22551, Skip = "Too slow.")]
-        public static void Y2016_Day14_GetOneTimePadKeyIndex_Returns_Correct_Solution(string salt, int ordinal, bool useKeyStretching, int expected)
+        public static void Y2016_Day14_GetOneTimePadKeyIndex_Returns_Correct_Solution(
+            string salt,
+            int ordinal,
+            bool useKeyStretching,
+            int expected)
         {
+            // Arrange
+            using var cts = new CancellationTokenSource(TimeSpan.FromMinutes(1));
+
             // Act
-            int actual = Day14.GetOneTimePadKeyIndex(salt, ordinal, useKeyStretching);
+            int actual = Day14.GetOneTimePadKeyIndex(salt, ordinal, useKeyStretching, cts.Token);
 
             // Assert
             actual.ShouldBe(expected);
         }
 
         [Fact(Skip = "Too slow.")]
-        public void Y2016_Day14_Solve_Returns_Correct_Solution()
+        public async Task Y2016_Day14_Solve_Returns_Correct_Solution()
         {
             // Arrange
             string[] args = new[] { "ihaygndm" };
 
             // Act
-            var puzzle = SolvePuzzle<Day14>(args);
+            var puzzle = await SolvePuzzleAsync<Day14>(args);
 
             // Assert
             puzzle.IndexOfKey64.ShouldBe(15035);

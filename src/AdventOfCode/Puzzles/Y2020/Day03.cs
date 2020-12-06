@@ -5,6 +5,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
 {
     using System.Collections.Generic;
     using System.Drawing;
+    using System.Threading;
+    using System.Threading.Tasks;
 
     /// <summary>
     /// A class representing the puzzle for <c>https://adventofcode.com/2020/day/3</c>. This class cannot be inherited.
@@ -79,9 +81,9 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
         }
 
         /// <inheritdoc />
-        protected override object[] SolveCore(string[] args)
+        protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
         {
-            IList<string> grid = ReadResourceAsLines();
+            IList<string> grid = await ReadResourceAsLinesAsync();
 
             var slopes = new[]
             {
@@ -109,11 +111,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
                 Logger.WriteLine("The product of the collisions from traversing the slopes is {0}.", ProductOfTreeCollisions);
             }
 
-            return new object[]
-            {
-                TreeCollisions,
-                ProductOfTreeCollisions,
-            };
+            return PuzzleResult.Create(TreeCollisions, ProductOfTreeCollisions);
         }
     }
 }

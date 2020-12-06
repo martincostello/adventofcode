@@ -7,6 +7,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
     using System.Collections.Generic;
     using System.Linq;
     using System.Numerics;
+    using System.Threading;
+    using System.Threading.Tasks;
 
     /// <summary>
     /// A class representing the puzzle for <c>https://adventofcode.com/2017/day/11</c>. This class cannot be inherited.
@@ -89,9 +91,9 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
         }
 
         /// <inheritdoc />
-        protected override object[] SolveCore(string[] args)
+        protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
         {
-            string path = ReadResourceAsString().Trim();
+            string path = (await ReadResourceAsStringAsync()).Trim();
 
             (MinimumSteps, MaximumDistance) = FindStepRange(path);
 
@@ -101,11 +103,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
                 Logger.WriteLine($"The maximum distance reached by the child process was {MaximumDistance:N0}.");
             }
 
-            return new object[]
-            {
-                MinimumSteps,
-                MaximumDistance,
-            };
+            return PuzzleResult.Create(MinimumSteps, MaximumDistance);
         }
 
         /// <summary>

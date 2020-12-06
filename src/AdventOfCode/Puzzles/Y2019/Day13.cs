@@ -3,7 +3,6 @@
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2019
 {
-    using System;
     using System.Collections.Generic;
     using System.Drawing;
     using System.Linq;
@@ -36,7 +35,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
         /// </returns>
         public static async Task<(long blockTileCount, long score)> PlayGameAsync(
             string program,
-            CancellationToken cancellationToken = default)
+            CancellationToken cancellationToken)
         {
             long[] instructions = IntcodeVM.ParseProgram(program);
 
@@ -78,11 +77,11 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
         }
 
         /// <inheritdoc />
-        protected override object[] SolveCore(string[] args)
+        protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
         {
-            string program = ReadResourceAsString();
+            string program = await ReadResourceAsStringAsync();
 
-            (BlockTileCount, Score) = PlayGameAsync(program).Result;
+            (BlockTileCount, Score) = await PlayGameAsync(program, cancellationToken);
 
             if (Verbose)
             {
@@ -90,11 +89,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
                 Logger.WriteLine("The score after the last block is broken is {0}", Score);
             }
 
-            return new object[]
-            {
-                BlockTileCount,
-                Score,
-            };
+            return PuzzleResult.Create(BlockTileCount/*, Score*/);
         }
     }
 }

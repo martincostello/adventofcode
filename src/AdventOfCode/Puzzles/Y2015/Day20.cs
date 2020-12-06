@@ -4,6 +4,8 @@
 namespace MartinCostello.AdventOfCode.Puzzles.Y2015
 {
     using System.Linq;
+    using System.Threading;
+    using System.Threading.Tasks;
 
     /// <summary>
     /// A class representing the puzzle for <c>https://adventofcode.com/2015/day/20</c>. This class cannot be inherited.
@@ -75,7 +77,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
         }
 
         /// <inheritdoc />
-        protected override object[] SolveCore(string[] args)
+        protected override Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
         {
             if (args.Length != 1 && args.Length != 2)
             {
@@ -95,7 +97,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
                     LowestHouseNumber);
             }
 
-            return new object[] { LowestHouseNumber };
+            return PuzzleResult.Create(LowestHouseNumber);
         }
     }
 }

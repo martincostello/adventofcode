@@ -4,6 +4,8 @@
 namespace MartinCostello.AdventOfCode.Puzzles.Y2016
 {
     using System.Collections.Generic;
+    using System.Threading;
+    using System.Threading.Tasks;
 
     /// <summary>
     /// A class representing the puzzle for <c>https://adventofcode.com/2016/day/23</c>. This class cannot be inherited.
@@ -20,13 +22,13 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         protected override int MinimumArguments => 1;
 
         /// <inheritdoc />
-        protected override object[] SolveCore(string[] args)
+        protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
         {
             int input = ParseInt32(args[0]);
 
-            IList<string> instructions = ReadResourceAsLines();
+            IList<string> instructions = await ReadResourceAsLinesAsync();
 
-            IDictionary<char, int> registers = Day12.Process(instructions, initialValueOfA: input);
+            IDictionary<char, int> registers = Day12.Process(instructions, initialValueOfA: input, cancellationToken: cancellationToken);
             SafeValue = registers['a'];
 
             if (Verbose)
@@ -34,7 +36,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
                 Logger.WriteLine($"The value to send to the safe for an input of {input:N0} is '{SafeValue}'.");
             }
 
-            return new object[] { SafeValue };
+            return PuzzleResult.Create(SafeValue);
         }
     }
 }

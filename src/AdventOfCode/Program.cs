@@ -6,6 +6,8 @@ namespace MartinCostello.AdventOfCode
     using System;
     using System.Diagnostics;
     using System.Globalization;
+    using System.Threading;
+    using System.Threading.Tasks;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.Extensions.Hosting;
 
@@ -19,8 +21,8 @@ namespace MartinCostello.AdventOfCode
         /// </summary>
         /// <param name="args">The arguments to the application.</param>
         /// <returns>The exit code from the application.</returns>
-        public static int Main(string[] args)
-            => Run(args, new ConsoleLogger());
+        public static async Task<int> Main(string[] args)
+            => await RunAsync(args, new ConsoleLogger());
 
         /// <summary>
         /// Creates the host builder to use for the application.
@@ -46,13 +48,13 @@ namespace MartinCostello.AdventOfCode
         /// <param name="args">The arguments to the application.</param>
         /// <param name="logger">The logger to use.</param>
         /// <returns>The exit code from the application.</returns>
-        internal static int Run(string[] args, ILogger logger)
+        internal static async Task<int> RunAsync(string[] args, ILogger logger)
         {
             if (args == null || args.Length < 1)
             {
                 try
                 {
-                    CreateHostBuilder(Array.Empty<string>()).Build().Run();
+                    await CreateHostBuilder(Array.Empty<string>()).Build().RunAsync();
                     return 0;
                 }
 #pragma warning disable CA1031
@@ -69,36 +71,51 @@ namespace MartinCostello.AdventOfCode
                 day = 0;
             }
 
-            if (args.Length == 2 &&
-                !int.TryParse(args[1], NumberStyles.Integer & ~NumberStyles.AllowLeadingSign, CultureInfo.InvariantCulture, out int year))
+            int year = 0;
+
+            if (args.Length > 1)
             {
-                year = 0;
+                if (!int.TryParse(args[1], NumberStyles.Integer & ~NumberStyles.AllowLeadingSign, CultureInfo.InvariantCulture, out year))
+                {
+                    year = 0;
+                }
+
+                args = args[2..];
             }
             else
             {
                 year = DateTime.UtcNow.Year;
+                args = args[1..];
             }
 
-            args = args[1..];
+            using var cts = new CancellationTokenSource();
 
-            return SolvePuzzle(year, day, args, logger);
+            Console.CancelKeyPress += (_, e) =>
+            {
+                e.Cancel = true;
+                cts.Cancel();
+            };
+
+            return await SolvePuzzleAsync(year, day, args, logger, cts.Token);
         }
 
         /// <summary>
-        /// Solves the puzzle associated with the specified year and day.
+        /// Solves the puzzle associated with the specified year and day as an asychronous operation.
         /// </summary>
         /// <param name="year">The year associated with the puzzle.</param>
         /// <param name="day">The day associated with the puzzle.</param>
         /// <param name="args">The arguments to pass to the puzzle.</param>
         /// <param name="logger">The logger to use.</param>
+        /// <param name="cancellationToken">The cancellation token to use.</param>
         /// <returns>
-        /// The value returned by <see cref="IPuzzle.Solve"/>.
+        /// The solution to the puzzle.
         /// </returns>
-        private static int SolvePuzzle(
+        private static async Task<int> SolvePuzzleAsync(
             int year,
             int day,
             string[] args,
-            ILogger logger)
+            ILogger logger,
+            CancellationToken cancellationToken)
         {
             var factory = new PuzzleFactory(logger);
 
@@ -122,7 +139,12 @@ namespace MartinCostello.AdventOfCode
 
             try
             {
-                puzzle.Solve(args);
+                _ = await puzzle.SolveAsync(args, cancellationToken);
+            }
+            catch (OperationCanceledException)
+            {
+                logger.WriteLine("Solution canceled.");
+                return -1;
             }
             catch (PuzzleException ex)
             {

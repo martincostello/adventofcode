@@ -3,6 +3,7 @@
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2015
 {
+    using System.Threading.Tasks;
     using Shouldly;
     using Xunit;
     using Xunit.Abstractions;
@@ -45,12 +46,12 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
         }
 
         [Theory(Skip = "Too slow.")]
-        [InlineData(new string[] { }, 11266889531)]
+        [InlineData(new string[0], 11266889531)]
         [InlineData(new string[] { "4" }, 77387711)]
-        public void Y2015_Day24_Solve_Returns_Correct_Solution(string[] args, long expected)
+        public async Task Y2015_Day24_Solve_Returns_Correct_Solution(string[] args, long expected)
         {
             // Act
-            var puzzle = SolvePuzzle<Day24>(args);
+            var puzzle = await SolvePuzzleAsync<Day24>(args);
 
             // Assert
             puzzle.QuantumEntanglementOfFirstGroup.ShouldBe(expected);

@@ -3,6 +3,7 @@
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2015
 {
+    using System.Threading.Tasks;
     using Shouldly;
     using Xunit;
     using Xunit.Abstractions;
@@ -49,10 +50,10 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
         }
 
         [Fact]
-        public void Y2015_Day13_Solve_Returns_Correct_Solution()
+        public async Task Y2015_Day13_Solve_Returns_Correct_Solution()
         {
             // Act
-            var puzzle = SolvePuzzle<Day13>();
+            var puzzle = await SolvePuzzleAsync<Day13>();
 
             // Assert
             puzzle.MaximumTotalChangeInHappiness.ShouldBe(618);

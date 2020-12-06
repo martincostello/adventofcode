@@ -108,12 +108,12 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
         }
 
         /// <inheritdoc />
-        protected override object[] SolveCore(string[] args)
+        protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
         {
-            string program = ReadResourceAsString();
+            string program = await ReadResourceAsStringAsync();
 
-            HighestSignal = RunProgramAsync(program, useFeedback: false).Result;
-            HighestSignalUsingFeedback = RunProgramAsync(program, useFeedback: true).Result;
+            HighestSignal = await RunProgramAsync(program, useFeedback: false, cancellationToken);
+            HighestSignalUsingFeedback = await RunProgramAsync(program, useFeedback: true, cancellationToken);
 
             if (Verbose)
             {
@@ -121,11 +121,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
                 Logger.WriteLine("The highest signal that can be sent to the thrusters using a feedback loop is {0}.", HighestSignalUsingFeedback);
             }
 
-            return new object[]
-            {
-                HighestSignal,
-                HighestSignalUsingFeedback,
-            };
+            return PuzzleResult.Create(HighestSignal, HighestSignalUsingFeedback);
         }
     }
 }

@@ -5,6 +5,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
 {
     using System;
     using System.Collections.Generic;
+    using System.Threading;
+    using System.Threading.Tasks;
 
     /// <summary>
     /// A class representing the puzzle for <c>https://adventofcode.com/2016/day/12</c>. This class cannot be inherited.
@@ -34,6 +36,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         /// An optional delegate to receive any output clock signal; which causes signal
         /// processing to stop if it returns <see langword="true"/>.
         /// </param>
+        /// <param name="cancellationToken">The optional cancellation token to use.</param>
         /// <returns>
         /// An <see cref="IDictionary{TKey, TValue}"/> containing the values of the CPU
         /// registers after processing the instructions specified by <paramref name="instructions"/>.
@@ -42,7 +45,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
             IList<string> instructions,
             int initialValueOfA = 0,
             int initialValueOfC = 0,
-            Func<int, bool>? signal = null)
+            Func<int, bool>? signal = null,
+            CancellationToken cancellationToken = default)
         {
             instructions = new List<string>(instructions); // Copy before possible modification
 
@@ -56,6 +60,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
 
             for (int i = 0; i < instructions.Count; i++)
             {
+                cancellationToken.ThrowIfCancellationRequested();
+
                 string instruction = instructions[i];
                 string[] split = instruction.Split(' ');
                 int value;
@@ -173,14 +179,14 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         }
 
         /// <inheritdoc />
-        protected override object[] SolveCore(string[] args)
+        protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
         {
-            IList<string> instructions = ReadResourceAsLines();
+            IList<string> instructions = await ReadResourceAsLinesAsync();
 
-            IDictionary<char, int> registers = Process(instructions, initialValueOfC: 0);
+            IDictionary<char, int> registers = Process(instructions, initialValueOfC: 0, cancellationToken: cancellationToken);
             ValueInRegisterA = registers['a'];
 
-            registers = Process(instructions, initialValueOfC: 1);
+            registers = Process(instructions, initialValueOfC: 1, cancellationToken: cancellationToken);
             ValueInRegisterAWhenInitializedWithIgnitionKey = registers['a'];
 
             if (Verbose)
@@ -189,11 +195,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
                 Logger.WriteLine($"The value left in register a if c is initialized to 1 is {ValueInRegisterAWhenInitializedWithIgnitionKey:N0}.");
             }
 
-            return new object[]
-            {
-                ValueInRegisterA,
-                ValueInRegisterAWhenInitializedWithIgnitionKey,
-            };
+            return PuzzleResult.Create(ValueInRegisterA, ValueInRegisterAWhenInitializedWithIgnitionKey);
         }
     }
 }

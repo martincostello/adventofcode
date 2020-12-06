@@ -6,6 +6,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Threading;
+    using System.Threading.Tasks;
 
     /// <summary>
     /// A class representing the puzzle for <c>https://adventofcode.com/2017/day/8</c>. This class cannot be inherited.
@@ -50,9 +52,9 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
         }
 
         /// <inheritdoc />
-        protected override object[] SolveCore(string[] args)
+        protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
         {
-            IList<string> instructions = ReadResourceAsLines();
+            IList<string> instructions = await ReadResourceAsLinesAsync();
 
             HighestRegisterValueAtEnd = FindHighestRegisterValueAtEnd(instructions);
             HighestRegisterValueDuring = FindHighestRegisterValueDuring(instructions);
@@ -63,11 +65,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
                 Logger.WriteLine($"The largest value in any register at any point while executing the input was {HighestRegisterValueDuring:N0}.");
             }
 
-            return new object[]
-            {
-                HighestRegisterValueAtEnd,
-                HighestRegisterValueDuring,
-            };
+            return PuzzleResult.Create(HighestRegisterValueAtEnd, HighestRegisterValueDuring);
         }
 
         /// <summary>

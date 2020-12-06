@@ -3,6 +3,7 @@
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2016
 {
+    using System.Threading.Tasks;
     using Shouldly;
     using Xunit;
     using Xunit.Abstractions;
@@ -38,18 +39,18 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
             int[] binsOfInterest = new[] { 0, 1, 2 };
 
             // Act
-            var actual = Day10.GetBotNumber(instructions, 5, 2, binsOfInterest);
+            (int bot, int product) = Day10.GetBotNumber(instructions, 5, 2, binsOfInterest);
 
             // Assert
-            actual.Item1.ShouldBe(2);
-            actual.Item2.ShouldBe(30);
+            bot.ShouldBe(2);
+            product.ShouldBe(30);
         }
 
         [Fact]
-        public void Y2016_Day10_Solve_Returns_Correct_Solution()
+        public async Task Y2016_Day10_Solve_Returns_Correct_Solution()
         {
             // Act
-            var puzzle = SolvePuzzle<Day10>();
+            var puzzle = await SolvePuzzleAsync<Day10>();
 
             // Assert
             puzzle.BotThatCompares61And17Microchips.ShouldBe(141);

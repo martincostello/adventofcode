@@ -96,7 +96,10 @@
                         <label class="custom-file-label" for="resource" id="resource-label">Puzzle input file</label>
                     </div>
                 </div>
-                <button type="submit" class="btn btn-block btn-secondary btn-lg" id="solve">Solve!</button>
+                <button type="submit" class="btn btn-secondary btn-lg" id="solve">
+                    <placeholder id="solve-text">Solve!</placeholder>
+                    <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true" id="spinner"></span>
+                </button>
             </form>
         </div>
         <hr />
@@ -112,6 +115,8 @@
                     <h5 class="card-title">The solution(s) are:</h5>
                     <p class="card-text">
                         <ul id="solution">
+                        </ul>
+                        <ul id="visualization">
                         </ul>
                     </p>
                 </div>
@@ -150,10 +155,17 @@
         const solutionContainer = document.getElementById('solution-container');
         const solutionHeader = document.getElementById('solution-header');
 
+        const spinner = document.getElementById('spinner');
+
+        const visualization = document.getElementById('visualization');
+
         const days = document.getElementById('day');
         const error = document.getElementById('error');
         const form = document.getElementById('form');
+
         const solve = document.getElementById('solve');
+        const solveText = document.getElementById('solve-text');
+
         const timeToSolve = document.getElementById('time-to-solve');
         const years = document.getElementById('year');
 
@@ -193,10 +205,16 @@
 
             const option = days.selectedOptions[0];
 
-            error.textContent = '';
-            solution.textContent = '';
-            timeToSolve.textContent = '';
+            arguments.value = '';
             inputFile.value = '';
+
+            error.classList.add(hideClass);
+            error.textContent = '';
+
+            solutionContainer.classList.add(hideClass);
+            solution.innerHTML = '';
+            timeToSolve.textContent = '';
+            visualization.innerHTML = '';
 
             form.setAttribute('action', option.getAttribute('data-location'));
 
@@ -227,6 +245,10 @@
 
         solve.addEventListener('click', () => {
 
+            solve.disabled = true;
+            solveText.innerText = 'Solving...';
+            spinner.classList.remove(hideClass);
+
             const url = form.getAttribute('action');
             const formData = new FormData();
 
@@ -239,9 +261,14 @@
             }
 
             const solveIt = async () => {
+
+                error.classList.add(hideClass);
                 error.textContent = '';
-                solution.textContent = '';
+                solution.innerHTML = '';
+                solutionContainer.classList.add(hideClass);
                 timeToSolve.textContent = '';
+                visualization.innerHTML = '';
+
                 fetch(url, { method: 'POST', body: formData }).then(async (response) => {
                     var body = await response.json();
                     if (!response.ok) {
@@ -263,8 +290,33 @@
                             solution.appendChild(element);
                         });
 
+                        body.visualizations.forEach((value) => {
+
+                            const pre = document.createElement('pre');
+                            pre.textContent = value;
+
+                            if (value.split('\n').length > 100) {
+                                pre.classList.add('pre-scrollable');
+                            }
+                            else {
+                                pre.classList.remove('pre-scrollable');
+                            }
+
+                            const code = document.createElement('code');
+                            code.appendChild(pre);
+
+                            const li = document.createElement('li');
+                            li.appendChild(code);
+
+                            solution.appendChild(li);
+                        });
+
                         solutionContainer.classList.remove(hideClass);
                     }
+
+                    spinner.classList.add(hideClass);
+                    solveText.innerText = 'Solve!';
+                    solve.disabled = false;
                 });
             };
 

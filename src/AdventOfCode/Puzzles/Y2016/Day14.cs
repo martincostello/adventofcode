@@ -8,6 +8,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
     using System.Globalization;
     using System.Security.Cryptography;
     using System.Text;
+    using System.Threading;
+    using System.Threading.Tasks;
 
     /// <summary>
     /// A class representing the puzzle for <c>https://adventofcode.com/2016/day/14</c>. This class cannot be inherited.
@@ -35,17 +37,24 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         /// <param name="salt">The salt to use to generate the one-time pad key.</param>
         /// <param name="ordinal">The ordinal of the key to return the index of.</param>
         /// <param name="useKeyStretching">Whether to use key stretching.</param>
+        /// <param name="cancellationToken">The cancellation token to use.</param>
         /// <returns>
         /// The index of the one-time pad key generated using <paramref name="salt"/>
         /// with the ordinal value specified by <paramref name="ordinal"/>.
         /// </returns>
-        internal static int GetOneTimePadKeyIndex(string salt, int ordinal, bool useKeyStretching)
+        internal static int GetOneTimePadKeyIndex(
+            string salt,
+            int ordinal,
+            bool useKeyStretching,
+            CancellationToken cancellationToken)
         {
             int current = 0;
             var cache = new Dictionary<string, string>();
 
             for (int i = 0; current < ordinal; i++)
             {
+                cancellationToken.ThrowIfCancellationRequested();
+
                 string value = salt + i.ToString(CultureInfo.InvariantCulture);
                 string key = GenerateKey(value, useKeyStretching, cache);
 
@@ -88,12 +97,12 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         }
 
         /// <inheritdoc />
-        protected override object[] SolveCore(string[] args)
+        protected override Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
         {
             string salt = args[0];
 
-            IndexOfKey64 = GetOneTimePadKeyIndex(salt, 64, useKeyStretching: false);
-            IndexOfKey64WithStretching = GetOneTimePadKeyIndex(salt, 64, useKeyStretching: true);
+            IndexOfKey64 = GetOneTimePadKeyIndex(salt, 64, useKeyStretching: false, cancellationToken);
+            IndexOfKey64WithStretching = GetOneTimePadKeyIndex(salt, 64, useKeyStretching: true, cancellationToken);
 
             if (Verbose)
             {
@@ -101,11 +110,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
                 Logger.WriteLine($"The index that produces the 64th one-time pad key when using key stretching is {IndexOfKey64WithStretching:N0}.");
             }
 
-            return new object[]
-            {
-                IndexOfKey64,
-                IndexOfKey64WithStretching,
-            };
+            return PuzzleResult.Create(IndexOfKey64, IndexOfKey64WithStretching);
         }
 
         /// <summary>
@@ -209,6 +214,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         /// A <see cref="string"/> containing the hexadecimal representation of <paramref name="bytes"/>.
         /// </returns>
         private static string GetStringForHash(ReadOnlySpan<byte> bytes)
-            => Convert.ToHexString(bytes);
+#pragma warning disable CA1308
+            => Convert.ToHexString(bytes).ToLowerInvariant();
+#pragma warning restore CA1308
     }
 }

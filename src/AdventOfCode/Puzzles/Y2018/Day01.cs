@@ -6,6 +6,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2018
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Threading;
+    using System.Threading.Tasks;
 
     /// <summary>
     /// A class representing the puzzle for <c>https://adventofcode.com/2018/day/1</c>. This class cannot be inherited.
@@ -83,9 +85,9 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2018
         }
 
         /// <inheritdoc />
-        protected override object[] SolveCore(string[] args)
+        protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
         {
-            IList<string> sequence = ReadResourceAsLines();
+            IList<string> sequence = await ReadResourceAsLinesAsync();
 
             (Frequency, FirstRepeatedFrequency) = CalculateFrequencyWithRepetition(sequence);
 
@@ -95,11 +97,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2018
                 Logger.WriteLine($"The first repeated frequency is {FirstRepeatedFrequency:N0}.");
             }
 
-            return new object[]
-            {
-                Frequency,
-                FirstRepeatedFrequency,
-            };
+            return PuzzleResult.Create(Frequency, FirstRepeatedFrequency);
         }
 
         /// <summary>

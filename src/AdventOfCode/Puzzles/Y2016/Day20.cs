@@ -5,6 +5,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
 {
     using System.Collections.Generic;
     using System.Linq;
+    using System.Threading;
+    using System.Threading.Tasks;
 
     /// <summary>
     /// A class representing the puzzle for <c>https://adventofcode.com/2016/day/20</c>. This class cannot be inherited.
@@ -121,9 +123,9 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         }
 
         /// <inheritdoc />
-        protected override object[] SolveCore(string[] args)
+        protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
         {
-            IList<string> ranges = ReadResourceAsLines();
+            IList<string> ranges = await ReadResourceAsLinesAsync();
 
             LowestNonblockedIP = GetLowestNonblockedIP(uint.MaxValue, ranges, out uint count);
             AllowedIPCount = count;
@@ -134,11 +136,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
                 Logger.WriteLine($"The number of IP addresses allowed is {AllowedIPCount:N0}.");
             }
 
-            return new object[]
-            {
-                LowestNonblockedIP,
-                AllowedIPCount,
-            };
+            return PuzzleResult.Create(LowestNonblockedIP, AllowedIPCount);
         }
     }
 }
