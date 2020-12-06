@@ -87,24 +87,27 @@ namespace MartinCostello.AdventOfCode
                 return;
             }
 
-            var form = await context.Request.ReadFormAsync(context.RequestAborted);
-
-            if (metadata.RequiresData)
-            {
-                if (!form.TryGetValue("resource", out var resource))
-                {
-                    await WriteErrorAsync(context, StatusCodes.Status400BadRequest, "Bad Request", "No puzzle resource provided.");
-                    return;
-                }
-
-                puzzle.Resource = new MemoryStream(Encoding.UTF8.GetBytes(resource));
-            }
-
             string[] arguments = Array.Empty<string>();
 
-            if (form.TryGetValue("arguments", out var values))
+            if (metadata.RequiresData || metadata.MinimumArguments > 0)
             {
-                arguments = values.Select((p) => p).ToArray();
+                var form = await context.Request.ReadFormAsync(context.RequestAborted);
+
+                if (metadata.RequiresData)
+                {
+                    if (!form.TryGetValue("resource", out var resource))
+                    {
+                        await WriteErrorAsync(context, StatusCodes.Status400BadRequest, "Bad Request", "No puzzle resource provided.");
+                        return;
+                    }
+
+                    puzzle.Resource = new MemoryStream(Encoding.UTF8.GetBytes(resource));
+                }
+
+                if (form.TryGetValue("arguments", out var values))
+                {
+                    arguments = values.Select((p) => p).ToArray();
+                }
             }
 
             var timeout = TimeSpan.FromMinutes(1);
