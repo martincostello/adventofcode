@@ -8,6 +8,7 @@ namespace MartinCostello.AdventOfCode.Api
     using System.Linq;
     using System.Net;
     using System.Net.Http;
+    using System.Text;
     using System.Text.Json;
     using System.Threading.Tasks;
     using Shouldly;
@@ -195,6 +196,69 @@ namespace MartinCostello.AdventOfCode.Api
                     actual.GetRawText().ShouldBe(expected.ToString());
                 }
             }
+        }
+
+        [Fact]
+        public async Task Can_Get_Puzzle_Metadata()
+        {
+            // Arrange
+            using var client = Fixture.CreateClient();
+
+            // Act
+            using var response = await client.GetAsync($"/api/puzzles");
+
+            // Assert
+            response.StatusCode.ShouldBe(HttpStatusCode.OK);
+            response.Content.ShouldNotBeNull();
+            response.Content!.Headers.ContentType.ShouldNotBeNull();
+            response.Content.Headers.ContentType.MediaType.ShouldBe("application/json");
+
+            using var puzzles = await JsonDocument.ParseAsync(await response.Content.ReadAsStreamAsync());
+
+            puzzles.RootElement.GetArrayLength().ShouldBeGreaterThan(0);
+
+            foreach (var puzzle in puzzles.RootElement.EnumerateArray())
+            {
+                puzzle.TryGetProperty("day", out _).ShouldBeTrue();
+                puzzle.TryGetProperty("location", out _).ShouldBeTrue();
+                puzzle.TryGetProperty("minimumArguments", out _).ShouldBeTrue();
+                puzzle.TryGetProperty("requiresData", out _).ShouldBeTrue();
+                puzzle.TryGetProperty("year", out _).ShouldBeTrue();
+            }
+        }
+
+        [Fact]
+        public async Task Api_Returns_404_If_Puzzle_Not_Found()
+        {
+            // Arrange
+            using var client = Fixture.CreateClient();
+
+            // Act
+            using var content = new MultipartFormDataContent();
+            using var response = await client.PostAsync($"/api/puzzles/2014/1/solve", content);
+
+            // Assert
+            response.StatusCode.ShouldBe(HttpStatusCode.NotFound);
+            response.Content.ShouldNotBeNull();
+            response.Content!.Headers.ContentType.ShouldNotBeNull();
+            response.Content.Headers.ContentType.MediaType.ShouldBe("application/json");
+        }
+
+        [Fact]
+        public async Task Api_Returns_415_If_Puzzle_Content_Incorrect()
+        {
+            // Arrange
+            using var client = Fixture.CreateClient();
+
+            // Act
+            using var content = new StringContent("{}", Encoding.UTF8, "application/json");
+            using var response = await client.PostAsync($"/api/puzzles/2015/1/solve", content);
+
+            // Assert
+            response.StatusCode.ShouldBe(HttpStatusCode.UnsupportedMediaType);
+            response.Content.ShouldNotBeNull();
+            response.Content!.Headers.ContentType.ShouldNotBeNull();
+            response.Content.Headers.ContentType.MediaType.ShouldBe("application/json");
         }
 
         private static string GetPuzzleInput(int year, int day)
