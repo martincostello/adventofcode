@@ -21,8 +21,12 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
         {
         }
 
-        [Fact]
-        public void Y2020_Day06_GetSumOfQuestionsWithYesAnswers_Returns_Correct_Value()
+        [Theory]
+        [InlineData(false, 11)]
+        [InlineData(true, 6)]
+        public void Y2020_Day06_GetSumOfQuestionsWithYesAnswers_Returns_Correct_Value(
+            bool byEveryone,
+            int expected)
         {
             // Arrange
             string[] values = new[]
@@ -45,10 +49,10 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
             };
 
             // Act
-            int actual = Day06.GetSumOfQuestionsWithYesAnswers(values);
+            int actual = Day06.GetSumOfQuestionsWithYesAnswers(values, byEveryone);
 
             // Assert
-            actual.ShouldBe(11);
+            actual.ShouldBe(expected);
         }
 
         [Fact]
@@ -58,7 +62,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
             var puzzle = SolvePuzzle<Day06>();
 
             // Assert
-            puzzle.SumOfQuestions.ShouldBe(6542);
+            puzzle.SumOfQuestionsAnyoneYes.ShouldBe(6542);
+            puzzle.SumOfQuestionsEveryoneYes.ShouldBe(3299);
         }
     }
 }
