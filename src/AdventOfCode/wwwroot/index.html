@@ -96,7 +96,14 @@
                         <label class="custom-file-label" for="resource" id="resource-label">Puzzle input file</label>
                     </div>
                 </div>
-                <button type="submit" class="btn btn-block btn-secondary btn-lg" id="solve">Solve!</button>
+                <div class="btn-group" role="group">
+                    <button type="submit" class="btn btn-secondary btn-lg" id="solve">Solve!</button>
+                </div>
+                <div class="btn-group" role="group">
+                    <div class="spinner-border d-none" role="status" id="spinner">
+                        <span class="sr-only">Solving...</span>
+                    </div>
+                </div>
             </form>
         </div>
         <hr />
@@ -151,6 +158,8 @@
         const solution = document.getElementById('solution');
         const solutionContainer = document.getElementById('solution-container');
         const solutionHeader = document.getElementById('solution-header');
+
+        const spinner = document.getElementById('spinner');
 
         const visualization = document.getElementById('visualization');
 
@@ -236,6 +245,9 @@
 
         solve.addEventListener('click', () => {
 
+            solve.disabled = true;
+            spinner.classList.remove(hideClass);
+
             const url = form.getAttribute('action');
             const formData = new FormData();
 
@@ -300,6 +312,9 @@
 
                         solutionContainer.classList.remove(hideClass);
                     }
+
+                    spinner.classList.add(hideClass);
+                    solve.disabled = false;
                 });
             };
 
