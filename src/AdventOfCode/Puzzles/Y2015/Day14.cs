@@ -10,7 +10,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
     /// <summary>
     /// A class representing the puzzle for <c>https://adventofcode.com/2015/day/14</c>. This class cannot be inherited.
     /// </summary>
-    public sealed class Day14 : Puzzle2015
+    [Puzzle(2015, 14, MinimumArguments = 1, RequiresData = true)]
+    public sealed class Day14 : Puzzle
     {
         /// <summary>
         /// Gets the maximum distance travelled by the winning reindeer at the given point in time, in kilometers.
@@ -82,14 +83,13 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
         }
 
         /// <inheritdoc />
-        protected override int SolveCore(string[] args)
+        protected override object[] SolveCore(string[] args)
         {
             int timeIndex = ParseInt32(args[0], NumberStyles.Integer & ~NumberStyles.AllowLeadingSign);
 
             if (timeIndex < 0)
             {
-                Logger.WriteLine("The time index specified is invalid.");
-                return -1;
+                throw new PuzzleException("The time index specified is invalid.");
             }
 
             IList<string> flightData = ReadResourceAsLines();
@@ -108,7 +108,11 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
                 Logger.WriteLine("After {0:N0} seconds, the reindeer in the lead has {1:N0} points.", timeIndex, MaximumReindeerPoints);
             }
 
-            return 0;
+            return new object[]
+            {
+                MaximumReindeerDistance,
+                MaximumReindeerPoints,
+            };
         }
 
         /// <summary>

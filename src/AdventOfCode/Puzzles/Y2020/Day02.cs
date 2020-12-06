@@ -9,7 +9,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
     /// <summary>
     /// A class representing the puzzle for <c>https://adventofcode.com/2020/day/2</c>. This class cannot be inherited.
     /// </summary>
-    public sealed class Day02 : Puzzle2020
+    [Puzzle(2020, 02, RequiresData = true)]
+    public sealed class Day02 : Puzzle
     {
         /// <summary>
         /// Gets the number of valid passwords using policy version 1.
@@ -73,7 +74,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
         }
 
         /// <inheritdoc />
-        protected override int SolveCore(string[] args)
+        protected override object[] SolveCore(string[] args)
         {
             IList<string> values = ReadResourceAsLines();
 
@@ -86,7 +87,11 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
                 Logger.WriteLine("There are {0} valid passwords using policy version 2.", ValidPasswordsV2);
             }
 
-            return 0;
+            return new object[]
+            {
+                ValidPasswordsV1,
+                ValidPasswordsV2,
+            };
         }
     }
 }

@@ -13,7 +13,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
     /// <summary>
     /// A class representing the puzzle for <c>https://adventofcode.com/2015/day/6</c>. This class cannot be inherited.
     /// </summary>
-    public sealed class Day06 : Puzzle2015
+    [Puzzle(2015, 06, MinimumArguments = 1, RequiresData = true)]
+    public sealed class Day06 : Puzzle
     {
         /// <summary>
         /// Gets the number of lights illuminated.
@@ -29,7 +30,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
         protected override int MinimumArguments => 1;
 
         /// <inheritdoc />
-        protected override int SolveCore(string[] args)
+        protected override object[] SolveCore(string[] args)
         {
             int version = args[0] switch
             {
@@ -40,8 +41,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
 
             if (version == -1)
             {
-                Logger.WriteLine("The instruction set specified is invalid.");
-                return -1;
+                throw new PuzzleException("The specified instruction set is invalid.");
             }
 
             var lines = ReadResourceAsLines();
@@ -90,7 +90,11 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
                 }
             }
 
-            return 0;
+            return new object[]
+            {
+                LightsIlluminated,
+                TotalBrightness,
+            };
         }
 
         /// <summary>
@@ -173,7 +177,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
                         break;
 
                     default:
-                        throw new InvalidOperationException("The current instruction is invalid.");
+                        throw new PuzzleException($"The current instruction '{Action}' is invalid.");
                 }
             }
 
@@ -219,7 +223,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
 
                 if (action == null || origin == null || termination == null)
                 {
-                    throw new ArgumentException("The specified instruction is invalid.", nameof(value));
+                    throw new PuzzleException("The specified instruction is invalid.");
                 }
 
                 Rectangle bounds = ParseBounds(origin, termination);
@@ -300,7 +304,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
 
                 if (delta == null || origin == null || termination == null)
                 {
-                    throw new ArgumentException("The specified instruction is invalid.", nameof(value));
+                    throw new PuzzleException("The specified instruction is invalid.");
                 }
 
                 Rectangle bounds = ParseBounds(origin, termination);
@@ -339,18 +343,12 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
             {
                 if (width < 1)
                 {
-                    throw new ArgumentOutOfRangeException(
-                        nameof(width),
-                        width,
-                        FormattableString.Invariant($"{nameof(width)} cannot be less than zero."));
+                    throw new PuzzleException("Width cannot be less than zero.");
                 }
 
                 if (height < 1)
                 {
-                    throw new ArgumentOutOfRangeException(
-                        nameof(height),
-                        height,
-                        FormattableString.Invariant($"{nameof(height)} cannot be less than zero."));
+                    throw new PuzzleException("Height cannot be less than zero.");
                 }
 
                 _bounds = new Rectangle(0, 0, width, height);

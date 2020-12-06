@@ -11,7 +11,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
     /// <summary>
     /// A class representing the puzzle for <c>https://adventofcode.com/2016/day/4</c>. This class cannot be inherited.
     /// </summary>
-    public sealed class Day04 : Puzzle2016
+    [Puzzle(2016, 04, RequiresData = true)]
+    public sealed class Day04 : Puzzle
     {
         /// <summary>
         /// Gets the sector Id of the room where North Pole objects are stored.
@@ -88,7 +89,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         }
 
         /// <inheritdoc />
-        protected override int SolveCore(string[] args)
+        protected override object[] SolveCore(string[] args)
         {
             IList<string> names = ReadResourceAsLines();
 
@@ -98,10 +99,14 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
             if (Verbose)
             {
                 Logger.WriteLine("The sum of the sector Ids of the real rooms is {0:N0}.", SumOfSectorIdsOfRealRooms);
-                Logger.WriteLine("The sector ID of the room where North Pole objects are stored is {0:N0}.", SumOfSectorIdsOfRealRooms);
+                Logger.WriteLine("The sector ID of the room where North Pole objects are stored is {0:N0}.", SectorIdOfNorthPoleObjectsRoom);
             }
 
-            return 0;
+            return new object[]
+            {
+                SumOfSectorIdsOfRealRooms,
+                SectorIdOfNorthPoleObjectsRoom,
+            };
         }
 
         /// <summary>

@@ -10,7 +10,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
     /// <summary>
     /// A class representing the puzzle for <c>https://adventofcode.com/2015/day/11</c>. This class cannot be inherited.
     /// </summary>
-    public sealed class Day11 : Puzzle2015
+    [Puzzle(2015, 11, MinimumArguments = 1)]
+    public sealed class Day11 : Puzzle
     {
         /// <summary>
         /// Gets the next password.
@@ -99,7 +100,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
         }
 
         /// <inheritdoc />
-        protected override int SolveCore(string[] args)
+        protected override object[] SolveCore(string[] args)
         {
             string current = args[0];
             NextPassword = GenerateNextPassword(current);
@@ -109,7 +110,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
                 Logger.WriteLine("Santa's new password should be '{0}'.", NextPassword);
             }
 
-            return 0;
+            return new object[] { NextPassword };
         }
 
         /// <summary>

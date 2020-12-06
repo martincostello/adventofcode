@@ -11,7 +11,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
     /// <summary>
     /// A class representing the puzzle for <c>https://adventofcode.com/2019/day/2</c>. This class cannot be inherited.
     /// </summary>
-    public sealed class Day02 : Puzzle2019
+    [Puzzle(2019, 02, RequiresData = true)]
+    public sealed class Day02 : Puzzle
     {
         /// <summary>
         /// Gets the output of the program.
@@ -47,14 +48,14 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
 
             if (!await vm.RunAsync(cancellationToken))
             {
-                throw new InvalidProgramException();
+                throw new PuzzleException("Failed to run program.");
             }
 
             return vm.Memory().ToArray();
         }
 
         /// <inheritdoc />
-        protected override int SolveCore(string[] args)
+        protected override object[] SolveCore(string[] args)
         {
             string program = ReadResourceAsString();
 
@@ -65,7 +66,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
                 Logger.WriteLine("The value at position 0 after the program halts is {0}.", Output[0]);
             }
 
-            return 0;
+            return new object[] { Output[0] };
         }
     }
 }

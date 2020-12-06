@@ -11,7 +11,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
     /// <summary>
     /// A class representing the puzzle for <c>https://adventofcode.com/2016/day/21</c>. This class cannot be inherited.
     /// </summary>
-    public sealed class Day21 : Puzzle2016
+    [Puzzle(2016, 21, MinimumArguments = 1, RequiresData = true)]
+    public sealed class Day21 : Puzzle
     {
         /// <summary>
         /// Gets the result of scrambling the puzzle input.
@@ -113,7 +114,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         }
 
         /// <inheritdoc />
-        protected override int SolveCore(string[] args)
+        protected override object[] SolveCore(string[] args)
         {
             string text = args[0];
             bool reverse = args.Length > 1 && string.Equals(args[1], bool.TrueString, StringComparison.OrdinalIgnoreCase);
@@ -127,7 +128,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
                 Logger.WriteLine($"The result of {(reverse ? "un" : string.Empty)}scrambling '{text}' is '{ScrambledResult}'.");
             }
 
-            return 0;
+            return new object[] { ScrambledResult };
         }
 
         /// <summary>

@@ -9,7 +9,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
     /// <summary>
     /// A class representing the puzzle for <c>https://adventofcode.com/2016/day/19</c>. This class cannot be inherited.
     /// </summary>
-    public sealed class Day19 : Puzzle2016
+    [Puzzle(2016, 19, MinimumArguments = 1)]
+    public sealed class Day19 : Puzzle
     {
         /// <summary>
         /// Gets the number of the elf who receives all the presents.
@@ -36,7 +37,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         }
 
         /// <inheritdoc />
-        protected override int SolveCore(string[] args)
+        protected override object[] SolveCore(string[] args)
         {
             int count = ParseInt32(args[0]);
             int version = args.Length > 1 ? ParseInt32(args[1]) : 1;
@@ -48,7 +49,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
                 Logger.WriteLine($"The elf that gets all the presents using version {version} of the rules is {ElfWithAllPresents:N0}.");
             }
 
-            return 0;
+            return new object[] { ElfWithAllPresents };
         }
 
         /// <summary>

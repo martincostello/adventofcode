@@ -8,7 +8,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
     /// <summary>
     /// A class representing the puzzle for <c>https://adventofcode.com/2016/day/23</c>. This class cannot be inherited.
     /// </summary>
-    public sealed class Day23 : Puzzle2016
+    [Puzzle(2016, 23, MinimumArguments = 1, RequiresData = true, IsHidden = true)]
+    public sealed class Day23 : Puzzle
     {
         /// <summary>
         /// Gets the value to send to the safe.
@@ -19,7 +20,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         protected override int MinimumArguments => 1;
 
         /// <inheritdoc />
-        protected override int SolveCore(string[] args)
+        protected override object[] SolveCore(string[] args)
         {
             int input = ParseInt32(args[0]);
 
@@ -33,7 +34,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
                 Logger.WriteLine($"The value to send to the safe for an input of {input:N0} is '{SafeValue}'.");
             }
 
-            return 0;
+            return new object[] { SafeValue };
         }
     }
 }

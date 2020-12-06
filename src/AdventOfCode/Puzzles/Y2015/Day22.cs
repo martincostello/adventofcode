@@ -12,7 +12,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
     /// <summary>
     /// A class representing the puzzle for <c>https://adventofcode.com/2015/day/22</c>. This class cannot be inherited.
     /// </summary>
-    public sealed class Day22 : Puzzle2015
+    [Puzzle(2015, 22, RequiresData = true)]
+    public sealed class Day22 : Puzzle
     {
         /// <summary>
         /// Gets the minimum amount of mana that can be spent to win.
@@ -89,7 +90,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
         }
 
         /// <inheritdoc />
-        protected override int SolveCore(string[] args)
+        protected override object[] SolveCore(string[] args)
         {
             string difficulty = args.Length == 1 ? args[0] : "easy";
 
@@ -116,7 +117,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
                     MinimumCostToWin);
             }
 
-            return 0;
+            return new object[] { MinimumCostToWin };
         }
 
         /// <summary>

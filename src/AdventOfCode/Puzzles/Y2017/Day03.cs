@@ -10,7 +10,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
     /// <summary>
     /// A class representing the puzzle for <c>https://adventofcode.com/2017/day/3</c>. This class cannot be inherited.
     /// </summary>
-    public sealed class Day03 : Puzzle2017
+    [Puzzle(2017, 03, MinimumArguments = 1)]
+    public sealed class Day03 : Puzzle
     {
         /// <summary>
         /// A move one unit left. This field is read-only.
@@ -174,7 +175,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
         }
 
         /// <inheritdoc />
-        protected override int SolveCore(string[] args)
+        protected override object[] SolveCore(string[] args)
         {
             int square = ParseInt32(args[0]);
 
@@ -187,7 +188,11 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
                 Logger.WriteLine($"The first value written that is larger than square {square:N0} is {FirstStorageLargerThanInput:N0}.");
             }
 
-            return 0;
+            return new object[]
+            {
+                Steps,
+                FirstStorageLargerThanInput,
+            };
         }
 
         /// <summary>

@@ -9,7 +9,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
     /// <summary>
     /// A class representing the puzzle for <c>https://adventofcode.com/2020/day/1</c>. This class cannot be inherited.
     /// </summary>
-    public sealed class Day01 : Puzzle2020
+    [Puzzle(2020, 01, RequiresData = true)]
+    public sealed class Day01 : Puzzle
     {
         /// <summary>
         /// Gets the product of the two input values that sum to a value of 2020.
@@ -45,7 +46,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
         }
 
         /// <inheritdoc />
-        protected override int SolveCore(string[] args)
+        protected override object[] SolveCore(string[] args)
         {
             IList<string> values = ReadResourceAsLines();
 
@@ -58,7 +59,11 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
                 Logger.WriteLine("The product of the three entries that sum to 2020 is {0}.", ProductOf2020SumFrom3);
             }
 
-            return 0;
+            return new object[]
+            {
+                ProductOf2020SumFrom2,
+                ProductOf2020SumFrom3,
+            };
         }
     }
 }

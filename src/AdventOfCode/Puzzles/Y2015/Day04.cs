@@ -14,7 +14,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
     /// <summary>
     /// A class representing the puzzle for <c>https://adventofcode.com/2015/day/4</c>. This class cannot be inherited.
     /// </summary>
-    public sealed class Day04 : Puzzle2015
+    [Puzzle(2015, 04, MinimumArguments = 2)]
+    public sealed class Day04 : Puzzle
     {
         /// <summary>
         /// Gets the lowest value that produces a hash that starts with the required number of zeroes.
@@ -107,14 +108,14 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
 
             if (solutions.IsEmpty)
             {
-                throw new ArgumentException("No answer was found for the specified secret key.", nameof(secretKey));
+                throw new PuzzleException("No answer was found for the specified secret key.");
             }
 
             return solutions.Min();
         }
 
         /// <inheritdoc />
-        protected override int SolveCore(string[] args)
+        protected override object[] SolveCore(string[] args)
         {
             string secretKey = args[0];
             int zeroes = ParseInt32(args[1]);
@@ -129,7 +130,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
                     LowestZeroHash);
             }
 
-            return 0;
+            return new object[] { LowestZeroHash };
         }
 
         /// <summary>

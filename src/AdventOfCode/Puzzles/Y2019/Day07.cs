@@ -12,7 +12,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
     /// <summary>
     /// A class representing the puzzle for <c>https://adventofcode.com/2019/day/7</c>. This class cannot be inherited.
     /// </summary>
-    public sealed class Day07 : Puzzle2019
+    [Puzzle(2019, 07, RequiresData = true)]
+    public sealed class Day07 : Puzzle
     {
         /// <summary>
         /// Gets the highest signal that can be sent to the thrusters.
@@ -107,7 +108,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
         }
 
         /// <inheritdoc />
-        protected override int SolveCore(string[] args)
+        protected override object[] SolveCore(string[] args)
         {
             string program = ReadResourceAsString();
 
@@ -120,7 +121,11 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
                 Logger.WriteLine("The highest signal that can be sent to the thrusters using a feedback loop is {0}.", HighestSignalUsingFeedback);
             }
 
-            return 0;
+            return new object[]
+            {
+                HighestSignal,
+                HighestSignalUsingFeedback,
+            };
         }
     }
 }

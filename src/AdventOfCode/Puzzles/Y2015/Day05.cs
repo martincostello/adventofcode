@@ -10,7 +10,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
     /// <summary>
     /// A class representing the puzzle for <c>https://adventofcode.com/2015/day/5</c>. This class cannot be inherited.
     /// </summary>
-    public sealed class Day05 : Puzzle2015
+    [Puzzle(2015, 05, MinimumArguments = 1, RequiresData = true)]
+    public sealed class Day05 : Puzzle
     {
         /// <summary>
         /// The sequences of characters that are not considered nice. This field is read-only.
@@ -144,7 +145,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
         }
 
         /// <inheritdoc />
-        protected override int SolveCore(string[] args)
+        protected override object[] SolveCore(string[] args)
         {
             int version = args[0] switch
             {
@@ -155,8 +156,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
 
             if (version == -1)
             {
-                Logger.WriteLine("The rules version specified is invalid.");
-                return -1;
+                throw new PuzzleException("The rules version specified is invalid.");
             }
 
             int count = 0;
@@ -186,7 +186,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
                 Logger.WriteLine("{0:N0} strings are nice using version {1} of the rules.", NiceStringCount, version);
             }
 
-            return 0;
+            return new object[] { NiceStringCount };
         }
 
         /// <summary>

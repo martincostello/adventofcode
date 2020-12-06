@@ -10,7 +10,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
     /// <summary>
     /// A class representing the puzzle for <c>https://adventofcode.com/2016/day/10</c>. This class cannot be inherited.
     /// </summary>
-    public sealed class Day10 : Puzzle2016
+    [Puzzle(2016, 10, RequiresData = true)]
+    public sealed class Day10 : Puzzle
     {
         /// <summary>
         /// Gets the number of the bot that compares value-61 and value-17 microchips.
@@ -66,7 +67,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         }
 
         /// <inheritdoc />
-        protected override int SolveCore(string[] args)
+        protected override object[] SolveCore(string[] args)
         {
             IList<string> instructions = ReadResourceAsLines();
             IList<int> binsOfInterest = new[] { 0, 1, 2 };
@@ -79,7 +80,11 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
                 Logger.WriteLine($"The product of the microchips in output bins 0, 1 and 2 is {ProductOfMicrochipsInBins012:N0}.");
             }
 
-            return 0;
+            return new object[]
+            {
+                BotThatCompares61And17Microchips,
+                ProductOfMicrochipsInBins012,
+            };
         }
 
         /// <summary>

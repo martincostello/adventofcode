@@ -10,15 +10,13 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
     /// <summary>
     /// A class representing the puzzle for <c>https://adventofcode.com/2019/day/5</c>. This class cannot be inherited.
     /// </summary>
-    public sealed class Day05 : Puzzle2019
+    [Puzzle(2019, 05, MinimumArguments = 1, RequiresData = true)]
+    public sealed class Day05 : Puzzle
     {
         /// <summary>
         /// Gets the diagnostic code output by the program.
         /// </summary>
         public long DiagnosticCode { get; private set; }
-
-        /// <inheritdoc />
-        protected override int MinimumArguments => 1;
 
         /// <summary>
         /// Runs the specified Intcode program.
@@ -43,7 +41,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
 
             if (!await vm.RunAsync(cancellationToken))
             {
-                throw new InvalidProgramException();
+                throw new PuzzleException("Failed to run program.");
             }
 
             var outputs = await vm.Output.ToListAsync(cancellationToken);
@@ -51,7 +49,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
         }
 
         /// <inheritdoc />
-        protected override int SolveCore(string[] args)
+        protected override object[] SolveCore(string[] args)
         {
             int input = ParseInt32(args[0]);
             string program = ReadResourceAsString();
@@ -63,7 +61,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
                 Logger.WriteLine("The program produces diagnostic code {0}.", DiagnosticCode);
             }
 
-            return 0;
+            return new object[] { DiagnosticCode };
         }
     }
 }

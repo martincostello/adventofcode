@@ -10,7 +10,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
     /// <summary>
     /// A class representing the puzzle for <c>https://adventofcode.com/2016/day/15</c>. This class cannot be inherited.
     /// </summary>
-    public sealed class Day15 : Puzzle2016
+    [Puzzle(2016, 15, RequiresData = true)]
+    public sealed class Day15 : Puzzle
     {
         /// <summary>
         /// The delimiters used when parsing the input. This field is read-only.
@@ -52,7 +53,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         }
 
         /// <inheritdoc />
-        protected override int SolveCore(string[] args)
+        protected override object[] SolveCore(string[] args)
         {
             IList<string> input = ReadResourceAsLines();
 
@@ -70,7 +71,11 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
                 Logger.WriteLine($"The first time the button can be pressed to get a capsule with the extra disc present is {TimeOfFirstButtonPressWithExtraDisc:N0}.");
             }
 
-            return 0;
+            return new object[]
+            {
+                TimeOfFirstButtonPress,
+                TimeOfFirstButtonPressWithExtraDisc,
+            };
         }
 
         /// <summary>

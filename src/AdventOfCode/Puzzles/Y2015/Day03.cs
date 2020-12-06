@@ -10,7 +10,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
     /// <summary>
     /// A class representing the puzzle for <c>https://adventofcode.com/2015/day/3</c>.
     /// </summary>
-    public class Day03 : Puzzle2015
+    [Puzzle(2015, 03, RequiresData = true)]
+    public class Day03 : Puzzle
     {
         /// <summary>
         /// Gets the number of houses with presents delivered to by Santa.
@@ -80,7 +81,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
         }
 
         /// <inheritdoc />
-        protected override int SolveCore(string[] args)
+        protected override object[] SolveCore(string[] args)
         {
             string instructions = ReadResourceAsString();
 
@@ -98,7 +99,11 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
                     HousesWithPresentsFromSantaAndRoboSanta);
             }
 
-            return 0;
+            return new object[]
+            {
+                HousesWithPresentsFromSanta,
+                HousesWithPresentsFromSantaAndRoboSanta,
+            };
         }
 
         /// <summary>
@@ -167,7 +172,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
                     CardinalDirection.North => new Size(0, 1),
                     CardinalDirection.South => new Size(0, -1),
                     CardinalDirection.West => new Size(-1, 0),
-                    _ => throw new ArgumentOutOfRangeException(nameof(direction), direction, "The specified direction is invalid."),
+                    _ => throw new PuzzleException($"The specified direction '{direction}' is invalid."),
                 };
             }
         }

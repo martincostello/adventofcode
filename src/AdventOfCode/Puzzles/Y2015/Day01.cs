@@ -8,7 +8,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
     /// <summary>
     /// A class representing the puzzle for <c>https://adventofcode.com/2015/day/1</c>. This class cannot be inherited.
     /// </summary>
-    public sealed class Day01 : Puzzle2015
+    [Puzzle(2015, 01, RequiresData = true)]
+    public sealed class Day01 : Puzzle
     {
         /// <summary>
         /// Gets the final floor reached by the instructions.
@@ -66,7 +67,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
         }
 
         /// <inheritdoc />
-        protected override int SolveCore(string[] args)
+        protected override object[] SolveCore(string[] args)
         {
             string value = ReadResourceAsString();
 
@@ -81,7 +82,11 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
                 Logger.WriteLine("Santa first enters the basement after following instruction {0:N0}.", FirstBasementInstruction);
             }
 
-            return 0;
+            return new object[]
+            {
+                FinalFloor,
+                FirstBasementInstruction,
+            };
         }
     }
 }

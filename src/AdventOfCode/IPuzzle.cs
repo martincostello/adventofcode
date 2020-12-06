@@ -17,7 +17,7 @@ namespace MartinCostello.AdventOfCode
         /// Solves the puzzle given the specified input.
         /// </summary>
         /// <param name="args">The input arguments to the puzzle.</param>
-        /// <returns>The exit code the application should return.</returns>
-        int Solve(string[] args);
+        /// <returns>The solution(s) to the puzzle.</returns>
+        object[] Solve(string[] args);
     }
 }

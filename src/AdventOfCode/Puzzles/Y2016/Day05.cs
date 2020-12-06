@@ -13,7 +13,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
     /// <summary>
     /// A class representing the puzzle for <c>https://adventofcode.com/2016/day/5</c>. This class cannot be inherited.
     /// </summary>
-    public sealed class Day05 : Puzzle2016
+    [Puzzle(2016, 05, MinimumArguments = 1)]
+    public sealed class Day05 : Puzzle
     {
         /// <summary>
         /// Gets the password for the door.
@@ -80,7 +81,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         }
 
         /// <inheritdoc />
-        protected override int SolveCore(string[] args)
+        protected override object[] SolveCore(string[] args)
         {
             string doorId = args[0];
 
@@ -93,7 +94,11 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
                 Logger.WriteLine($"The password for door '{doorId}' is '{PasswordWhenPositionIsIndicated}' when the position is specified in the hash.");
             }
 
-            return 0;
+            return new object[]
+            {
+                Password,
+                PasswordWhenPositionIsIndicated,
+            };
         }
 
         /// <summary>

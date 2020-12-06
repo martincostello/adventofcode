@@ -9,7 +9,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
     /// <summary>
     /// A class representing the puzzle for <c>https://adventofcode.com/2017/day/13</c>. This class cannot be inherited.
     /// </summary>
-    public sealed class Day13 : Puzzle2017
+    [Puzzle(2017, 13, RequiresData = true)]
+    public sealed class Day13 : Puzzle
     {
         /// <summary>
         /// Gets the severity of the trip through the firewall.
@@ -102,7 +103,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
         }
 
         /// <inheritdoc />
-        protected override int SolveCore(string[] args)
+        protected override object[] SolveCore(string[] args)
         {
             IList<string> depthRanges = ReadResourceAsLines();
 
@@ -115,7 +116,11 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
                 Logger.WriteLine($"The fewest number of picoseconds that the packet needs to be delayed by to pass through the firewall without being caught is {ShortestDelay:N0}.");
             }
 
-            return 0;
+            return new object[]
+            {
+                Severity,
+                ShortestDelay,
+            };
         }
     }
 }

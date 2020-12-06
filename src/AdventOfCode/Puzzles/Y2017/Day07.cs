@@ -10,7 +10,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
     /// <summary>
     /// A class representing the puzzle for <c>https://adventofcode.com/2017/day/7</c>. This class cannot be inherited.
     /// </summary>
-    public sealed class Day07 : Puzzle2017
+    [Puzzle(2017, 07, RequiresData = true)]
+    public sealed class Day07 : Puzzle
     {
         /// <summary>
         /// Gets the name of the bottom program.
@@ -53,7 +54,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
         }
 
         /// <inheritdoc />
-        protected override int SolveCore(string[] args)
+        protected override object[] SolveCore(string[] args)
         {
             IList<string> structure = ReadResourceAsLines();
 
@@ -66,7 +67,11 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
                 Logger.WriteLine($"The desired weight of the program to balance the structure is {DesiredWeightOfUnbalancedDisc:N0}.");
             }
 
-            return 0;
+            return new object[]
+            {
+                BottomProgramName,
+                DesiredWeightOfUnbalancedDisc,
+            };
         }
 
         /// <summary>

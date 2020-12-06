@@ -6,7 +6,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
     /// <summary>
     /// A class representing the puzzle for <c>https://adventofcode.com/2017/day/1</c>. This class cannot be inherited.
     /// </summary>
-    public sealed class Day01 : Puzzle2017
+    [Puzzle(2017, 01, RequiresData = true)]
+    public sealed class Day01 : Puzzle
     {
         /// <summary>
         /// Gets the solution to the captcha using the next number.
@@ -53,7 +54,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
         }
 
         /// <inheritdoc />
-        protected override int SolveCore(string[] args)
+        protected override object[] SolveCore(string[] args)
         {
             string digits = ReadResourceAsString().TrimEnd();
 
@@ -66,7 +67,11 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
                 Logger.WriteLine($"The solution to the second captcha is {CaptchaSolutionOpposite:N0}.");
             }
 
-            return 0;
+            return new object[]
+            {
+                CaptchaSolutionNext,
+                CaptchaSolutionOpposite,
+            };
         }
     }
 }

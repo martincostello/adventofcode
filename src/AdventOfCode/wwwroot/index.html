@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en-gb">
+<head prefix="og:http://ogp.me/ns#">
+    <title>Advent of Code as a Service</title>
+    <meta charset="utf-8" />
+    <meta http-equiv="cache-control" content="no-cache, no-store" />
+    <meta http-equiv="content-type" content="text/html;" />
+    <meta http-equiv="pragma" content="no-cache" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="author" content="Martin Costello" />
+    <meta name="bitcoin" content="12uKG1MwnApd6uiFQ3VXLxFMNC3Z74Z2NG" />
+    <meta name="copyright" content="&copy; Martin Costello 2020" />
+    <meta name="description" content="Find solutions for the puzzles of Advent of Code" />
+    <meta name="language" content="en" />
+    <meta name="keywords" content="advent,of,code" />
+    <meta name="referrer" content="origin-when-cross-origin" />
+    <meta name="robots" content="INDEX" />
+    <meta name="theme-color" content="#000000" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta property="fb:profile_id" content="10100867762061905" />
+    <meta property="og:description" content="Find solutions for the puzzles of Advent of Code" />
+    <meta property="og:image" content="https://aoc.azurewebsites.net/favicon.png" />
+    <meta property="og:image:type" content="image/png" />
+    <meta property="og:locale" content="en_GB" />
+    <meta property="og:site_name" content="aoc.azurewebsites.net" />
+    <meta property="og:title" content="Advent of Code as a Service" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://aoc.azurewebsites.net/" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:creator" content="@martin_costello" />
+    <meta name="twitter:description" content="Find solutions for the puzzles of Advent of Code" />
+    <meta name="twitter:domain" content="aoc.azurewebsites.net" />
+    <meta name="twitter:site" content="@martin_costello" />
+    <meta name="twitter:title" content="Advent of Code as a Service" />
+    <meta name="twitter:url" content="https://aoc.azurewebsites.net/" />
+    <meta name="application-name" content="Advent of Code as a Service" />
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <link rel="shortcut icon" href="/favicon.png" type="image/x-icon" />
+    <link rel="dns-prefetch" href="//stackpath.bootstrapcdn.com" />
+    <link rel="preconnect" href="//stackpath.bootstrapcdn.com" />
+    <script type="text/javascript">
+        if (self == top) {
+            document.documentElement.className = document.documentElement.className.replace(/\bjs-flash\b/, '');
+        }
+        else {
+            top.location = self.location;
+        }
+    </script>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <a id="link-home" class="navbar-brand" href="/">Advent of Code as a Service</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#site-navbar" aria-controls="site-navbar" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="site-navbar">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a id="link-repo" class="nav-link" href="https://github.com/martincostello/adventofcode" rel="noopener" target="_blank" title="View the source code on GitHub">GitHub Repository</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    <main class="container body-content">
+        <h1>Advent of Code as a Service</h1>
+        <div>
+            <select id="year" name="year">
+            </select>
+            <select id="day" name="day">
+            </select>
+            <div class="form-group">
+                <label for="arguments">Argument(s)</label>
+                <textarea class="form-control" id="arguments" rows="3"></textarea>
+            </div>
+            <form id="form" action="" method="get">
+                <div id="puzzle-day"></div>
+                <div id="puzzle-minimum-arguments"></div>
+                <div id="puzzle-requires-data"></div>
+                <div id="puzzle-year"></div>
+                <div class="input-group mb-3">
+                    <div class="custom-file">
+                        <input type="file" class="custom-file-input" id="resource">
+                        <label class="custom-file-label" for="resource">Choose file</label>
+                    </div>
+                </div>
+                <input id="solve" type="submit" value="Solve!" />
+            </form>
+            <div id="error" class="text-danger"></div>
+            <div>
+                Solutions: <div id="solution" class="text-success"></div>
+            </div>
+            <div>
+                Time to solve: <div id="time-to-solve" class="text-success"></div>
+            </div>
+        </div>
+        <hr />
+        <footer>
+            <p>&copy; Martin Costello 2020</p>
+        </footer>
+    </main>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootswatch/4.5.2/slate/bootstrap.min.css" integrity="sha384-8iuq0iaMHpnH2vSyvZMSIqQuUnQA7QM+f6srIdlgBrTSEyd//AWNMyEaSF2yPzNQ" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous" async></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous" async></script>
+    <script>
+
+        const data = {
+        };
+
+        const arguments = document.getElementById('arguments');
+        const days = document.getElementById('day');
+        const error = document.getElementById('error');
+        const form = document.getElementById('form');
+        const resource = document.getElementById('resource');
+        const solve = document.getElementById('solve');
+        const solution = document.getElementById('solution');
+        const timeToSolve = document.getElementById('time-to-solve');
+        const years = document.getElementById('year');
+
+        years.addEventListener('change', () => {
+
+            days.innerHTML = '';
+
+            const puzzlesForYear = data[years.value];
+
+            for (let i = 0; i < puzzlesForYear.length; i++) {
+
+                const element = document.createElement('option');
+                const puzzle = puzzlesForYear[i];
+
+                element.setAttribute('data-day', puzzle.day);
+                element.setAttribute('data-location', puzzle.location);
+                element.setAttribute('data-minimum-arguments', puzzle.minimumArguments);
+                element.setAttribute('data-requires-data', puzzle.requiresData);
+                element.setAttribute('data-year', puzzle.year);
+
+                element.setAttribute('value', puzzle.day);
+                element.text = puzzle.day;
+
+                days.appendChild(element);
+
+                const now = new Date();
+
+                if (puzzle.year == now.getFullYear() && puzzle.day == now.getDate() && now.getMonth() == 11) {
+                    element.selected = true;
+                }
+            }
+
+            days.dispatchEvent(new Event('change'));
+        });
+
+        days.addEventListener('change', () => {
+
+            const option = days.selectedOptions[0];
+
+            document.querySelector('#puzzle-day').textContent = option.getAttribute('data-day');
+            document.querySelector('#puzzle-minimum-arguments').textContent = option.getAttribute('data-minimum-arguments');
+            document.querySelector('#puzzle-requires-data').textContent = option.getAttribute('data-requires-data');
+            document.querySelector('#puzzle-year').textContent = option.getAttribute('data-year');
+
+            arguments.setAttribute('rows', option.getAttribute('data-minimum-arguments'));
+            form.setAttribute('action', option.getAttribute('data-location'));
+
+            error.textContent = '';
+            solution.textContent = '';
+            timeToSolve.textContent = '';
+            resource.value = '';
+        });
+
+        solve.addEventListener('click', () => {
+
+            const url = form.getAttribute('action');
+            const formData = new FormData();
+
+            if (arguments.value) {
+                const split = arguments.value.split('\n');
+
+                split.forEach((value) => {
+                    formData.append('arguments', value);
+                });
+            }
+
+            const solveIt = async () => {
+                error.textContent = '';
+                solution.textContent = '';
+                timeToSolve.textContent = '';
+                fetch(url, { method: 'POST', body: formData }).then(async (response) => {
+                    if (!response.ok) {
+                        var errorResponse = await response.json();
+                        error.textContent = `${errorResponse.status}: ${errorResponse.detail}`;
+                    }
+                    return response.json();
+                }).then(async (json) => {
+                    timeToSolve.textContent = `${json.timeToSolve} milliseconds`;
+                    solution.textContent = `${JSON.stringify(json.solutions, null, 2)}`;
+                });
+            };
+
+            if (resource.files.length === 1) {
+                const file = resource.files[0];
+                const reader = new FileReader();
+
+                reader.readAsText(file, 'UTF-8');
+
+                reader.onload = (event) => {
+                    formData.append('resource', event.target.result);
+                    solveIt();
+                };
+            }
+            else {
+                solveIt();
+            }
+        });
+
+        form.addEventListener('submit', (event) => {
+            event.preventDefault();
+            return false;
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            fetch('/api/puzzles').then(async (response) => {
+                if (!response.ok) {
+                    throw new Error(response.status);
+                }
+                return response.json();
+            }).then(async (puzzles) => {
+                puzzles.forEach((puzzle) => {
+
+                    const year = puzzle.year.toString();
+
+                    if (data[year] == null) {
+                        data[year] = [];
+                    }
+
+                    data[puzzle.year].push(puzzle);
+
+                    if (data[puzzle.year].length === 1) {
+                        const element = document.createElement('option');
+
+                        element.setAttribute('data-year', puzzle.year);
+                        element.setAttribute('value', puzzle.year);
+
+                        element.text = puzzle.year;
+
+                        years.appendChild(element);
+
+                        if (puzzle.year == new Date().getFullYear()) {
+                            element.selected = true;
+                        }
+                    }
+                });
+
+                years.dispatchEvent(new Event('change'));
+            });
+        }, false);
+    </script>
+</body>
+</html>

@@ -11,7 +11,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
     /// <summary>
     /// A class representing the puzzle for <c>https://adventofcode.com/2017/day/10</c>. This class cannot be inherited.
     /// </summary>
-    public sealed class Day10 : Puzzle2017
+    [Puzzle(2017, 10, RequiresData = true)]
+    public sealed class Day10 : Puzzle
     {
         /// <summary>
         /// The default sequence length to use.
@@ -79,7 +80,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
         }
 
         /// <inheritdoc />
-        protected override int SolveCore(string[] args)
+        protected override object[] SolveCore(string[] args)
         {
             string rawLengths = ReadResourceAsString().Trim();
 
@@ -97,7 +98,11 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
                 Logger.WriteLine($"The hexadecimal dense hash of the input is {DenseHash}.");
             }
 
-            return 0;
+            return new object[]
+            {
+                ProductOfFirstTwoElements,
+                DenseHash,
+            };
         }
 
         /// <summary>

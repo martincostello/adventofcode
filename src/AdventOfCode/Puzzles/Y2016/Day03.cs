@@ -10,7 +10,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
     /// <summary>
     /// A class representing the puzzle for <c>https://adventofcode.com/2016/day/3</c>. This class cannot be inherited.
     /// </summary>
-    public sealed class Day03 : Puzzle2016
+    [Puzzle(2016, 03, RequiresData = true)]
+    public sealed class Day03 : Puzzle
     {
         /// <summary>
         /// Gets the number of possible triangles by columns.
@@ -54,7 +55,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         }
 
         /// <inheritdoc />
-        protected override int SolveCore(string[] args)
+        protected override object[] SolveCore(string[] args)
         {
             IList<string> dimensions = ReadResourceAsLines();
 
@@ -67,7 +68,11 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
                 Logger.WriteLine("The number of possible triangles using columns is {0:N0}.", PossibleTrianglesByColumns);
             }
 
-            return 0;
+            return new object[]
+            {
+                PossibleTrianglesByRows,
+                PossibleTrianglesByColumns,
+            };
         }
 
         /// <summary>

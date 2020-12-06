@@ -10,7 +10,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
     /// <summary>
     /// A class representing the puzzle for <c>https://adventofcode.com/2016/day/8</c>. This class cannot be inherited.
     /// </summary>
-    public sealed class Day08 : Puzzle2016
+    [Puzzle(2016, 08, RequiresData = true)]
+    public sealed class Day08 : Puzzle
     {
         /// <summary>
         /// Gets the number of pixels that are be lit.
@@ -62,7 +63,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         }
 
         /// <inheritdoc />
-        protected override int SolveCore(string[] args)
+        protected override object[] SolveCore(string[] args)
         {
             IList<string> instructions = ReadResourceAsLines();
 
@@ -73,7 +74,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
                 Logger.WriteLine($"There are {PixelsLit:N0} pixels lit.");
             }
 
-            return 0;
+            return new object[] { PixelsLit };
         }
 
         /// <summary>

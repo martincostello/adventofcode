@@ -9,7 +9,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
     /// <summary>
     /// A class representing the puzzle for <c>https://adventofcode.com/2016/day/9</c>. This class cannot be inherited.
     /// </summary>
-    public sealed class Day09 : Puzzle2016
+    [Puzzle(2016, 09, RequiresData = true)]
+    public sealed class Day09 : Puzzle
     {
         /// <summary>
         /// Gets the decompressed length of the data using version 1 of the decompression algorithm.
@@ -33,7 +34,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
             => GetDecompressedLength(data, 0, data.Length, version);
 
         /// <inheritdoc />
-        protected override int SolveCore(string[] args)
+        protected override object[] SolveCore(string[] args)
         {
             string data = ReadResourceAsString();
 
@@ -46,7 +47,11 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
                 Logger.WriteLine($"The decompressed length of the data using version 2 of the algorithm is {DecompressedLengthVersion2:N0}.");
             }
 
-            return 0;
+            return new object[]
+            {
+                DecompressedLengthVersion1,
+                DecompressedLengthVersion2,
+            };
         }
 
         /// <summary>

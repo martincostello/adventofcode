@@ -9,7 +9,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
     /// <summary>
     /// A class representing the puzzle for <c>https://adventofcode.com/2019/day/8</c>. This class cannot be inherited.
     /// </summary>
-    public sealed class Day08 : Puzzle2019
+    [Puzzle(2019, 08, RequiresData = true)]
+    public sealed class Day08 : Puzzle
     {
         /// <summary>
         /// Gets the checksum of the image.
@@ -108,7 +109,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
         }
 
         /// <inheritdoc />
-        protected override int SolveCore(string[] args)
+        protected override object[] SolveCore(string[] args)
         {
             string image = ReadResourceAsString().TrimEnd('\n');
 
@@ -119,7 +120,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
                 Logger.WriteLine("The checksum of the image data is {0}.", Checksum);
             }
 
-            return 0;
+            return new object[] { Checksum };
         }
 
         /// <summary>

@@ -11,7 +11,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2018
     /// <summary>
     /// A class representing the puzzle for <c>https://adventofcode.com/2018/day/5</c>. This class cannot be inherited.
     /// </summary>
-    public sealed class Day05 : Puzzle2018
+    [Puzzle(2018, 05, RequiresData = true)]
+    public sealed class Day05 : Puzzle
     {
         /// <summary>
         /// Gets the number of remaining polymer units after the reduction.
@@ -76,7 +77,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2018
         }
 
         /// <inheritdoc />
-        protected override int SolveCore(string[] args)
+        protected override object[] SolveCore(string[] args)
         {
             string polymer = ReadResourceAsString().Trim('\r', '\n');
 
@@ -89,7 +90,11 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2018
                 Logger.WriteLine($"The number of units that remain after fully reacting the polymer with optimization is {RemainingUnitsOptimized:N0}.");
             }
 
-            return 0;
+            return new object[]
+            {
+                RemainingUnits,
+                RemainingUnitsOptimized,
+            };
         }
 
         /// <summary>

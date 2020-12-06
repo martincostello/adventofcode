@@ -9,7 +9,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
     /// <summary>
     /// A class representing the puzzle for <c>https://adventofcode.com/2017/day/6</c>. This class cannot be inherited.
     /// </summary>
-    public sealed class Day06 : Puzzle2017
+    [Puzzle(2017, 06, RequiresData = true)]
+    public sealed class Day06 : Puzzle
     {
         /// <summary>
         /// Gets the count of redistribution cycles performed before a distribution of memory re-occurs.
@@ -40,17 +41,14 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
         }
 
         /// <inheritdoc />
-        protected override int SolveCore(string[] args)
+        protected override object[] SolveCore(string[] args)
         {
             IList<int> memory = ReadResourceAsString().Trim()
                 .Split('\t')
                 .Select((p) => ParseInt32(p))
                 .ToList();
 
-            (int cycleCount, int loopSize) = Debug(memory);
-
-            CycleCount = cycleCount;
-            LoopSize = loopSize;
+            (CycleCount, LoopSize) = Debug(memory);
 
             if (Verbose)
             {
@@ -58,7 +56,11 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
                 Logger.WriteLine($"{LoopSize:N0} cycles are in the infinite loop that arises from the configuration in the input.");
             }
 
-            return 0;
+            return new object[]
+            {
+                CycleCount,
+                LoopSize,
+            };
         }
 
         /// <summary>

@@ -12,7 +12,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
     /// <summary>
     /// A class representing the puzzle for <c>https://adventofcode.com/2020/day/4</c>. This class cannot be inherited.
     /// </summary>
-    public sealed class Day04 : Puzzle2020
+    [Puzzle(2020, 04, RequiresData = true)]
+    public sealed class Day04 : Puzzle
     {
         /// <summary>
         /// The required keys for passports. This field is read-only.
@@ -86,7 +87,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
         }
 
         /// <inheritdoc />
-        protected override int SolveCore(string[] args)
+        protected override object[] SolveCore(string[] args)
         {
             IList<string> batch = ReadResourceAsLines();
 
@@ -98,7 +99,11 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
                 Logger.WriteLine("There are {0} verified passports.", VerifiedPassports);
             }
 
-            return 0;
+            return new object[]
+            {
+                ValidPassports,
+                VerifiedPassports,
+            };
         }
 
         /// <summary>

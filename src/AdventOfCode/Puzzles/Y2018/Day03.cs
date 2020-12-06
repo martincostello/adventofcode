@@ -9,7 +9,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2018
     /// <summary>
     /// A class representing the puzzle for <c>https://adventofcode.com/2018/day/3</c>. This class cannot be inherited.
     /// </summary>
-    public sealed class Day03 : Puzzle2018
+    [Puzzle(2018, 03, RequiresData = true)]
+    public sealed class Day03 : Puzzle
     {
         /// <summary>
         /// Gets the area, in square inches, of fabric with two or more claims.
@@ -91,7 +92,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2018
         }
 
         /// <inheritdoc />
-        protected override int SolveCore(string[] args)
+        protected override object[] SolveCore(string[] args)
         {
             IList<string> claims = ReadResourceAsLines();
 
@@ -104,7 +105,11 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2018
                 Logger.WriteLine($"The Id of the claim with no overlapping claims is {IdOfUniqueClaim}.");
             }
 
-            return 0;
+            return new object[]
+            {
+                Area,
+                IdOfUniqueClaim!,
+            };
         }
 
         /// <summary>

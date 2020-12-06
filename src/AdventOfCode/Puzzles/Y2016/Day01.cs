@@ -10,7 +10,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
     /// <summary>
     /// A class representing the puzzle for <c>https://adventofcode.com/2016/day/1</c>. This class cannot be inherited.
     /// </summary>
-    public sealed class Day01 : Puzzle2016
+    [Puzzle(2016, 01, RequiresData = true)]
+    public sealed class Day01 : Puzzle
     {
         /// <summary>
         /// An enumeration of directions.
@@ -76,7 +77,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
                         CardinalDirection.South => new Size(0, -1),
                         CardinalDirection.East => new Size(1, 0),
                         CardinalDirection.West => new Size(-1, 0),
-                        _ => throw new InvalidOperationException($"The bearing {bearing} is not known."),
+                        _ => throw new PuzzleException($"The bearing {bearing} is not known."),
                     };
 
                     position += delta;
@@ -87,7 +88,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         }
 
         /// <inheritdoc />
-        protected override int SolveCore(string[] args)
+        protected override object[] SolveCore(string[] args)
         {
             string instructions = ReadResourceAsString();
 
@@ -105,7 +106,11 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
                     BlocksToEasterBunnyHQ);
             }
 
-            return 0;
+            return new object[]
+            {
+                BlocksToEasterBunnyHQ,
+                BlocksToEasterBunnyHQIgnoringDuplicates,
+            };
         }
 
         /// <summary>
@@ -151,7 +156,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
                 CardinalDirection.North => direction == Direction.Left ? CardinalDirection.West : CardinalDirection.East,
                 CardinalDirection.South => direction == Direction.Left ? CardinalDirection.East : CardinalDirection.West,
                 CardinalDirection.West => direction == Direction.Left ? CardinalDirection.South : CardinalDirection.North,
-                _ => throw new ArgumentOutOfRangeException(nameof(bearing), bearing, "Invalid bearing."),
+                _ => throw new PuzzleException($"Invalid bearing '{bearing}'."),
             };
         }
 

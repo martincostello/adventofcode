@@ -10,7 +10,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
     /// <summary>
     /// A class representing the puzzle for <c>https://adventofcode.com/2017/day/8</c>. This class cannot be inherited.
     /// </summary>
-    public sealed class Day08 : Puzzle2017
+    [Puzzle(2017, 08, RequiresData = true)]
+    public sealed class Day08 : Puzzle
     {
         /// <summary>
         /// Gets the highest value in any register once the program has run.
@@ -49,7 +50,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
         }
 
         /// <inheritdoc />
-        protected override int SolveCore(string[] args)
+        protected override object[] SolveCore(string[] args)
         {
             IList<string> instructions = ReadResourceAsLines();
 
@@ -62,7 +63,11 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
                 Logger.WriteLine($"The largest value in any register at any point while executing the input was {HighestRegisterValueDuring:N0}.");
             }
 
-            return 0;
+            return new object[]
+            {
+                HighestRegisterValueAtEnd,
+                HighestRegisterValueDuring,
+            };
         }
 
         /// <summary>
@@ -131,7 +136,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
                 "==" => left == right,
                 ">=" => left >= right,
                 "<=" => left <= right,
-                _ => throw new InvalidProgramException($"Unknown operation: {operation}"),
+                _ => throw new PuzzleException($"Unknown operation '{operation}'."),
             };
         }
 

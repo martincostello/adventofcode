@@ -75,11 +75,16 @@ namespace MartinCostello.AdventOfCode.Benchmarks
             yield return new PuzzleInput<Puzzles.Y2019.Day07>();
             yield return new PuzzleInput<Puzzles.Y2019.Day08>();
             yield return new PuzzleInput<Puzzles.Y2019.Day09>("1");
+            yield return new PuzzleInput<Puzzles.Y2020.Day01>();
+            yield return new PuzzleInput<Puzzles.Y2020.Day02>();
+            yield return new PuzzleInput<Puzzles.Y2020.Day03>();
+            yield return new PuzzleInput<Puzzles.Y2020.Day04>();
+            yield return new PuzzleInput<Puzzles.Y2020.Day05>();
         }
 
         [Benchmark]
         [ArgumentsSource(nameof(Puzzles))]
-        public int Solve(PuzzleInput input)
+        public object[] Solve(PuzzleInput input)
             => input.Puzzle.Solve(input.Args);
 
         public sealed class PuzzleInput<T> : PuzzleInput

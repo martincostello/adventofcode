@@ -9,7 +9,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
     /// <summary>
     /// A class representing the puzzle for <c>https://adventofcode.com/2019/day/1</c>. This class cannot be inherited.
     /// </summary>
-    public sealed class Day01 : Puzzle2019
+    [Puzzle(2019, 01, RequiresData = true)]
+    public sealed class Day01 : Puzzle
     {
         /// <summary>
         /// Gets the total fuel requirement for the modules.
@@ -42,7 +43,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
             => GetFuelRequirementsForMassWithFuel(ParseInt32(mass));
 
         /// <inheritdoc />
-        protected override int SolveCore(string[] args)
+        protected override object[] SolveCore(string[] args)
         {
             IList<string> masses = ReadResourceAsLines();
 
@@ -55,7 +56,11 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
                 Logger.WriteLine("{0} fuel is required for the fully-fuelled rocket.", TotalFuelRequiredForRocket);
             }
 
-            return 0;
+            return new object[]
+            {
+                TotalFuelRequiredForModules,
+                TotalFuelRequiredForRocket,
+            };
         }
 
         /// <summary>

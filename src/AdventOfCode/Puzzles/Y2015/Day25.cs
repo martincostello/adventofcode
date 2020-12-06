@@ -8,7 +8,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
     /// <summary>
     /// A class representing the puzzle for <c>https://adventofcode.com/2015/day/25</c>. This class cannot be inherited.
     /// </summary>
-    public sealed class Day25 : Puzzle2015
+    [Puzzle(2015, 25, MinimumArguments = 2)]
+    public sealed class Day25 : Puzzle
     {
         /// <summary>
         /// Gets the code for the weather machine.
@@ -67,7 +68,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
         }
 
         /// <inheritdoc />
-        protected override int SolveCore(string[] args)
+        protected override object[] SolveCore(string[] args)
         {
             int row = ParseInt32(args[0]);
             int column = ParseInt32(args[1]);
@@ -83,7 +84,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
                     Code);
             }
 
-            return 0;
+            return new object[] { Code };
         }
     }
 }

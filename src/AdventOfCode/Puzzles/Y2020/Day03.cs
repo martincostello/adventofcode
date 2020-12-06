@@ -9,7 +9,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
     /// <summary>
     /// A class representing the puzzle for <c>https://adventofcode.com/2020/day/3</c>. This class cannot be inherited.
     /// </summary>
-    public sealed class Day03 : Puzzle2020
+    [Puzzle(2020, 03, RequiresData = true)]
+    public sealed class Day03 : Puzzle
     {
         /// <summary>
         /// Gets the number of trees collided with when traversing the grid.
@@ -78,7 +79,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
         }
 
         /// <inheritdoc />
-        protected override int SolveCore(string[] args)
+        protected override object[] SolveCore(string[] args)
         {
             IList<string> grid = ReadResourceAsLines();
 
@@ -108,7 +109,11 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
                 Logger.WriteLine("The product of the collisions from traversing the slopes is {0}.", ProductOfTreeCollisions);
             }
 
-            return 0;
+            return new object[]
+            {
+                TreeCollisions,
+                ProductOfTreeCollisions,
+            };
         }
     }
 }

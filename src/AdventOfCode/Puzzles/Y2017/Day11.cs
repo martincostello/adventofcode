@@ -11,7 +11,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
     /// <summary>
     /// A class representing the puzzle for <c>https://adventofcode.com/2017/day/11</c>. This class cannot be inherited.
     /// </summary>
-    public sealed class Day11 : Puzzle2017
+    [Puzzle(2017, 11, RequiresData = true)]
+    public sealed class Day11 : Puzzle
     {
         /// <summary>
         /// A move north. This field is read-only.
@@ -88,7 +89,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
         }
 
         /// <inheritdoc />
-        protected override int SolveCore(string[] args)
+        protected override object[] SolveCore(string[] args)
         {
             string path = ReadResourceAsString().Trim();
 
@@ -100,7 +101,11 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
                 Logger.WriteLine($"The maximum distance reached by the child process was {MaximumDistance:N0}.");
             }
 
-            return 0;
+            return new object[]
+            {
+                MinimumSteps,
+                MaximumDistance,
+            };
         }
 
         /// <summary>
@@ -136,7 +141,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
                 CardinalDirection.South => South,
                 CardinalDirection.SouthEast => SouthEast,
                 CardinalDirection.SouthWest => SouthWest,
-                _ => throw new InvalidOperationException("Invalid cardinal direction."),
+                _ => throw new PuzzleException($"Invalid cardinal direction '{direction}'."),
             };
         }
 
@@ -162,7 +167,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
                     "s" => CardinalDirection.South,
                     "se" => CardinalDirection.SouthEast,
                     "sw" => CardinalDirection.SouthWest,
-                    _ => throw new InvalidOperationException($"Unknown direction: {direction}"),
+                    _ => throw new PuzzleException($"Unknown direction '{direction}'."),
                 };
 
                 result.Add(parsed);

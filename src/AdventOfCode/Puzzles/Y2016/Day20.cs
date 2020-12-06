@@ -9,7 +9,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
     /// <summary>
     /// A class representing the puzzle for <c>https://adventofcode.com/2016/day/20</c>. This class cannot be inherited.
     /// </summary>
-    public sealed class Day20 : Puzzle2016
+    [Puzzle(2016, 20, RequiresData = true)]
+    public sealed class Day20 : Puzzle
     {
         /// <summary>
         /// Gets the number of IP addresses that are not blocked.
@@ -120,7 +121,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         }
 
         /// <inheritdoc />
-        protected override int SolveCore(string[] args)
+        protected override object[] SolveCore(string[] args)
         {
             IList<string> ranges = ReadResourceAsLines();
 
@@ -133,7 +134,11 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
                 Logger.WriteLine($"The number of IP addresses allowed is {AllowedIPCount:N0}.");
             }
 
-            return 0;
+            return new object[]
+            {
+                LowestNonblockedIP,
+                AllowedIPCount,
+            };
         }
     }
 }

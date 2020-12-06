@@ -9,7 +9,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
     /// <summary>
     /// A class representing the puzzle for <c>https://adventofcode.com/2015/day/23</c>. This class cannot be inherited.
     /// </summary>
-    public sealed class Day23 : Puzzle2015
+    [Puzzle(2015, 23, RequiresData = true)]
+    public sealed class Day23 : Puzzle
     {
         /// <summary>
         /// Gets the final value of the <c>a</c> register.
@@ -105,7 +106,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
         }
 
         /// <inheritdoc />
-        protected override int SolveCore(string[] args)
+        protected override object[] SolveCore(string[] args)
         {
             IList<string> instructions = ReadResourceAsLines();
             uint initialValue = args.Length == 1 ? ParseUInt32(args[0]) : 0;
@@ -121,7 +122,11 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
                     B);
             }
 
-            return 0;
+            return new object[]
+            {
+                A,
+                B,
+            };
         }
 
         /// <summary>

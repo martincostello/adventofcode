@@ -15,6 +15,11 @@ namespace MartinCostello.AdventOfCode
     public abstract class Puzzle : IPuzzle
     {
         /// <summary>
+        /// Gets or sets the optional resource stream associated with the puzzle.
+        /// </summary>
+        public Stream? Resource { get; set; }
+
+        /// <summary>
         /// Gets or sets a value indicating whether the puzzle should be run verbosely.
         /// </summary>
         public bool Verbose { get; set; }
@@ -27,29 +32,35 @@ namespace MartinCostello.AdventOfCode
         /// <summary>
         /// Gets the minimum number of arguments required to solve the puzzle.
         /// </summary>
-        protected virtual int MinimumArguments => 0;
-
-        /// <summary>
-        /// Gets the year associated with the puzzle.
-        /// </summary>
-        protected abstract int Year { get; }
+        protected virtual int MinimumArguments
+            => Metadata()?.MinimumArguments ?? 0;
 
         /// <inheritdoc />
-        public virtual int Solve(string[] args)
+        public virtual object[] Solve(string[] args)
         {
             if (!EnsureArguments(args, MinimumArguments))
             {
-                Logger.WriteLine(
+                string message = string.Format(
+                    CultureInfo.InvariantCulture,
                     "At least {0:N0} argument{1} {2} required.",
                     MinimumArguments,
                     MinimumArguments == 1 ? string.Empty : "s",
                     MinimumArguments == 1 ? "is" : "are");
 
-                return -1;
+                throw new PuzzleException(message);
             }
 
             return SolveCore(args);
         }
+
+        /// <summary>
+        /// Returns the metadata for the puzzle.
+        /// </summary>
+        /// <returns>
+        /// The puzzle's metadata.
+        /// </returns>
+        internal PuzzleAttribute Metadata()
+            => GetType().GetCustomAttribute<PuzzleAttribute>() !;
 
         /// <summary>
         /// Replaces the format items in a specified string with the string representations
@@ -147,12 +158,14 @@ namespace MartinCostello.AdventOfCode
         /// </returns>
         protected Stream ReadResource()
         {
-            TypeInfo thisType = GetType().GetTypeInfo();
-            string name = FormattableString.Invariant($"MartinCostello.{thisType.Assembly.GetName().Name}.Input.Y{Year}.{thisType.Name}.input.txt");
+            var thisType = GetType();
 
-            // HACK Work around https://github.com/DotNetAnalyzers/StyleCopAnalyzers/issues/2968
-            var stream = thisType.Assembly.GetManifestResourceStream(name);
-            return stream!;
+            string year = thisType.Namespace!.Split('.')[^1];
+
+            string name = FormattableString.Invariant(
+                $"MartinCostello.{thisType.Assembly.GetName().Name}.Input.{year}.{thisType.Name}.input.txt");
+
+            return thisType.Assembly.GetManifestResourceStream(name) !;
         }
 
         /// <summary>
@@ -165,8 +178,7 @@ namespace MartinCostello.AdventOfCode
         {
             var lines = new List<string>();
 
-            using Stream stream = ReadResource();
-            using var reader = new StreamReader(stream);
+            using var reader = new StreamReader(Resource ?? ReadResource(), leaveOpen: Resource is not null);
 
             string? value = null;
 
@@ -186,9 +198,7 @@ namespace MartinCostello.AdventOfCode
         /// </returns>
         protected string ReadResourceAsString()
         {
-            using Stream stream = ReadResource();
-            using var reader = new StreamReader(stream);
-
+            using var reader = new StreamReader(Resource ?? ReadResource(), leaveOpen: Resource is not null);
             return reader.ReadToEnd();
         }
 
@@ -196,7 +206,9 @@ namespace MartinCostello.AdventOfCode
         /// Solves the puzzle given the specified arguments.
         /// </summary>
         /// <param name="args">The input arguments to the puzzle.</param>
-        /// <returns>The exit code the application should return.</returns>
-        protected abstract int SolveCore(string[] args);
+        /// <returns>
+        /// The solution(s) to the puzzle.
+        /// </returns>
+        protected abstract object[] SolveCore(string[] args);
     }
 }

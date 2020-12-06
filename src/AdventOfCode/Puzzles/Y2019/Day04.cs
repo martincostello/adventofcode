@@ -10,7 +10,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
     /// <summary>
     /// A class representing the puzzle for <c>https://adventofcode.com/2019/day/4</c>. This class cannot be inherited.
     /// </summary>
-    public sealed class Day04 : Puzzle2019
+    [Puzzle(2019, 04, MinimumArguments = 1)]
+    public sealed class Day04 : Puzzle
     {
         /// <summary>
         /// Gets the number of valid passwords in the given range for version 1 of the rules.
@@ -21,9 +22,6 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
         /// Gets the number of valid passwords in the given range for version 2 of the rules.
         /// </summary>
         public int CountV2 { get; private set; }
-
-        /// <inheritdoc />
-        protected override int MinimumArguments => 1;
 
         /// <summary>
         /// Gets the number of valid passwords in the specified range.
@@ -116,7 +114,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
         }
 
         /// <inheritdoc />
-        protected override int SolveCore(string[] args)
+        protected override object[] SolveCore(string[] args)
         {
             CountV1 = GetPasswordsInRange(args[0], rulesVersion: 1);
             CountV2 = GetPasswordsInRange(args[0], rulesVersion: 2);
@@ -127,7 +125,11 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
                 Logger.WriteLine("{0} different passwords within the range meet the criteria for version 2.", CountV2);
             }
 
-            return 0;
+            return new object[]
+            {
+                CountV1,
+                CountV2,
+            };
         }
     }
 }

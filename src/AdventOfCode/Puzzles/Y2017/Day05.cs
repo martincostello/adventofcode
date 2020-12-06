@@ -9,7 +9,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
     /// <summary>
     /// A class representing the puzzle for <c>https://adventofcode.com/2017/day/5</c>. This class cannot be inherited.
     /// </summary>
-    public sealed class Day05 : Puzzle2017
+    [Puzzle(2017, 05, RequiresData = true)]
+    public sealed class Day05 : Puzzle
     {
         /// <summary>
         /// Gets the number of steps required to exit the input instructions for version 1 of the CPU.
@@ -57,7 +58,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
         }
 
         /// <inheritdoc />
-        protected override int SolveCore(string[] args)
+        protected override object[] SolveCore(string[] args)
         {
             IList<int> program = ReadResourceAsLines()
                 .Select((p) => ParseInt32(p))
@@ -72,7 +73,11 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
                 Logger.WriteLine($"It takes {StepsToExitV2:N0} to reach the exit using version 2.");
             }
 
-            return 0;
+            return new object[]
+            {
+                StepsToExitV1,
+                StepsToExitV2,
+            };
         }
     }
 }

@@ -10,7 +10,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
     /// <summary>
     /// A class representing the puzzle for <c>https://adventofcode.com/2015/day/10</c>. This class cannot be inherited.
     /// </summary>
-    public sealed class Day10 : Puzzle2015
+    [Puzzle(2015, 10, MinimumArguments = 2)]
+    public sealed class Day10 : Puzzle
     {
         /// <summary>
         /// Gets the solution to the puzzle.
@@ -49,7 +50,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
         }
 
         /// <inheritdoc />
-        protected override int SolveCore(string[] args)
+        protected override object[] SolveCore(string[] args)
         {
             string value = args[0];
             int iterations = ParseInt32(args[1], NumberStyles.Integer & ~NumberStyles.AllowLeadingSign);
@@ -72,7 +73,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
                     result.Length);
             }
 
-            return 0;
+            return new object[] { Solution };
         }
     }
 }

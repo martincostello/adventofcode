@@ -8,7 +8,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
     /// <summary>
     /// A class representing the puzzle for <c>https://adventofcode.com/2015/day/20</c>. This class cannot be inherited.
     /// </summary>
-    public sealed class Day20 : Puzzle2015
+    [Puzzle(2015, 20, MinimumArguments = 1)]
+    public sealed class Day20 : Puzzle
     {
         /// <summary>
         /// Gets the lowest house number that gets at least the specified number of presents.
@@ -74,12 +75,11 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
         }
 
         /// <inheritdoc />
-        protected override int SolveCore(string[] args)
+        protected override object[] SolveCore(string[] args)
         {
             if (args.Length != 1 && args.Length != 2)
             {
-                Logger.WriteLine("No target value or maximum number of visits specified.");
-                return -1;
+                throw new PuzzleException("No target value or maximum number of visits specified.");
             }
 
             int target = ParseInt32(args[0]);
@@ -95,7 +95,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
                     LowestHouseNumber);
             }
 
-            return 0;
+            return new object[] { LowestHouseNumber };
         }
     }
 }

@@ -10,7 +10,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2018
     /// <summary>
     /// A class representing the puzzle for <c>https://adventofcode.com/2018/day/2</c>. This class cannot be inherited.
     /// </summary>
-    public sealed class Day02 : Puzzle2018
+    [Puzzle(2018, 02, RequiresData = true)]
+    public sealed class Day02 : Puzzle
     {
         /// <summary>
         /// Gets the checksum of the box Ids.
@@ -133,7 +134,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2018
         }
 
         /// <inheritdoc />
-        protected override int SolveCore(string[] args)
+        protected override object[] SolveCore(string[] args)
         {
             IList<string> ids = ReadResourceAsLines();
 
@@ -146,7 +147,11 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2018
                 Logger.WriteLine($"The common letters are {CommonLettersForBoxes}.");
             }
 
-            return 0;
+            return new object[]
+            {
+                Checksum,
+                CommonLettersForBoxes,
+            };
         }
     }
 }

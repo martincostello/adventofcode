@@ -11,7 +11,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
     /// <summary>
     /// A class representing the puzzle for <c>https://adventofcode.com/2019/day/3</c>. This class cannot be inherited.
     /// </summary>
-    public sealed class Day03 : Puzzle2019
+    [Puzzle(2019, 03, RequiresData = true)]
+    public sealed class Day03 : Puzzle
     {
         /// <summary>
         /// Represents the wires passing through a grid square.
@@ -128,7 +129,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
         }
 
         /// <inheritdoc />
-        protected override int SolveCore(string[] args)
+        protected override object[] SolveCore(string[] args)
         {
             IList<string> wires = ReadResourceAsLines();
 
@@ -140,7 +141,11 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
                 Logger.WriteLine("The minimum number of combined steps to get to an intersection is {0}.", MinimumSteps);
             }
 
-            return 0;
+            return new object[]
+            {
+                ManhattanDistance,
+                MinimumSteps,
+            };
         }
 
         /// <summary>
@@ -161,7 +166,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
                 'L' => (-distance, 0),
                 'R' => (distance, 0),
                 'U' => (0, distance),
-                _ => throw new NotSupportedException($"The direction '{direction}' is invalid."),
+                _ => throw new PuzzleException($"The direction '{direction}' is invalid."),
             };
         }
     }

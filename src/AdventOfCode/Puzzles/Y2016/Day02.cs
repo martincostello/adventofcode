@@ -10,7 +10,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
     /// <summary>
     /// A class representing the puzzle for <c>https://adventofcode.com/2016/day/2</c>. This class cannot be inherited.
     /// </summary>
-    public sealed class Day02 : Puzzle2016
+    [Puzzle(2016, 02, RequiresData = true)]
+    public sealed class Day02 : Puzzle
     {
         /// <summary>
         /// An enumeration of directions.
@@ -118,7 +119,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         }
 
         /// <inheritdoc />
-        protected override int SolveCore(string[] args)
+        protected override object[] SolveCore(string[] args)
         {
             ICollection<string> instructions = ReadResourceAsLines();
 
@@ -136,7 +137,11 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
                     BathroomCodeAlphanumericKeypad);
             }
 
-            return 0;
+            return new object[]
+            {
+                BathroomCodeDigitKeypad,
+                BathroomCodeAlphanumericKeypad,
+            };
         }
 
         /// <summary>

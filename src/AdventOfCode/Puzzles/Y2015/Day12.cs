@@ -3,12 +3,14 @@
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2015
 {
+    using System.IO;
     using System.Text.Json;
 
     /// <summary>
     /// A class representing the puzzle for <c>https://adventofcode.com/2015/day/12</c>. This class cannot be inherited.
     /// </summary>
-    public sealed class Day12 : Puzzle2015
+    [Puzzle(2015, 12, RequiresData = true)]
+    public sealed class Day12 : Puzzle
     {
         /// <summary>
         /// Gets the sum of the integers in the JSON document.
@@ -55,19 +57,31 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
         }
 
         /// <inheritdoc />
-        protected override int SolveCore(string[] args)
+        protected override object[] SolveCore(string[] args)
         {
-            using var document = JsonDocument.Parse(ReadResource());
-            string keyToIgnore = args.Length > 0 ? args[0] : string.Empty;
+            Stream resource = Resource ?? ReadResource();
 
-            Sum = SumIntegerValues(document.RootElement, keyToIgnore);
-
-            if (Verbose)
+            try
             {
-                Logger.WriteLine("The sum of the integers in the JSON document is {0:N0}.", Sum);
+                using var document = JsonDocument.Parse(resource);
+                string keyToIgnore = args.Length > 0 ? args[0] : string.Empty;
+
+                Sum = SumIntegerValues(document.RootElement, keyToIgnore);
+
+                if (Verbose)
+                {
+                    Logger.WriteLine("The sum of the integers in the JSON document is {0:N0}.", Sum);
+                }
+            }
+            finally
+            {
+                if (Resource is null)
+                {
+                    resource.Dispose();
+                }
             }
 
-            return 0;
+            return new object[] { Sum };
         }
     }
 }

@@ -10,7 +10,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
     /// <summary>
     /// A class representing the puzzle for <c>https://adventofcode.com/2016/day/16</c>. This class cannot be inherited.
     /// </summary>
-    public sealed class Day16 : Puzzle2016
+    [Puzzle(2016, 16, MinimumArguments = 2)]
+    public sealed class Day16 : Puzzle
     {
         /// <summary>
         /// Gets the value of the checksum for the disk.
@@ -37,7 +38,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         }
 
         /// <inheritdoc />
-        protected override int SolveCore(string[] args)
+        protected override object[] SolveCore(string[] args)
         {
             string initial = args[0];
             int size = ParseInt32(args[1]);
@@ -49,7 +50,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
                 Logger.WriteLine($"The checksum for the generated disk data is '{Checksum}'.");
             }
 
-            return 0;
+            return new object[] { Checksum };
         }
 
         /// <summary>

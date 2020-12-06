@@ -9,7 +9,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
     /// <summary>
     /// A class representing the puzzle for <c>https://adventofcode.com/2016/day/12</c>. This class cannot be inherited.
     /// </summary>
-    public sealed class Day12 : Puzzle2016
+    [Puzzle(2016, 12, RequiresData = true)]
+    public sealed class Day12 : Puzzle
     {
         /// <summary>
         /// Gets the value in register A after processing the instructions.
@@ -172,7 +173,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         }
 
         /// <inheritdoc />
-        protected override int SolveCore(string[] args)
+        protected override object[] SolveCore(string[] args)
         {
             IList<string> instructions = ReadResourceAsLines();
 
@@ -188,7 +189,11 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
                 Logger.WriteLine($"The value left in register a if c is initialized to 1 is {ValueInRegisterAWhenInitializedWithIgnitionKey:N0}.");
             }
 
-            return 0;
+            return new object[]
+            {
+                ValueInRegisterA,
+                ValueInRegisterAWhenInitializedWithIgnitionKey,
+            };
         }
     }
 }

@@ -10,7 +10,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2018
     /// <summary>
     /// A class representing the puzzle for <c>https://adventofcode.com/2018/day/1</c>. This class cannot be inherited.
     /// </summary>
-    public sealed class Day01 : Puzzle2018
+    [Puzzle(2018, 01, RequiresData = true)]
+    public sealed class Day01 : Puzzle
     {
         /// <summary>
         /// Gets the frequency of the device calculated from the sequence.
@@ -82,7 +83,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2018
         }
 
         /// <inheritdoc />
-        protected override int SolveCore(string[] args)
+        protected override object[] SolveCore(string[] args)
         {
             IList<string> sequence = ReadResourceAsLines();
 
@@ -94,7 +95,11 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2018
                 Logger.WriteLine($"The first repeated frequency is {FirstRepeatedFrequency:N0}.");
             }
 
-            return 0;
+            return new object[]
+            {
+                Frequency,
+                FirstRepeatedFrequency,
+            };
         }
 
         /// <summary>

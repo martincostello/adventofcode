@@ -38,30 +38,26 @@ namespace MartinCostello.AdventOfCode
                 Logger = Logger,
             };
 
-            // Act
-            int actual = target.Solve(args);
-
-            // Assert
-            actual.ShouldBe(-1);
+            // Act and Assert
+            Assert.Throws<PuzzleException>(() => target.Solve(args));
 
             // Arrange
             args = Array.Empty<string>();
             target = new MyPuzzle(1);
 
-            // Act
-            actual = target.Solve(args);
-
-            // Assert
-            actual.ShouldBe(-1);
+            // Act and Assert
+            Assert.Throws<PuzzleException>(() => target.Solve(args));
 
             // Arrange
             target = new MyPuzzle(0);
 
             // Act
-            actual = target.Solve(args);
+            object[] actual = target.Solve(args);
 
             // Assert
-            actual.ShouldBe(0);
+            actual.ShouldNotBeNull();
+            actual.Length.ShouldBe(1);
+            actual[0].ShouldBe(42);
             target.Answer.ShouldBe(42);
         }
 
@@ -93,13 +89,10 @@ namespace MartinCostello.AdventOfCode
             protected override int MinimumArguments => _minimumArguments;
 
             /// <inheritdoc />
-            protected override int Year => DateTime.UtcNow.Year;
-
-            /// <inheritdoc />
-            protected override int SolveCore(string[] args)
+            protected override object[] SolveCore(string[] args)
             {
                 Answer = 42;
-                return 0;
+                return new object[] { Answer };
             }
         }
     }

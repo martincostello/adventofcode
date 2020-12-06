@@ -42,8 +42,17 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AdventOfCode.Benchmarks", "
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{F8B9BBE9-B047-466F-8E3C-42D625F27C85}"
 	ProjectSection(SolutionItems) = preProject
+		.github\workflows\automerge.yml = .github\workflows\automerge.yml
 		.github\workflows\build.yml = .github\workflows\build.yml
+		.github\workflows\deploy.yml = .github\workflows\deploy.yml
 		.github\workflows\update-dotnet-sdk.yml = .github\workflows\update-dotnet-sdk.yml
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".vscode", ".vscode", "{2B9D0296-9AAF-4C1E-84C5-3A617D820DDD}"
+	ProjectSection(SolutionItems) = preProject
+		.vscode\extensions.json = .vscode\extensions.json
+		.vscode\launch.json = .vscode\launch.json
+		.vscode\tasks.json = .vscode\tasks.json
 	EndProjectSection
 EndProject
 Global
@@ -74,6 +83,7 @@ Global
 		{69E6E803-EFAD-4E12-BC44-4646244E26AF} = {A16BB7EB-64BE-4E3B-B1E3-6AC44D46CAAF}
 		{6F0D9802-4B4A-4450-857C-459C8AD35588} = {BC7347DF-3D60-4150-B245-7E836674DF8C}
 		{F8B9BBE9-B047-466F-8E3C-42D625F27C85} = {69E6E803-EFAD-4E12-BC44-4646244E26AF}
+		{2B9D0296-9AAF-4C1E-84C5-3A617D820DDD} = {A16BB7EB-64BE-4E3B-B1E3-6AC44D46CAAF}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C690654F-56C1-4E71-9835-4C5ED66BD059}

@@ -12,15 +12,13 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
     /// <summary>
     /// A class representing the puzzle for <c>https://adventofcode.com/2019/day/9</c>. This class cannot be inherited.
     /// </summary>
-    public sealed class Day09 : Puzzle2019
+    [Puzzle(2019, 09, MinimumArguments = 1, RequiresData = true)]
+    public sealed class Day09 : Puzzle
     {
         /// <summary>
         /// Gets the key code output by the program.
         /// </summary>
         public long Keycode { get; private set; }
-
-        /// <inheritdoc />
-        protected override int MinimumArguments => 1;
 
         /// <summary>
         /// Runs the specified Intcode program.
@@ -54,14 +52,14 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
 
             if (!await vm.RunAsync(cancellationToken))
             {
-                throw new InvalidProgramException();
+                throw new PuzzleException("Failed to run program.");
             }
 
             return await vm.Output.ToListAsync(cancellationToken);
         }
 
         /// <inheritdoc />
-        protected override int SolveCore(string[] args)
+        protected override object[] SolveCore(string[] args)
         {
             long input = ParseInt64(args[0]);
             string program = ReadResourceAsString();
@@ -73,7 +71,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
                 Logger.WriteLine("The program produces BOOST keycode {0}.", Keycode);
             }
 
-            return 0;
+            return new object[] { Keycode };
         }
     }
 }

@@ -12,7 +12,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
     /// <summary>
     /// A class representing the puzzle for <c>https://adventofcode.com/2015/day/18</c>. This class cannot be inherited.
     /// </summary>
-    public sealed class Day18 : Puzzle2015
+    [Puzzle(2015, 18, MinimumArguments = 1, RequiresData = true)]
+    public sealed class Day18 : Puzzle
     {
         /// <summary>
         /// The character that signifies that a light is on.
@@ -72,7 +73,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
         }
 
         /// <inheritdoc />
-        protected override int SolveCore(string[] args)
+        protected override object[] SolveCore(string[] args)
         {
             IList<string> initial = ReadResourceAsLines();
             int steps = ParseInt32(args[0]);
@@ -101,7 +102,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
                     steps);
             }
 
-            return 0;
+            return new object[] { LightsIlluminated };
         }
 
         /// <summary>

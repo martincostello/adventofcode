@@ -9,7 +9,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
     /// <summary>
     /// A class representing the puzzle for <c>https://adventofcode.com/2015/day/13</c>. This class cannot be inherited.
     /// </summary>
-    public sealed class Day13 : Puzzle2015
+    [Puzzle(2015, 13, RequiresData = true)]
+    public sealed class Day13 : Puzzle
     {
         /// <summary>
         /// Gets the maximum total change in happiness.
@@ -56,7 +57,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
         }
 
         /// <inheritdoc />
-        protected override int SolveCore(string[] args)
+        protected override object[] SolveCore(string[] args)
         {
             IList<string> potentialHappiness = ReadResourceAsLines();
 
@@ -93,7 +94,11 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
                 Logger.WriteLine("The total change in happiness with the current user seated is {0:N0}.", MaximumTotalChangeInHappinessWithCurrentUser);
             }
 
-            return 0;
+            return new object[]
+            {
+                MaximumTotalChangeInHappiness,
+                MaximumTotalChangeInHappinessWithCurrentUser,
+            };
         }
 
         /// <summary>

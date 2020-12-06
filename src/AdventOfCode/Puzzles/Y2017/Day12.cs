@@ -9,7 +9,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
     /// <summary>
     /// A class representing the puzzle for <c>https://adventofcode.com/2017/day/12</c>. This class cannot be inherited.
     /// </summary>
-    public sealed class Day12 : Puzzle2017
+    [Puzzle(2017, 12, RequiresData = true)]
+    public sealed class Day12 : Puzzle
     {
         /// <summary>
         /// Gets the number of programs in the group that contains program zero.
@@ -68,7 +69,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
         }
 
         /// <inheritdoc />
-        protected override int SolveCore(string[] args)
+        protected override object[] SolveCore(string[] args)
         {
             IList<string> pipes = ReadResourceAsLines();
 
@@ -81,7 +82,11 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
                 Logger.WriteLine($"There are {NumberOfGroups:N0} groups in the network of pipes.");
             }
 
-            return 0;
+            return new object[]
+            {
+                ProgramsInGroupOfProgram0,
+                NumberOfGroups,
+            };
         }
 
         /// <summary>
