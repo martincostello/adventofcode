@@ -41,6 +41,7 @@ namespace MartinCostello.AdventOfCode.Api
         {
             // Arrange
             using var client = Fixture.CreateClient();
+            client.Timeout = TimeSpan.FromSeconds(30);
 
             using var content = new MultipartFormDataContent();
 
@@ -62,7 +63,6 @@ namespace MartinCostello.AdventOfCode.Api
             }
 
             // Act
-            using var content = new FormUrlEncodedContent((IEnumerable<KeyValuePair<string?, string?>>)parameters);
             using var response = await client.PostAsync($"/api/puzzles/{year}/{day}/solve", content);
 
             // Assert
