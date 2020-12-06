@@ -66,34 +66,51 @@
     </nav>
     <main class="container body-content">
         <h1>Advent of Code as a Service</h1>
-        <div>
-            <select id="year" name="year">
-            </select>
-            <select id="day" name="day">
-            </select>
-            <div class="form-group">
-                <label for="arguments">Argument(s)</label>
-                <textarea class="form-control" id="arguments" rows="3"></textarea>
-            </div>
-            <form id="form" action="" method="get">
-                <div id="puzzle-day"></div>
-                <div id="puzzle-minimum-arguments"></div>
-                <div id="puzzle-requires-data"></div>
-                <div id="puzzle-year"></div>
-                <div class="input-group mb-3">
+        <div class="container">
+            <form id="form" action="" class="needs-validation" method="get" novalidate>
+                <div class="form-group">
+                    <label for="year">Year</label>
+                    <select class="form-control" id="year" required>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="day">Day</label>
+                    <select class="form-control" id="day" required>
+                    </select>
+                </div>
+                <div class="form-group d-none" id="arguments-container">
+                    <label for="arguments">Argument(s)</label>
+                    <textarea class="form-control" id="arguments" rows="2"></textarea>
+                </div>
+                <div class="form-group d-none" id="file-container">
+                    <label for="resource">Puzzle input</label>
                     <div class="custom-file">
-                        <input type="file" class="custom-file-input" id="resource">
-                        <label class="custom-file-label" for="resource">Choose file</label>
+                        <input type="file" class="custom-file-input form-control-file" id="resource">
+                        <label class="custom-file-label" for="resource" id="resource-label">Puzzle input file</label>
                     </div>
                 </div>
-                <input id="solve" type="submit" value="Solve!" />
+                <button type="submit" class="btn btn-block btn-secondary btn-lg" id="solve">Solve!</button>
             </form>
-            <div id="error" class="text-danger"></div>
-            <div>
-                Solutions: <div id="solution" class="text-success"></div>
+        </div>
+        <hr />
+        <div class="container">
+            <div id="error" class="alert alert-danger d-none" role="alert">
             </div>
-            <div>
-                Time to solve: <div id="time-to-solve" class="text-success"></div>
+        </div>
+        <div id="solution-container" class="container d-none">
+            <div class="card">
+                <div class="card-header" id="solution-header">
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title">The solution(s) are:</h5>
+                    <p class="card-text">
+                        <ul id="solution">
+                        </ul>
+                    </p>
+                </div>
+                <div class="card-footer">
+                    <em>Solved in <placeholder id="time-to-solve"></placeholder></em>
+                </div>
             </div>
         </div>
         <hr />
@@ -106,16 +123,30 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous" async></script>
     <script>
 
+        const hideClass = 'd-none';
+
         const data = {
         };
 
         const arguments = document.getElementById('arguments');
+        const argumentsContainer = document.getElementById('arguments-container');
+
+        const inputFile = document.getElementById('resource');
+        const inputFileLabel = document.getElementById('resource-label');
+        const inputFileContainer = document.getElementById('file-container');
+
+        inputFile.addEventListener('change', (event) => {
+            inputFileLabel.textContent = event.target.files[0].name;
+        });
+
+        const solution = document.getElementById('solution');
+        const solutionContainer = document.getElementById('solution-container');
+        const solutionHeader = document.getElementById('solution-header');
+
         const days = document.getElementById('day');
         const error = document.getElementById('error');
         const form = document.getElementById('form');
-        const resource = document.getElementById('resource');
         const solve = document.getElementById('solve');
-        const solution = document.getElementById('solution');
         const timeToSolve = document.getElementById('time-to-solve');
         const years = document.getElementById('year');
 
@@ -155,18 +186,36 @@
 
             const option = days.selectedOptions[0];
 
-            document.querySelector('#puzzle-day').textContent = option.getAttribute('data-day');
-            document.querySelector('#puzzle-minimum-arguments').textContent = option.getAttribute('data-minimum-arguments');
-            document.querySelector('#puzzle-requires-data').textContent = option.getAttribute('data-requires-data');
-            document.querySelector('#puzzle-year').textContent = option.getAttribute('data-year');
-
-            arguments.setAttribute('rows', option.getAttribute('data-minimum-arguments'));
-            form.setAttribute('action', option.getAttribute('data-location'));
-
             error.textContent = '';
             solution.textContent = '';
             timeToSolve.textContent = '';
-            resource.value = '';
+            inputFile.value = '';
+
+            form.setAttribute('action', option.getAttribute('data-location'));
+
+            let minimumArguments = parseInt(option.getAttribute('data-minimum-arguments'), 10);
+
+            if (minimumArguments == 0) {
+                argumentsContainer.classList.add(hideClass);
+                arguments.setAttribute('placeholder', '');
+                arguments.setAttribute('rows', 0);
+                arguments.removeAttribute('required');
+            }
+            else {
+                argumentsContainer.classList.remove(hideClass);
+                arguments.setAttribute('placeholder', `Requires ${minimumArguments} argument(s)`);
+                arguments.setAttribute('rows', minimumArguments);
+                arguments.setAttribute('required', '');
+            }
+
+            if (option.getAttribute('data-requires-data') === 'true') {
+                inputFile.setAttribute('required', '');
+                inputFileContainer.classList.remove(hideClass);
+            }
+            else {
+                inputFile.removeAttribute('required');
+                inputFileContainer.classList.add(hideClass);
+            }
         });
 
         solve.addEventListener('click', () => {
@@ -187,19 +236,33 @@
                 solution.textContent = '';
                 timeToSolve.textContent = '';
                 fetch(url, { method: 'POST', body: formData }).then(async (response) => {
+                    var body = await response.json();
                     if (!response.ok) {
-                        var errorResponse = await response.json();
-                        error.textContent = `${errorResponse.status}: ${errorResponse.detail}`;
+                        solutionContainer.classList.add(hideClass);
+                        error.classList.remove(hideClass);
+                        error.textContent = body.detail;
                     }
-                    return response.json();
-                }).then(async (json) => {
-                    timeToSolve.textContent = `${json.timeToSolve} milliseconds`;
-                    solution.textContent = `${JSON.stringify(json.solutions, null, 2)}`;
+                    else {
+                        error.classList.add(hideClass);
+                        timeToSolve.textContent = `${body.timeToSolve} milliseconds`;
+
+                        solution.innerHTML = '';
+                        solutionHeader.textContent = `Advent of Code ${body.year} Day ${body.day} Solution`;
+
+                        body.solutions.forEach((value) => {
+                            const element = document.createElement('li');
+                            element.classList.add('text-monospace');
+                            element.textContent = value;
+                            solution.appendChild(element);
+                        });
+
+                        solutionContainer.classList.remove(hideClass);
+                    }
                 });
             };
 
-            if (resource.files.length === 1) {
-                const file = resource.files[0];
+            if (inputFile.files.length === 1) {
+                const file = inputFile.files[0];
                 const reader = new FileReader();
 
                 reader.readAsText(file, 'UTF-8');
