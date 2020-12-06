@@ -3,7 +3,6 @@
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2020
 {
-    using System;
     using System.Collections.Generic;
     using System.Linq;
 
@@ -49,37 +48,13 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
                     continue;
                 }
 
-                membersOfGroup++;
-
-                if (byEveryone)
+                if (!byEveryone || ++membersOfGroup == 1)
                 {
-                    if (membersOfGroup == 1)
-                    {
-                        foreach (char question in line)
-                        {
-                            current.Add(question);
-                        }
-                    }
-                    else
-                    {
-                        foreach (char question in current.ToArray())
-                        {
-                            if (!line.Contains(question, StringComparison.Ordinal))
-                            {
-                                current.Remove(question);
-                            }
-                        }
-                    }
+                    current.UnionWith(line);
                 }
                 else
                 {
-                    foreach (char question in line)
-                    {
-                        if (!current.Contains(question))
-                        {
-                            current.Add(question);
-                        }
-                    }
+                    current.IntersectWith(line);
                 }
             }
 
