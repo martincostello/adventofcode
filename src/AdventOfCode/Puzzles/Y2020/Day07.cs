@@ -5,6 +5,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
     using System.Threading;
     using System.Threading.Tasks;
 
@@ -18,6 +19,11 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
         /// Gets the number of bag colors that can eventually contain at least one bag of the given color.
         /// </summary>
         public int BagColorsThatCanContainColor { get; private set; }
+
+        /// <summary>
+        /// Gets the number of bags required inside the specified top-level bag to allow it be carried.
+        /// </summary>
+        public int BagsInsideBag { get; private set; }
 
         /// <summary>
         /// Gets the number of bag colors that can eventually contain at least one bag of the specified colors.
@@ -82,6 +88,47 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
             return result;
         }
 
+        /// <summary>
+        /// Gets the number of bags required inside the specified top-level bag to allow it be carried.
+        /// </summary>
+        /// <param name="rules">A collection of bag-colour relationship rules.</param>
+        /// <param name="color">The color to get the count of bags inside.</param>
+        /// <returns>
+        /// The number of bags required inside the top-level bag of the specified color to allow it be carried.
+        /// </returns>
+        public static int GetInsideBagCount(ICollection<string> rules, string color)
+        {
+            Dictionary<string, Dictionary<string, int>> colors = ParseRules(rules);
+
+            var path = new Stack<string>();
+            path.Push(color);
+
+            return CountChildren(path);
+
+            int CountChildren(Stack<string> path)
+            {
+                var self = colors[path.Peek()];
+
+                int count = self.Values.Sum();
+
+                foreach (var bag in self)
+                {
+                    if (path.Contains(bag.Key))
+                    {
+                        continue;
+                    }
+
+                    path.Push(bag.Key);
+
+                    count += CountChildren(path) * bag.Value;
+
+                    path.Pop();
+                }
+
+                return count;
+            }
+        }
+
         /// <inheritdoc />
         protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
         {
@@ -90,13 +137,15 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
             IList<string> rules = await ReadResourceAsLinesAsync();
 
             BagColorsThatCanContainColor = GetBagColorsThatCouldContainColor(rules, color);
+            BagsInsideBag = GetInsideBagCount(rules, color);
 
             if (Verbose)
             {
-                Logger.WriteLine("The product of the two entries that sum to 2020 is {0}.", BagColorsThatCanContainColor);
+                Logger.WriteLine("The number of bags that can contain a {0} bag is {1}.", color, BagColorsThatCanContainColor);
+                Logger.WriteLine("The number of bags contained in a {0} bag is {1}.", color, BagsInsideBag);
             }
 
-            return PuzzleResult.Create(BagColorsThatCanContainColor);
+            return PuzzleResult.Create(BagColorsThatCanContainColor, BagsInsideBag);
         }
 
         /// <summary>
