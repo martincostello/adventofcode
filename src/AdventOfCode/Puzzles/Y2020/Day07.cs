@@ -52,9 +52,14 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
                 }
             }
 
+            return result;
+
             bool ContainsPathToTarget(Stack<string> path, string targetColor)
             {
-                var self = colors[path.Peek()];
+                if (!colors.TryGetValue(path.Peek(), out var self))
+                {
+                    return false;
+                }
 
                 if (self.ContainsKey(targetColor))
                 {
@@ -84,8 +89,6 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
 
                 return foundPath;
             }
-
-            return result;
         }
 
         /// <summary>
@@ -107,7 +110,10 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
 
             int CountChildren(Stack<string> path)
             {
-                var self = colors[path.Peek()];
+                if (!colors.TryGetValue(path.Peek(), out var self))
+                {
+                    return 0;
+                }
 
                 int count = self.Values.Sum();
 
