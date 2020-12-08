@@ -80,7 +80,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
 
                     if (completed)
                     {
-                        return accumulator;
+                        result = accumulator;
+                        break;
                     }
                 }
             }
