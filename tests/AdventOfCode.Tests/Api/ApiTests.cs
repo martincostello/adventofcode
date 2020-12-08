@@ -131,6 +131,7 @@ namespace MartinCostello.AdventOfCode.Api
         [InlineData(2020, 05, null, true, new object[] { 878, 504 }, 0)]
         [InlineData(2020, 06, null, true, new object[] { 6542, 3299 }, 0)]
         [InlineData(2020, 07, new[] { "shiny gold" }, true, new object[] { 179, 18925 }, 0)]
+        [InlineData(2020, 08, null, true, new object[] { 1137, 1125 }, 0)]
         public async Task Can_Solve_Puzzle(
             int year,
             int day,
@@ -141,7 +142,7 @@ namespace MartinCostello.AdventOfCode.Api
         {
             // Arrange
             using var client = Fixture.CreateClient();
-            client.Timeout = TimeSpan.FromSeconds(45);
+            client.Timeout = TimeSpan.FromMinutes(1);
 
             using var content = new MultipartFormDataContent();
 
