@@ -42,46 +42,54 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
         public int Accumulator { get; private set; }
 
         /// <summary>
-        /// Runs the specified program for one iteration.
+        /// Gets the value of the accumulator when the fixed program has terminated.
+        /// </summary>
+        public int AccumulatorWithFix { get; private set; }
+
+        /// <summary>
+        /// Runs the specified program and returns the value of the accumulator.
         /// </summary>
         /// <param name="program">The program to run.</param>
+        /// <param name="fix">Whether to fix the program.</param>
         /// <returns>
-        /// The value of the accumulator after the program has run one iteration.
+        /// The value of the accumulator after the program has run.
         /// </returns>
-        public static int RunProgram(IList<string> program)
+        public static int RunProgram(IList<string> program, bool fix)
         {
             IList<Instruction> instructions = ParseProgram(program);
 
-            var visited = new HashSet<int>();
+            int result = 0;
 
-            int accumulator = 0;
-
-            for (int i = 0; i < instructions.Count; i++)
+            if (fix)
             {
-                if (visited.Contains(i))
+                for (int i = 0; i < instructions.Count; i++)
                 {
-                    break;
-                }
+                    Instruction instruction = instructions[i];
 
-                visited.Add(i);
-                Instruction instruction = instructions[i];
+                    var fixCandidate = new List<Instruction>(instructions)
+                    {
+                        [i] = instruction.Operation switch
+                        {
+                            Operation.Jump => instruction with { Operation = Operation.NoOp },
+                            Operation.NoOp => instruction with { Operation = Operation.Jump },
+                            _ => instruction,
+                        },
+                    };
 
-                switch (instruction.Operation)
-                {
-                    case Operation.Accumulate:
-                        accumulator += instruction.Argument;
-                        break;
+                    (int accumulator, bool completed) = RunProgram(fixCandidate);
 
-                    case Operation.Jump:
-                        i += instruction.Argument - 1;
-                        break;
-
-                    default:
-                        break;
+                    if (completed)
+                    {
+                        return accumulator;
+                    }
                 }
             }
+            else
+            {
+                (result, _) = RunProgram(instructions);
+            }
 
-            return accumulator;
+            return result;
         }
 
         /// <inheritdoc />
@@ -89,14 +97,16 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
         {
             IList<string> program = await ReadResourceAsLinesAsync();
 
-            Accumulator = RunProgram(program);
+            Accumulator = RunProgram(program, fix: false);
+            AccumulatorWithFix = RunProgram(program, fix: true);
 
             if (Verbose)
             {
                 Logger.WriteLine("The value of the accumulator after one iteration is {0}.", Accumulator);
+                Logger.WriteLine("The value of the accumulator when the fixed program completes is {0}.", AccumulatorWithFix);
             }
 
-            return PuzzleResult.Create(Accumulator);
+            return PuzzleResult.Create(Accumulator, AccumulatorWithFix);
         }
 
         /// <summary>
@@ -130,6 +140,48 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
             }
 
             return result;
+        }
+
+        /// <summary>
+        /// Runs the specified program and returns the value of the accumulator.
+        /// </summary>
+        /// <param name="instructions">The program to run.</param>
+        /// <returns>
+        /// The value of the accumulator after the program has run and
+        /// whether it completed without an infinite loop.
+        /// </returns>
+        private static (int accumulator, bool completed) RunProgram(IList<Instruction> instructions)
+        {
+            var visited = new HashSet<int>();
+
+            int accumulator = 0;
+
+            for (int i = 0; i < instructions.Count; i++)
+            {
+                if (visited.Contains(i))
+                {
+                    return (accumulator, false);
+                }
+
+                visited.Add(i);
+                Instruction instruction = instructions[i];
+
+                switch (instruction.Operation)
+                {
+                    case Operation.Accumulate:
+                        accumulator += instruction.Argument;
+                        break;
+
+                    case Operation.Jump:
+                        i += instruction.Argument - 1;
+                        break;
+
+                    default:
+                        break;
+                }
+            }
+
+            return (accumulator, true);
         }
 
         /// <summary>

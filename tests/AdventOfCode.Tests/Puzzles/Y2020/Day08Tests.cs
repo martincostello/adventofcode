@@ -22,8 +22,10 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
         {
         }
 
-        [Fact]
-        public void Y2020_Day08_RunProgram_Returns_Correct_Value()
+        [Theory]
+        [InlineData(false, 5)]
+        [InlineData(true, 8)]
+        public void Y2020_Day08_RunProgram_Returns_Correct_Value(bool fix, int expected)
         {
             // Arrange
             string[] values = new[]
@@ -40,10 +42,10 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
             };
 
             // Act
-            int actual = Day08.RunProgram(values);
+            int actual = Day08.RunProgram(values, fix);
 
             // Assert
-            actual.ShouldBe(5);
+            actual.ShouldBe(expected);
         }
 
         [Fact]
@@ -54,6 +56,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
 
             // Assert
             puzzle.Accumulator.ShouldBe(1137);
+            puzzle.AccumulatorWithFix.ShouldBe(1125);
         }
     }
 }
