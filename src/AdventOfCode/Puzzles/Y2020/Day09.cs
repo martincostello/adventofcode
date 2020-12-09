@@ -21,7 +21,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
         public long WeakNumber { get; private set; }
 
         /// <summary>
-        /// Gets encryption weakness.
+        /// Gets the encryption weakness.
         /// </summary>
         public long Weakness { get; private set; }
 
@@ -38,7 +38,10 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
             for (int i = preambleLength; i < values.Length; i++)
             {
                 long current = values[i];
-                long[] preamble = values.Slice(i - preambleLength, preambleLength).ToArray();
+
+                long[] preamble = values
+                    .Slice(i - preambleLength, preambleLength)
+                    .ToArray();
 
                 bool isValid = Maths.GetPermutations(preamble, 2)
                     .Where((p) => p.Sum() == current)
@@ -47,7 +50,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
 
                 if (!isValid)
                 {
-                    return values[i];
+                    return current;
                 }
             }
 
