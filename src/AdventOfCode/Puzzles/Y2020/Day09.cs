@@ -21,6 +21,11 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
         public long WeakNumber { get; private set; }
 
         /// <summary>
+        /// Gets encryption weakness.
+        /// </summary>
+        public long Weakness { get; private set; }
+
+        /// <summary>
         /// Gets the first weak number from the specified XMAS signal.
         /// </summary>
         /// <param name="values">The values of the signal.</param>
@@ -49,6 +54,43 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
             return -1;
         }
 
+        /// <summary>
+        /// Gets the encryption weakness from the specified XMAS signal.
+        /// </summary>
+        /// <param name="values">The values of the signal.</param>
+        /// <param name="weakNumber">The weak number of the sequence.</param>
+        /// <returns>
+        /// The encryption weakness in the XMAS signal or -1 if it is secure.
+        /// </returns>
+        public static long GetWeakness(ReadOnlySpan<long> values, long weakNumber)
+        {
+            var sequence = new List<long>(values.Length);
+
+            for (int i = 0; i < values.Length; i++)
+            {
+                long first = values[i];
+                sequence.Add(first);
+
+                long sum = first;
+
+                for (int j = i + 1; j < values.Length && sum < weakNumber; j++)
+                {
+                    long next = values[j];
+                    sum += next;
+                    sequence.Add(next);
+                }
+
+                if (sum == weakNumber && sequence.Count > 1)
+                {
+                    return sequence.Min() + sequence.Max();
+                }
+
+                sequence.Clear();
+            }
+
+            return -1;
+        }
+
         /// <inheritdoc />
         protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
         {
@@ -59,13 +101,15 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
                 .ToArray();
 
             WeakNumber = GetWeakNumber(values, 25);
+            Weakness = GetWeakness(values, WeakNumber);
 
             if (Verbose)
             {
                 Logger.WriteLine("The first weak number in the XMAS sequence is {0}.", WeakNumber);
+                Logger.WriteLine("The encryption weakness of the XMAS sequence is {0}.", Weakness);
             }
 
-            return PuzzleResult.Create(WeakNumber);
+            return PuzzleResult.Create(WeakNumber, Weakness);
         }
     }
 }
