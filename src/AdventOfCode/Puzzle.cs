@@ -7,6 +7,8 @@ namespace MartinCostello.AdventOfCode
     using System.Collections.Generic;
     using System.Globalization;
     using System.IO;
+    using System.Linq;
+    using System.Numerics;
     using System.Reflection;
     using System.Threading;
     using System.Threading.Tasks;
@@ -191,6 +193,52 @@ namespace MartinCostello.AdventOfCode
             }
 
             return lines;
+        }
+
+        /// <summary>
+        /// Returns the sequence associated with the resource for the puzzle as the specified type.
+        /// </summary>
+        /// <typeparam name="T">
+        /// The type to read the resource as a sequence of.
+        /// </typeparam>
+        /// <returns>
+        /// A <see cref="Task{TResult}"/> that represents the asynchronous operation which returns an
+        /// <see cref="IList{T}"/> containing the lines of the resource associated with the puzzle.
+        /// </returns>
+        protected async Task<IList<T>> ReadResourceAsSequenceAsync<T>()
+        {
+            var lines = await ReadResourceAsLinesAsync();
+
+            if (typeof(T) == typeof(int))
+            {
+                return lines
+                    .Select((p) => ParseInt32(p))
+                    .Cast<T>()
+                    .ToList();
+            }
+            else if (typeof(T) == typeof(long))
+            {
+                return lines
+                    .Select((p) => ParseInt64(p))
+                    .Cast<T>()
+                    .ToList();
+            }
+            else if (typeof(T) == typeof(uint))
+            {
+                return lines
+                    .Select((p) => ParseUInt32(p))
+                    .Cast<T>()
+                    .ToList();
+            }
+            else if (typeof(T) == typeof(BigInteger))
+            {
+                return lines
+                    .Select((p) => BigInteger.Parse(p, CultureInfo.InvariantCulture))
+                    .Cast<T>()
+                    .ToList();
+            }
+
+            throw new NotSupportedException($"The {typeof(T).Name} type is not supported.");
         }
 
         /// <summary>
