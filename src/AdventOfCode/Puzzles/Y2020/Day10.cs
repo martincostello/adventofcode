@@ -20,6 +20,11 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
         public int JoltageProduct { get; private set; }
 
         /// <summary>
+        /// Gets the number of distinct valid arrangements of adapters.
+        /// </summary>
+        public long ValidArrangements { get; private set; }
+
+        /// <summary>
         /// Gets the product of the 1-jolt and 3-jolt differences when the adapters
         /// with the specified joltage ratings are linked together in series.
         /// </summary>
@@ -35,7 +40,6 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
                 .ToList();
 
             int maxRating = sorted.Max();
-            int deviceRating = maxRating + 3;
 
             // Start with the charging outlet with a joltage of 0
             var chain = new Stack<int>();
@@ -70,15 +74,14 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
 
             return deltas[1] * deltas[3];
 
-            IList<int> JoltageCandidates(Stack<int> path)
+            IEnumerable<int> JoltageCandidates(Stack<int> path)
             {
                 int previous = path.Peek();
 
                 return sorted
                     .Where((p) => !path.Contains(p))
                     .Where((p) => p >= previous + 1)
-                    .Where((p) => p <= previous + 3)
-                    .ToList();
+                    .Where((p) => p <= previous + 3);
             }
 
             bool ContainsPathToTarget(Stack<int> path)
@@ -90,12 +93,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
                     return path.Count == sorted.Count + 1;
                 }
 
-                IList<int> candidates = JoltageCandidates(path);
-
-                if (candidates.Count == 0)
-                {
-                    return false;
-                }
+                IEnumerable<int> candidates = JoltageCandidates(path);
 
                 foreach (int candidate in candidates)
                 {
@@ -113,19 +111,58 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
             }
         }
 
+        /// <summary>
+        /// Gets the total number of distinct valid arrangements of adapters.
+        /// </summary>
+        /// <param name="joltageRatings">The joltage ratings of the adapters.</param>
+        /// <returns>
+        /// The number of distinct valid arrangements of the adapters.
+        /// </returns>
+        public static long GetValidArrangements(IEnumerable<int> joltageRatings)
+        {
+            IList<int> sorted = joltageRatings
+                .OrderBy((p) => p)
+                .ToList();
+
+            // Adapted from https://github.com/thatsumoguy/Advent-of-Code-2020.
+            // My original solution was brute force and worked out the valid
+            // paths and just took to long to work it all out. It worked fine
+            // with the examples and solved them, but never completed the file.
+            // See https://www.reddit.com/r/adventofcode/comments/kadp4g/why_does_this_code_work_and_what_does_it_do/gf9pixm/
+            sorted.Insert(0, 0);
+
+            long[] steps = new long[sorted.Count];
+            steps[0] = 1;
+
+            for (int i = 1; i < sorted.Count; i++)
+            {
+                for (int j = 0; j < i; j++)
+                {
+                    if (sorted[i] - sorted[j] <= 3)
+                    {
+                        steps[i] += steps[j];
+                    }
+                }
+            }
+
+            return steps[^1];
+        }
+
         /// <inheritdoc />
         protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
         {
             IList<int> joltages = await ReadResourceAsSequenceAsync<int>();
 
             JoltageProduct = GetJoltageProduct(joltages);
+            ValidArrangements = GetValidArrangements(joltages);
 
             if (Verbose)
             {
                 Logger.WriteLine("The product of the 1-jolt differences and 3-jolt differences is {0}.", JoltageProduct);
+                Logger.WriteLine("The total number of distinct ways to arrange the adapters is {0}.", ValidArrangements);
             }
 
-            return PuzzleResult.Create(JoltageProduct);
+            return PuzzleResult.Create(JoltageProduct, ValidArrangements);
         }
     }
 }

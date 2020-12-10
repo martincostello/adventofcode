@@ -34,6 +34,18 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
             actual.ShouldBe(expected);
         }
 
+        [Theory]
+        [InlineData(new[] { 16, 10, 15, 5, 1, 11, 7, 19, 6, 12, 4 }, 8)]
+        [InlineData(new[] { 28, 33, 18, 42, 31, 14, 46, 20, 48, 47, 24, 23, 49, 45, 19, 38, 39, 11, 1, 32, 25, 35, 8, 17, 7, 9, 4, 2, 34, 10, 3 }, 19208)]
+        public void Y2020_Day10_GetValidArrangements_Returns_Correct_Value(int[] joltages, int expected)
+        {
+            // Act
+            long actual = Day10.GetValidArrangements(joltages);
+
+            // Assert
+            actual.ShouldBe(expected);
+        }
+
         [Fact]
         public async Task Y2020_Day10_Solve_Returns_Correct_Solution()
         {
@@ -42,6 +54,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
 
             // Assert
             puzzle.JoltageProduct.ShouldBe(2775);
+            puzzle.ValidArrangements.ShouldBe(518344341716992L);
         }
     }
 }
