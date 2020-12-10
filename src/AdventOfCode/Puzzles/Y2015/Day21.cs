@@ -87,7 +87,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
         protected override Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
         {
             string[] potentialWeapons = Shop.PotentialWeapons.Keys.ToArray();
-            string?[] potentialArmor = Shop.PotentialArmor.Keys.Concat(new string?[] { null }).ToArray();
+            string?[] potentialArmor = Shop.PotentialArmor.Keys.Append(null!).ToArray();
 
             ICollection<string> keys = Shop.PotentialRings.Keys.ToArray();
 

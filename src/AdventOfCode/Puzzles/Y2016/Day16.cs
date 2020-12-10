@@ -127,7 +127,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
                     }
                 }
 
-                a = new List<char>(a.Concat(new[] { '0' }).Concat(b));
+                a = new List<char>(a.Append('0').Concat(b));
             }
 
             if (a.Count > size)
