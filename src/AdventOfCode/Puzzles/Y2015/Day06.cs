@@ -6,7 +6,6 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
     using System;
     using System.Collections.Generic;
     using System.Drawing;
-    using System.Globalization;
     using System.Linq;
     using System.Text;
     using System.Threading;
@@ -413,7 +412,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
                 {
                     for (int y = 0; y < _bounds.Height; y++)
                     {
-                        builder.AppendFormat(CultureInfo.InvariantCulture, "{0}", _lightBrightnesses[x, y]);
+                        builder.Append(_lightBrightnesses[x, y]);
                     }
 
                     builder.AppendLine();
