@@ -21,11 +21,6 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
         private const char Empty = 'L';
 
         /// <summary>
-        /// The floor.
-        /// </summary>
-        private const char Floor = '.';
-
-        /// <summary>
         /// An occupied chair.
         /// </summary>
         private const char Occupied = '#';
@@ -138,11 +133,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
                 {
                     char seat = row[x];
 
-                    if (seat == Floor)
-                    {
-                        continue;
-                    }
-                    else if (seat == Empty && CountAdjacentSeats(x, y, version) == 0)
+                    if (seat == Empty && CountAdjacentSeats(x, y, version) == 0)
                     {
                         updated[y][x] = Occupied;
                         changed = true;
