@@ -5,7 +5,6 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
 {
     using System;
     using System.Collections.Generic;
-    using System.Globalization;
     using System.Linq;
     using System.Threading;
     using System.Threading.Tasks;
@@ -125,7 +124,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
             {
                 IList<int> columns = line
                     .Split('\t')
-                    .Select((p) => int.Parse(p, CultureInfo.InvariantCulture))
+                    .Select((p) => ParseInt32(p))
                     .ToList();
 
                 spreadsheet.Add(columns);

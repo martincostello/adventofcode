@@ -3,7 +3,6 @@
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2015
 {
-    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading;
@@ -36,8 +35,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
         {
             // Create a map of wire Ids to the instructions to get their value
             var instructionMap = instructions
-                .Select((p) => p.Split(new string[] { " -> " }, StringSplitOptions.None))
-                .ToDictionary((p) => p.Last(), (p) => p.First().Split(' '));
+                .Select((p) => p.Split(" -> "))
+                .ToDictionary((p) => p[^1], (p) => p[0].Split(' '));
 
             var result = new Dictionary<string, ushort>();
 

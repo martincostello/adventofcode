@@ -33,9 +33,9 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         /// <returns>
         /// The decrypted message derived from <paramref name="messages"/>.
         /// </returns>
-        internal static string DecryptMessage(ICollection<string> messages, bool leastLikely)
+        internal static string DecryptMessage(IList<string> messages, bool leastLikely)
         {
-            int length = messages.First().Length;
+            int length = messages[0].Length;
 
             var result = new StringBuilder(length);
 

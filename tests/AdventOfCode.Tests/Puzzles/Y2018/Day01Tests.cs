@@ -23,12 +23,12 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2018
         }
 
         [Theory]
-        [InlineData(new[] { "+1", "-2", "+3", "+1" }, 3)]
-        [InlineData(new[] { "+1", "+1", "+1" }, 3)]
-        [InlineData(new[] { "+1", "+1", "-2" }, 0)]
-        [InlineData(new[] { "-1", "-2", "-3" }, -6)]
+        [InlineData(new[] { 1, -2, 3, +1 }, 3)]
+        [InlineData(new[] { 1, 1, 1 }, 3)]
+        [InlineData(new[] { 1, 1, -2 }, 0)]
+        [InlineData(new[] { -1, -2, -3 }, -6)]
         public static void Y2018_Day01_CalculateFrequency_Returns_Correct_Solution(
-            string[] sequence,
+            int[] sequence,
             int expected)
         {
             // Act
@@ -39,13 +39,13 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2018
         }
 
         [Theory]
-        [InlineData(new[] { "+1", "-2", "+3", "+1", "+1", "-2" }, 2)]
-        [InlineData(new[] { "+1", "-1" }, 0)]
-        [InlineData(new[] { "+3", "+3", "+4", "-2", "-4" }, 10)]
-        [InlineData(new[] { "-6", "+3", "+8", "+5", "-6" }, 5)]
-        [InlineData(new[] { "+7", "+7", "-2", "-7", "-4" }, 14)]
+        [InlineData(new[] { 1, -2, 3, 1, 1, -2 }, 2)]
+        [InlineData(new[] { 1, -1 }, 0)]
+        [InlineData(new[] { 3, 3, 4, -2, -4 }, 10)]
+        [InlineData(new[] { -6, 3, 8, 5, -6 }, 5)]
+        [InlineData(new[] { 7, 7, -2, -7, -4 }, 14)]
         public static void Y2018_Day01_CalculateFrequencyWithRepetition_Returns_Correct_Solution(
-            string[] sequence,
+            int[] sequence,
             int expected)
         {
             // Act

@@ -112,7 +112,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
 
             // Add on the remaining IPs if the last deny-list
             // does not run to the maximum allowed IP address.
-            var (start, end) = ranges.Last();
+            var (start, end) = ranges[^1];
 
             if (end != maxValue)
             {

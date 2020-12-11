@@ -96,7 +96,9 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
         /// </returns>
         private static IDictionary<int, Node> BuildGraph(IEnumerable<string> pipes)
         {
-            var graph = pipes.Select((p) => new Node(p)).ToDictionary((p) => p.Id, (p) => p);
+            var graph = pipes
+                .Select((p) => new Node(p))
+                .ToDictionary((p) => p.Id, (p) => p);
 
             foreach (Node node in graph.Values)
             {

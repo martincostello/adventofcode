@@ -48,14 +48,16 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
         /// <inheritdoc />
         protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
         {
-            var containerVolumes = (await ReadResourceAsLinesAsync())
-                .Select((p) => ParseInt32(p))
-                .ToList();
+            var containerVolumes = await ReadResourceAsSequenceAsync<int>();
 
             int volume = ParseInt32(args[0]);
 
             var combinations = GetContainerCombinations(volume, containerVolumes);
-            var combinationsWithLeastContainers = combinations.GroupBy((p) => p.Count).OrderBy((p) => p.Key).First();
+
+            var combinationsWithLeastContainers = combinations
+                .GroupBy((p) => p.Count)
+                .OrderBy((p) => p.Key)
+                .First();
 
             Combinations = combinations.Count;
             CombinationsWithMinimumContainers = combinationsWithLeastContainers.Count();

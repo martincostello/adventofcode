@@ -44,8 +44,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
         {
             // Parse the input
             var parsedDistances = collection
-                .Select((p) => p.Split(" = ", StringSplitOptions.None))
-                .Select((p) => new { Locations = p[0].Split(" to ", StringSplitOptions.None), Distance = ParseInt32(p[1]) })
+                .Select((p) => p.Split(" = "))
+                .Select((p) => new { Locations = p[0].Split(" to "), Distance = ParseInt32(p[1]) })
                 .ToList();
 
             if (parsedDistances.Count == 1)
@@ -220,7 +220,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
             /// <summary>
             /// Gets the current position on the path.
             /// </summary>
-            internal string Current => Steps.Last();
+            internal string Current => Steps[^1];
 
             /// <summary>
             /// Gets the steps along the path.

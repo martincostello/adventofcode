@@ -32,7 +32,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2018
         /// <returns>
         /// The resulting frequency from applying the sequence from <paramref name="sequence"/>.
         /// </returns>
-        public static int CalculateFrequency(IEnumerable<string> sequence)
+        public static int CalculateFrequency(IList<int> sequence)
             => CalculateFrequencyWithRepetition(sequence).frequency;
 
         /// <summary>
@@ -42,26 +42,22 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2018
         /// <returns>
         /// The resulting frequency from applying the sequence from <paramref name="sequence"/>.
         /// </returns>
-        public static (int frequency, int firstRepeat) CalculateFrequencyWithRepetition(IEnumerable<string> sequence)
+        public static (int frequency, int firstRepeat) CalculateFrequencyWithRepetition(IList<int> sequence)
         {
-            IList<int> changes = sequence
-                .Select((p) => ParseInt32(p))
-                .ToList();
-
             int current = 0;
             int? frequency = null;
             int? firstRepeat = null;
 
-            var history = new List<int>(changes.Count)
+            var history = new List<int>(sequence.Count)
             {
                 current,
             };
 
-            bool isInfinite = TendsToInfinity(changes);
+            bool isInfinite = TendsToInfinity(sequence);
 
             do
             {
-                foreach (int shift in changes)
+                foreach (int shift in sequence)
                 {
                     int previous = current;
                     current += shift;
@@ -87,7 +83,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2018
         /// <inheritdoc />
         protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
         {
-            IList<string> sequence = await ReadResourceAsLinesAsync();
+            IList<int> sequence = await ReadResourceAsSequenceAsync<int>();
 
             (Frequency, FirstRepeatedFrequency) = CalculateFrequencyWithRepetition(sequence);
 
@@ -107,7 +103,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2018
         /// <returns>
         /// <see langword="true"/> if the sequence tends towards positive or negative infinity.
         /// </returns>
-        private static bool TendsToInfinity(IEnumerable<int> sequence)
+        private static bool TendsToInfinity(IList<int> sequence)
             => Math.Abs(sequence.Sum(Math.Sign)) == sequence.Count((p) => p != 0);
     }
 }

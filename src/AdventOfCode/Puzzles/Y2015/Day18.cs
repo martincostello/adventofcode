@@ -6,7 +6,6 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
     using System;
     using System.Collections.Generic;
     using System.Drawing;
-    using System.Linq;
     using System.Text;
     using System.Threading;
     using System.Threading.Tasks;
@@ -204,7 +203,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
         private static bool[,] ParseInitialState(IList<string> initialState)
         {
             // Assume that the input configuration is a rectangle
-            int width = initialState.First().Length;
+            int width = initialState[0].Length;
             int height = initialState.Count;
 
             bool[,] state = new bool[width, height];

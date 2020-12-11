@@ -23,11 +23,11 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
         }
 
         [Theory]
-        [InlineData("12", 2)]
-        [InlineData("14", 2)]
-        [InlineData("1969", 654)]
-        [InlineData("100756", 33583)]
-        public static void Y2019_Day01_GetFuelRequirementsForMass(string mass, int expected)
+        [InlineData(12, 2)]
+        [InlineData(14, 2)]
+        [InlineData(1969, 654)]
+        [InlineData(100756, 33583)]
+        public static void Y2019_Day01_GetFuelRequirementsForMass(int mass, int expected)
         {
             // Act
             int actual = Day01.GetFuelRequirementsForMass(mass);
@@ -37,10 +37,10 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
         }
 
         [Theory]
-        [InlineData("12", 2)]
-        [InlineData("1969", 966)]
-        [InlineData("100756", 50346)]
-        public static void Y2019_Day01_GetFuelRequirementsForMassWithFuel(string mass, int expected)
+        [InlineData(12, 2)]
+        [InlineData(1969, 966)]
+        [InlineData(100756, 50346)]
+        public static void Y2019_Day01_GetFuelRequirementsForMassWithFuel(int mass, int expected)
         {
             // Act
             int actual = Day01.GetFuelRequirementsForMassWithFuel(mass);
