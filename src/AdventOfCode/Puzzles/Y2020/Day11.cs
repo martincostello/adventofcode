@@ -31,19 +31,28 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
         private const char Occupied = '#';
 
         /// <summary>
-        /// Gets the number of occupied seats.
+        /// Gets the number of occupied seats using version 1 of the rules.
         /// </summary>
-        public int OccupiedSeats { get; private set; }
+        public int OccupiedSeatsV1 { get; private set; }
+
+        /// <summary>
+        /// Gets the number of occupied seats using version 2 of the rules.
+        /// </summary>
+        public int OccupiedSeatsV2 { get; private set; }
 
         /// <summary>
         /// Gets the number of occupied seats for the specified layout.
         /// </summary>
         /// <param name="layout">The seat layout.</param>
+        /// <param name="version">The version of the rules to use.</param>
         /// <param name="logger">The optional logger to use.</param>
         /// <returns>
         /// The number of occupied seats in the layout and a visualization of the final grid.
         /// </returns>
-        public static (int occupiedSeats, string visualization) GetOccupiedSeats(IList<string> layout, ILogger? logger = null)
+        public static (int occupiedSeats, string visualization) GetOccupiedSeats(
+            IList<string> layout,
+            int version,
+            ILogger? logger = null)
         {
             var initial = layout
                 .Select((p) => p.ToCharArray())
@@ -54,7 +63,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
 
             string visualization = WriteGrid(current, logger);
 
-            while ((current = Iterate(current)) != previous)
+            while ((current = Iterate(current, version)) != previous)
             {
                 visualization = WriteGrid(current, logger);
                 previous = current;
@@ -73,19 +82,25 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
         {
             IList<string> layout = await ReadResourceAsLinesAsync();
 
-            (int occupiedSeats, string visualization) = GetOccupiedSeats(layout);
+            (int occupiedSeatsV1, string visualizationV1) = GetOccupiedSeats(layout, version: 1);
+            (int occupiedSeatsV2, string visualizationV2) = GetOccupiedSeats(layout, version: 2);
 
-            OccupiedSeats = occupiedSeats;
+            OccupiedSeatsV1 = occupiedSeatsV1;
+            OccupiedSeatsV2 = occupiedSeatsV2;
 
             if (Verbose)
             {
-                Logger.WriteLine("There are {0} occupied seats.", OccupiedSeats);
+                Logger.WriteLine("There are {0} occupied seats using the first set of rules.", OccupiedSeatsV1);
+                Logger.WriteLine("There are {0} occupied seats using the second set of rules.", OccupiedSeatsV2);
             }
 
             var result = new PuzzleResult();
 
-            result.Solutions.Add(OccupiedSeats);
-            result.Visualizations.Add(visualization);
+            result.Solutions.Add(OccupiedSeatsV1);
+            result.Visualizations.Add(visualizationV1);
+
+            result.Solutions.Add(OccupiedSeatsV2);
+            result.Visualizations.Add(visualizationV2);
 
             return result;
         }
@@ -94,11 +109,12 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
         /// Iterates the seat layout according to the rules.
         /// </summary>
         /// <param name="layout">The seat layout to iterate.</param>
+        /// <param name="version">The version of the rules to use.</param>
         /// <returns>
         /// <paramref name="layout"/> if the seat layout did not change;
         /// otherwise a new value containing the new seat layout.
         /// </returns>
-        private static List<char[]> Iterate(List<char[]> layout)
+        private static List<char[]> Iterate(List<char[]> layout, int version)
         {
             var updated = new List<char[]>();
 
@@ -108,6 +124,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
             }
 
             bool changed = false;
+
+            int occupiedTolerance = version == 1 ? 4 : 5;
 
             int height = layout.Count;
             int width = layout[0].Length;
@@ -124,12 +142,12 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
                     {
                         continue;
                     }
-                    else if (seat == Empty && CountAdjacentSeats(x, y) == 0)
+                    else if (seat == Empty && CountAdjacentSeats(x, y, version) == 0)
                     {
                         updated[y][x] = Occupied;
                         changed = true;
                     }
-                    else if (seat == Occupied && CountAdjacentSeats(x, y) >= 4)
+                    else if (seat == Occupied && CountAdjacentSeats(x, y, version) >= occupiedTolerance)
                     {
                         updated[y][x] = Empty;
                         changed = true;
@@ -139,30 +157,45 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
 
             return changed ? updated : layout;
 
-            int CountAdjacentSeats(int x, int y)
+            int CountAdjacentSeats(int x, int y, int version)
             {
                 int count = 0;
 
-                count += IsAdjacentSeatOccupied(x - 1, y - 1);
-                count += IsAdjacentSeatOccupied(x, y - 1);
-                count += IsAdjacentSeatOccupied(x + 1, y - 1);
-                count += IsAdjacentSeatOccupied(x - 1, y);
-                count += IsAdjacentSeatOccupied(x + 1, y);
-                count += IsAdjacentSeatOccupied(x - 1, y + 1);
-                count += IsAdjacentSeatOccupied(x, y + 1);
-                count += IsAdjacentSeatOccupied(x + 1, y + 1);
+                count += IsAdjacentSeatOccupied(x, y, version, (-1, -1));
+                count += IsAdjacentSeatOccupied(x, y, version, (0, -1));
+                count += IsAdjacentSeatOccupied(x, y, version, (1, -1));
+                count += IsAdjacentSeatOccupied(x, y, version, (-1, 0));
+                count += IsAdjacentSeatOccupied(x, y, version, (1, 0));
+                count += IsAdjacentSeatOccupied(x, y, version, (-1, 1));
+                count += IsAdjacentSeatOccupied(x, y, version, (0, 1));
+                count += IsAdjacentSeatOccupied(x, y, version, (1, 1));
 
                 return count;
             }
 
-            int IsAdjacentSeatOccupied(int x, int y)
+            int IsAdjacentSeatOccupied(int x, int y, int version, (int x, int y) vector)
             {
+                x += vector.x;
+                y += vector.y;
+
                 if (x < 0 || y < 0 || x > width - 1 || y > height - 1)
                 {
                     return 0;
                 }
 
-                return layout[y][x] == Occupied ? 1 : 0;
+                char seat = layout[y][x];
+
+                if (version == 1)
+                {
+                    return seat == Occupied ? 1 : 0;
+                }
+
+                return seat switch
+                {
+                    Empty => 0,
+                    Occupied => 1,
+                    _ => IsAdjacentSeatOccupied(x, y, version, vector),
+                };
             }
         }
 

@@ -22,8 +22,10 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
         {
         }
 
-        [Fact]
-        public void Y2020_Day11_Get2020Product_Returns_Correct_Value()
+        [Theory]
+        [InlineData(1, 37)]
+        [InlineData(2, 26)]
+        public void Y2020_Day11_GetOccupiedSeats_Returns_Correct_Value(int version, int expected)
         {
             // Arrange
             string[] layout = new[]
@@ -41,10 +43,10 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
             };
 
             // Act
-            (int actual, _) = Day11.GetOccupiedSeats(layout, Logger);
+            (int actual, _) = Day11.GetOccupiedSeats(layout, version, Logger);
 
             // Assert
-            actual.ShouldBe(37);
+            actual.ShouldBe(expected);
         }
 
         [Fact]
@@ -54,7 +56,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
             var puzzle = await SolvePuzzleAsync<Day11>();
 
             // Assert
-            puzzle.OccupiedSeats.ShouldBe(2108);
+            puzzle.OccupiedSeatsV1.ShouldBe(2108);
+            puzzle.OccupiedSeatsV2.ShouldBe(1897);
         }
     }
 }
