@@ -47,7 +47,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
         /// <param name="version">The version of the rules to use.</param>
         /// <param name="logger">The optional logger to use.</param>
         /// <returns>
-        /// The number of occupied seats in the layout and a visualization of the final grid.
+        /// The number of occupied seats in the layout and a visualization of the final seat layout.
         /// </returns>
         public static (int occupiedSeats, string visualization) GetOccupiedSeats(
             IList<string> layout,
