@@ -53,7 +53,11 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
             int volume = ParseInt32(args[0]);
 
             var combinations = GetContainerCombinations(volume, containerVolumes);
-            var combinationsWithLeastContainers = combinations.GroupBy((p) => p.Count).OrderBy((p) => p.Key).First();
+
+            var combinationsWithLeastContainers = combinations
+                .GroupBy((p) => p.Count)
+                .OrderBy((p) => p.Key)
+                .First();
 
             Combinations = combinations.Count;
             CombinationsWithMinimumContainers = combinationsWithLeastContainers.Count();
