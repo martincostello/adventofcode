@@ -25,9 +25,12 @@ namespace MartinCostello.AdventOfCode
             {
                 Console.WriteLine();
 
-                for (int x = 0; x < array.GetLength(0); x++)
+                int lengthX = array.GetLength(0);
+                int lengthY = array.GetLength(1);
+
+                for (int x = 0; x < lengthX; x++)
                 {
-                    for (int y = 0; y < array.GetLength(1); y++)
+                    for (int y = 0; y < lengthY; y++)
                     {
                         Console.Write(array[x, y] ? trueChar : falseChar);
                     }
