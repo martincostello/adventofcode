@@ -73,7 +73,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
             var potentialHappinessWithCurrentUser = new List<string>(potentialHappiness);
 
             var existingGuestNames = potentialHappiness
-                .Select((p) => p.Split(' ').First())
+                .Select((p) => p.Split(' ')[0])
                 .Distinct()
                 .ToList();
 
@@ -106,8 +106,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
         /// <returns>The total change in happiness for the given place setting.</returns>
         private static int GetHappiness(IList<string> setting, IDictionary<string, Dictionary<string, int>> happinesses)
         {
-            string head = setting.First();
-            string tail = setting.Last();
+            string head = setting[0];
+            string tail = setting[^1];
 
             // Because the table is circular, find the happinesses for the first and last items
             int happiness = happinesses[head][tail];
@@ -138,8 +138,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
 
             var result = new Potential()
             {
-                Name = split.First(),
-                AdjacentName = split.Last().TrimEnd('.'),
+                Name = split[0],
+                AdjacentName = split[^1].TrimEnd('.'),
             };
 
             result.Happiness = ParseInt32(split[3]);

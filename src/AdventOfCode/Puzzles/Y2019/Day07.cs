@@ -98,7 +98,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
                         }
                     }
 
-                    signal = (await amplifiers.Last().Output.ToListAsync(cancellationToken))[^1];
+                    signal = (await amplifiers[^1].Output.ToListAsync(cancellationToken))[^1];
                 }
 
                 signals.Add(signal);

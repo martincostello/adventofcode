@@ -151,7 +151,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
 
                 return new FlightData()
                 {
-                    Name = split.First(),
+                    Name = split[0],
                     MaximumSpeed = ParseInt32(split[3]),
                     MaximumActivityPeriod = ParseInt32(split[6]),
                     RestPeriod = ParseInt32(split[13]),

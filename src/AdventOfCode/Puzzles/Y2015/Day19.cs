@@ -141,7 +141,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
 
             IList<string> lines = await ReadResourceAsLinesAsync();
 
-            string molecule = lines.Last();
+            string molecule = lines[^1];
 
             ICollection<string> replacements = lines
                 .Take(lines.Count - 1)

@@ -220,7 +220,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
             /// <summary>
             /// Gets the current position on the path.
             /// </summary>
-            internal string Current => Steps.Last();
+            internal string Current => Steps[^1];
 
             /// <summary>
             /// Gets the steps along the path.
