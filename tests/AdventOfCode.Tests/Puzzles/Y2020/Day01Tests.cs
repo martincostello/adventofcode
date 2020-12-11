@@ -28,14 +28,14 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
         public void Y2020_Day01_Get2020Product_Returns_Correct_Value(int take, int expected)
         {
             // Arrange
-            string[] values = new[]
+            int[] values = new[]
             {
-                "1721",
-                "979",
-                "366",
-                "299",
-                "675",
-                "1456",
+                1721,
+                979,
+                366,
+                299,
+                675,
+                1456,
             };
 
             // Act

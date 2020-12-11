@@ -28,17 +28,13 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
         /// Gets the product of a number of values from the specified set of values
         /// that which when added together equal 2020.
         /// </summary>
-        /// <param name="values">The values to find the 2020 sum's product from.</param>
+        /// <param name="expenses">The values to find the 2020 sum's product from.</param>
         /// <param name="take">The number of values to use to reach the 2020 target.</param>
         /// <returns>
         /// The product of the specified number of values that sum to a value of 2020.
         /// </returns>
-        public static int Get2020Product(IEnumerable<string> values, int take)
+        public static int Get2020Product(IEnumerable<int> expenses, int take)
         {
-            int[] expenses = values
-                .Select((p) => ParseInt32(p))
-                .ToArray();
-
             var result = Maths.GetPermutations(expenses, take);
 
             return result
@@ -50,7 +46,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
         /// <inheritdoc />
         protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
         {
-            IList<string> values = await ReadResourceAsLinesAsync();
+            IList<int> values = await ReadResourceAsSequenceAsync<int>();
 
             ProductOf2020SumFrom2 = Get2020Product(values, 2);
             ProductOf2020SumFrom3 = Get2020Product(values, 3);

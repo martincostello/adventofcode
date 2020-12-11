@@ -48,9 +48,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
         /// <inheritdoc />
         protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
         {
-            var containerVolumes = (await ReadResourceAsLinesAsync())
-                .Select((p) => ParseInt32(p))
-                .ToList();
+            var containerVolumes = await ReadResourceAsSequenceAsync<int>();
 
             int volume = ParseInt32(args[0]);
 

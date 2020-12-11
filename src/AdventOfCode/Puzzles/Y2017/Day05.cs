@@ -4,7 +4,6 @@
 namespace MartinCostello.AdventOfCode.Puzzles.Y2017
 {
     using System.Collections.Generic;
-    using System.Linq;
     using System.Threading;
     using System.Threading.Tasks;
 
@@ -62,9 +61,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
         /// <inheritdoc />
         protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
         {
-            IList<int> program = (await ReadResourceAsLinesAsync())
-                .Select((p) => ParseInt32(p))
-                .ToList();
+            IList<int> program = await ReadResourceAsSequenceAsync<int>();
 
             StepsToExitV1 = Execute(program, 1);
             StepsToExitV2 = Execute(program, 2);

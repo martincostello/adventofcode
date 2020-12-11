@@ -31,44 +31,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
         /// <returns>
         /// The fuel requirements for the mass specified by <paramref name="mass"/>.
         /// </returns>
-        public static int GetFuelRequirementsForMass(string mass)
-            => GetFuelRequirementsForMass(ParseInt32(mass));
-
-        /// <summary>
-        /// Gets the fuel requirements for the specified mass, including the fuel itself.
-        /// </summary>
-        /// <param name="mass">The mass to get the fuel requirements for.</param>
-        /// <returns>
-        /// The fuel-inclusive fuel requirements for the mass specified by <paramref name="mass"/>.
-        /// </returns>
-        public static int GetFuelRequirementsForMassWithFuel(string mass)
-            => GetFuelRequirementsForMassWithFuel(ParseInt32(mass));
-
-        /// <inheritdoc />
-        protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
-        {
-            IList<string> masses = await ReadResourceAsLinesAsync();
-
-            TotalFuelRequiredForModules = GetFuelRequirementsForMasses(masses);
-            TotalFuelRequiredForRocket = GetFuelRequirementsForRocket(masses);
-
-            if (Verbose)
-            {
-                Logger.WriteLine("{0} fuel is required for the modules.", TotalFuelRequiredForModules);
-                Logger.WriteLine("{0} fuel is required for the fully-fuelled rocket.", TotalFuelRequiredForRocket);
-            }
-
-            return PuzzleResult.Create(TotalFuelRequiredForModules, TotalFuelRequiredForRocket);
-        }
-
-        /// <summary>
-        /// Gets the fuel requirements for the specified mass.
-        /// </summary>
-        /// <param name="mass">The mass to get the fuel requirements for.</param>
-        /// <returns>
-        /// The fuel requirements for the mass specified by <paramref name="mass"/>.
-        /// </returns>
-        private static int GetFuelRequirementsForMass(int mass)
+        public static int GetFuelRequirementsForMass(int mass)
         {
             int requirement = mass / 3;
 
@@ -84,7 +47,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
         /// <returns>
         /// The fuel-inclusive fuel requirements for the mass specified by <paramref name="mass"/>.
         /// </returns>
-        private static int GetFuelRequirementsForMassWithFuel(int mass)
+        public static int GetFuelRequirementsForMassWithFuel(int mass)
         {
             int fuel = GetFuelRequirementsForMass(mass);
 
@@ -96,6 +59,23 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
             return fuel;
         }
 
+        /// <inheritdoc />
+        protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
+        {
+            IList<int> masses = await ReadResourceAsSequenceAsync<int>();
+
+            TotalFuelRequiredForModules = GetFuelRequirementsForMasses(masses);
+            TotalFuelRequiredForRocket = GetFuelRequirementsForRocket(masses);
+
+            if (Verbose)
+            {
+                Logger.WriteLine("{0} fuel is required for the modules.", TotalFuelRequiredForModules);
+                Logger.WriteLine("{0} fuel is required for the fully-fuelled rocket.", TotalFuelRequiredForRocket);
+            }
+
+            return PuzzleResult.Create(TotalFuelRequiredForModules, TotalFuelRequiredForRocket);
+        }
+
         /// <summary>
         /// Gets the fuel requirements for a fully-fuelled rocket with the specified module masses.
         /// </summary>
@@ -103,11 +83,11 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
         /// <returns>
         /// The fuel requirements for the rocket with the modules specified by <paramref name="masses"/>.
         /// </returns>
-        private static int GetFuelRequirementsForMasses(IEnumerable<string> masses)
+        private static int GetFuelRequirementsForMasses(IEnumerable<int> masses)
         {
             int total = 0;
 
-            foreach (string mass in masses)
+            foreach (int mass in masses)
             {
                 total += GetFuelRequirementsForMass(mass);
             }
@@ -122,11 +102,11 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
         /// <returns>
         /// The fuel requirements for the rocket with the modules specified by <paramref name="masses"/>.
         /// </returns>
-        private static int GetFuelRequirementsForRocket(IEnumerable<string> masses)
+        private static int GetFuelRequirementsForRocket(IEnumerable<int> masses)
         {
             int total = 0;
 
-            foreach (string mass in masses)
+            foreach (int mass in masses)
             {
                 total += GetFuelRequirementsForMassWithFuel(mass);
             }

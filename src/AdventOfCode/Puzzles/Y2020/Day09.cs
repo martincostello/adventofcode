@@ -97,11 +97,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
         /// <inheritdoc />
         protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
         {
-            IList<string> signal = await ReadResourceAsLinesAsync();
-
-            long[] values = signal
-                .Select((p) => ParseInt64(p))
-                .ToArray();
+            long[] values = (await ReadResourceAsSequenceAsync<long>()).ToArray();
 
             WeakNumber = GetWeakNumber(values, 25);
             Weakness = GetWeakness(values, WeakNumber);
