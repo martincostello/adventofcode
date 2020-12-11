@@ -44,7 +44,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
             {
                 cancellationToken.ThrowIfCancellationRequested();
 
-                string[] split = replacement.Split(" => ", StringSplitOptions.None);
+                string[] split = replacement.Split(" => ");
 
                 string source = split[0];
                 string target = split[1];
