@@ -59,13 +59,10 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         {
             IList<string> input = await ReadResourceAsLinesAsync();
 
-            IList<string> extraDisc = new[]
-            {
-                $"Disc #{input.Count + 1} has 11 positions; at time=0, it is at position 0.",
-            };
+            string extraDisc = $"Disc #{input.Count + 1} has 11 positions; at time=0, it is at position 0.";
 
             TimeOfFirstButtonPress = FindTimeForCapsuleRelease(input);
-            TimeOfFirstButtonPressWithExtraDisc = FindTimeForCapsuleRelease(input.Concat(extraDisc));
+            TimeOfFirstButtonPressWithExtraDisc = FindTimeForCapsuleRelease(input.Append(extraDisc));
 
             if (Verbose)
             {
