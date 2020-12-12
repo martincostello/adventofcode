@@ -16,6 +16,17 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
     public sealed class Day12 : Puzzle
     {
         /// <summary>
+        /// A dictionary of vectors keyed by headings. This field is read-only.
+        /// </summary>
+        private static readonly Dictionary<int, Size> Vectors = new ()
+        {
+            [000] = new Size(0, 1),
+            [090] = new Size(1, 0),
+            [180] = new Size(0, -1),
+            [270] = new Size(-1, 0),
+        };
+
+        /// <summary>
         /// Gets the Manhattan distance the ship has travelled.
         /// </summary>
         public int ManhattanDistance { get; private set; }
@@ -34,14 +45,6 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
         /// </returns>
         public static int GetDistanceTravelled(IEnumerable<string> instructions)
         {
-            var vectors = new Dictionary<int, (int x, int y)>()
-            {
-                [000] = (0, 1),
-                [090] = (1, 0),
-                [180] = (0, -1),
-                [270] = (-1, 0),
-            };
-
             int heading = 90;
             var ship = Point.Empty;
 
@@ -51,11 +54,6 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
 
                 switch (instruction[0..1])
                 {
-                    case "F":
-                        (int x, int y) = vectors[heading];
-                        ship += new Size(units * x, units * y);
-                        break;
-
                     case "L":
                         heading = Math.Abs((heading - units + 360) % 360);
                         break;
@@ -64,20 +62,24 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
                         heading = Math.Abs((heading + units) % 360);
                         break;
 
+                    case "F":
+                        ship += Vectors[heading] * units;
+                        break;
+
                     case "N":
-                        ship += new Size(0, units);
+                        ship += Vectors[000] * units;
                         break;
 
                     case "S":
-                        ship += new Size(0, -units);
+                        ship += Vectors[180] * units;
                         break;
 
                     case "E":
-                        ship += new Size(units, 0);
+                        ship += Vectors[090] * units;
                         break;
 
                     case "W":
-                        ship += new Size(-units, 0);
+                        ship += Vectors[270] * units;
                         break;
 
                     default:
@@ -106,10 +108,6 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
 
                 switch (instruction[0..1])
                 {
-                    case "F":
-                        ship += new Size(units * waypoint.X, units * waypoint.Y);
-                        break;
-
                     case "L":
                         waypoint = units switch
                         {
@@ -130,20 +128,24 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
                         };
                         break;
 
+                    case "F":
+                        ship += new Size(waypoint) * units;
+                        break;
+
                     case "N":
-                        waypoint += new Size(0, units);
+                        waypoint += Vectors[000] * units;
                         break;
 
                     case "S":
-                        waypoint += new Size(0, -units);
+                        waypoint += Vectors[180] * units;
                         break;
 
                     case "E":
-                        waypoint += new Size(units, 0);
+                        waypoint += Vectors[090] * units;
                         break;
 
                     case "W":
-                        waypoint += new Size(-units, 0);
+                        waypoint += Vectors[270] * units;
                         break;
 
                     default:
