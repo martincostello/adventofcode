@@ -36,8 +36,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
         {
             var vectors = new Dictionary<int, (int x, int y)>()
             {
-                [0] = (0, 1),
-                [90] = (1, 0),
+                [000] = (0, 1),
+                [090] = (1, 0),
                 [180] = (0, -1),
                 [270] = (-1, 0),
             };
@@ -47,13 +47,13 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
 
             foreach (string instruction in instructions)
             {
-                int? moveHeading = null;
                 int units = ParseInt32(instruction[1..]);
 
                 switch (instruction[0..1])
                 {
                     case "F":
-                        moveHeading = heading;
+                        (int x, int y) = vectors[heading];
+                        ship += new Size(units * x, units * y);
                         break;
 
                     case "L":
@@ -65,29 +65,23 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
                         break;
 
                     case "N":
-                        moveHeading = 0;
+                        ship += new Size(0, units);
                         break;
 
                     case "S":
-                        moveHeading = 180;
+                        ship += new Size(0, -units);
                         break;
 
                     case "E":
-                        moveHeading = 90;
+                        ship += new Size(units, 0);
                         break;
 
                     case "W":
-                        moveHeading = 270;
+                        ship += new Size(-units, 0);
                         break;
 
                     default:
                         break;
-                }
-
-                if (moveHeading.HasValue)
-                {
-                    (int x, int y) = vectors[moveHeading.Value];
-                    ship += new Size(units * x, units * y);
                 }
             }
 
