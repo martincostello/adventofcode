@@ -20,10 +20,10 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
         /// </summary>
         private static readonly Dictionary<int, Size> Vectors = new ()
         {
-            [000] = new Size(0, 1),
-            [090] = new Size(1, 0),
-            [180] = new Size(0, -1),
-            [270] = new Size(-1, 0),
+            [Headings.North] = new Size(0, 1),
+            [Headings.South] = new Size(0, -1),
+            [Headings.East] = new Size(1, 0),
+            [Headings.West] = new Size(-1, 0),
         };
 
         /// <summary>
@@ -67,19 +67,19 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
                         break;
 
                     case "N":
-                        ship += Vectors[000] * units;
+                        ship += Vectors[Headings.North] * units;
                         break;
 
                     case "S":
-                        ship += Vectors[180] * units;
+                        ship += Vectors[Headings.South] * units;
                         break;
 
                     case "E":
-                        ship += Vectors[090] * units;
+                        ship += Vectors[Headings.East] * units;
                         break;
 
                     case "W":
-                        ship += Vectors[270] * units;
+                        ship += Vectors[Headings.West] * units;
                         break;
 
                     default:
@@ -133,19 +133,19 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
                         break;
 
                     case "N":
-                        waypoint += Vectors[000] * units;
+                        waypoint += Vectors[Headings.North] * units;
                         break;
 
                     case "S":
-                        waypoint += Vectors[180] * units;
+                        waypoint += Vectors[Headings.South] * units;
                         break;
 
                     case "E":
-                        waypoint += Vectors[090] * units;
+                        waypoint += Vectors[Headings.East] * units;
                         break;
 
                     case "W":
-                        waypoint += Vectors[270] * units;
+                        waypoint += Vectors[Headings.West] * units;
                         break;
 
                     default:
@@ -171,6 +171,32 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
             }
 
             return PuzzleResult.Create(ManhattanDistance, ManhattanDistanceWithWaypoint);
+        }
+
+        /// <summary>
+        /// A class containing headings for cardinal directions.
+        /// </summary>
+        private static class Headings
+        {
+            /// <summary>
+            /// The heading for north.
+            /// </summary>
+            internal const int North = 0;
+
+            /// <summary>
+            /// The heading for south.
+            /// </summary>
+            internal const int South = 180;
+
+            /// <summary>
+            /// The heading for east.
+            /// </summary>
+            internal const int East = 90;
+
+            /// <summary>
+            /// The heading for west.
+            /// </summary>
+            internal const int West = 270;
         }
     }
 }
