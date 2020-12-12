@@ -45,7 +45,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
         /// </returns>
         public static int GetDistanceTravelled(IEnumerable<string> instructions)
         {
-            int heading = 90;
+            int heading = Headings.East;
             var ship = Point.Empty;
 
             foreach (string instruction in instructions)
