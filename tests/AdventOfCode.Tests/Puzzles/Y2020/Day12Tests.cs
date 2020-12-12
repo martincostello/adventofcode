@@ -36,6 +36,19 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
         }
 
         [Fact]
+        public void Y2020_Day12_GetDistanceTravelledWithWaypoint_Returns_Correct_Value()
+        {
+            // Arrange
+            string[] values = { "F10", "N3", "F7", "R90", "F11" };
+
+            // Act
+            int actual = Day12.GetDistanceTravelledWithWaypoint(values);
+
+            // Assert
+            actual.ShouldBe(286);
+        }
+
+        [Fact]
         public async Task Y2020_Day12_Solve_Returns_Correct_Solution()
         {
             // Act
@@ -43,6 +56,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
 
             // Assert
             puzzle.ManhattanDistance.ShouldBe(439);
+            puzzle.ManhattanDistanceWithWaypoint.ShouldBe(12385);
         }
     }
 }
