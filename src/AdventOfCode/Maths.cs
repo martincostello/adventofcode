@@ -39,12 +39,17 @@ namespace MartinCostello.AdventOfCode
                     if (bits[j])
                     {
                         sum += values[j];
+
+                        if (sum > total)
+                        {
+                            break;
+                        }
                     }
                 }
 
                 if (sum == total)
                 {
-                    var combination = new List<long>();
+                    var combination = new List<long>(length);
 
                     for (int j = 0; j < length; j++)
                     {
