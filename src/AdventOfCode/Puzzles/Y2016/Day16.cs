@@ -20,9 +20,6 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         /// </summary>
         public string? Checksum { get; private set; }
 
-        /// <inheritdoc />
-        protected override int MinimumArguments => 2;
-
         /// <summary>
         /// Returns the checksum for random disk data generated for the
         /// specified initial state and disk size.

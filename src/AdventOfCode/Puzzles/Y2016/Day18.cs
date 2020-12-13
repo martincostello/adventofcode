@@ -17,9 +17,6 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         /// </summary>
         public int SafeTileCount { get; private set; }
 
-        /// <inheritdoc />
-        protected override int MinimumArguments => 1;
-
         /// <summary>
         /// Finds the number of safe tiles from the specified map.
         /// </summary>

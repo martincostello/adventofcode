@@ -45,9 +45,6 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
         /// </summary>
         public int FirstStorageLargerThanInput { get; private set; }
 
-        /// <inheritdoc />
-        protected override int MinimumArguments => 1;
-
         /// <summary>
         /// Computes how many steps are required to carry the data from the specified square identified all the way to the access port.
         /// </summary>

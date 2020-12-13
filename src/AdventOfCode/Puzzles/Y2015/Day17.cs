@@ -24,9 +24,6 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
         /// </summary>
         internal int CombinationsWithMinimumContainers { get; private set; }
 
-        /// <inheritdoc />
-        protected override int MinimumArguments => 1;
-
         /// <summary>
         /// Returns the combinations of containers that can be used to completely fill
         /// one or more containers completely with the specified total volume of eggnog.

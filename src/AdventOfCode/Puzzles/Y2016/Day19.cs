@@ -19,9 +19,6 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         /// </summary>
         public int ElfWithAllPresents { get; private set; }
 
-        /// <inheritdoc />
-        protected override int MinimumArguments => 1;
-
         /// <summary>
         /// Finds the elf that receives all of the presents.
         /// </summary>

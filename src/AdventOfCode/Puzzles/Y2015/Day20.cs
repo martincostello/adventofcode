@@ -18,9 +18,6 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
         /// </summary>
         internal int LowestHouseNumber { get; private set; }
 
-        /// <inheritdoc />
-        protected override int MinimumArguments => 1;
-
         /// <summary>
         /// Returns the lowest house number that gets the specified number of presents.
         /// </summary>

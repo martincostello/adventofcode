@@ -20,9 +20,6 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
         /// </summary>
         internal int Solution { get; private set; }
 
-        /// <inheritdoc />
-        protected override int MinimumArguments => 2;
-
         /// <summary>
         /// Gets the 'look-and-say' representation of a <see cref="string"/>.
         /// </summary>

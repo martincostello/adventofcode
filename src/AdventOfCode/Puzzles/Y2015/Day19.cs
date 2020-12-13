@@ -20,9 +20,6 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
         /// </summary>
         internal int Solution { get; private set; }
 
-        /// <inheritdoc />
-        protected override int MinimumArguments => 1;
-
         /// <summary>
         /// Gets the possible molecules that can be created from single step transformations of a molecule.
         /// </summary>
