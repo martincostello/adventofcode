@@ -28,9 +28,6 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         /// </summary>
         public int IndexOfKey64WithStretching { get; private set; }
 
-        /// <inheritdoc />
-        protected override int MinimumArguments => 1;
-
         /// <summary>
         /// Returns the index of the one-time pad key for the specified ordinal.
         /// </summary>

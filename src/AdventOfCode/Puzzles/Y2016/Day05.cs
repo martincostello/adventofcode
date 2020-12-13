@@ -28,9 +28,6 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         /// </summary>
         public string? PasswordWhenPositionIsIndicated { get; private set; }
 
-        /// <inheritdoc />
-        protected override int MinimumArguments => 1;
-
         /// <summary>
         /// Generates the password for the door with the specified Id.
         /// </summary>

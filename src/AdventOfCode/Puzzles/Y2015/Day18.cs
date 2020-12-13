@@ -31,9 +31,6 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
         /// </summary>
         internal int LightsIlluminated { get; private set; }
 
-        /// <inheritdoc />
-        protected override int MinimumArguments => 1;
-
         /// <summary>
         /// Returns the light configuration for the specified initial state after the specified number of steps.
         /// </summary>

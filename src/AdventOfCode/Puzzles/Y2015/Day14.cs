@@ -25,9 +25,6 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
         /// </summary>
         internal int MaximumReindeerPoints { get; private set; }
 
-        /// <inheritdoc />
-        protected override int MinimumArguments => 1;
-
         /// <summary>
         /// Gets the maximum distance travelled by the specified reindeer at the specified time index.
         /// </summary>

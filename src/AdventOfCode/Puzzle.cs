@@ -36,7 +36,7 @@ namespace MartinCostello.AdventOfCode
         /// <summary>
         /// Gets the minimum number of arguments required to solve the puzzle.
         /// </summary>
-        protected virtual int MinimumArguments
+        protected int MinimumArguments
             => Metadata()?.MinimumArguments ?? 0;
 
         /// <inheritdoc />

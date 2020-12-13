@@ -25,9 +25,6 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
         /// </summary>
         internal int NiceStringCount { get; private set; }
 
-        /// <inheritdoc />
-        protected override int MinimumArguments => 1;
-
         /// <summary>
         /// Returns whether the specified string is 'nice' using the first set of criteria.
         /// </summary>

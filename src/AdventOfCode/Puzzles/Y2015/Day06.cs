@@ -28,9 +28,6 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
         internal int TotalBrightness { get; private set; }
 
         /// <inheritdoc />
-        protected override int MinimumArguments => 1;
-
-        /// <inheritdoc />
         protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
         {
             int version = args[0] switch

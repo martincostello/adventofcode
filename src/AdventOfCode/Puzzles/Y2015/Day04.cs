@@ -23,9 +23,6 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
         /// </summary>
         internal int LowestZeroHash { get; private set; }
 
-        /// <inheritdoc />
-        protected override int MinimumArguments => 2;
-
         /// <summary>
         /// Gets the lowest positive integer which when combined with a secret key has an MD5 hash whose
         /// hexadecimal representation starts with the specified number of zeroes.

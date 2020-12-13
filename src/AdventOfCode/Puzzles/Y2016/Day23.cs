@@ -19,9 +19,6 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         public int SafeValue { get; private set; }
 
         /// <inheritdoc />
-        protected override int MinimumArguments => 1;
-
-        /// <inheritdoc />
         protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
         {
             int input = ParseInt32(args[0]);

@@ -21,9 +21,6 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         /// </summary>
         public string? ScrambledResult { get; private set; }
 
-        /// <inheritdoc />
-        protected override int MinimumArguments => 1;
-
         /// <summary>
         /// Scrambles the specified text.
         /// </summary>

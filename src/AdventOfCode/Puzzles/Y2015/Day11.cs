@@ -20,9 +20,6 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
         /// </summary>
         internal string? NextPassword { get; private set; }
 
-        /// <inheritdoc />
-        protected override int MinimumArguments => 1;
-
         /// <summary>
         /// Generates the next password that should be used based on a current password value.
         /// </summary>

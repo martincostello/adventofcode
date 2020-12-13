@@ -18,9 +18,6 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
         /// </summary>
         internal ulong Code { get; private set; }
 
-        /// <inheritdoc />
-        protected override int MinimumArguments => 2;
-
         /// <summary>
         /// Gets the code for the weather machine at the specified row and column.
         /// </summary>
