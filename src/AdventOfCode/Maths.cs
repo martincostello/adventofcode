@@ -121,6 +121,37 @@ namespace MartinCostello.AdventOfCode
         }
 
         /// <summary>
+        /// Returns the Greatest Common Divisor of the two specified numbers.
+        /// </summary>
+        /// <param name="a">The first number.</param>
+        /// <param name="b">The second number.</param>
+        /// <returns>
+        /// The greatest common divisor of <paramref name="a"/> and <paramref name="b"/>.
+        /// </returns>
+        internal static long GreatestCommonDivisor(long a, long b)
+        {
+            while (b != 0)
+            {
+                long x = b;
+                b = a % b;
+                a = x;
+            }
+
+            return a;
+        }
+
+        /// <summary>
+        /// Returns the Lowest Common Multiple of the two specified numbers.
+        /// </summary>
+        /// <param name="a">The first number.</param>
+        /// <param name="b">The second number.</param>
+        /// <returns>
+        /// The lowest common multiple of <paramref name="a"/> and <paramref name="b"/>.
+        /// </returns>
+        internal static long LowestCommonMultiple(long a, long b)
+            => a / GreatestCommonDivisor(a, b) * b;
+
+        /// <summary>
         /// Increments the value of the specified <see cref="BitArray"/>.
         /// </summary>
         /// <param name="value">The value to increment.</param>

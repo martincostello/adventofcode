@@ -35,6 +35,22 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
             actual.ShouldBe(295);
         }
 
+        [Theory]
+        [InlineData(new[] { "", "7,13,x,x,59,x,31,19" }, 1068781)]
+        [InlineData(new[] { "", "17,x,13,19" }, 3417)]
+        [InlineData(new[] { "", "67,7,59,61" }, 754018)]
+        [InlineData(new[] { "", "67,x,7,59,61" }, 779210)]
+        [InlineData(new[] { "", "67,7,x,59,61" }, 1261476)]
+        [InlineData(new[] { "", "1789,37,47,1889" }, 1202161486)]
+        public void Y2020_Day13_GetEarliestTimestamp_Returns_Correct_Value(string[] notes, long expected)
+        {
+            // Act
+            long actual = Day13.GetEarliestTimestamp(notes);
+
+            // Assert
+            actual.ShouldBe(expected);
+        }
+
         [Fact]
         public async Task Y2020_Day13_Solve_Returns_Correct_Solution()
         {
@@ -43,6 +59,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
 
             // Assert
             puzzle.BusWaitProduct.ShouldBe(2935);
+            puzzle.EarliestTimestamp.ShouldBe(836024966345345L);
         }
     }
 }

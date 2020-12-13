@@ -136,7 +136,7 @@ namespace MartinCostello.AdventOfCode.Api
         [InlineData(2020, 10, null, true, new object[] { 2775, 518344341716992L }, 0)]
         [InlineData(2020, 11, null, true, new object[] { 2108, 1897 }, 2)]
         [InlineData(2020, 12, null, true, new object[] { 439, 12385 }, 0)]
-        [InlineData(2020, 13, null, true, new object[] { 2935 }, 0)]
+        [InlineData(2020, 13, null, true, new object[] { 2935, 836024966345345L }, 0)]
         public async Task Can_Solve_Puzzle(
             int year,
             int day,
