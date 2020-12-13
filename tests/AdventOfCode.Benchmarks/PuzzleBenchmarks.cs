@@ -66,6 +66,7 @@ namespace MartinCostello.AdventOfCode.Benchmarks
             yield return new PuzzleInput<Puzzles.Y2017.Day11>();
             yield return new PuzzleInput<Puzzles.Y2017.Day12>();
             yield return new PuzzleInput<Puzzles.Y2017.Day13>();
+            yield return new PuzzleInput<Puzzles.Y2017.Day14>();
             yield return new PuzzleInput<Puzzles.Y2018.Day02>();
             yield return new PuzzleInput<Puzzles.Y2018.Day03>("312051");
             yield return new PuzzleInput<Puzzles.Y2018.Day04>();
