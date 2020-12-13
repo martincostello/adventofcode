@@ -22,17 +22,19 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
         {
         }
 
-        [Fact]
-        public static void Y2017_Day15_GetMatchingPairs_Returns_Correct_Solution()
+        [Theory]
+        [InlineData(1, 588)]
+        [InlineData(2, 309)]
+        public static void Y2017_Day15_GetMatchingPairs_Returns_Correct_Solution(int version, int expected)
         {
             // Arrange
             string[] seeds = { "Generator A starts with 65", "Generator B starts with 8921" };
 
             // Act
-            int actual = Day15.GetMatchingPairs(seeds);
+            int actual = Day15.GetMatchingPairs(seeds, version);
 
             // Assert
-            actual.ShouldBe(588);
+            actual.ShouldBe(expected);
         }
 
         [Fact]
@@ -42,7 +44,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
             var puzzle = await SolvePuzzleAsync<Day15>();
 
             // Assert
-            puzzle.FinalCount.ShouldBe(594);
+            puzzle.FinalCountV1.ShouldBe(594);
+            puzzle.FinalCountV2.ShouldBe(328);
         }
     }
 }

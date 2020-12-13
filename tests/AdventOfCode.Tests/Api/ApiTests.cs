@@ -111,7 +111,7 @@ namespace MartinCostello.AdventOfCode.Api
         [InlineData(2017, 12, null, true, new object[] { 113, 202 }, 0)]
         [InlineData(2017, 13, null, true, new object[] { 1612, 3907994 }, 0)]
         [InlineData(2017, 14, new[] { "hwlqcszp" }, false, new object[] { 8304 }, 0)]
-        [InlineData(2017, 15, null, true, new object[] { 594 }, 0)]
+        [InlineData(2017, 15, null, true, new object[] { 594, 328 }, 0)]
         [InlineData(2018, 01, null, true, new object[] { 543, 621 }, 0)]
         [InlineData(2018, 02, null, true, new object[] { 5880, "tiwcdpbseqhxryfmgkvjujvza" }, 0)]
         [InlineData(2018, 03, null, true, new object[] { 100595, "415" }, 0)]

@@ -14,36 +14,85 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
     public sealed class Day15 : Puzzle
     {
         /// <summary>
-        /// Gets the judge's final count.
+        /// Gets the judge's final count using version 1.
         /// </summary>
-        public int FinalCount { get; private set; }
+        public int FinalCountV1 { get; private set; }
+
+        /// <summary>
+        /// Gets the judge's final count using version 2.
+        /// </summary>
+        public int FinalCountV2 { get; private set; }
 
         /// <summary>
         /// Gets the number of values whose lowest 16 bits match when a sequence is generated 40,000,000 times.
         /// </summary>
         /// <param name="seeds">The seed values for the generator.</param>
+        /// <param name="version">The version of the generator logic to use.</param>
         /// <returns>
         /// The number of matching pairs from the generated sequences.
         /// </returns>
-        public static int GetMatchingPairs(IList<string> seeds)
+        public static int GetMatchingPairs(IList<string> seeds, int version)
         {
             long a = ParseInt64(seeds[0].Split(' ')[^1]);
             long b = ParseInt64(seeds[1].Split(' ')[^1]);
 
-            int result = 0;
+            var valuesA = new Queue<long>();
+            var valuesB = new Queue<long>();
 
-            for (int i = 0; i < 40_000_000; i++)
+            int limit = version switch
+            {
+                1 => 40_000_000,
+                _ => 5_000_000,
+            };
+
+            int generated = 0;
+            int pairs = 0;
+
+            while (generated < limit)
             {
                 a = GenerateA(a);
                 b = GenerateB(b);
 
-                if ((a & 0xffff) == (b & 0xffff))
+                if (version == 1)
                 {
-                    result++;
+                    if (IsPair(a, b))
+                    {
+                        pairs++;
+                    }
+
+                    generated++;
+                }
+                else
+                {
+                    if (a % 4 == 0)
+                    {
+                        valuesA.Enqueue(a);
+                    }
+
+                    if (b % 8 == 0)
+                    {
+                        valuesB.Enqueue(b);
+                    }
+
+                    if (valuesA.Count > 0 && valuesB.Count > 0)
+                    {
+                        long comparandA = valuesA.Dequeue();
+                        long comparandB = valuesB.Dequeue();
+
+                        if (IsPair(comparandA, comparandB))
+                        {
+                            pairs++;
+                        }
+
+                        generated++;
+                    }
                 }
             }
 
-            return result;
+            return pairs;
+
+            static bool IsPair(long first, long second)
+                => (first & 0xffff) == (second & 0xffff);
 
             static long GenerateA(long previous)
             {
@@ -63,14 +112,16 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017
         {
             IList<string> input = await ReadResourceAsLinesAsync();
 
-            FinalCount = GetMatchingPairs(input);
+            FinalCountV1 = GetMatchingPairs(input, version: 1);
+            FinalCountV2 = GetMatchingPairs(input, version: 2);
 
             if (Verbose)
             {
-                Logger.WriteLine($"The judge's final count is {FinalCount:N0}.");
+                Logger.WriteLine($"The judge's final count using version 1 is {FinalCountV1:N0}.");
+                Logger.WriteLine($"The judge's final count using version 2 is {FinalCountV2:N0}.");
             }
 
-            return PuzzleResult.Create(FinalCount);
+            return PuzzleResult.Create(FinalCountV1, FinalCountV2);
         }
     }
 }
