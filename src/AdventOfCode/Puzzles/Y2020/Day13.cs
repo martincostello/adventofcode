@@ -72,6 +72,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
         public static long GetEarliestTimestamp(IList<string> notes)
         {
             // Adapted from https://github.com/RaczeQ/AdventOfCode2020/blob/master/Day13/SecondSolver.cs
+            // Uses the Chinese Remainder Theorem: https://en.wikipedia.org/wiki/Chinese_remainder_theorem
             var buses = notes[1]
                 .Split(',')
                 .Select((id, offset) => (id, offset))
