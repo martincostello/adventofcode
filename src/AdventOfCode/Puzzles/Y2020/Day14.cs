@@ -100,11 +100,10 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
                         for (int i = 0; i < floatingIndexes.Count; i++)
                         {
                             long maskedAddress = address | onesMask;
-                            maskedAddress &= ~(1L << floatingIndexes[i]);
 
                             for (int j = 0; j < floatingIndexes.Count; j++)
                             {
-                                addresses.Add(maskedAddress);
+                                addresses.Add(maskedAddress &= ~(1L << floatingIndexes[i]));
                                 addresses.Add(maskedAddress |= 1L << floatingIndexes[j]);
                                 addresses.Add(maskedAddress |= 1L << floatingIndexes[i]);
                                 addresses.Add(maskedAddress &= ~(1L << floatingIndexes[j]));
