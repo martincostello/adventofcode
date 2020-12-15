@@ -40,7 +40,9 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
             char[] splitChars = { '[', ']', '=' };
             StringSplitOptions splitOptions = StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries;
 
+            int floatingBits = 0;
             string mask = string.Empty;
+
             var memory = new Dictionary<long, long>(program.Count);
 
             foreach (string instruction in program)
@@ -50,6 +52,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
                     // Flip the mask to match the endianness of BitArray
                     string maskValue = instruction[MaskPrefix.Length..];
                     mask = new string(maskValue.Reverse().ToArray());
+                    floatingBits = mask.Count((p) => p == 'X');
                 }
                 else
                 {
@@ -77,42 +80,37 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
                     }
                     else
                     {
-                        long onesMask = 0;
+                        long limit = (long)Math.Pow(2, floatingBits);
 
-                        var floatingIndexes = new List<int>();
-
-                        for (int i = 0; i < mask.Length; i++)
+                        for (long i = 0; i < limit; i++)
                         {
-                            switch (mask[i])
+                            long baseAddress = address;
+                            int offset = 0;
+
+                            for (int bit = 0; bit < mask.Length; bit++)
                             {
-                                case '1':
-                                    onesMask |= 1L << i;
-                                    break;
+                                char ch = mask[bit];
 
-                                case 'X':
-                                    floatingIndexes.Add(i);
-                                    break;
+                                if (ch == '1')
+                                {
+                                    baseAddress |= 1L << bit;
+                                }
+                                else if (ch == 'X')
+                                {
+                                    if (((i >> offset) & 1) == 0)
+                                    {
+                                        baseAddress &= ~(1L << bit);
+                                    }
+                                    else
+                                    {
+                                        baseAddress |= 1L << bit;
+                                    }
+
+                                    offset++;
+                                }
                             }
-                        }
 
-                        var addresses = new HashSet<long>();
-
-                        for (int i = 0; i < floatingIndexes.Count; i++)
-                        {
-                            long maskedAddress = address | onesMask;
-
-                            for (int j = 0; j < floatingIndexes.Count; j++)
-                            {
-                                addresses.Add(maskedAddress &= ~(1L << floatingIndexes[i]));
-                                addresses.Add(maskedAddress |= 1L << floatingIndexes[j]);
-                                addresses.Add(maskedAddress |= 1L << floatingIndexes[i]);
-                                addresses.Add(maskedAddress &= ~(1L << floatingIndexes[j]));
-                            }
-                        }
-
-                        foreach (int index in addresses)
-                        {
-                            memory[index] = value;
+                            memory[baseAddress] = value;
                         }
                     }
                 }
