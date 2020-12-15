@@ -68,8 +68,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
 
             // Assert
             puzzle.SumOfRemainingValuesV1.ShouldBe(9967721333886L);
-            puzzle.SumOfRemainingValuesV2.ShouldBeGreaterThan(696373757011L);
-            puzzle.SumOfRemainingValuesV2.ShouldNotBe(702519779853L);
+            puzzle.SumOfRemainingValuesV2.ShouldBe(4355897790573L);
         }
     }
 }
