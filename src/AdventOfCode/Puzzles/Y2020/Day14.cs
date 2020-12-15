@@ -4,8 +4,8 @@
 namespace MartinCostello.AdventOfCode.Puzzles.Y2020
 {
     using System;
-    using System.Collections;
     using System.Collections.Generic;
+    using System.Linq;
     using System.Threading;
     using System.Threading.Tasks;
 
@@ -16,79 +16,110 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
     public sealed class Day14 : Puzzle
     {
         /// <summary>
-        /// Gets the sum of all values left in memory after processing completes.
+        /// Gets the sum of all values left in memory after processing completes using version 1.
         /// </summary>
-        public long SumOfRemainingValues { get; private set; }
+        public long SumOfRemainingValuesV1 { get; private set; }
+
+        /// <summary>
+        /// Gets the sum of all values left in memory after processing completes using version 2.
+        /// </summary>
+        public long SumOfRemainingValuesV2 { get; private set; }
 
         /// <summary>
         /// Runs the specified program.
         /// </summary>
         /// <param name="program">The instructions of the program to run.</param>
+        /// <param name="version">The emulator version to use.</param>
         /// <returns>
         /// The sum of the values in memory once the program has been run.
         /// </returns>
-        public static long RunProgram(IList<string> program)
+        public static long RunProgram(IList<string> program, int version)
         {
-            const int Bits = 36;
             const string MaskPrefix = "mask = ";
 
             char[] splitChars = { '[', ']', '=' };
             StringSplitOptions splitOptions = StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries;
 
-            bool?[] mask = new bool?[Bits];
-            var memory = new Dictionary<long, BitArray>(program.Count);
+            string mask = string.Empty;
+            var memory = new Dictionary<long, long>(program.Count);
 
             foreach (string instruction in program)
             {
                 if (instruction.StartsWith(MaskPrefix, StringComparison.Ordinal))
                 {
-                    string maskValue = instruction[MaskPrefix.Length..];
-
                     // Flip the mask to match the endianness of BitArray
-                    for (int i = 0; i < maskValue.Length; i++)
-                    {
-                        mask[i] = maskValue[mask.Length - i - 1] switch
-                        {
-                            '0' => false,
-                            '1' => true,
-                            _ => null,
-                        };
-                    }
+                    string maskValue = instruction[MaskPrefix.Length..];
+                    mask = new string(maskValue.Reverse().ToArray());
                 }
                 else
                 {
-                    (long address, long value36) = DecodeInstruction(instruction);
+                    (long address, long value) = DecodeInstruction(instruction);
 
-                    byte[] valueBytes = BitConverter.GetBytes(value36);
-                    var value = new BitArray(valueBytes);
-
-                    for (int i = 0; i < mask.Length; i++)
+                    if (version == 1)
                     {
-                        bool? maskBit = mask[i];
+                        long maskedValue = value;
 
-                        if (maskBit.HasValue)
+                        for (int i = 0; i < mask.Length; i++)
                         {
-                            value[i] = maskBit.Value;
+                            switch (mask[i])
+                            {
+                                case '0':
+                                    maskedValue &= ~(1L << i);
+                                    break;
+
+                                case '1':
+                                    maskedValue |= 1L << i;
+                                    break;
+                            }
+                        }
+
+                        memory[address] = maskedValue;
+                    }
+                    else
+                    {
+                        long onesMask = 0;
+
+                        var floatingIndexes = new List<int>();
+
+                        for (int i = 0; i < mask.Length; i++)
+                        {
+                            switch (mask[i])
+                            {
+                                case '1':
+                                    onesMask |= 1L << i;
+                                    break;
+
+                                case 'X':
+                                    floatingIndexes.Add(i);
+                                    break;
+                            }
+                        }
+
+                        var addresses = new HashSet<long>();
+
+                        for (int i = 0; i < floatingIndexes.Count; i++)
+                        {
+                            long maskedAddress = address | onesMask;
+                            maskedAddress &= ~(1L << floatingIndexes[i]);
+
+                            for (int j = 0; j < floatingIndexes.Count; j++)
+                            {
+                                addresses.Add(maskedAddress);
+                                addresses.Add(maskedAddress |= 1L << floatingIndexes[j]);
+                                addresses.Add(maskedAddress |= 1L << floatingIndexes[i]);
+                                addresses.Add(maskedAddress &= ~(1L << floatingIndexes[j]));
+                            }
+                        }
+
+                        foreach (int index in addresses)
+                        {
+                            memory[index] = value;
                         }
                     }
-
-                    memory[address] = value;
                 }
             }
 
-            byte[] buffer = new byte[8];
-            long sum = 0;
-
-            foreach (BitArray value in memory.Values)
-            {
-                value.CopyTo(buffer, 0);
-
-                sum += BitConverter.ToInt64(buffer, 0);
-
-                Array.Clear(buffer, 0, buffer.Length);
-            }
-
-            return sum;
+            return memory.Values.Sum();
 
             (long address, long value) DecodeInstruction(string instruction)
             {
@@ -102,14 +133,16 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
         {
             IList<string> values = await ReadResourceAsLinesAsync();
 
-            SumOfRemainingValues = RunProgram(values);
+            SumOfRemainingValuesV1 = RunProgram(values, version: 1);
+            SumOfRemainingValuesV2 = RunProgram(values, version: 2);
 
             if (Verbose)
             {
-                Logger.WriteLine("The sum of all values left in memory is {0}.", SumOfRemainingValues);
+                Logger.WriteLine("The sum of all values left in memory using version 1 is {0}.", SumOfRemainingValuesV1);
+                Logger.WriteLine("The sum of all values left in memory using version 2 is {0}.", SumOfRemainingValuesV2);
             }
 
-            return PuzzleResult.Create(SumOfRemainingValues);
+            return PuzzleResult.Create(SumOfRemainingValuesV1, SumOfRemainingValuesV2);
         }
     }
 }

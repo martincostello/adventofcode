@@ -23,7 +23,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
         }
 
         [Fact]
-        public void Y2020_Day14_RunProgram_Returns_Correct_Value()
+        public void Y2020_Day14_RunProgram_Returns_Correct_Value_V1()
         {
             // Arrange
             string[] program = new[]
@@ -35,10 +35,29 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
             };
 
             // Act
-            long actual = Day14.RunProgram(program);
+            long actual = Day14.RunProgram(program, version: 1);
 
             // Assert
             actual.ShouldBe(165);
+        }
+
+        [Fact]
+        public void Y2020_Day14_RunProgram_Returns_Correct_Value_V2()
+        {
+            // Arrange
+            string[] program = new[]
+            {
+                "mask = 000000000000000000000000000000X1001X",
+                "mem[42] = 100",
+                "mask = 00000000000000000000000000000000X0XX",
+                "mem[26] = 1",
+            };
+
+            // Act
+            long actual = Day14.RunProgram(program, version: 2);
+
+            // Assert
+            actual.ShouldBe(208);
         }
 
         [Fact]
@@ -48,7 +67,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
             var puzzle = await SolvePuzzleAsync<Day14>();
 
             // Assert
-            puzzle.SumOfRemainingValues.ShouldBe(9967721333886L);
+            puzzle.SumOfRemainingValuesV1.ShouldBe(9967721333886L);
+            puzzle.SumOfRemainingValuesV2.ShouldBeGreaterThan(696373757011L);
         }
     }
 }
