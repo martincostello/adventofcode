@@ -20,6 +20,11 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
         public int Number2020 { get; private set; }
 
         /// <summary>
+        /// Gets the 30000000th number spoken.
+        /// </summary>
+        public int Number30000000 { get; private set; }
+
+        /// <summary>
         /// Gets the value of the specified number to be spoken.
         /// </summary>
         /// <param name="startingNumbers">The starting numbers for the game.</param>
@@ -79,13 +84,15 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
                 .ToList();
 
             Number2020 = GetSpokenNumber(startingNumbers, 2020);
+            Number30000000 = GetSpokenNumber(startingNumbers, 30000000);
 
             if (Verbose)
             {
                 Logger.WriteLine("The 2020th number spoken is {0}.", Number2020);
+                Logger.WriteLine("The 30000000th number spoken is {0}.", Number30000000);
             }
 
-            return PuzzleResult.Create(Number2020);
+            return PuzzleResult.Create(Number2020, Number30000000);
         }
     }
 }
