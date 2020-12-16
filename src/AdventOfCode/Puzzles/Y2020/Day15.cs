@@ -46,11 +46,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
 
             for (int i = startingNumbers.Count; i < number; i++)
             {
-                if (!numbers.TryGetValue(lastSpoken, out IList<int>? times))
-                {
-                    lastSpoken = 0;
-                }
-                else if (times.Count == 1)
+                if (!numbers.TryGetValue(lastSpoken, out IList<int>? times) || times.Count == 1)
                 {
                     lastSpoken = 0;
                 }
