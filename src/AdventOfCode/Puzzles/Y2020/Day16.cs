@@ -21,21 +21,26 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
         public int ScanningErrorRate { get; private set; }
 
         /// <summary>
-        /// Gets the product of a number of values from the specified set of values
-        /// that which when added together equal 2020.
+        /// Gets the product of the departure fields on your ticket.
         /// </summary>
-        /// <param name="notes">The values to find the 2020 sum's product from.</param>
+        public long DepartureProduct { get; private set; }
+
+        /// <summary>
+        /// Scans the tickets associated with the specified notes.
+        /// </summary>
+        /// <param name="notes">The notes containing the ticket information.</param>
         /// <returns>
-        /// The ticket scanning error rate.
+        /// The ticket scanning error rate and your parsed ticket.
         /// </returns>
-        public static int GetScanningErrorRate(IList<string> notes)
+        public static (int errorRate, IDictionary<string, int> ticket) ScanTickets(IList<string> notes)
         {
             var rules = new Dictionary<string, ICollection<Range>>();
-            var tickets = new List<IList<int>>();
+            var allTickets = new List<IList<int>>();
 
             int indexOfFirstTicket = notes.IndexOf("your ticket:") + 1;
             int indexOfSecondTicket = notes.IndexOf("nearby tickets:") + 1;
 
+            // Parse the rules
             foreach (string line in notes.Take(indexOfFirstTicket - 2))
             {
                 string[] split = line.Split(':');
@@ -59,6 +64,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
                 rules[name] = ranges;
             }
 
+            // Parse the nearby tickets
             foreach (string line in notes.Skip(indexOfSecondTicket).Prepend(notes[indexOfFirstTicket]))
             {
                 int[] ticket = line
@@ -66,12 +72,14 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
                     .Select((p) => ParseInt32(p))
                     .ToArray();
 
-                tickets.Add(ticket);
+                allTickets.Add(ticket);
             }
 
             int invalidValues = 0;
+            var validTickets = new List<IList<int>>();
 
-            foreach (IList<int> ticket in tickets.Skip(1))
+            // Find the valid tickets
+            foreach (IList<int> ticket in allTickets.Skip(1))
             {
                 bool isValid = true;
 
@@ -81,7 +89,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
 
                     foreach (ICollection<Range> ranges in rules.Values)
                     {
-                        isValid = ranges.Any((p) => value >= p.Start.Value && value <= p.End.Value);
+                        isValid = ranges.Any((p) => InRange(value, p));
 
                         if (isValid)
                         {
@@ -94,9 +102,83 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
                         invalidValues += value;
                     }
                 }
+
+                if (isValid)
+                {
+                    validTickets.Add(ticket);
+                }
             }
 
-            return invalidValues;
+            // Store indexes where each field could be located
+            var possibleIndexes = new Dictionary<string, List<int>>();
+            var allIndexes = Enumerable.Range(0, allTickets[0].Count).ToList();
+
+            foreach (string key in rules.Keys)
+            {
+                possibleIndexes[key] = new List<int>(allIndexes);
+            }
+
+            var indexes = new Dictionary<int, string>();
+
+            while (possibleIndexes.Values.Any((p) => p.Count > 1))
+            {
+                // For any fields where the index is known, remove it from all the other possibilities
+                foreach (var index in possibleIndexes.Where((p) => p.Value.Count == 1))
+                {
+                    int foundIndex = index.Value[0];
+
+                    indexes[foundIndex] = index.Key;
+
+                    foreach (List<int> other in possibleIndexes.Values.Where((p) => p.Count > 1))
+                    {
+                        other.Remove(foundIndex);
+                    }
+                }
+
+                // No need to iterate through the rules for fields we know the index for
+                foreach (var rule in rules.Where((p) => possibleIndexes[p.Key].Count > 1))
+                {
+                    // Check if all the values for this index fit the current rule
+                    for (int index = 0; index < possibleIndexes.Count; index++)
+                    {
+                        bool areAllValid = true;
+
+                        for (int j = 0; j < validTickets.Count; j++)
+                        {
+                            IList<int> ticket = validTickets[j];
+                            int value = ticket[index];
+
+                            bool isInRange = rule.Value.Any((p) => InRange(value, p));
+
+                            if (!isInRange)
+                            {
+                                // This index cannot be the field associated with this rule
+                                areAllValid = false;
+                                break;
+                            }
+                        }
+
+                        if (!areAllValid)
+                        {
+                            // This index cannot be for the field associated with this rule
+                            possibleIndexes[rule.Key].Remove(index);
+                        }
+                    }
+                }
+            }
+
+            // Build up the ticket from the indexes found
+            var yourTicket = new Dictionary<string, int>();
+
+            foreach (var index in indexes)
+            {
+                yourTicket[index.Value] = allTickets[0][index.Key];
+            }
+
+            return (invalidValues, yourTicket);
+
+            static bool InRange(int value, Range range)
+                => value >= range.Start.Value && value <= range.End.Value;
         }
 
         /// <inheritdoc />
@@ -104,14 +186,22 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
         {
             IList<string> values = await ReadResourceAsLinesAsync();
 
-            ScanningErrorRate = GetScanningErrorRate(values);
+            (int scanningErrorRate, var ticket) = ScanTickets(values);
+
+            ScanningErrorRate = scanningErrorRate;
+
+            DepartureProduct = ticket
+                .Where((p) => p.Key.StartsWith("departure", StringComparison.Ordinal))
+                .Select((p) => (long)p.Value)
+                .Aggregate((x, y) => x * y);
 
             if (Verbose)
             {
                 Logger.WriteLine("The ticket scanning error rate is {0}.", ScanningErrorRate);
+                Logger.WriteLine("The product of the ticket fields starting with 'departure' is {0}.", DepartureProduct);
             }
 
-            return PuzzleResult.Create(ScanningErrorRate);
+            return PuzzleResult.Create(ScanningErrorRate, DepartureProduct);
         }
     }
 }

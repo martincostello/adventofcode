@@ -3,6 +3,7 @@
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2020
 {
+    using System.Collections.Generic;
     using System.Threading.Tasks;
     using Shouldly;
     using Xunit;
@@ -23,7 +24,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
         }
 
         [Fact]
-        public void Y2020_Day16_GetScanningErrorRate_Returns_Correct_Value()
+        public void Y2020_Day16_ScanTickets_Returns_Correct_Error_Rate()
         {
             // Arrange
             string[] notes = new[]
@@ -43,10 +44,39 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
             };
 
             // Act
-            int actual = Day16.GetScanningErrorRate(notes);
+            (int actual, _) = Day16.ScanTickets(notes);
 
             // Assert
             actual.ShouldBe(71);
+        }
+
+        [Fact]
+        public void Y2020_Day16_ScanTickets_Returns_Correct_Ticket()
+        {
+            // Arrange
+            string[] notes = new[]
+            {
+                "class: 0-1 or 4-19",
+                "row: 0-5 or 8-19",
+                "seat: 0-13 or 16-19",
+                string.Empty,
+                "your ticket:",
+                "11,12,13",
+                string.Empty,
+                "nearby tickets:",
+                "3,9,18",
+                "15,1,5",
+                "5,14,9",
+            };
+
+            // Act
+            (_, IDictionary<string, int> actual) = Day16.ScanTickets(notes);
+
+            // Assert
+            actual.ShouldNotBeNull();
+            actual.ShouldContainKeyAndValue("class", 12);
+            actual.ShouldContainKeyAndValue("row", 11);
+            actual.ShouldContainKeyAndValue("seat", 13);
         }
 
         [Fact]
@@ -57,6 +87,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
 
             // Assert
             puzzle.ScanningErrorRate.ShouldBe(21071);
+            puzzle.DepartureProduct.ShouldBe(3429967441937L);
         }
     }
 }
