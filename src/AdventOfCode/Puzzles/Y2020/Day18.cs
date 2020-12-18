@@ -39,7 +39,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
         {
             return expressions.Sum((p) => Evaluate(p, version));
 
-            static long Evaluate(string expression, int version)
+            static long Evaluate(ReadOnlySpan<char> expression, int version)
             {
                 var tokens = new List<string>();
                 var current = new StringBuilder();
@@ -87,7 +87,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
                             }
                         }
 
-                        string subexpression = expression.Substring(i + 1, end - i - 1);
+                        var subexpression = expression.Slice(i + 1, end - i - 1);
 
                         tokens.Add(Evaluate(subexpression, version).ToString(CultureInfo.InvariantCulture));
                         i += end - i;
