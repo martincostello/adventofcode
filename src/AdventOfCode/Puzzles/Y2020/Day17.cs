@@ -231,37 +231,78 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
         /// </returns>
         private static string WriteState(IDictionary<Point, char> states, ILogger? logger)
         {
-            int maxHeight = states.Max((p) => p.Key.Y);
-            int maxWidth = states.Max((p) => p.Key.X);
-            int maxDepth = states.Max((p) => p.Key.Z);
-            int minDepth = -maxDepth;
-
             var builder = new StringBuilder();
 
-            for (int z = minDepth; z <= maxDepth; z++)
+            int maxY = states.Max((p) => p.Key.Y);
+            int maxX = states.Max((p) => p.Key.X);
+            int maxZ = states.Max((p) => p.Key.Z);
+            int minZ = -maxZ;
+
+            bool is4D = states.Keys.First().W.HasValue;
+
+            if (is4D)
             {
-                builder.Append("z=")
-                       .Append(z)
-                       .AppendLine();
+                int maxW = states.Max((p) => p.Key.W!.Value);
+                int minW = -maxW;
 
-                for (int y = 0; y <= maxHeight; y++)
+                for (int w = minW; w <= maxW; w++)
                 {
-                    for (int x = 0; x <= maxWidth; x++)
+                    for (int z = minZ; z <= maxZ; z++)
                     {
-                        var point = new Point(x, y, z);
+                        builder.Append("z=")
+                               .Append(z)
+                               .Append(", w=")
+                               .Append(w)
+                               .AppendLine();
 
-                        if (!states.TryGetValue(point, out char state))
+                        for (int y = 0; y <= maxY; y++)
                         {
-                            state = Inactive;
+                            for (int x = 0; x <= maxX; x++)
+                            {
+                                var point = new Point(x, y, z, w);
+
+                                if (!states.TryGetValue(point, out char state))
+                                {
+                                    state = Inactive;
+                                }
+
+                                builder.Append(state);
+                            }
+
+                            builder.AppendLine();
                         }
 
-                        builder.Append(state);
+                        builder.AppendLine();
+                    }
+                }
+            }
+            else
+            {
+                for (int z = minZ; z <= maxZ; z++)
+                {
+                    builder.Append("z=")
+                           .Append(z)
+                           .AppendLine();
+
+                    for (int y = 0; y <= maxY; y++)
+                    {
+                        for (int x = 0; x <= maxX; x++)
+                        {
+                            var point = new Point(x, y, z);
+
+                            if (!states.TryGetValue(point, out char state))
+                            {
+                                state = Inactive;
+                            }
+
+                            builder.Append(state);
+                        }
+
+                        builder.AppendLine();
                     }
 
                     builder.AppendLine();
                 }
-
-                builder.AppendLine();
             }
 
             string visualization = builder.ToString();
