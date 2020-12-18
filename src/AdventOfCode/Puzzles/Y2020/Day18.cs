@@ -124,7 +124,6 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
                 }
                 else
                 {
-                    long addition = ParseInt64(tokens[0]);
                     var products = new List<long>();
 
                     for (int i = 1; i < tokens.Count; i += 2)
@@ -133,16 +132,14 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
 
                         if (string.Equals("+", token, StringComparison.Ordinal))
                         {
-                            addition += ParseInt64(tokens[i + 1]);
+                            result += ParseInt64(tokens[i + 1]);
                         }
                         else if (string.Equals("*", token, StringComparison.Ordinal))
                         {
-                            products.Add(addition);
-                            addition = ParseInt64(tokens[i + 1]);
+                            products.Add(result);
+                            result = ParseInt64(tokens[i + 1]);
                         }
                     }
-
-                    result = addition;
 
                     foreach (long i in products)
                     {
