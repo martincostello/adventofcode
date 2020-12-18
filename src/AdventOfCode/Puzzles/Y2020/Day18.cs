@@ -18,22 +18,28 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
     public sealed class Day18 : Puzzle
     {
         /// <summary>
-        /// Gets the sum of evaluating the expression(s).
+        /// Gets the sum of evaluating the expression(s) using V1 of the precedence rules.
         /// </summary>
-        public long Sum { get; private set; }
+        public long SumV1 { get; private set; }
+
+        /// <summary>
+        /// Gets the sum of evaluating the expression(s) using V2 of the precedence rules.
+        /// </summary>
+        public long SumV2 { get; private set; }
 
         /// <summary>
         /// Evaluates the result of the specified expression(s) and returns the sum.
         /// </summary>
         /// <param name="expressions">The expression(s) to evaluate.</param>
+        /// <param name="version">The version of the precedence rules to use.</param>
         /// <returns>
         /// The sum of from evaluating the expression(s).
         /// </returns>
-        public static long Evaluate(IEnumerable<string> expressions)
+        public static long Evaluate(IEnumerable<string> expressions, int version)
         {
-            return expressions.Sum(Evaluate);
+            return expressions.Sum((p) => Evaluate(p, version));
 
-            static long Evaluate(string expression)
+            static long Evaluate(string expression, int version)
             {
                 var tokens = new List<string>();
                 var current = new StringBuilder();
@@ -83,7 +89,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
 
                         string subexpression = expression.Substring(i + 1, end - i - 1);
 
-                        tokens.Add(Evaluate(subexpression).ToString(CultureInfo.InvariantCulture));
+                        tokens.Add(Evaluate(subexpression, version).ToString(CultureInfo.InvariantCulture));
                         i += end - i;
                     }
                     else
@@ -100,17 +106,47 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
 
                 long result = ParseInt64(tokens[0]);
 
-                for (int i = 1; i < tokens.Count; i += 2)
+                if (version == 1)
                 {
-                    string token = tokens[i];
+                    for (int i = 1; i < tokens.Count; i += 2)
+                    {
+                        string token = tokens[i];
 
-                    if (string.Equals("+", token, StringComparison.Ordinal))
-                    {
-                        result += ParseInt64(tokens[i + 1]);
+                        if (string.Equals("+", token, StringComparison.Ordinal))
+                        {
+                            result += ParseInt64(tokens[i + 1]);
+                        }
+                        else if (string.Equals("*", token, StringComparison.Ordinal))
+                        {
+                            result *= ParseInt64(tokens[i + 1]);
+                        }
                     }
-                    else if (string.Equals("*", token, StringComparison.Ordinal))
+                }
+                else
+                {
+                    long addition = ParseInt64(tokens[0]);
+                    var products = new List<long>();
+
+                    for (int i = 1; i < tokens.Count; i += 2)
                     {
-                        result *= ParseInt64(tokens[i + 1]);
+                        string token = tokens[i];
+
+                        if (string.Equals("+", token, StringComparison.Ordinal))
+                        {
+                            addition += ParseInt64(tokens[i + 1]);
+                        }
+                        else if (string.Equals("*", token, StringComparison.Ordinal))
+                        {
+                            products.Add(addition);
+                            addition = ParseInt64(tokens[i + 1]);
+                        }
+                    }
+
+                    result = addition;
+
+                    foreach (long i in products)
+                    {
+                        result *= i;
                     }
                 }
 
@@ -123,14 +159,16 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
         {
             IList<string> expressions = await ReadResourceAsLinesAsync();
 
-            Sum = Evaluate(expressions);
+            SumV1 = Evaluate(expressions, version: 1);
+            SumV2 = Evaluate(expressions, version: 2);
 
             if (Verbose)
             {
-                Logger.WriteLine("The sum of the evaluated expressions is {0}.", Sum);
+                Logger.WriteLine("The sum of the evaluated expressions with the first precedence rules is {0}.", SumV1);
+                Logger.WriteLine("The sum of the evaluated expressions with the second precedence rules is {0}.", SumV2);
             }
 
-            return PuzzleResult.Create(Sum);
+            return PuzzleResult.Create(SumV1, SumV2);
         }
     }
 }
