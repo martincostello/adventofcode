@@ -138,22 +138,18 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
 
             foreach (var point in states)
             {
-                char currentState = point.Value;
+                char state = point.Value;
 
                 int count = CountActiveCubes(point.Key, states);
 
-                char nextState = currentState;
-
-                if (currentState == Active && count != 2 && count != 3)
+                if (state == Active && count != 2 && count != 3)
                 {
-                    nextState = Inactive;
+                    updated[point.Key] = Inactive;
                 }
-                else if (currentState == Inactive && count == 3)
+                else if (state == Inactive && count == 3)
                 {
-                    nextState = Active;
+                    updated[point.Key] = Active;
                 }
-
-                updated[point.Key] = nextState;
             }
 
             return updated;
