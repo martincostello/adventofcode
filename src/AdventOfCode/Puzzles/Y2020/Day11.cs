@@ -152,14 +152,18 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
             {
                 int count = 0;
 
-                count += IsAdjacentSeatOccupied(x, y, version, (-1, -1));
-                count += IsAdjacentSeatOccupied(x, y, version, (0, -1));
-                count += IsAdjacentSeatOccupied(x, y, version, (1, -1));
-                count += IsAdjacentSeatOccupied(x, y, version, (-1, 0));
-                count += IsAdjacentSeatOccupied(x, y, version, (1, 0));
-                count += IsAdjacentSeatOccupied(x, y, version, (-1, 1));
-                count += IsAdjacentSeatOccupied(x, y, version, (0, 1));
-                count += IsAdjacentSeatOccupied(x, y, version, (1, 1));
+                for (int i = -1; i <= 1; i++)
+                {
+                    for (int j = -1; j <= 1; j++)
+                    {
+                        if (i == 0 && j == 0)
+                        {
+                            continue;
+                        }
+
+                        count += IsAdjacentSeatOccupied(x, y, version, (i, j));
+                    }
+                }
 
                 return count;
             }
