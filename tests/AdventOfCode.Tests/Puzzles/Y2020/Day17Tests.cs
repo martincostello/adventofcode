@@ -23,12 +23,16 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
         }
 
         [Theory]
-        [InlineData(0, 5)]
-        [InlineData(1, 11)]
-        [InlineData(2, 21)]
-        [InlineData(3, 38)]
-        [InlineData(6, 112)]
-        public void Y2020_Day17_GetOccupiedSeats_Returns_Correct_Value(int cycles, int expected)
+        [InlineData(0, 3, 5)]
+        [InlineData(1, 3, 11)]
+        [InlineData(2, 3, 21)]
+        [InlineData(3, 3, 38)]
+        [InlineData(6, 3, 112)]
+        [InlineData(6, 4, 848)]
+        public void Y2020_Day17_GetActiveCubes_Returns_Correct_Value(
+            int cycles,
+            int dimensions,
+            int expected)
         {
             // Arrange
             string[] layout = new[]
@@ -39,7 +43,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
             };
 
             // Act
-            (int actual, _) = Day17.GetActiveCubes(layout, cycles, Logger);
+            (int actual, _) = Day17.GetActiveCubes(layout, cycles, dimensions, Logger);
 
             // Assert
             actual.ShouldBe(expected);
@@ -52,7 +56,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
             var puzzle = await SolvePuzzleAsync<Day17>();
 
             // Assert
-            puzzle.ActiveCubes.ShouldBe(388);
+            puzzle.ActiveCubes3D.ShouldBe(388);
+            puzzle.ActiveCubes4D.ShouldBe(2280);
         }
     }
 }

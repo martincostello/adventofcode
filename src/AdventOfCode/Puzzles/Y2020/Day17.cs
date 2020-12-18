@@ -27,15 +27,21 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
         private const char Inactive = '.';
 
         /// <summary>
-        /// Gets the number of active cubes after the specified number of cycles.
+        /// Gets the number of active cubes in three dimensions after the specified number of cycles.
         /// </summary>
-        public int ActiveCubes { get; private set; }
+        public int ActiveCubes3D { get; private set; }
+
+        /// <summary>
+        /// Gets the number of active cubes in four dimensions after the specified number of cycles.
+        /// </summary>
+        public int ActiveCubes4D { get; private set; }
 
         /// <summary>
         /// Gets the number of active cubes for the specified initial states.
         /// </summary>
         /// <param name="initialStates">The initial cube states.</param>
         /// <param name="cycles">The number of cycles to perform.</param>
+        /// <param name="dimensions">The number of dimensions.</param>
         /// <param name="logger">The optional logger to use.</param>
         /// <returns>
         /// The number of active cubes after the specified number of cycles and a visualization of the final states.
@@ -43,6 +49,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
         public static (int activeCubes, string visualization) GetActiveCubes(
             IList<string> initialStates,
             int cycles,
+            int dimensions,
             ILogger? logger = null)
         {
             var currentState = new Dictionary<Point, char>();
@@ -51,7 +58,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
             {
                 for (int x = 0; x < initialStates.Count; x++)
                 {
-                    currentState[new Point(x, y, z: 0)] = initialStates[y][x];
+                    var point = dimensions == 4 ? new Point(x, y, z: 0, w: 0) : new Point(x, y, z: 0);
+                    currentState[point] = initialStates[y][x];
                 }
             }
 
@@ -94,19 +102,25 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
 
             int cycles = 6;
 
-            (int activeCubes, string visualization) = GetActiveCubes(layout, cycles);
+            (int activeCubes3D, string visualization3D) = GetActiveCubes(layout, cycles, dimensions: 3);
+            (int activeCubes4D, string visualization4D) = GetActiveCubes(layout, cycles, dimensions: 4);
 
-            ActiveCubes = activeCubes;
+            ActiveCubes3D = activeCubes3D;
+            ActiveCubes4D = activeCubes4D;
 
             if (Verbose)
             {
-                Logger.WriteLine("There are {0} active cubes after {1} cycles.", ActiveCubes, cycles);
+                Logger.WriteLine("There are {0} active cubes after {1} cycles in 3 dimensions.", ActiveCubes3D, cycles);
+                Logger.WriteLine("There are {0} active cubes after {1} cycles in 4 dimensions.", ActiveCubes4D, cycles);
             }
 
             var result = new PuzzleResult();
 
-            result.Solutions.Add(ActiveCubes);
-            result.Visualizations.Add(visualization);
+            result.Solutions.Add(ActiveCubes3D);
+            result.Visualizations.Add(visualization3D);
+
+            result.Solutions.Add(ActiveCubes4D);
+            result.Visualizations.Add(visualization4D);
 
             return result;
         }
@@ -175,7 +189,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
         /// </summary>
         /// <param name="position">The point to enumerate the adjacent points for.</param>
         /// <returns>
-        /// A sequence of adjacent points in 3D space to <paramref name="position"/>.
+        /// A sequence of adjacent points in space to <paramref name="position"/>.
         /// </returns>
         private static IEnumerable<Point> AdjacentCubes(Point position)
         {
@@ -185,11 +199,26 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
                 {
                     for (int x = -1; x <= 1; x++)
                     {
-                        var adjacent = new Point(x, y, z);
-
-                        if (adjacent != Point.Zero)
+                        if (position.W.HasValue)
                         {
-                            yield return position + adjacent;
+                            for (int w = -1; w <= 1; w++)
+                            {
+                                var adjacent = new Point(x, y, z, w);
+
+                                if (adjacent != Point.Zero4D)
+                                {
+                                    yield return position + adjacent;
+                                }
+                            }
+                        }
+                        else
+                        {
+                            var adjacent = new Point(x, y, z);
+
+                            if (adjacent != Point.Zero3D)
+                            {
+                                yield return position + adjacent;
+                            }
                         }
                     }
                 }
@@ -247,14 +276,24 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
         }
 
         /// <summary>
-        /// Represents a point in 3D space.
+        /// Represents a point (or vector) in 3 or 4 dimensional space.
         /// </summary>
         private struct Point : IEquatable<Point>
         {
             /// <summary>
-            /// The origin point for a 3D space.
+            /// The origin point for 3D space.
             /// </summary>
-            public static Point Zero = new Point(0, 0, 0);
+            public static Point Zero3D = new Point(0, 0, 0, null);
+
+            /// <summary>
+            /// The origin point for 4D space.
+            /// </summary>
+            public static Point Zero4D = new Point(0, 0, 0, 0);
+
+            /// <summary>
+            /// The W coordinate.
+            /// </summary>
+            public int? W;
 
             /// <summary>
             /// The X coordinate.
@@ -277,11 +316,13 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
             /// <param name="x">The X coordinate.</param>
             /// <param name="y">The Y coordinate.</param>
             /// <param name="z">The Z coordinate.</param>
-            public Point(int x, int y, int z)
+            /// <param name="w">The optional W coordinate.</param>
+            public Point(int x, int y, int z, int? w = default)
             {
                 X = x;
                 Y = y;
                 Z = z;
+                W = w;
             }
 
             public static Point operator +(Point point, Point vector)
@@ -289,14 +330,15 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
                 return new Point(
                     point.X + vector.X,
                     point.Y + vector.Y,
-                    point.Z + vector.Z);
+                    point.Z + vector.Z,
+                    point.W + vector.W);
             }
 
             public static bool operator ==(Point a, Point b)
-                => a.X == b.X && a.Y == b.Y && a.Z == b.Z;
+                => a.X == b.X && a.Y == b.Y && a.Z == b.Z && a.W == b.W;
 
             public static bool operator !=(Point a, Point b)
-                => a.X != b.X || a.Y != b.Y || a.Z != b.Z;
+                => a.X != b.X || a.Y != b.Y || a.Z != b.Z || a.W != b.W;
 
             /// <inheritdoc />
             public override bool Equals(object? obj)
@@ -320,11 +362,20 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
 
             /// <inheritdoc />
             public override int GetHashCode()
-                => HashCode.Combine(X, Y, Z);
+                => HashCode.Combine(X, Y, Z, W);
 
             /// <inheritdoc />
             public override string ToString()
-                => "(" + string.Join(", ", X, Y, Z) + ")";
+            {
+                if (W.HasValue)
+                {
+                    return "(" + string.Join(", ", X, Y, Z, W.Value) + ")";
+                }
+                else
+                {
+                    return "(" + string.Join(", ", X, Y, Z) + ")";
+                }
+            }
         }
     }
 }
