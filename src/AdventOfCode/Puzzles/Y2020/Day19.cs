@@ -4,7 +4,6 @@
 namespace MartinCostello.AdventOfCode.Puzzles.Y2020
 {
     using System.Collections.Generic;
-    using System.Globalization;
     using System.Linq;
     using System.Text.RegularExpressions;
     using System.Threading;
@@ -22,31 +21,36 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
         public int MatchesRule0 { get; private set; }
 
         /// <summary>
-        /// Gets the count of the number of messages that completely match the specified rule.
+        /// Gets the number of messages that completely match rule zero with the fix applied.
+        /// </summary>
+        public int MatchesRule0WithFix { get; private set; }
+
+        /// <summary>
+        /// Gets the count of the number of messages that completely match rule 0.
         /// </summary>
         /// <param name="input">The input of rules and messages to get the count for.</param>
-        /// <param name="ruleIndex">The index of the rule to count the number of messages that match.</param>
+        /// <param name="applyFix">Whether to apply the fix to the rules.</param>
         /// <returns>
-        /// The number of messages that completely match the rule specified by <paramref name="ruleIndex"/>.
+        /// The number of messages that completely match rule 0.
         /// </returns>
-        public static int GetMatchCount(IList<string> input, int ruleIndex)
+        public static int GetMatchCount(IList<string> input, bool applyFix)
         {
             int delimiter = input.IndexOf(string.Empty);
 
-            IDictionary<string, string> rules = ParseRules(input.Take(delimiter));
+            IDictionary<string, string> rules = ParseRules(input.Take(delimiter), applyFix);
 
-            string rule = rules[ruleIndex.ToString(CultureInfo.InvariantCulture)];
+            string rule = rules["0"];
 
             string pattern = "^" + rule + "$";
             var messages = input.Skip(delimiter + 1);
 
             return messages.Count((p) => Regex.IsMatch(p, pattern));
 
-            static IDictionary<string, string> ParseRules(IEnumerable<string> foo)
+            static IDictionary<string, string> ParseRules(IEnumerable<string> input, bool applyFix)
             {
                 var rawRules = new Dictionary<string, List<string>>();
 
-                foreach (string rule in foo)
+                foreach (string rule in input)
                 {
                     string[] split = rule.Split(':');
 
@@ -81,9 +85,16 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
                         for (int i = 0; i < values.Count; i++)
                         {
                             // Replace any known rule keys with the pattern for that rule
-                            if (rules.TryGetValue(values[i], out string? r))
+                            string otherRule = values[i];
+
+                            if (rules.TryGetValue(otherRule, out string? r))
                             {
-                                values[i] = "(" + r + ")";
+                                if (r.Length > 1)
+                                {
+                                    r = "(" + r + ")";
+                                }
+
+                                values[i] = r;
                             }
                         }
 
@@ -96,6 +107,20 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
                     }
                 }
 
+                if (applyFix)
+                {
+                    //// "N: a | a N" => "N: (a)+" => "8: 42 | 42 8" => "8: (42)+"
+                    rules["8"] = $"({rules["42"]})+";
+
+                    //// "N: a b | a N b" => "N: (a (ab)* b)" => "11: 42 31 | 42 11 31" => "11: (42((42)(31))*31)"
+                    rules["11"] = $"{rules["42"]}(({rules["42"]})({rules["31"]}))*{rules["31"]}";
+
+                    // This works for the example, but not generally. Above is broken.
+                    rules["11"] = $"({rules["42"]})+({rules["31"]})+";
+
+                    rules["0"] = rules["8"] + rules["11"];
+                }
+
                 return rules;
             }
         }
@@ -105,16 +130,16 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
         {
             IList<string> input = await ReadResourceAsLinesAsync();
 
-            int rule = 0;
-
-            MatchesRule0 = GetMatchCount(input, rule);
+            MatchesRule0 = GetMatchCount(input, applyFix: false);
+            MatchesRule0WithFix = GetMatchCount(input, applyFix: true);
 
             if (Verbose)
             {
-                Logger.WriteLine("The number of messages that completely match rule {0} is {1}.", rule, MatchesRule0);
+                Logger.WriteLine("The number of messages that completely match rule 0 is {0} without the fix.", MatchesRule0);
+                Logger.WriteLine("The number of messages that completely match rule 0 is {0} with the fix.", MatchesRule0WithFix);
             }
 
-            return PuzzleResult.Create(MatchesRule0);
+            return PuzzleResult.Create(MatchesRule0, MatchesRule0WithFix);
         }
     }
 }
