@@ -37,16 +37,32 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
         {
             int delimiter = input.IndexOf(string.Empty);
 
-            IDictionary<string, string> rules = ParseRules(input.Take(delimiter), applyFix);
+            IDictionary<string, string> rules = ParseRules(input.Take(delimiter));
 
-            string rule = rules["0"];
+            string[] messages = input
+                .Skip(delimiter + 1)
+                .ToArray();
 
-            string pattern = "^" + rule + "$";
-            var messages = input.Skip(delimiter + 1);
+            if (applyFix)
+            {
+                string rule31 = rules["31"];
+                string rule42 = rules["42"];
 
+                //// "N: a | a N" => "N: (a)+" => "8: 42 | 42 8" => "8: (42)+"
+                string rule8 = $"({rule42})+";
+
+                // See https://www.regular-expressions.info/balancing.html
+                string rule11 = $"(?:(?'X'{rule42})+(?'-X'{rule31})+)+(?(X)(?!))";
+
+                rules["0"] = $"{rule8}{rule11}";
+                rules["8"] = rule8;
+                rules["11"] = rule11;
+            }
+
+            string pattern = $"^{rules["0"]}$";
             return messages.Count((p) => Regex.IsMatch(p, pattern));
 
-            static IDictionary<string, string> ParseRules(IEnumerable<string> input, bool applyFix)
+            static IDictionary<string, string> ParseRules(IEnumerable<string> input)
             {
                 var rawRules = new Dictionary<string, List<string>>();
 
@@ -105,20 +121,6 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
                             rawRules.Remove(rule);
                         }
                     }
-                }
-
-                if (applyFix)
-                {
-                    //// "N: a | a N" => "N: (a)+" => "8: 42 | 42 8" => "8: (42)+"
-                    rules["8"] = $"({rules["42"]})+";
-
-                    //// "N: a b | a N b" => "N: (a (ab)* b)" => "11: 42 31 | 42 11 31" => "11: (42((42)(31))*31)"
-                    rules["11"] = $"{rules["42"]}(({rules["42"]})({rules["31"]}))*{rules["31"]}";
-
-                    // This works for the example, but not generally. Above is broken.
-                    rules["11"] = $"({rules["42"]})+({rules["31"]})+";
-
-                    rules["0"] = rules["8"] + rules["11"];
                 }
 
                 return rules;

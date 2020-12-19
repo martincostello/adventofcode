@@ -121,8 +121,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
 
             // Assert
             puzzle.MatchesRule0.ShouldBe(195);
-            puzzle.MatchesRule0WithFix.ShouldBeLessThan(319);
-            puzzle.MatchesRule0WithFix.ShouldBe(-1);
+            puzzle.MatchesRule0WithFix.ShouldBe(309);
         }
     }
 }
