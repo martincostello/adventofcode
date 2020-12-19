@@ -49,12 +49,12 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
                 string rule42 = rules["42"];
 
                 //// "N: a | a N" => "N: (a)+" => "8: 42 | 42 8" => "8: (42)+"
-                string rule8 = $"({rule42})+";
+                string rule8 = $"(" + rule42 + ")+";
 
                 // See https://www.regular-expressions.info/balancing.html
                 string rule11 = $"(?:(?'X'{rule42})+(?'-X'{rule31})+)+(?(X)(?!))";
 
-                rules["0"] = $"{rule8}{rule11}";
+                rules["0"] = rule8 + rule11;
                 rules["8"] = rule8;
                 rules["11"] = rule11;
             }
