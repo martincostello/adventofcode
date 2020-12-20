@@ -118,7 +118,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
                     }
                 }
 
-                // By convention, the first row is consider the top, aligned left-to-right
+                // By convention, the first row is considered the top, aligned left-to-right
                 IList<Tile> topRow = edgeRows[0];
                 IList<Tile> rightRow = edgeRows.Single((p) => p[0] == topRow[^1]);
                 IList<Tile> bottomRow = edgeRows.Single((p) => p[0] == rightRow[^1]);
@@ -260,9 +260,9 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
             public long Id { get; set; }
 
             /// <summary>
-            /// Gets the edges of the tile.
+            /// Gets the candidates for the edges of the tile.
             /// </summary>
-            public IList<string> EdgeCandidates { get; } = new List<string>();
+            public HashSet<string> EdgeCandidates { get; } = new HashSet<string>();
 
             /// <summary>
             /// Gets the original grid of the image.
