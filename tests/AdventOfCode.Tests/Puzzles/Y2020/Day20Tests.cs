@@ -26,7 +26,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
         public void Y2020_Day20_GetCornerTileIdProduct_Returns_Correct_Value()
         {
             // Arrange
-            string[] tiles = new[]
+            string[] input = new[]
             {
                 "Tile 2311:",
                 "..##.#..#.",
@@ -139,10 +139,10 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
             };
 
             // Act
-            long actual = Day20.GetCornerTileIdProduct(tiles);
+            (long actualCornerIdProduct, int actualRoughness) = Day20.GetCornerTileIdProduct(input);
 
             // Assert
-            actual.ShouldBe(20899048083289L);
+            actualCornerIdProduct.ShouldBe(20899048083289L);
         }
 
         [Fact]
