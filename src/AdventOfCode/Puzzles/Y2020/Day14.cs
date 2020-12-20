@@ -51,7 +51,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
                 {
                     // Flip the mask to match the endianness of BitArray
                     string maskValue = instruction[MaskPrefix.Length..];
-                    mask = new string(maskValue.Reverse().ToArray());
+                    mask = maskValue.Mirror();
                     floatingBits = mask.Count((p) => p == 'X');
                 }
                 else
