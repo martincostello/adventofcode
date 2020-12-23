@@ -143,6 +143,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
 
             // Assert
             actualCornerIdProduct.ShouldBe(20899048083289L);
+            ////actualRoughness.ShouldBe(273);
         }
 
         [Fact]
@@ -153,6 +154,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
 
             // Assert
             puzzle.ProductOfCornerTiles.ShouldBe(17712468069479L);
+            ////puzzle.WaterRoughness.ShouldBe(-1);
         }
     }
 }

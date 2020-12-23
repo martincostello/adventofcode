@@ -242,10 +242,10 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
             if (Verbose)
             {
                 Logger.WriteLine("The product of the Ids of the four corner tiles is {0}.", ProductOfCornerTiles);
-                Logger.WriteLine("The roughness of the water is {0}.", WaterRoughness);
+                ////Logger.WriteLine("The roughness of the water is {0}.", WaterRoughness);
             }
 
-            return PuzzleResult.Create(ProductOfCornerTiles, WaterRoughness);
+            return PuzzleResult.Create(ProductOfCornerTiles/*, WaterRoughness*/);
         }
 
         /// <summary>
