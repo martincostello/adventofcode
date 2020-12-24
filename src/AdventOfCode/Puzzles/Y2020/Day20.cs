@@ -41,13 +41,44 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
 
             Tile[,] image = BuildImage(corners, edges, others);
 
-            int extent = image.GetLength(0) - 1;
+            int width = image.GetLength(0);
+            int extent = width - 1;
 
             long cornerIdProduct =
                 image[0, 0].Id *
                 image[0, extent].Id *
                 image[extent, 0].Id *
                 image[extent, extent].Id;
+
+            // Create the full image
+            foreach (Tile tile in image)
+            {
+                tile.RemoveBorder();
+            }
+
+            int tileWidth = image[0, 0].Grid.Count;
+            int finalWidth = tileWidth * width;
+
+            char[,] finalImage = new char[finalWidth, finalWidth];
+
+            for (int j = 0; j < width; j++)
+            {
+                for (int i = 0; i < width; i++)
+                {
+                    Tile tile = image[i, j];
+
+                    int offsetX = i * tileWidth;
+                    int offsetY = j * tileWidth;
+
+                    for (int y = 0; y < tileWidth; y++)
+                    {
+                        for (int x = 0; x < tileWidth; x++)
+                        {
+                            finalImage[x + offsetX, y + offsetY] = tile.Grid[y][x];
+                        }
+                    }
+                }
+            }
 
             return (cornerIdProduct, 0);
 
