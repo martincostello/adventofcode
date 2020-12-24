@@ -148,11 +148,120 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
                     result[0, width - i - 1] = current;
                 }
 
-                //// TODO Correctly orient the tiles
+                bool aligned;
+                Tile topCorner = result[0, 0];
+
+                do
+                {
+                    aligned = true;
+
+                    for (int i = 1; i < topRow.Count; i++)
+                    {
+                        bool foundAlignment = false;
+
+                        string mirrorRight = topRow[i - 1].Right().Mirror();
+                        Tile thisTile = topRow[i];
+
+                        for (int j = 0; j < 8; j++)
+                        {
+                            if (mirrorRight == thisTile.Left())
+                            {
+                                foundAlignment = true;
+                                break;
+                            }
+
+                            thisTile.NextOrientation();
+                        }
+
+                        aligned &= foundAlignment;
+                    }
+
+                    for (int i = 1; aligned && i < rightRow.Count; i++)
+                    {
+                        bool foundAlignment = false;
+
+                        string mirrorBottom = rightRow[i - 1].Bottom().Mirror();
+                        Tile thisTile = rightRow[i];
+
+                        for (int j = 0; j < 8; j++)
+                        {
+                            if (mirrorBottom == thisTile.Top())
+                            {
+                                foundAlignment = true;
+                                break;
+                            }
+
+                            thisTile.NextOrientation();
+                        }
+
+                        aligned &= foundAlignment;
+                    }
+
+                    for (int i = 1; aligned && i < bottomRow.Count; i++)
+                    {
+                        bool foundAlignment = false;
+
+                        string mirrorLeft = bottomRow[i - 1].Left().Mirror();
+                        Tile thisTile = bottomRow[i];
+
+                        for (int j = 0; j < 8; j++)
+                        {
+                            if (mirrorLeft == thisTile.Right())
+                            {
+                                foundAlignment = true;
+                                break;
+                            }
+
+                            thisTile.NextOrientation();
+                        }
+
+                        aligned &= foundAlignment;
+                    }
+
+                    for (int i = 1; aligned && i < leftRow.Count - 1; i++)
+                    {
+                        bool foundAlignment = false;
+
+                        string mirrorTop = leftRow[i - 1].Top().Mirror();
+                        Tile thisTile = leftRow[i];
+
+                        for (int j = 0; j < 8; j++)
+                        {
+                            if (mirrorTop == thisTile.Bottom())
+                            {
+                                foundAlignment = true;
+                                break;
+                            }
+
+                            thisTile.NextOrientation();
+                        }
+
+                        aligned &= foundAlignment;
+                    }
+
+                    if (aligned)
+                    {
+                        break;
+                    }
+
+                    topCorner.NextOrientation();
+                }
+                while (!aligned);
 
                 if (others.Count == 1)
                 {
-                    result[width / 2, width / 2] = others[0];
+                    int centerIndex = width / 2;
+                    Tile center = others[0];
+                    Tile right = result[centerIndex + 1, centerIndex];
+
+                    string mirrorLeft = right.Left().Mirror();
+
+                    while (center.Right() != mirrorLeft)
+                    {
+                        center.NextOrientation();
+                    }
+
+                    result[centerIndex, centerIndex] = center;
                 }
                 else if (others.Count > 1)
                 {
@@ -254,6 +363,11 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
         [System.Diagnostics.DebuggerDisplay("Id = {Id}")]
         private sealed class Tile
         {
+            /// <summary>
+            /// The number of times the tile has been flipped or rotated.
+            /// </summary>
+            private uint _iterations;
+
             /// <summary>
             /// Gets or sets the Id of the tile.
             /// </summary>
@@ -377,21 +491,14 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
 
                 // Flip and rotate the other tile until its left
                 // edge aligns with the right edge of this tile
-                for (int i = 0; i < 4; i++)
+                for (int i = 0; i < 8; i++)
                 {
                     if (other.Left() == right)
                     {
                         break;
                     }
 
-                    other.Flip();
-
-                    if (other.Left() == right)
-                    {
-                        break;
-                    }
-
-                    other.Rotate();
+                    other.NextOrientation();
                 }
 
                 return true;
@@ -416,24 +523,30 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
 
                 // Flip and rotate the other tile until its top
                 // edge aligns with the bottom edge of this tile
-                for (int i = 0; i < 4; i++)
+                for (int i = 0; i < 8; i++)
                 {
                     if (other.Top() == bottom)
                     {
                         break;
                     }
 
-                    other.Flip();
-
-                    if (other.Top() == bottom)
-                    {
-                        break;
-                    }
-
-                    other.Rotate();
+                    other.NextOrientation();
                 }
 
                 return true;
+            }
+
+            /// <summary>
+            /// Moves the tile to its next orientation.
+            /// </summary>
+            public void NextOrientation()
+            {
+                Rotate();
+
+                if (++_iterations % 4 == 0)
+                {
+                    Flip();
+                }
             }
         }
     }
