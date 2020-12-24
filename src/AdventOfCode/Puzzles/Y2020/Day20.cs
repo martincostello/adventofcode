@@ -80,14 +80,12 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
                         {
                             Tile edge = edges[j];
 
-                            if (!current.IsNeighbor(edge))
+                            if (current.IsNeighbor(edge))
                             {
-                                continue;
+                                edges.RemoveAt(j--);
+                                edgeRow.Add(edge);
+                                current = edge;
                             }
-
-                            edges.RemoveAt(j--);
-                            edgeRow.Add(edge);
-                            current = edge;
                         }
                     }
 
@@ -103,22 +101,15 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
                     {
                         Tile corner = corners[i];
 
-                        if (corner == first)
+                        if (corner != first && last.IsNeighbor(corner))
                         {
-                            continue;
+                            row.Add(corner);
+                            corners.RemoveAt(i--);
                         }
-
-                        if (!last.IsNeighbor(corner))
-                        {
-                            continue;
-                        }
-
-                        row.Add(corner);
-                        corners.RemoveAt(i--);
                     }
                 }
 
-                // By convention, the first row is considered the top, aligned left-to-right
+                // By convention, the first row is considered the top
                 IList<Tile> topRow = edgeRows[0];
                 IList<Tile> rightRow = edgeRows.Single((p) => p[0] == topRow[^1]);
                 IList<Tile> bottomRow = edgeRows.Single((p) => p[0] == rightRow[^1]);
@@ -148,8 +139,9 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
                     result[0, width - i - 1] = current;
                 }
 
+                // Align the grid's edge tiles with each other
                 bool aligned;
-                Tile topCorner = result[0, 0];
+                Tile topLeft = result[0, 0];
 
                 do
                 {
@@ -157,65 +149,17 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
 
                     for (int i = 1; i < topRow.Count; i++)
                     {
-                        bool foundAlignment = false;
-
-                        string mirrorRight = topRow[i - 1].Right().Mirror();
-                        Tile thisTile = topRow[i];
-
-                        for (int j = 0; j < 8; j++)
-                        {
-                            if (mirrorRight == thisTile.Left())
-                            {
-                                foundAlignment = true;
-                                break;
-                            }
-
-                            thisTile.NextOrientation();
-                        }
-
-                        aligned &= foundAlignment;
+                        aligned &= topRow[i - 1].TryAlignToEdge(topRow[i], (p) => p.Right(), (p) => p.Left());
                     }
 
                     for (int i = 1; aligned && i < rightRow.Count; i++)
                     {
-                        bool foundAlignment = false;
-
-                        string mirrorBottom = rightRow[i - 1].Bottom().Mirror();
-                        Tile thisTile = rightRow[i];
-
-                        for (int j = 0; j < 8; j++)
-                        {
-                            if (mirrorBottom == thisTile.Top())
-                            {
-                                foundAlignment = true;
-                                break;
-                            }
-
-                            thisTile.NextOrientation();
-                        }
-
-                        aligned &= foundAlignment;
+                        aligned &= rightRow[i - 1].TryAlignToEdge(rightRow[i], (p) => p.Bottom(), (p) => p.Top());
                     }
 
                     for (int i = 1; aligned && i < bottomRow.Count; i++)
                     {
-                        bool foundAlignment = false;
-
-                        string mirrorLeft = bottomRow[i - 1].Left().Mirror();
-                        Tile thisTile = bottomRow[i];
-
-                        for (int j = 0; j < 8; j++)
-                        {
-                            if (mirrorLeft == thisTile.Right())
-                            {
-                                foundAlignment = true;
-                                break;
-                            }
-
-                            thisTile.NextOrientation();
-                        }
-
-                        aligned &= foundAlignment;
+                        aligned &= bottomRow[i - 1].TryAlignToEdge(bottomRow[i], (p) => p.Left(), (p) => p.Right());
                     }
 
                     for (int i = 1; aligned && i < leftRow.Count - 1; i++)
@@ -244,28 +188,27 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
                         break;
                     }
 
-                    topCorner.NextOrientation();
+                    topLeft.NextOrientation();
                 }
                 while (!aligned);
 
                 if (others.Count == 1)
                 {
+                    // Align and place the center tile
                     int centerIndex = width / 2;
+
                     Tile center = others[0];
                     Tile right = result[centerIndex + 1, centerIndex];
 
-                    string mirrorLeft = right.Left().Mirror();
-
-                    while (center.Right() != mirrorLeft)
-                    {
-                        center.NextOrientation();
-                    }
+                    right.TryAlignToEdge(center, (p) => p.Left(), (p) => p.Right());
 
                     result[centerIndex, centerIndex] = center;
                 }
                 else if (others.Count > 1)
                 {
                     // TODO Recurse to fill in the next ring
+                    ////(corners, edges, others) = Geometry(others);
+                    ////Tile[,] inner = BuildImage(corners, edges, others);
                 }
 
                 return result;
@@ -473,59 +416,29 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
                 => new string(Grid.Select((p) => p[^1]).ToArray());
 
             /// <summary>
-            /// Tries to align the other tile to this tile's right edge.
+            /// Tries to align the other tile to this tile's edge.
             /// </summary>
             /// <param name="other">The other tile to try to align.</param>
+            /// <param name="thisEdge">A delegate to a method to get the edge to align to.</param>
+            /// <param name="otherEdge">A delegate to a method to get the other edge to align with this tile.</param>
             /// <returns>
             /// <see langword="true"/> if <paramref name="other"/> was aligned
             /// to the right edge of this tile; otherwise <see langword="false"/>.
             /// </returns>
-            public bool TryAlignToRightEdge(Tile other)
+            public bool TryAlignToEdge(Tile other, Func<Tile, string> thisEdge, Func<Tile, string> otherEdge)
             {
                 if (!IsNeighbor(other))
                 {
                     return false;
                 }
 
-                string right = Right();
+                string mirror = thisEdge(this).Mirror();
 
                 // Flip and rotate the other tile until its left
                 // edge aligns with the right edge of this tile
                 for (int i = 0; i < 8; i++)
                 {
-                    if (other.Left() == right)
-                    {
-                        break;
-                    }
-
-                    other.NextOrientation();
-                }
-
-                return true;
-            }
-
-            /// <summary>
-            /// Tries to align the other tile to this tile's bottom edge.
-            /// </summary>
-            /// <param name="other">The other tile to try to align.</param>
-            /// <returns>
-            /// <see langword="true"/> if <paramref name="other"/> was aligned
-            /// to the bottom edge of this tile; otherwise <see langword="false"/>.
-            /// </returns>
-            public bool TryAlignToBottomEdge(Tile other)
-            {
-                if (!IsNeighbor(other))
-                {
-                    return false;
-                }
-
-                string bottom = Bottom();
-
-                // Flip and rotate the other tile until its top
-                // edge aligns with the bottom edge of this tile
-                for (int i = 0; i < 8; i++)
-                {
-                    if (other.Top() == bottom)
+                    if (otherEdge(other) == mirror)
                     {
                         break;
                     }
