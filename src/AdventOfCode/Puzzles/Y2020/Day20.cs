@@ -80,7 +80,131 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
                 }
             }
 
-            return (cornerIdProduct, 0);
+            // Represent the sea monster
+            ////| | | | | | | | | | | | | | | | | | |#| |
+            ////|#| | | | |#|#| | | | |#|#| | | | |#|#|#|
+            ////| |#| | |#| | |#| | |#| | |#| | |#| | | |
+            const int SeaMonsterWidth = 20;
+            const int SeaMonsterHeight = 3;
+
+            var seaMonster = new[]
+            {
+                (0, 1),
+                (1, 2),
+                (4, 2),
+                (5, 1),
+                (6, 1),
+                (7, 2),
+                (10, 2),
+                (11, 1),
+                (12, 1),
+                (13, 2),
+                (16, 2),
+                (17, 1),
+                (18, 0),
+                (18, 1),
+                (19, 1),
+            };
+
+            int rotations = 0;
+            int seaMonsters = 0;
+
+            while (true)
+            {
+                seaMonsters = CountMonsters(finalImage);
+
+                if (seaMonsters > 0)
+                {
+                    break;
+                }
+
+                finalImage = Rotate(finalImage);
+
+                if (++rotations % 4 == 0)
+                {
+                    finalImage = Flip(finalImage);
+                }
+            }
+
+            int hashes = 0;
+
+            for (int i = 0; i < finalWidth; i++)
+            {
+                for (int j = 0; j < finalWidth; j++)
+                {
+                    if (finalImage[i, j] == '#')
+                    {
+                        hashes++;
+                    }
+                }
+            }
+
+            int roughness = hashes - (seaMonsters * seaMonster.Length);
+
+            return (cornerIdProduct, roughness);
+
+            int CountMonsters(char[,] image)
+            {
+                int width = image.GetLength(0);
+                int monsters = 0;
+
+                for (int y = 0; y < width - SeaMonsterHeight; y++)
+                {
+                    for (int x = 0; x < width - SeaMonsterWidth; x++)
+                    {
+                        int pixels = 0;
+
+                        foreach ((int offsetX, int offsetY) in seaMonster)
+                        {
+                            if (image[x + offsetX, y + offsetY] == '#')
+                            {
+                                pixels++;
+                            }
+                        }
+
+                        if (pixels == seaMonster.Length)
+                        {
+                            monsters++;
+                        }
+                    }
+                }
+
+                return monsters;
+            }
+
+            static char[,] Flip(char[,] image)
+            {
+                int width = image.GetLength(0);
+
+                char[,] rotated = new char[width, width];
+
+                for (int x = 0; x < width; x++)
+                {
+                    for (int y = width - 1; y > -1; y--)
+                    {
+                        rotated[width - x - 1, y] = image[x, y];
+                    }
+                }
+
+                return rotated;
+            }
+
+            static char[,] Rotate(char[,] image)
+            {
+                int width = image.GetLength(0);
+
+                char[,] rotated = new char[width, width];
+
+                for (int x = 0; x < width; x++)
+                {
+                    for (int y = width - 1; y > -1; y--)
+                    {
+                        rotated[width - y - 1, x] = image[x, y];
+                    }
+                }
+
+                return rotated;
+            }
 
             static Tile[,] BuildImage(
                 List<Tile> corners,

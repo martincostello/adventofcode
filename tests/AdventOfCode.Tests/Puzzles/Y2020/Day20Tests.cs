@@ -143,7 +143,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
 
             // Assert
             actualCornerIdProduct.ShouldBe(20899048083289L);
-            ////actualRoughness.ShouldBe(273);
+            actualRoughness.ShouldBe(273);
         }
 
         [Fact]
