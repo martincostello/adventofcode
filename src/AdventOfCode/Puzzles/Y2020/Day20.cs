@@ -379,17 +379,12 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
                     for (int x = 1; x < width - 1; x++)
                     {
                         Tile above = result[x, y - 1];
-                        Tile left = result[x - 1, y];
-
-                        string aboveMatch = above.Bottom().Mirror();
-                        string leftMatch = left.Right().Mirror();
 
                         for (int k = 0; k < others.Count; k++)
                         {
                             Tile thisTile = others[k];
 
-                            if (above.TryAlignToEdge(thisTile, (p) => p.Bottom(), (p) => p.Top()) &&
-                                left.TryAlignToEdge(thisTile, (p) => p.Right(), (p) => p.Left()))
+                            if (above.TryAlignToEdge(thisTile, (p) => p.Bottom(), (p) => p.Top()))
                             {
                                 others.RemoveAt(k);
                                 result[x, y] = thisTile;
@@ -639,13 +634,13 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
                 {
                     if (otherEdge(other) == mirror)
                     {
-                        break;
+                        return true;
                     }
 
                     other.NextOrientation();
                 }
 
-                return true;
+                return false;
             }
 
             /// <summary>
