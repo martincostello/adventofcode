@@ -139,11 +139,13 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
             };
 
             // Act
-            (long actualCornerIdProduct, int actualRoughness) = Day20.GetCornerTileIdProduct(input);
+            (long actualCornerIdProduct, int actualRoughness, string visualization) = Day20.GetCornerTileIdProduct(input);
 
             // Assert
             actualCornerIdProduct.ShouldBe(20899048083289L);
-            ////actualRoughness.ShouldBe(273);
+            actualRoughness.ShouldBe(273);
+
+            OutputHelper.WriteLine(visualization);
         }
 
         [Fact]
@@ -154,7 +156,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
 
             // Assert
             puzzle.ProductOfCornerTiles.ShouldBe(17712468069479L);
-            ////puzzle.WaterRoughness.ShouldBe(-1);
+            puzzle.WaterRoughness.ShouldBe(2173);
         }
     }
 }

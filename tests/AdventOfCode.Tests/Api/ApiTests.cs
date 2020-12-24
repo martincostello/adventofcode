@@ -147,7 +147,7 @@ namespace MartinCostello.AdventOfCode.Api
         [InlineData(2020, 17, null, true, new object[] { 388, 2280 }, 2)]
         [InlineData(2020, 18, null, true, new object[] { 2743012121210L, 65658760783597L }, 0)]
         [InlineData(2020, 19, null, true, new object[] { 195, 309 }, 0)]
-        [InlineData(2020, 20, null, true, new object[] { 17712468069479L }, 0)]
+        [InlineData(2020, 20, null, true, new object[] { 17712468069479L, 2173 }, 1)]
         [InlineData(2020, 21, null, true, new object[] { 2098, "ppdplc,gkcplx,ktlh,msfmt,dqsbql,mvqkdj,ggsz,hbhsx" }, 0)]
         [InlineData(2020, 22, null, true, new object[] { 33694, 31835 }, 0)]
         public async Task Can_Solve_Puzzle(

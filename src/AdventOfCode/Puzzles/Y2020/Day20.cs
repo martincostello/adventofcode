@@ -6,6 +6,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Text;
     using System.Threading;
     using System.Threading.Tasks;
 
@@ -31,9 +32,9 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
         /// </summary>
         /// <param name="input">The input data containing the description of the tiles of the image.</param>
         /// <returns>
-        /// The product of the Ids of the four corner tiles and the roughness of the water.
+        /// The product of the Ids of the four corner tiles and the roughness of the water and the final image.
         /// </returns>
-        public static (long cornerIdProduct, int roughness) GetCornerTileIdProduct(IList<string> input)
+        public static (long cornerIdProduct, int roughness, string visualization) GetCornerTileIdProduct(IList<string> input)
         {
             IDictionary<long, Tile> tiles = ParseTiles(input);
 
@@ -41,7 +42,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
 
             Tile[,] image = BuildImage(corners, edges, others);
 
-            int extent = image.GetLength(0) - 1;
+            int width = image.GetLength(0);
+            int extent = width - 1;
 
             long cornerIdProduct =
                 image[0, 0].Id *
@@ -49,7 +51,186 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
                 image[extent, 0].Id *
                 image[extent, extent].Id;
 
-            return (cornerIdProduct, 0);
+            // Create the full image
+            foreach (Tile tile in image)
+            {
+                tile.RemoveBorder();
+            }
+
+            int tileWidth = image[0, 0].Grid.Count;
+            int finalWidth = tileWidth * width;
+
+            char[,] finalImage = new char[finalWidth, finalWidth];
+
+            for (int j = 0; j < width; j++)
+            {
+                for (int i = 0; i < width; i++)
+                {
+                    Tile tile = image[i, j];
+
+                    int offsetX = i * tileWidth;
+                    int offsetY = j * tileWidth;
+
+                    for (int y = 0; y < tileWidth; y++)
+                    {
+                        for (int x = 0; x < tileWidth; x++)
+                        {
+                            finalImage[x + offsetX, y + offsetY] = tile.Grid[y][x];
+                        }
+                    }
+                }
+            }
+
+            // Represent the sea monster
+            ////| | | | | | | | | | | | | | | | | | |#| |
+            ////|#| | | | |#|#| | | | |#|#| | | | |#|#|#|
+            ////| |#| | |#| | |#| | |#| | |#| | |#| | | |
+            const int SeaMonsterWidth = 20;
+            const int SeaMonsterHeight = 3;
+
+            var seaMonster = new[]
+            {
+                (0, 1),
+                (1, 2),
+                (4, 2),
+                (5, 1),
+                (6, 1),
+                (7, 2),
+                (10, 2),
+                (11, 1),
+                (12, 1),
+                (13, 2),
+                (16, 2),
+                (17, 1),
+                (18, 0),
+                (18, 1),
+                (19, 1),
+            };
+
+            int rotations = 0;
+            int seaMonsters = 0;
+
+            while (rotations < 8)
+            {
+                seaMonsters = FindMonsters(finalImage);
+
+                if (seaMonsters > 0)
+                {
+                    break;
+                }
+
+                finalImage = Rotate(finalImage);
+
+                if (++rotations % 4 == 0)
+                {
+                    finalImage = Flip(finalImage);
+                }
+            }
+
+            int hashes = 0;
+
+            for (int j = 0; j < finalWidth; j++)
+            {
+                for (int i = 0; i < finalWidth; i++)
+                {
+                    if (finalImage[i, j] == '#')
+                    {
+                        hashes++;
+                    }
+                }
+            }
+
+            FindMonsters(finalImage, highlightMonsters: true);
+
+            var imageBuilder = new StringBuilder(width * (width + 2));
+
+            for (int j = 0; j < finalWidth; j++)
+            {
+                for (int i = 0; i < finalWidth; i++)
+                {
+                    imageBuilder.Append(finalImage[i, j]);
+                }
+
+                imageBuilder.AppendLine();
+            }
+
+            int roughness = hashes - (seaMonsters * seaMonster.Length);
+
+            return (cornerIdProduct, roughness, imageBuilder.ToString());
+
+            int FindMonsters(char[,] image, bool highlightMonsters = false)
+            {
+                int width = image.GetLength(0);
+                int monsters = 0;
+
+                for (int y = 0; y < width - SeaMonsterHeight; y++)
+                {
+                    for (int x = 0; x < width - SeaMonsterWidth; x++)
+                    {
+                        int pixels = 0;
+
+                        foreach ((int offsetX, int offsetY) in seaMonster)
+                        {
+                            if (image[x + offsetX, y + offsetY] == '#')
+                            {
+                                pixels++;
+                            }
+                        }
+
+                        if (pixels == seaMonster.Length)
+                        {
+                            monsters++;
+
+                            if (highlightMonsters)
+                            {
+                                foreach ((int offsetX, int offsetY) in seaMonster)
+                                {
+                                    if (image[x + offsetX, y + offsetY] == '#')
+                                    {
+                                        image[x + offsetX, y + offsetY] = 'O';
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+                return monsters;
+            }
+
+            static char[,] Flip(char[,] image)
+            {
+                int width = image.GetLength(0);
+
+                char[,] rotated = new char[width, width];
+
+                for (int x = 0; x < width; x++)
+                {
+                    for (int y = width - 1; y > -1; y--)
+                    {
+                        rotated[width - x - 1, y] = image[x, y];
+                    }
+                }
+
+                return rotated;
+            }
+
+            static char[,] Rotate(char[,] image)
+            {
+                int width = image.GetLength(0);
+
+                char[,] rotated = new char[width, width];
+
+                for (int x = 0; x < width; x++)
+                {
+                    for (int y = width - 1; y > -1; y--)
+                    {
+                        rotated[width - y - 1, x] = image[x, y];
+                    }
+                }
+
+                return rotated;
+            }
 
             static Tile[,] BuildImage(
                 List<Tile> corners,
@@ -64,7 +245,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
 
                 // Iterate through the corners and find the tiles that adjoin it to the right:
                 // [Corner] -> [Edge] -> [Edge] -> [Edge]
-                for (int i = 0; i < 4; i++)
+                for (int i = 0; i < corners.Count; i++)
                 {
                     Tile corner = corners[i];
                     Tile current = corner;
@@ -80,14 +261,12 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
                         {
                             Tile edge = edges[j];
 
-                            if (!current.TryAlignToRightEdge(edge))
+                            if (current.IsNeighbor(edge))
                             {
-                                continue;
+                                edges.RemoveAt(j--);
+                                edgeRow.Add(edge);
+                                current = edge;
                             }
-
-                            edges.RemoveAt(j--);
-                            edgeRow.Add(edge);
-                            current = edge;
                         }
                     }
 
@@ -103,22 +282,15 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
                     {
                         Tile corner = corners[i];
 
-                        if (corner == first)
+                        if (corner != first && last.IsNeighbor(corner))
                         {
-                            continue;
+                            row.Add(corner);
+                            corners.RemoveAt(i--);
                         }
-
-                        if (!last.TryAlignToRightEdge(corner))
-                        {
-                            continue;
-                        }
-
-                        row.Add(corner);
-                        corners.RemoveAt(i--);
                     }
                 }
 
-                // By convention, the first row is considered the top, aligned left-to-right
+                // By convention, the first row is considered the top
                 IList<Tile> topRow = edgeRows[0];
                 IList<Tile> rightRow = edgeRows.Single((p) => p[0] == topRow[^1]);
                 IList<Tile> bottomRow = edgeRows.Single((p) => p[0] == rightRow[^1]);
@@ -148,15 +320,62 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
                     result[0, width - i - 1] = current;
                 }
 
-                //// TODO Correctly orient the tiles
+                // Align the grid's edge tiles with each other
+                bool aligned;
+                Tile topLeft = result[0, 0];
 
-                if (others.Count == 1)
+                do
                 {
-                    result[width / 2, width / 2] = others[0];
+                    aligned = true;
+
+                    for (int i = 1; i < topRow.Count; i++)
+                    {
+                        aligned &= topRow[i - 1].TryAlignToEdge(topRow[i], (p) => p.Right(), (p) => p.Left());
+                    }
+
+                    for (int i = 1; aligned && i < rightRow.Count; i++)
+                    {
+                        aligned &= rightRow[i - 1].TryAlignToEdge(rightRow[i], (p) => p.Bottom(), (p) => p.Top());
+                    }
+
+                    for (int i = 1; aligned && i < bottomRow.Count; i++)
+                    {
+                        aligned &= bottomRow[i - 1].TryAlignToEdge(bottomRow[i], (p) => p.Left(), (p) => p.Right());
+                    }
+
+                    for (int i = 1; aligned && i < leftRow.Count - 1; i++)
+                    {
+                        aligned &= leftRow[i - 1].TryAlignToEdge(leftRow[i], (p) => p.Top(), (p) => p.Bottom());
+                    }
+
+                    if (aligned)
+                    {
+                        break;
+                    }
+
+                    topLeft.NextOrientation();
                 }
-                else if (others.Count > 1)
+                while (!aligned);
+
+                // Fill and align the inner square(s)
+                for (int y = 1; y < width - 1; y++)
                 {
-                    // TODO Recurse to fill in the next ring
+                    for (int x = 1; x < width - 1; x++)
+                    {
+                        Tile above = result[x, y - 1];
+
+                        for (int k = 0; k < others.Count; k++)
+                        {
+                            Tile thisTile = others[k];
+
+                            if (above.TryAlignToEdge(thisTile, (p) => p.Bottom(), (p) => p.Top()))
+                            {
+                                others.RemoveAt(k);
+                                result[x, y] = thisTile;
+                                break;
+                            }
+                        }
+                    }
                 }
 
                 return result;
@@ -237,15 +456,26 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
         {
             IList<string> tiles = await ReadResourceAsLinesAsync();
 
-            (ProductOfCornerTiles, WaterRoughness) = GetCornerTileIdProduct(tiles);
+            (long productOfCornerTiles, int waterRoughness, string image) = GetCornerTileIdProduct(tiles);
+
+            ProductOfCornerTiles = productOfCornerTiles;
+            WaterRoughness = waterRoughness;
+
+            Logger.WriteLine(image);
 
             if (Verbose)
             {
                 Logger.WriteLine("The product of the Ids of the four corner tiles is {0}.", ProductOfCornerTiles);
-                ////Logger.WriteLine("The roughness of the water is {0}.", WaterRoughness);
+                Logger.WriteLine("The roughness of the water is {0}.", WaterRoughness);
             }
 
-            return PuzzleResult.Create(ProductOfCornerTiles/*, WaterRoughness*/);
+            var result = new PuzzleResult();
+
+            result.Solutions.Add(ProductOfCornerTiles);
+            result.Solutions.Add(WaterRoughness);
+            result.Visualizations.Add(image);
+
+            return result;
         }
 
         /// <summary>
@@ -254,6 +484,11 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
         [System.Diagnostics.DebuggerDisplay("Id = {Id}")]
         private sealed class Tile
         {
+            /// <summary>
+            /// The number of times the tile has been flipped or rotated.
+            /// </summary>
+            private uint _iterations;
+
             /// <summary>
             /// Gets or sets the Id of the tile.
             /// </summary>
@@ -359,81 +594,50 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
                 => new string(Grid.Select((p) => p[^1]).ToArray());
 
             /// <summary>
-            /// Tries to align the other tile to this tile's right edge.
+            /// Tries to align the other tile to this tile's edge.
             /// </summary>
             /// <param name="other">The other tile to try to align.</param>
+            /// <param name="thisEdge">A delegate to a method to get the edge to align to.</param>
+            /// <param name="otherEdge">A delegate to a method to get the other edge to align with this tile.</param>
             /// <returns>
             /// <see langword="true"/> if <paramref name="other"/> was aligned
             /// to the right edge of this tile; otherwise <see langword="false"/>.
             /// </returns>
-            public bool TryAlignToRightEdge(Tile other)
+            public bool TryAlignToEdge(Tile other, Func<Tile, string> thisEdge, Func<Tile, string> otherEdge)
             {
                 if (!IsNeighbor(other))
                 {
                     return false;
                 }
 
-                string right = Right();
+                string mirror = thisEdge(this).Mirror();
 
                 // Flip and rotate the other tile until its left
                 // edge aligns with the right edge of this tile
-                for (int i = 0; i < 4; i++)
+                for (int i = 0; i < 8; i++)
                 {
-                    if (other.Left() == right)
+                    if (otherEdge(other) == mirror)
                     {
-                        break;
+                        return true;
                     }
 
-                    other.Flip();
-
-                    if (other.Left() == right)
-                    {
-                        break;
-                    }
-
-                    other.Rotate();
+                    other.NextOrientation();
                 }
 
-                return true;
+                return false;
             }
 
             /// <summary>
-            /// Tries to align the other tile to this tile's bottom edge.
+            /// Moves the tile to its next orientation.
             /// </summary>
-            /// <param name="other">The other tile to try to align.</param>
-            /// <returns>
-            /// <see langword="true"/> if <paramref name="other"/> was aligned
-            /// to the bottom edge of this tile; otherwise <see langword="false"/>.
-            /// </returns>
-            public bool TryAlignToBottomEdge(Tile other)
+            public void NextOrientation()
             {
-                if (!IsNeighbor(other))
+                Rotate();
+
+                if (++_iterations % 4 == 0)
                 {
-                    return false;
+                    Flip();
                 }
-
-                string bottom = Bottom();
-
-                // Flip and rotate the other tile until its top
-                // edge aligns with the bottom edge of this tile
-                for (int i = 0; i < 4; i++)
-                {
-                    if (other.Top() == bottom)
-                    {
-                        break;
-                    }
-
-                    other.Flip();
-
-                    if (other.Top() == bottom)
-                    {
-                        break;
-                    }
-
-                    other.Rotate();
-                }
-
-                return true;
             }
         }
     }
