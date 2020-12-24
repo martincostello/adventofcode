@@ -374,19 +374,20 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
                 while (!aligned);
 
                 // Fill and align the inner square(s)
-                for (int i = 1; i < width - 1; i++)
+                for (int y = 1; y < width - 1; y++)
                 {
-                    for (int j = 1; j < width - 1; j++)
+                    for (int x = 1; x < width - 1; x++)
                     {
+                        Tile above = result[x, y - 1];
+
                         for (int k = 0; k < others.Count; k++)
                         {
-                            Tile above = result[i, j - 1];
                             Tile thisTile = others[k];
 
                             if (above.TryAlignToEdge(thisTile, (p) => p.Bottom(), (p) => p.Top()))
                             {
                                 others.RemoveAt(k);
-                                result[i, j] = thisTile;
+                                result[x, y] = thisTile;
                                 break;
                             }
                         }
