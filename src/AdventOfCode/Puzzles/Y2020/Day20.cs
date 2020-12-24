@@ -6,6 +6,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Text;
     using System.Threading;
     using System.Threading.Tasks;
 
@@ -31,9 +32,9 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
         /// </summary>
         /// <param name="input">The input data containing the description of the tiles of the image.</param>
         /// <returns>
-        /// The product of the Ids of the four corner tiles and the roughness of the water.
+        /// The product of the Ids of the four corner tiles and the roughness of the water and the final image.
         /// </returns>
-        public static (long cornerIdProduct, int roughness) GetCornerTileIdProduct(IList<string> input)
+        public static (long cornerIdProduct, int roughness, string visualization) GetCornerTileIdProduct(IList<string> input)
         {
             IDictionary<long, Tile> tiles = ParseTiles(input);
 
@@ -109,7 +110,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
             int rotations = 0;
             int seaMonsters = 0;
 
-            while (true)
+            while (rotations < 8)
             {
                 seaMonsters = CountMonsters(finalImage);
 
@@ -126,22 +127,28 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
                 }
             }
 
+            var imageBuilder = new StringBuilder(width * (width + 2));
+
             int hashes = 0;
 
-            for (int i = 0; i < finalWidth; i++)
+            for (int j = 0; j < finalWidth; j++)
             {
-                for (int j = 0; j < finalWidth; j++)
+                for (int i = 0; i < finalWidth; i++)
                 {
+                    imageBuilder.Append(finalImage[i, j]);
+
                     if (finalImage[i, j] == '#')
                     {
                         hashes++;
                     }
                 }
+
+                imageBuilder.AppendLine();
             }
 
             int roughness = hashes - (seaMonsters * seaMonster.Length);
 
-            return (cornerIdProduct, roughness);
+            return (cornerIdProduct, roughness, imageBuilder.ToString());
 
             int CountMonsters(char[,] image)
             {
@@ -445,15 +452,26 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
         {
             IList<string> tiles = await ReadResourceAsLinesAsync();
 
-            (ProductOfCornerTiles, WaterRoughness) = GetCornerTileIdProduct(tiles);
+            (long productOfCornerTiles, int waterRoughness, string image) = GetCornerTileIdProduct(tiles);
+
+            ProductOfCornerTiles = productOfCornerTiles;
+            WaterRoughness = waterRoughness;
+
+            Logger.WriteLine(image);
 
             if (Verbose)
             {
                 Logger.WriteLine("The product of the Ids of the four corner tiles is {0}.", ProductOfCornerTiles);
-                ////Logger.WriteLine("The roughness of the water is {0}.", WaterRoughness);
+                Logger.WriteLine("The roughness of the water is {0}.", WaterRoughness);
             }
 
-            return PuzzleResult.Create(ProductOfCornerTiles/*, WaterRoughness*/);
+            var result = new PuzzleResult();
+
+            result.Solutions.Add(ProductOfCornerTiles);
+            result.Solutions.Add(WaterRoughness);
+            result.Visualizations.Add(image);
+
+            return result;
         }
 
         /// <summary>

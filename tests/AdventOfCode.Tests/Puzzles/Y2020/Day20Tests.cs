@@ -139,7 +139,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
             };
 
             // Act
-            (long actualCornerIdProduct, int actualRoughness) = Day20.GetCornerTileIdProduct(input);
+            (long actualCornerIdProduct, int actualRoughness, string visualization) = Day20.GetCornerTileIdProduct(input);
 
             // Assert
             actualCornerIdProduct.ShouldBe(20899048083289L);
