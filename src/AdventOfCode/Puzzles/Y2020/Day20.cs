@@ -192,23 +192,24 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
                 }
                 while (!aligned);
 
-                if (others.Count == 1)
+                // Fill and align the inner square(s)
+                for (int j = 1; j < width - 1; j++)
                 {
-                    // Align and place the center tile
-                    int centerIndex = width / 2;
+                    for (int i = 1; i < width - 1; i++)
+                    {
+                        for (int k = 0; k < others.Count; k++)
+                        {
+                            Tile above = result[i, j - 1];
+                            Tile thisTile = others[k];
 
-                    Tile center = others[0];
-                    Tile right = result[centerIndex + 1, centerIndex];
-
-                    right.TryAlignToEdge(center, (p) => p.Left(), (p) => p.Right());
-
-                    result[centerIndex, centerIndex] = center;
-                }
-                else if (others.Count > 1)
-                {
-                    // TODO Recurse to fill in the next ring
-                    ////(corners, edges, others) = Geometry(others);
-                    ////Tile[,] inner = BuildImage(corners, edges, others);
+                            if (above.TryAlignToEdge(thisTile, (p) => p.Bottom(), (p) => p.Top()))
+                            {
+                                others.RemoveAt(k);
+                                result[i, j] = thisTile;
+                                break;
+                            }
+                        }
+                    }
                 }
 
                 return result;
