@@ -35,10 +35,11 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
             };
 
             // Act
-            int actual = Day21.GetIngredientsWithNoAllergens(foods);
+            (int actualOccurrences, string actualAllergens) = Day21.GetIngredientsWithNoAllergens(foods);
 
             // Assert
-            actual.ShouldBe(5);
+            actualOccurrences.ShouldBe(5);
+            actualAllergens.ShouldBe("mxmxvkd,sqjhc,fvjkl");
         }
 
         [Fact]
@@ -49,6 +50,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
 
             // Assert
             puzzle.IngredientsWithNoAllergens.ShouldBe(2098);
+            puzzle.CanonicalAllergens.ShouldBe("ppdplc,gkcplx,ktlh,msfmt,dqsbql,mvqkdj,ggsz,hbhsx");
         }
     }
 }

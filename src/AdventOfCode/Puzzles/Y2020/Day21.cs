@@ -16,19 +16,28 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
     public sealed class Day21 : Puzzle
     {
         /// <summary>
+        /// Gets the canonocal list of ingredients that are allergens.
+        /// </summary>
+        public string CanonicalAllergens { get; private set; } = string.Empty;
+
+        /// <summary>
         /// Gets the number of times ingredients with no allergens appear.
         /// </summary>
         public int IngredientsWithNoAllergens { get; private set; }
 
         /// <summary>
-        /// Gets the number of times ingredients with no allergens appear in the specified foods.
+        /// Gets the number of times ingredients with no allergens appear in the specified foods
+        /// and the list of ingredients which are the allergens.
         /// </summary>
         /// <param name="foods">The foods to check for allergens.</param>
         /// <param name="cancellationToken">The optional cancellation token to use.</param>
         /// <returns>
-        /// The number of times ingredients with no allergens appear in the food.
+        /// The number of times ingredients with no allergens appear in the food and
+        /// the canonical sorted list of ingredients which are allergens.
         /// </returns>
-        public static int GetIngredientsWithNoAllergens(IEnumerable<string> foods, CancellationToken cancellationToken = default)
+        public static (int occurences, string canonicalAllergens) GetIngredientsWithNoAllergens(
+            IEnumerable<string> foods,
+            CancellationToken cancellationToken = default)
         {
             // Based on https://github.com/DanaL/AdventOfCode/blob/master/2020/Day21.cs
             var parsedFoods = new List<(string[] ingredients, string[] allergens)>();
@@ -112,10 +121,19 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
 
             cancellationToken.ThrowIfCancellationRequested();
 
-            return occurrences.Keys
+            int occurences = occurrences.Keys
                 .Where((p) => !allergicIngredients.Contains(p))
                 .Select((p) => occurrences[p])
                 .Sum();
+
+            string[] sortedAllergens = allergensForIngredients
+                .OrderBy((p) => p.Value)
+                .Select((p) => p.Key)
+                .ToArray();
+
+            string canonicalAllergens = string.Join(',', sortedAllergens);
+
+            return (occurences, canonicalAllergens);
         }
 
         /// <inheritdoc />
@@ -123,14 +141,15 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
         {
             IList<string> recipies = await ReadResourceAsLinesAsync();
 
-            IngredientsWithNoAllergens = GetIngredientsWithNoAllergens(recipies, cancellationToken);
+            (IngredientsWithNoAllergens, CanonicalAllergens) = GetIngredientsWithNoAllergens(recipies, cancellationToken);
 
             if (Verbose)
             {
                 Logger.WriteLine("Ingredients with no allergens appear {0} times.", IngredientsWithNoAllergens);
+                Logger.WriteLine("The canonical allergens are: {0}.", CanonicalAllergens);
             }
 
-            return PuzzleResult.Create(IngredientsWithNoAllergens);
+            return PuzzleResult.Create(IngredientsWithNoAllergens, CanonicalAllergens);
         }
     }
 }
