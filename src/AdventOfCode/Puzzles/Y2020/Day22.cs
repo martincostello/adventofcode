@@ -49,9 +49,9 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
                 .Select(ParseInt32)
                 .ToList();
 
-            return Play(deck1, deck2, recursive);
+            return Play(new Queue<int>(deck1), new Queue<int>(deck2), recursive);
 
-            static int Play(List<int> deck1, List<int> deck2, bool recursive)
+            static int Play(Queue<int> deck1, Queue<int> deck2, bool recursive)
             {
                 var previousHands1 = new HashSet<string>();
                 var previousHands2 = new HashSet<string>();
@@ -74,18 +74,15 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
                         }
                     }
 
-                    int card1 = deck1[0];
-                    int card2 = deck2[0];
-
-                    deck1.RemoveAt(0);
-                    deck2.RemoveAt(0);
+                    int card1 = deck1.Dequeue();
+                    int card2 = deck2.Dequeue();
 
                     int winner;
 
                     if (recursive && deck1.Count >= card1 && deck2.Count >= card2)
                     {
-                        var subDeck1 = deck1.Take(card1).ToList();
-                        var subDeck2 = deck2.Take(card2).ToList();
+                        var subDeck1 = new Queue<int>(deck1.Take(card1));
+                        var subDeck2 = new Queue<int>(deck2.Take(card2));
 
                         int score = Play(subDeck1, subDeck2, recursive);
 
@@ -98,13 +95,13 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
 
                     if (winner == 1)
                     {
-                        deck1.Insert(deck1.Count, card1);
-                        deck1.Insert(deck1.Count, card2);
+                        deck1.Enqueue(card1);
+                        deck1.Enqueue(card2);
                     }
                     else
                     {
-                        deck2.Insert(deck2.Count, card2);
-                        deck2.Insert(deck2.Count, card1);
+                        deck2.Enqueue(card2);
+                        deck2.Enqueue(card1);
                     }
                 }
 
@@ -113,13 +110,14 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
                 return Score(winnersDeck);
             }
 
-            static int Score(List<int> deck)
+            static int Score(Queue<int> deck)
             {
+                var copy = new Queue<int>(deck);
                 int score = 0;
 
-                for (int i = 0; i < deck.Count; i++)
+                while (copy.TryDequeue(out int card))
                 {
-                    score += deck[deck.Count - i - 1] * (i + 1);
+                    score += card * (copy.Count + 1);
                 }
 
                 return score;
