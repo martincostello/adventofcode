@@ -112,7 +112,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
 
             while (rotations < 8)
             {
-                seaMonsters = CountMonsters(finalImage);
+                seaMonsters = FindMonsters(finalImage);
 
                 if (seaMonsters > 0)
                 {
@@ -127,20 +127,28 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
                 }
             }
 
-            var imageBuilder = new StringBuilder(width * (width + 2));
-
             int hashes = 0;
 
             for (int j = 0; j < finalWidth; j++)
             {
                 for (int i = 0; i < finalWidth; i++)
                 {
-                    imageBuilder.Append(finalImage[i, j]);
-
                     if (finalImage[i, j] == '#')
                     {
                         hashes++;
                     }
+                }
+            }
+
+            FindMonsters(finalImage, highlightMonsters: true);
+
+            var imageBuilder = new StringBuilder(width * (width + 2));
+
+            for (int j = 0; j < finalWidth; j++)
+            {
+                for (int i = 0; i < finalWidth; i++)
+                {
+                    imageBuilder.Append(finalImage[i, j]);
                 }
 
                 imageBuilder.AppendLine();
@@ -150,7 +158,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
 
             return (cornerIdProduct, roughness, imageBuilder.ToString());
 
-            int CountMonsters(char[,] image)
+            int FindMonsters(char[,] image, bool highlightMonsters = false)
             {
                 int width = image.GetLength(0);
                 int monsters = 0;
@@ -172,6 +180,17 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
                         if (pixels == seaMonster.Length)
                         {
                             monsters++;
+
+                            if (highlightMonsters)
+                            {
+                                foreach ((int offsetX, int offsetY) in seaMonster)
+                                {
+                                    if (image[x + offsetX, y + offsetY] == '#')
+                                    {
+                                        image[x + offsetX, y + offsetY] = 'O';
+                                    }
+                                }
+                            }
                         }
                     }
                 }
@@ -355,9 +374,9 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
                 while (!aligned);
 
                 // Fill and align the inner square(s)
-                for (int j = 1; j < width - 1; j++)
+                for (int i = 1; i < width - 1; i++)
                 {
-                    for (int i = 1; i < width - 1; i++)
+                    for (int j = 1; j < width - 1; j++)
                     {
                         for (int k = 0; k < others.Count; k++)
                         {
