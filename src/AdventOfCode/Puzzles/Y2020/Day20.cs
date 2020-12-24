@@ -80,7 +80,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
                         {
                             Tile edge = edges[j];
 
-                            if (!current.TryAlignToRightEdge(edge))
+                            if (!current.IsNeighbor(edge))
                             {
                                 continue;
                             }
@@ -108,7 +108,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
                             continue;
                         }
 
-                        if (!last.TryAlignToRightEdge(corner))
+                        if (!last.IsNeighbor(corner))
                         {
                             continue;
                         }
