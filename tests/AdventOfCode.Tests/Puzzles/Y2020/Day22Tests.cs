@@ -22,8 +22,10 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
         {
         }
 
-        [Fact]
-        public void Y2020_Day22_PlayCombat_Returns_Correct_Value()
+        [Theory]
+        [InlineData(false, 306)]
+        [InlineData(true, 291)]
+        public void Y2020_Day22_PlayCombat_Returns_Correct_Value(bool recursive, int expected)
         {
             // Arrange
             string[] values = new[]
@@ -44,10 +46,10 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
             };
 
             // Act
-            int actual = Day22.PlayCombat(values);
+            int actual = Day22.PlayCombat(values, recursive);
 
             // Assert
-            actual.ShouldBe(306);
+            actual.ShouldBe(expected);
         }
 
         [Fact]
@@ -58,6 +60,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
 
             // Assert
             puzzle.WinningScore.ShouldBe(33694);
+            puzzle.WinningScoreRecursive.ShouldBe(31835);
         }
     }
 }
