@@ -245,7 +245,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
 
                 // Iterate through the corners and find the tiles that adjoin it to the right:
                 // [Corner] -> [Edge] -> [Edge] -> [Edge]
-                for (int i = 0; i < 4; i++)
+                for (int i = 0; i < corners.Count; i++)
                 {
                     Tile corner = corners[i];
                     Tile current = corner;
@@ -345,23 +345,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
 
                     for (int i = 1; aligned && i < leftRow.Count - 1; i++)
                     {
-                        bool foundAlignment = false;
-
-                        string mirrorTop = leftRow[i - 1].Top().Mirror();
-                        Tile thisTile = leftRow[i];
-
-                        for (int j = 0; j < 8; j++)
-                        {
-                            if (mirrorTop == thisTile.Bottom())
-                            {
-                                foundAlignment = true;
-                                break;
-                            }
-
-                            thisTile.NextOrientation();
-                        }
-
-                        aligned &= foundAlignment;
+                        aligned &= leftRow[i - 1].TryAlignToEdge(leftRow[i], (p) => p.Top(), (p) => p.Bottom());
                     }
 
                     if (aligned)
