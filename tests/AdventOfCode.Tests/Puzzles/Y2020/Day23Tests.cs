@@ -3,6 +3,8 @@
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2020
 {
+    using System.Collections.Generic;
+    using System.Linq;
     using System.Threading.Tasks;
     using Shouldly;
     using Xunit;
@@ -23,18 +25,42 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
         }
 
         [Theory]
-        [InlineData(10, "92658374")]
-        [InlineData(100, "67384529")]
-        public void Y2020_Day23_Play_Returns_Correct_Value(int moves, string expected)
+        [InlineData(10, new[] { 5, 8, 3, 7, 4, 1, 9, 2, 6 })]
+        [InlineData(100, new[] { 2, 9, 1, 6, 7, 3, 8, 4, 5, })]
+        public void Y2020_Day23_Play_Returns_Correct_Value_Part_1(int moves, int[] expected)
         {
             // Arrange
             int[] arrangement = { 3, 8, 9, 1, 2, 5, 4, 6, 7 };
 
             // Act
-            string actual = Day23.Play(arrangement, moves);
+            LinkedList<int> actual = Day23.Play(arrangement, moves);
 
             // Assert
             actual.ShouldBe(expected);
+        }
+
+        [Fact]
+        public void Y2020_Day23_Play_Returns_Correct_Value_Part_2()
+        {
+            // Arrange
+            IEnumerable<int> arrangement = new[] { 3, 8, 9, 1, 2, 5, 4, 6, 7 }.Concat(Enumerable.Range(10, 999_991));
+
+            // Act
+            LinkedList<int> actual = Day23.Play(arrangement, moves: 10_000_000);
+
+            LinkedListNode<int>? item1 = actual.Find(1);
+
+            // Assert
+            item1.ShouldNotBeNull();
+
+            var next = item1.Next ?? actual.First;
+            next.ShouldNotBeNull();
+            next.Value.ShouldBe(934001);
+
+            next = next.Next ?? actual.First;
+
+            next.ShouldNotBeNull();
+            next.Value.ShouldBe(159792);
         }
 
         [Fact]
@@ -45,6 +71,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
 
             // Assert
             puzzle.LabelsAfterCup1.ShouldBe("24987653");
+            puzzle.ProductOfLabelsAfterCup1.ShouldBe(442938711161L);
         }
     }
 }

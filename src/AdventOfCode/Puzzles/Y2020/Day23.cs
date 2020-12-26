@@ -21,31 +21,45 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
         public string LabelsAfterCup1 { get; private set; } = string.Empty;
 
         /// <summary>
+        /// Gets the product of the labels of the two cups after cup 1 after 10,000,000 moves.
+        /// </summary>
+        public long ProductOfLabelsAfterCup1 { get; private set; }
+
+        /// <summary>
         /// Plays a game of cups using the specified arrangement of cups for a number of moves.
         /// </summary>
         /// <param name="arrangement">The starting arrangement of the cups.</param>
         /// <param name="moves">The number of moves to make.</param>
         /// <returns>
-        /// The labels of the cups after cup 1 after the specified number of moves.
+        /// The circle of cups when the game ends.
         /// </returns>
-        public static string Play(IEnumerable<int> arrangement, int moves)
+        public static LinkedList<int> Play(IEnumerable<int> arrangement, int moves)
         {
             var circle = new LinkedList<int>(arrangement);
 
             int minimum = circle.Min();
             int maximum = circle.Max();
 
-            var current = circle.First!;
+            var nodeMap = new Dictionary<int, LinkedListNode<int>>();
+            var current = circle.First;
+
+            while (current is not null)
+            {
+                nodeMap[current.Value] = current;
+                current = current.Next;
+            }
+
+            current = circle.First!;
 
             for (int i = 0; i < moves; i++)
             {
                 const int ToRemove = 3;
-                var selections = new List<int>(ToRemove);
+                var selections = new List<LinkedListNode<int>>(ToRemove);
 
                 for (int j = 0; j < ToRemove; j++)
                 {
                     var selection = circle.Clockwise(current);
-                    selections.Add(selection.Value);
+                    selections.Add(selection);
                     circle.Remove(selection);
                 }
 
@@ -60,40 +74,54 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
                         destination = maximum;
                     }
                 }
-                while (selections.Contains(destination));
+                while (selections.Exists((p) => p.Value == destination));
 
-                var destinationNode = circle.Find(destination);
+                var destinationNode = nodeMap[destination];
 
                 while (selections.Count > 0)
                 {
-                    int selection = selections[0];
-                    destinationNode = circle.AddAfter(destinationNode!, selection);
+                    var selection = selections[0];
+                    circle.AddAfter(destinationNode!, selection);
+                    destinationNode = selection;
                     selections.Remove(selection);
                 }
 
                 current = circle.Clockwise(current);
             }
 
-            string final = string.Join(string.Empty, circle);
-            int index = final.IndexOf('1', StringComparison.Ordinal);
-
-            return final[(index + 1) ..] + final[..index];
+            return circle;
         }
 
         /// <inheritdoc />
         protected override Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
         {
             IEnumerable<int> arrangement = args[0].Select((p) => p - '0').ToArray();
-            int moves = 100;
 
-            LabelsAfterCup1 = Play(arrangement, moves);
+            var circle = Play(arrangement, moves: 100);
+
+            string final = string.Join(string.Empty, circle);
+            int index = final.IndexOf('1', StringComparison.Ordinal);
+
+            LabelsAfterCup1 = final[(index + 1) ..] + final[..index];
+
+            arrangement = arrangement.Concat(Enumerable.Range(10, 999_991));
+
+            circle = Play(arrangement, 10_000_000);
+
+            var item1 = circle.Find(1);
+
+            ProductOfLabelsAfterCup1 =
+                1L *
+                item1!.Next!.Value *
+                item1.Next.Next!.Value;
 
             if (Verbose)
             {
-                Logger.WriteLine("The labels on the cups after {0} moves is {1}.", moves, LabelsAfterCup1);
+                Logger.WriteLine("The labels on the cups after 100 moves is {0}.", LabelsAfterCup1);
+                Logger.WriteLine("The product of the labels on the first two cups after cup 1 after 10,000,000 moves is {0}.", ProductOfLabelsAfterCup1);
             }
 
-            return PuzzleResult.Create(LabelsAfterCup1);
+            return PuzzleResult.Create(LabelsAfterCup1, ProductOfLabelsAfterCup1);
         }
     }
 }
