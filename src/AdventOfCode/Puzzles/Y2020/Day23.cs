@@ -40,7 +40,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
 
                 for (int j = 0; j < ToRemove; j++)
                 {
-                    var selection = NextCircular(current);
+                    var selection = circle.Clockwise(current);
                     selections.Add(selection.Value);
                     circle.Remove(selection);
                 }
@@ -67,18 +67,13 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
                     selections.Remove(selection);
                 }
 
-                current = NextCircular(current);
+                current = circle.Clockwise(current);
             }
 
             string final = string.Join(string.Empty, circle);
             int index = final.IndexOf('1', StringComparison.Ordinal);
 
             return final[(index + 1) ..] + final[..index];
-
-            LinkedListNode<int> NextCircular(LinkedListNode<int> node)
-            {
-                return node.Next ?? circle!.First!;
-            }
         }
 
         /// <inheritdoc />
