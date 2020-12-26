@@ -63,15 +63,10 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
             var circle = new LinkedList<int>(Enumerable.Range(1, count));
             var current = circle.First!;
 
-            LinkedListNode<int> NextCircular(LinkedListNode<int> node)
-            {
-                return node.Next ?? circle.First!;
-            }
-
             while (circle.Count > 1)
             {
-                circle.Remove(NextCircular(current));
-                current = NextCircular(current);
+                circle.Remove(circle.Clockwise(current));
+                current = circle.Clockwise(current);
             }
 
             return circle.First!.Value;
@@ -90,32 +85,27 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
             var current = circle.First!;
             var opposite = current;
 
-            LinkedListNode<int> NextCircular(LinkedListNode<int> node)
-            {
-                return node.Next ?? circle.First!;
-            }
-
             int steps = circle.Count / 2;
 
             for (int i = 0; i < steps; i++)
             {
-                opposite = NextCircular(opposite);
+                opposite = circle.Clockwise(opposite);
             }
 
             while (circle.Count > 1)
             {
-                var next = NextCircular(opposite);
+                var next = circle.Clockwise(opposite);
 
                 if (circle.Count % 2 == 1)
                 {
-                    next = NextCircular(next);
+                    next = circle.Clockwise(next);
                 }
 
                 circle.Remove(opposite);
 
                 opposite = next;
 
-                current = NextCircular(current);
+                current = circle.Clockwise(current);
             }
 
             return circle.First!.Value;
