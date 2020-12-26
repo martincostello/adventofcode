@@ -105,9 +105,9 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
 
                         int count = 0;
 
-                        foreach (Tile neighbor in tile.Neighbours())
+                        foreach (Tile neighbor in tile.Neighbors())
                         {
-                            if (floor.TryGetValue(neighbor, out bool foo) && foo)
+                            if (floor.TryGetValue(neighbor, out bool isNeighborBlack) && isNeighborBlack)
                             {
                                 count++;
                             }
@@ -253,12 +253,12 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
             public Tile SouthWest() => this + new Tile(-1, 0, 1);
 
             /// <summary>
-            /// Enumerates the tile's neighbours.
+            /// Enumerates the tile's neighbors.
             /// </summary>
             /// <returns>
-            /// The neighbours of this tile.
+            /// The neighbors of this tile.
             /// </returns>
-            public IEnumerable<Tile> Neighbours()
+            public IEnumerable<Tile> Neighbors()
             {
                 yield return West();
                 yield return NorthWest();
