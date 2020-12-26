@@ -28,9 +28,13 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
         /// <returns>
         /// The labels of the cups after cup 1 after the specified number of moves.
         /// </returns>
-        public static string Play(string arrangement, int moves)
+        public static string Play(IEnumerable<int> arrangement, int moves)
         {
-            var circle = new LinkedList<int>(arrangement.Select((p) => p - '0'));
+            var circle = new LinkedList<int>(arrangement);
+
+            int minimum = circle.Min();
+            int maximum = circle.Max();
+
             var current = circle.First!;
 
             for (int i = 0; i < moves; i++)
@@ -51,9 +55,9 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
                 {
                     destination--;
 
-                    if (destination < 1)
+                    if (destination < minimum)
                     {
-                        destination = 9;
+                        destination = maximum;
                     }
                 }
                 while (selections.Contains(destination));
@@ -79,7 +83,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
         /// <inheritdoc />
         protected override Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
         {
-            string arrangement = args[0];
+            IEnumerable<int> arrangement = args[0].Select((p) => p - '0').ToArray();
             int moves = 100;
 
             LabelsAfterCup1 = Play(arrangement, moves);

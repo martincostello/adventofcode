@@ -28,7 +28,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
         public void Y2020_Day23_Play_Returns_Correct_Value(int moves, string expected)
         {
             // Arrange
-            string arrangement = "389125467";
+            int[] arrangement = { 3, 8, 9, 1, 2, 5, 4, 6, 7 };
 
             // Act
             string actual = Day23.Play(arrangement, moves);
