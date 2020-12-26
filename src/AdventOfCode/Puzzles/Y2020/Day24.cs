@@ -88,6 +88,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
                 int n = Math.Max(maximumX, maximumY);
                 n = Math.Max(n, maximumZ) + 1;
 
+                var result = new Dictionary<Tile, bool>(floor);
+
                 for (int x = -n; x <= n; x++)
                 {
                     for (int y = Math.Max(-n, -x - n); y <= Math.Min(n, -x + n); y++)
@@ -96,52 +98,33 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
 
                         var tile = new Tile(x, y, z);
 
-                        if (!floor.ContainsKey(tile))
+                        if (!floor.TryGetValue(tile, out bool isBlack))
                         {
-                            floor[tile] = false;
+                            isBlack = false;
+                        }
+
+                        int count = 0;
+
+                        foreach (Tile neighbor in tile.Neighbours())
+                        {
+                            if (floor.TryGetValue(neighbor, out bool foo) && foo)
+                            {
+                                count++;
+                            }
+                        }
+
+                        if (isBlack && (count == 0 || count > 2))
+                        {
+                            result[tile] = false;
+                        }
+                        else if (!isBlack && count == 2)
+                        {
+                            result[tile] = true;
                         }
                     }
                 }
 
-                var copy = new Dictionary<Tile, bool>(floor);
-
-                foreach ((Tile tile, bool isBlack) in floor)
-                {
-                    int count = CountBlackNeighbors(tile);
-
-                    if (isBlack && (count == 0 || count > 2))
-                    {
-                        copy[tile] = false;
-                    }
-                    else if (!isBlack && count == 2)
-                    {
-                        copy[tile] = true;
-                    }
-                }
-
-                return copy;
-
-                int CountBlackNeighbors(Tile tile)
-                {
-                    int count = 0;
-
-                    foreach (Tile neighbor in tile.Neighbours())
-                    {
-                        count += IsTileBlack(neighbor);
-                    }
-
-                    return count;
-                }
-
-                int IsTileBlack(Tile tile)
-                {
-                    if (!floor.TryGetValue(tile, out bool isBlack))
-                    {
-                        isBlack = false;
-                    }
-
-                    return isBlack ? 1 : 0;
-                }
+                return result;
             }
         }
 
