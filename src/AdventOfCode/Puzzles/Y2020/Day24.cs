@@ -16,20 +16,26 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
     public sealed class Day24 : Puzzle
     {
         /// <summary>
-        /// Gets the product of the two input values that sum to a value of 2020.
+        /// Gets the number of black tiles after 1 day.
         /// </summary>
-        public int BlackTiles { get; private set; }
+        public int BlackTilesDay0 { get; private set; }
+
+        /// <summary>
+        /// Gets the number of black tiles after 100 days.
+        /// </summary>
+        public int BlackTilesDay100 { get; private set; }
 
         /// <summary>
         /// Applies the tiling pattern to the floor using the specified instructions.
         /// </summary>
         /// <param name="instructions">The instructions of how to flip the tiles on the floor.</param>
+        /// <param name="days">The number of days to iterate the floor for.</param>
         /// <returns>
         /// The number of black tiles on the floor once the instructions have been followed.
         /// </returns>
-        public static int TileFloor(IEnumerable<string> instructions)
+        public static int TileFloor(ICollection<string> instructions, int days)
         {
-            var tiles = new Dictionary<Tile, bool>();
+            var floor = new Dictionary<Tile, bool>();
 
             foreach (string instruction in instructions)
             {
@@ -57,15 +63,86 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
                     };
                 }
 
-                if (!tiles.TryGetValue(destination, out bool isBlack))
+                if (!floor.TryGetValue(destination, out bool isBlack))
                 {
                     isBlack = false;
                 }
 
-                tiles[destination] = !isBlack;
+                floor[destination] = !isBlack;
             }
 
-            return tiles.Count((p) => p.Value);
+            for (int i = 0; i < days; i++)
+            {
+                floor = Iterate(floor);
+            }
+
+            return floor.Count((p) => p.Value);
+
+            static Dictionary<Tile, bool> Iterate(Dictionary<Tile, bool> floor)
+            {
+                // See https://www.redblobgames.com/grids/hexagons/#range
+                int maximumX = floor.Max((p) => Math.Abs(p.Key.X));
+                int maximumY = floor.Max((p) => Math.Abs(p.Key.Y));
+                int maximumZ = floor.Max((p) => Math.Abs(p.Key.Z));
+
+                int n = Math.Max(maximumX, maximumY);
+                n = Math.Max(n, maximumZ) + 1;
+
+                for (int x = -n; x <= n; x++)
+                {
+                    for (int y = Math.Max(-n, -x - n); y <= Math.Min(n, -x + n); y++)
+                    {
+                        int z = -x - y;
+
+                        var tile = new Tile(x, y, z);
+
+                        if (!floor.ContainsKey(tile))
+                        {
+                            floor[tile] = false;
+                        }
+                    }
+                }
+
+                var copy = new Dictionary<Tile, bool>(floor);
+
+                foreach ((Tile tile, bool isBlack) in floor)
+                {
+                    int count = CountBlackNeighbors(tile);
+
+                    if (isBlack && (count == 0 || count > 2))
+                    {
+                        copy[tile] = false;
+                    }
+                    else if (!isBlack && count == 2)
+                    {
+                        copy[tile] = true;
+                    }
+                }
+
+                return copy;
+
+                int CountBlackNeighbors(Tile tile)
+                {
+                    int count = 0;
+
+                    foreach (Tile neighbor in tile.Neighbours())
+                    {
+                        count += IsTileBlack(neighbor);
+                    }
+
+                    return count;
+                }
+
+                int IsTileBlack(Tile tile)
+                {
+                    if (!floor.TryGetValue(tile, out bool isBlack))
+                    {
+                        isBlack = false;
+                    }
+
+                    return isBlack ? 1 : 0;
+                }
+            }
         }
 
         /// <inheritdoc />
@@ -73,19 +150,22 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
         {
             IList<string> instructions = await ReadResourceAsLinesAsync();
 
-            BlackTiles = TileFloor(instructions);
+            BlackTilesDay0 = TileFloor(instructions, days: 0);
+            BlackTilesDay100 = TileFloor(instructions, days: 100);
 
             if (Verbose)
             {
-                Logger.WriteLine("{0} tiles are left with the black side up", BlackTiles);
+                Logger.WriteLine("{0} tiles are left with the black side up initially.", BlackTilesDay0);
+                Logger.WriteLine("{0} tiles are left with the black side up after 100 days.", BlackTilesDay100);
             }
 
-            return PuzzleResult.Create(BlackTiles);
+            return PuzzleResult.Create(BlackTilesDay0, BlackTilesDay100);
         }
 
         /// <summary>
         /// A struct representing a hexagonal tile.
         /// </summary>
+        [System.Diagnostics.DebuggerDisplay("({X}, {Y}, {Z})")]
         private struct Tile : IEquatable<Tile>
         {
             /// <summary>
@@ -188,6 +268,22 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
             /// The tile south east of this tile.
             /// </returns>
             public Tile SouthWest() => this + new Tile(-1, 0, 1);
+
+            /// <summary>
+            /// Enumerates the tile's neighbours.
+            /// </summary>
+            /// <returns>
+            /// The neighbours of this tile.
+            /// </returns>
+            public IEnumerable<Tile> Neighbours()
+            {
+                yield return West();
+                yield return NorthWest();
+                yield return NorthEast();
+                yield return East();
+                yield return SouthEast();
+                yield return SouthWest();
+            }
         }
     }
 }
