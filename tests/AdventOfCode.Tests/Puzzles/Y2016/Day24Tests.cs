@@ -42,7 +42,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
             actual.ShouldBe(14);
         }
 
-        [Fact(Skip = "Too slow.")]
+        [Fact]
         public async Task Y2016_Day24_Solve_Returns_Correct_Solution()
         {
             // Act

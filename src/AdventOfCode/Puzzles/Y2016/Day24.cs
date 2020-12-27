@@ -6,6 +6,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
     using System;
     using System.Collections.Generic;
     using System.Drawing;
+    using System.Linq;
     using System.Threading;
     using System.Threading.Tasks;
 
@@ -39,6 +40,25 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
 
             double minimumCost = double.MaxValue;
 
+            var costs = new Dictionary<(Point a, Point b), double>();
+
+            Point[] allWaypoints = waypoints
+                .Prepend(origin)
+                .ToArray();
+
+            foreach (Point a in allWaypoints)
+            {
+                foreach (Point b in allWaypoints)
+                {
+                    if (a == b)
+                    {
+                        break;
+                    }
+
+                    costs[(b, a)] = costs[(a, b)] = PathFinding.AStar(maze, a, b, ManhattanDistance);
+                }
+            }
+
             foreach (IEnumerable<Point> goals in Maths.GetPermutations(waypoints))
             {
                 double cost = 0;
@@ -46,7 +66,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
 
                 foreach (Point goal in goals)
                 {
-                    cost += PathFinding.AStar(maze, current, goal, ManhattanDistance);
+                    cost += costs[(current, goal)];
 
                     if (cost > minimumCost)
                     {
@@ -58,7 +78,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
 
                 if (returnToOrigin && cost < minimumCost)
                 {
-                    cost += PathFinding.AStar(maze, current, origin, ManhattanDistance);
+                    cost += costs[(current, origin)];
                 }
 
                 if (cost < minimumCost)
