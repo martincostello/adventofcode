@@ -43,18 +43,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
             var start = new Point(1, 1);
             var goal = new Point(x, y);
 
-            var maze = new SquareGrid(x * 2, y * 2);
-
-            for (int i = 0; i < maze.Width; i++)
-            {
-                for (int j = 0; j < maze.Height; j++)
-                {
-                    if (IsWall(favoriteNumber, i, j))
-                    {
-                        maze.Walls.Add(new Point(i, j));
-                    }
-                }
-            }
+            SquareGrid maze = BuildMaze(x * 2, y * 2, favoriteNumber);
 
             return (int)PathFinding.AStar(
                 maze,
@@ -89,21 +78,13 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         /// </returns>
         private static int CountLocationsWithin50Steps(int favoriteNumber)
         {
-            var start = new Point(1, 1);
-            var maze = new SquareGrid(30, 30);
-
-            for (int x = 0; x < maze.Width; x++)
-            {
-                for (int y = 0; y < maze.Height; y++)
-                {
-                    if (IsWall(favoriteNumber, x, y))
-                    {
-                        maze.Walls.Add(new Point(x, y));
-                    }
-                }
-            }
-
             int count = 0;
+            int maximum = 50;
+            int dimensions = (maximum / 2) + 1;
+
+            SquareGrid maze = BuildMaze(dimensions, dimensions, favoriteNumber);
+
+            var start = new Point(1, 1);
 
             for (int x = 0; x < maze.Width; x++)
             {
@@ -113,7 +94,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
 
                     double cost = PathFinding.AStar(maze, start, goal, ManhattanDistance);
 
-                    if (cost <= 50)
+                    if (cost <= maximum)
                     {
                         count++;
                     }
@@ -124,19 +105,46 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         }
 
         /// <summary>
+        /// Builds a maze with the specified dimensions.
+        /// </summary>
+        /// <param name="width">The width of the maze.</param>
+        /// <param name="height">The height of the maze.</param>
+        /// <param name="seed">The seed to use for wall placement.</param>
+        /// <returns>
+        /// A <see cref="SquareGrid"/> representing the maze.
+        /// </returns>
+        private static SquareGrid BuildMaze(int width, int height, int seed)
+        {
+            var maze = new SquareGrid(width, height);
+
+            for (int i = 0; i < maze.Width; i++)
+            {
+                for (int j = 0; j < maze.Height; j++)
+                {
+                    if (IsWall(seed, i, j))
+                    {
+                        maze.Walls.Add(new Point(i, j));
+                    }
+                }
+            }
+
+            return maze;
+        }
+
+        /// <summary>
         /// Returns whether the specified coordinate is a wall.
         /// </summary>
-        /// <param name="favoriteNumber">The favourite number to use.</param>
+        /// <param name="seed">The seed number to use.</param>
         /// <param name="x">The X coordinate.</param>
         /// <param name="y">The Y coordinate.</param>
         /// <returns>
         /// <see langword="true"/> if the coordinate is a wall; otherwise <see langword="false"/>.
         /// </returns>
-        private static bool IsWall(int favoriteNumber, int x, int y)
+        private static bool IsWall(int seed, int x, int y)
         {
             int z = (x * x) + (3 * x) + (2 * x * y) + y + (y * y);
 
-            z += favoriteNumber;
+            z += seed;
 
             string binary = Convert.ToString(z, toBase: 2);
 
