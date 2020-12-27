@@ -60,7 +60,12 @@ namespace MartinCostello.AdventOfCode
                 }
             }
 
-            return costSoFar[goal];
+            if (!costSoFar.TryGetValue(goal, out double minimumCost))
+            {
+                minimumCost = double.NaN;
+            }
+
+            return minimumCost;
         }
 
         /// <summary>

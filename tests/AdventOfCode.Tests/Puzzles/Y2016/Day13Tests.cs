@@ -45,6 +45,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
 
             // Assert
             puzzle.FewestStepsToReach31X39Y.ShouldBe(82);
+            puzzle.LocationsWithin50.ShouldBe(138);
         }
     }
 }
