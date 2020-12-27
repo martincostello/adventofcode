@@ -23,19 +23,21 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         }
 
         [Theory]
-        [InlineData("hijkl", "")]
-        [InlineData("ihgpwlah", "DDRRRD")]
-        [InlineData("kglvqrro", "DDUDRLRRUDRD")]
-        [InlineData("ulqzkmiv", "DRURDRUDDLLDLUURRDULRLDUUDDDRR")]
-        public static void Y2016_Day17_GetShortestPathToVault_Returns_Correct_Solution(
+        [InlineData("hijkl", "", 0)]
+        [InlineData("ihgpwlah", "DDRRRD", 370)]
+        [InlineData("kglvqrro", "DDUDRLRRUDRD", 492)]
+        [InlineData("ulqzkmiv", "DRURDRUDDLLDLUURRDULRLDUUDDDRR", 830)]
+        public static void Y2016_Day17_GetPathsToVault_Returns_Correct_Solution(
             string passcode,
-            string expected)
+            string expectedShortestPath,
+            int expectedLongestPath)
         {
             // Act
-            string actual = Day17.GetShortestPathToVault(passcode);
+            (string actualShortestPath, int actualLongestPath) = Day17.GetPathsToVault(passcode);
 
             // Assert
-            actual.ShouldBe(expected);
+            actualShortestPath.ShouldBe(expectedShortestPath);
+            actualLongestPath.ShouldBe(expectedLongestPath);
         }
 
         [Fact]
@@ -46,6 +48,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
 
             // Assert
             puzzle.ShortestPathToVault.ShouldBe("DRRDRLDURD");
+            puzzle.LongestPathToVault.ShouldBe(618);
         }
     }
 }

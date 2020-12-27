@@ -24,13 +24,18 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         public string ShortestPathToVault { get; private set; } = string.Empty;
 
         /// <summary>
+        /// Gets the longest path to the vault.
+        /// </summary>
+        public int LongestPathToVault { get; private set; }
+
+        /// <summary>
         /// Determines the shortest path to reach the vault.
         /// </summary>
         /// <param name="passcode">The passcode to use.</param>
         /// <returns>
-        /// The shortest path that can be taken to reach the vault.
+        /// The shortest path that can be taken to reach the vault and the length of the longest path.
         /// </returns>
-        public static string GetShortestPathToVault(string passcode)
+        public static (string shortest, int longest) GetPathsToVault(string passcode)
         {
             var up = (vector: new Size(0, -1), direction: 'U');
             var down = (vector: new Size(0, 1), direction: 'D');
@@ -46,9 +51,16 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
 
             GetPathsToVault(Point.Empty, path, routes);
 
-            return routes
+            string shortestPath = routes
                 .OrderBy((p) => p.Length)
                 .FirstOrDefault() ?? string.Empty;
+
+            int longestPath = routes
+                .Select((p) => p.Length)
+                .OrderByDescending((p) => p)
+                .FirstOrDefault();
+
+            return (shortestPath, longestPath);
 
             void GetPathsToVault(Point current, Stack<char> path, ICollection<string> routes)
             {
@@ -57,13 +69,6 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
                 if (current == vault)
                 {
                     routes.Add(pathSoFar);
-                    return;
-                }
-
-                if (routes.Count > 0 &&
-                    pathSoFar.Length > routes.Min((p) => p.Length))
-                {
-                    // We cannot find a better path so stop searching
                     return;
                 }
 
@@ -123,14 +128,15 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         {
             string passcode = args[0];
 
-            ShortestPathToVault = GetShortestPathToVault(passcode);
+            (ShortestPathToVault, LongestPathToVault) = GetPathsToVault(passcode);
 
             if (Verbose)
             {
                 Logger.WriteLine("The shortest path to the vault is {0}.", ShortestPathToVault);
+                Logger.WriteLine("The longest path to the vault is {0}.", LongestPathToVault);
             }
 
-            return PuzzleResult.Create(ShortestPathToVault);
+            return PuzzleResult.Create(ShortestPathToVault, LongestPathToVault);
         }
     }
 }
