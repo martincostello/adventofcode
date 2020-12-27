@@ -12,7 +12,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
     /// <summary>
     /// A class representing the puzzle for <c>https://adventofcode.com/2016/day/13</c>. This class cannot be inherited.
     /// </summary>
-    [Puzzle(2016, 13, MinimumArguments = 1, IsHidden = true)]
+    [Puzzle(2016, 13, MinimumArguments = 1)]
     public sealed class Day13 : Puzzle
     {
         /// <summary>
@@ -26,7 +26,6 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         /// <param name="favoriteNumber">The office designer's favorite number.</param>
         /// <param name="x">The x-coordinate of the destination.</param>
         /// <param name="y">The y-coordinate of the destination.</param>
-        /// <param name="cancellationToken">The optional cancellation token to use.</param>
         /// <returns>
         /// The minimum number of steps required to reach the coordinate in the maze specified
         /// by <paramref name="x"/> and <paramref name="y"/>.
@@ -34,29 +33,26 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         public static int GetMinimumStepsToReachCoordinate(
             int favoriteNumber,
             int x,
-            int y,
-            CancellationToken cancellationToken = default)
+            int y)
         {
-            int[,] maze = new int[x * 2, y * 2];
+            var maze = new SquareGrid(x * 5, y * 5);
 
-            for (int i = 0; i < maze.GetLength(0); i++)
+            for (int i = 0; i < maze.Width; i++)
             {
-                for (int j = 0; j < maze.GetLength(1); j++)
+                for (int j = 0; j < maze.Height; j++)
                 {
-                    maze[i, j] = IsCoordinateWall(favoriteNumber, i, j) ? 1 : 0;
+                    if (IsCoordinateWall(favoriteNumber, i, j))
+                    {
+                        maze.Walls.Add(new Point(i, j));
+                    }
                 }
             }
 
-            int steps = 0;
-            var location = new Point(1, 1);
-            var destination = new Point(x, y);
-
-            while (!cancellationToken.IsCancellationRequested && location != destination)
-            {
-                // TODO Implement the puzzle
-            }
-
-            return steps;
+            return (int)PathFinding.AStar(
+                maze,
+                new Point(1, 1),
+                new Point(x, y),
+                (a, b) => Math.Abs(a.X - b.X) + Math.Abs(a.Y - b.Y));
 
             static bool IsCoordinateWall(int favoriteNumber, int x, int y)
             {
@@ -64,7 +60,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
 
                 z += favoriteNumber;
 
-                string binary = Convert.ToString(z, 2);
+                string binary = Convert.ToString(z, toBase: 2);
 
                 return binary.Count((p) => p == '1') % 2 != 0;
             }
@@ -75,7 +71,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         {
             int favoriteNumber = ParseInt32(args[0]);
 
-            FewestStepsToReach31X39Y = GetMinimumStepsToReachCoordinate(favoriteNumber, 31, 39, cancellationToken);
+            FewestStepsToReach31X39Y = GetMinimumStepsToReachCoordinate(favoriteNumber, 31, 39);
 
             if (Verbose)
             {
