@@ -21,13 +21,19 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         public int FewestStepsToVisitAllLocations { get; private set; }
 
         /// <summary>
+        /// Gets the fewest steps that can be taken to visit all of the locations and return to the origin.
+        /// </summary>
+        public int FewestStepsToVisitAllLocationsAndReturn { get; private set; }
+
+        /// <summary>
         /// Returns the minimum number of steps required to visit all of the locations in the maze.
         /// </summary>
         /// <param name="layout">The layout of the maze.</param>
+        /// <param name="returnToOrigin">Whether to return to the origin point.</param>
         /// <returns>
         /// The minimum number of steps required to visit all locations.
         /// </returns>
-        public static int GetMinimumStepsToVisitLocations(IList<string> layout)
+        public static int GetMinimumStepsToVisitLocations(IList<string> layout, bool returnToOrigin)
         {
             (SquareGrid maze, Point origin, IList<Point> waypoints) = BuildMaze(layout);
 
@@ -50,6 +56,11 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
                     current = goal;
                 }
 
+                if (returnToOrigin && cost < minimumCost)
+                {
+                    cost += PathFinding.AStar(maze, current, origin, ManhattanDistance);
+                }
+
                 if (cost < minimumCost)
                 {
                     minimumCost = cost;
@@ -67,14 +78,21 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         {
             IList<string> layout = await ReadResourceAsLinesAsync();
 
-            FewestStepsToVisitAllLocations = GetMinimumStepsToVisitLocations(layout);
+            FewestStepsToVisitAllLocations = GetMinimumStepsToVisitLocations(layout, returnToOrigin: false);
+            FewestStepsToVisitAllLocationsAndReturn = GetMinimumStepsToVisitLocations(layout, returnToOrigin: true);
 
             if (Verbose)
             {
-                Logger.WriteLine("The fewest number of steps required to visit every location is {0}.", FewestStepsToVisitAllLocations);
+                Logger.WriteLine(
+                    "The fewest number of steps required to visit every location is {0}.",
+                    FewestStepsToVisitAllLocations);
+
+                Logger.WriteLine(
+                    "The fewest number of steps required to visit every location and return to the origin is {0}.",
+                    FewestStepsToVisitAllLocationsAndReturn);
             }
 
-            return PuzzleResult.Create(FewestStepsToVisitAllLocations);
+            return PuzzleResult.Create(FewestStepsToVisitAllLocations, FewestStepsToVisitAllLocationsAndReturn);
         }
 
         /// <summary>
