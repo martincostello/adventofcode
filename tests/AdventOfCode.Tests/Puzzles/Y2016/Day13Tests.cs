@@ -22,7 +22,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         {
         }
 
-        [Theory(Skip = "Not implemented.")]
+        [Theory]
         [InlineData(10, 7, 4, 11)]
         public static void Y2016_Day13_GetMinimumStepsToReachCoordinate_Returns_Correct_Solution(
             int favoriteNumber,
@@ -37,14 +37,15 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
             actual.ShouldBe(expected);
         }
 
-        [Fact(Skip = "Not implemented.")]
-        public async Task Y2016_Day10_Solve_Returns_Correct_Solution()
+        [Fact]
+        public async Task Y2016_Day13_Solve_Returns_Correct_Solution()
         {
             // Act
-            var puzzle = await SolvePuzzleAsync<Day13>();
+            var puzzle = await SolvePuzzleAsync<Day13>("1362");
 
             // Assert
-            puzzle.FewestStepsToReach31X39Y.ShouldNotBe(0);
+            puzzle.FewestStepsToReach31X39Y.ShouldBe(82);
+            puzzle.LocationsWithin50.ShouldBe(138);
         }
     }
 }
