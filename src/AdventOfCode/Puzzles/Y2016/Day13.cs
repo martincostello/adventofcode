@@ -40,16 +40,11 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
             int x,
             int y)
         {
-            var start = new Point(1, 1);
-            var goal = new Point(x, y);
-
             SquareGrid maze = BuildMaze(x * 2, y * 2, favoriteNumber);
 
-            return (int)PathFinding.AStar(
-                maze,
-                start,
-                goal,
-                ManhattanDistance);
+            var goal = new Point(x, y);
+
+            return (int)GetMinimumStepsToGoal(maze, goal);
         }
 
         /// <inheritdoc />
@@ -84,15 +79,13 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
 
             SquareGrid maze = BuildMaze(dimensions, dimensions, favoriteNumber);
 
-            var start = new Point(1, 1);
-
             for (int x = 0; x < maze.Width; x++)
             {
                 for (int y = 0; y < maze.Height; y++)
                 {
                     var goal = new Point(x, y);
 
-                    double cost = PathFinding.AStar(maze, start, goal, ManhattanDistance);
+                    double cost = GetMinimumStepsToGoal(maze, goal);
 
                     if (cost <= maximum)
                     {
@@ -129,37 +122,39 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
             }
 
             return maze;
+
+            static bool IsWall(int seed, int x, int y)
+            {
+                int z = (x * x) + (3 * x) + (2 * x * y) + y + (y * y);
+
+                z += seed;
+
+                string binary = Convert.ToString(z, toBase: 2);
+
+                return binary.Count((p) => p == '1') % 2 != 0;
+            }
         }
 
         /// <summary>
-        /// Returns whether the specified coordinate is a wall.
+        /// Returns the minimum number of steps required to reach the specified goal.
         /// </summary>
-        /// <param name="seed">The seed number to use.</param>
-        /// <param name="x">The X coordinate.</param>
-        /// <param name="y">The Y coordinate.</param>
+        /// <param name="maze">The maze to traverse.</param>
+        /// <param name="goal">The destination to reach.</param>
         /// <returns>
-        /// <see langword="true"/> if the coordinate is a wall; otherwise <see langword="false"/>.
+        /// The minimum number of steps required to reach <paramref name="goal"/>.
         /// </returns>
-        private static bool IsWall(int seed, int x, int y)
+        private static double GetMinimumStepsToGoal(SquareGrid maze, Point goal)
         {
-            int z = (x * x) + (3 * x) + (2 * x * y) + y + (y * y);
+            var start = new Point(1, 1);
 
-            z += seed;
+            return PathFinding.AStar(
+                maze,
+                start,
+                goal,
+                ManhattanDistance);
 
-            string binary = Convert.ToString(z, toBase: 2);
-
-            return binary.Count((p) => p == '1') % 2 != 0;
+            static double ManhattanDistance(Point a, Point b)
+                => Math.Abs(a.X - b.X) + Math.Abs(a.Y - b.Y);
         }
-
-        /// <summary>
-        /// Returns the Manhattan distance between two points.
-        /// </summary>
-        /// <param name="a">The first point.</param>
-        /// <param name="b">The second point.</param>
-        /// <returns>
-        /// The Manhattan distance between <paramref name="a"/> and <paramref name="b"/>.
-        /// </returns>
-        private static double ManhattanDistance(Point a, Point b)
-            => Math.Abs(a.X - b.X) + Math.Abs(a.Y - b.Y);
     }
 }
