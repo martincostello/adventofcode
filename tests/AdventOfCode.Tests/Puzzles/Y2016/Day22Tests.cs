@@ -30,6 +30,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
 
             // Assert
             puzzle.ViableNodePairs.ShouldBe(985);
+            puzzle.MinimumStepsToExtract.ShouldBe(179);
         }
     }
 }

@@ -95,7 +95,7 @@ namespace MartinCostello.AdventOfCode.Api
         [InlineData(2016, 20, null, true, new object[] { 22887907u, 109u }, 0)]
         [InlineData(2016, 21, new[] { "abcdefgh" }, true, new object[] { "gcedfahb" }, 0)]
         [InlineData(2016, 21, new[] { "fbgdceah", "true" }, true, new object[] { "hegbdcfa" }, 0)]
-        [InlineData(2016, 22, null, true, new object[] { 985 }, 0)]
+        [InlineData(2016, 22, null, true, new object[] { 985, 179 }, 0)]
         [InlineData(2016, 23, null, true, new object[] { 14346, 479010906 }, 0, Skip = "Too slow.")]
         [InlineData(2016, 24, null, true, new object[] { 502, 724 }, 0)]
         [InlineData(2016, 25, null, true, new object[] { 198 }, 0)]

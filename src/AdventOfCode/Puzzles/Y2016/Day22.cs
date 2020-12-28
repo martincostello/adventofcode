@@ -5,6 +5,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
 {
     using System;
     using System.Collections.Generic;
+    using System.Drawing;
     using System.Linq;
     using System.Threading;
     using System.Threading.Tasks;
@@ -21,26 +22,32 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         public int ViableNodePairs { get; private set; }
 
         /// <summary>
+        /// Gets the minimum number of steps required to extract the data.
+        /// </summary>
+        public int MinimumStepsToExtract { get; private set; }
+
+        /// <summary>
         /// Counts the number of viable node pairs.
         /// </summary>
         /// <param name="output">The output from a <c>df</c> command.</param>
         /// <param name="logger">The optional logger to use.</param>
         /// <returns>
-        /// The number of viable nodes found by parsing <paramref name="output"/>.
+        /// The number of viable nodes found by parsing <paramref name="output"/> and
+        /// the minimum number of moves required to extract the data on the target node.
         /// </returns>
-        public static int CountViableNodePairs(IEnumerable<string> output, ILogger? logger = null)
+        public static (int viableNodes, int stepsToExtract) CountViableNodePairs(IEnumerable<string> output, ILogger? logger = null)
         {
             IList<Node> nodes = output
                 .Skip(2)
                 .Select(Node.Parse)
                 .ToList();
 
-            int count = 0;
+            int viableCount = 0;
             int nodeCount = nodes.Count;
 
             for (int i = 0; i < nodeCount; i++)
             {
-                Node a = nodes[i];
+                Node node = nodes[i];
 
                 for (int j = 0; j < nodeCount; j++)
                 {
@@ -49,52 +56,110 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
                         continue;
                     }
 
-                    Node b = nodes[j];
+                    Node other = nodes[j];
 
-                    if (a.Used > 0 && a.Used <= b.Available)
+                    if (node.Used > 0 && node.Used <= other.Available)
                     {
-                        count++;
+                        viableCount++;
                     }
                 }
             }
 
-            char[,] grid = new char[nodes.Max((p) => p.X) + 1, nodes.Max((p) => p.Y) + 1];
+            int width = nodes.Max((p) => p.Location.X) + 1;
+            int height = nodes.Max((p) => p.Location.Y) + 1;
 
-            Node goal = nodes
-                .Where((p) => p.Y == 0)
-                .OrderByDescending((p) => p.X)
+            char[,] grid = new char[width, height];
+
+            Node goalNode = nodes
+                .Where((p) => p.Location.Y == 0)
+                .OrderByDescending((p) => p.Location.X)
                 .First();
+
+            Node emptyNode = nodes.First((p) => p.Used == 0);
 
             int minimumSize = nodes.Select((p) => p.Size).Min();
 
-            for (int x = 0; x < grid.GetLength(0); x++)
-            {
-                for (int y = 0; y < grid.GetLength(1); y++)
-                {
-                    Node node = nodes.First((p) => p.X == x && p.Y == y);
+            const char Available = '.';
+            const char Empty = '_';
+            const char Full = '#';
+            const char Goal = 'G';
 
-                    if (node == goal)
+            for (int x = 0; x < width; x++)
+            {
+                for (int y = 0; y < height; y++)
+                {
+                    Node node = nodes.First((p) => p.Location.X == x && p.Location.Y == y);
+
+                    if (node == goalNode)
                     {
-                        grid[x, y] = 'G';
+                        grid[x, y] = Goal;
+                    }
+                    else if (node == emptyNode)
+                    {
+                        grid[x, y] = Empty;
                     }
                     else if (node.Used > minimumSize)
                     {
-                        grid[x, y] = '#';
-                    }
-                    else if (node.Used == 0)
-                    {
-                        grid[x, y] = '_';
+                        grid[x, y] = Full;
                     }
                     else
                     {
-                        grid[x, y] = '.';
+                        grid[x, y] = Available;
                     }
                 }
             }
 
             logger?.WriteGrid(grid);
 
-            return count;
+            var up = new Size(0, -1);
+            var down = new Size(0, 1);
+            var left = new Size(-1, 0);
+            var right = new Size(1, 0);
+
+            Point empty = emptyNode.Location;
+
+            int steps = 0;
+
+            // Move up until the "wall" is reached
+            while (grid[empty.X, empty.Y - 1] == Available)
+            {
+                empty += up;
+                steps++;
+            }
+
+            // Move left until there is no more blocking "wall"
+            while (grid[empty.X, empty.Y - 1] == Full)
+            {
+                empty += left;
+                steps++;
+            }
+
+            // Move to the top of the grid
+            while (empty.Y > 0)
+            {
+                empty += up;
+                steps++;
+            }
+
+            // Move to the square adjacent to the goal
+            while (grid[empty.X, empty.Y] != Goal)
+            {
+                empty += right;
+                steps++;
+            }
+
+            // Loop around to move the goal left
+            while (empty.X != 1)
+            {
+                empty += right;
+                empty += down;
+                empty += left;
+                empty += left;
+                empty += up;
+                steps += 5;
+            }
+
+            return (viableCount, steps);
         }
 
         /// <inheritdoc />
@@ -102,14 +167,15 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         {
             IList<string> output = await ReadResourceAsLinesAsync();
 
-            ViableNodePairs = CountViableNodePairs(output, Logger);
+            (ViableNodePairs, MinimumStepsToExtract) = CountViableNodePairs(output, Logger);
 
             if (Verbose)
             {
                 Logger.WriteLine("The number of viable pairs of nodes is {0:N0}.", ViableNodePairs);
+                Logger.WriteLine("The fewest number of steps required to extract the goal data is {0:N0}.", MinimumStepsToExtract);
             }
 
-            return PuzzleResult.Create(ViableNodePairs);
+            return PuzzleResult.Create(ViableNodePairs, MinimumStepsToExtract);
         }
 
         /// <summary>
@@ -123,15 +189,13 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
             /// <param name="name">The name of the storage node.</param>
             /// <param name="size">The size of the storage node in terabytes.</param>
             /// <param name="used">The amount of used space in the storage node, in terabytes.</param>
-            /// <param name="x">The X coordinate of the node.</param>
-            /// <param name="y">The Y cooridnate of the node.</param>
-            private Node(string name, int size, int used, int x, int y)
+            /// <param name="location">The coordinates of the node's location.</param>
+            private Node(string name, int size, int used, Point location)
             {
                 Name = name;
                 Size = size;
                 Used = used;
-                X = x;
-                Y = y;
+                Location = location;
             }
 
             /// <summary>
@@ -155,14 +219,9 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
             public int Available => Size - Used;
 
             /// <summary>
-            /// Gets the X coordinate of the node.
+            /// Gets the coordinates of the node.
             /// </summary>
-            public int X { get; private set; }
-
-            /// <summary>
-            /// Gets the Y coordinate of the node.
-            /// </summary>
-            public int Y { get; private set; }
+            public Point Location { get; private set; }
 
             /// <summary>
             /// Parses an instance of <see cref="Node"/> from the specified line
@@ -186,8 +245,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
                     split[0],
                     ParseInt32(split[1].TrimEnd('T')),
                     ParseInt32(split[2].TrimEnd('T')),
-                    x,
-                    y);
+                    new Point(x, y));
             }
 
             /// <summary>
