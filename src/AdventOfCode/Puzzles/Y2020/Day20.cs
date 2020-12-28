@@ -6,7 +6,6 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Text;
     using System.Threading;
     using System.Threading.Tasks;
 
@@ -31,10 +30,13 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
         /// when they are assembled in the correct order.
         /// </summary>
         /// <param name="input">The input data containing the description of the tiles of the image.</param>
+        /// <param name="logger">The logger to use.</param>
         /// <returns>
         /// The product of the Ids of the four corner tiles and the roughness of the water and the final image.
         /// </returns>
-        public static (long cornerIdProduct, int roughness, string visualization) GetCornerTileIdProduct(IList<string> input)
+        public static (long cornerIdProduct, int roughness, string visualization) GetCornerTileIdProduct(
+            IList<string> input,
+            ILogger logger)
         {
             IDictionary<long, Tile> tiles = ParseTiles(input);
 
@@ -142,21 +144,11 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
 
             FindMonsters(finalImage, highlightMonsters: true);
 
-            var imageBuilder = new StringBuilder(width * (width + 2));
-
-            for (int j = 0; j < finalWidth; j++)
-            {
-                for (int i = 0; i < finalWidth; i++)
-                {
-                    imageBuilder.Append(finalImage[i, j]);
-                }
-
-                imageBuilder.AppendLine();
-            }
+            string visualization = logger.WriteGrid(finalImage);
 
             int roughness = hashes - (seaMonsters * seaMonster.Length);
 
-            return (cornerIdProduct, roughness, imageBuilder.ToString());
+            return (cornerIdProduct, roughness, visualization);
 
             int FindMonsters(char[,] image, bool highlightMonsters = false)
             {
@@ -456,7 +448,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
         {
             IList<string> tiles = await ReadResourceAsLinesAsync();
 
-            (long productOfCornerTiles, int waterRoughness, string image) = GetCornerTileIdProduct(tiles);
+            (long productOfCornerTiles, int waterRoughness, string image) = GetCornerTileIdProduct(tiles, Logger);
 
             ProductOfCornerTiles = productOfCornerTiles;
             WaterRoughness = waterRoughness;

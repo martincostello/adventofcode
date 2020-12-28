@@ -3,6 +3,7 @@
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2020
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Text;
@@ -207,7 +208,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
             int width = grid.Count;
             int height = grid[0].Length;
 
-            var builder = new StringBuilder((width + 2) * height);
+            var builder = new StringBuilder((width + Environment.NewLine.Length) * height);
 
             for (int y = 0; y < height; y++)
             {
