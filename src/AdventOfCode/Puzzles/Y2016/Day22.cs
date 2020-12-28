@@ -65,6 +65,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
                 .OrderByDescending((p) => p.X)
                 .First();
 
+            int minimumSize = nodes.Select((p) => p.Size).Min();
+
             for (int x = 0; x < grid.GetLength(0); x++)
             {
                 for (int y = 0; y < grid.GetLength(1); y++)
@@ -75,7 +77,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
                     {
                         grid[x, y] = 'G';
                     }
-                    else if (node.Size > 200)
+                    else if (node.Used > minimumSize)
                     {
                         grid[x, y] = '#';
                     }
