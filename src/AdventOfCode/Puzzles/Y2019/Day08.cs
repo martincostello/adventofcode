@@ -3,6 +3,7 @@
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2019
 {
+    using System;
     using System.Collections.Generic;
     using System.Text;
     using System.Threading;
@@ -173,7 +174,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019
             int width = message.GetLength(0);
             int height = message.GetLength(1);
 
-            var builder = new StringBuilder((width + 2) * height);
+            var builder = new StringBuilder((width + Environment.NewLine.Length) * height);
 
             for (int y = 0; y < height; y++)
             {

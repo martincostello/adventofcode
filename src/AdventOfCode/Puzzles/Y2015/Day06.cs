@@ -403,7 +403,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015
             /// <inheritdoc />
             public override string ToString()
             {
-                var builder = new StringBuilder((_bounds.Width * _bounds.Height) + (_bounds.Width * Environment.NewLine.Length));
+                var builder = new StringBuilder((_bounds.Width + Environment.NewLine.Length) * _bounds.Height);
 
                 for (int x = 0; x < _bounds.Width; x++)
                 {

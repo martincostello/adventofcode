@@ -24,10 +24,11 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         /// Counts the number of viable node pairs.
         /// </summary>
         /// <param name="output">The output from a <c>df</c> command.</param>
+        /// <param name="logger">The optional logger to use.</param>
         /// <returns>
         /// The number of viable nodes found by parsing <paramref name="output"/>.
         /// </returns>
-        public static int CountViableNodePairs(IEnumerable<string> output)
+        public static int CountViableNodePairs(IEnumerable<string> output, ILogger? logger = null)
         {
             IList<Node> nodes = output
                 .Skip(2)
@@ -57,6 +58,40 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
                 }
             }
 
+            char[,] grid = new char[nodes.Max((p) => p.X) + 1, nodes.Max((p) => p.Y) + 1];
+
+            Node goal = nodes
+                .Where((p) => p.Y == 0)
+                .OrderByDescending((p) => p.X)
+                .First();
+
+            for (int x = 0; x < grid.GetLength(0); x++)
+            {
+                for (int y = 0; y < grid.GetLength(1); y++)
+                {
+                    Node node = nodes.First((p) => p.X == x && p.Y == y);
+
+                    if (node == goal)
+                    {
+                        grid[x, y] = 'G';
+                    }
+                    else if (node.Size > 200)
+                    {
+                        grid[x, y] = '#';
+                    }
+                    else if (node.Used == 0)
+                    {
+                        grid[x, y] = '_';
+                    }
+                    else
+                    {
+                        grid[x, y] = '.';
+                    }
+                }
+            }
+
+            logger?.WriteGrid(grid);
+
             return count;
         }
 
@@ -65,7 +100,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         {
             IList<string> output = await ReadResourceAsLinesAsync();
 
-            ViableNodePairs = CountViableNodePairs(output);
+            ViableNodePairs = CountViableNodePairs(output, Logger);
 
             if (Verbose)
             {
@@ -86,11 +121,15 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
             /// <param name="name">The name of the storage node.</param>
             /// <param name="size">The size of the storage node in terabytes.</param>
             /// <param name="used">The amount of used space in the storage node, in terabytes.</param>
-            private Node(string name, int size, int used)
+            /// <param name="x">The X coordinate of the node.</param>
+            /// <param name="y">The Y cooridnate of the node.</param>
+            private Node(string name, int size, int used, int x, int y)
             {
                 Name = name;
                 Size = size;
                 Used = used;
+                X = x;
+                Y = y;
             }
 
             /// <summary>
@@ -114,6 +153,16 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
             public int Available => Size - Used;
 
             /// <summary>
+            /// Gets the X coordinate of the node.
+            /// </summary>
+            public int X { get; private set; }
+
+            /// <summary>
+            /// Gets the Y coordinate of the node.
+            /// </summary>
+            public int Y { get; private set; }
+
+            /// <summary>
             /// Parses an instance of <see cref="Node"/> from the specified line
             /// of output from the <c>df</c> command.
             /// </summary>
@@ -125,10 +174,18 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
             {
                 string[] split = value.Split(' ', StringSplitOptions.RemoveEmptyEntries);
 
+                int indexX = split[0].IndexOf("x", StringComparison.Ordinal);
+                int indexY = split[0].IndexOf("y", StringComparison.Ordinal);
+
+                int x = ParseInt32(split[0].Substring(indexX + 1, indexY - indexX - 2));
+                int y = ParseInt32(split[0][(indexY + 1) ..]);
+
                 return new Node(
                     split[0],
                     ParseInt32(split[1].TrimEnd('T')),
-                    ParseInt32(split[2].TrimEnd('T')));
+                    ParseInt32(split[2].TrimEnd('T')),
+                    x,
+                    y);
             }
 
             /// <summary>
