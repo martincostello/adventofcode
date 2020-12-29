@@ -22,7 +22,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
         {
         }
 
-        [Fact(Skip = "Not implemented.")]
+        [Fact]
         public static void Y2016_Day11_GetMinimumStepsForAssembly_Returns_Correct_Solution()
         {
             // Arrange
@@ -35,20 +35,21 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016
             };
 
             // Act
-            int actual = Day11.GetMinimumStepsForAssembly(initialState);
+            int actual = Day11.GetMinimumStepsForAssembly(initialState, useExtra: false);
 
             // Assert
             actual.ShouldBe(11);
         }
 
-        [Fact(Skip = "Not implemented.")]
+        [Fact]
         public async Task Y2016_Day11_Solve_Returns_Correct_Solution()
         {
             // Act
             var puzzle = await SolvePuzzleAsync<Day11>();
 
             // Assert
-            puzzle.MinimumStepsForAssembly.ShouldNotBe(0);
+            puzzle.MinimumStepsForAssembly.ShouldBe(47);
+            puzzle.MinimumStepsForAssemblyWithExtraParts.ShouldBe(71);
         }
     }
 }
