@@ -1,7 +1,7 @@
 #! /usr/bin/pwsh
 param(
     [Parameter(Mandatory = $false)][string] $Configuration = "Release",
-    [Parameter(Mandatory = $false)][string] $Framework = "net5.0"
+    [Parameter(Mandatory = $false)][string] $Framework = "net6.0"
 )
 
 $ErrorActionPreference = "Stop"

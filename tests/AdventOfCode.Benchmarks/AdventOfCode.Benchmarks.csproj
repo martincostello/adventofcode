@@ -6,7 +6,7 @@
     <OutputType>Exe</OutputType>
     <RootNamespace>MartinCostello.AdventOfCode.Benchmarks</RootNamespace>
     <Summary>$(Description)</Summary>
-    <TargetFrameworks>net5.0</TargetFrameworks>
+    <TargetFrameworks>net6.0</TargetFrameworks>
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\src\AdventOfCode\AdventOfCode.csproj" />
