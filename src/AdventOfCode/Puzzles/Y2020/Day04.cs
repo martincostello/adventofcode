@@ -182,7 +182,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020
                     "hcl" => IsValidHairColor(value),
                     "hgt" => IsValidHeight(value),
                     "iyr" => IsValidYear(value, 2010, 2020),
-                    "pid" => TryParseInt32(value, out _) && value.Length == 9,
+                    "pid" => TryParseInt32(value, out _) && value!.Length == 9,
                     _ => true,
                 };
 
