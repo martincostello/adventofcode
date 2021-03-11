@@ -28,7 +28,7 @@ namespace MartinCostello.AdventOfCode
         public static double AStar<T>(IWeightedGraph<T> graph, T start, T goal, Func<T, T, double> heuristic)
             where T : notnull
         {
-            var frontier = new PriorityQueue<T>();
+            var frontier = new PriorityQueue<T, double>();
             frontier.Enqueue(start, 0);
 
             var cameFrom = new Dictionary<T, T>() { [start] = start };
