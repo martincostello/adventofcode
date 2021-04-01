@@ -50,6 +50,15 @@ jobs:
         name: webapp
         path: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
 
+  deploy:
+    if: ${{ github.ref == 'refs/heads/main' }}
+    name: deploy-production
+    needs: build
+    runs-on: windows-latest
+    environment:
+      name: production
+      url: ${{ steps.deploy_production.outputs.webapp-url }}
+
     steps:
 
     - name: Download artifacts
