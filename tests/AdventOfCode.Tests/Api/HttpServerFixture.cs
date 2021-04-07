@@ -5,14 +5,14 @@ namespace MartinCostello.AdventOfCode.Api
 {
     using System;
     using System.Linq;
-    using System.Net;
     using System.Net.Http;
-    using System.Net.Sockets;
     using System.Reflection;
     using System.Security.Cryptography.X509Certificates;
     using System.Threading.Tasks;
     using MartinCostello.Logging.XUnit;
     using Microsoft.AspNetCore.Hosting;
+    using Microsoft.AspNetCore.Hosting.Server;
+    using Microsoft.AspNetCore.Hosting.Server.Features;
     using Microsoft.AspNetCore.Mvc.Testing;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Hosting;
@@ -90,21 +90,14 @@ namespace MartinCostello.AdventOfCode.Api
 #pragma warning restore CA2000
             {
                 AllowAutoRedirect = ClientOptions.AllowAutoRedirect,
+                CheckCertificateRevocationList = true,
                 MaxAutomaticRedirections = ClientOptions.MaxAutomaticRedirections,
                 UseCookies = ClientOptions.HandleCookies,
             };
 
             try
             {
-                if (ClientOptions.BaseAddress.IsLoopback &&
-                    string.Equals(ClientOptions.BaseAddress.Scheme, "https", StringComparison.OrdinalIgnoreCase))
-                {
-                    handler.ServerCertificateCustomValidationCallback = (request, cert, chain, errors) => true;
-                }
-
-#pragma warning disable CA5400
-                var client = new HttpClient(handler);
-#pragma warning restore CA5400
+                var client = new HttpClient(handler, disposeHandler: true);
 
                 ConfigureClient(client);
 
@@ -129,7 +122,9 @@ namespace MartinCostello.AdventOfCode.Api
                 (p) => p.ConfigureHttpsDefaults(
                     (r) => r.ServerCertificate = new X509Certificate2("localhost-dev.pfx", "Pa55w0rd!")));
 
-            builder.UseUrls(ServerAddress.ToString());
+            // Configure the server address for the server to
+            // listen on for HTTPS requests on a dynamic port.
+            builder.UseUrls("https://127.0.0.1:0");
         }
 
         /// <inheritdoc />
@@ -148,33 +143,6 @@ namespace MartinCostello.AdventOfCode.Api
             }
         }
 
-        private static Uri FindFreeServerAddress()
-        {
-            int port = GetFreePortNumber();
-
-            return new UriBuilder()
-            {
-                Scheme = "https",
-                Host = "localhost",
-                Port = port,
-            }.Uri;
-        }
-
-        private static int GetFreePortNumber()
-        {
-            var listener = new TcpListener(IPAddress.Loopback, 0);
-            listener.Start();
-
-            try
-            {
-                return ((IPEndPoint)listener.LocalEndpoint).Port;
-            }
-            finally
-            {
-                listener.Stop();
-            }
-        }
-
         private async Task EnsureHttpServerAsync()
         {
             if (_host == null)
@@ -185,9 +153,6 @@ namespace MartinCostello.AdventOfCode.Api
 
         private async Task CreateHttpServer()
         {
-            // Configure the server address for the server to listen on for HTTP requests
-            ClientOptions.BaseAddress = FindFreeServerAddress();
-
             var builder = CreateHostBuilder().ConfigureWebHost(ConfigureWebHost);
 
             _host = builder.Build();
@@ -195,6 +160,12 @@ namespace MartinCostello.AdventOfCode.Api
             // Force creation of the Kestrel server and start it
             var hostedService = _host.Services.GetService<IHostedService>();
             await hostedService!.StartAsync(default);
+
+            var server = _host.Services.GetRequiredService<IServer>();
+
+            ClientOptions.BaseAddress = server.Features.Get<IServerAddressesFeature>().Addresses
+                .Select((p) => new Uri(p))
+                .First();
         }
 
         private string GetApplicationContentRootPath()
