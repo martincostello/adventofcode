@@ -15,17 +15,6 @@ namespace MartinCostello.AdventOfCode.Benchmarks
         /// </summary>
         /// <param name="args">The arguments to the application.</param>
         internal static void Main(string[] args)
-        {
-            var switcher = BenchmarkSwitcher.FromAssembly(typeof(Program).Assembly);
-
-            if (args?.Length == 0)
-            {
-                switcher.RunAll();
-            }
-            else
-            {
-                switcher.Run(args);
-            }
-        }
+            => BenchmarkRunner.Run<PuzzleBenchmarks>(args: args);
     }
 }
