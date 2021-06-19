@@ -115,8 +115,7 @@ namespace MartinCostello.AdventOfCode.Api
         /// <inheritdoc />
         protected override void ConfigureWebHost(IWebHostBuilder builder)
         {
-            builder.ConfigureLogging((loggingBuilder) => loggingBuilder.ClearProviders().AddXUnit(this))
-                   .UseContentRoot(GetApplicationContentRootPath());
+            builder.ConfigureLogging((loggingBuilder) => loggingBuilder.ClearProviders().AddXUnit(this));
 
             builder.ConfigureKestrel(
                 (p) => p.ConfigureHttpsDefaults(
@@ -163,20 +162,9 @@ namespace MartinCostello.AdventOfCode.Api
 
             var server = _host.Services.GetRequiredService<IServer>();
 
-            ClientOptions.BaseAddress = server.Features.Get<IServerAddressesFeature>().Addresses
+            ClientOptions.BaseAddress = server.Features.Get<IServerAddressesFeature>() !.Addresses
                 .Select((p) => new Uri(p))
                 .First();
-        }
-
-        private string GetApplicationContentRootPath()
-        {
-            var attribute = GetTestAssemblies()
-                .SelectMany((p) => p.GetCustomAttributes<WebApplicationFactoryContentRootAttribute>())
-                .Where((p) => string.Equals(p.Key, "AdventOfCode", StringComparison.OrdinalIgnoreCase))
-                .OrderBy((p) => p.Priority)
-                .First();
-
-            return attribute.ContentRootPath;
         }
     }
 }
