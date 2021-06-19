@@ -1,10 +1,16 @@
 @page
 @using MartinCostello.AdventOfCode
 @model MartinCostello.AdventOfCode.Pages.Index
+@{
+    string appName = "Advent of Code as a Service";
+    string description = "Find solutions for the puzzles of Advent of Code";
+    string domain = "aoc.azurewebsites.net";
+    string twitterHandle = "@martin_costello";
+}
 <!DOCTYPE html>
 <html lang="en-gb">
 <head prefix="og:http://ogp.me/ns#">
-    <title>Advent of Code as a Service</title>
+    <title>@(appName)</title>
     <meta charset="utf-8" />
     <meta http-equiv="cache-control" content="no-cache, no-store" />
     <meta http-equiv="content-type" content="text/html;" />
@@ -12,8 +18,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="author" content="Martin Costello" />
     <meta name="bitcoin" content="12uKG1MwnApd6uiFQ3VXLxFMNC3Z74Z2NG" />
-    <meta name="copyright" content="&copy; Martin Costello 2020" />
-    <meta name="description" content="Find solutions for the puzzles of Advent of Code" />
+    <meta name="copyright" content="&copy; Martin Costello @DateTimeOffset.UtcNow.Year" />
+    <meta name="description" content="@(description)" />
     <meta name="language" content="en" />
     <meta name="keywords" content="advent,of,code" />
     <meta name="referrer" content="origin-when-cross-origin" />
@@ -21,22 +27,22 @@
     <meta name="theme-color" content="#000000" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta property="fb:profile_id" content="10100867762061905" />
-    <meta property="og:description" content="Find solutions for the puzzles of Advent of Code" />
-    <meta property="og:image" content="https://aoc.azurewebsites.net/favicon.png" />
+    <meta property="og:description" content="@(description)" />
+    <meta property="og:image" content="https://@(domain)/favicon.png" />
     <meta property="og:image:type" content="image/png" />
     <meta property="og:locale" content="en_GB" />
-    <meta property="og:site_name" content="aoc.azurewebsites.net" />
-    <meta property="og:title" content="Advent of Code as a Service" />
+    <meta property="og:site_name" content="@(domain)" />
+    <meta property="og:title" content="@(appName)" />
     <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://aoc.azurewebsites.net/" />
+    <meta property="og:url" content="https://@(domain)/" />
     <meta name="twitter:card" content="summary" />
-    <meta name="twitter:creator" content="@@martin_costello" />
-    <meta name="twitter:description" content="Find solutions for the puzzles of Advent of Code" />
-    <meta name="twitter:domain" content="aoc.azurewebsites.net" />
-    <meta name="twitter:site" content="@@martin_costello" />
-    <meta name="twitter:title" content="Advent of Code as a Service" />
-    <meta name="twitter:url" content="https://aoc.azurewebsites.net/" />
-    <meta name="application-name" content="Advent of Code as a Service" />
+    <meta name="twitter:creator" content="@(twitterHandle)" />
+    <meta name="twitter:description" content="@(description)" />
+    <meta name="twitter:domain" content="@(domain)" />
+    <meta name="twitter:site" content="@(twitterHandle)" />
+    <meta name="twitter:title" content="@(appName)" />
+    <meta name="twitter:url" content="https://@(domain)/" />
+    <meta name="application-name" content="@(appName)" />
     <link rel="manifest" href="/manifest.webmanifest" />
     <link rel="shortcut icon" href="/favicon.png" type="image/x-icon" />
     <link rel="dns-prefetch" href="//stackpath.bootstrapcdn.com" />
@@ -52,7 +58,7 @@
 </head>
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-        <a id="link-home" class="navbar-brand" href="/">Advent of Code as a Service</a>
+        <a id="link-home" class="navbar-brand" href="/">@(appName)</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#site-navbar" aria-controls="site-navbar" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -70,7 +76,7 @@
     <main class="container body-content">
         <div class="jumbotron">
             <div class="container">
-                <h1 class="display-4">Advent of Code as a Service</h1>
+                <h1 class="display-4">@(appName)</h1>
                 <p class="lead">
                     Solves <a href="https://adventofcode.com/">Advent of Code</a> puzzles using your personal input.
                 </p>
