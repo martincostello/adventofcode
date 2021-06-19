@@ -23,7 +23,8 @@ namespace MartinCostello.AdventOfCode.Api
         protected IntegrationTest(HttpServerFixture fixture, ITestOutputHelper outputHelper)
         {
             Fixture = fixture;
-            Fixture.SetOutputHelper(outputHelper);
+            OutputHelper = outputHelper;
+            Fixture.SetOutputHelper(OutputHelper);
         }
 
         /// <summary>
@@ -38,6 +39,11 @@ namespace MartinCostello.AdventOfCode.Api
         /// Gets the <see cref="HttpServerFixture"/> to use.
         /// </summary>
         protected HttpServerFixture Fixture { get; }
+
+        /// <summary>
+        /// Gets the <see cref="ITestOutputHelper"/> to use.
+        /// </summary>
+        protected ITestOutputHelper OutputHelper { get; }
 
         /// <inheritdoc />
         public void Dispose()

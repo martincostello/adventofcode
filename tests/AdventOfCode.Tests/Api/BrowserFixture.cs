@@ -23,8 +23,8 @@ namespace MartinCostello.AdventOfCode.Api
         private ITestOutputHelper OutputHelper { get; }
 
         public async Task WithPageAsync(
-            string browserType,
             Func<IPage, Task> action,
+            string browserType = "chromium",
             [CallerMemberName] string? testName = null)
         {
             using IPlaywright playwright = await Playwright.CreateAsync();
