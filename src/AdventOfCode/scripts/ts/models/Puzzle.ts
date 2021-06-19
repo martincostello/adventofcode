@@ -1,9 +1,10 @@
 // Copyright (c) Martin Costello, 2015. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
-import { Solver } from './view/Solver';
-
-document.addEventListener('DOMContentLoaded', () => {
-    const solver = new Solver();
-    solver.initialize();
-});
+export interface Puzzle {
+    year: number;
+    day: number;
+    minimumArguments: number;
+    requiresData: boolean;
+    location: string;
+}
