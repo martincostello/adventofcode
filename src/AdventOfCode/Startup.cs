@@ -3,12 +3,14 @@
 
 namespace MartinCostello.AdventOfCode
 {
+    using System.IO.Compression;
     using System.Linq;
     using System.Reflection;
     using System.Threading.Tasks;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Http.Json;
+    using Microsoft.AspNetCore.ResponseCompression;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Hosting;
 
@@ -37,13 +39,15 @@ namespace MartinCostello.AdventOfCode
             app.UseStatusCodePagesWithRedirects("/error.html?code={0}");
 
             app.UseHttpsRedirection();
-            app.UseDefaultFiles();
+            app.UseResponseCompression();
             app.UseStaticFiles();
             app.UseRouting();
 
             app.UseEndpoints(
                 (endpoints) =>
                 {
+                    endpoints.MapRazorPages();
+
                     endpoints.MapGet("/error", (context) =>
                     {
                         context.Response.Redirect("/error.html");
@@ -61,13 +65,6 @@ namespace MartinCostello.AdventOfCode
         /// <param name="services">The <see cref="IServiceCollection"/> to use.</param>
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddRouting(
-                (p) =>
-                {
-                    p.AppendTrailingSlash = true;
-                    p.LowercaseUrls = true;
-                });
-
             services.AddSingleton<ILogger, WebLogger>();
             services.AddSingleton<PuzzleFactory>();
 
@@ -85,6 +82,18 @@ namespace MartinCostello.AdventOfCode
             }
 
             services.Configure<JsonOptions>(options => options.SerializerOptions.WriteIndented = true);
+
+            services.AddRazorPages();
+
+            services.Configure<GzipCompressionProviderOptions>((p) => p.Level = CompressionLevel.Fastest);
+            services.Configure<BrotliCompressionProviderOptions>((p) => p.Level = CompressionLevel.Fastest);
+
+            services.AddResponseCompression((p) =>
+            {
+                p.EnableForHttps = true;
+                p.Providers.Add<BrotliCompressionProvider>();
+                p.Providers.Add<GzipCompressionProvider>();
+            });
         }
     }
 }

@@ -8,7 +8,7 @@ param(
 )
 
 $ErrorActionPreference = "Stop"
-$ProgressPreference = "SilentlyContinue"
+$global:ProgressPreference = "SilentlyContinue"
 
 $solutionPath = Split-Path $MyInvocation.MyCommand.Definition
 $sdkFile = Join-Path $solutionPath "global.json"
@@ -44,6 +44,7 @@ else {
 }
 
 if ($installDotNetSdk -eq $true) {
+
     $env:DOTNET_INSTALL_DIR = Join-Path "$(Convert-Path "$PSScriptRoot")" ".dotnetcli"
     $sdkPath = Join-Path $env:DOTNET_INSTALL_DIR "sdk\$dotnetVersion"
 

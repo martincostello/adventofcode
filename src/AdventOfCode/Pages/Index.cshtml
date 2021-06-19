@@ -1,0 +1,153 @@
+@page
+@using MartinCostello.AdventOfCode
+@model MartinCostello.AdventOfCode.Pages.Index
+@{
+    string appName = "Advent of Code as a Service";
+    string description = "Find solutions for the puzzles of Advent of Code";
+    string domain = "aoc.azurewebsites.net";
+    string twitterHandle = "@martin_costello";
+}
+<!DOCTYPE html>
+<html lang="en-gb">
+<head prefix="og:http://ogp.me/ns#">
+    <title>@(appName)</title>
+    <meta charset="utf-8" />
+    <meta http-equiv="cache-control" content="no-cache, no-store" />
+    <meta http-equiv="content-type" content="text/html;" />
+    <meta http-equiv="pragma" content="no-cache" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="author" content="Martin Costello" />
+    <meta name="bitcoin" content="12uKG1MwnApd6uiFQ3VXLxFMNC3Z74Z2NG" />
+    <meta name="copyright" content="&copy; Martin Costello @DateTimeOffset.UtcNow.Year" />
+    <meta name="description" content="@(description)" />
+    <meta name="language" content="en" />
+    <meta name="keywords" content="advent,of,code" />
+    <meta name="referrer" content="origin-when-cross-origin" />
+    <meta name="robots" content="INDEX" />
+    <meta name="theme-color" content="#000000" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta property="fb:profile_id" content="10100867762061905" />
+    <meta property="og:description" content="@(description)" />
+    <meta property="og:image" content="https://@(domain)/favicon.png" />
+    <meta property="og:image:type" content="image/png" />
+    <meta property="og:locale" content="en_GB" />
+    <meta property="og:site_name" content="@(domain)" />
+    <meta property="og:title" content="@(appName)" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://@(domain)/" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:creator" content="@(twitterHandle)" />
+    <meta name="twitter:description" content="@(description)" />
+    <meta name="twitter:domain" content="@(domain)" />
+    <meta name="twitter:site" content="@(twitterHandle)" />
+    <meta name="twitter:title" content="@(appName)" />
+    <meta name="twitter:url" content="https://@(domain)/" />
+    <meta name="application-name" content="@(appName)" />
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <link rel="shortcut icon" href="/favicon.png" type="image/x-icon" />
+    <link rel="dns-prefetch" href="//stackpath.bootstrapcdn.com" />
+    <link rel="preconnect" href="//stackpath.bootstrapcdn.com" />
+    <script type="text/javascript">
+        if (self == top) {
+            document.documentElement.className = document.documentElement.className.replace(/\bjs-flash\b/, '');
+        }
+        else {
+            top.location = self.location;
+        }
+    </script>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <a id="link-home" class="navbar-brand" href="/">@(appName)</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#site-navbar" aria-controls="site-navbar" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="site-navbar">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a id="link-aoc" class="nav-link" href="https://adventofcode.com/" rel="noopener" target="_blank" title="Open Advent of Code">Advent of Code</a>
+                </li>
+                <li class="nav-item">
+                    <a id="link-repo" class="nav-link" href="https://github.com/martincostello/adventofcode" rel="noopener" target="_blank" title="View the source code on GitHub">GitHub Repository</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    <main class="container body-content">
+        <div class="jumbotron">
+            <div class="container">
+                <h1 class="display-4">@(appName)</h1>
+                <p class="lead">
+                    Solves <a href="https://adventofcode.com/">Advent of Code</a> puzzles using your personal input.
+                </p>
+            </div>
+        </div>
+        <div class="container">
+            <form id="form" action="" class="needs-validation" method="get" novalidate>
+                <div class="form-group">
+                    <label for="year">Year</label>
+                    <select class="form-control" id="year" required>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="day">Day</label>
+                    <select class="form-control" id="day" required>
+                    </select>
+                </div>
+                <div class="form-group d-none" id="arguments-container">
+                    <label for="arguments">Argument(s)</label>
+                    <textarea class="form-control" id="arguments" rows="2"></textarea>
+                </div>
+                <div class="form-group d-none" id="file-container">
+                    <label for="resource">Puzzle input</label>
+                    <div class="custom-file">
+                        <input type="file" class="custom-file-input form-control-file" id="resource">
+                        <label class="custom-file-label" for="resource" id="resource-label">Puzzle input file</label>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-secondary btn-lg" id="solve">
+                    <placeholder id="solve-text">Solve!</placeholder>
+                    <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true" id="spinner"></span>
+                </button>
+            </form>
+        </div>
+        <hr />
+        <div class="container">
+            <div id="error" class="alert alert-danger d-none" role="alert">
+            </div>
+        </div>
+        <div id="solution-container" class="container d-none">
+            <div class="card">
+                <div class="card-header" id="solution-header">
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title">The solution(s) are:</h5>
+                    <p class="card-text">
+                        <ul id="solution">
+                        </ul>
+                        <ul id="visualization">
+                        </ul>
+                    </p>
+                </div>
+                <div class="card-footer">
+                    <em>Solved in <placeholder id="time-to-solve"></placeholder></em>
+                </div>
+            </div>
+        </div>
+        <hr />
+        <footer>
+            <p>&copy; Martin Costello @DateTimeOffset.UtcNow.Year</p>
+        </footer>
+    </main>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootswatch/4.5.2/slate/bootstrap.min.css" integrity="sha384-8iuq0iaMHpnH2vSyvZMSIqQuUnQA7QM+f6srIdlgBrTSEyd//AWNMyEaSF2yPzNQ" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous" async></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous" async></script>
+    <script src="~/static/js/main.js"></script>
+</body>
+<!--
+    Build:         https://github.com/martincostello/adventofcode/actions/runs/@(GitMetadata.BuildId)
+    Commit SHA:    @(GitMetadata.Commit)
+    Commit branch: @(GitMetadata.Branch)
+    Timestamp      @(GitMetadata.Timestamp)
+-->
+</html>

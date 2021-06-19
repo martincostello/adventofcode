@@ -20,6 +20,7 @@ env:
   DOTNET_NOLOGO: true
   DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
   NUGET_XMLDOC_MODE: skip
+  WEBSITE_URL_PROD: https://aoc.azurewebsites.net/
 
 jobs:
   build:
@@ -39,6 +40,11 @@ jobs:
     - name: Setup .NET SDK
       uses: actions/setup-dotnet@v1
 
+    - name: Install Playwright CLI
+      shell: pwsh
+      run: |
+        dotnet tool install --global Microsoft.Playwright.CLI
+
     - name: Build, test and publish
       shell: pwsh
       run: ./build.ps1
@@ -50,6 +56,22 @@ jobs:
         name: webapp
         path: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
 
+    - name: Publish screenshots
+      uses: actions/upload-artifact@v2
+      if: ${{ always() }}
+      with:
+        name: screenshots
+        path: ./artifacts/screenshots/*.png
+        if-no-files-found: ignore
+
+    - name: Publish videos
+      uses: actions/upload-artifact@v2
+      if: ${{ always() }}
+      with:
+        name: videos
+        path: ./artifacts/videos/*
+        if-no-files-found: ignore
+
   deploy:
     if: ${{ github.ref == 'refs/heads/main' }}
     name: deploy-production
@@ -58,7 +80,7 @@ jobs:
     concurrency: production_environment
     environment:
       name: production
-      url: ${{ steps.deploy_production.outputs.webapp-url }}
+      url: ${{ env.WEBSITE_URL_PROD }}
 
     steps:
 
@@ -73,3 +95,22 @@ jobs:
       with:
         app-name: ${{ env.AZURE_WEBAPP_NAME }}
         publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE  }}
+
+  test:
+    name: test-production
+    needs: deploy
+    runs-on: windows-latest
+
+    steps:
+
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Setup .NET SDK
+      uses: actions/setup-dotnet@v1
+
+    - name: Run end-to-end tests
+      shell: pwsh
+      run: dotnet test ./tests/AdventOfCode.Tests --filter Category=EndToEnd /p:CollectCoverage=false
+      env:
+        WEBSITE_URL: ${{ env.WEBSITE_URL_PROD }}

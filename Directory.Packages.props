@@ -4,11 +4,14 @@
     <PackageVersion Include="MartinCostello.Logging.XUnit" Version="0.1.1" />
     <PackageVersion Include="Microsoft.AspNetCore.Mvc.Testing" Version="5.0.7" />
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="16.10.0" />
+    <PackageVersion Include="Microsoft.Playwright" Version="1.12.2" />
     <PackageVersion Include="Microsoft.SourceLink.GitHub" Version="1.0.0" />
+    <PackageVersion Include="Microsoft.TypeScript.MSBuild" Version="4.3.2" />
     <PackageVersion Include="Shouldly" Version="4.0.3" />
     <PackageVersion Include="StyleCop.Analyzers" Version="1.1.118" />
     <PackageVersion Include="xunit" Version="2.4.1" />
     <PackageVersion Include="xunit.runner.visualstudio" Version="2.4.3" />
+    <PackageVersion Include="Xunit.SkippableFact" Version="1.4.13" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.SourceLink.GitHub" PrivateAssets="All" />

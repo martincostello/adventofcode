@@ -190,7 +190,7 @@ namespace MartinCostello.AdventOfCode.Api
             using var response = await client.PostAsync($"/api/puzzles/{year}/{day}/solve", content);
 
             // Assert
-            response.StatusCode.ShouldBe(HttpStatusCode.OK);
+            response.StatusCode.ShouldBe(HttpStatusCode.OK, await response.Content.ReadAsStringAsync());
             response.Content.ShouldNotBeNull();
             response.Content!.Headers.ContentType.ShouldNotBeNull();
             response.Content.Headers.ContentType.MediaType.ShouldBe("application/json");
