@@ -1,3 +1,6 @@
+@page
+@using MartinCostello.AdventOfCode
+@model MartinCostello.AdventOfCode.Pages.Index
 <!DOCTYPE html>
 <html lang="en-gb">
 <head prefix="og:http://ogp.me/ns#">
@@ -27,10 +30,10 @@
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://aoc.azurewebsites.net/" />
     <meta name="twitter:card" content="summary" />
-    <meta name="twitter:creator" content="@martin_costello" />
+    <meta name="twitter:creator" content="@@martin_costello" />
     <meta name="twitter:description" content="Find solutions for the puzzles of Advent of Code" />
     <meta name="twitter:domain" content="aoc.azurewebsites.net" />
-    <meta name="twitter:site" content="@martin_costello" />
+    <meta name="twitter:site" content="@@martin_costello" />
     <meta name="twitter:title" content="Advent of Code as a Service" />
     <meta name="twitter:url" content="https://aoc.azurewebsites.net/" />
     <meta name="application-name" content="Advent of Code as a Service" />
@@ -127,7 +130,7 @@
         </div>
         <hr />
         <footer>
-            <p>&copy; Martin Costello 2020</p>
+            <p>&copy; Martin Costello @DateTimeOffset.UtcNow.Year</p>
         </footer>
     </main>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootswatch/4.5.2/slate/bootstrap.min.css" integrity="sha384-8iuq0iaMHpnH2vSyvZMSIqQuUnQA7QM+f6srIdlgBrTSEyd//AWNMyEaSF2yPzNQ" crossorigin="anonymous">
@@ -379,4 +382,10 @@
         }, false);
     </script>
 </body>
+<!--
+    Build:         https://github.com/martincostello/adventofcode/actions/runs/@(GitMetadata.BuildId)
+    Commit SHA:    @(GitMetadata.Commit)
+    Commit branch: @(GitMetadata.Branch)
+    Timestamp      @(GitMetadata.Timestamp)
+-->
 </html>

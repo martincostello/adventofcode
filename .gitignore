@@ -11,10 +11,12 @@ Backup*/
 BenchmarkDotNet.Artifacts/
 bin
 Bin
+node_modules/
 obj
 packages
 profile.arm.json
 project.lock.json
+src/AdventOfCode/wwwroot/static/js/
 TestResults
 UpgradeLog*.htm
 UpgradeLog*.XML
