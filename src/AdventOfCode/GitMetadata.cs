@@ -9,38 +9,37 @@ namespace MartinCostello.AdventOfCode
     using System.Reflection;
 
     /// <summary>
-    /// A class containing metadata for the assembly.
+    /// A class containing Git metadata for the assembly. This class cannot be inherited.
     /// </summary>
     public static class GitMetadata
     {
         /// <summary>
-        /// Gets the branch name.
+        /// Gets the SHA for the Git branch the assembly was compiled from.
         /// </summary>
         public static string Branch { get; } = GetMetadataValue("CommitBranch", "Unknown");
 
         /// <summary>
-        /// Gets the commit name.
+        /// Gets the SHA for the Git commit the assembly was compiled from.
         /// </summary>
         public static string Commit { get; } = GetMetadataValue("CommitHash", "HEAD");
 
         /// <summary>
-        /// Gets the build Id.
+        /// Gets the Id for the GitHub Actions run the assembly was compiled and deployed from.
         /// </summary>
-        public static string BuildId { get; } = GetMetadataValue("BuildId", "Unknown");
+        public static string DeployId { get; } = GetMetadataValue("DeployId", "Unknown");
 
         /// <summary>
-        /// Gets the build timestamp.
+        /// Gets the timestamp the assembly was compiled at.
         /// </summary>
         public static DateTime Timestamp { get; } = DateTime.Parse(GetMetadataValue("BuildTimestamp", DateTime.UtcNow.ToString("o", CultureInfo.InvariantCulture)), CultureInfo.InvariantCulture, DateTimeStyles.AdjustToUniversal);
 
         /// <summary>
-        /// Gets the assembly metadata value with the specified name.
+        /// Gets the specified metadata value.
         /// </summary>
-        /// <param name="name">The name of the metadata value to return.</param>
-        /// <param name="defaultValue">The default value to use.</param>
+        /// <param name="name">The name of the metadata value to retrieve.</param>
+        /// <param name="defaultValue">The default value if the metadata is not found.</param>
         /// <returns>
-        /// The value of the metadata with the name specified by <paramref name="name"/>,
-        /// if found, otherwise the value of <paramref name="defaultValue"/>.
+        /// A <see cref="string"/> containing the Git SHA-1 for the revision of the application.
         /// </returns>
         private static string GetMetadataValue(string name, string defaultValue)
         {
