@@ -245,7 +245,7 @@ export class Solver {
                 const li = document.createElement('li');
                 li.appendChild(code);
 
-                this.elements.solution.appendChild(li);
+                this.elements.visualization.appendChild(li);
             });
 
             this.show(this.elements.solutionContainer);

@@ -61,21 +61,21 @@ namespace MartinCostello.AdventOfCode
             var container = await Page.QuerySelectorAsync("id=solution");
             await container!.WaitForElementStateAsync(ElementState.Visible);
 
-            var solutions = await container.QuerySelectorAllAsync(".text-monospace");
+            var elements = await container.QuerySelectorAllAsync("li");
 
-            var actual = new List<string>();
+            var solutions = new List<string>(elements.Count);
 
-            foreach (var solution in solutions)
+            foreach (var element in elements)
             {
-                actual.Add(await solution.InnerTextAsync());
+                solutions.Add(await element.InnerTextAsync());
             }
 
-            return actual;
+            return solutions;
         }
 
         public async Task<int> VisualizationsAsync()
         {
-            var container = await Page.QuerySelectorAsync("id=solution");
+            var container = await Page.QuerySelectorAsync("id=visualization");
             await container!.WaitForElementStateAsync(ElementState.Visible);
 
             var visualizations = await container.QuerySelectorAllAsync("pre");
