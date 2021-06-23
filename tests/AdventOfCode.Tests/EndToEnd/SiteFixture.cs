@@ -1,13 +1,13 @@
 ﻿// Copyright (c) Martin Costello, 2015. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
+using System;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using Xunit;
+
 namespace MartinCostello.AdventOfCode.EndToEnd
 {
-    using System;
-    using System.Net.Http;
-    using System.Net.Http.Headers;
-    using Xunit;
-
     public sealed class SiteFixture
     {
         private const string WebsiteUrl = "WEBSITE_URL";

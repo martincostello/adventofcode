@@ -1,16 +1,16 @@
 ﻿// Copyright (c) Martin Costello, 2015. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
+using System;
+using System.IO;
+using System.Threading.Tasks;
+using Microsoft.Playwright;
+using Shouldly;
+using Xunit;
+using Xunit.Abstractions;
+
 namespace MartinCostello.AdventOfCode.Api
 {
-    using System;
-    using System.IO;
-    using System.Threading.Tasks;
-    using Microsoft.Playwright;
-    using Shouldly;
-    using Xunit;
-    using Xunit.Abstractions;
-
     public class UITests : IntegrationTest
     {
         public UITests(HttpServerFixture fixture, ITestOutputHelper outputHelper)

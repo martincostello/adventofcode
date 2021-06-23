@@ -1,11 +1,11 @@
 ﻿// Copyright (c) Martin Costello, 2015. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
+using System.Collections.Generic;
+using System.ComponentModel;
+
 namespace MartinCostello.AdventOfCode
 {
-    using System.Collections.Generic;
-    using System.ComponentModel;
-
     /// <summary>
     /// A class containing extension methods for <see cref="LinkedList{T}"/>. This class cannot be inherited.
     /// </summary>

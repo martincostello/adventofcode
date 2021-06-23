@@ -1,11 +1,11 @@
 ﻿// Copyright (c) Martin Costello, 2015. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
+using System.Text;
+using Microsoft.Extensions.Logging;
+
 namespace MartinCostello.AdventOfCode
 {
-    using System.Text;
-    using Microsoft.Extensions.Logging;
-
     /// <summary>
     /// A class representing an <see cref="ILogger"/> implementation for the web application. This class cannot be inherited.
     /// </summary>
