@@ -1,9 +1,6 @@
 ﻿// Copyright (c) Martin Costello, 2015. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
-using System;
-using System.Collections.Generic;
-
 namespace MartinCostello.AdventOfCode
 {
     /// <summary>
@@ -28,7 +25,7 @@ namespace MartinCostello.AdventOfCode
         public static double AStar<T>(IWeightedGraph<T> graph, T start, T goal, Func<T, T, double> heuristic)
             where T : notnull
         {
-            var frontier = new PriorityQueue<T>();
+            var frontier = new PriorityQueue<T, double>();
             frontier.Enqueue(start, 0);
 
             var cameFrom = new Dictionary<T, T>() { [start] = start };
