@@ -1,17 +1,10 @@
 ﻿// Copyright (c) Martin Costello, 2015. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
-using System;
 using System.IO;
-using System.Linq;
 using System.Net;
 using System.Net.Http;
-using System.Text;
 using System.Text.Json;
-using System.Threading.Tasks;
-using Shouldly;
-using Xunit;
-using Xunit.Abstractions;
 
 namespace MartinCostello.AdventOfCode.Api
 {
