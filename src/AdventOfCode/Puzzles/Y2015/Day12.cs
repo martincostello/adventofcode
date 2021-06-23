@@ -3,8 +3,6 @@
 
 using System.IO;
 using System.Text.Json;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2015
 {
