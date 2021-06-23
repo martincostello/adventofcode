@@ -1,25 +1,25 @@
 ﻿// Copyright (c) Martin Costello, 2015. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
+using System;
+using System.Linq;
+using System.Net.Http;
+using System.Reflection;
+using System.Security.Cryptography.X509Certificates;
+using System.Threading.Tasks;
+using MartinCostello.Logging.XUnit;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Hosting.Server;
+using Microsoft.AspNetCore.Hosting.Server.Features;
+using Microsoft.AspNetCore.Mvc.Testing;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
+using Xunit;
+using Xunit.Abstractions;
+
 namespace MartinCostello.AdventOfCode.Api
 {
-    using System;
-    using System.Linq;
-    using System.Net.Http;
-    using System.Reflection;
-    using System.Security.Cryptography.X509Certificates;
-    using System.Threading.Tasks;
-    using MartinCostello.Logging.XUnit;
-    using Microsoft.AspNetCore.Hosting;
-    using Microsoft.AspNetCore.Hosting.Server;
-    using Microsoft.AspNetCore.Hosting.Server.Features;
-    using Microsoft.AspNetCore.Mvc.Testing;
-    using Microsoft.Extensions.DependencyInjection;
-    using Microsoft.Extensions.Hosting;
-    using Microsoft.Extensions.Logging;
-    using Xunit;
-    using Xunit.Abstractions;
-
     /// <summary>
     /// A test fixture representing an HTTP server hosting the application. This class cannot be inherited.
     /// </summary>
