@@ -4,7 +4,6 @@
 using System.IO.Compression;
 using System.Linq;
 using System.Reflection;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http.Json;
@@ -33,12 +32,13 @@ namespace MartinCostello.AdventOfCode
             else
             {
                 app.UseExceptionHandler("/error");
-                app.UseHsts();
             }
 
-            app.UseStatusCodePagesWithRedirects("/error.html?code={0}");
+            app.UseStatusCodePagesWithReExecute("/error", "?id={0}");
 
+            app.UseHsts();
             app.UseHttpsRedirection();
+
             app.UseResponseCompression();
             app.UseStaticFiles();
             app.UseRouting();
@@ -47,12 +47,6 @@ namespace MartinCostello.AdventOfCode
                 (endpoints) =>
                 {
                     endpoints.MapRazorPages();
-
-                    endpoints.MapGet("/error", (context) =>
-                    {
-                        context.Response.Redirect("/error.html");
-                        return Task.CompletedTask;
-                    });
 
                     endpoints.MapGet("/api/puzzles", PuzzlesApi.GetPuzzlesAsync);
                     endpoints.MapPost("/api/puzzles/{year:int}/{day:int}/solve", PuzzlesApi.SolvePuzzleAsync);

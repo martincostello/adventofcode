@@ -1,0 +1,62 @@
+@page "/"
+@model IndexModel
+<div class="jumbotron">
+    <div class="container">
+        <h1 class="display-4">Advent of Code as a Service</h1>
+        <p class="lead">
+            Solves <a href="https://adventofcode.com/">Advent of Code</a> puzzles using your personal input.
+        </p>
+    </div>
+</div>
+<div class="container">
+    <form id="form" action="" class="needs-validation" method="get" novalidate>
+        <div class="form-group">
+            <label for="year">Year</label>
+            <select class="form-control" id="year" required>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="day">Day</label>
+            <select class="form-control" id="day" required>
+            </select>
+        </div>
+        <div class="form-group d-none" id="arguments-container">
+            <label for="arguments">Argument(s)</label>
+            <textarea class="form-control" id="arguments" rows="2"></textarea>
+        </div>
+        <div class="form-group d-none" id="file-container">
+            <label for="resource">Puzzle input</label>
+            <div class="custom-file">
+                <input type="file" class="custom-file-input form-control-file" id="resource">
+                <label class="custom-file-label" for="resource" id="resource-label">Puzzle input file</label>
+            </div>
+        </div>
+        <button type="submit" class="btn btn-secondary btn-lg" id="solve">
+            <placeholder id="solve-text">Solve!</placeholder>
+            <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true" id="spinner"></span>
+        </button>
+    </form>
+</div>
+<hr />
+<div class="container">
+    <div id="error" class="alert alert-danger d-none" role="alert">
+    </div>
+</div>
+<div id="solution-container" class="container d-none">
+    <div class="card">
+        <div class="card-header" id="solution-header">
+        </div>
+        <div class="card-body">
+            <h5 class="card-title">The solution(s) are:</h5>
+            <p class="card-text">
+                <ul id="solution">
+                </ul>
+                <ul id="visualization">
+                </ul>
+            </p>
+        </div>
+        <div class="card-footer">
+            <em>Solved in <placeholder id="time-to-solve"></placeholder></em>
+        </div>
+    </div>
+</div>
