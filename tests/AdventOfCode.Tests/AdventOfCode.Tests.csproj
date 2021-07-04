@@ -11,12 +11,6 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\src\AdventOfCode\AdventOfCode.csproj" />
-    <WebApplicationFactoryContentRootAttribute
-      Include="AdventOfCode"
-      AssemblyName="AdventOfCode"
-      ContentRootPath="$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)../../src/AdventOfCode'))"
-      ContentRootTest="AdventOfCode.csproj"
-      Priority="-1" />
   </ItemGroup>
   <ItemGroup>
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
