@@ -2,9 +2,9 @@
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 using System;
+using System.IO;
 using System.Linq;
 using System.Net.Http;
-using System.Reflection;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 using MartinCostello.Logging.XUnit;
@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Hosting.Server;
 using Microsoft.AspNetCore.Hosting.Server.Features;
 using Microsoft.AspNetCore.Mvc.Testing;
+using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -115,10 +116,8 @@ namespace MartinCostello.AdventOfCode.Api
         /// <inheritdoc />
         protected override void ConfigureWebHost(IWebHostBuilder builder)
         {
-            base.ConfigureWebHost(builder);
-
             builder.ConfigureLogging((loggingBuilder) => loggingBuilder.ClearProviders().AddXUnit(this))
-                   .UseContentRoot(GetApplicationContentRootPath());
+                   .UseSolutionRelativeContentRoot(Path.Combine("src", "AdventOfCode"));
 
             builder.ConfigureKestrel(
                 (p) => p.ConfigureHttpsDefaults(
@@ -168,17 +167,6 @@ namespace MartinCostello.AdventOfCode.Api
             ClientOptions.BaseAddress = server.Features.Get<IServerAddressesFeature>() !.Addresses
                 .Select((p) => new Uri(p))
                 .First();
-        }
-
-        private string GetApplicationContentRootPath()
-        {
-            var attribute = GetTestAssemblies()
-                .SelectMany((p) => p.GetCustomAttributes<WebApplicationFactoryContentRootAttribute>())
-                .Where((p) => string.Equals(p.Key, "AdventOfCode", StringComparison.OrdinalIgnoreCase))
-                .OrderBy((p) => p.Priority)
-                .First();
-
-            return attribute.ContentRootPath;
         }
     }
 }
