@@ -24,7 +24,7 @@ namespace MartinCostello.AdventOfCode.Api
     /// <summary>
     /// A test fixture representing an HTTP server hosting the application. This class cannot be inherited.
     /// </summary>
-    public sealed class HttpServerFixture : WebApplicationFactory<Startup>, IAsyncLifetime, ITestOutputHelperAccessor
+    public sealed class HttpServerFixture : WebApplicationFactory<Startup>, ITestOutputHelperAccessor
     {
         private IHost? _host;
         private bool _disposed;
@@ -45,10 +45,24 @@ namespace MartinCostello.AdventOfCode.Api
         /// <summary>
         /// Gets the server address of the application.
         /// </summary>
-        public Uri ServerAddress => ClientOptions.BaseAddress;
+        public Uri ServerAddress
+        {
+            get
+            {
+                EnsureServer();
+                return ClientOptions.BaseAddress;
+            }
+        }
 
         /// <inheritdoc />
-        public override IServiceProvider? Services => _host?.Services;
+        public override IServiceProvider? Services
+        {
+            get
+            {
+                EnsureServer();
+                return _host!.Services!;
+            }
+        }
 
         /// <summary>
         /// Clears the current <see cref="ITestOutputHelper"/>.
@@ -64,56 +78,6 @@ namespace MartinCostello.AdventOfCode.Api
             => OutputHelper = value;
 
         /// <inheritdoc />
-        async Task IAsyncLifetime.InitializeAsync()
-            => await EnsureHttpServerAsync();
-
-        /// <inheritdoc />
-        async Task IAsyncLifetime.DisposeAsync()
-        {
-            if (_host != null)
-            {
-                await _host.StopAsync();
-                _host.Dispose();
-                _host = null;
-            }
-        }
-
-        /// <summary>
-        /// Creates an <see cref="HttpClient"/> to communicate with the application.
-        /// </summary>
-        /// <returns>
-        /// An <see cref="HttpClient"/> that can be to used to make application requests.
-        /// </returns>
-        public HttpClient CreateHttpClient()
-        {
-#pragma warning disable CA2000
-            var handler = new HttpClientHandler()
-#pragma warning restore CA2000
-            {
-                AllowAutoRedirect = ClientOptions.AllowAutoRedirect,
-                CheckCertificateRevocationList = true,
-                MaxAutomaticRedirections = ClientOptions.MaxAutomaticRedirections,
-                UseCookies = ClientOptions.HandleCookies,
-            };
-
-            try
-            {
-                var client = new HttpClient(handler, disposeHandler: true);
-
-                ConfigureClient(client);
-
-                client.BaseAddress = ClientOptions.BaseAddress;
-
-                return client;
-            }
-            catch (Exception)
-            {
-                handler.Dispose();
-                throw;
-            }
-        }
-
-        /// <inheritdoc />
         protected override void ConfigureWebHost(IWebHostBuilder builder)
         {
             builder.ConfigureLogging((loggingBuilder) => loggingBuilder.ClearProviders().AddXUnit(this))
@@ -126,6 +90,32 @@ namespace MartinCostello.AdventOfCode.Api
             // Configure the server address for the server to
             // listen on for HTTPS requests on a dynamic port.
             builder.UseUrls("https://127.0.0.1:0");
+        }
+
+        /// <inheritdoc />
+        protected override IHost CreateHost(IHostBuilder builder)
+        {
+            builder.ConfigureWebHost((p) => p.UseKestrel());
+
+            _host = builder.Build();
+            _host.Start();
+
+            var server = _host.Services.GetRequiredService<IServer>();
+            var addresses = server.Features.Get<IServerAddressesFeature>();
+
+            ClientOptions.BaseAddress = addresses!.Addresses
+                .Select((p) => new Uri(p))
+                .Last();
+
+            // The base class still needs a separate host using TestServer
+            var testHostBuilder = CreateHostBuilder();
+            var testHost = testHostBuilder!
+                .ConfigureWebHost((p) => p.UseTestServer())
+                .Build();
+
+            testHost.Start();
+
+            return testHost;
         }
 
         /// <inheritdoc />
@@ -144,29 +134,14 @@ namespace MartinCostello.AdventOfCode.Api
             }
         }
 
-        private async Task EnsureHttpServerAsync()
+        private void EnsureServer()
         {
-            if (_host == null)
+            if (_host is null)
             {
-                await CreateHttpServer();
+                using (CreateDefaultClient())
+                {
+                }
             }
-        }
-
-        private async Task CreateHttpServer()
-        {
-            var builder = CreateHostBuilder().ConfigureWebHost(ConfigureWebHost);
-
-            _host = builder.Build();
-
-            // Force creation of the Kestrel server and start it
-            var hostedService = _host.Services.GetService<IHostedService>();
-            await hostedService!.StartAsync(default);
-
-            var server = _host.Services.GetRequiredService<IServer>();
-
-            ClientOptions.BaseAddress = server.Features.Get<IServerAddressesFeature>() !.Addresses
-                .Select((p) => new Uri(p))
-                .First();
         }
     }
 }
