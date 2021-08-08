@@ -49,7 +49,7 @@ namespace MartinCostello.AdventOfCode.Api
         }
 
         /// <inheritdoc />
-        public override IServiceProvider? Services
+        public override IServiceProvider Services
         {
             get
             {
