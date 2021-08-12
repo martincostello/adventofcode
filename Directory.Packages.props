@@ -1,6 +1,6 @@
 <Project>
   <ItemGroup>
-    <PackageVersion Include="BenchmarkDotNet" Version="0.13.0" />
+    <PackageVersion Include="BenchmarkDotNet" Version="0.13.1" />
     <PackageVersion Include="MartinCostello.Logging.XUnit" Version="0.1.2" />
     <PackageVersion Include="Microsoft.AspNetCore.Mvc.Testing" Version="5.0.9" />
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="16.10.0" />
