@@ -1,0 +1,26 @@
+{
+  "name": "C# (.NET)",
+  "build": {
+    "dockerfile": "Dockerfile",
+    "args": {
+      "VARIANT": "5.0"
+    }
+  },
+  "extensions": [
+    "editorconfig.editorconfig",
+    "ms-dotnettools.csharp",
+    "ms-vscode.PowerShell"
+  ],
+  "forwardPorts": [ 5000 ],
+  "portsAttributes":{
+    "5000": {
+      "label": "Advent Of Code",
+      "onAutoForward": "openBrowserOnce",
+      "protocol": "http"
+    }
+  },
+  "postCreateCommand": "./build.ps1 -SkipTests",
+  "remoteEnv": {
+    "PATH": "/root/.dotnet/tools:${containerWorkspaceFolder}/.dotnetcli:${containerEnv:PATH}"
+  }
+}

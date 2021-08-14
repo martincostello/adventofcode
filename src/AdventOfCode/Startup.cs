@@ -36,8 +36,11 @@ namespace MartinCostello.AdventOfCode
 
             app.UseStatusCodePagesWithReExecute("/error", "?id={0}");
 
-            app.UseHsts();
-            app.UseHttpsRedirection();
+            if (!environment.IsDevelopment())
+            {
+                app.UseHsts();
+                app.UseHttpsRedirection();
+            }
 
             app.UseResponseCompression();
             app.UseStaticFiles();
