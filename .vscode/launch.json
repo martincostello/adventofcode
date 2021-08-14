@@ -6,30 +6,17 @@
       "type": "coreclr",
       "request": "launch",
       "preLaunchTask": "build",
-      "program": "${workspaceRoot}/src/AdventOfCode/bin/Debug/net5.0/AdventOfCode.dll",
+      "program": "${workspaceFolder}/src/AdventOfCode/bin/Debug/net5.0/AdventOfCode.dll",
       "args": [],
-      "cwd": "${workspaceRoot}/src/AdventOfCode",
+      "cwd": "${workspaceFolder}/src/AdventOfCode",
       "stopAtEntry": false,
       "internalConsoleOptions": "openOnSessionStart",
-      "launchBrowser": {
-        "enabled": true,
-        "args": "${auto-detect-url}",
-        "windows": {
-          "command": "cmd.exe",
-          "args": "/C start ${auto-detect-url}"
-        },
-        "osx": {
-          "command": "open"
-        },
-        "linux": {
-          "command": "xdg-open"
-        }
+      "serverReadyAction": {
+        "action": "openExternally",
+        "pattern": "\\bNow listening on:\\s+(https?://\\S+)"
       },
       "env": {
         "ASPNETCORE_ENVIRONMENT": "Development"
-      },
-      "sourceFileMap": {
-        "/Views": "${workspaceRoot}/src/AdventOfCode/Views"
       }
     },
     {
@@ -41,7 +28,7 @@
       "args": [
         "test"
       ],
-      "cwd": "${workspaceRoot}/tests/AdventOfCode.Tests",
+      "cwd": "${workspaceFolder}/tests/AdventOfCode.Tests",
       "console": "internalConsole",
       "stopAtEntry": false,
       "internalConsoleOptions": "openOnSessionStart"
