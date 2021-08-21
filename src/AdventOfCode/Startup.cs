@@ -3,93 +3,88 @@
 
 using System.IO.Compression;
 using System.Reflection;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http.Json;
 using Microsoft.AspNetCore.ResponseCompression;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 
-namespace MartinCostello.AdventOfCode
+namespace MartinCostello.AdventOfCode;
+
+/// <summary>
+/// A class representing the startup logic for the application.
+/// </summary>
+public class Startup
 {
     /// <summary>
-    /// A class representing the startup logic for the application.
+    /// Configures the application.
     /// </summary>
-    public class Startup
+    /// <param name="app">The <see cref="IApplicationBuilder"/> to use.</param>
+    /// <param name="environment">The <see cref="IWebHostEnvironment"/> to use.</param>
+    public void Configure(IApplicationBuilder app, IWebHostEnvironment environment)
     {
-        /// <summary>
-        /// Configures the application.
-        /// </summary>
-        /// <param name="app">The <see cref="IApplicationBuilder"/> to use.</param>
-        /// <param name="environment">The <see cref="IWebHostEnvironment"/> to use.</param>
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment environment)
+        if (environment.IsDevelopment())
         {
-            if (environment.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
-            else
-            {
-                app.UseExceptionHandler("/error");
-            }
-
-            app.UseStatusCodePagesWithReExecute("/error", "?id={0}");
-
-            if (!environment.IsDevelopment())
-            {
-                app.UseHsts();
-                app.UseHttpsRedirection();
-            }
-
-            app.UseResponseCompression();
-            app.UseStaticFiles();
-            app.UseRouting();
-
-            app.UseEndpoints(
-                (endpoints) =>
-                {
-                    endpoints.MapRazorPages();
-
-                    endpoints.MapGet("/api/puzzles", PuzzlesApi.GetPuzzlesAsync);
-                    endpoints.MapPost("/api/puzzles/{year:int}/{day:int}/solve", PuzzlesApi.SolvePuzzleAsync);
-                });
+            app.UseDeveloperExceptionPage();
+        }
+        else
+        {
+            app.UseExceptionHandler("/error");
         }
 
-        /// <summary>
-        /// Configures the services for the application.
-        /// </summary>
-        /// <param name="services">The <see cref="IServiceCollection"/> to use.</param>
-        public void ConfigureServices(IServiceCollection services)
+        app.UseStatusCodePagesWithReExecute("/error", "?id={0}");
+
+        if (!environment.IsDevelopment())
         {
-            services.AddSingleton<ILogger, WebLogger>();
-            services.AddSingleton<PuzzleFactory>();
+            app.UseHsts();
+            app.UseHttpsRedirection();
+        }
 
-            var puzzles = GetType().Assembly
-                .GetTypes()
-                .Where((p) => p.IsAssignableTo(typeof(Puzzle)))
-                .Select((p) => p.GetCustomAttribute<PuzzleAttribute>())
-                .Where((p) => p is not null)
-                .Where((p) => !p!.IsHidden)
-                .ToList();
+        app.UseResponseCompression();
+        app.UseStaticFiles();
+        app.UseRouting();
 
-            foreach (var puzzle in puzzles)
+        app.UseEndpoints(
+            (endpoints) =>
             {
-                services.AddSingleton(puzzle!);
-            }
+                endpoints.MapRazorPages();
 
-            services.Configure<JsonOptions>(options => options.SerializerOptions.WriteIndented = true);
-
-            services.AddRazorPages();
-
-            services.Configure<GzipCompressionProviderOptions>((p) => p.Level = CompressionLevel.Fastest);
-            services.Configure<BrotliCompressionProviderOptions>((p) => p.Level = CompressionLevel.Fastest);
-
-            services.AddResponseCompression((p) =>
-            {
-                p.EnableForHttps = true;
-                p.Providers.Add<BrotliCompressionProvider>();
-                p.Providers.Add<GzipCompressionProvider>();
+                endpoints.MapGet("/api/puzzles", PuzzlesApi.GetPuzzlesAsync);
+                endpoints.MapPost("/api/puzzles/{year:int}/{day:int}/solve", PuzzlesApi.SolvePuzzleAsync);
             });
+    }
+
+    /// <summary>
+    /// Configures the services for the application.
+    /// </summary>
+    /// <param name="services">The <see cref="IServiceCollection"/> to use.</param>
+    public void ConfigureServices(IServiceCollection services)
+    {
+        services.AddSingleton<ILogger, WebLogger>();
+        services.AddSingleton<PuzzleFactory>();
+
+        var puzzles = GetType().Assembly
+            .GetTypes()
+            .Where((p) => p.IsAssignableTo(typeof(Puzzle)))
+            .Select((p) => p.GetCustomAttribute<PuzzleAttribute>())
+            .Where((p) => p is not null)
+            .Where((p) => !p!.IsHidden)
+            .ToList();
+
+        foreach (var puzzle in puzzles)
+        {
+            services.AddSingleton(puzzle!);
         }
+
+        services.Configure<JsonOptions>(options => options.SerializerOptions.WriteIndented = true);
+
+        services.AddRazorPages();
+
+        services.Configure<GzipCompressionProviderOptions>((p) => p.Level = CompressionLevel.Fastest);
+        services.Configure<BrotliCompressionProviderOptions>((p) => p.Level = CompressionLevel.Fastest);
+
+        services.AddResponseCompression((p) =>
+        {
+            p.EnableForHttps = true;
+            p.Providers.Add<BrotliCompressionProvider>();
+            p.Providers.Add<GzipCompressionProvider>();
+        });
     }
 }

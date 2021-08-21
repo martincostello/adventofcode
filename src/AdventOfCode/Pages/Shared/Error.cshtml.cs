@@ -7,28 +7,27 @@ using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace MartinCostello.AdventOfCode.Pages
+namespace MartinCostello.AdventOfCode.Pages;
+
+/// <summary>
+/// A class representing the model for the error page.
+/// </summary>
+[ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+public class ErrorModel : PageModel
 {
     /// <summary>
-    /// A class representing the model for the error page.
+    /// Gets or sets the request Id.
     /// </summary>
-    [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-    public class ErrorModel : PageModel
-    {
-        /// <summary>
-        /// Gets or sets the request Id.
-        /// </summary>
-        public string? RequestId { get; set; }
+    public string? RequestId { get; set; }
 
-        /// <summary>
-        /// Gets a value indicating whether to show the request Id.
-        /// </summary>
-        public bool ShowRequestId => !string.IsNullOrEmpty(RequestId);
+    /// <summary>
+    /// Gets a value indicating whether to show the request Id.
+    /// </summary>
+    public bool ShowRequestId => !string.IsNullOrEmpty(RequestId);
 
-        /// <summary>
-        /// Handles GET requests for the error page.
-        /// </summary>
-        public void OnGet()
-            => RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier;
-    }
+    /// <summary>
+    /// Handles GET requests for the error page.
+    /// </summary>
+    public void OnGet()
+        => RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier;
 }

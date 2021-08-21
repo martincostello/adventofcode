@@ -1,136 +1,135 @@
-﻿// Copyright (c) Martin Costello, 2015. All rights reserved.
+// Copyright (c) Martin Costello, 2015. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 using System.Drawing;
 using System.Security.Cryptography;
 
-namespace MartinCostello.AdventOfCode.Puzzles.Y2016
+namespace MartinCostello.AdventOfCode.Puzzles.Y2016;
+
+/// <summary>
+/// A class representing the puzzle for <c>https://adventofcode.com/2016/day/17</c>. This class cannot be inherited.
+/// </summary>
+[Puzzle(2016, 17, MinimumArguments = 1)]
+public sealed class Day17 : Puzzle
 {
     /// <summary>
-    /// A class representing the puzzle for <c>https://adventofcode.com/2016/day/17</c>. This class cannot be inherited.
+    /// Gets the shortest path to the vault.
     /// </summary>
-    [Puzzle(2016, 17, MinimumArguments = 1)]
-    public sealed class Day17 : Puzzle
+    public string ShortestPathToVault { get; private set; } = string.Empty;
+
+    /// <summary>
+    /// Gets the longest path to the vault.
+    /// </summary>
+    public int LongestPathToVault { get; private set; }
+
+    /// <summary>
+    /// Determines the shortest path to reach the vault.
+    /// </summary>
+    /// <param name="passcode">The passcode to use.</param>
+    /// <returns>
+    /// The shortest path that can be taken to reach the vault and the length of the longest path.
+    /// </returns>
+    public static (string shortest, int longest) GetPathsToVault(string passcode)
     {
-        /// <summary>
-        /// Gets the shortest path to the vault.
-        /// </summary>
-        public string ShortestPathToVault { get; private set; } = string.Empty;
+        var up = (vector: new Size(0, -1), direction: 'U');
+        var down = (vector: new Size(0, 1), direction: 'D');
+        var left = (vector: new Size(-1, 0), direction: 'L');
+        var right = (vector: new Size(1, 0), direction: 'R');
 
-        /// <summary>
-        /// Gets the longest path to the vault.
-        /// </summary>
-        public int LongestPathToVault { get; private set; }
+        var possibleMoves = new[] { up, down, left, right };
 
-        /// <summary>
-        /// Determines the shortest path to reach the vault.
-        /// </summary>
-        /// <param name="passcode">The passcode to use.</param>
-        /// <returns>
-        /// The shortest path that can be taken to reach the vault and the length of the longest path.
-        /// </returns>
-        public static (string shortest, int longest) GetPathsToVault(string passcode)
+        var vault = new Point(3, 3);
+
+        var path = new Stack<char>();
+        var routes = new List<string>();
+
+        GetPathsToVault(Point.Empty, path, routes);
+
+        string shortestPath = routes
+            .OrderBy((p) => p.Length)
+            .FirstOrDefault() ?? string.Empty;
+
+        int longestPath = routes
+            .Select((p) => p.Length)
+            .OrderByDescending((p) => p)
+            .FirstOrDefault();
+
+        return (shortestPath, longestPath);
+
+        void GetPathsToVault(Point current, Stack<char> path, ICollection<string> routes)
         {
-            var up = (vector: new Size(0, -1), direction: 'U');
-            var down = (vector: new Size(0, 1), direction: 'D');
-            var left = (vector: new Size(-1, 0), direction: 'L');
-            var right = (vector: new Size(1, 0), direction: 'R');
+            string pathSoFar = string.Join(string.Empty, path.Reverse());
 
-            var possibleMoves = new[] { up, down, left, right };
-
-            var vault = new Point(3, 3);
-
-            var path = new Stack<char>();
-            var routes = new List<string>();
-
-            GetPathsToVault(Point.Empty, path, routes);
-
-            string shortestPath = routes
-                .OrderBy((p) => p.Length)
-                .FirstOrDefault() ?? string.Empty;
-
-            int longestPath = routes
-                .Select((p) => p.Length)
-                .OrderByDescending((p) => p)
-                .FirstOrDefault();
-
-            return (shortestPath, longestPath);
-
-            void GetPathsToVault(Point current, Stack<char> path, ICollection<string> routes)
+            if (current == vault)
             {
-                string pathSoFar = string.Join(string.Empty, path.Reverse());
-
-                if (current == vault)
-                {
-                    routes.Add(pathSoFar);
-                    return;
-                }
-
-                string hash = Hash(passcode + pathSoFar);
-
-                for (int i = 0; i < possibleMoves.Length; i++)
-                {
-                    var (vector, direction) = possibleMoves[i];
-                    var candidate = current + vector;
-
-                    if (CanUseDoor(hash[i], candidate))
-                    {
-                        path.Push(direction);
-
-                        GetPathsToVault(candidate, path, routes);
-
-                        path.Pop();
-                    }
-                }
+                routes.Add(pathSoFar);
+                return;
             }
 
-            static string Hash(string value)
+            string hash = Hash(passcode + pathSoFar);
+
+            for (int i = 0; i < possibleMoves.Length; i++)
             {
-                byte[] buffer = Encoding.UTF8.GetBytes(value);
-                byte[] hash = MD5.HashData(buffer);
+                var (vector, direction) = possibleMoves[i];
+                var candidate = current + vector;
+
+                if (CanUseDoor(hash[i], candidate))
+                {
+                    path.Push(direction);
+
+                    GetPathsToVault(candidate, path, routes);
+
+                    path.Pop();
+                }
+            }
+        }
+
+        static string Hash(string value)
+        {
+            byte[] buffer = Encoding.UTF8.GetBytes(value);
+            byte[] hash = MD5.HashData(buffer);
 
 #pragma warning disable CA1308
-                return Convert.ToHexString(hash)[0..4].ToLowerInvariant();
+            return Convert.ToHexString(hash)[0..4].ToLowerInvariant();
 #pragma warning restore CA1308
-            }
-
-            static bool IsOpenDoor(char value)
-            {
-                return value switch
-                {
-                    'b' => true,
-                    'c' => true,
-                    'd' => true,
-                    'e' => true,
-                    'f' => true,
-                    _ => false,
-                };
-            }
-
-            static bool IsValidMove(Point location)
-                => location.X > -1 &&
-                   location.Y > -1 &&
-                   location.X < 4 &&
-                   location.Y < 4;
-
-            static bool CanUseDoor(char passcode, Point location)
-                => IsOpenDoor(passcode) && IsValidMove(location);
         }
 
-        /// <inheritdoc />
-        protected override Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
+        static bool IsOpenDoor(char value)
         {
-            string passcode = args[0];
-
-            (ShortestPathToVault, LongestPathToVault) = GetPathsToVault(passcode);
-
-            if (Verbose)
+            return value switch
             {
-                Logger.WriteLine("The shortest path to the vault is {0}.", ShortestPathToVault);
-                Logger.WriteLine("The longest path to the vault is {0}.", LongestPathToVault);
-            }
-
-            return PuzzleResult.Create(ShortestPathToVault, LongestPathToVault);
+                'b' => true,
+                'c' => true,
+                'd' => true,
+                'e' => true,
+                'f' => true,
+                _ => false,
+            };
         }
+
+        static bool IsValidMove(Point location)
+            => location.X > -1 &&
+               location.Y > -1 &&
+               location.X < 4 &&
+               location.Y < 4;
+
+        static bool CanUseDoor(char passcode, Point location)
+            => IsOpenDoor(passcode) && IsValidMove(location);
+    }
+
+    /// <inheritdoc />
+    protected override Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
+    {
+        string passcode = args[0];
+
+        (ShortestPathToVault, LongestPathToVault) = GetPathsToVault(passcode);
+
+        if (Verbose)
+        {
+            Logger.WriteLine("The shortest path to the vault is {0}.", ShortestPathToVault);
+            Logger.WriteLine("The longest path to the vault is {0}.", LongestPathToVault);
+        }
+
+        return PuzzleResult.Create(ShortestPathToVault, LongestPathToVault);
     }
 }

@@ -1,77 +1,76 @@
-﻿// Copyright (c) Martin Costello, 2015. All rights reserved.
+// Copyright (c) Martin Costello, 2015. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
-namespace MartinCostello.AdventOfCode.Puzzles.Y2020
+namespace MartinCostello.AdventOfCode.Puzzles.Y2020;
+
+/// <summary>
+/// A class representing the puzzle for <c>https://adventofcode.com/2020/day/25</c>. This class cannot be inherited.
+/// </summary>
+[Puzzle(2020, 25, RequiresData = true)]
+public sealed class Day25 : Puzzle
 {
     /// <summary>
-    /// A class representing the puzzle for <c>https://adventofcode.com/2020/day/25</c>. This class cannot be inherited.
+    /// Gets the private key of the card and door.
     /// </summary>
-    [Puzzle(2020, 25, RequiresData = true)]
-    public sealed class Day25 : Puzzle
+    public long PrivateKey { get; private set; }
+
+    /// <summary>
+    /// Gets the private key associated with the specified card and door public keys.
+    /// </summary>
+    /// <param name="cardPublicKey">The public key of the key card.</param>
+    /// <param name="doorPublicKey">The public key of the door.</param>
+    /// <returns>
+    /// The shared private key of the card and door.
+    /// </returns>
+    public static long GetPrivateKey(int cardPublicKey, int doorPublicKey)
     {
-        /// <summary>
-        /// Gets the private key of the card and door.
-        /// </summary>
-        public long PrivateKey { get; private set; }
+        int loopSize = GetLoopSize(cardPublicKey);
 
-        /// <summary>
-        /// Gets the private key associated with the specified card and door public keys.
-        /// </summary>
-        /// <param name="cardPublicKey">The public key of the key card.</param>
-        /// <param name="doorPublicKey">The public key of the door.</param>
-        /// <returns>
-        /// The shared private key of the card and door.
-        /// </returns>
-        public static long GetPrivateKey(int cardPublicKey, int doorPublicKey)
+        long privateKey = 1;
+
+        for (int i = 0; i < loopSize; i++)
         {
-            int loopSize = GetLoopSize(cardPublicKey);
+            privateKey = Transform(privateKey, doorPublicKey);
+        }
 
-            long privateKey = 1;
+        return privateKey;
 
-            for (int i = 0; i < loopSize; i++)
+        static int GetLoopSize(int publicKey)
+        {
+            long value = 1;
+
+            for (int i = 1; i < int.MaxValue; i++)
             {
-                privateKey = Transform(privateKey, doorPublicKey);
-            }
+                value = Transform(value, subjectNumber: 7);
 
-            return privateKey;
-
-            static int GetLoopSize(int publicKey)
-            {
-                long value = 1;
-
-                for (int i = 1; i < int.MaxValue; i++)
+                if (value == publicKey)
                 {
-                    value = Transform(value, subjectNumber: 7);
-
-                    if (value == publicKey)
-                    {
-                        return i;
-                    }
+                    return i;
                 }
-
-                return -1;
             }
 
-            static long Transform(long value, int subjectNumber)
-            {
-                value *= subjectNumber;
-                return value % 20201227;
-            }
+            return -1;
         }
 
-        /// <inheritdoc />
-        protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
+        static long Transform(long value, int subjectNumber)
         {
-            IList<int> values = await ReadResourceAsSequenceAsync<int>();
-
-            PrivateKey = GetPrivateKey(values[0], values[1]);
-
-            if (Verbose)
-            {
-                Logger.WriteLine("The encryption key the handshake is trying to establish is {0}.", PrivateKey);
-            }
-
-            return PuzzleResult.Create(PrivateKey);
+            value *= subjectNumber;
+            return value % 20201227;
         }
+    }
+
+    /// <inheritdoc />
+    protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
+    {
+        IList<int> values = await ReadResourceAsSequenceAsync<int>();
+
+        PrivateKey = GetPrivateKey(values[0], values[1]);
+
+        if (Verbose)
+        {
+            Logger.WriteLine("The encryption key the handshake is trying to establish is {0}.", PrivateKey);
+        }
+
+        return PuzzleResult.Create(PrivateKey);
     }
 }

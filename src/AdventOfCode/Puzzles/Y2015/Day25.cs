@@ -1,87 +1,86 @@
-﻿// Copyright (c) Martin Costello, 2015. All rights reserved.
+// Copyright (c) Martin Costello, 2015. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 using System.Drawing;
 
-namespace MartinCostello.AdventOfCode.Puzzles.Y2015
+namespace MartinCostello.AdventOfCode.Puzzles.Y2015;
+
+/// <summary>
+/// A class representing the puzzle for <c>https://adventofcode.com/2015/day/25</c>. This class cannot be inherited.
+/// </summary>
+[Puzzle(2015, 25, MinimumArguments = 2)]
+public sealed class Day25 : Puzzle
 {
     /// <summary>
-    /// A class representing the puzzle for <c>https://adventofcode.com/2015/day/25</c>. This class cannot be inherited.
+    /// Gets the code for the weather machine.
     /// </summary>
-    [Puzzle(2015, 25, MinimumArguments = 2)]
-    public sealed class Day25 : Puzzle
+    internal ulong Code { get; private set; }
+
+    /// <summary>
+    /// Gets the code for the weather machine at the specified row and column.
+    /// </summary>
+    /// <param name="row">The row number.</param>
+    /// <param name="column">The column number.</param>
+    /// <returns>
+    /// The weather machine code for the specified row and column.
+    /// </returns>
+    internal static ulong GetCodeForWeatherMachine(int row, int column)
     {
-        /// <summary>
-        /// Gets the code for the weather machine.
-        /// </summary>
-        internal ulong Code { get; private set; }
+        // Zero-index the row and column
+        row--;
+        column--;
 
-        /// <summary>
-        /// Gets the code for the weather machine at the specified row and column.
-        /// </summary>
-        /// <param name="row">The row number.</param>
-        /// <param name="column">The column number.</param>
-        /// <returns>
-        /// The weather machine code for the specified row and column.
-        /// </returns>
-        internal static ulong GetCodeForWeatherMachine(int row, int column)
+        ulong result = 20151125;
+
+        var current = new Point(0, 0);
+        var target = new Point(column, row);
+
+        int currentRow = 0;
+
+        while (current != target)
         {
-            // Zero-index the row and column
-            row--;
-            column--;
+            currentRow++;
 
-            ulong result = 20151125;
-
-            var current = new Point(0, 0);
-            var target = new Point(column, row);
-
-            int currentRow = 0;
-
-            while (current != target)
+            for (int i = 0; i <= currentRow && current != target; i++)
             {
-                currentRow++;
-
-                for (int i = 0; i <= currentRow && current != target; i++)
-                {
-                    current = new Point(i, currentRow - i);
-                    result = GenerateCode(result);
-                }
+                current = new Point(i, currentRow - i);
+                result = GenerateCode(result);
             }
-
-            return result;
         }
 
-        /// <summary>
-        /// Generates the next code from the specified value.
-        /// </summary>
-        /// <param name="value">The value to generate the code from.</param>
-        /// <returns>
-        /// The code generated from the specified value.
-        /// </returns>
-        internal static ulong GenerateCode(ulong value)
+        return result;
+    }
+
+    /// <summary>
+    /// Generates the next code from the specified value.
+    /// </summary>
+    /// <param name="value">The value to generate the code from.</param>
+    /// <returns>
+    /// The code generated from the specified value.
+    /// </returns>
+    internal static ulong GenerateCode(ulong value)
+    {
+        ulong result = value * 252533;
+        return result % 33554393;
+    }
+
+    /// <inheritdoc />
+    protected override Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
+    {
+        int row = ParseInt32(args[0]);
+        int column = ParseInt32(args[1]);
+
+        Code = GetCodeForWeatherMachine(row, column);
+
+        if (Verbose)
         {
-            ulong result = value * 252533;
-            return result % 33554393;
+            Logger.WriteLine(
+                "The code for row {0:N0} and column {1:N0} is {2:N0}.",
+                row,
+                column,
+                Code);
         }
 
-        /// <inheritdoc />
-        protected override Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
-        {
-            int row = ParseInt32(args[0]);
-            int column = ParseInt32(args[1]);
-
-            Code = GetCodeForWeatherMachine(row, column);
-
-            if (Verbose)
-            {
-                Logger.WriteLine(
-                    "The code for row {0:N0} and column {1:N0} is {2:N0}.",
-                    row,
-                    column,
-                    Code);
-            }
-
-            return PuzzleResult.Create(Code);
-        }
+        return PuzzleResult.Create(Code);
     }
 }

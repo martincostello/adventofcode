@@ -4,36 +4,35 @@
 using System.Net;
 using System.Net.Mime;
 
-namespace MartinCostello.AdventOfCode.EndToEnd
+namespace MartinCostello.AdventOfCode.EndToEnd;
+
+public class ResourceTests : EndToEndTest
 {
-    public class ResourceTests : EndToEndTest
+    public ResourceTests(SiteFixture fixture)
+        : base(fixture)
     {
-        public ResourceTests(SiteFixture fixture)
-            : base(fixture)
-        {
-        }
+    }
 
-        [SkippableTheory]
-        [InlineData("/", MediaTypeNames.Text.Html)]
-        [InlineData("/error.html", MediaTypeNames.Text.Html)]
-        [InlineData("/favicon.ico", "image/x-icon")]
-        [InlineData("/humans.txt", MediaTypeNames.Text.Plain)]
-        [InlineData("/manifest.webmanifest", "application/manifest+json")]
-        [InlineData("/robots.txt", MediaTypeNames.Text.Plain)]
-        [InlineData("/static/js/main.js", "application/javascript")]
-        [InlineData("/static/js/main.js.map", MediaTypeNames.Text.Plain)]
-        public async Task Can_Load_Resource_As_Get(string requestUri, string contentType)
-        {
-            // Arrange
-            using var client = Fixture.CreateClient();
+    [SkippableTheory]
+    [InlineData("/", MediaTypeNames.Text.Html)]
+    [InlineData("/error.html", MediaTypeNames.Text.Html)]
+    [InlineData("/favicon.ico", "image/x-icon")]
+    [InlineData("/humans.txt", MediaTypeNames.Text.Plain)]
+    [InlineData("/manifest.webmanifest", "application/manifest+json")]
+    [InlineData("/robots.txt", MediaTypeNames.Text.Plain)]
+    [InlineData("/static/js/main.js", "application/javascript")]
+    [InlineData("/static/js/main.js.map", MediaTypeNames.Text.Plain)]
+    public async Task Can_Load_Resource_As_Get(string requestUri, string contentType)
+    {
+        // Arrange
+        using var client = Fixture.CreateClient();
 
-            // Act
-            using var response = await client.GetAsync(requestUri);
+        // Act
+        using var response = await client.GetAsync(requestUri);
 
-            // Assert
-            response.StatusCode.ShouldBe(HttpStatusCode.OK, await response.Content.ReadAsStringAsync());
-            response.Content.ShouldNotBeNull();
-            response.Content!.Headers.ContentType?.MediaType?.ShouldBe(contentType);
-        }
+        // Assert
+        response.StatusCode.ShouldBe(HttpStatusCode.OK, await response.Content.ReadAsStringAsync());
+        response.Content.ShouldNotBeNull();
+        response.Content!.Headers.ContentType?.MediaType?.ShouldBe(contentType);
     }
 }
