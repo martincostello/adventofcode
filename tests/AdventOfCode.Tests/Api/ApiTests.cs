@@ -221,7 +221,7 @@ public class ApiTests : IntegrationTest
         using var client = Fixture.CreateClient();
 
         // Act
-        using var response = await client.GetAsync($"/api/puzzles");
+        using var response = await client.GetAsync("/api/puzzles");
 
         // Assert
         response.StatusCode.ShouldBe(HttpStatusCode.OK);
@@ -251,13 +251,13 @@ public class ApiTests : IntegrationTest
 
         // Act
         using var content = new MultipartFormDataContent();
-        using var response = await client.PostAsync($"/api/puzzles/2014/1/solve", content);
+        using var response = await client.PostAsync("/api/puzzles/2014/1/solve", content);
 
         // Assert
         response.StatusCode.ShouldBe(HttpStatusCode.NotFound);
         response.Content.ShouldNotBeNull();
         response.Content!.Headers.ContentType.ShouldNotBeNull();
-        response.Content.Headers.ContentType.MediaType.ShouldBe("application/json");
+        response.Content.Headers.ContentType.MediaType.ShouldBe("application/problem+json");
     }
 
     [Fact]
@@ -268,13 +268,13 @@ public class ApiTests : IntegrationTest
 
         // Act
         using var content = new StringContent("{}", Encoding.UTF8, "application/json");
-        using var response = await client.PostAsync($"/api/puzzles/2015/1/solve", content);
+        using var response = await client.PostAsync("/api/puzzles/2015/1/solve", content);
 
         // Assert
         response.StatusCode.ShouldBe(HttpStatusCode.UnsupportedMediaType);
         response.Content.ShouldNotBeNull();
         response.Content!.Headers.ContentType.ShouldNotBeNull();
-        response.Content.Headers.ContentType.MediaType.ShouldBe("application/json");
+        response.Content.Headers.ContentType.MediaType.ShouldBe("application/problem+json");
     }
 
     private static string GetPuzzleInput(int year, int day)

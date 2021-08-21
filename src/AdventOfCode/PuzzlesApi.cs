@@ -13,14 +13,13 @@ internal static class PuzzlesApi
     /// <summary>
     /// Gets the available puzzles as an asynchronous operation.
     /// </summary>
-    /// <param name="context">The HTTP context.</param>
+    /// <param name="attributes">The available puzzles.</param>
     /// <returns>
     /// A <see cref="Task"/> representing the asynchronous operation to solve the puzzle.
     /// </returns>
-    internal static async Task GetPuzzlesAsync(HttpContext context)
+    internal static IResult GetPuzzlesAsync(IEnumerable<PuzzleAttribute> attributes)
     {
-        var puzzles = context.RequestServices
-            .GetServices<PuzzleAttribute>()
+        var puzzles = attributes
             .OrderBy((p) => p.Year)
             .ThenBy((p) => p.Day)
             .Select((p) =>
@@ -34,28 +33,33 @@ internal static class PuzzlesApi
             })
             .ToList();
 
-        await context.Response.WriteAsJsonAsync(puzzles);
+        return Results.Json(puzzles);
     }
 
     /// <summary>
     /// Solves the puzzle associated with the specified HTTP request as an asynchronous operation.
     /// </summary>
-    /// <param name="context">The HTTP context.</param>
+    /// <param name="year">The year the puzzle to solve is from.</param>
+    /// <param name="day">The day the puzzle to solve is from.</param>
+    /// <param name="request">The HTTP request.</param>
+    /// <param name="factory">The <see cref="PuzzleFactory"/> to use.</param>
+    /// <param name="logger">The <see cref="ILogger"/> to use.</param>
+    /// <param name="cancellationToken">The <see cref="CancellationToken"/> to use.</param>
     /// <returns>
     /// A <see cref="Task"/> representing the asynchronous operation to solve the puzzle.
     /// </returns>
-    internal static async Task SolvePuzzleAsync(HttpContext context)
+    internal static async Task<IResult> SolvePuzzleAsync(
+        int year,
+        int day,
+        HttpRequest request,
+        PuzzleFactory factory,
+        ILogger<Puzzle> logger,
+        CancellationToken cancellationToken)
     {
-        if (!context.Request.HasFormContentType)
+        if (!request.HasFormContentType)
         {
-            await WriteErrorAsync(context, StatusCodes.Status415UnsupportedMediaType, "Unsupported Media Type", "The specified media type is not supported.");
-            return;
+            return Results.Problem("The specified media type is not supported.", statusCode: StatusCodes.Status415UnsupportedMediaType);
         }
-
-        int year = int.Parse((string)context.Request.RouteValues["year"]!, CultureInfo.InvariantCulture);
-        int day = int.Parse((string)context.Request.RouteValues["day"]!, CultureInfo.InvariantCulture);
-
-        var factory = context.RequestServices.GetRequiredService<PuzzleFactory>();
 
         Puzzle puzzle;
 
@@ -65,30 +69,27 @@ internal static class PuzzlesApi
         }
         catch (PuzzleException ex)
         {
-            await WriteErrorAsync(context, StatusCodes.Status404NotFound, "Not Found", ex.Message);
-            return;
+            return Results.Problem(ex.Message, statusCode: StatusCodes.Status404NotFound);
         }
 
         var metadata = puzzle.Metadata();
 
         if (metadata.IsHidden)
         {
-            await WriteErrorAsync(context, StatusCodes.Status403Forbidden, "Forbidden", "This puzzle cannot be solved.");
-            return;
+            return Results.Problem("This puzzle cannot be solved.", statusCode: StatusCodes.Status403Forbidden);
         }
 
         string[] arguments = Array.Empty<string>();
 
         if (metadata.RequiresData || metadata.MinimumArguments > 0)
         {
-            var form = await context.Request.ReadFormAsync(context.RequestAborted);
+            var form = await request.ReadFormAsync(cancellationToken);
 
             if (metadata.RequiresData)
             {
                 if (!form.TryGetValue("resource", out var resource))
                 {
-                    await WriteErrorAsync(context, StatusCodes.Status400BadRequest, "Bad Request", "No puzzle resource provided.");
-                    return;
+                    return Results.Problem("No puzzle resource provided.", statusCode: StatusCodes.Status400BadRequest);
                 }
 
                 puzzle.Resource = new MemoryStream(Encoding.UTF8.GetBytes(resource));
@@ -102,41 +103,28 @@ internal static class PuzzlesApi
 
         var timeout = TimeSpan.FromMinutes(1);
 
-        using var cts = CancellationTokenSource.CreateLinkedTokenSource(context.RequestAborted);
-        cts.CancelAfter(timeout);
-
         var stopwatch = Stopwatch.StartNew();
 
         PuzzleResult solution;
 
         try
         {
-            solution = await puzzle.SolveAsync(arguments, cts.Token);
+            solution = await puzzle.SolveAsync(arguments, cancellationToken).WaitAsync(timeout, cancellationToken);
         }
         catch (OperationCanceledException)
         {
-            await WriteErrorAsync(context, StatusCodes.Status408RequestTimeout, "Request Timeout", $"The puzzle was not solved within {timeout}.");
-            return;
+            return Results.Problem($"The puzzle was not solved within {timeout}.", statusCode: StatusCodes.Status408RequestTimeout);
         }
         catch (PuzzleException ex)
         {
-            await WriteErrorAsync(context, StatusCodes.Status400BadRequest, "Bad Request", ex.Message);
-            return;
+            return Results.Problem(ex.Message, statusCode: StatusCodes.Status400BadRequest);
         }
 #pragma warning disable CA1031
         catch (Exception ex)
 #pragma warning restore CA1031
         {
-            var logger = context.RequestServices.GetRequiredService<ILogger<Puzzle>>();
             logger.LogError(ex, "Failed to solve puzzle for year {Year} and day {Day}.", year, day);
-
-            await WriteErrorAsync(
-                context,
-                StatusCodes.Status500InternalServerError,
-                "Internal Server Error",
-                "Failed to solve puzzle.");
-
-            return;
+            return Results.Problem("Failed to solve puzzle.", statusCode: StatusCodes.Status500InternalServerError);
         }
 
         stopwatch.Stop();
@@ -150,34 +138,6 @@ internal static class PuzzlesApi
             timeToSolve = stopwatch.Elapsed.TotalMilliseconds,
         };
 
-        await context.Response.WriteAsJsonAsync(result);
-    }
-
-    /// <summary>
-    /// Writes an HTTP error response as an asynchronous operation.
-    /// </summary>
-    /// <param name="context">The HTTP context to write to.</param>
-    /// <param name="statusCode">The HTTP status code to return.</param>
-    /// <param name="title">The error title.</param>
-    /// <param name="detail">The error detail.</param>
-    /// <returns>
-    /// A <see cref="Task"/> representing the asynchronous operation to write the error response.
-    /// </returns>
-    private static async Task WriteErrorAsync(
-        HttpContext context,
-        int statusCode,
-        string title,
-        string detail)
-    {
-        context.Response.StatusCode = statusCode;
-
-        var error = new Microsoft.AspNetCore.Mvc.ProblemDetails()
-        {
-            Detail = detail,
-            Status = statusCode,
-            Title = title,
-        };
-
-        await context.Response.WriteAsJsonAsync(error);
+        return Results.Json(result);
     }
 }
