@@ -127,7 +127,7 @@ internal static class PuzzlesApi
         catch (Exception ex)
 #pragma warning restore CA1031
         {
-            var logger = context.RequestServices.GetRequiredService<ILogger<Startup>>();
+            var logger = context.RequestServices.GetRequiredService<ILogger<Puzzle>>();
             logger.LogError(ex, "Failed to solve puzzle for year {Year} and day {Day}.", year, day);
 
             await WriteErrorAsync(

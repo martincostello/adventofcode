@@ -2,7 +2,7 @@
   <PropertyGroup>
     <Description>Solutions for Advent of Code.</Description>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <NoWarn>$(NoWarn);CA2007;CA2225;CA5351</NoWarn>
+    <NoWarn>$(NoWarn);CA2007;CA2225;CA5351;SA1516</NoWarn>
     <OutputType>Exe</OutputType>
     <PreserveCompilationContext>true</PreserveCompilationContext>
     <RootNamespace>MartinCostello.AdventOfCode</RootNamespace>

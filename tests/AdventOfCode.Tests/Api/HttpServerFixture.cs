@@ -17,7 +17,7 @@ namespace MartinCostello.AdventOfCode.Api;
 /// <summary>
 /// A test fixture representing an HTTP server hosting the application. This class cannot be inherited.
 /// </summary>
-public sealed class HttpServerFixture : WebApplicationFactory<Startup>, ITestOutputHelperAccessor
+public sealed class HttpServerFixture : WebApplicationFactory<Puzzle>, ITestOutputHelperAccessor
 {
     private IHost? _host;
     private bool _disposed;
@@ -74,7 +74,7 @@ public sealed class HttpServerFixture : WebApplicationFactory<Startup>, ITestOut
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
         builder.ConfigureLogging((loggingBuilder) => loggingBuilder.ClearProviders().AddXUnit(this))
-                .UseSolutionRelativeContentRoot(Path.Combine("src", "AdventOfCode"));
+               .UseSolutionRelativeContentRoot(Path.Combine("src", "AdventOfCode"));
 
         builder.ConfigureKestrel(
             (p) => p.ConfigureHttpsDefaults(
@@ -88,26 +88,25 @@ public sealed class HttpServerFixture : WebApplicationFactory<Startup>, ITestOut
     /// <inheritdoc />
     protected override IHost CreateHost(IHostBuilder builder)
     {
-        builder.ConfigureWebHost((p) => p.UseKestrel());
+        var testHost = builder.Build();
+
+        builder.ConfigureWebHost(webHostBuilder => webHostBuilder.UseKestrel());
 
         _host = builder.Build();
         _host.Start();
 
+        // Extract the selected dynamic port out of the Kestrel server
+        // and assign it onto the client options for convenience so it
+        // "just works" as otherwise it'll be the default http://localhost
+        // URL, which won't route to the Kestrel-hosted HTTP server.
         var server = _host.Services.GetRequiredService<IServer>();
         var addresses = server.Features.Get<IServerAddressesFeature>();
 
         ClientOptions.BaseAddress = addresses!.Addresses
-            .Select((p) => new Uri(p))
+            .Select(x => new Uri(x))
             .Last();
 
-        // The base class still needs a separate host using TestServer
-        var testHostBuilder = CreateHostBuilder();
-        var testHost = testHostBuilder!
-            .ConfigureWebHost((p) => p.UseTestServer())
-            .Build();
-
         testHost.Start();
-
         return testHost;
     }
 
