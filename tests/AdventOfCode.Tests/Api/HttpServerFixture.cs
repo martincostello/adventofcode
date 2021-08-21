@@ -95,18 +95,15 @@ public sealed class HttpServerFixture : WebApplicationFactory<Puzzle>, ITestOutp
         _host = builder.Build();
         _host.Start();
 
-        // Extract the selected dynamic port out of the Kestrel server
-        // and assign it onto the client options for convenience so it
-        // "just works" as otherwise it'll be the default http://localhost
-        // URL, which won't route to the Kestrel-hosted HTTP server.
         var server = _host.Services.GetRequiredService<IServer>();
         var addresses = server.Features.Get<IServerAddressesFeature>();
 
         ClientOptions.BaseAddress = addresses!.Addresses
-            .Select(x => new Uri(x))
+            .Select((p) => new Uri(p))
             .Last();
 
         testHost.Start();
+
         return testHost;
     }
 
