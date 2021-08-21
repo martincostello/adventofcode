@@ -1,4 +1,4 @@
-// Copyright (c) Martin Costello, 2015. All rights reserved.
+﻿// Copyright (c) Martin Costello, 2015. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2020;
@@ -568,7 +568,7 @@ public sealed class Day20 : Puzzle
         /// The left edge of the tile.
         /// </returns>
         public string Left()
-            => new string(Grid.Select((p) => p[0]).Reverse().ToArray());
+            => new (Grid.Select((p) => p[0]).Reverse().ToArray());
 
         /// <summary>
         /// Returns the right edge.
@@ -577,7 +577,7 @@ public sealed class Day20 : Puzzle
         /// The right edge of the tile.
         /// </returns>
         public string Right()
-            => new string(Grid.Select((p) => p[^1]).ToArray());
+            => new (Grid.Select((p) => p[^1]).ToArray());
 
         /// <summary>
         /// Tries to align the other tile to this tile's edge.

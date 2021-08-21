@@ -1,4 +1,4 @@
-// Copyright (c) Martin Costello, 2015. All rights reserved.
+﻿// Copyright (c) Martin Costello, 2015. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2015;
@@ -95,7 +95,7 @@ public sealed class Day05 : Puzzle
             char first = value[i];
             char second = value[i + 1];
 
-            string pair = new string(new[] { first, second });
+            string pair = new (new[] { first, second });
 
             if (!letterPairs.TryGetValue(pair, out IList<int>? indexes))
             {

@@ -1,4 +1,4 @@
-// Copyright (c) Martin Costello, 2015. All rights reserved.
+﻿// Copyright (c) Martin Costello, 2015. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2020;
@@ -148,7 +148,7 @@ public sealed class Day24 : Puzzle
         /// <summary>
         /// A tile with all coordinates having a value of zero. This field is read-only.
         /// </summary>
-        public static readonly Tile Zero = new Tile(0, 0, 0);
+        public static readonly Tile Zero = new (0, 0, 0);
 
         /// <summary>
         /// The X coordinate.
