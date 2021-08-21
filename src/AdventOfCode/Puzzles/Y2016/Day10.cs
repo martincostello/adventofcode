@@ -1,4 +1,4 @@
-// Copyright (c) Martin Costello, 2015. All rights reserved.
+﻿// Copyright (c) Martin Costello, 2015. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2016;
@@ -31,7 +31,7 @@ public sealed class Day10 : Puzzle
     /// with the values specified by <paramref name="a"/> and <paramref name="b"/> and the product
     /// of the values of the microchips in the output bins with the numbers specified by <paramref name="binsOfInterest"/>.
     /// </returns>
-    internal static (int bot, int product) GetBotNumber(IEnumerable<string> instructions, int a, int b, IEnumerable<int> binsOfInterest)
+    internal static (int Bot, int Product) GetBotNumber(IEnumerable<string> instructions, int a, int b, IEnumerable<int> binsOfInterest)
     {
         int max = Math.Max(a, b);
         int min = Math.Min(a, b);

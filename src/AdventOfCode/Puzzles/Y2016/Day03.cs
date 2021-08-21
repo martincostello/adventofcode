@@ -1,4 +1,4 @@
-// Copyright (c) Martin Costello, 2015. All rights reserved.
+﻿// Copyright (c) Martin Costello, 2015. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2016;
@@ -29,8 +29,8 @@ public sealed class Day03 : Puzzle
     /// </returns>
     internal static int GetPossibleTriangleCount(ICollection<string> dimensions, bool readAsColumns)
     {
-        IList<(int a, int b, int c)> triangles = ParseTriangles(dimensions, readAsColumns);
-        return triangles.Count((p) => IsValidTriangle(p.a, p.b, p.c));
+        IList<(int A, int B, int C)> triangles = ParseTriangles(dimensions, readAsColumns);
+        return triangles.Count((p) => IsValidTriangle(p.A, p.B, p.C));
     }
 
     /// <summary>
@@ -75,9 +75,9 @@ public sealed class Day03 : Puzzle
     /// <returns>
     /// An <see cref="IList{T}"/> containing the parsed triangle dimensions.
     /// </returns>
-    private static IList<(int a, int b, int c)> ParseTriangles(ICollection<string> dimensions, bool readAsColumns)
+    private static IList<(int A, int B, int C)> ParseTriangles(ICollection<string> dimensions, bool readAsColumns)
     {
-        var result = new List<(int a, int b, int c)>(dimensions.Count);
+        var result = new List<(int A, int B, int C)>(dimensions.Count);
 
         foreach (string dimension in dimensions)
         {
@@ -92,17 +92,17 @@ public sealed class Day03 : Puzzle
 
         if (readAsColumns)
         {
-            var resultFromColumns = new List<(int a, int b, int c)>(result.Count);
+            var resultFromColumns = new List<(int A, int B, int C)>(result.Count);
 
             for (int i = 0; i < result.Count; i += 3)
             {
-                var (a, b, c) = result[i];
-                var second = result[i + 1];
-                var third = result[i + 2];
+                var (a1, b1, c1) = result[i];
+                var (a2, b2, c2) = result[i + 1];
+                var (a3, b3, c3) = result[i + 2];
 
-                resultFromColumns.Add((a, second.a, third.a));
-                resultFromColumns.Add((b, second.b, third.b));
-                resultFromColumns.Add((c, second.c, third.c));
+                resultFromColumns.Add((a1, a2, a3));
+                resultFromColumns.Add((b1, b2, b3));
+                resultFromColumns.Add((c1, c2, c3));
             }
 
             result = resultFromColumns;

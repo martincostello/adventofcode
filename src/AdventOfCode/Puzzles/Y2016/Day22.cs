@@ -1,4 +1,4 @@
-// Copyright (c) Martin Costello, 2015. All rights reserved.
+﻿// Copyright (c) Martin Costello, 2015. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 using System.Drawing;
@@ -30,7 +30,7 @@ public sealed class Day22 : Puzzle
     /// The number of viable nodes found by parsing <paramref name="output"/> and
     /// the minimum number of moves required to extract the data on the target node.
     /// </returns>
-    public static (int viableNodes, int stepsToExtract) CountViableNodePairs(IEnumerable<string> output, ILogger? logger = null)
+    public static (int ViableNodes, int StepsToExtract) CountViableNodePairs(IEnumerable<string> output, ILogger? logger = null)
     {
         IList<Node> nodes = output
             .Skip(2)
@@ -234,7 +234,7 @@ public sealed class Day22 : Puzzle
             int indexY = split[0].IndexOf("y", StringComparison.Ordinal);
 
             int x = ParseInt32(split[0].Substring(indexX + 1, indexY - indexX - 2));
-            int y = ParseInt32(split[0][(indexY + 1) ..]);
+            int y = ParseInt32(split[0][(indexY + 1)..]);
 
             return new Node(
                 split[0],

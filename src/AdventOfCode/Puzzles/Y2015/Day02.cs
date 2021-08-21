@@ -1,4 +1,4 @@
-// Copyright (c) Martin Costello, 2015. All rights reserved.
+﻿// Copyright (c) Martin Costello, 2015. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2015;
@@ -28,7 +28,7 @@ public sealed class Day02 : Puzzle
     /// A named tuple that returns the total area of wrapping paper
     /// required in square feet and the total length of ribbon required in feet.
     /// </returns>
-    internal static (int area, int length) GetTotalWrappingPaperAreaAndRibbonLength(IEnumerable<string> dimensions)
+    internal static (int Area, int Length) GetTotalWrappingPaperAreaAndRibbonLength(IEnumerable<string> dimensions)
     {
         // Parse the dimensions of the presents
         var presents = dimensions

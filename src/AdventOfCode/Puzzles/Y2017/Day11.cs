@@ -1,4 +1,4 @@
-// Copyright (c) Martin Costello, 2015. All rights reserved.
+﻿// Copyright (c) Martin Costello, 2015. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 using System.Numerics;
@@ -60,7 +60,7 @@ public sealed class Day11 : Puzzle
     /// The minimum number of steps required to traverse the path described by <paramref name="path"/>
     /// and the maximum number of steps taken from the origin point.
     /// </returns>
-    public static (int minimum, int maximum) FindStepRange(string path)
+    public static (int Minimum, int Maximum) FindStepRange(string path)
     {
         IList<CardinalDirection> directions = ParsePath(path);
 

@@ -1,4 +1,4 @@
-// Copyright (c) Martin Costello, 2015. All rights reserved.
+﻿// Copyright (c) Martin Costello, 2015. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2020;
@@ -26,7 +26,7 @@ public sealed class Day05 : Puzzle
     /// <returns>
     /// The row, column and Id of the specified boarding pass.
     /// </returns>
-    public static (int row, int column, int id) ScanBoardingPass(string boardingPass)
+    public static (int Row, int Column, int Id) ScanBoardingPass(string boardingPass)
     {
         var rowRange = new Range(0, 127);
         var columnRange = new Range(0, 7);

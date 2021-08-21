@@ -1,4 +1,4 @@
-// Copyright (c) Martin Costello, 2015. All rights reserved.
+﻿// Copyright (c) Martin Costello, 2015. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2018;
@@ -27,7 +27,7 @@ public sealed class Day01 : Puzzle
     /// The resulting frequency from applying the sequence from <paramref name="sequence"/>.
     /// </returns>
     public static int CalculateFrequency(IList<int> sequence)
-        => CalculateFrequencyWithRepetition(sequence).frequency;
+        => CalculateFrequencyWithRepetition(sequence).Frequency;
 
     /// <summary>
     /// Calculates the resulting frequency after applying the specified sequence.
@@ -36,7 +36,7 @@ public sealed class Day01 : Puzzle
     /// <returns>
     /// The resulting frequency from applying the sequence from <paramref name="sequence"/>.
     /// </returns>
-    public static (int frequency, int firstRepeat) CalculateFrequencyWithRepetition(IList<int> sequence)
+    public static (int Frequency, int FirstRepeat) CalculateFrequencyWithRepetition(IList<int> sequence)
     {
         int current = 0;
         int? frequency = null;

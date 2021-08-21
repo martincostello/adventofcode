@@ -1,4 +1,4 @@
-// Copyright (c) Martin Costello, 2015. All rights reserved.
+﻿// Copyright (c) Martin Costello, 2015. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 using System.Drawing;
@@ -29,7 +29,7 @@ public sealed class Day13 : Puzzle
     /// <returns>
     /// The number of block tiles on the screen.
     /// </returns>
-    public static async Task<(long blockTileCount, long score)> PlayGameAsync(
+    public static async Task<(long BlockTileCount, long Score)> PlayGameAsync(
         string program,
         CancellationToken cancellationToken)
     {

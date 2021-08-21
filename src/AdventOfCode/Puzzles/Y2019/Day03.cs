@@ -1,4 +1,4 @@
-// Copyright (c) Martin Costello, 2015. All rights reserved.
+﻿// Copyright (c) Martin Costello, 2015. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 using System.Drawing;
@@ -51,7 +51,7 @@ public sealed class Day03 : Puzzle
     /// The Manhattan distance from the central port to the closest intersection and the
     /// minimum number of combined steps to reach an intersection.
     /// </returns>
-    public static (int manhattanDistance, int minimumSteps) GetManhattanDistanceOfClosesIntersection(IList<string> wires)
+    public static (int ManhattanDistance, int MinimumSteps) GetManhattanDistanceOfClosesIntersection(IList<string> wires)
     {
         var grid = new Dictionary<Point, Wires>();
         var stepsToIntersection = new Dictionary<Point, int[]>();
@@ -148,7 +148,7 @@ public sealed class Day03 : Puzzle
     /// <returns>
     /// The x and y coordinates to move the grid by.
     /// </returns>
-    private static (int x, int y) GetDelta(string instruction)
+    private static (int X, int Y) GetDelta(string instruction)
     {
         char direction = instruction[0];
         int distance = ParseInt32(instruction.AsSpan(1));

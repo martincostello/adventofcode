@@ -1,4 +1,4 @@
-// Copyright (c) Martin Costello, 2015. All rights reserved.
+﻿// Copyright (c) Martin Costello, 2015. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2016;
@@ -34,7 +34,7 @@ public sealed class Day20 : Puzzle
         count = 0;
 
         // Parse the IP ranges for the deny-list and sort
-        var ranges = new List<(uint start, uint end)>(denyList.Count);
+        var ranges = new List<(uint Start, uint End)>(denyList.Count);
 
         foreach (string range in denyList)
         {
@@ -47,20 +47,18 @@ public sealed class Day20 : Puzzle
         }
 
         ranges = ranges
-            .OrderBy((p) => p.start)
-            .ThenBy((p) => p.end)
+            .OrderBy((p) => p.Start)
+            .ThenBy((p) => p.End)
             .ToList();
 
         for (int i = 0; i < ranges.Count - 1; i++)
         {
-            var range1 = ranges[i];
-            var range2 = ranges[i + 1];
+            var (start1, end1) = ranges[i];
+            var (start2, end2) = ranges[i + 1];
 
-            if (range1.end > range2.start ||
-                range1.end == range2.start - 1)
+            if (end1 > start2 || end1 == start2 - 1)
             {
-                if (range2.start < range1.end &&
-                    range2.end < range1.end)
+                if (start2 < end1 && end2 < end1)
                 {
                     // Exclude the second range if entirely within the first
                     ranges.RemoveAt(i + 1);
@@ -68,7 +66,7 @@ public sealed class Day20 : Puzzle
                 else
                 {
                     // Create a new range that combines the existing ranges
-                    var composite = (range1.start, range2.end);
+                    var composite = (start1, end2);
 
                     // Remove the original ranges and replace with the new one
                     ranges.RemoveAt(i);
@@ -76,8 +74,8 @@ public sealed class Day20 : Puzzle
                     ranges.Insert(i, composite);
 
                     ranges = ranges
-                        .OrderBy((p) => p.start)
-                        .ThenBy((p) => p.end)
+                        .OrderBy((p) => p.Start)
+                        .ThenBy((p) => p.End)
                         .ToList();
                 }
 
@@ -91,17 +89,17 @@ public sealed class Day20 : Puzzle
         // Count the number of IPs not in the deny-list ranges
         for (int i = 0; i < ranges.Count - 1; i++)
         {
-            var range1 = ranges[i];
-            var range2 = ranges[i + 1];
+            var (start1, end1) = ranges[i];
+            var (start2, end2) = ranges[i + 1];
 
-            count += range2.start - range1.end - 1;
+            count += start2 - end1 - 1;
 
             if (i == 0)
             {
                 // As ranges are sorted and do not overlap,
                 // the lowest allowed IP is 1 more than the
                 // high value for the first deny-listed range.
-                result = range1.end + 1;
+                result = end1 + 1;
             }
         }
 

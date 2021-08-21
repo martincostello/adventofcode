@@ -57,7 +57,7 @@ public abstract class Puzzle : IPuzzle
     /// The puzzle's metadata.
     /// </returns>
     internal PuzzleAttribute Metadata()
-        => GetType().GetCustomAttribute<PuzzleAttribute>() !;
+        => GetType().GetCustomAttribute<PuzzleAttribute>()!;
 
     /// <summary>
     /// Replaces the format items in a specified string with the string representations
@@ -162,7 +162,7 @@ public abstract class Puzzle : IPuzzle
         string name = FormattableString.Invariant(
             $"MartinCostello.{thisType.Assembly.GetName().Name}.Input.{year}.{thisType.Name}.input.txt");
 
-        return thisType.Assembly.GetManifestResourceStream(name) !;
+        return thisType.Assembly.GetManifestResourceStream(name)!;
     }
 
     /// <summary>

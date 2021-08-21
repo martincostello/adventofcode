@@ -148,7 +148,7 @@ public sealed class Day24 : Puzzle
         /// <summary>
         /// A tile with all coordinates having a value of zero. This field is read-only.
         /// </summary>
-        public static readonly Tile Zero = new (0, 0, 0);
+        public static readonly Tile Zero = new(0, 0, 0);
 
         /// <summary>
         /// The X coordinate.

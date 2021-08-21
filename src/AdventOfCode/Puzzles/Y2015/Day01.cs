@@ -1,4 +1,4 @@
-// Copyright (c) Martin Costello, 2015. All rights reserved.
+﻿// Copyright (c) Martin Costello, 2015. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2015;
@@ -28,7 +28,7 @@ public sealed class Day01 : Puzzle
     /// A named tuple that returns the floor Santa is on when the instructions
     /// are followed and the number of the instruction that first causes the basement to be entered.
     /// </returns>
-    internal static (int floor, int instructionThatEntersBasement) GetFinalFloorAndFirstInstructionBasementReached(ReadOnlySpan<char> value)
+    internal static (int Floor, int InstructionThatEntersBasement) GetFinalFloorAndFirstInstructionBasementReached(ReadOnlySpan<char> value)
     {
         int floor = 0;
         int instructionThatEntersBasement = -1;

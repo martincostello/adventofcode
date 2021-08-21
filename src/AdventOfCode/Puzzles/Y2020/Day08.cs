@@ -1,4 +1,4 @@
-// Copyright (c) Martin Costello, 2015. All rights reserved.
+﻿// Copyright (c) Martin Costello, 2015. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2020;
@@ -145,7 +145,7 @@ public sealed class Day08 : Puzzle
     /// The value of the accumulator after the program has run and
     /// whether it completed without an infinite loop.
     /// </returns>
-    private static (int accumulator, bool completed) RunProgram(IList<Instruction> instructions)
+    private static (int Accumulator, bool Completed) RunProgram(IList<Instruction> instructions)
     {
         var visited = new HashSet<int>();
 

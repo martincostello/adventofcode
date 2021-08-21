@@ -46,7 +46,7 @@ public sealed class Day07 : Puzzle
 
         foreach (string aba in abas)
         {
-            string bab = new (new[] { aba[1], aba[0], aba[1] });
+            string bab = new(new[] { aba[1], aba[0], aba[1] });
 
             foreach (string hypernet in hypernets)
             {

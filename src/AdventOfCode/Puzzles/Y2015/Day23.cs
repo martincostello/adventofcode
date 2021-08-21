@@ -1,4 +1,4 @@
-// Copyright (c) Martin Costello, 2015. All rights reserved.
+﻿// Copyright (c) Martin Costello, 2015. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2015;
@@ -28,7 +28,7 @@ public sealed class Day23 : Puzzle
     /// <returns>
     /// A named tuple that contains the values of the a and b registers.
     /// </returns>
-    internal static (uint a, uint b) ProcessInstructions(
+    internal static (uint A, uint B) ProcessInstructions(
         IList<string> instructions,
         uint initialValue,
         ILogger logger)

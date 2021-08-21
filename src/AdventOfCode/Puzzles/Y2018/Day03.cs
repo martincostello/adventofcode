@@ -1,4 +1,4 @@
-// Copyright (c) Martin Costello, 2015. All rights reserved.
+﻿// Copyright (c) Martin Costello, 2015. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2018;
@@ -112,7 +112,7 @@ public sealed class Day03 : Puzzle
     /// <returns>
     /// A two-dimensional array of squares representing the fabric and the claims for each square inch.
     /// </returns>
-    private static (Square[,] fabric, IList<Claim> claims) ParseFabric(IEnumerable<string> claims)
+    private static (Square[,] Fabric, IList<Claim> Claims) ParseFabric(IEnumerable<string> claims)
     {
         IList<Claim> fabricClaims = claims
             .Select(Claim.Parse)

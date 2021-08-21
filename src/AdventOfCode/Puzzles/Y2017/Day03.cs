@@ -14,22 +14,22 @@ public sealed class Day03 : Puzzle
     /// <summary>
     /// A move one unit left. This field is read-only.
     /// </summary>
-    private static readonly Size Left = new (width: -1, height: 0);
+    private static readonly Size Left = new(width: -1, height: 0);
 
     /// <summary>
     /// A move one unit right. This field is read-only.
     /// </summary>
-    private static readonly Size Right = new (width: 1, height: 0);
+    private static readonly Size Right = new(width: 1, height: 0);
 
     /// <summary>
     /// A move one unit up. This field is read-only.
     /// </summary>
-    private static readonly Size Up = new (width: 0, height: 1);
+    private static readonly Size Up = new(width: 0, height: 1);
 
     /// <summary>
     /// A move one unit down. This field is read-only.
     /// </summary>
-    private static readonly Size Down = new (width: 0, height: -1);
+    private static readonly Size Down = new(width: 0, height: -1);
 
     /// <summary>
     /// Gets the number steps that are required to carry the data from the input value to the access port.

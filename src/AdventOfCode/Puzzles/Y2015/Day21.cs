@@ -1,4 +1,4 @@
-// Copyright (c) Martin Costello, 2015. All rights reserved.
+﻿// Copyright (c) Martin Costello, 2015. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2015;
@@ -28,7 +28,7 @@ public sealed class Day21 : Puzzle
     /// <returns>
     /// A named tuple that returns whether the human player won and the amount of gold spent.
     /// </returns>
-    internal static (bool didHumanWin, int goldSpent) Fight(string weapon, string? armor, ICollection<string>? rings)
+    internal static (bool DidHumanWin, int GoldSpent) Fight(string weapon, string? armor, ICollection<string>? rings)
     {
         var shop = new Shop();
         var human = new Human();

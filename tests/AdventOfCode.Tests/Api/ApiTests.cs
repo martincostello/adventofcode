@@ -284,7 +284,7 @@ public class ApiTests : IntegrationTest
         string name = FormattableString.Invariant(
             $"MartinCostello.{type.Assembly.GetName().Name}.Input.Y{year}.Day{day:00}.input.txt");
 
-        using var stream = type.Assembly.GetManifestResourceStream(name) !;
+        using var stream = type.Assembly.GetManifestResourceStream(name)!;
         using var reader = new StreamReader(stream);
 
         return reader.ReadToEnd();

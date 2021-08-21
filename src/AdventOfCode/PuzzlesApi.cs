@@ -52,8 +52,8 @@ internal static class PuzzlesApi
             return;
         }
 
-        int year = int.Parse((string)context.Request.RouteValues["year"] !, CultureInfo.InvariantCulture);
-        int day = int.Parse((string)context.Request.RouteValues["day"] !, CultureInfo.InvariantCulture);
+        int year = int.Parse((string)context.Request.RouteValues["year"]!, CultureInfo.InvariantCulture);
+        int day = int.Parse((string)context.Request.RouteValues["day"]!, CultureInfo.InvariantCulture);
 
         var factory = context.RequestServices.GetRequiredService<PuzzleFactory>();
 

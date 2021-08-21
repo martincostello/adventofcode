@@ -1,4 +1,4 @@
-// Copyright (c) Martin Costello, 2015. All rights reserved.
+﻿// Copyright (c) Martin Costello, 2015. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2020;
@@ -38,7 +38,7 @@ public sealed class Day11 : Puzzle
     /// <returns>
     /// The number of occupied seats in the layout and a visualization of the final seat layout.
     /// </returns>
-    public static (int occupiedSeats, string visualization) GetOccupiedSeats(
+    public static (int OccupiedSeats, string Visualization) GetOccupiedSeats(
         IList<string> layout,
         int version,
         ILogger? logger = null)
@@ -162,10 +162,10 @@ public sealed class Day11 : Puzzle
             return count;
         }
 
-        int IsAdjacentSeatOccupied(int x, int y, int version, (int x, int y) vector)
+        int IsAdjacentSeatOccupied(int x, int y, int version, (int X, int Y) vector)
         {
-            x += vector.x;
-            y += vector.y;
+            x += vector.X;
+            y += vector.Y;
 
             if (x < 0 || y < 0 || x > width - 1 || y > height - 1)
             {

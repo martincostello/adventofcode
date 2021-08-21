@@ -1,4 +1,4 @@
-// Copyright (c) Martin Costello, 2015. All rights reserved.
+﻿// Copyright (c) Martin Costello, 2015. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2020;
@@ -26,7 +26,7 @@ public sealed class Day16 : Puzzle
     /// <returns>
     /// The ticket scanning error rate and your parsed ticket.
     /// </returns>
-    public static (int errorRate, IDictionary<string, int> ticket) ScanTickets(IList<string> notes)
+    public static (int ErrorRate, IDictionary<string, int> Ticket) ScanTickets(IList<string> notes)
     {
         var rules = new Dictionary<string, ICollection<Range>>();
         var allTickets = new List<IList<int>>();

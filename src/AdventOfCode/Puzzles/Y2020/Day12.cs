@@ -1,4 +1,4 @@
-// Copyright (c) Martin Costello, 2015. All rights reserved.
+﻿// Copyright (c) Martin Costello, 2015. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 using System.Drawing;
@@ -14,12 +14,12 @@ public sealed class Day12 : Puzzle
     /// <summary>
     /// A dictionary of vectors keyed by headings. This field is read-only.
     /// </summary>
-    private static readonly Dictionary<int, Size> Vectors = new ()
+    private static readonly Dictionary<int, Size> Vectors = new()
     {
-        [Headings.North] = new Size(0, 1),
-        [Headings.South] = new Size(0, -1),
-        [Headings.East] = new Size(1, 0),
-        [Headings.West] = new Size(-1, 0),
+        [Headings.North] = new(0, 1),
+        [Headings.South] = new(0, -1),
+        [Headings.East] = new(1, 0),
+        [Headings.West] = new(-1, 0),
     };
 
     /// <summary>

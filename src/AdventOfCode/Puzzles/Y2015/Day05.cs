@@ -95,7 +95,7 @@ public sealed class Day05 : Puzzle
             char first = value[i];
             char second = value[i + 1];
 
-            string pair = new (new[] { first, second });
+            string pair = new(new[] { first, second });
 
             if (!letterPairs.TryGetValue(pair, out IList<int>? indexes))
             {

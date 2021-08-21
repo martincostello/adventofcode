@@ -1,4 +1,4 @@
-// Copyright (c) Martin Costello, 2015. All rights reserved.
+﻿// Copyright (c) Martin Costello, 2015. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2018;
@@ -27,7 +27,7 @@ public sealed class Day04 : Puzzle
     /// The product of the guard who slept the most and the minute they were asleep the most as specified by <paramref name="log"/>
     /// and the product of the minute a guard was most asleep and the guard's Id.
     /// </returns>
-    public static (int guardMinute, int minuteGuard) GetSleepiestGuardsMinutes(IEnumerable<string> log)
+    public static (int GuardMinute, int MinuteGuard) GetSleepiestGuardsMinutes(IEnumerable<string> log)
     {
         var parsedAndSortedLog = log
             .Select(LogEntry.Parse)

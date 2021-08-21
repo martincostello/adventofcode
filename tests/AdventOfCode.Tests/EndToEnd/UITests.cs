@@ -79,7 +79,7 @@ public class UITests : EndToEndTest
         string name = FormattableString.Invariant(
             $"MartinCostello.{type.Assembly.GetName().Name}.Input.Y{year}.Day{(day.Length == 1 ? "0" : string.Empty)}{day}.input.txt");
 
-        using var stream = type.Assembly.GetManifestResourceStream(name) !;
+        using var stream = type.Assembly.GetManifestResourceStream(name)!;
         using var reader = new StreamReader(stream);
 
         return await reader.ReadToEndAsync();

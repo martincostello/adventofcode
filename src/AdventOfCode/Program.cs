@@ -17,9 +17,11 @@ if (args.FirstOrDefault() == "--solve")
 var builder = WebApplication.CreateBuilder(args);
 
 builder.WebHost.CaptureStartupErrors(true);
+
 builder.WebHost.ConfigureKestrel((p) => p.AddServerHeader = false);
 
 builder.Services.AddSingleton<ILogger, WebLogger>();
+
 builder.Services.AddSingleton<PuzzleFactory>();
 
 var puzzles = typeof(Puzzle).Assembly
@@ -40,6 +42,7 @@ builder.Services.Configure<JsonOptions>((p) => p.SerializerOptions.WriteIndented
 builder.Services.AddRazorPages();
 
 builder.Services.Configure<GzipCompressionProviderOptions>((p) => p.Level = CompressionLevel.Fastest);
+
 builder.Services.Configure<BrotliCompressionProviderOptions>((p) => p.Level = CompressionLevel.Fastest);
 
 builder.Services.AddResponseCompression((p) =>
@@ -65,12 +68,15 @@ if (!app.Environment.IsDevelopment())
 }
 
 app.UseResponseCompression();
+
 app.UseStaticFiles();
+
 app.UseRouting();
 
 app.MapRazorPages();
 
 app.MapGet("/api/puzzles", PuzzlesApi.GetPuzzlesAsync);
+
 app.MapPost("/api/puzzles/{year:int}/{day:int}/solve", PuzzlesApi.SolvePuzzleAsync);
 
 app.Run();

@@ -1,4 +1,4 @@
-// Copyright (c) Martin Costello, 2015. All rights reserved.
+﻿// Copyright (c) Martin Costello, 2015. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2020;
@@ -112,7 +112,7 @@ public sealed class Day14 : Puzzle
 
         return memory.Values.Sum();
 
-        (long address, long value) DecodeInstruction(string instruction)
+        (long Address, long Value) DecodeInstruction(string instruction)
         {
             string[] split = instruction.Split(splitChars, splitOptions);
             return (ParseInt64(split[1]), ParseInt64(split[2]));

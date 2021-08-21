@@ -28,7 +28,7 @@ public sealed class Day20 : Puzzle
     /// <returns>
     /// The product of the Ids of the four corner tiles and the roughness of the water and the final image.
     /// </returns>
-    public static (long cornerIdProduct, int roughness, string visualization) GetCornerTileIdProduct(
+    public static (long CornerIdProduct, int Roughness, string Visualization) GetCornerTileIdProduct(
         IList<string> input,
         ILogger logger)
     {
@@ -367,7 +367,7 @@ public sealed class Day20 : Puzzle
             return result;
         }
 
-        static (List<Tile> corners, List<Tile> edges, List<Tile> others) Geometry(ICollection<Tile> tiles)
+        static (List<Tile> Corners, List<Tile> Edges, List<Tile> Others) Geometry(ICollection<Tile> tiles)
         {
             var corners = new List<Tile>();
             var edges = new List<Tile>();
@@ -568,7 +568,7 @@ public sealed class Day20 : Puzzle
         /// The left edge of the tile.
         /// </returns>
         public string Left()
-            => new (Grid.Select((p) => p[0]).Reverse().ToArray());
+            => new(Grid.Select((p) => p[0]).Reverse().ToArray());
 
         /// <summary>
         /// Returns the right edge.
@@ -577,7 +577,7 @@ public sealed class Day20 : Puzzle
         /// The right edge of the tile.
         /// </returns>
         public string Right()
-            => new (Grid.Select((p) => p[^1]).ToArray());
+            => new(Grid.Select((p) => p[^1]).ToArray());
 
         /// <summary>
         /// Tries to align the other tile to this tile's edge.

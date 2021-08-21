@@ -1,4 +1,4 @@
-// Copyright (c) Martin Costello, 2015. All rights reserved.
+﻿// Copyright (c) Martin Costello, 2015. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2017;
@@ -27,7 +27,7 @@ public sealed class Day06 : Puzzle
     /// The number of redistribution cycles that must be completed before a configuration is repeated and
     /// the number of loops in the infinite loop cycle caused by the distribution algorithm.
     /// </returns>
-    public static (int cycleCount, int loopSize) Debug(IList<int> memory)
+    public static (int CycleCount, int LoopSize) Debug(IList<int> memory)
     {
         var copy = new List<int>(memory);
 

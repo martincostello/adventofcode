@@ -1,4 +1,4 @@
-// Copyright (c) Martin Costello, 2015. All rights reserved.
+﻿// Copyright (c) Martin Costello, 2015. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2020;
@@ -29,12 +29,12 @@ public sealed class Day21 : Puzzle
     /// The number of times ingredients with no allergens appear in the food and
     /// the canonical sorted list of ingredients which are allergens.
     /// </returns>
-    public static (int occurences, string canonicalAllergens) GetIngredientsWithNoAllergens(
+    public static (int Occurences, string CanonicalAllergens) GetIngredientsWithNoAllergens(
         IEnumerable<string> foods,
         CancellationToken cancellationToken = default)
     {
         // Based on https://github.com/DanaL/AdventOfCode/blob/master/2020/Day21.cs
-        var parsedFoods = new List<(string[] ingredients, string[] allergens)>();
+        var parsedFoods = new List<(string[] Ingredients, string[] Allergens)>();
 
         foreach (string recipe in foods)
         {

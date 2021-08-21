@@ -39,7 +39,7 @@ public sealed class Day17 : Puzzle
     /// <returns>
     /// The number of active cubes after the specified number of cycles and a visualization of the final states.
     /// </returns>
-    public static (int activeCubes, string visualization) GetActiveCubes(
+    public static (int ActiveCubes, string Visualization) GetActiveCubes(
         IList<string> initialStates,
         int cycles,
         int dimensions,
@@ -313,12 +313,12 @@ public sealed class Day17 : Puzzle
         /// <summary>
         /// The origin point for 3D space.
         /// </summary>
-        public static Point Zero3D = new (0, 0, 0, null);
+        public static Point Zero3D = new(0, 0, 0, null);
 
         /// <summary>
         /// The origin point for 4D space.
         /// </summary>
-        public static Point Zero4D = new (0, 0, 0, 0);
+        public static Point Zero4D = new(0, 0, 0, 0);
 
         /// <summary>
         /// The W coordinate.

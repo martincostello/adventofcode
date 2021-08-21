@@ -1,4 +1,4 @@
-// Copyright (c) Martin Costello, 2015. All rights reserved.
+﻿// Copyright (c) Martin Costello, 2015. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 using System.Diagnostics;
@@ -25,7 +25,7 @@ public sealed class Day22 : Puzzle
     /// <returns>
     /// A named tuple that returns whether the wizard won and the amount of mana spent by the wizard.
     /// </returns>
-    internal static (bool didWizardWin, int manaSpent) Fight(Func<Wizard, ICollection<string>, string> spellSelector, string difficulty)
+    internal static (bool DidWizardWin, int ManaSpent) Fight(Func<Wizard, ICollection<string>, string> spellSelector, string difficulty)
     {
         var wizard = new Wizard(spellSelector);
         var boss = new Boss();
@@ -94,7 +94,7 @@ public sealed class Day22 : Puzzle
         // Play the game 100,000 times with random choices of spells
         const int Iterations = 100000;
 
-        var solutions = new List<(bool didWizardWin, int manaSpent)>(Iterations);
+        var solutions = new List<(bool DidWizardWin, int ManaSpent)>(Iterations);
 
         while (solutions.Count < Iterations)
         {
@@ -103,8 +103,8 @@ public sealed class Day22 : Puzzle
         }
 
         MinimumCostToWin = solutions
-            .Where((p) => p.didWizardWin)
-            .Min((p) => p.manaSpent);
+            .Where((p) => p.DidWizardWin)
+            .Min((p) => p.ManaSpent);
 
         if (Verbose)
         {

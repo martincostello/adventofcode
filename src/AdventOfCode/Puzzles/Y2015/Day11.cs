@@ -76,7 +76,7 @@ public sealed class Day11 : Puzzle
                 continue;
             }
 
-            string pair = new (new[] { first, second });
+            string pair = new(new[] { first, second });
 
             if (!letterPairs.TryGetValue(pair, out IList<int>? indexes))
             {

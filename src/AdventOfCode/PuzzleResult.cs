@@ -36,5 +36,5 @@ public sealed class PuzzleResult
     /// A <see cref="PuzzleResult"/> for <paramref name="solutions"/>.
     /// </returns>
     public static PuzzleResult Create(params object[] solutions)
-        => new () { Solutions = solutions };
+        => new() { Solutions = solutions };
 }

@@ -1,4 +1,4 @@
-// Copyright (c) Martin Costello, 2015. All rights reserved.
+﻿// Copyright (c) Martin Costello, 2015. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2019;
@@ -24,7 +24,7 @@ public sealed class Day08 : Puzzle
     /// <returns>
     /// The checksum of the image data.
     /// </returns>
-    public static (int checksum, string visualization) GetImageChecksum(string image, int height, int width, ILogger? logger = null)
+    public static (int Checksum, string Visualization) GetImageChecksum(string image, int height, int width, ILogger? logger = null)
     {
         var layers = new List<int[,]>();
         int[,] current = new int[0, 0];

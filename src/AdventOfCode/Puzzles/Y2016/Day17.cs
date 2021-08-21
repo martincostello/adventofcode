@@ -1,4 +1,4 @@
-// Copyright (c) Martin Costello, 2015. All rights reserved.
+﻿// Copyright (c) Martin Costello, 2015. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 using System.Drawing;
@@ -29,7 +29,7 @@ public sealed class Day17 : Puzzle
     /// <returns>
     /// The shortest path that can be taken to reach the vault and the length of the longest path.
     /// </returns>
-    public static (string shortest, int longest) GetPathsToVault(string passcode)
+    public static (string Shortest, int Longest) GetPathsToVault(string passcode)
     {
         var up = (vector: new Size(0, -1), direction: 'U');
         var down = (vector: new Size(0, 1), direction: 'D');

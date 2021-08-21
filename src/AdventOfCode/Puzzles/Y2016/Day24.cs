@@ -1,4 +1,4 @@
-// Copyright (c) Martin Costello, 2015. All rights reserved.
+﻿// Copyright (c) Martin Costello, 2015. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 using System.Drawing;
@@ -35,7 +35,7 @@ public sealed class Day24 : Puzzle
 
         double minimumCost = double.MaxValue;
 
-        var costs = new Dictionary<(Point a, Point b), double>();
+        var costs = new Dictionary<(Point A, Point B), double>();
 
         Point[] allWaypoints = waypoints
             .Prepend(origin)
@@ -117,7 +117,7 @@ public sealed class Day24 : Puzzle
     /// <returns>
     /// A <see cref="SquareGrid"/> representing the maze, the origin point and the goal locations in the maze.
     /// </returns>
-    private static (SquareGrid maze, Point origin, IList<Point> goals) BuildMaze(IList<string> layout)
+    private static (SquareGrid Maze, Point Origin, IList<Point> Goals) BuildMaze(IList<string> layout)
     {
         var maze = new SquareGrid(layout[0].Length, layout.Count);
         var origin = Point.Empty;
