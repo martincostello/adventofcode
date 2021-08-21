@@ -2,6 +2,7 @@
   <PropertyGroup>
     <Description>Tests for AdventOfCode.</Description>
     <GenerateDocumentationFile>false</GenerateDocumentationFile>
+    <IsTestProject>true</IsTestProject>
     <NoWarn>$(NoWarn);CA1054;CA1707;CA1711;CA1812;CA2007;CA2234;SA1600</NoWarn>
     <RootNamespace>MartinCostello.AdventOfCode</RootNamespace>
     <TargetFramework>net6.0</TargetFramework>
