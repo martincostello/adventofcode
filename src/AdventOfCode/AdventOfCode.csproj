@@ -2,8 +2,6 @@
   <PropertyGroup>
     <Description>Solutions for Advent of Code.</Description>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <!-- HACK Workaround for https://github.com/dotnet/sdk/issues/20444 -->
-    <LangVersion Condition="'$(BuildingInsideVisualStudio)' == 'true'">preview</LangVersion>
     <NoWarn>$(NoWarn);CA2007;CA2225;CA5351</NoWarn>
     <OutputType>Exe</OutputType>
     <PreserveCompilationContext>true</PreserveCompilationContext>
