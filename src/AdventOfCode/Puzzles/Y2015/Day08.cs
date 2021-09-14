@@ -1,164 +1,157 @@
-﻿// Copyright (c) Martin Costello, 2015. All rights reserved.
+// Copyright (c) Martin Costello, 2015. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
+namespace MartinCostello.AdventOfCode.Puzzles.Y2015;
 
-namespace MartinCostello.AdventOfCode.Puzzles.Y2015
+/// <summary>
+/// A class representing the puzzle for <c>https://adventofcode.com/2015/day/8</c>. This class cannot be inherited.
+/// </summary>
+[Puzzle(2015, 08, RequiresData = true)]
+public sealed class Day08 : Puzzle
 {
     /// <summary>
-    /// A class representing the puzzle for <c>https://adventofcode.com/2015/day/8</c>. This class cannot be inherited.
+    /// Gets the value for the first solution.
     /// </summary>
-    [Puzzle(2015, 08, RequiresData = true)]
-    public sealed class Day08 : Puzzle
+    internal int FirstSolution { get; private set; }
+
+    /// <summary>
+    /// Gets the value for the second solution.
+    /// </summary>
+    internal int SecondSolution { get; private set; }
+
+    /// <summary>
+    /// Returns the number of characters in the specified collection of <see cref="string"/> if literals are encoded.
+    /// </summary>
+    /// <param name="collection">The values to get the encoded number of characters from.</param>
+    /// <returns>The number of characters in <paramref name="collection"/> when encoded.</returns>
+    internal static int GetEncodedCharacterCount(IEnumerable<string> collection) => collection.Sum(GetEncodedCharacterCount);
+
+    /// <summary>
+    /// Returns the number of characters in the specified <see cref="string"/> if literals are encoded.
+    /// </summary>
+    /// <param name="value">The value to get the encoded number of characters from.</param>
+    /// <returns>The number of characters in <paramref name="value"/> when encoded.</returns>
+    internal static int GetEncodedCharacterCount(string value)
     {
-        /// <summary>
-        /// Gets the value for the first solution.
-        /// </summary>
-        internal int FirstSolution { get; private set; }
+        var builder = new StringBuilder("\"", value.Length + 2);
 
-        /// <summary>
-        /// Gets the value for the second solution.
-        /// </summary>
-        internal int SecondSolution { get; private set; }
-
-        /// <summary>
-        /// Returns the number of characters in the specified collection of <see cref="string"/> if literals are encoded.
-        /// </summary>
-        /// <param name="collection">The values to get the encoded number of characters from.</param>
-        /// <returns>The number of characters in <paramref name="collection"/> when encoded.</returns>
-        internal static int GetEncodedCharacterCount(IEnumerable<string> collection) => collection.Sum(GetEncodedCharacterCount);
-
-        /// <summary>
-        /// Returns the number of characters in the specified <see cref="string"/> if literals are encoded.
-        /// </summary>
-        /// <param name="value">The value to get the encoded number of characters from.</param>
-        /// <returns>The number of characters in <paramref name="value"/> when encoded.</returns>
-        internal static int GetEncodedCharacterCount(string value)
+        for (int i = 0; i < value.Length; i++)
         {
-            var builder = new StringBuilder("\"", value.Length + 2);
+            char current = value[i];
 
-            for (int i = 0; i < value.Length; i++)
+            switch (current)
             {
-                char current = value[i];
+                case '\"':
+                case '\\':
+                case '\'':
+                    builder.Append('\\');
+                    break;
 
-                switch (current)
-                {
-                    case '\"':
-                    case '\\':
-                    case '\'':
-                        builder.Append('\\');
-                        break;
-
-                    default:
-                        break;
-                }
-
-                builder.Append(current);
+                default:
+                    break;
             }
 
-            builder.Append('\"');
-
-            return builder.Length;
+            builder.Append(current);
         }
 
-        /// <summary>
-        /// Returns the number of literal characters in the specified collection of <see cref="string"/>.
-        /// </summary>
-        /// <param name="collection">The values to get the number of literal characters from.</param>
-        /// <returns>The number of literal characters in <paramref name="collection"/>.</returns>
-        internal static int GetLiteralCharacterCount(IEnumerable<string> collection) => collection.Sum(GetLiteralCharacterCount);
+        builder.Append('\"');
 
-        /// <summary>
-        /// Returns the number of literal characters in the specified <see cref="string"/>.
-        /// </summary>
-        /// <param name="value">The value to get the number of literal characters from.</param>
-        /// <returns>The number of literal characters in <paramref name="value"/>.</returns>
-        internal static int GetLiteralCharacterCount(string value)
+        return builder.Length;
+    }
+
+    /// <summary>
+    /// Returns the number of literal characters in the specified collection of <see cref="string"/>.
+    /// </summary>
+    /// <param name="collection">The values to get the number of literal characters from.</param>
+    /// <returns>The number of literal characters in <paramref name="collection"/>.</returns>
+    internal static int GetLiteralCharacterCount(IEnumerable<string> collection) => collection.Sum(GetLiteralCharacterCount);
+
+    /// <summary>
+    /// Returns the number of literal characters in the specified <see cref="string"/>.
+    /// </summary>
+    /// <param name="value">The value to get the number of literal characters from.</param>
+    /// <returns>The number of literal characters in <paramref name="value"/>.</returns>
+    internal static int GetLiteralCharacterCount(string value)
+    {
+        int count = 0;
+
+        // Remove quotes if present as first/last characters
+        bool removeFirstQuote = value.Length > 0 && value[0] == '\"';
+        bool removeLastQuote = value.Length > 1 && value[^1] == '\"';
+
+        if (removeFirstQuote)
         {
-            int count = 0;
+            value = value[1..];
+        }
 
-            // Remove quotes if present as first/last characters
-            bool removeFirstQuote = value.Length > 0 && value[0] == '\"';
-            bool removeLastQuote = value.Length > 1 && value[^1] == '\"';
+        if (removeLastQuote)
+        {
+            value = value[0..^1];
+        }
 
-            if (removeFirstQuote)
+        if (value.Length > 0)
+        {
+            var characters = new Queue<char>(value);
+
+            while (characters.Count > 0)
             {
-                value = value[1..];
-            }
+                char current = characters.Dequeue();
 
-            if (removeLastQuote)
-            {
-                value = value[0..^1];
-            }
-
-            if (value.Length > 0)
-            {
-                var characters = new Queue<char>(value);
-
-                while (characters.Count > 0)
+                if (characters.Count > 0)
                 {
-                    char current = characters.Dequeue();
-
-                    if (characters.Count > 0)
+                    switch (current)
                     {
-                        switch (current)
-                        {
-                            case '\\':
-                                char next = characters.Peek();
+                        case '\\':
+                            char next = characters.Peek();
 
-                                if (next == '\"' || next == '\'' || next == '\\')
-                                {
-                                    characters.Dequeue();
-                                }
-                                else if (next == 'x' && characters.Count > 2)
-                                {
-                                    characters.Dequeue();
-                                    characters.Dequeue();
-                                    characters.Dequeue();
-                                }
+                            if (next == '\"' || next == '\'' || next == '\\')
+                            {
+                                characters.Dequeue();
+                            }
+                            else if (next == 'x' && characters.Count > 2)
+                            {
+                                characters.Dequeue();
+                                characters.Dequeue();
+                                characters.Dequeue();
+                            }
 
-                                break;
+                            break;
 
-                            default:
-                                break;
-                        }
+                        default:
+                            break;
                     }
-
-                    count++;
                 }
-            }
 
-            return count;
+                count++;
+            }
         }
 
-        /// <inheritdoc />
-        protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
+        return count;
+    }
+
+    /// <inheritdoc />
+    protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
+    {
+        IList<string> input = await ReadResourceAsLinesAsync();
+
+        int countForCode = input.Sum((p) => p.Length);
+        int countInMemory = GetLiteralCharacterCount(input);
+        int countEncoded = GetEncodedCharacterCount(input);
+
+        FirstSolution = countForCode - countInMemory;
+        SecondSolution = countEncoded - countForCode;
+
+        if (Verbose)
         {
-            IList<string> input = await ReadResourceAsLinesAsync();
+            Logger.WriteLine(
+                "The number of characters of code for string literals minus the number of characters in memory for the values of the strings is {0:N0}.",
+                FirstSolution);
 
-            int countForCode = input.Sum((p) => p.Length);
-            int countInMemory = GetLiteralCharacterCount(input);
-            int countEncoded = GetEncodedCharacterCount(input);
-
-            FirstSolution = countForCode - countInMemory;
-            SecondSolution = countEncoded - countForCode;
-
-            if (Verbose)
-            {
-                Logger.WriteLine(
-                    "The number of characters of code for string literals minus the number of characters in memory for the values of the strings is {0:N0}.",
-                    FirstSolution);
-
-                Logger.WriteLine(
-                    "The total number of characters to represent the newly encoded strings minus the number of characters of code in each original string literal is {0:N0}.",
-                    SecondSolution);
-            }
-
-            return PuzzleResult.Create(FirstSolution, SecondSolution);
+            Logger.WriteLine(
+                "The total number of characters to represent the newly encoded strings minus the number of characters of code in each original string literal is {0:N0}.",
+                SecondSolution);
         }
+
+        return PuzzleResult.Create(FirstSolution, SecondSolution);
     }
 }

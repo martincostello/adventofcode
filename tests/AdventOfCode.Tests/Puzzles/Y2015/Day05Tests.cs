@@ -1,101 +1,95 @@
 ﻿// Copyright (c) Martin Costello, 2015. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
-using System.Threading.Tasks;
-using Shouldly;
-using Xunit;
-using Xunit.Abstractions;
+namespace MartinCostello.AdventOfCode.Puzzles.Y2015;
 
-namespace MartinCostello.AdventOfCode.Puzzles.Y2015
+/// <summary>
+/// A class containing tests for the <see cref="Day05"/> class. This class cannot be inherited.
+/// </summary>
+public sealed class Day05Tests : PuzzleTest
 {
     /// <summary>
-    /// A class containing tests for the <see cref="Day05"/> class. This class cannot be inherited.
+    /// Initializes a new instance of the <see cref="Day05Tests"/> class.
     /// </summary>
-    public sealed class Day05Tests : PuzzleTest
+    /// <param name="outputHelper">The <see cref="ITestOutputHelper"/> to use.</param>
+    public Day05Tests(ITestOutputHelper outputHelper)
+        : base(outputHelper)
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Day05Tests"/> class.
-        /// </summary>
-        /// <param name="outputHelper">The <see cref="ITestOutputHelper"/> to use.</param>
-        public Day05Tests(ITestOutputHelper outputHelper)
-            : base(outputHelper)
-        {
-        }
+    }
 
-        [Theory]
-        [InlineData("ugknbfddgicrmopn", true)]
-        [InlineData("aaa", true)]
-        [InlineData("jchzalrnumimnmhp", false)]
-        [InlineData("haegwjzuvuyypxyu", false)]
-        [InlineData("dvszwmarrgswjxmb", false)]
-        [InlineData("haegwjzuvuyypabu", false)]
-        [InlineData("haegwjzuvuyypcdu", false)]
-        [InlineData("haegwjzuvuyyppqu", false)]
-        public static void Y2015_Day05_IsNiceV1(string value, bool expected)
-        {
-            // Act
-            bool actual = Day05.IsNiceV1(value);
+    [Theory]
+    [InlineData("ugknbfddgicrmopn", true)]
+    [InlineData("aaa", true)]
+    [InlineData("jchzalrnumimnmhp", false)]
+    [InlineData("haegwjzuvuyypxyu", false)]
+    [InlineData("dvszwmarrgswjxmb", false)]
+    [InlineData("haegwjzuvuyypabu", false)]
+    [InlineData("haegwjzuvuyypcdu", false)]
+    [InlineData("haegwjzuvuyyppqu", false)]
+    public static void Y2015_Day05_IsNiceV1(string value, bool expected)
+    {
+        // Act
+        bool actual = Day05.IsNiceV1(value);
 
-            // Assert
-            actual.ShouldBe(expected);
-        }
+        // Assert
+        actual.ShouldBe(expected);
+    }
 
-        [Theory]
-        [InlineData("qjhvhtzxzqqjkmpb", true)]
-        [InlineData("xxyxx", true)]
-        [InlineData("uurcxstgmygtbstg", false)]
-        [InlineData("ieodomkazucvgmuy", false)]
-        public static void Y2015_Day05_IsNiceV2(string value, bool expected)
-        {
-            // Act
-            bool actual = Day05.IsNiceV2(value);
+    [Theory]
+    [InlineData("qjhvhtzxzqqjkmpb", true)]
+    [InlineData("xxyxx", true)]
+    [InlineData("uurcxstgmygtbstg", false)]
+    [InlineData("ieodomkazucvgmuy", false)]
+    public static void Y2015_Day05_IsNiceV2(string value, bool expected)
+    {
+        // Act
+        bool actual = Day05.IsNiceV2(value);
 
-            // Assert
-            actual.ShouldBe(expected);
-        }
+        // Assert
+        actual.ShouldBe(expected);
+    }
 
-        [Theory]
-        [InlineData("xyxy", true)]
-        [InlineData("aabcdefgaa", true)]
-        [InlineData("abaaab", true)]
-        [InlineData("a", false)]
-        [InlineData("aa", false)]
-        [InlineData("aaa", false)]
-        [InlineData("aaaa", true)]
-        public static void Y2015_Day05_HasPairOfLettersWithMoreThanOneOccurence(string value, bool expected)
-        {
-            // Act
-            bool actual = Day05.HasPairOfLettersWithMoreThanOneOccurence(value);
+    [Theory]
+    [InlineData("xyxy", true)]
+    [InlineData("aabcdefgaa", true)]
+    [InlineData("abaaab", true)]
+    [InlineData("a", false)]
+    [InlineData("aa", false)]
+    [InlineData("aaa", false)]
+    [InlineData("aaaa", true)]
+    public static void Y2015_Day05_HasPairOfLettersWithMoreThanOneOccurence(string value, bool expected)
+    {
+        // Act
+        bool actual = Day05.HasPairOfLettersWithMoreThanOneOccurence(value);
 
-            // Assert
-            actual.ShouldBe(expected);
-        }
+        // Assert
+        actual.ShouldBe(expected);
+    }
 
-        [Theory]
-        [InlineData("xyx", true)]
-        [InlineData("abcdefeghi", true)]
-        [InlineData("aaa", true)]
-        [InlineData("a", false)]
-        [InlineData("aa", false)]
-        public static void Y2015_Day05_HasLetterThatIsTheBreadOfALetterSandwich(string value, bool expected)
-        {
-            // Act
-            bool actual = Day05.HasLetterThatIsTheBreadOfALetterSandwich(value);
+    [Theory]
+    [InlineData("xyx", true)]
+    [InlineData("abcdefeghi", true)]
+    [InlineData("aaa", true)]
+    [InlineData("a", false)]
+    [InlineData("aa", false)]
+    public static void Y2015_Day05_HasLetterThatIsTheBreadOfALetterSandwich(string value, bool expected)
+    {
+        // Act
+        bool actual = Day05.HasLetterThatIsTheBreadOfALetterSandwich(value);
 
-            // Assert
-            actual.ShouldBe(expected);
-        }
+        // Assert
+        actual.ShouldBe(expected);
+    }
 
-        [Theory]
-        [InlineData(new[] { "1" }, 236)]
-        [InlineData(new[] { "2" }, 51)]
-        public async Task Y2015_Day05_Solve_Returns_Correct_Solution(string[] args, int expected)
-        {
-            // Act
-            var puzzle = await SolvePuzzleAsync<Day05>(args);
+    [Theory]
+    [InlineData(new[] { "1" }, 236)]
+    [InlineData(new[] { "2" }, 51)]
+    public async Task Y2015_Day05_Solve_Returns_Correct_Solution(string[] args, int expected)
+    {
+        // Act
+        var puzzle = await SolvePuzzleAsync<Day05>(args);
 
-            // Assert
-            puzzle.NiceStringCount.ShouldBe(expected);
-        }
+        // Assert
+        puzzle.NiceStringCount.ShouldBe(expected);
     }
 }

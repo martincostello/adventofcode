@@ -1,54 +1,48 @@
 ﻿// Copyright (c) Martin Costello, 2015. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
-using System.Threading.Tasks;
-using Shouldly;
-using Xunit;
-using Xunit.Abstractions;
+namespace MartinCostello.AdventOfCode.Puzzles.Y2016;
 
-namespace MartinCostello.AdventOfCode.Puzzles.Y2016
+/// <summary>
+/// A class containing tests for the <see cref="Day11"/> class. This class cannot be inherited.
+/// </summary>
+public sealed class Day11Tests : PuzzleTest
 {
     /// <summary>
-    /// A class containing tests for the <see cref="Day11"/> class. This class cannot be inherited.
+    /// Initializes a new instance of the <see cref="Day11Tests"/> class.
     /// </summary>
-    public sealed class Day11Tests : PuzzleTest
+    /// <param name="outputHelper">The <see cref="ITestOutputHelper"/> to use.</param>
+    public Day11Tests(ITestOutputHelper outputHelper)
+        : base(outputHelper)
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Day11Tests"/> class.
-        /// </summary>
-        /// <param name="outputHelper">The <see cref="ITestOutputHelper"/> to use.</param>
-        public Day11Tests(ITestOutputHelper outputHelper)
-            : base(outputHelper)
+    }
+
+    [Fact(Skip = "Not implemented.")]
+    public static void Y2016_Day11_GetMinimumStepsForAssembly_Returns_Correct_Solution()
+    {
+        // Arrange
+        string[] initialState = new[]
         {
-        }
+            "The first floor contains a hydrogen-compatible microchip and a lithium-compatible microchip.",
+            "The second floor contains a hydrogen generator.",
+            "The third floor contains a lithium generator.",
+            "The fourth floor contains nothing relevant.",
+        };
 
-        [Fact(Skip = "Not implemented.")]
-        public static void Y2016_Day11_GetMinimumStepsForAssembly_Returns_Correct_Solution()
-        {
-            // Arrange
-            string[] initialState = new[]
-            {
-                "The first floor contains a hydrogen-compatible microchip and a lithium-compatible microchip.",
-                "The second floor contains a hydrogen generator.",
-                "The third floor contains a lithium generator.",
-                "The fourth floor contains nothing relevant.",
-            };
+        // Act
+        int actual = Day11.GetMinimumStepsForAssembly(initialState);
 
-            // Act
-            int actual = Day11.GetMinimumStepsForAssembly(initialState);
+        // Assert
+        actual.ShouldBe(11);
+    }
 
-            // Assert
-            actual.ShouldBe(11);
-        }
+    [Fact(Skip = "Not implemented.")]
+    public async Task Y2016_Day11_Solve_Returns_Correct_Solution()
+    {
+        // Act
+        var puzzle = await SolvePuzzleAsync<Day11>();
 
-        [Fact(Skip = "Not implemented.")]
-        public async Task Y2016_Day11_Solve_Returns_Correct_Solution()
-        {
-            // Act
-            var puzzle = await SolvePuzzleAsync<Day11>();
-
-            // Assert
-            puzzle.MinimumStepsForAssembly.ShouldNotBe(0);
-        }
+        // Assert
+        puzzle.MinimumStepsForAssembly.ShouldNotBe(0);
     }
 }

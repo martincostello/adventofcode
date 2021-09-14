@@ -1,222 +1,216 @@
-﻿// Copyright (c) Martin Costello, 2015. All rights reserved.
+// Copyright (c) Martin Costello, 2015. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
-using System;
-using System.Collections.Generic;
 using System.Drawing;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 
-namespace MartinCostello.AdventOfCode.Puzzles.Y2015
+namespace MartinCostello.AdventOfCode.Puzzles.Y2015;
+
+/// <summary>
+/// A class representing the puzzle for <c>https://adventofcode.com/2015/day/18</c>. This class cannot be inherited.
+/// </summary>
+[Puzzle(2015, 18, MinimumArguments = 1, RequiresData = true)]
+public sealed class Day18 : Puzzle
 {
     /// <summary>
-    /// A class representing the puzzle for <c>https://adventofcode.com/2015/day/18</c>. This class cannot be inherited.
+    /// The character that signifies that a light is on.
     /// </summary>
-    [Puzzle(2015, 18, MinimumArguments = 1, RequiresData = true)]
-    public sealed class Day18 : Puzzle
+    private const char Off = '.';
+
+    /// <summary>
+    /// The character that signifies that a light is on.
+    /// </summary>
+    private const char On = '#';
+
+    /// <summary>
+    /// Gets the number of lights that are illuminated.
+    /// </summary>
+    internal int LightsIlluminated { get; private set; }
+
+    /// <summary>
+    /// Returns the light configuration for the specified initial state after the specified number of steps.
+    /// </summary>
+    /// <param name="initial">The initial light configuration.</param>
+    /// <param name="steps">The number of steps to return the configuration for.</param>
+    /// <param name="areCornerLightsBroken">Whether the corner lights are broken.</param>
+    /// <returns>
+    /// An <see cref="IList{T}"/> of <see cref="string"/> containing the light
+    /// configuration after the number of steps specified by the value of <paramref name="steps"/>.
+    /// </returns>
+    internal static IList<string> GetGridConfigurationAfterSteps(IList<string> initial, int steps, bool areCornerLightsBroken)
     {
-        /// <summary>
-        /// The character that signifies that a light is on.
-        /// </summary>
-        private const char Off = '.';
+        bool[,] current = ParseInitialState(initial);
 
-        /// <summary>
-        /// The character that signifies that a light is on.
-        /// </summary>
-        private const char On = '#';
-
-        /// <summary>
-        /// Gets the number of lights that are illuminated.
-        /// </summary>
-        internal int LightsIlluminated { get; private set; }
-
-        /// <summary>
-        /// Returns the light configuration for the specified initial state after the specified number of steps.
-        /// </summary>
-        /// <param name="initial">The initial light configuration.</param>
-        /// <param name="steps">The number of steps to return the configuration for.</param>
-        /// <param name="areCornerLightsBroken">Whether the corner lights are broken.</param>
-        /// <returns>
-        /// An <see cref="IList{T}"/> of <see cref="string"/> containing the light
-        /// configuration after the number of steps specified by the value of <paramref name="steps"/>.
-        /// </returns>
-        internal static IList<string> GetGridConfigurationAfterSteps(IList<string> initial, int steps, bool areCornerLightsBroken)
+        for (int i = 0; i < steps; i++)
         {
-            bool[,] current = ParseInitialState(initial);
-
-            for (int i = 0; i < steps; i++)
-            {
-                current = Animate(current, areCornerLightsBroken);
-            }
-
-            int width = current.GetLength(0);
-            int height = current.GetLength(1);
-
-            var result = new List<string>(width);
-
-            for (int x = 0; x < width; x++)
-            {
-                var builder = new StringBuilder(height);
-
-                for (int y = 0; y < height; y++)
-                {
-                    builder.Append(current[x, y] ? On : Off);
-                }
-
-                result.Add(builder.ToString());
-            }
-
-            return result;
+            current = Animate(current, areCornerLightsBroken);
         }
 
-        /// <inheritdoc />
-        protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
+        int width = current.GetLength(0);
+        int height = current.GetLength(1);
+
+        var result = new List<string>(width);
+
+        for (int x = 0; x < width; x++)
         {
-            IList<string> initial = await ReadResourceAsLinesAsync();
-            int steps = ParseInt32(args[0]);
-            bool areCornerLightsBroken = args.Length == 2 && string.Equals(args[1], bool.TrueString, StringComparison.OrdinalIgnoreCase);
+            var builder = new StringBuilder(height);
 
-            IList<string> final = GetGridConfigurationAfterSteps(initial, steps, areCornerLightsBroken);
-
-            for (int x = 0; x < final.Count; x++)
+            for (int y = 0; y < height; y++)
             {
-                string value = final[x];
+                builder.Append(current[x, y] ? On : Off);
+            }
 
-                for (int y = 0; y < value.Length; y++)
+            result.Add(builder.ToString());
+        }
+
+        return result;
+    }
+
+    /// <inheritdoc />
+    protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
+    {
+        IList<string> initial = await ReadResourceAsLinesAsync();
+        int steps = ParseInt32(args[0]);
+        bool areCornerLightsBroken = args.Length == 2 && string.Equals(args[1], bool.TrueString, StringComparison.OrdinalIgnoreCase);
+
+        IList<string> final = GetGridConfigurationAfterSteps(initial, steps, areCornerLightsBroken);
+
+        for (int x = 0; x < final.Count; x++)
+        {
+            string value = final[x];
+
+            for (int y = 0; y < value.Length; y++)
+            {
+                if (value[y] == On)
                 {
-                    if (value[y] == On)
+                    LightsIlluminated++;
+                }
+            }
+        }
+
+        if (Verbose)
+        {
+            Logger.WriteLine(
+                "There are {0:N0} lights illuminated after {1:N0} steps.",
+                LightsIlluminated,
+                steps);
+        }
+
+        return PuzzleResult.Create(LightsIlluminated);
+    }
+
+    /// <summary>
+    /// Animates the specified input frame and returns the new output frame.
+    /// </summary>
+    /// <param name="input">The input frame.</param>
+    /// <param name="areCornerLightsBroken">Whether the corner lights are broken.</param>
+    /// <returns>
+    /// An <see cref="Array"/> of <see cref="bool"/> containing the new frame.
+    /// </returns>
+    private static bool[,] Animate(bool[,] input, bool areCornerLightsBroken)
+    {
+        int width = input.GetLength(0);
+        int height = input.GetLength(1);
+
+        bool[,] output = new bool[width, height];
+
+        IList<Point> cornerLights;
+
+        if (areCornerLightsBroken)
+        {
+            cornerLights = new Point[]
+            {
+                new Point(0, 0),
+                new Point(width - 1, 0),
+                new Point(0, height - 1),
+                new Point(width - 1, height - 1),
+            };
+        }
+        else
+        {
+            cornerLights = Array.Empty<Point>();
+        }
+
+        for (int x = 0; x < width; x++)
+        {
+            for (int y = 0; y < height; y++)
+            {
+                bool newState;
+
+                if (areCornerLightsBroken && cornerLights.Contains(new Point(x, y)))
+                {
+                    newState = true;
+                }
+                else
+                {
+                    var neighbors = new List<Point>(8)
                     {
-                        LightsIlluminated++;
+                        new Point(x - 1, y - 1),
+                        new Point(x, y - 1),
+                        new Point(x + 1, y - 1),
+                        new Point(x - 1, y),
+                        new Point(x + 1, y),
+                        new Point(x + 1, y + 1),
+                        new Point(x, y + 1),
+                        new Point(x - 1, y + 1),
+                    };
+
+                    int neighborsOn = 0;
+
+                    foreach (Point neighbor in neighbors)
+                    {
+                        if (neighbor.X >= 0 && neighbor.X < width && neighbor.Y >= 0 && neighbor.Y < height)
+                        {
+                            if (input[neighbor.X, neighbor.Y] || cornerLights.Contains(new Point(neighbor.X, neighbor.Y)))
+                            {
+                                neighborsOn++;
+                            }
+                        }
                     }
-                }
-            }
 
-            if (Verbose)
-            {
-                Logger.WriteLine(
-                    "There are {0:N0} lights illuminated after {1:N0} steps.",
-                    LightsIlluminated,
-                    steps);
-            }
-
-            return PuzzleResult.Create(LightsIlluminated);
-        }
-
-        /// <summary>
-        /// Animates the specified input frame and returns the new output frame.
-        /// </summary>
-        /// <param name="input">The input frame.</param>
-        /// <param name="areCornerLightsBroken">Whether the corner lights are broken.</param>
-        /// <returns>
-        /// An <see cref="Array"/> of <see cref="bool"/> containing the new frame.
-        /// </returns>
-        private static bool[,] Animate(bool[,] input, bool areCornerLightsBroken)
-        {
-            int width = input.GetLength(0);
-            int height = input.GetLength(1);
-
-            bool[,] output = new bool[width, height];
-
-            IList<Point> cornerLights;
-
-            if (areCornerLightsBroken)
-            {
-                cornerLights = new Point[]
-                {
-                    new Point(0, 0),
-                    new Point(width - 1, 0),
-                    new Point(0, height - 1),
-                    new Point(width - 1, height - 1),
-                };
-            }
-            else
-            {
-                cornerLights = Array.Empty<Point>();
-            }
-
-            for (int x = 0; x < width; x++)
-            {
-                for (int y = 0; y < height; y++)
-                {
-                    bool newState;
-
-                    if (areCornerLightsBroken && cornerLights.Contains(new Point(x, y)))
+                    if (input[x, y])
                     {
-                        newState = true;
+                        newState = neighborsOn == 2 || neighborsOn == 3;
                     }
                     else
                     {
-                        var neighbors = new List<Point>(8)
-                        {
-                            new Point(x - 1, y - 1),
-                            new Point(x, y - 1),
-                            new Point(x + 1, y - 1),
-                            new Point(x - 1, y),
-                            new Point(x + 1, y),
-                            new Point(x + 1, y + 1),
-                            new Point(x, y + 1),
-                            new Point(x - 1, y + 1),
-                        };
-
-                        int neighborsOn = 0;
-
-                        foreach (Point neighbor in neighbors)
-                        {
-                            if (neighbor.X >= 0 && neighbor.X < width && neighbor.Y >= 0 && neighbor.Y < height)
-                            {
-                                if (input[neighbor.X, neighbor.Y] || cornerLights.Contains(new Point(neighbor.X, neighbor.Y)))
-                                {
-                                    neighborsOn++;
-                                }
-                            }
-                        }
-
-                        if (input[x, y])
-                        {
-                            newState = neighborsOn == 2 || neighborsOn == 3;
-                        }
-                        else
-                        {
-                            newState = neighborsOn == 3;
-                        }
+                        newState = neighborsOn == 3;
                     }
-
-                    output[x, y] = newState;
                 }
-            }
 
-            return output;
+                output[x, y] = newState;
+            }
         }
 
-        /// <summary>
-        /// Parses the specified initial state as an <see cref="Array"/> of <see cref="bool"/>.
-        /// </summary>
-        /// <param name="initialState">The initial state as a collection of strings.</param>
-        /// <returns>
-        /// An <see cref="Array"/> of <see cref="bool"/> representing the light configuration
-        /// specified by <paramref name="initialState"/>.
-        /// </returns>
-        private static bool[,] ParseInitialState(IList<string> initialState)
+        return output;
+    }
+
+    /// <summary>
+    /// Parses the specified initial state as an <see cref="Array"/> of <see cref="bool"/>.
+    /// </summary>
+    /// <param name="initialState">The initial state as a collection of strings.</param>
+    /// <returns>
+    /// An <see cref="Array"/> of <see cref="bool"/> representing the light configuration
+    /// specified by <paramref name="initialState"/>.
+    /// </returns>
+    private static bool[,] ParseInitialState(IList<string> initialState)
+    {
+        // Assume that the input configuration is a rectangle
+        int width = initialState[0].Length;
+        int height = initialState.Count;
+
+        bool[,] state = new bool[width, height];
+
+        for (int x = 0; x < height; x++)
         {
-            // Assume that the input configuration is a rectangle
-            int width = initialState[0].Length;
-            int height = initialState.Count;
+            string value = initialState[x];
 
-            bool[,] state = new bool[width, height];
-
-            for (int x = 0; x < height; x++)
+            for (int y = 0; y < value.Length; y++)
             {
-                string value = initialState[x];
-
-                for (int y = 0; y < value.Length; y++)
-                {
-                    // '#' means 'on'; '.' means 'off'
-                    state[x, y] = value[y] == On;
-                }
+                // '#' means 'on'; '.' means 'off'
+                state[x, y] = value[y] == On;
             }
-
-            return state;
         }
+
+        return state;
     }
 }

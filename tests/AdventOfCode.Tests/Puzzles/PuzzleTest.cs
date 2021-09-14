@@ -1,79 +1,72 @@
 ﻿// Copyright (c) Martin Costello, 2015. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
-using System;
-using System.Threading;
-using System.Threading.Tasks;
-using Shouldly;
-using Xunit.Abstractions;
+namespace MartinCostello.AdventOfCode.Puzzles;
 
-namespace MartinCostello.AdventOfCode.Puzzles
+/// <summary>
+/// The class class for puzzle tests.
+/// </summary>
+public abstract class PuzzleTest
 {
     /// <summary>
-    /// The class class for puzzle tests.
+    /// Initializes a new instance of the <see cref="PuzzleTest"/> class.
     /// </summary>
-    public abstract class PuzzleTest
+    /// <param name="outputHelper">The <see cref="ITestOutputHelper"/> to use.</param>
+    protected PuzzleTest(ITestOutputHelper outputHelper)
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="PuzzleTest"/> class.
-        /// </summary>
-        /// <param name="outputHelper">The <see cref="ITestOutputHelper"/> to use.</param>
-        protected PuzzleTest(ITestOutputHelper outputHelper)
+        OutputHelper = outputHelper;
+        Logger = new TestLogger(OutputHelper);
+    }
+
+    /// <summary>
+    /// Gets the <see cref="ITestOutputHelper"/> to use.
+    /// </summary>
+    protected ITestOutputHelper OutputHelper { get; }
+
+    /// <summary>
+    /// Gets the <see cref="ILogger"/> to use.
+    /// </summary>
+    private protected ILogger Logger { get; }
+
+    /// <summary>
+    /// Solves the specified puzzle type asynchronously.
+    /// </summary>
+    /// <typeparam name="T">The type of the puzzle to solve.</typeparam>
+    /// <returns>
+    /// The solved puzzle of the type specified by <typeparamref name="T"/>.
+    /// </returns>
+    protected async Task<T> SolvePuzzleAsync<T>()
+        where T : Puzzle, new()
+        => await SolvePuzzleAsync<T>(Array.Empty<string>());
+
+    /// <summary>
+    /// Solves the specified puzzle type with the specified arguments asynchronously.
+    /// </summary>
+    /// <typeparam name="T">The type of the puzzle to solve.</typeparam>
+    /// <param name="args">The arguments to pass to the puzzle.</param>
+    /// <returns>
+    /// The solved puzzle of the type specified by <typeparamref name="T"/>.
+    /// </returns>
+    protected async Task<T> SolvePuzzleAsync<T>(params string[] args)
+        where T : Puzzle, new()
+    {
+        // Arrange
+        var puzzle = new T()
         {
-            OutputHelper = outputHelper;
-            Logger = new TestLogger(OutputHelper);
-        }
+            Logger = Logger,
+            Verbose = true,
+        };
 
-        /// <summary>
-        /// Gets the <see cref="ITestOutputHelper"/> to use.
-        /// </summary>
-        protected ITestOutputHelper OutputHelper { get; }
+        using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(90));
 
-        /// <summary>
-        /// Gets the <see cref="ILogger"/> to use.
-        /// </summary>
-        private protected ILogger Logger { get; }
+        // Act
+        PuzzleResult result = await puzzle.SolveAsync(args, cts.Token);
 
-        /// <summary>
-        /// Solves the specified puzzle type asynchronously.
-        /// </summary>
-        /// <typeparam name="T">The type of the puzzle to solve.</typeparam>
-        /// <returns>
-        /// The solved puzzle of the type specified by <typeparamref name="T"/>.
-        /// </returns>
-        protected async Task<T> SolvePuzzleAsync<T>()
-            where T : Puzzle, new()
-            => await SolvePuzzleAsync<T>(Array.Empty<string>());
+        // Assert
+        result.ShouldNotBeNull();
+        result.Solutions.ShouldNotBeNull();
+        result.Solutions.Count.ShouldBeGreaterThan(0);
 
-        /// <summary>
-        /// Solves the specified puzzle type with the specified arguments asynchronously.
-        /// </summary>
-        /// <typeparam name="T">The type of the puzzle to solve.</typeparam>
-        /// <param name="args">The arguments to pass to the puzzle.</param>
-        /// <returns>
-        /// The solved puzzle of the type specified by <typeparamref name="T"/>.
-        /// </returns>
-        protected async Task<T> SolvePuzzleAsync<T>(params string[] args)
-            where T : Puzzle, new()
-        {
-            // Arrange
-            var puzzle = new T()
-            {
-                Logger = Logger,
-                Verbose = true,
-            };
-
-            using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(90));
-
-            // Act
-            PuzzleResult result = await puzzle.SolveAsync(args, cts.Token);
-
-            // Assert
-            result.ShouldNotBeNull();
-            result.Solutions.ShouldNotBeNull();
-            result.Solutions.Count.ShouldBeGreaterThan(0);
-
-            return puzzle;
-        }
+        return puzzle;
     }
 }

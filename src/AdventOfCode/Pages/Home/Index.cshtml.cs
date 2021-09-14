@@ -5,18 +5,17 @@
 
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace MartinCostello.AdventOfCode.Pages
+namespace MartinCostello.AdventOfCode.Pages;
+
+/// <summary>
+/// A class representing the model for the index page.
+/// </summary>
+public class IndexModel : PageModel
 {
     /// <summary>
-    /// A class representing the model for the index page.
+    /// Handles GET requests for the index page.
     /// </summary>
-    public class IndexModel : PageModel
+    public void OnGet()
     {
-        /// <summary>
-        /// Handles GET requests for the index page.
-        /// </summary>
-        public void OnGet()
-        {
-        }
     }
 }

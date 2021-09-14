@@ -1,120 +1,116 @@
 ﻿// Copyright (c) Martin Costello, 2015. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
-using System.Threading;
-using System.Threading.Tasks;
+namespace MartinCostello.AdventOfCode.Puzzles.Y2017;
 
-namespace MartinCostello.AdventOfCode.Puzzles.Y2017
+/// <summary>
+/// A class representing the puzzle for <c>https://adventofcode.com/2017/day/9</c>. This class cannot be inherited.
+/// </summary>
+[Puzzle(2017, 09, RequiresData = true)]
+public sealed class Day09 : Puzzle
 {
     /// <summary>
-    /// A class representing the puzzle for <c>https://adventofcode.com/2017/day/9</c>. This class cannot be inherited.
+    /// Gets the total score for all groups in the stream.
     /// </summary>
-    [Puzzle(2017, 09, RequiresData = true)]
-    public sealed class Day09 : Puzzle
+    public int TotalScore { get; private set; }
+
+    /// <summary>
+    /// Gets the number of garbage characters in the stream.
+    /// </summary>
+    public int GarbageCount { get; private set; }
+
+    /// <summary>
+    /// Computes the total score for all the groups in the specified stream.
+    /// </summary>
+    /// <param name="stream">The stream to get the score for.</param>
+    /// <returns>
+    /// The total score for the groups in the stream specified by <paramref name="stream"/>.
+    /// </returns>
+    public static (int Score, int GarbageCount) ParseStream(string stream)
     {
-        /// <summary>
-        /// Gets the total score for all groups in the stream.
-        /// </summary>
-        public int TotalScore { get; private set; }
+        int score = 0;
+        int level = 0;
+        int garbageCount = 0;
+        bool withinGarbage = false;
 
-        /// <summary>
-        /// Gets the number of garbage characters in the stream.
-        /// </summary>
-        public int GarbageCount { get; private set; }
-
-        /// <summary>
-        /// Computes the total score for all the groups in the specified stream.
-        /// </summary>
-        /// <param name="stream">The stream to get the score for.</param>
-        /// <returns>
-        /// The total score for the groups in the stream specified by <paramref name="stream"/>.
-        /// </returns>
-        public static (int score, int garbageCount) ParseStream(string stream)
+        for (int i = 0; i < stream.Length; i++)
         {
-            int score = 0;
-            int level = 0;
-            int garbageCount = 0;
-            bool withinGarbage = false;
+            char c = stream[i];
 
-            for (int i = 0; i < stream.Length; i++)
+            switch (c)
             {
-                char c = stream[i];
+                case '{':
+                    if (withinGarbage)
+                    {
+                        garbageCount++;
+                    }
+                    else
+                    {
+                        level++;
+                        score += level;
+                    }
 
-                switch (c)
-                {
-                    case '{':
-                        if (withinGarbage)
-                        {
-                            garbageCount++;
-                        }
-                        else
-                        {
-                            level++;
-                            score += level;
-                        }
+                    break;
 
-                        break;
+                case '}':
+                    if (withinGarbage)
+                    {
+                        garbageCount++;
+                    }
+                    else
+                    {
+                        level--;
+                    }
 
-                    case '}':
-                        if (withinGarbage)
-                        {
-                            garbageCount++;
-                        }
-                        else
-                        {
-                            level--;
-                        }
+                    break;
 
-                        break;
+                case '<':
+                    if (withinGarbage)
+                    {
+                        garbageCount++;
+                    }
+                    else
+                    {
+                        withinGarbage = true;
+                    }
 
-                    case '<':
-                        if (withinGarbage)
-                        {
-                            garbageCount++;
-                        }
-                        else
-                        {
-                            withinGarbage = true;
-                        }
+                    break;
 
-                        break;
+                case '>':
+                    withinGarbage = false;
+                    break;
 
-                    case '>':
-                        withinGarbage = false;
-                        break;
+                case '!':
+                    i++;
+                    break;
 
-                    case '!':
-                        i++;
-                        break;
+                case ',':
+                default:
+                    if (withinGarbage)
+                    {
+                        garbageCount++;
+                    }
 
-                    case ',':
-                    default:
-                        if (withinGarbage)
-                        {
-                            garbageCount++;
-                        }
-
-                        break;
-                }
+                    break;
             }
-
-            return (score, garbageCount);
         }
 
-        /// <inheritdoc />
-        protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
+        return (score, garbageCount);
+    }
+
+    /// <inheritdoc />
+    protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
+    {
+        string stream = (await ReadResourceAsStringAsync()).Trim();
+
+        (TotalScore, GarbageCount) = ParseStream(stream);
+
+        if (Verbose)
         {
-            string stream = (await ReadResourceAsStringAsync()).Trim();
-
-            (TotalScore, GarbageCount) = ParseStream(stream);
-
-            if (Verbose)
-            {
-                Logger.WriteLine($"The total score for all the groups is {TotalScore:N0}.");
-                Logger.WriteLine($"There are {GarbageCount:N0} non-canceled characters within the garbage.");
-            }
-
-            return PuzzleResult.Create(TotalScore, GarbageCount);
+            Logger.WriteLine($"The total score for all the groups is {TotalScore:N0}.");
+            Logger.WriteLine($"There are {GarbageCount:N0} non-canceled characters within the garbage.");
         }
+
+        return PuzzleResult.Create(TotalScore, GarbageCount);
     }
 }

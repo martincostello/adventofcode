@@ -1,200 +1,193 @@
 ﻿// Copyright (c) Martin Costello, 2015. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
+namespace MartinCostello.AdventOfCode.Puzzles.Y2020;
 
-namespace MartinCostello.AdventOfCode.Puzzles.Y2020
+/// <summary>
+/// A class representing the puzzle for <c>https://adventofcode.com/2020/day/7</c>. This class cannot be inherited.
+/// </summary>
+[Puzzle(2020, 07, MinimumArguments = 1, RequiresData = true)]
+public sealed class Day07 : Puzzle
 {
     /// <summary>
-    /// A class representing the puzzle for <c>https://adventofcode.com/2020/day/7</c>. This class cannot be inherited.
+    /// Gets the number of bag colors that can eventually contain at least one bag of the given color.
     /// </summary>
-    [Puzzle(2020, 07, MinimumArguments = 1, RequiresData = true)]
-    public sealed class Day07 : Puzzle
+    public int BagColorsThatCanContainColor { get; private set; }
+
+    /// <summary>
+    /// Gets the number of bags required inside the specified top-level bag to allow it be carried.
+    /// </summary>
+    public int BagsInsideBag { get; private set; }
+
+    /// <summary>
+    /// Gets the number of bag colors that can eventually contain at least one bag of the specified colors.
+    /// </summary>
+    /// <param name="rules">A collection of bag-colour relationship rules.</param>
+    /// <param name="color">The color to get the number of bag colors for.</param>
+    /// <returns>
+    /// The number of bag colors that can eventually contain at least one bag of the color specified by <paramref name="color"/>.
+    /// </returns>
+    public static int GetBagColorsThatCouldContainColor(ICollection<string> rules, string color)
     {
-        /// <summary>
-        /// Gets the number of bag colors that can eventually contain at least one bag of the given color.
-        /// </summary>
-        public int BagColorsThatCanContainColor { get; private set; }
+        Dictionary<string, Dictionary<string, int>> colors = ParseRules(rules);
 
-        /// <summary>
-        /// Gets the number of bags required inside the specified top-level bag to allow it be carried.
-        /// </summary>
-        public int BagsInsideBag { get; private set; }
+        colors.Remove(color);
 
-        /// <summary>
-        /// Gets the number of bag colors that can eventually contain at least one bag of the specified colors.
-        /// </summary>
-        /// <param name="rules">A collection of bag-colour relationship rules.</param>
-        /// <param name="color">The color to get the number of bag colors for.</param>
-        /// <returns>
-        /// The number of bag colors that can eventually contain at least one bag of the color specified by <paramref name="color"/>.
-        /// </returns>
-        public static int GetBagColorsThatCouldContainColor(ICollection<string> rules, string color)
+        int result = 0;
+
+        foreach (var bag in colors)
         {
-            Dictionary<string, Dictionary<string, int>> colors = ParseRules(rules);
+            var path = new Stack<string>();
+            path.Push(bag.Key);
 
-            colors.Remove(color);
-
-            int result = 0;
-
-            foreach (var bag in colors)
+            if (ContainsPathToTarget(path, color))
             {
-                var path = new Stack<string>();
+                result++;
+            }
+        }
+
+        return result;
+
+        bool ContainsPathToTarget(Stack<string> path, string targetColor)
+        {
+            if (!colors.TryGetValue(path.Peek(), out var self))
+            {
+                return false;
+            }
+
+            if (self.ContainsKey(targetColor))
+            {
+                return true;
+            }
+
+            bool foundPath = false;
+
+            foreach (var bag in self)
+            {
+                if (path.Contains(bag.Key))
+                {
+                    continue;
+                }
+
                 path.Push(bag.Key);
 
-                if (ContainsPathToTarget(path, color))
+                foundPath = ContainsPathToTarget(path, targetColor);
+
+                path.Pop();
+
+                if (foundPath)
                 {
-                    result++;
+                    break;
                 }
             }
 
-            return result;
-
-            bool ContainsPathToTarget(Stack<string> path, string targetColor)
-            {
-                if (!colors.TryGetValue(path.Peek(), out var self))
-                {
-                    return false;
-                }
-
-                if (self.ContainsKey(targetColor))
-                {
-                    return true;
-                }
-
-                bool foundPath = false;
-
-                foreach (var bag in self)
-                {
-                    if (path.Contains(bag.Key))
-                    {
-                        continue;
-                    }
-
-                    path.Push(bag.Key);
-
-                    foundPath = ContainsPathToTarget(path, targetColor);
-
-                    path.Pop();
-
-                    if (foundPath)
-                    {
-                        break;
-                    }
-                }
-
-                return foundPath;
-            }
+            return foundPath;
         }
+    }
 
-        /// <summary>
-        /// Gets the number of bags required inside the specified top-level bag to allow it be carried.
-        /// </summary>
-        /// <param name="rules">A collection of bag-colour relationship rules.</param>
-        /// <param name="color">The color to get the count of bags inside.</param>
-        /// <returns>
-        /// The number of bags required inside the top-level bag of the specified color to allow it be carried.
-        /// </returns>
-        public static int GetInsideBagCount(ICollection<string> rules, string color)
+    /// <summary>
+    /// Gets the number of bags required inside the specified top-level bag to allow it be carried.
+    /// </summary>
+    /// <param name="rules">A collection of bag-colour relationship rules.</param>
+    /// <param name="color">The color to get the count of bags inside.</param>
+    /// <returns>
+    /// The number of bags required inside the top-level bag of the specified color to allow it be carried.
+    /// </returns>
+    public static int GetInsideBagCount(ICollection<string> rules, string color)
+    {
+        Dictionary<string, Dictionary<string, int>> colors = ParseRules(rules);
+
+        var path = new Stack<string>();
+        path.Push(color);
+
+        return CountChildren(path);
+
+        int CountChildren(Stack<string> path)
         {
-            Dictionary<string, Dictionary<string, int>> colors = ParseRules(rules);
-
-            var path = new Stack<string>();
-            path.Push(color);
-
-            return CountChildren(path);
-
-            int CountChildren(Stack<string> path)
+            if (!colors.TryGetValue(path.Peek(), out var self))
             {
-                if (!colors.TryGetValue(path.Peek(), out var self))
-                {
-                    return 0;
-                }
-
-                int count = self.Values.Sum();
-
-                foreach (var bag in self)
-                {
-                    if (path.Contains(bag.Key))
-                    {
-                        continue;
-                    }
-
-                    path.Push(bag.Key);
-
-                    count += CountChildren(path) * bag.Value;
-
-                    path.Pop();
-                }
-
-                return count;
+                return 0;
             }
-        }
 
-        /// <inheritdoc />
-        protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
+            int count = self.Values.Sum();
+
+            foreach (var bag in self)
+            {
+                if (path.Contains(bag.Key))
+                {
+                    continue;
+                }
+
+                path.Push(bag.Key);
+
+                count += CountChildren(path) * bag.Value;
+
+                path.Pop();
+            }
+
+            return count;
+        }
+    }
+
+    /// <inheritdoc />
+    protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
+    {
+        string color = args[0];
+
+        IList<string> rules = await ReadResourceAsLinesAsync();
+
+        BagColorsThatCanContainColor = GetBagColorsThatCouldContainColor(rules, color);
+        BagsInsideBag = GetInsideBagCount(rules, color);
+
+        if (Verbose)
         {
-            string color = args[0];
-
-            IList<string> rules = await ReadResourceAsLinesAsync();
-
-            BagColorsThatCanContainColor = GetBagColorsThatCouldContainColor(rules, color);
-            BagsInsideBag = GetInsideBagCount(rules, color);
-
-            if (Verbose)
-            {
-                Logger.WriteLine("The number of bags that can contain a {0} bag is {1}.", color, BagColorsThatCanContainColor);
-                Logger.WriteLine("The number of bags contained in a {0} bag is {1}.", color, BagsInsideBag);
-            }
-
-            return PuzzleResult.Create(BagColorsThatCanContainColor, BagsInsideBag);
+            Logger.WriteLine("The number of bags that can contain a {0} bag is {1}.", color, BagColorsThatCanContainColor);
+            Logger.WriteLine("The number of bags contained in a {0} bag is {1}.", color, BagsInsideBag);
         }
 
-        /// <summary>
-        /// Parses the specified rules for bag contents and counts.
-        /// </summary>
-        /// <param name="rules">The rules to parse.</param>
-        /// <returns>
-        /// The number of color of bags that each color of bag may contain.
-        /// </returns>
-        private static Dictionary<string, Dictionary<string, int>> ParseRules(ICollection<string> rules)
+        return PuzzleResult.Create(BagColorsThatCanContainColor, BagsInsideBag);
+    }
+
+    /// <summary>
+    /// Parses the specified rules for bag contents and counts.
+    /// </summary>
+    /// <param name="rules">The rules to parse.</param>
+    /// <returns>
+    /// The number of color of bags that each color of bag may contain.
+    /// </returns>
+    private static Dictionary<string, Dictionary<string, int>> ParseRules(ICollection<string> rules)
+    {
+        var colors = new Dictionary<string, Dictionary<string, int>>();
+
+        foreach (string rule in rules)
         {
-            var colors = new Dictionary<string, Dictionary<string, int>>();
+            const string Delimiter = " bags contain ";
 
-            foreach (string rule in rules)
+            int index = rule.IndexOf(Delimiter, StringComparison.Ordinal);
+
+            string thisColor = rule[0..index];
+            string contents = rule[(index + Delimiter.Length)..^1];
+
+            string[] split = contents.Split(", ");
+
+            var bagColors = colors[thisColor] = new Dictionary<string, int>();
+
+            foreach (string bag in split)
             {
-                const string Delimiter = " bags contain ";
-
-                int index = rule.IndexOf(Delimiter, StringComparison.Ordinal);
-
-                string thisColor = rule[0..index];
-                string contents = rule[(index + Delimiter.Length) ..^1];
-
-                string[] split = contents.Split(", ");
-
-                var bagColors = colors[thisColor] = new Dictionary<string, int>();
-
-                foreach (string bag in split)
+                if (string.Equals(bag, "no other bags", StringComparison.Ordinal))
                 {
-                    if (string.Equals(bag, "no other bags", StringComparison.Ordinal))
-                    {
-                        break;
-                    }
-
-                    string[] otherBag = bag.Split(' ');
-
-                    int count = ParseInt32(otherBag[0]);
-                    string otherColor = string.Join(' ', otherBag[1..^1]);
-
-                    bagColors[otherColor] = count;
+                    break;
                 }
-            }
 
-            return colors;
+                string[] otherBag = bag.Split(' ');
+
+                int count = ParseInt32(otherBag[0]);
+                string otherColor = string.Join(' ', otherBag[1..^1]);
+
+                bagColors[otherColor] = count;
+            }
         }
+
+        return colors;
     }
 }
