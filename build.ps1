@@ -4,7 +4,8 @@ param(
     [Parameter(Mandatory = $false)][string] $VersionSuffix = "",
     [Parameter(Mandatory = $false)][string] $OutputPath = "",
     [Parameter(Mandatory = $false)][switch] $SkipPublish,
-    [Parameter(Mandatory = $false)][switch] $SkipTests
+    [Parameter(Mandatory = $false)][switch] $SkipTests,
+    [Parameter(Mandatory = $false)][string] $Runtime = ""
 )
 
 $ErrorActionPreference = "Stop"
@@ -104,7 +105,16 @@ if ($SkipPublish -eq $false) {
     $project = (Join-Path $solutionPath "src\AdventOfCode\AdventOfCode.csproj")
     $publishPath = (Join-Path $OutputPath "publish")
 
-    & $dotnet publish $project --output $publishPath --configuration $Configuration
+    $additionalArgs = @()
+
+    if (![string]::IsNullOrEmpty($Runtime)) {
+        $additionalArgs += "--self-contained"
+        $additionalArgs += "--runtime"
+        $additionalArgs += $Runtime
+    }
+
+    & $dotnet publish $project --output $publishPath --configuration $Configuration $additionalArgs
+
     if ($LASTEXITCODE -ne 0) {
         throw "dotnet publish failed with exit code $LASTEXITCODE"
     }
