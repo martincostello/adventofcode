@@ -63,5 +63,5 @@ public sealed class WebLogger : ILogger
     /// <param name="format">The format string to use to generate the message.</param>
     /// <param name="args">The arguments for the format string.</param>
     public void WriteLine(string format, params object[] args)
-        => _logger.LogInformation("{Message}", string.Format(format, args));
+        => _logger.LogInformation("{Message}", string.Format(CultureInfo.InvariantCulture, format, args));
 }

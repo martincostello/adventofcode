@@ -76,7 +76,7 @@ public sealed class Day12 : Puzzle
         {
             if (Resource is null)
             {
-                resource.Dispose();
+                await resource.DisposeAsync();
             }
         }
 
