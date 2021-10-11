@@ -2,7 +2,7 @@
   <ItemGroup>
     <PackageVersion Include="BenchmarkDotNet" Version="0.13.1" />
     <PackageVersion Include="MartinCostello.Logging.XUnit" Version="0.2.0" />
-    <PackageVersion Include="Microsoft.AspNetCore.Mvc.Testing" Version="6.0.0-rc.2.21470.37" />
+    <PackageVersion Include="Microsoft.AspNetCore.Mvc.Testing" Version="6.0.0-rtm.21509.1" />
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="16.11.0" />
     <PackageVersion Include="Microsoft.Playwright" Version="1.15.4" />
     <PackageVersion Include="Microsoft.SourceLink.GitHub" Version="1.0.0" />
