@@ -2,7 +2,7 @@
   <PropertyGroup>
     <DefineConstants>$(DefineConstants);BENCHMARKS</DefineConstants>
     <Description>Benchmarks for AdventOfCode.</Description>
-    <NoWarn>$(NoWarn);CA1034;CA1056;CA1812;CA1819;CA2007;SA1600</NoWarn>
+    <NoWarn>$(NoWarn);CA1034;CA1056;CA1819;CA2007;SA1600</NoWarn>
     <OutputType>Exe</OutputType>
     <RootNamespace>MartinCostello.AdventOfCode.Benchmarks</RootNamespace>
     <Summary>$(Description)</Summary>

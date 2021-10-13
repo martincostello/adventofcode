@@ -1,17 +1,19 @@
 ﻿// Copyright (c) Martin Costello, 2015. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
+using IMicrosoftLogger = Microsoft.Extensions.Logging.ILogger;
+
 namespace MartinCostello.AdventOfCode;
 
 /// <summary>
 /// A class representing an <see cref="ILogger"/> implementation for the web application. This class cannot be inherited.
 /// </summary>
-public sealed class WebLogger : ILogger
+public sealed partial class WebLogger : ILogger
 {
     /// <summary>
-    /// The <see cref="ILogger{T}"/> to use. This field is read-only.
+    /// The <see cref="IMicrosoftLogger"/> to use. This field is read-only.
     /// </summary>
-    private readonly ILogger<WebLogger> _logger;
+    private readonly IMicrosoftLogger _logger;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="WebLogger"/> class.
@@ -52,7 +54,7 @@ public sealed class WebLogger : ILogger
 
         string result = builder.ToString();
 
-        _logger.LogInformation("{Result}", result);
+        Log.Result(_logger, result);
 
         return result;
     }
@@ -63,5 +65,14 @@ public sealed class WebLogger : ILogger
     /// <param name="format">The format string to use to generate the message.</param>
     /// <param name="args">The arguments for the format string.</param>
     public void WriteLine(string format, params object[] args)
-        => _logger.LogInformation("{Message}", string.Format(CultureInfo.InvariantCulture, format, args));
+        => Log.WriteLine(_logger, string.Format(CultureInfo.InvariantCulture, format, args));
+
+    private static partial class Log
+    {
+        [LoggerMessage(1, LogLevel.Information, "{Message}")]
+        public static partial void WriteLine(IMicrosoftLogger logger, string message);
+
+        [LoggerMessage(2, LogLevel.Information, "{Result}")]
+        public static partial void Result(IMicrosoftLogger logger, string result);
+    }
 }

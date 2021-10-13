@@ -8,7 +8,7 @@ namespace MartinCostello.AdventOfCode;
 /// <summary>
 /// A class representing the puzzles API. This class cannot be inherited.
 /// </summary>
-internal static class PuzzlesApi
+internal static partial class PuzzlesApi
 {
     /// <summary>
     /// Gets the available puzzles as an asynchronous operation.
@@ -123,7 +123,7 @@ internal static class PuzzlesApi
         catch (Exception ex)
 #pragma warning restore CA1031
         {
-            logger.LogError(ex, "Failed to solve puzzle for year {Year} and day {Day}.", year, day);
+            Log.FailedToSolvePuzzle(logger, ex, year, day);
             return Results.Problem("Failed to solve puzzle.", statusCode: StatusCodes.Status500InternalServerError);
         }
 
@@ -139,5 +139,11 @@ internal static class PuzzlesApi
         };
 
         return Results.Json(result);
+    }
+
+    private static partial class Log
+    {
+        [LoggerMessage(1, LogLevel.Error, "Failed to solve puzzle for year {Year} and day {Day}.")]
+        public static partial void FailedToSolvePuzzle(Microsoft.Extensions.Logging.ILogger logger, Exception exception, int year, int day);
     }
 }
