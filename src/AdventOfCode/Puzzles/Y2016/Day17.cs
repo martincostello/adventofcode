@@ -58,7 +58,10 @@ public sealed class Day17 : Puzzle
 
         void GetPathsToVault(Point current, Stack<char> path, ICollection<string> routes)
         {
-            string pathSoFar = string.Join(string.Empty, path.Reverse());
+            char[] reversed = path.ToArray();
+            Array.Reverse(reversed);
+
+            string pathSoFar = new(reversed);
 
             if (current == vault)
             {

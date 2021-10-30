@@ -54,8 +54,9 @@ public sealed class Day21 : Puzzle
         char[] slice = values
             .Skip(start)
             .Take(end - start + 1)
-            .Reverse()
             .ToArray();
+
+        Array.Reverse(slice);
 
         for (int i = start, j = 0; i <= end; i++, j++)
         {

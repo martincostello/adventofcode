@@ -568,7 +568,12 @@ public sealed class Day20 : Puzzle
         /// The left edge of the tile.
         /// </returns>
         public string Left()
-            => new(Grid.Select((p) => p[0]).Reverse().ToArray());
+        {
+            char[] reversed = Grid.Select((p) => p[0]).ToArray();
+            Array.Reverse(reversed);
+
+            return new(reversed);
+        }
 
         /// <summary>
         /// Returns the right edge.
