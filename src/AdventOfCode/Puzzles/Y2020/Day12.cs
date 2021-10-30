@@ -107,9 +107,9 @@ public sealed class Day12 : Puzzle
                 case "L":
                     waypoint = units switch
                     {
-                        90 => new Point(-waypoint.Y, waypoint.X),
-                        180 => new Point(-waypoint.X, -waypoint.Y),
-                        270 => new Point(waypoint.Y, -waypoint.X),
+                        90 => new(-waypoint.Y, waypoint.X),
+                        180 => new(-waypoint.X, -waypoint.Y),
+                        270 => new(waypoint.Y, -waypoint.X),
                         _ => waypoint,
                     };
                     break;
@@ -117,9 +117,9 @@ public sealed class Day12 : Puzzle
                 case "R":
                     waypoint = units switch
                     {
-                        90 => new Point(waypoint.Y, -waypoint.X),
-                        180 => new Point(-waypoint.X, -waypoint.Y),
-                        270 => new Point(-waypoint.Y, waypoint.X),
+                        90 => new(waypoint.Y, -waypoint.X),
+                        180 => new(-waypoint.X, -waypoint.Y),
+                        270 => new(-waypoint.Y, waypoint.X),
                         _ => waypoint,
                     };
                     break;

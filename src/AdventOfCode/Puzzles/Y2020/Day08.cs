@@ -113,11 +113,11 @@ public sealed class Day08 : Puzzle
     /// </returns>
     private static IList<Instruction> ParseProgram(ICollection<string> program)
     {
-        var result = new List<Instruction>();
+        var result = new List<Instruction>(program.Count);
 
         foreach (string operation in program)
         {
-            Operation op = operation.Substring(0, 3) switch
+            var op = operation.Substring(0, 3) switch
             {
                 "acc" => Operation.Accumulate,
                 "jmp" => Operation.Jump,

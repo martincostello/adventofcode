@@ -1,4 +1,4 @@
-// Copyright (c) Martin Costello, 2015. All rights reserved.
+﻿// Copyright (c) Martin Costello, 2015. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2016;
@@ -118,12 +118,17 @@ public sealed class Day16 : Puzzle
                 }
             }
 
-            a = new List<char>(a.Append('0').Concat(b));
+            var c = new List<char>(a.Count + b.Count + 1);
+            c.AddRange(a);
+            c.Add('0');
+            c.AddRange(b);
+
+            a = c;
         }
 
         if (a.Count > size)
         {
-            a = a.Take(size).ToList();
+            a.RemoveRange(size, a.Count - size);
         }
 
         return a;

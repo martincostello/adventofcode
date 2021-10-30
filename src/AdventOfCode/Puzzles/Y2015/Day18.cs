@@ -1,4 +1,4 @@
-// Copyright (c) Martin Costello, 2015. All rights reserved.
+﻿// Copyright (c) Martin Costello, 2015. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 using System.Drawing;
@@ -119,10 +119,10 @@ public sealed class Day18 : Puzzle
         {
             cornerLights = new Point[]
             {
-                new Point(0, 0),
-                new Point(width - 1, 0),
-                new Point(0, height - 1),
-                new Point(width - 1, height - 1),
+                new(0, 0),
+                new(width - 1, 0),
+                new(0, height - 1),
+                new(width - 1, height - 1),
             };
         }
         else
@@ -144,14 +144,14 @@ public sealed class Day18 : Puzzle
                 {
                     var neighbors = new List<Point>(8)
                     {
-                        new Point(x - 1, y - 1),
-                        new Point(x, y - 1),
-                        new Point(x + 1, y - 1),
-                        new Point(x - 1, y),
-                        new Point(x + 1, y),
-                        new Point(x + 1, y + 1),
-                        new Point(x, y + 1),
-                        new Point(x - 1, y + 1),
+                        new(x - 1, y - 1),
+                        new(x, y - 1),
+                        new(x + 1, y - 1),
+                        new(x - 1, y),
+                        new(x + 1, y),
+                        new(x + 1, y + 1),
+                        new(x, y + 1),
+                        new(x - 1, y + 1),
                     };
 
                     int neighborsOn = 0;

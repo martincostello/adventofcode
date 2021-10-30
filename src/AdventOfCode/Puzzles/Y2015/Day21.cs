@@ -265,11 +265,11 @@ public sealed class Day21 : Puzzle
         /// </summary>
         internal static readonly IDictionary<string, Item> PotentialArmor = new Dictionary<string, Item>()
         {
-            ["Leather"] = new Item() { Cost = 13, Armor = 1 },
-            ["Chainmail"] = new Item() { Cost = 31, Armor = 2 },
-            ["Splintmail"] = new Item() { Cost = 53, Armor = 3 },
-            ["Bandedmail"] = new Item() { Cost = 75, Armor = 4 },
-            ["Platemail"] = new Item() { Cost = 102, Armor = 5 },
+            ["Leather"] = new() { Cost = 13, Armor = 1 },
+            ["Chainmail"] = new() { Cost = 31, Armor = 2 },
+            ["Splintmail"] = new() { Cost = 53, Armor = 3 },
+            ["Bandedmail"] = new() { Cost = 75, Armor = 4 },
+            ["Platemail"] = new() { Cost = 102, Armor = 5 },
         };
 
         /// <summary>
@@ -277,12 +277,12 @@ public sealed class Day21 : Puzzle
         /// </summary>
         internal static readonly IDictionary<string, Item> PotentialRings = new Dictionary<string, Item>()
         {
-            ["Damage +1"] = new Item() { Cost = 25, Damage = 1 },
-            ["Damage +2"] = new Item() { Cost = 50, Damage = 2 },
-            ["Damage +3"] = new Item() { Cost = 100, Damage = 3 },
-            ["Defense +1"] = new Item() { Cost = 20, Armor = 1 },
-            ["Defense +2"] = new Item() { Cost = 40, Armor = 2 },
-            ["Defense +3"] = new Item() { Cost = 80, Armor = 3 },
+            ["Damage +1"] = new() { Cost = 25, Damage = 1 },
+            ["Damage +2"] = new() { Cost = 50, Damage = 2 },
+            ["Damage +3"] = new() { Cost = 100, Damage = 3 },
+            ["Defense +1"] = new() { Cost = 20, Armor = 1 },
+            ["Defense +2"] = new() { Cost = 40, Armor = 2 },
+            ["Defense +3"] = new() { Cost = 80, Armor = 3 },
         };
 
         /// <summary>
@@ -290,11 +290,11 @@ public sealed class Day21 : Puzzle
         /// </summary>
         internal static readonly IDictionary<string, Item> PotentialWeapons = new Dictionary<string, Item>()
         {
-            ["Dagger"] = new Item() { Cost = 8, Damage = 4 },
-            ["Shortsword"] = new Item() { Cost = 10, Damage = 5 },
-            ["Warhammer"] = new Item() { Cost = 25, Damage = 6 },
-            ["Longsword"] = new Item() { Cost = 40, Damage = 7 },
-            ["Greataxe"] = new Item() { Cost = 74, Damage = 8 },
+            ["Dagger"] = new() { Cost = 8, Damage = 4 },
+            ["Shortsword"] = new() { Cost = 10, Damage = 5 },
+            ["Warhammer"] = new() { Cost = 25, Damage = 6 },
+            ["Longsword"] = new() { Cost = 40, Damage = 7 },
+            ["Greataxe"] = new() { Cost = 74, Damage = 8 },
         };
 
         /// <summary>

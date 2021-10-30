@@ -60,8 +60,7 @@ public sealed class Day11 : Puzzle
 
         int occupiedSeats = current
             .SelectMany((p) => p)
-            .Where((p) => p == Occupied)
-            .Count();
+            .Count((p) => p == Occupied);
 
         return (occupiedSeats, visualization);
     }
@@ -105,7 +104,7 @@ public sealed class Day11 : Puzzle
     /// </returns>
     private static List<char[]> Iterate(List<char[]> layout, int version)
     {
-        var updated = new List<char[]>();
+        var updated = new List<char[]>(layout.Count);
 
         foreach (char[] row in layout)
         {

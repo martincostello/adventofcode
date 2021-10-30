@@ -1,4 +1,4 @@
-// Copyright (c) Martin Costello, 2015. All rights reserved.
+﻿// Copyright (c) Martin Costello, 2015. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 using System.Drawing;
@@ -162,10 +162,10 @@ public class Day03 : Puzzle
         {
             Location += direction switch
             {
-                CardinalDirection.East => new Size(1, 0),
-                CardinalDirection.North => new Size(0, 1),
-                CardinalDirection.South => new Size(0, -1),
-                CardinalDirection.West => new Size(-1, 0),
+                CardinalDirection.East => new(1, 0),
+                CardinalDirection.North => new(0, 1),
+                CardinalDirection.South => new(0, -1),
+                CardinalDirection.West => new(-1, 0),
                 _ => throw new PuzzleException($"The specified direction '{direction}' is invalid."),
             };
         }

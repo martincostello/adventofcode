@@ -1,4 +1,4 @@
-// Copyright (c) Martin Costello, 2015. All rights reserved.
+﻿// Copyright (c) Martin Costello, 2015. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 using System.Collections.Concurrent;
@@ -140,8 +140,8 @@ public sealed class Day04 : Puzzle
         byte[] buffer = Encoding.UTF8.GetBytes(formatted);
         byte[] hash = MD5.HashData(buffer);
 
-        int wholeBytes = zeroes / 2;
-        bool hasHalfByte = zeroes % 2 == 1;
+        (int wholeBytes, int remainder) = Math.DivRem(zeroes, 2);
+        bool hasHalfByte = remainder == 1;
 
         int sum = hash[0];
 

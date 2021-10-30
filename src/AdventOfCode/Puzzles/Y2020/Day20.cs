@@ -524,9 +524,9 @@ public sealed class Day20 : Puzzle
         /// </summary>
         public void Rotate()
         {
-            var rotated = new List<string>();
-
             int length = Grid.Count;
+
+            var rotated = new List<string>(length);
 
             for (int x = 0; x < length; x++)
             {
@@ -537,7 +537,7 @@ public sealed class Day20 : Puzzle
                     rotation[length - y - 1] = Grid[y][x];
                 }
 
-                rotated.Add(new string(rotation));
+                rotated.Add(new(rotation));
             }
 
             Grid = rotated;
@@ -568,7 +568,12 @@ public sealed class Day20 : Puzzle
         /// The left edge of the tile.
         /// </returns>
         public string Left()
-            => new(Grid.Select((p) => p[0]).Reverse().ToArray());
+        {
+            char[] reversed = Grid.Select((p) => p[0]).ToArray();
+            Array.Reverse(reversed);
+
+            return new(reversed);
+        }
 
         /// <summary>
         /// Returns the right edge.

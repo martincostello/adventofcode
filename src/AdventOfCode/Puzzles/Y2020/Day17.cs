@@ -357,7 +357,7 @@ public sealed class Day17 : Puzzle
 
         public static Point operator +(Point point, Point vector)
         {
-            return new Point(
+            return new(
                 point.X + vector.X,
                 point.Y + vector.Y,
                 point.Z + vector.Z,
@@ -399,11 +399,11 @@ public sealed class Day17 : Puzzle
         {
             if (W.HasValue)
             {
-                return "(" + string.Join(", ", X, Y, Z, W.Value) + ")";
+                return '(' + string.Join(", ", X, Y, Z, W.Value) + ')';
             }
             else
             {
-                return "(" + string.Join(", ", X, Y, Z) + ")";
+                return '(' + string.Join(", ", X, Y, Z) + ')';
             }
         }
     }

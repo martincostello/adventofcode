@@ -22,6 +22,9 @@ internal static class StringExtensions
             return value;
         }
 
-        return new string(value.Reverse().ToArray());
+        char[] reversed = value.ToCharArray();
+        Array.Reverse(reversed);
+
+        return new(reversed);
     }
 }

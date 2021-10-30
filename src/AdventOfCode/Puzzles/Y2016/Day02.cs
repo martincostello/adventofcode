@@ -1,4 +1,4 @@
-// Copyright (c) Martin Costello, 2015. All rights reserved.
+﻿// Copyright (c) Martin Costello, 2015. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 using System.Drawing;
@@ -50,7 +50,7 @@ public sealed class Day02 : Puzzle
     /// <summary>
     /// Gets the keypad grid containing digits and letters.
     /// </summary>
-    internal static char[][] AlphanumericGrid => new[]
+    internal static char[][] AlphanumericGrid { get; } = new[]
     {
         new[] { '\0', '\0', '1', '\0', '\0' },
         new[] { '\0', '2', '3', '4', '\0' },
@@ -62,7 +62,7 @@ public sealed class Day02 : Puzzle
     /// <summary>
     /// Gets the keypad grid containing only digits.
     /// </summary>
-    internal static char[][] DigitGrid => new[]
+    internal static char[][] DigitGrid { get; } = new[]
     {
         new[] { '1', '2', '3' },
         new[] { '4', '5', '6' },

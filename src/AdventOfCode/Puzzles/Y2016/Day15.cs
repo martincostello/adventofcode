@@ -1,4 +1,4 @@
-// Copyright (c) Martin Costello, 2015. All rights reserved.
+﻿// Copyright (c) Martin Costello, 2015. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2016;
@@ -12,7 +12,7 @@ public sealed class Day15 : Puzzle
     /// <summary>
     /// The delimiters used when parsing the input. This field is read-only.
     /// </summary>
-    private static readonly char[] Separators = new[] { ' ', ',', '.' };
+    private static readonly char[] Separators = { ' ', ',', '.' };
 
     /// <summary>
     /// Gets the value of T where the button can first be pressed to get a capsule.

@@ -44,7 +44,7 @@ public sealed class Day04 : Puzzle
             if (string.IsNullOrEmpty(line))
             {
                 passports.Add(current);
-                current = new NameValueCollection();
+                current = new();
                 continue;
             }
 

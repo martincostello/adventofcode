@@ -180,7 +180,7 @@ public sealed class Day24 : Puzzle
 
         public static Tile operator +(Tile point, Tile vector)
         {
-            return new Tile(
+            return new(
                 point.X + vector.X,
                 point.Y + vector.Y,
                 point.Z + vector.Z);

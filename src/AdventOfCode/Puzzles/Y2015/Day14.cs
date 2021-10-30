@@ -1,4 +1,4 @@
-// Copyright (c) Martin Costello, 2015. All rights reserved.
+﻿// Copyright (c) Martin Costello, 2015. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2015;
@@ -57,8 +57,7 @@ public sealed class Day14 : Puzzle
         for (int i = 1; i < timeIndex; i++)
         {
             // Find how far each reindeer is from the starting point
-            var distances = data
-                .ToDictionary((p) => p.Name, (p) => p.GetDistanceAfterTimeIndex(i));
+            var distances = data.ToDictionary((p) => p.Name, (p) => p.GetDistanceAfterTimeIndex(i));
 
             // Find the furthest distance away one or more reindeer are
             int maxDistance = distances.Max((p) => p.Value);
@@ -160,8 +159,7 @@ public sealed class Day14 : Puzzle
         {
             int cycleTime = MaximumActivityPeriod + RestPeriod;
 
-            int cycles = timeIndex / cycleTime;
-            int secondsOfIncompleteCycle = timeIndex % cycleTime;
+            (int cycles, int secondsOfIncompleteCycle) = Math.DivRem(timeIndex, cycleTime);
 
             int secondsOfTravelInIncompleteCycle =
                 secondsOfIncompleteCycle > MaximumActivityPeriod ?

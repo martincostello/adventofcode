@@ -212,16 +212,16 @@ public sealed class Day03 : Puzzle
         /// <summary>
         /// An array of offsets that may surround an address in the grid.
         /// </summary>
-        private static readonly Size[] Offsets = new[]
+        private static readonly Size[] Offsets =
         {
-            new Size(0, 1),
-            new Size(1, 1),
-            new Size(1, 0),
-            new Size(1, -1),
-            new Size(0, -1),
-            new Size(-1, -1),
-            new Size(-1, 0),
-            new Size(-1, 1),
+            new(0, 1),
+            new(1, 1),
+            new(1, 0),
+            new(1, -1),
+            new(0, -1),
+            new(-1, -1),
+            new(-1, 0),
+            new(-1, 1),
         };
 
         /// <summary>

@@ -127,7 +127,7 @@ public sealed class Day03 : Puzzle
         {
             for (int j = 0; j < totalHeight; j++)
             {
-                fabric[i, j] = new Square();
+                fabric[i, j] = new();
             }
         }
 

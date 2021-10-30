@@ -66,7 +66,7 @@ public sealed class Day06 : Puzzle
     private static int GetRepeatCount(List<int> memory)
     {
         var patterns = new HashSet<string>();
-        string pattern = string.Join(",", memory);
+        string pattern = string.Join(',', memory);
 
         int count = 0;
 
@@ -77,7 +77,7 @@ public sealed class Day06 : Puzzle
             Redistribute(memory);
 
             count++;
-            pattern = string.Join(",", memory);
+            pattern = string.Join(',', memory);
         }
         while (!patterns.Contains(pattern));
 

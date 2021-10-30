@@ -1,4 +1,4 @@
-// Copyright (c) Martin Costello, 2015. All rights reserved.
+﻿// Copyright (c) Martin Costello, 2015. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2017;
@@ -71,13 +71,18 @@ public sealed class Day02 : Puzzle
             {
                 int y = values[j];
 
-                if (x % y == 0)
+                (int div, int rem) = Math.DivRem(x, y);
+
+                if (rem == 0)
                 {
-                    return Math.Abs(x / y);
+                    return Math.Abs(div);
                 }
-                else if (y % x == 0)
+
+                (div, rem) = Math.DivRem(y, x);
+
+                if (rem == 0)
                 {
-                    return Math.Abs(y / x);
+                    return Math.Abs(div);
                 }
             }
         }
@@ -118,7 +123,7 @@ public sealed class Day02 : Puzzle
         {
             IList<int> columns = line
                 .Split('\t')
-                .Select((p) => ParseInt32(p))
+                .Select(ParseInt32)
                 .ToList();
 
             spreadsheet.Add(columns);

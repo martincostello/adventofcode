@@ -1,4 +1,4 @@
-// Copyright (c) Martin Costello, 2015. All rights reserved.
+﻿// Copyright (c) Martin Costello, 2015. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 using System.Text.RegularExpressions;
@@ -35,9 +35,7 @@ public sealed class Day19 : Puzzle
 
         IDictionary<string, string> rules = ParseRules(input.Take(delimiter));
 
-        string[] messages = input
-            .Skip(delimiter + 1)
-            .ToArray();
+        var messages = input.Skip(delimiter + 1);
 
         if (applyFix)
         {
@@ -103,7 +101,7 @@ public sealed class Day19 : Puzzle
                         {
                             if (r.Length > 1)
                             {
-                                r = "(" + r + ")";
+                                r = '(' + r + ')';
                             }
 
                             values[i] = r;

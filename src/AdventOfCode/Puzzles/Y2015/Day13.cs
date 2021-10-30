@@ -1,4 +1,4 @@
-// Copyright (c) Martin Costello, 2015. All rights reserved.
+﻿// Copyright (c) Martin Costello, 2015. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2015;
@@ -37,7 +37,7 @@ public sealed class Day13 : Puzzle
             .Distinct()
             .ToList();
 
-        IList<IList<string>> permutations = Maths.GetPermutations(names)
+        var permutations = Maths.GetPermutations(names)
             .Select((p) => new List<string>(p) as IList<string>)
             .ToList();
 

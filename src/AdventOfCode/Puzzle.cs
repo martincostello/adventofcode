@@ -37,12 +37,14 @@ public abstract class Puzzle : IPuzzle
     {
         if (!EnsureArguments(args, MinimumArguments))
         {
+            bool singular = MinimumArguments == 1;
+
             string message = string.Format(
                 CultureInfo.InvariantCulture,
                 "At least {0:N0} argument{1} {2} required.",
                 MinimumArguments,
-                MinimumArguments == 1 ? string.Empty : "s",
-                MinimumArguments == 1 ? "is" : "are");
+                singular ? string.Empty : "s",
+                singular ? "is" : "are");
 
             throw new PuzzleException(message);
         }
