@@ -341,11 +341,11 @@ public sealed class Day22 : Puzzle
         /// </summary>
         internal static readonly IDictionary<string, SpellInfo> Spells = new Dictionary<string, SpellInfo>()
         {
-            ["MagicMissile"] = new SpellInfo("MagicMissile", 53, () => new MagicMissile()),
-            ["Drain"] = new SpellInfo("Drain", 73, () => new Drain()),
-            ["Shield"] = new SpellInfo("Shield", 113, () => new Shield()),
-            ["Poison"] = new SpellInfo("Poison", 173, () => new Poison()),
-            ["Recharge"] = new SpellInfo("Recharge", 229, () => new Recharge()),
+            ["MagicMissile"] = new("MagicMissile", 53, () => new MagicMissile()),
+            ["Drain"] = new("Drain", 73, () => new Drain()),
+            ["Shield"] = new("Shield", 113, () => new Shield()),
+            ["Poison"] = new("Poison", 173, () => new Poison()),
+            ["Recharge"] = new("Recharge", 229, () => new Recharge()),
         };
 
         /// <summary>

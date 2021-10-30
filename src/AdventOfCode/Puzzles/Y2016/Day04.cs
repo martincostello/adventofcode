@@ -160,7 +160,7 @@ public sealed class Day04 : Puzzle
 
         sectorId = name.Substring(indexOfLastDash + 1, indexOfChecksum - indexOfLastDash - 1);
 
-        encryptedName = name.Substring(0, indexOfLastDash);
+        encryptedName = name[..indexOfLastDash];
         string encryptedNameLetters = encryptedName.Replace("-", string.Empty, StringComparison.Ordinal);
 
         char[] top5Letters = encryptedNameLetters

@@ -71,10 +71,10 @@ public sealed class Day01 : Puzzle
 
                 Size delta = bearing switch
                 {
-                    CardinalDirection.North => new Size(0, 1),
-                    CardinalDirection.South => new Size(0, -1),
-                    CardinalDirection.East => new Size(1, 0),
-                    CardinalDirection.West => new Size(-1, 0),
+                    CardinalDirection.North => new(0, 1),
+                    CardinalDirection.South => new(0, -1),
+                    CardinalDirection.East => new(1, 0),
+                    CardinalDirection.West => new(-1, 0),
                     _ => throw new PuzzleException($"The bearing {bearing} is not known."),
                 };
 

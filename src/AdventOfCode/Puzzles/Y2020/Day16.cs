@@ -52,7 +52,7 @@ public sealed class Day16 : Puzzle
                 int start = ParseInt32(parts[0]);
                 int end = ParseInt32(parts[1]);
 
-                ranges.Add(new Range(start, end));
+                ranges.Add(new(start, end));
             }
 
             rules[name] = ranges;

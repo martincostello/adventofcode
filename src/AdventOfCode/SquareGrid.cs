@@ -18,10 +18,10 @@ public sealed class SquareGrid : IWeightedGraph<Point>
     /// </summary>
     private static readonly Size[] Vectors =
     {
-        new Size(0, 1),
-        new Size(1, 0),
-        new Size(0, -1),
-        new Size(-1, 0),
+        new(0, 1),
+        new(1, 0),
+        new(0, -1),
+        new(-1, 0),
     };
 
     /// <summary>

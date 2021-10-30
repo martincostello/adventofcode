@@ -112,7 +112,7 @@ public sealed class Day13 : Puzzle
             {
                 if (IsWall(seed, i, j))
                 {
-                    maze.Walls.Add(new Point(i, j));
+                    maze.Walls.Add(new(i, j));
                 }
             }
         }

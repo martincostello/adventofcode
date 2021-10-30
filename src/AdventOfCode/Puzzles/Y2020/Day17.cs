@@ -357,7 +357,7 @@ public sealed class Day17 : Puzzle
 
         public static Point operator +(Point point, Point vector)
         {
-            return new Point(
+            return new(
                 point.X + vector.X,
                 point.Y + vector.Y,
                 point.Z + vector.Z,

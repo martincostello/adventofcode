@@ -1,6 +1,8 @@
 ﻿// Copyright (c) Martin Costello, 2015. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
+using System.Runtime.CompilerServices;
+
 namespace MartinCostello.AdventOfCode.Puzzles.Y2016;
 
 /// <summary>
@@ -186,12 +188,10 @@ public sealed class Day21 : Puzzle
     {
         if (reverse)
         {
-            int temp = x;
-            x = y;
-            y = temp;
+            (x, y) = (y, x);
         }
 
-        string value = new string(values);
+        string value = new(values);
         string ch = values[x].ToString(CultureInfo.InvariantCulture);
 
         value = value.Remove(x, 1);
@@ -281,12 +281,7 @@ public sealed class Day21 : Puzzle
     /// <param name="values">The value to swap characters for.</param>
     /// <param name="x">The index of the first location to swap.</param>
     /// <param name="y">The index of the second location to swap.</param>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private static void SwapPosition(char[] values, int x, int y)
-    {
-        char first = values[x];
-        char second = values[y];
-
-        values[x] = second;
-        values[y] = first;
-    }
+        => (values[x], values[y]) = (values[y], values[x]);
 }

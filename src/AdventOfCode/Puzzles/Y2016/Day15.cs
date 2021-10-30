@@ -12,7 +12,7 @@ public sealed class Day15 : Puzzle
     /// <summary>
     /// The delimiters used when parsing the input. This field is read-only.
     /// </summary>
-    private static readonly char[] Separators = new[] { ' ', ',', '.' };
+    private static readonly char[] Separators = { ' ', ',', '.' };
 
     /// <summary>
     /// Gets the value of T where the button can first be pressed to get a capsule.

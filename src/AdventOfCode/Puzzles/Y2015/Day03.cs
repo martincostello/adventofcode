@@ -162,10 +162,10 @@ public class Day03 : Puzzle
         {
             Location += direction switch
             {
-                CardinalDirection.East => new Size(1, 0),
-                CardinalDirection.North => new Size(0, 1),
-                CardinalDirection.South => new Size(0, -1),
-                CardinalDirection.West => new Size(-1, 0),
+                CardinalDirection.East => new(1, 0),
+                CardinalDirection.North => new(0, 1),
+                CardinalDirection.South => new(0, -1),
+                CardinalDirection.West => new(-1, 0),
                 _ => throw new PuzzleException($"The specified direction '{direction}' is invalid."),
             };
         }

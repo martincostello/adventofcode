@@ -218,7 +218,7 @@ public sealed class Day06 : Puzzle
 
             Rectangle bounds = ParseBounds(origin, termination);
 
-            return new InstructionV1(action, bounds);
+            return new(action, bounds);
         }
     }
 
@@ -299,7 +299,7 @@ public sealed class Day06 : Puzzle
 
             Rectangle bounds = ParseBounds(origin, termination);
 
-            return new InstructionV2(delta.Value, bounds);
+            return new(delta.Value, bounds);
         }
     }
 
@@ -341,7 +341,7 @@ public sealed class Day06 : Puzzle
                 throw new PuzzleException("Height cannot be less than zero.");
             }
 
-            _bounds = new Rectangle(0, 0, width, height);
+            _bounds = new(0, 0, width, height);
             _lightBrightnesses = new int[width, height];
         }
 
