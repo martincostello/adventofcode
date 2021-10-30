@@ -159,8 +159,7 @@ public sealed class Day14 : Puzzle
         {
             int cycleTime = MaximumActivityPeriod + RestPeriod;
 
-            int cycles = timeIndex / cycleTime;
-            int secondsOfIncompleteCycle = timeIndex % cycleTime;
+            (int cycles, int secondsOfIncompleteCycle) = Math.DivRem(timeIndex, cycleTime);
 
             int secondsOfTravelInIncompleteCycle =
                 secondsOfIncompleteCycle > MaximumActivityPeriod ?

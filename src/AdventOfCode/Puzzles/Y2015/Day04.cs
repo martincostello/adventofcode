@@ -140,8 +140,8 @@ public sealed class Day04 : Puzzle
         byte[] buffer = Encoding.UTF8.GetBytes(formatted);
         byte[] hash = MD5.HashData(buffer);
 
-        int wholeBytes = zeroes / 2;
-        bool hasHalfByte = zeroes % 2 == 1;
+        (int wholeBytes, int remainder) = Math.DivRem(zeroes, 2);
+        bool hasHalfByte = remainder == 1;
 
         int sum = hash[0];
 

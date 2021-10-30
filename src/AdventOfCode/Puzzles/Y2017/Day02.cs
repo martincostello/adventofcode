@@ -71,13 +71,18 @@ public sealed class Day02 : Puzzle
             {
                 int y = values[j];
 
-                if (x % y == 0)
+                (int div, int rem) = Math.DivRem(x, y);
+
+                if (rem == 0)
                 {
-                    return Math.Abs(x / y);
+                    return Math.Abs(div);
                 }
-                else if (y % x == 0)
+
+                (div, rem) = Math.DivRem(y, x);
+
+                if (rem == 0)
                 {
-                    return Math.Abs(y / x);
+                    return Math.Abs(div);
                 }
             }
         }

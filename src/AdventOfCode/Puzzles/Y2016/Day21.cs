@@ -219,13 +219,15 @@ public sealed class Day21 : Puzzle
         {
             steps = 1;
 
-            if (index == 0 || index % 2 != 0)
+            (int div, int rem) = Math.DivRem(index, 2);
+
+            if (index == 0 || rem != 0)
             {
-                steps += index / 2;
+                steps += div;
             }
             else
             {
-                steps += index + Math.Abs((index / 2) - 4);
+                steps += index + Math.Abs(div - 4);
             }
         }
         else
