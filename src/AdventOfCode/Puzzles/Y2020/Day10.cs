@@ -30,11 +30,10 @@ public sealed class Day10 : Puzzle
     public static int GetJoltageProduct(IEnumerable<int> joltageRatings)
     {
         // Sort the ratings so the search space is efficient
-        IList<int> sorted = joltageRatings
-            .OrderBy((p) => p)
-            .ToList();
+        var sorted = joltageRatings.ToList();
+        sorted.Sort();
 
-        int maxRating = sorted.Max();
+        int maxRating = sorted[^1];
 
         // Start with the charging outlet with a joltage of 0
         var chain = new Stack<int>();
@@ -115,9 +114,8 @@ public sealed class Day10 : Puzzle
     /// </returns>
     public static long GetValidArrangements(IEnumerable<int> joltageRatings)
     {
-        IList<int> sorted = joltageRatings
-            .OrderBy((p) => p)
-            .ToList();
+        var sorted = joltageRatings.ToList();
+        sorted.Sort();
 
         // Adapted from https://github.com/thatsumoguy/Advent-of-Code-2020.
         // My original solution was brute force and worked out the valid
