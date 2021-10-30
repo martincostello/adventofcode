@@ -33,7 +33,7 @@ public sealed class Day13 : Puzzle
         int[] buses = notes[1]
             .Split(',')
             .Where((p) => !string.Equals(p, "x", StringComparison.Ordinal))
-            .Select((p) => ParseInt32(p))
+            .Select(ParseInt32)
             .ToArray();
 
         var nextBusesInMinutes = new Dictionary<int, int>(buses.Length);

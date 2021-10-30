@@ -118,12 +118,17 @@ public sealed class Day16 : Puzzle
                 }
             }
 
-            a = new List<char>(a.Append('0').Concat(b));
+            var c = new List<char>(a.Count + b.Count + 1);
+            c.AddRange(a);
+            c.Add('0');
+            c.AddRange(b);
+
+            a = c;
         }
 
         if (a.Count > size)
         {
-            a = a.Take(size).ToList();
+            a.RemoveRange(size, a.Count - size);
         }
 
         return a;

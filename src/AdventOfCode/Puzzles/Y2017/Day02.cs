@@ -118,7 +118,7 @@ public sealed class Day02 : Puzzle
         {
             IList<int> columns = line
                 .Split('\t')
-                .Select((p) => ParseInt32(p))
+                .Select(ParseInt32)
                 .ToList();
 
             spreadsheet.Add(columns);

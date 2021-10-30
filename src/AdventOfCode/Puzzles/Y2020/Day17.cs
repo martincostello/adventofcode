@@ -399,11 +399,11 @@ public sealed class Day17 : Puzzle
         {
             if (W.HasValue)
             {
-                return "(" + string.Join(", ", X, Y, Z, W.Value) + ")";
+                return '(' + string.Join(", ", X, Y, Z, W.Value) + ')';
             }
             else
             {
-                return "(" + string.Join(", ", X, Y, Z) + ")";
+                return '(' + string.Join(", ", X, Y, Z) + ')';
             }
         }
     }

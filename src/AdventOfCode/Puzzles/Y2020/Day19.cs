@@ -35,9 +35,7 @@ public sealed class Day19 : Puzzle
 
         IDictionary<string, string> rules = ParseRules(input.Take(delimiter));
 
-        string[] messages = input
-            .Skip(delimiter + 1)
-            .ToArray();
+        var messages = input.Skip(delimiter + 1);
 
         if (applyFix)
         {
@@ -103,7 +101,7 @@ public sealed class Day19 : Puzzle
                         {
                             if (r.Length > 1)
                             {
-                                r = "(" + r + ")";
+                                r = '(' + r + ')';
                             }
 
                             values[i] = r;

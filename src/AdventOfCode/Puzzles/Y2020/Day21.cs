@@ -120,10 +120,9 @@ public sealed class Day21 : Puzzle
             .Select((p) => occurrences[p])
             .Sum();
 
-        string[] sortedAllergens = allergensForIngredients
+        var sortedAllergens = allergensForIngredients
             .OrderBy((p) => p.Value)
-            .Select((p) => p.Key)
-            .ToArray();
+            .Select((p) => p.Key);
 
         string canonicalAllergens = string.Join(',', sortedAllergens);
 

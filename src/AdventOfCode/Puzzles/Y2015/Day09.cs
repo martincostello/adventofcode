@@ -203,7 +203,7 @@ public sealed class Day09 : Puzzle
         internal Path(string origin)
         {
             Origin = origin;
-            Steps = new List<string>(new[] { origin });
+            Steps = new List<string>() { origin };
         }
 
         /// <summary>

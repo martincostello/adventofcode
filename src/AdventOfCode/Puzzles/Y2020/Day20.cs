@@ -524,9 +524,9 @@ public sealed class Day20 : Puzzle
         /// </summary>
         public void Rotate()
         {
-            var rotated = new List<string>();
-
             int length = Grid.Count;
+
+            var rotated = new List<string>(length);
 
             for (int x = 0; x < length; x++)
             {

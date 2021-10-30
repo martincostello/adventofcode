@@ -37,7 +37,7 @@ public sealed class Day13 : Puzzle
             .Distinct()
             .ToList();
 
-        IList<IList<string>> permutations = Maths.GetPermutations(names)
+        var permutations = Maths.GetPermutations(names)
             .Select((p) => new List<string>(p) as IList<string>)
             .ToList();
 

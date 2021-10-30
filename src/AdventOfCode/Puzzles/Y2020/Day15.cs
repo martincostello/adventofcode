@@ -71,7 +71,7 @@ public sealed class Day15 : Puzzle
     {
         IList<int> startingNumbers = args[0]
             .Split(',')
-            .Select((p) => ParseInt32(p))
+            .Select(ParseInt32)
             .ToList();
 
         Number2020 = GetSpokenNumber(startingNumbers, 2020);

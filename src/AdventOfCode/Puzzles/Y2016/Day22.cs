@@ -230,8 +230,8 @@ public sealed class Day22 : Puzzle
         {
             string[] split = value.Split(' ', StringSplitOptions.RemoveEmptyEntries);
 
-            int indexX = split[0].IndexOf("x", StringComparison.Ordinal);
-            int indexY = split[0].IndexOf("y", StringComparison.Ordinal);
+            int indexX = split[0].IndexOf('x', StringComparison.Ordinal);
+            int indexY = split[0].IndexOf('y', StringComparison.Ordinal);
 
             int x = ParseInt32(split[0].Substring(indexX + 1, indexY - indexX - 2));
             int y = ParseInt32(split[0][(indexY + 1)..]);

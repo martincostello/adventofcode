@@ -33,7 +33,7 @@ public sealed class Day08 : Puzzle
     /// <returns>The number of characters in <paramref name="value"/> when encoded.</returns>
     internal static int GetEncodedCharacterCount(string value)
     {
-        var builder = new StringBuilder("\"", value.Length + 2);
+        var builder = new StringBuilder(value.Length + 2).Append('\"');
 
         for (int i = 0; i < value.Length; i++)
         {

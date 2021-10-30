@@ -63,7 +63,7 @@ public sealed class Day16 : Puzzle
         {
             int[] ticket = line
                 .Split(',')
-                .Select((p) => ParseInt32(p))
+                .Select(ParseInt32)
                 .ToArray();
 
             allTickets.Add(ticket);
@@ -104,7 +104,7 @@ public sealed class Day16 : Puzzle
         }
 
         // Store indexes where each field could be located
-        var possibleIndexes = new Dictionary<string, List<int>>();
+        var possibleIndexes = new Dictionary<string, List<int>>(rules.Keys.Count);
         var allIndexes = Enumerable.Range(0, allTickets[0].Count).ToList();
 
         foreach (string key in rules.Keys)
@@ -162,7 +162,7 @@ public sealed class Day16 : Puzzle
         }
 
         // Build up the ticket from the indexes found
-        var yourTicket = new Dictionary<string, int>();
+        var yourTicket = new Dictionary<string, int>(indexes.Count);
 
         foreach (var index in indexes)
         {

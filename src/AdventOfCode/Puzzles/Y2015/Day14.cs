@@ -57,8 +57,7 @@ public sealed class Day14 : Puzzle
         for (int i = 1; i < timeIndex; i++)
         {
             // Find how far each reindeer is from the starting point
-            var distances = data
-                .ToDictionary((p) => p.Name, (p) => p.GetDistanceAfterTimeIndex(i));
+            var distances = data.ToDictionary((p) => p.Name, (p) => p.GetDistanceAfterTimeIndex(i));
 
             // Find the furthest distance away one or more reindeer are
             int maxDistance = distances.Max((p) => p.Value);

@@ -55,16 +55,46 @@ public sealed class Day16 : Puzzle
             {
                 if (item.Value.Item2 == 1)
                 {
-                    parsed = parsed.Where((p) => !p.Metadata.ContainsKey(item.Key) || p.Metadata[item.Key] > item.Value.Item1);
+                    bool NotFoundOrMore(AuntSue p)
+                    {
+                        if (!p.Metadata.TryGetValue(item.Key, out int value))
+                        {
+                            return true;
+                        }
+
+                        return value > item.Value.Item1;
+                    }
+
+                    parsed = parsed.Where(NotFoundOrMore);
                 }
                 else
                 {
-                    parsed = parsed.Where((p) => !p.Metadata.ContainsKey(item.Key) || p.Metadata[item.Key] < item.Value.Item1);
+                    bool NotFoundOrLess(AuntSue p)
+                    {
+                        if (!p.Metadata.TryGetValue(item.Key, out int value))
+                        {
+                            return true;
+                        }
+
+                        return value < item.Value.Item1;
+                    }
+
+                    parsed = parsed.Where(NotFoundOrLess);
                 }
             }
             else
             {
-                parsed = parsed.Where((p) => !p.Metadata.ContainsKey(item.Key) || p.Metadata[item.Key] == item.Value.Item1);
+                bool NotFoundOrEqual(AuntSue p)
+                {
+                    if (!p.Metadata.TryGetValue(item.Key, out int value))
+                    {
+                        return true;
+                    }
+
+                    return value == item.Value.Item1;
+                }
+
+                parsed = parsed.Where(NotFoundOrEqual);
             }
         }
 
