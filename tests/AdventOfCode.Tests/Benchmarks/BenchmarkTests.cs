@@ -11,7 +11,7 @@ public static class BenchmarkTests
     {
         foreach (object puzzle in PuzzleBenchmarks.Puzzles())
         {
-            yield return new object[] { puzzle };
+            yield return new[] { puzzle };
         }
     }
 
