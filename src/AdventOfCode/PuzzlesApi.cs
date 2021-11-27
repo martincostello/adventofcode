@@ -2,6 +2,7 @@
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 using System.Diagnostics;
+using System.Text.Json.Serialization;
 
 namespace MartinCostello.AdventOfCode;
 
@@ -23,12 +24,12 @@ internal static partial class PuzzlesApi
             .OrderBy((p) => p.Year)
             .ThenBy((p) => p.Day)
             .Select((p) =>
-            new
+            new PuzzleMetadata
             {
-                p.Year,
-                p.Day,
-                p.MinimumArguments,
-                p.RequiresData,
+                Year = p.Year,
+                Day = p.Day,
+                MinimumArguments = p.MinimumArguments,
+                RequiresData = p.RequiresData,
                 Location = FormattableString.Invariant($"/api/puzzles/{p.Year}/{p.Day}/solve"),
             })
             .ToList();
@@ -129,16 +130,88 @@ internal static partial class PuzzlesApi
 
         stopwatch.Stop();
 
-        var result = new
+        var result = new PuzzleSolution
         {
-            year,
-            day,
-            solutions = solution.Solutions,
-            visualizations = solution.Visualizations,
-            timeToSolve = stopwatch.Elapsed.TotalMilliseconds,
+            Year = year,
+            Day = day,
+            Solutions = solution.Solutions,
+            Visualizations = solution.Visualizations,
+            TimeToSolve = stopwatch.Elapsed.TotalMilliseconds,
         };
 
         return Results.Json(result);
+    }
+
+    /// <summary>
+    /// A class representing metadata for a puzzle. This class cannot be inherited.
+    /// </summary>
+    internal sealed class PuzzleMetadata
+    {
+        /// <summary>
+        /// Gets or sets the puzzle's year.
+        /// </summary>
+        [JsonPropertyName("year")]
+        public int Year { get; set; }
+
+        /// <summary>
+        /// Gets or sets the puzzle's day.
+        /// </summary>
+        [JsonPropertyName("day")]
+        public int Day { get; set; }
+
+        /// <summary>
+        /// Gets or sets the minimum number of arguments required for the puzzle.
+        /// </summary>
+        [JsonPropertyName("minimumArguments")]
+        public int MinimumArguments { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the puzzle requires data.
+        /// </summary>
+        [JsonPropertyName("requiresData")]
+        public bool RequiresData { get; set; }
+
+        /// <summary>
+        /// Gets or sets the relative URI of the puzzle's solution endpoint.
+        /// </summary>
+        [JsonPropertyName("location")]
+        public string Location { get; set; } = default!;
+    }
+
+    /// <summary>
+    /// A class representing the solution for a puzzle. This class cannot be inherited.
+    /// </summary>
+    internal sealed class PuzzleSolution
+    {
+        /// <summary>
+        /// Gets or sets the puzzle's year.
+        /// </summary>
+        [JsonPropertyName("year")]
+        public int Year { get; set; }
+
+        /// <summary>
+        /// Gets or sets the puzzle's day.
+        /// </summary>
+        [JsonPropertyName("day")]
+        public int Day { get; set; }
+
+        /// <summary>
+        /// Gets or sets the puzzle's solutions.
+        /// </summary>
+        [JsonPropertyName("solutions")]
+        public IList<object> Solutions { get; set; } = default!;
+
+        /// <summary>
+        /// Gets or sets the puzzle's visualizations.
+        /// </summary>
+        [JsonPropertyName("visualizations")]
+        public IList<string> Visualizations { get; set; } = default!;
+
+        /// <summary>
+        /// Gets or sets the time taken to solve the puzzle in milliseconds.
+        /// </summary>
+        [JsonPropertyName("timeToSolve")]
+        public double TimeToSolve { get; set; }
     }
 
     private static partial class Log
