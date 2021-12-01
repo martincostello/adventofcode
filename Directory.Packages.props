@@ -4,7 +4,7 @@
     <PackageVersion Include="MartinCostello.Logging.XUnit" Version="0.2.0" />
     <PackageVersion Include="Microsoft.AspNetCore.Mvc.Testing" Version="6.0.0" />
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.0.0" />
-    <PackageVersion Include="Microsoft.Playwright" Version="1.17.0" />
+    <PackageVersion Include="Microsoft.Playwright" Version="1.17.1" />
     <PackageVersion Include="Microsoft.SourceLink.GitHub" Version="1.1.1" />
     <PackageVersion Include="Microsoft.TypeScript.MSBuild" Version="4.5.2" />
     <PackageVersion Include="Shouldly" Version="4.0.3" />
