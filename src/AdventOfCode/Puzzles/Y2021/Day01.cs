@@ -15,14 +15,35 @@ public sealed class Day01 : Puzzle
     public int DepthIncreases { get; private set; }
 
     /// <summary>
+    /// Gets the number of times the recorded depth increases over a sliding window.
+    /// </summary>
+    public int DepthIncreasesWithSlidingWindow { get; private set; }
+
+    /// <summary>
     /// Gets the number of times the depth increases in the specified sequence of depth measurements.
     /// </summary>
     /// <param name="depthMeasurements">The depth measurements to count the increases in.</param>
+    /// <param name="useSlidingWindow">Whether to use a sliding window of 3 measurements to measure the increase.</param>
     /// <returns>
     /// The number of times the depth increases in the sequence specified by <paramref name="depthMeasurements"/>.
     /// </returns>
-    public static int GetDepthMeasurementIncreases(IList<int> depthMeasurements)
+    public static int GetDepthMeasurementIncreases(IList<int> depthMeasurements, bool useSlidingWindow)
     {
+        if (useSlidingWindow)
+        {
+            var aggregated = new List<int>(depthMeasurements.Count - 2);
+
+            for (int i = 0; i < depthMeasurements.Count - 2; i++)
+            {
+                aggregated.Add(
+                    depthMeasurements[i] +
+                    depthMeasurements[i + 1] +
+                    depthMeasurements[i + 2]);
+            }
+
+            depthMeasurements = aggregated;
+        }
+
         int result = 0;
 
         for (int i = 1; i < depthMeasurements.Count; i++)
@@ -44,13 +65,20 @@ public sealed class Day01 : Puzzle
     {
         IList<int> values = await ReadResourceAsSequenceAsync<int>();
 
-        DepthIncreases = GetDepthMeasurementIncreases(values);
+        DepthIncreases = GetDepthMeasurementIncreases(values, useSlidingWindow: false);
+        DepthIncreasesWithSlidingWindow = GetDepthMeasurementIncreases(values, useSlidingWindow: true);
 
         if (Verbose)
         {
-            Logger.WriteLine("The depth measurement increases {0:N0} times.", DepthIncreases);
+            Logger.WriteLine(
+                "The depth measurement increases {0:N0} times.",
+                DepthIncreases);
+
+            Logger.WriteLine(
+                "The depth measurement increases {0:N0} times when using a sliding window of 3 measurements.",
+                DepthIncreasesWithSlidingWindow);
         }
 
-        return PuzzleResult.Create(DepthIncreases);
+        return PuzzleResult.Create(DepthIncreases, DepthIncreasesWithSlidingWindow);
     }
 }

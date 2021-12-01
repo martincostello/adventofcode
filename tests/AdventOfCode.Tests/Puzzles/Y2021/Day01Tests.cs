@@ -18,11 +18,17 @@ public sealed class Day01Tests : PuzzleTest
     }
 
     [Theory]
-    [InlineData(new int[] { 199, 200, 208, 210, 200, 207, 240, 269, 260, 263 }, 7)]
-    public void Y2021_Day01_Get2020Product_Returns_Correct_Value(int[] depthMeasurements, int expected)
+    [InlineData(false, 7)]
+    [InlineData(true, 5)]
+    public void Y2021_Day01_Get2020Product_Returns_Correct_Value(
+        bool useSlidingWindow,
+        int expected)
     {
+        // Arrange
+        int[] depthMeasurements = { 199, 200, 208, 210, 200, 207, 240, 269, 260, 263 };
+
         // Act
-        int actual = Day01.GetDepthMeasurementIncreases(depthMeasurements);
+        int actual = Day01.GetDepthMeasurementIncreases(depthMeasurements, useSlidingWindow);
 
         // Assert
         actual.ShouldBe(expected);
@@ -36,5 +42,6 @@ public sealed class Day01Tests : PuzzleTest
 
         // Assert
         puzzle.DepthIncreases.ShouldBe(1532);
+        puzzle.DepthIncreasesWithSlidingWindow.ShouldBe(1571);
     }
 }
