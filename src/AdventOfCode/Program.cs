@@ -4,11 +4,9 @@
 using System.Diagnostics;
 using System.IO.Compression;
 using System.Reflection;
-using System.Text.Json.Serialization;
 using MartinCostello.AdventOfCode;
 using Microsoft.AspNetCore.Http.Json;
 using Microsoft.AspNetCore.ResponseCompression;
-using Microsoft.Extensions.Options;
 using ILogger = MartinCostello.AdventOfCode.ILogger;
 
 if (args.FirstOrDefault() == "--solve")
@@ -39,12 +37,10 @@ foreach (var puzzle in puzzles)
     builder.Services.AddSingleton(puzzle!);
 }
 
-builder.Services.Configure<JsonOptions>((p) => p.SerializerOptions.WriteIndented = true);
-
-builder.Services.AddSingleton<JsonSerializerContext>((p) =>
+builder.Services.Configure<JsonOptions>((p) =>
 {
-    var options = p.GetRequiredService<IOptions<JsonOptions>>().Value;
-    return new ApplicationJsonSerializerContext(options.SerializerOptions);
+    p.SerializerOptions.WriteIndented = true;
+    p.SerializerOptions.AddContext<ApplicationJsonSerializerContext>();
 });
 
 builder.Services.AddRazorPages();
