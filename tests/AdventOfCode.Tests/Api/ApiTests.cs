@@ -147,7 +147,7 @@ public class ApiTests : IntegrationTest
     [InlineData(2020, 24, null, true, new object[] { 289, 3551 }, 0)]
     [InlineData(2020, 25, null, true, new object[] { 296776 }, 0)]
     [InlineData(2021, 01, null, true, new object[] { 1532, 1571 }, 0)]
-    [InlineData(2021, 02, null, true, new object[] { 2150351 }, 0)]
+    [InlineData(2021, 02, null, true, new object[] { 2150351, 1842742223 }, 0)]
     public async Task Can_Solve_Puzzle(
         int year,
         int day,

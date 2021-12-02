@@ -17,8 +17,10 @@ public sealed class Day02Tests : PuzzleTest
     {
     }
 
-    [Fact]
-    public void Y2021_Day02_NavigateCourse_Returns_Correct_Value()
+    [Theory]
+    [InlineData(false, 150)]
+    [InlineData(true, 900)]
+    public void Y2021_Day02_NavigateCourse_Returns_Correct_Value(bool useAim, int expected)
     {
         // Arrange
         string[] course =
@@ -32,10 +34,10 @@ public sealed class Day02Tests : PuzzleTest
         };
 
         // Act
-        int actual = Day02.NavigateCourse(course);
+        int actual = Day02.NavigateCourse(course, useAim);
 
         // Assert
-        actual.ShouldBe(150);
+        actual.ShouldBe(expected);
     }
 
     [Fact]
@@ -46,5 +48,6 @@ public sealed class Day02Tests : PuzzleTest
 
         // Assert
         puzzle.ProductOfFinalPosition.ShouldBe(2150351);
+        puzzle.ProductOfFinalPositionWithAim.ShouldBe(1842742223);
     }
 }

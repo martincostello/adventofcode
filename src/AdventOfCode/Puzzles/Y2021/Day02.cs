@@ -18,20 +18,44 @@ public sealed class Day02 : Puzzle
     public int ProductOfFinalPosition { get; private set; }
 
     /// <summary>
+    /// Gets the product of the depth and horizontal position
+    /// of the submarine at the end of its course when the aim
+    /// of the submarine is accounted for.
+    /// </summary>
+    public int ProductOfFinalPositionWithAim { get; private set; }
+
+    /// <summary>
     /// Navigates the submarine through the specified course.
     /// </summary>
     /// <param name="course">The course to navigate.</param>
+    /// <param name="useAim">Whether to account for the aim of the submarine.</param>
     /// <returns>
     /// The product of the depth and horizontal position of the
     /// submarine at the end of the course specified by <paramref name="course"/>.
     /// </returns>
-    public static int NavigateCourse(IEnumerable<string> course)
+    public static int NavigateCourse(IEnumerable<string> course, bool useAim)
     {
+        int aim = 0;
         var position = Point.Empty;
 
         foreach (string instruction in course)
         {
-            position += ParseInstruction(instruction);
+            Size adjustment = ParseInstruction(instruction);
+
+            if (useAim)
+            {
+                aim += adjustment.Height;
+
+                if (adjustment.Width > 0)
+                {
+                    position += adjustment;
+                    position += new Size(0, adjustment.Width * aim);
+                }
+            }
+            else
+            {
+                position += adjustment;
+            }
         }
 
         return position.X * position.Y;
@@ -43,10 +67,10 @@ public sealed class Day02 : Puzzle
 
             return split[0] switch
             {
-                "forward" => new Size(magnitude, 0),
-                "down" => new Size(0, magnitude),
-                "up" => new Size(0, -magnitude),
-                _ => throw new NotImplementedException(),
+                "forward" => new(magnitude, 0),
+                "down" => new(0, magnitude),
+                "up" => new(0, -magnitude),
+                _ => throw new NotSupportedException(),
             };
         }
     }
@@ -56,15 +80,20 @@ public sealed class Day02 : Puzzle
     {
         IList<string> course = await ReadResourceAsLinesAsync();
 
-        ProductOfFinalPosition = NavigateCourse(course);
+        ProductOfFinalPosition = NavigateCourse(course, useAim: false);
+        ProductOfFinalPositionWithAim = NavigateCourse(course, useAim: true);
 
         if (Verbose)
         {
             Logger.WriteLine(
                 "The product of the submarine's final depth and forward position is {0:N0}.",
                 ProductOfFinalPosition);
+
+            Logger.WriteLine(
+                "The product of the submarine's final depth and forward position is {0:N0} when accounting for aim.",
+                ProductOfFinalPositionWithAim);
         }
 
-        return PuzzleResult.Create(ProductOfFinalPosition);
+        return PuzzleResult.Create(ProductOfFinalPosition, ProductOfFinalPositionWithAim);
     }
 }
