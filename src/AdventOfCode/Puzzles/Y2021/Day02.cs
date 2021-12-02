@@ -63,14 +63,15 @@ public sealed class Day02 : Puzzle
         static Size ParseInstruction(string text)
         {
             string[] split = text.Split(' ');
+            string direction = split[0];
             int magnitude = ParseInt32(split[1]);
 
-            return split[0] switch
+            return direction switch
             {
                 "forward" => new(magnitude, 0),
                 "down" => new(0, magnitude),
                 "up" => new(0, -magnitude),
-                _ => throw new NotSupportedException(),
+                _ => throw new PuzzleException($"The direction '{direction}' is not supported."),
             };
         }
     }
