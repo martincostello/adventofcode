@@ -20,7 +20,7 @@ public sealed class Day01Tests : PuzzleTest
     [Theory]
     [InlineData(false, 7)]
     [InlineData(true, 5)]
-    public void Y2021_Day01_Get2020Product_Returns_Correct_Value(
+    public void Y2021_Day01_GetDepthMeasurementIncreases_Returns_Correct_Value(
         bool useSlidingWindow,
         int expected)
     {
