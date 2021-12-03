@@ -45,6 +45,33 @@ public sealed class Day03Tests : PuzzleTest
     }
 
     [Fact]
+    public void Y2021_Day03_GetLifeSupportRating_Returns_Correct_Value()
+    {
+        // Arrange
+        string[] diagnosticReport =
+        {
+            "00100",
+            "11110",
+            "10110",
+            "10111",
+            "10101",
+            "01111",
+            "00111",
+            "11100",
+            "10000",
+            "11001",
+            "00010",
+            "01010",
+        };
+
+        // Act
+        int actual = Day03.GetLifeSupportRating(diagnosticReport);
+
+        // Assert
+        actual.ShouldBe(230);
+    }
+
+    [Fact]
     public async Task Y2021_Day03_Solve_Returns_Correct_Solution()
     {
         // Act
@@ -52,5 +79,6 @@ public sealed class Day03Tests : PuzzleTest
 
         // Assert
         puzzle.PowerConsumption.ShouldBe(3633500);
+        puzzle.LifeSupportRating.ShouldBe(4550283);
     }
 }
