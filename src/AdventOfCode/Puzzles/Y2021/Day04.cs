@@ -10,18 +10,23 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2021;
 public sealed class Day04 : Puzzle
 {
     /// <summary>
-    /// Gets the winning score from playing Bingo.
+    /// Gets the score of the first winning card from playing Bingo.
     /// </summary>
-    public int Score { get; private set; }
+    public int FirstWinningScore { get; private set; }
+
+    /// <summary>
+    /// Gets the score of the last winning card from playing Bingo.
+    /// </summary>
+    public int LastWinningScore { get; private set; }
 
     /// <summary>
     /// Plays the specified game of Bingo.
     /// </summary>
     /// <param name="game">The lines containing the definition of the game.</param>
     /// <returns>
-    /// The score of the winning Bingo card.
+    /// The score of the first and last winning Bingo cards.
     /// </returns>
-    public static int PlayBingo(IEnumerable<string> game)
+    public static (int FirstWinningScore, int LastWinningScore) PlayBingo(IEnumerable<string> game)
     {
         int[] numbers = game
             .First()
@@ -31,18 +36,28 @@ public sealed class Day04 : Puzzle
 
         var cards = ParseCards(game);
 
+        int? firstWinningScore = null;
+        int? lastWinningScore = null;
+
         foreach (int number in numbers)
         {
             foreach (var card in cards)
             {
                 if (card.Mark(number) && card.HasWon())
                 {
-                    return card.Score();
+                    int score = card.Score();
+
+                    if (firstWinningScore is null)
+                    {
+                        firstWinningScore = score;
+                    }
+
+                    lastWinningScore = score;
                 }
             }
         }
 
-        return 0;
+        return (firstWinningScore.GetValueOrDefault(), lastWinningScore.GetValueOrDefault());
     }
 
     /// <inheritdoc />
@@ -50,14 +65,15 @@ public sealed class Day04 : Puzzle
     {
         IList<string> game = await ReadResourceAsLinesAsync();
 
-        Score = PlayBingo(game);
+        (FirstWinningScore, LastWinningScore) = PlayBingo(game);
 
         if (Verbose)
         {
-            Logger.WriteLine("The score of the winning Bingo card is {0:N0}.", Score);
+            Logger.WriteLine("The score of the first winning Bingo card is {0:N0}.", FirstWinningScore);
+            Logger.WriteLine("The score of the last winning Bingo card is {0:N0}.", LastWinningScore);
         }
 
-        return PuzzleResult.Create(Score);
+        return PuzzleResult.Create(FirstWinningScore, LastWinningScore);
     }
 
     private static IList<BingoCard> ParseCards(IEnumerable<string> game)
@@ -86,6 +102,7 @@ public sealed class Day04 : Puzzle
     {
         private readonly Square[,] _squares;
         private int _lastMarked;
+        private bool _hasWon;
 
         private BingoCard(Square[,] squares)
         {
@@ -135,6 +152,7 @@ public sealed class Day04 : Puzzle
 
                 if (rowCount == lengthX)
                 {
+                    _hasWon = true;
                     return true;
                 }
             }
@@ -155,6 +173,7 @@ public sealed class Day04 : Puzzle
 
                 if (columnCount == lengthY)
                 {
+                    _hasWon = true;
                     return true;
                 }
             }
@@ -164,6 +183,11 @@ public sealed class Day04 : Puzzle
 
         public bool Mark(int number)
         {
+            if (_hasWon)
+            {
+                return false;
+            }
+
             _lastMarked = number;
 
             int lengthX = _squares.GetLength(0);

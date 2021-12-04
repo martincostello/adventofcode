@@ -38,10 +38,11 @@ public sealed class Day04Tests : PuzzleTest
         };
 
         // Act
-        int actual = Day04.PlayBingo(game);
+        (int firstWinningScore, int lastWinningScore) = Day04.PlayBingo(game);
 
         // Assert
-        actual.ShouldBe(4512);
+        firstWinningScore.ShouldBe(4512);
+        lastWinningScore.ShouldBe(1924);
     }
 
     [Fact]
@@ -51,6 +52,7 @@ public sealed class Day04Tests : PuzzleTest
         var puzzle = await SolvePuzzleAsync<Day04>();
 
         // Assert
-        puzzle.Score.ShouldBe(41668);
+        puzzle.FirstWinningScore.ShouldBe(41668);
+        puzzle.LastWinningScore.ShouldBe(10478);
     }
 }
