@@ -62,8 +62,7 @@ public sealed class Day16 : Puzzle
         foreach (string line in notes.Skip(indexOfSecondTicket).Prepend(notes[indexOfFirstTicket]))
         {
             int[] ticket = line
-                .Split(',')
-                .Select(Parse<int>)
+                .AsNumbers<int>()
                 .ToArray();
 
             allTickets.Add(ticket);

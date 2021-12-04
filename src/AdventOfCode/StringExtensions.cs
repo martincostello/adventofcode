@@ -27,4 +27,18 @@ internal static class StringExtensions
 
         return new(reversed);
     }
+
+    /// <summary>
+    /// Parse the specified string as a sequence of numbers.
+    /// </summary>
+    /// <typeparam name="T">The type of the numbers.</typeparam>
+    /// <param name="value">The string to parse into a sequence.</param>
+    /// <param name="separator">The optional separator character for the numbers.</param>
+    /// <param name="options">The optional options to use to split the string.</param>
+    /// <returns>
+    /// An <see cref="IEnumerable{T}"/> containing the parsed numbers.
+    /// </returns>
+    public static IEnumerable<T> AsNumbers<T>(this string value, char separator = ',', StringSplitOptions options = StringSplitOptions.None)
+        where T : INumber<T>
+        => value.Split(separator, options).Select(Puzzle.Parse<T>);
 }

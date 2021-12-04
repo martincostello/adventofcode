@@ -80,8 +80,7 @@ public sealed class Day10 : Puzzle
         string rawLengths = (await ReadResourceAsStringAsync()).Trim();
 
         ICollection<int> lengths = rawLengths
-            .Split(',')
-            .Select(Parse<int>)
+            .AsNumbers<int>()
             .ToList();
 
         ProductOfFirstTwoElements = FindProductOfFirstTwoHashElements(SequenceLength, lengths);

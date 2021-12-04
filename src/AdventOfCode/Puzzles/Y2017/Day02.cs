@@ -122,8 +122,7 @@ public sealed class Day02 : Puzzle
         foreach (string line in rows)
         {
             IList<int> columns = line
-                .Split('\t')
-                .Select(Parse<int>)
+                .AsNumbers<int>('\t')
                 .ToList();
 
             spreadsheet.Add(columns);
