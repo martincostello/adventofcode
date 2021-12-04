@@ -33,8 +33,8 @@ public sealed class Day19 : Puzzle
     /// <inheritdoc />
     protected override Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        int count = ParseInt32(args[0]);
-        int version = args.Length > 1 ? ParseInt32(args[1]) : 1;
+        int count = Parse<int>(args[0]);
+        int version = args.Length > 1 ? Parse<int>(args[1]) : 1;
 
         ElfWithAllPresents = FindElfThatGetsAllPresents(count, version);
 

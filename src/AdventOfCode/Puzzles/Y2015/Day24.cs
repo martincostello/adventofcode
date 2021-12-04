@@ -48,7 +48,7 @@ public sealed class Day24 : Puzzle
     {
         IList<int> weights = await ReadResourceAsNumbersAsync<int>();
 
-        int compartments = args.Length == 1 ? ParseInt32(args[0]) : 3;
+        int compartments = args.Length == 1 ? Parse<int>(args[0]) : 3;
 
         QuantumEntanglementOfFirstGroup = GetQuantumEntanglementOfIdealConfiguration(compartments, weights);
 

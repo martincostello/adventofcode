@@ -77,7 +77,7 @@ public sealed class Day14 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        int timeIndex = ParseInt32(args[0], NumberStyles.Integer & ~NumberStyles.AllowLeadingSign);
+        int timeIndex = Parse<int>(args[0], NumberStyles.Integer & ~NumberStyles.AllowLeadingSign);
 
         if (timeIndex < 0)
         {
@@ -142,9 +142,9 @@ public sealed class Day14 : Puzzle
             return new FlightData()
             {
                 Name = split[0],
-                MaximumSpeed = ParseInt32(split[3]),
-                MaximumActivityPeriod = ParseInt32(split[6]),
-                RestPeriod = ParseInt32(split[13]),
+                MaximumSpeed = Parse<int>(split[3]),
+                MaximumActivityPeriod = Parse<int>(split[6]),
+                RestPeriod = Parse<int>(split[13]),
             };
         }
 

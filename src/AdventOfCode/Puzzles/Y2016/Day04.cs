@@ -54,7 +54,7 @@ public sealed class Day04 : Puzzle
 
             if (string.Equals("northpole object storage", decryptedName, StringComparison.Ordinal))
             {
-                return ParseInt32(sectorIdString);
+                return Parse<int>(sectorIdString);
             }
         }
 
@@ -76,7 +76,7 @@ public sealed class Day04 : Puzzle
         {
             if (IsRoomReal(name, out string encryptedName, out string sectorIdString))
             {
-                sum += ParseInt32(sectorIdString);
+                sum += Parse<int>(sectorIdString);
             }
         }
 
@@ -116,7 +116,7 @@ public sealed class Day04 : Puzzle
         }
 
         var builder = new StringBuilder(encryptedName.Length);
-        int sectorIdValue = ParseInt32(sectorId);
+        int sectorIdValue = Parse<int>(sectorId);
 
         foreach (char ch in encryptedName)
         {

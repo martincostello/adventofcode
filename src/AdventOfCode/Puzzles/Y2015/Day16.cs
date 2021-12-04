@@ -148,14 +148,14 @@ public sealed class Day16 : Puzzle
 
             string[] split = value.Split(' ');
 
-            result.Number = ParseInt32(split[1].TrimEnd(':'));
+            result.Number = Parse<int>(split[1].TrimEnd(':'));
 
             split = string.Join(" ", split, 2, split.Length - 2).Split(',');
 
             foreach (string item in split)
             {
                 string[] itemSplit = item.Split(':');
-                result.Metadata[itemSplit[0].Trim()] = ParseInt32(itemSplit[1].Trim());
+                result.Metadata[itemSplit[0].Trim()] = Parse<int>(itemSplit[1].Trim());
             }
 
             return result;

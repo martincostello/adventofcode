@@ -148,9 +148,9 @@ public sealed class Day02 : Puzzle
         {
             string[] split = value.Split('x');
 
-            int length = ParseInt32(split[0]);
-            int width = ParseInt32(split[1]);
-            int height = ParseInt32(split[2]);
+            int length = Parse<int>(split[0]);
+            int width = Parse<int>(split[1]);
+            int height = Parse<int>(split[2]);
 
             return new Present(length, width, height);
         }

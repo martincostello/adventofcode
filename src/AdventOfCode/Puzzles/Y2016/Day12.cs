@@ -65,7 +65,7 @@ public sealed class Day12 : Puzzle
             {
                 case "cpy":
 
-                    if (TryParseInt32(split[1], out value))
+                    if (TryParse(split[1], out value))
                     {
                         registers[split[2][0]] = value;
                     }
@@ -86,7 +86,7 @@ public sealed class Day12 : Puzzle
 
                 case "tgl":
 
-                    if (!TryParseInt32(split[1], out value))
+                    if (!TryParse(split[1], out value))
                     {
                         value = registers[split[1][0]];
                     }
@@ -130,14 +130,14 @@ public sealed class Day12 : Puzzle
 
                 case "jnz":
 
-                    if (!TryParseInt32(split[1], out value))
+                    if (!TryParse(split[1], out value))
                     {
                         value = registers[split[1][0]];
                     }
 
                     int other;
 
-                    if (!TryParseInt32(split[2], out other))
+                    if (!TryParse(split[2], out other))
                     {
                         other = registers[split[2][0]];
                     }
@@ -151,7 +151,7 @@ public sealed class Day12 : Puzzle
 
                 case "out":
 
-                    if (!TryParseInt32(split[1], out value))
+                    if (!TryParse(split[1], out value))
                     {
                         value = registers[split[1][0]];
                     }

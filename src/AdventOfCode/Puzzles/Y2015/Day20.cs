@@ -77,8 +77,8 @@ public sealed class Day20 : Puzzle
             throw new PuzzleException("No target value or maximum number of visits specified.");
         }
 
-        int target = ParseInt32(args[0]);
-        int? maximumVisits = args.Length == 2 ? ParseInt32(args[1]) : default(int?);
+        int target = Parse<int>(args[0]);
+        int? maximumVisits = args.Length == 2 ? Parse<int>(args[1]) : default(int?);
 
         LowestHouseNumber = GetLowestHouseNumber(target, maximumVisits);
 

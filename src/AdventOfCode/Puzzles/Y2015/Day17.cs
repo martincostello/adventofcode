@@ -42,7 +42,7 @@ public sealed class Day17 : Puzzle
     {
         var containerVolumes = await ReadResourceAsNumbersAsync<int>();
 
-        int volume = ParseInt32(args[0]);
+        int volume = Parse<int>(args[0]);
 
         var combinations = GetContainerCombinations(volume, containerVolumes);
 

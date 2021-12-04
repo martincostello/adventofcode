@@ -151,7 +151,7 @@ public sealed class Day03 : Puzzle
     private static (int X, int Y) GetDelta(string instruction)
     {
         char direction = instruction[0];
-        int distance = ParseInt32(instruction.AsSpan(1));
+        int distance = Parse<int>(instruction.AsSpan(1));
 
         return direction switch
         {

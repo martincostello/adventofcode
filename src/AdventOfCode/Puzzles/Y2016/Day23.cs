@@ -17,7 +17,7 @@ public sealed class Day23 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        int input = ParseInt32(args[0]);
+        int input = Parse<int>(args[0]);
 
         IList<string> instructions = await ReadResourceAsLinesAsync();
 

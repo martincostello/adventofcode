@@ -81,7 +81,7 @@ public sealed class Day10 : Puzzle
 
         ICollection<int> lengths = rawLengths
             .Split(',')
-            .Select((p) => ParseInt32(p))
+            .Select(Parse<int>)
             .ToList();
 
         ProductOfFirstTwoElements = FindProductOfFirstTwoHashElements(SequenceLength, lengths);

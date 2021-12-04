@@ -49,8 +49,8 @@ public sealed class Day16 : Puzzle
             {
                 string[] parts = range.Split('-');
 
-                int start = ParseInt32(parts[0]);
-                int end = ParseInt32(parts[1]);
+                int start = Parse<int>(parts[0]);
+                int end = Parse<int>(parts[1]);
 
                 ranges.Add(new(start, end));
             }
@@ -63,7 +63,7 @@ public sealed class Day16 : Puzzle
         {
             int[] ticket = line
                 .Split(',')
-                .Select(ParseInt32)
+                .Select(Parse<int>)
                 .ToArray();
 
             allTickets.Add(ticket);

@@ -271,11 +271,11 @@ public sealed class Day15 : Puzzle
 
             split = string.Join(string.Empty, split, 1, split.Length - 1).Split(',');
 
-            result.Calories = ParseInt32(split[4].Trim().Split(' ')[1]);
-            result.Capacity = ParseInt32(split[0].Trim().Split(' ')[1]);
-            result.Durability = ParseInt32(split[1].Trim().Split(' ')[1]);
-            result.Flavor = ParseInt32(split[2].Trim().Split(' ')[1]);
-            result.Texture = ParseInt32(split[3].Trim().Split(' ')[1]);
+            result.Calories = Parse<int>(split[4].Trim().Split(' ')[1]);
+            result.Capacity = Parse<int>(split[0].Trim().Split(' ')[1]);
+            result.Durability = Parse<int>(split[1].Trim().Split(' ')[1]);
+            result.Flavor = Parse<int>(split[2].Trim().Split(' ')[1]);
+            result.Texture = Parse<int>(split[3].Trim().Split(' ')[1]);
 
             return result;
         }

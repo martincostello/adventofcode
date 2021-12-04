@@ -96,7 +96,7 @@ public sealed class Day18 : Puzzle
                 current.Clear();
             }
 
-            long result = ParseInt64(tokens[0]);
+            long result = Parse<long>(tokens[0]);
 
             if (version == 1)
             {
@@ -106,11 +106,11 @@ public sealed class Day18 : Puzzle
 
                     if (string.Equals("+", token, StringComparison.Ordinal))
                     {
-                        result += ParseInt64(tokens[i + 1]);
+                        result += Parse<long>(tokens[i + 1]);
                     }
                     else if (string.Equals("*", token, StringComparison.Ordinal))
                     {
-                        result *= ParseInt64(tokens[i + 1]);
+                        result *= Parse<long>(tokens[i + 1]);
                     }
                 }
             }
@@ -124,12 +124,12 @@ public sealed class Day18 : Puzzle
 
                     if (string.Equals("+", token, StringComparison.Ordinal))
                     {
-                        result += ParseInt64(tokens[i + 1]);
+                        result += Parse<long>(tokens[i + 1]);
                     }
                     else if (string.Equals("*", token, StringComparison.Ordinal))
                     {
                         products.Add(result);
-                        result = ParseInt64(tokens[i + 1]);
+                        result = Parse<long>(tokens[i + 1]);
                     }
                 }
 

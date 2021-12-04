@@ -32,8 +32,8 @@ public sealed class Day04 : Puzzle
     {
         string[] split = range.Split('-');
 
-        int start = ParseInt32(split[0]);
-        int end = ParseInt32(split[1]) + 1;
+        int start = Parse<int>(split[0]);
+        int end = Parse<int>(split[1]) + 1;
 
         int count = 0;
 

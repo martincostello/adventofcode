@@ -181,7 +181,7 @@ public sealed class Day07 : Puzzle
 
                 string[] otherBag = bag.Split(' ');
 
-                int count = ParseInt32(otherBag[0]);
+                int count = Parse<int>(otherBag[0]);
                 string otherColor = string.Join(' ', otherBag[1..^1]);
 
                 bagColors[otherColor] = count;

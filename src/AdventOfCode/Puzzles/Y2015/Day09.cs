@@ -39,7 +39,7 @@ public sealed class Day09 : Puzzle
         // Parse the input
         var parsedDistances = collection
             .Select((p) => p.Split(" = "))
-            .Select((p) => new { Locations = p[0].Split(" to "), Distance = ParseInt32(p[1]) })
+            .Select((p) => new { Locations = p[0].Split(" to "), Distance = Parse<int>(p[1]) })
             .ToList();
 
         if (parsedDistances.Count == 1)

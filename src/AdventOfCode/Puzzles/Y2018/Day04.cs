@@ -221,7 +221,7 @@ public sealed class Day04 : Puzzle
             }
             else
             {
-                id = ParseInt32(split[3].TrimStart('#'));
+                id = Parse<int>(split[3].TrimStart('#'));
             }
 
             return new LogEntry()

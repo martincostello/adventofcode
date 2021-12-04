@@ -125,7 +125,7 @@ public sealed class Day01 : Puzzle
             var instruction = new Instruction()
             {
                 Direction = rawInstruction[0] == 'L' ? Direction.Left : Direction.Right,
-                Distance = ParseInt32(rawInstruction[1..]),
+                Distance = Parse<int>(rawInstruction[1..]),
             };
 
             result.Add(instruction);

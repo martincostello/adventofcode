@@ -46,7 +46,7 @@ public sealed class Day10 : Puzzle
     protected override Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
         string value = args[0];
-        int iterations = ParseInt32(args[1], NumberStyles.Integer & ~NumberStyles.AllowLeadingSign);
+        int iterations = Parse<int>(args[1], NumberStyles.Integer & ~NumberStyles.AllowLeadingSign);
 
         string result = value;
 

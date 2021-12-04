@@ -42,7 +42,7 @@ public sealed class Day06 : Puzzle
     {
         IList<int> memory = (await ReadResourceAsStringAsync()).Trim()
             .Split('\t')
-            .Select((p) => ParseInt32(p))
+            .Select(Parse<int>)
             .ToList();
 
         (CycleCount, LoopSize) = Debug(memory);

@@ -112,11 +112,11 @@ public sealed class Day06 : Puzzle
             string[] originPoints = origin.Split(',');
             string[] terminationPoints = termination.Split(',');
 
-            int left = ParseInt32(originPoints[0]);
-            int bottom = ParseInt32(originPoints[1]);
+            int left = Parse<int>(originPoints[0]);
+            int bottom = Parse<int>(originPoints[1]);
 
-            int right = ParseInt32(terminationPoints[0]);
-            int top = ParseInt32(terminationPoints[1]);
+            int right = Parse<int>(terminationPoints[0]);
+            int top = Parse<int>(terminationPoints[1]);
 
             // Add one to the termination point so that the grid always has a width of at least one light
             return Rectangle.FromLTRB(left, bottom, right + 1, top + 1);

@@ -64,7 +64,7 @@ public sealed class Day18 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        int rows = ParseInt32(args[0]);
+        int rows = Parse<int>(args[0]);
         string firstRowTiles = args.Length > 1 ? args[1] : (await ReadResourceAsStringAsync()).TrimEnd();
 
         (int safeTileCount, string visualization) = FindSafeTileCount(firstRowTiles, rows, Logger);

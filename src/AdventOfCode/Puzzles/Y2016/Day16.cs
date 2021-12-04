@@ -34,7 +34,7 @@ public sealed class Day16 : Puzzle
     protected override Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
         string initial = args[0];
-        int size = ParseInt32(args[1]);
+        int size = Parse<int>(args[1]);
 
         Checksum = GetDiskChecksum(initial, size);
 

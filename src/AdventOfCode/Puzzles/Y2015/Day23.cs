@@ -66,13 +66,13 @@ public sealed class Day23 : Puzzle
                     break;
 
                 case "jmp":
-                    next = i + ParseInt32(registerOrOffset!);
+                    next = i + Parse<int>(registerOrOffset!);
                     break;
 
                 case "jie":
                     if ((registerOrOffset!.Split(',')[0].Trim() == "a" ? a : b).Value % 2 == 0)
                     {
-                        next = i + ParseInt32(offset!);
+                        next = i + Parse<int>(offset!);
                     }
 
                     break;
@@ -80,7 +80,7 @@ public sealed class Day23 : Puzzle
                 case "jio":
                     if ((registerOrOffset!.Split(',')[0].Trim() == "a" ? a : b).Value == 1)
                     {
-                        next = i + ParseInt32(offset!);
+                        next = i + Parse<int>(offset!);
                     }
 
                     break;
@@ -106,7 +106,7 @@ public sealed class Day23 : Puzzle
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
         IList<string> instructions = await ReadResourceAsLinesAsync();
-        uint initialValue = args.Length == 1 ? ParseUInt32(args[0]) : 0;
+        uint initialValue = args.Length == 1 ? Parse<uint>(args[0]) : 0;
 
         (A, B) = ProcessInstructions(instructions, initialValue, Logger);
 

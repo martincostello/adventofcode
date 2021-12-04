@@ -40,8 +40,8 @@ public sealed class Day20 : Puzzle
         {
             string[] split = range.Split('-');
 
-            uint low = ParseUInt32(split[0]);
-            uint high = ParseUInt32(split[1]);
+            uint low = Parse<uint>(split[0]);
+            uint high = Parse<uint>(split[1]);
 
             ranges.Add((low, high));
         }

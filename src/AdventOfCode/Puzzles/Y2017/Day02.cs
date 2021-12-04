@@ -123,7 +123,7 @@ public sealed class Day02 : Puzzle
         {
             IList<int> columns = line
                 .Split('\t')
-                .Select(ParseInt32)
+                .Select(Parse<int>)
                 .ToList();
 
             spreadsheet.Add(columns);

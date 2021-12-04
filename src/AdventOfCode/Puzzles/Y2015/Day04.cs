@@ -110,7 +110,7 @@ public sealed class Day04 : Puzzle
     protected override Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
         string secretKey = args[0];
-        int zeroes = ParseInt32(args[1]);
+        int zeroes = Parse<int>(args[1]);
 
         LowestZeroHash = GetLowestPositiveNumberWithStartingZeroes(secretKey, zeroes);
 

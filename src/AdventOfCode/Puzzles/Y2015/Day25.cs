@@ -67,8 +67,8 @@ public sealed class Day25 : Puzzle
     /// <inheritdoc />
     protected override Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        int row = ParseInt32(args[0]);
-        int column = ParseInt32(args[1]);
+        int row = Parse<int>(args[0]);
+        int column = Parse<int>(args[1]);
 
         Code = GetCodeForWeatherMachine(row, column);
 
