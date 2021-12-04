@@ -14,22 +14,26 @@ internal static class Maths
     /// <summary>
     /// Returns the combinations of values that add up to the specified total.
     /// </summary>
+    /// <typeparam name="TTotal">The type of the total.</typeparam>
+    /// <typeparam name="TValue">The type of the values.</typeparam>
     /// <param name="total">The total required for the combination(s).</param>
     /// <param name="values">The values to generate the combinations for.</param>
     /// <returns>
     /// The combinations of values whose total is the value specified by <paramref name="total"/>.
     /// </returns>
-    internal static IList<ICollection<long>> GetCombinations(long total, IList<int> values)
+    internal static IList<ICollection<TTotal>> GetCombinations<TTotal, TValue>(TTotal total, IList<TValue> values)
+        where TTotal : INumber<TTotal>
+        where TValue : INumber<TValue>, IComparisonOperators<TValue, TTotal>
     {
         int length = values.Count;
         var bits = new BitArray(length);
 
         int limit = (int)Math.Pow(2, length);
-        var result = new List<ICollection<long>>(limit);
+        var result = new List<ICollection<TTotal>>(limit);
 
         for (int i = 0; i < limit; i++)
         {
-            int sum = 0;
+            TValue sum = TValue.Zero;
 
             for (int j = 0; j < length; j++)
             {
@@ -46,13 +50,13 @@ internal static class Maths
 
             if (sum == total)
             {
-                var combination = new List<long>(length);
+                var combination = new List<TTotal>(length);
 
                 for (int j = 0; j < length; j++)
                 {
                     if (bits[j])
                     {
-                        combination.Add(values[j]);
+                        combination.Add(TTotal.Create(values[j]));
                     }
                 }
 
