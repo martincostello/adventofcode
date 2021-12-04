@@ -13,6 +13,7 @@
     <Copyright>Martin Costello (c) 2015-$([System.DateTime]::UtcNow.ToString(yyyy))</Copyright>
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
     <EnableNETAnalyzers>true</EnableNETAnalyzers>
+    <EnablePreviewFeatures>true</EnablePreviewFeatures>
     <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
     <GenerateDocumentationFile>false</GenerateDocumentationFile>
     <ImplicitUsings>enable</ImplicitUsings>
