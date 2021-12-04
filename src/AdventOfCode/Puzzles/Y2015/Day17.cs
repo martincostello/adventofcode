@@ -28,7 +28,7 @@ public sealed class Day17 : Puzzle
     /// <returns>
     /// The combinations of containers that can store the volume specified by <paramref name="volume"/>.
     /// </returns>
-    internal static IList<ICollection<long>> GetContainerCombinations(int volume, IList<int> containerVolumes)
+    internal static IList<ICollection<int>> GetContainerCombinations(int volume, IList<int> containerVolumes)
     {
         var containers = containerVolumes
             .OrderByDescending((p) => p)
@@ -40,9 +40,9 @@ public sealed class Day17 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        var containerVolumes = await ReadResourceAsSequenceAsync<int>();
+        var containerVolumes = await ReadResourceAsNumbersAsync<int>();
 
-        int volume = ParseInt32(args[0]);
+        int volume = Parse<int>(args[0]);
 
         var combinations = GetContainerCombinations(volume, containerVolumes);
 

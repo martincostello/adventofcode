@@ -83,9 +83,9 @@ public sealed class Day03 : Puzzle
         {
             string[] components = dimension.Trim().Split(' ', StringSplitOptions.RemoveEmptyEntries);
 
-            int a = ParseInt32(components[0]);
-            int b = ParseInt32(components[1]);
-            int c = ParseInt32(components[2]);
+            int a = Parse<int>(components[0]);
+            int b = Parse<int>(components[1]);
+            int c = Parse<int>(components[2]);
 
             result.Add((a, b, c));
         }

@@ -162,11 +162,11 @@ public sealed class Day12 : Puzzle
         {
             string[] split = pipe.Split(' ');
 
-            Id = ParseInt32(split[0]);
+            Id = Parse<int>(split[0]);
 
             EdgeIds = split
                 .Skip(2)
-                .Select((p) => ParseInt32(p.TrimEnd(',')))
+                .Select((p) => Parse<int>(p.TrimEnd(',')))
                 .ToList();
         }
 

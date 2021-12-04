@@ -28,12 +28,12 @@ public sealed class Day13 : Puzzle
     /// </returns>
     public static int GetEarliestBusWaitProduct(IList<string> notes)
     {
-        int timestamp = ParseInt32(notes[0]);
+        int timestamp = Parse<int>(notes[0]);
 
         int[] buses = notes[1]
             .Split(',')
             .Where((p) => !string.Equals(p, "x", StringComparison.Ordinal))
-            .Select(ParseInt32)
+            .Select(Parse<int>)
             .ToArray();
 
         var nextBusesInMinutes = new Dictionary<int, int>(buses.Length);
@@ -71,7 +71,7 @@ public sealed class Day13 : Puzzle
             .Split(',')
             .Select((id, offset) => (id, offset))
             .Where((p) => !string.Equals(p.id, "x", StringComparison.Ordinal))
-            .Select((p) => (id: ParseInt64(p.id), p.offset))
+            .Select((p) => (id: Parse<long>(p.id), p.offset))
             .OrderByDescending((p) => p.id)
             .ToList();
 

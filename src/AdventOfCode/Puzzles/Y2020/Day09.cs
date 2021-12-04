@@ -91,7 +91,7 @@ public sealed class Day09 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        long[] values = (await ReadResourceAsSequenceAsync<long>()).ToArray();
+        long[] values = (await ReadResourceAsNumbersAsync<long>()).ToArray();
 
         WeakNumber = GetWeakNumber(values, 25);
         Weakness = GetWeakness(values, WeakNumber);

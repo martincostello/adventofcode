@@ -1,7 +1,6 @@
 ﻿// Copyright (c) Martin Costello, 2015. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
-using System.Numerics;
 using System.Reflection;
 
 namespace MartinCostello.AdventOfCode;
@@ -75,18 +74,33 @@ public abstract class Puzzle : IPuzzle
         => string.Format(CultureInfo.InvariantCulture, format, args);
 
     /// <summary>
-    /// Parses the specified <see cref="string"/> as an <see cref="int"/>.
+    /// Parses the specified <see cref="ReadOnlySpan{T}"/> as a number of type <typeparamref name="T"/>.
     /// </summary>
+    /// <typeparam name="T">The type of the number to parse.</typeparam>
     /// <param name="s">The value to parse.</param>
     /// <returns>
     /// The parsed value of <paramref name="s"/>.
     /// </returns>
-    protected internal static int ParseInt32(string s)
-        => ParseInt32(s, NumberStyles.Integer);
+    protected internal static T Parse<T>(string s)
+        where T : INumber<T>
+        => Parse<T>(s, NumberStyles.Integer);
 
     /// <summary>
-    /// Parses the specified <see cref="ReadOnlySpan{T}"/> as an <see cref="int"/>.
+    /// Parses the specified <see cref="ReadOnlySpan{T}"/> as a number of type <typeparamref name="T"/>.
     /// </summary>
+    /// <typeparam name="T">The type of the number to parse.</typeparam>
+    /// <param name="s">The value to parse.</param>
+    /// <returns>
+    /// The parsed value of <paramref name="s"/>.
+    /// </returns>
+    protected internal static T Parse<T>(ReadOnlySpan<char> s)
+        where T : INumber<T>
+        => Parse<T>(s, NumberStyles.Integer);
+
+    /// <summary>
+    /// Parses the specified <see cref="ReadOnlySpan{T}"/> as a number of type <typeparamref name="T"/>.
+    /// </summary>
+    /// <typeparam name="T">The type of the number to parse.</typeparam>
     /// <param name="s">The value to parse.</param>
     /// <param name="style">
     /// An optional bitwise combination of enumeration values that indicates
@@ -95,47 +109,26 @@ public abstract class Puzzle : IPuzzle
     /// <returns>
     /// The parsed value of <paramref name="s"/>.
     /// </returns>
-    protected internal static int ParseInt32(ReadOnlySpan<char> s, NumberStyles style = NumberStyles.Integer)
-        => int.Parse(s, style, CultureInfo.InvariantCulture);
+    protected internal static T Parse<T>(ReadOnlySpan<char> s, NumberStyles style = NumberStyles.Integer)
+        where T : INumber<T>
+        => T.Parse(s, style, CultureInfo.InvariantCulture);
 
     /// <summary>
-    /// Parses the specified <see cref="string"/> as an <see cref="long"/>.
+    /// Tries to parse the specified <see cref="ReadOnlySpan{T}"/> as a number of type <typeparamref name="T"/>.
     /// </summary>
-    /// <param name="s">The value to parse.</param>
-    /// <param name="style">
-    /// A bitwise combination of enumeration values that indicates
-    /// the style elements that can be present in <paramref name="s"/>.
-    /// </param>
-    /// <returns>
-    /// The parsed value of <paramref name="s"/>.
-    /// </returns>
-    protected internal static long ParseInt64(ReadOnlySpan<char> s, NumberStyles style = NumberStyles.Integer)
-        => long.Parse(s, style, CultureInfo.InvariantCulture);
-
-    /// <summary>
-    /// Tries to parse the specified <see cref="string"/> as an <see cref="int"/>.
-    /// </summary>
+    /// <typeparam name="T">The type of the number to parse.</typeparam>
     /// <param name="s">The value to parse.</param>
     /// <param name="value">
-    /// When the method returns contains the parsed value
-    /// of <paramref name="s"/>; otherwise zero.
+    /// When the method returns contains the parsed value of <paramref name="s"/>;
+    /// otherwise the default value of <typeparamref name="T"/>.
     /// </param>
     /// <returns>
     /// <see langword="true"/> if <paramref name="s"/> was parsed
     /// successfully; otherwise <see langword="false"/>.
     /// </returns>
-    protected internal static bool TryParseInt32(ReadOnlySpan<char> s, out int value)
-        => int.TryParse(s, NumberStyles.Integer, CultureInfo.InvariantCulture, out value);
-
-    /// <summary>
-    /// Parses the specified <see cref="string"/> as an <see cref="uint"/>.
-    /// </summary>
-    /// <param name="s">The value to parse.</param>
-    /// <returns>
-    /// The parsed value of <paramref name="s"/>.
-    /// </returns>
-    protected internal static uint ParseUInt32(ReadOnlySpan<char> s)
-        => uint.Parse(s, NumberStyles.Integer, CultureInfo.InvariantCulture);
+    protected internal static bool TryParse<T>(ReadOnlySpan<char> s, out T value)
+        where T : INumber<T>
+        => T.TryParse(s, NumberStyles.Integer, CultureInfo.InvariantCulture, out value);
 
     /// <summary>
     /// Ensures that the specified number of arguments are present.
@@ -180,7 +173,7 @@ public abstract class Puzzle : IPuzzle
 
         using var reader = new StreamReader(Resource ?? ReadResource(), leaveOpen: Resource is not null);
 
-        string? value = null;
+        string? value;
 
         while ((value = await reader.ReadLineAsync()) != null)
         {
@@ -191,49 +184,30 @@ public abstract class Puzzle : IPuzzle
     }
 
     /// <summary>
-    /// Returns the sequence associated with the resource for the puzzle as the specified type.
+    /// Returns the number sequence associated with the resource for the puzzle as the specified type.
     /// </summary>
     /// <typeparam name="T">
-    /// The type to read the resource as a sequence of.
+    /// The type of number to read the resource as a sequence of.
     /// </typeparam>
     /// <returns>
     /// A <see cref="Task{TResult}"/> that represents the asynchronous operation which returns an
-    /// <see cref="IList{T}"/> containing the lines of the resource associated with the puzzle.
+    /// <see cref="IList{T}"/> containing the numbers in the resource associated with the puzzle.
     /// </returns>
-    protected async Task<IList<T>> ReadResourceAsSequenceAsync<T>()
+    protected async Task<IList<T>> ReadResourceAsNumbersAsync<T>()
+        where T : INumber<T>
     {
-        var lines = await ReadResourceAsLinesAsync();
+        var numbers = new List<T>();
 
-        if (typeof(T) == typeof(int))
+        using var reader = new StreamReader(Resource ?? ReadResource(), leaveOpen: Resource is not null);
+
+        string? value;
+
+        while ((value = await reader.ReadLineAsync()) != null)
         {
-            return lines
-                .Select((p) => ParseInt32(p))
-                .Cast<T>()
-                .ToList();
-        }
-        else if (typeof(T) == typeof(long))
-        {
-            return lines
-                .Select((p) => ParseInt64(p))
-                .Cast<T>()
-                .ToList();
-        }
-        else if (typeof(T) == typeof(uint))
-        {
-            return lines
-                .Select((p) => ParseUInt32(p))
-                .Cast<T>()
-                .ToList();
-        }
-        else if (typeof(T) == typeof(BigInteger))
-        {
-            return lines
-                .Select((p) => BigInteger.Parse(p, CultureInfo.InvariantCulture))
-                .Cast<T>()
-                .ToList();
+            numbers.Add(T.Parse(value, NumberStyles.Integer, CultureInfo.InvariantCulture));
         }
 
-        throw new NotSupportedException($"The {typeof(T).Name} type is not supported.");
+        return numbers;
     }
 
     /// <summary>

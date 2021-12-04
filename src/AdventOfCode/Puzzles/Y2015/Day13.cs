@@ -137,7 +137,7 @@ public sealed class Day13 : Puzzle
             AdjacentName = split[^1].TrimEnd('.'),
         };
 
-        result.Happiness = ParseInt32(split[3]);
+        result.Happiness = Parse<int>(split[3]);
 
         if (split[2] == "lose")
         {

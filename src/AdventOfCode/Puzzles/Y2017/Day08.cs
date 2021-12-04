@@ -158,10 +158,10 @@ public sealed class Day08 : Puzzle
 
             TargetRegister = split[0];
             TargetOperator = split[1] == "inc";
-            OperatorValue = ParseInt32(split[2]);
+            OperatorValue = Parse<int>(split[2]);
             ConditionRegister = split[4];
             ConditionOperator = split[5];
-            ConditionComparand = ParseInt32(split[6]);
+            ConditionComparand = Parse<int>(split[6]);
         }
 
         /// <summary>

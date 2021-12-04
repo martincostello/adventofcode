@@ -64,7 +64,7 @@ public sealed class Day02 : Puzzle
         {
             string[] split = text.Split(' ');
             string direction = split[0];
-            int magnitude = ParseInt32(split[1]);
+            int magnitude = Parse<int>(split[1]);
 
             return direction switch
             {

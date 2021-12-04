@@ -46,7 +46,7 @@ public sealed class Day13 : Puzzle
     /// <inheritdoc />
     protected override Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        int favoriteNumber = ParseInt32(args[0]);
+        int favoriteNumber = Parse<int>(args[0]);
 
         FewestStepsToReach31X39Y = GetMinimumStepsToReachCoordinate(favoriteNumber, 31, 39);
         LocationsWithin50 = CountLocationsWithin50Steps(favoriteNumber);

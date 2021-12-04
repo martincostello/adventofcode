@@ -29,8 +29,8 @@ public sealed class Day15 : Puzzle
     /// </returns>
     public static int GetMatchingPairs(IList<string> seeds, int version)
     {
-        long a = ParseInt64(seeds[0].Split(' ')[^1]);
-        long b = ParseInt64(seeds[1].Split(' ')[^1]);
+        long a = Parse<long>(seeds[0].Split(' ')[^1]);
+        long b = Parse<long>(seeds[1].Split(' ')[^1]);
 
         var valuesA = new Queue<long>();
         var valuesB = new Queue<long>();

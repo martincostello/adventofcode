@@ -111,9 +111,9 @@ public sealed class Day15 : Puzzle
         {
             string[] split = value.Split(Separators, StringSplitOptions.RemoveEmptyEntries);
 
-            int offset = ParseInt32(split[1].TrimStart('#'));
-            int positions = ParseInt32(split[3]);
-            int initialPosition = ParseInt32(split[11]);
+            int offset = Parse<int>(split[1].TrimStart('#'));
+            int positions = Parse<int>(split[3]);
+            int initialPosition = Parse<int>(split[11]);
 
             return new Disc(positions, initialPosition, offset);
         }

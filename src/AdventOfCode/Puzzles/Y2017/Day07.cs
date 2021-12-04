@@ -165,7 +165,7 @@ public sealed class Day07 : Puzzle
             string[] split = description.Split(' ', StringSplitOptions.RemoveEmptyEntries);
 
             Name = split[0];
-            Weight = ParseInt32(split[1].Trim('(', ')'));
+            Weight = Parse<int>(split[1].Trim('(', ')'));
 
             ProgramsHeld =
                 split.Length > 2 ?

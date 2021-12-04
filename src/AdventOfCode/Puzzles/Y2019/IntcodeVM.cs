@@ -69,7 +69,7 @@ internal sealed class IntcodeVM
     {
         return program
             .Split(',')
-            .Select((p) => Puzzle.ParseInt64(p))
+            .Select((p) => Puzzle.Parse<long>(p))
             .ToArray();
     }
 

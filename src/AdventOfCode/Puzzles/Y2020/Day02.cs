@@ -32,8 +32,8 @@ public sealed class Day02 : Puzzle
         string[] parts = value.Split(' ');
         string[] numbers = parts[0].Split('-');
 
-        int firstNumber = ParseInt32(numbers[0]);
-        int secondNumber = ParseInt32(numbers[1]);
+        int firstNumber = Parse<int>(numbers[0]);
+        int secondNumber = Parse<int>(numbers[1]);
 
         char requiredCharacter = parts[1][0];
         string password = parts[2];

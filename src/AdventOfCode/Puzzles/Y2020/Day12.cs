@@ -46,7 +46,7 @@ public sealed class Day12 : Puzzle
 
         foreach (string instruction in instructions)
         {
-            int units = ParseInt32(instruction[1..]);
+            int units = Parse<int>(instruction[1..]);
 
             switch (instruction[0..1])
             {
@@ -100,7 +100,7 @@ public sealed class Day12 : Puzzle
 
         foreach (string instruction in instructions)
         {
-            int units = ParseInt32(instruction[1..]);
+            int units = Parse<int>(instruction[1..]);
 
             switch (instruction[0..1])
             {

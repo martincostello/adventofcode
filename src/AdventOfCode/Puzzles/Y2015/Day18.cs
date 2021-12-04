@@ -69,7 +69,7 @@ public sealed class Day18 : Puzzle
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
         IList<string> initial = await ReadResourceAsLinesAsync();
-        int steps = ParseInt32(args[0]);
+        int steps = Parse<int>(args[0]);
         bool areCornerLightsBroken = args.Length == 2 && string.Equals(args[1], bool.TrueString, StringComparison.OrdinalIgnoreCase);
 
         IList<string> final = GetGridConfigurationAfterSteps(initial, steps, areCornerLightsBroken);

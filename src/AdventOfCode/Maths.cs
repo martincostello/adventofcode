@@ -14,22 +14,26 @@ internal static class Maths
     /// <summary>
     /// Returns the combinations of values that add up to the specified total.
     /// </summary>
+    /// <typeparam name="TTotal">The type of the total.</typeparam>
+    /// <typeparam name="TValue">The type of the values.</typeparam>
     /// <param name="total">The total required for the combination(s).</param>
     /// <param name="values">The values to generate the combinations for.</param>
     /// <returns>
     /// The combinations of values whose total is the value specified by <paramref name="total"/>.
     /// </returns>
-    internal static IList<ICollection<long>> GetCombinations(long total, IList<int> values)
+    internal static IList<ICollection<TTotal>> GetCombinations<TTotal, TValue>(TTotal total, IList<TValue> values)
+        where TTotal : INumber<TTotal>
+        where TValue : INumber<TValue>, IComparisonOperators<TValue, TTotal>
     {
         int length = values.Count;
         var bits = new BitArray(length);
 
         int limit = (int)Math.Pow(2, length);
-        var result = new List<ICollection<long>>(limit);
+        var result = new List<ICollection<TTotal>>(limit);
 
         for (int i = 0; i < limit; i++)
         {
-            int sum = 0;
+            TValue sum = TValue.Zero;
 
             for (int j = 0; j < length; j++)
             {
@@ -46,13 +50,13 @@ internal static class Maths
 
             if (sum == total)
             {
-                var combination = new List<long>(length);
+                var combination = new List<TTotal>(length);
 
                 for (int j = 0; j < length; j++)
                 {
                     if (bits[j])
                     {
-                        combination.Add(values[j]);
+                        combination.Add(TTotal.Create(values[j]));
                     }
                 }
 
@@ -68,6 +72,7 @@ internal static class Maths
     /// <summary>
     /// Returns the factors of the specified number.
     /// </summary>
+    /// <typeparam name="T">The type of the number.</typeparam>
     /// <param name="value">The value to get the factors for.</param>
     /// <returns>
     /// An <see cref="IEnumerable{T}"/> containing the factors of the specified number.
@@ -75,11 +80,12 @@ internal static class Maths
     /// <remarks>
     /// The values returned are unsorted.
     /// </remarks>
-    internal static IEnumerable<int> GetFactorsUnordered(int value)
+    internal static IEnumerable<T> GetFactorsUnordered<T>(T value)
+        where T : INumber<T>
     {
-        for (int i = 1; i * i <= value; i++)
+        for (T i = T.One; i * i <= value; i++)
         {
-            if (value % i == 0)
+            if (value % i == T.Zero)
             {
                 yield return i;
 
@@ -125,16 +131,18 @@ internal static class Maths
     /// <summary>
     /// Returns the Greatest Common Divisor of the two specified numbers.
     /// </summary>
+    /// <typeparam name="T">The type of the numbers.</typeparam>
     /// <param name="a">The first number.</param>
     /// <param name="b">The second number.</param>
     /// <returns>
     /// The greatest common divisor of <paramref name="a"/> and <paramref name="b"/>.
     /// </returns>
-    internal static long GreatestCommonDivisor(long a, long b)
+    internal static T GreatestCommonDivisor<T>(T a, T b)
+        where T : INumber<T>
     {
-        while (b != 0)
+        while (b != T.Zero)
         {
-            long x = b;
+            T x = b;
             b = a % b;
             a = x;
         }
@@ -145,12 +153,14 @@ internal static class Maths
     /// <summary>
     /// Returns the Lowest Common Multiple of the two specified numbers.
     /// </summary>
+    /// <typeparam name="T">The type of the numbers.</typeparam>
     /// <param name="a">The first number.</param>
     /// <param name="b">The second number.</param>
     /// <returns>
     /// The lowest common multiple of <paramref name="a"/> and <paramref name="b"/>.
     /// </returns>
-    internal static long LowestCommonMultiple(long a, long b)
+    internal static T LowestCommonMultiple<T>(T a, T b)
+        where T : INumber<T>
         => a / GreatestCommonDivisor(a, b) * b;
 
     /// <summary>

@@ -154,7 +154,7 @@ public sealed class Day04 : Puzzle
 
         static bool IsValidNumber(string? value, int minimum, int maximum)
         {
-            if (!TryParseInt32(value, out int number))
+            if (!TryParse(value, out int number))
             {
                 return false;
             }
@@ -177,7 +177,7 @@ public sealed class Day04 : Puzzle
                 "hcl" => IsValidHairColor(value),
                 "hgt" => IsValidHeight(value),
                 "iyr" => IsValidYear(value, 2010, 2020),
-                "pid" => TryParseInt32(value, out _) && value!.Length == 9,
+                "pid" => TryParse(value, out int _) && value!.Length == 9,
                 _ => true,
             };
 

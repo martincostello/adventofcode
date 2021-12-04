@@ -416,7 +416,7 @@ public sealed class Day20 : Puzzle
                 }
                 else if (line.StartsWith("Tile ", StringComparison.Ordinal))
                 {
-                    current.Id = ParseInt64(line[5..^1].AsSpan());
+                    current.Id = Parse<long>(line[5..^1].AsSpan());
                 }
                 else
                 {

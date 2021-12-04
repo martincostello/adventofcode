@@ -30,7 +30,7 @@ public sealed class Day13 : Puzzle
     {
         var configuration = depthRanges
             .Select((p) => p.Split(':'))
-            .Select((p) => new { layer = ParseInt32(p[0]), range = ParseInt32(p[1].Trim()) })
+            .Select((p) => new { layer = Parse<int>(p[0]), range = Parse<int>(p[1].Trim()) })
             .ToList();
 
         int[] depths = configuration.Select((p) => p.layer).ToArray();
@@ -66,7 +66,7 @@ public sealed class Day13 : Puzzle
     {
         var configuration = depthRanges
             .Select((p) => p.Split(':'))
-            .Select((p) => new { layer = ParseInt32(p[0]), range = ParseInt32(p[1].Trim()) })
+            .Select((p) => new { layer = Parse<int>(p[0]), range = Parse<int>(p[1].Trim()) })
             .ToList();
 
         int[] depths = configuration.Select((p) => p.layer).ToArray();

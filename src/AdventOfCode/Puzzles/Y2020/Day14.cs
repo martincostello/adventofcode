@@ -115,7 +115,7 @@ public sealed class Day14 : Puzzle
         (long Address, long Value) DecodeInstruction(string instruction)
         {
             string[] split = instruction.Split(splitChars, splitOptions);
-            return (ParseInt64(split[1]), ParseInt64(split[2]));
+            return (Parse<long>(split[1]), Parse<long>(split[2]));
         }
     }
 

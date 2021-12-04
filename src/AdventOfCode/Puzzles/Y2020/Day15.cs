@@ -70,8 +70,7 @@ public sealed class Day15 : Puzzle
     protected override Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
         IList<int> startingNumbers = args[0]
-            .Split(',')
-            .Select(ParseInt32)
+            .AsNumbers<int>()
             .ToList();
 
         Number2020 = GetSpokenNumber(startingNumbers, 2020);

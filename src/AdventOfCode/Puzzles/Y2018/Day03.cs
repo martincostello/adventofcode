@@ -192,13 +192,13 @@ public sealed class Day03 : Puzzle
 
             split = offset.Split(',');
 
-            int x = ParseInt32(split[0]);
-            int y = ParseInt32(split[1]);
+            int x = Parse<int>(split[0]);
+            int y = Parse<int>(split[1]);
 
             split = area.Split('x');
 
-            int width = ParseInt32(split[0]);
-            int height = ParseInt32(split[1]);
+            int width = Parse<int>(split[0]);
+            int height = Parse<int>(split[1]);
 
             return new Claim()
             {

@@ -139,11 +139,11 @@ public sealed class Day21 : Puzzle
         switch (split[0])
         {
             case "move":
-                Move(values, ParseInt32(split[2]), ParseInt32(split[5]), reverse);
+                Move(values, Parse<int>(split[2]), Parse<int>(split[5]), reverse);
                 break;
 
             case "reverse":
-                Reverse(values, ParseInt32(split[2]), ParseInt32(split[4]));
+                Reverse(values, Parse<int>(split[2]), Parse<int>(split[4]));
                 break;
 
             case "rotate":
@@ -154,7 +154,7 @@ public sealed class Day21 : Puzzle
                 }
                 else
                 {
-                    RotateDirection(values, string.Equals(split[1], "right", StringComparison.Ordinal), ParseInt32(split[2]), reverse);
+                    RotateDirection(values, string.Equals(split[1], "right", StringComparison.Ordinal), Parse<int>(split[2]), reverse);
                 }
 
                 break;
@@ -163,7 +163,7 @@ public sealed class Day21 : Puzzle
 
                 if (string.Equals(split[1], "position", StringComparison.Ordinal))
                 {
-                    SwapPosition(values, ParseInt32(split[2]), ParseInt32(split[5]));
+                    SwapPosition(values, Parse<int>(split[2]), Parse<int>(split[5]));
                 }
                 else
                 {

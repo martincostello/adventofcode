@@ -57,7 +57,7 @@ public sealed class Day01 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        IList<int> masses = await ReadResourceAsSequenceAsync<int>();
+        IList<int> masses = await ReadResourceAsNumbersAsync<int>();
 
         TotalFuelRequiredForModules = GetFuelRequirementsForMasses(masses);
         TotalFuelRequiredForRocket = GetFuelRequirementsForRocket(masses);

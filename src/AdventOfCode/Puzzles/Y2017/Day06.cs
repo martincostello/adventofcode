@@ -41,8 +41,7 @@ public sealed class Day06 : Puzzle
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
         IList<int> memory = (await ReadResourceAsStringAsync()).Trim()
-            .Split('\t')
-            .Select((p) => ParseInt32(p))
+            .AsNumbers<int>('\t')
             .ToList();
 
         (CycleCount, LoopSize) = Debug(memory);

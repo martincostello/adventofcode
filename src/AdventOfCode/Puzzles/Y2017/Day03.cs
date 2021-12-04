@@ -172,7 +172,7 @@ public sealed class Day03 : Puzzle
     /// <inheritdoc />
     protected override Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        int square = ParseInt32(args[0]);
+        int square = Parse<int>(args[0]);
 
         Steps = ComputeSteps(square);
         FirstStorageLargerThanInput = ComputeFirstLargestWrittenValue(square);

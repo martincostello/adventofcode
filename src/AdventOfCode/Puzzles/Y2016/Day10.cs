@@ -267,25 +267,25 @@ public sealed class Day10 : Puzzle
 
             if (string.Equals(split[0], "value", StringComparison.Ordinal))
             {
-                int chipValue = ParseInt32(split[1]);
-                int botNumber = ParseInt32(split[5]);
+                int chipValue = Parse<int>(split[1]);
+                int botNumber = Parse<int>(split[5]);
 
                 GetBot(botNumber).Accept(new Chip(chipValue));
             }
             else
             {
                 bool isHighBot = string.Equals("bot", split[10], StringComparison.Ordinal);
-                int highValue = ParseInt32(split[11]);
+                int highValue = Parse<int>(split[11]);
 
                 bool isLowBot = string.Equals("bot", split[5], StringComparison.Ordinal);
-                int lowValue = ParseInt32(split[6]);
+                int lowValue = Parse<int>(split[6]);
 
-                int botNumber = ParseInt32(split[1]);
+                int botNumber = Parse<int>(split[1]);
 
                 Bot bot = GetBot(botNumber);
 
-                bot.HighDestination = isHighBot ? GetBot(highValue) : GetBin(highValue) as ChipDestination;
-                bot.LowDestination = isLowBot ? GetBot(lowValue) : GetBin(lowValue) as ChipDestination;
+                bot.HighDestination = isHighBot ? GetBot(highValue) : GetBin(highValue);
+                bot.LowDestination = isLowBot ? GetBot(lowValue) : GetBin(lowValue);
             }
         }
 

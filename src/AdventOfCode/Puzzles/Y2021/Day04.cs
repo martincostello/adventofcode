@@ -30,8 +30,7 @@ public sealed class Day04 : Puzzle
     {
         int[] numbers = game
             .First()
-            .Split(',')
-            .Select(ParseInt32)
+            .AsNumbers<int>()
             .ToArray();
 
         var cards = ParseCards(game);
@@ -118,8 +117,7 @@ public sealed class Day04 : Puzzle
                 string line = card[i];
 
                 int[] numbers = line
-                    .Split(' ', StringSplitOptions.RemoveEmptyEntries)
-                    .Select(ParseInt32)
+                    .AsNumbers<int>(' ', StringSplitOptions.RemoveEmptyEntries)
                     .ToArray();
 
                 for (int j = 0; j < numbers.Length; j++)

@@ -175,15 +175,15 @@ public sealed class Day08 : Puzzle
         {
             case "rect":
                 split = split[1].Split('x', StringSplitOptions.None);
-                result.A = ParseInt32(split[0]);
-                result.B = ParseInt32(split[1]);
+                result.A = Parse<int>(split[0]);
+                result.B = Parse<int>(split[1]);
                 break;
 
             case "rotate":
                 result.IsRotation = true;
                 result.IsColumn = string.Equals(split[1], "column", StringComparison.Ordinal);
-                result.A = ParseInt32(split[2].Split('=', StringSplitOptions.None)[1]);
-                result.B = ParseInt32(split[4]);
+                result.A = Parse<int>(split[2].Split('=', StringSplitOptions.None)[1]);
+                result.B = Parse<int>(split[4]);
                 break;
 
             default:

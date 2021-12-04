@@ -33,7 +33,7 @@ public sealed class Day14 : Puzzle
             string knotHash = Day10.ComputeHash(input);
 
             int[] numbers = knotHash
-                .Select((p) => ParseInt32(p.ToString(), NumberStyles.HexNumber))
+                .Select((p) => Parse<int>(p.ToString(), NumberStyles.HexNumber))
                 .ToArray();
 
             var bits = numbers

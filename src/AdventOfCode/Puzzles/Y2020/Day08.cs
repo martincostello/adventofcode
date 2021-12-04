@@ -128,7 +128,7 @@ public sealed class Day08 : Puzzle
 
             if (op != Operation.NoOp)
             {
-                argument = ParseInt32(operation.AsSpan(4), NumberStyles.Number);
+                argument = Parse<int>(operation.AsSpan(4), NumberStyles.Number);
             }
 
             result.Add(new Instruction() with { Operation = op, Argument = argument });
