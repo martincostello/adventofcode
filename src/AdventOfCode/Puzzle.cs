@@ -179,7 +179,7 @@ public abstract class Puzzle : IPuzzle
 
         using var reader = new StreamReader(Resource ?? ReadResource(), leaveOpen: Resource is not null);
 
-        string? value = null;
+        string? value;
 
         while ((value = await reader.ReadLineAsync()) != null)
         {
@@ -202,11 +202,18 @@ public abstract class Puzzle : IPuzzle
     protected async Task<IList<T>> ReadResourceAsNumbersAsync<T>()
         where T : INumber<T>
     {
-        var lines = await ReadResourceAsLinesAsync();
+        var numbers = new List<T>();
 
-        return lines
-            .Select((p) => T.Parse(p, NumberStyles.Integer, CultureInfo.InvariantCulture))
-            .ToList();
+        using var reader = new StreamReader(Resource ?? ReadResource(), leaveOpen: Resource is not null);
+
+        string? value;
+
+        while ((value = await reader.ReadLineAsync()) != null)
+        {
+            numbers.Add(T.Parse(value, NumberStyles.Integer, CultureInfo.InvariantCulture));
+        }
+
+        return numbers;
     }
 
     /// <summary>
