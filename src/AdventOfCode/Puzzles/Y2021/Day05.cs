@@ -17,14 +17,21 @@ public sealed class Day05 : Puzzle
     public int OverlappingVents { get; private set; }
 
     /// <summary>
+    /// Gets the number of positions with more than one vent
+    /// with line segments that are diagonal considered.
+    /// </summary>
+    public int OverlappingVentsWithDiagonals { get; private set; }
+
+    /// <summary>
     /// Gets the number of positions with more than one vent from
     /// navigating the field of vents specified by the line segments.
     /// </summary>
     /// <param name="lineSegments">The line segments that describe the location of the vents.</param>
+    /// <param name="useDiagonals">Whether to consider line segments that are diagonal.</param>
     /// <returns>
     /// The number of positions with more than one vent.
     /// </returns>
-    public static int NavigateVents(IEnumerable<string> lineSegments)
+    public static int NavigateVents(IEnumerable<string> lineSegments, bool useDiagonals)
     {
         var field = new Dictionary<Point, int>();
 
@@ -37,27 +44,23 @@ public sealed class Day05 : Puzzle
             var start = new Point(startCoordinates[0], startCoordinates[1]);
             var end = new Point(endCoordinates[0], endCoordinates[1]);
 
-            if (start.X == end.X || start.Y == end.Y)
+            if (useDiagonals || start.X == end.X || start.Y == end.Y)
             {
-                int startX = Math.Min(start.X, end.X);
-                int endX = Math.Max(start.X, end.X);
-                int startY = Math.Min(start.Y, end.Y);
-                int endY = Math.Max(start.Y, end.Y);
+                int deltaX = Math.Sign(end.X - start.X);
+                int deltaY = Math.Sign(end.Y - start.Y);
+                int length = Math.Max(Math.Abs(end.X - start.X), Math.Abs(end.Y - start.Y));
 
-                for (int x = startX; x <= endX; x++)
+                for (int i = 0; i <= length; i++)
                 {
-                    for (int y = startY; y <= endY; y++)
-                    {
-                        var point = new Point(x, y);
+                    var point = new Point(start.X + (i * deltaX), start.Y + (i * deltaY));
 
-                        if (field.ContainsKey(point))
-                        {
-                            field[point]++;
-                        }
-                        else
-                        {
-                            field[point] = 1;
-                        }
+                    if (field.ContainsKey(point))
+                    {
+                        field[point]++;
+                    }
+                    else
+                    {
+                        field[point] = 1;
                     }
                 }
             }
@@ -71,13 +74,20 @@ public sealed class Day05 : Puzzle
     {
         IList<string> lineSegments = await ReadResourceAsLinesAsync();
 
-        OverlappingVents = NavigateVents(lineSegments);
+        OverlappingVents = NavigateVents(lineSegments, useDiagonals: false);
+        OverlappingVentsWithDiagonals = NavigateVents(lineSegments, useDiagonals: true);
 
         if (Verbose)
         {
-            Logger.WriteLine("There are overlapping vents at {0:N0} points.", OverlappingVents);
+            Logger.WriteLine(
+                "There are overlapping vents at {0:N0} points without considering diagonals.",
+                OverlappingVents);
+
+            Logger.WriteLine(
+                "There are overlapping vents at {0:N0} points considering diagonals.",
+                OverlappingVentsWithDiagonals);
         }
 
-        return PuzzleResult.Create(OverlappingVents);
+        return PuzzleResult.Create(OverlappingVents, OverlappingVentsWithDiagonals);
     }
 }

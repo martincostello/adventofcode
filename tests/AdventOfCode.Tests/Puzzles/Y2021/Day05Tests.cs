@@ -10,8 +10,10 @@ public sealed class Day05Tests : PuzzleTest
     {
     }
 
-    [Fact]
-    public void Y2021_Day05_PlayBingo_Returns_Correct_Value()
+    [Theory]
+    [InlineData(false, 5)]
+    [InlineData(true, 12)]
+    public void Y2021_Day05_NavigateVents_Returns_Correct_Value(bool useDiagonals, int expected)
     {
         // Arrange
         string[] game =
@@ -29,10 +31,10 @@ public sealed class Day05Tests : PuzzleTest
         };
 
         // Act
-        int actual = Day05.NavigateVents(game);
+        int actual = Day05.NavigateVents(game, useDiagonals);
 
         // Assert
-        actual.ShouldBe(5);
+        actual.ShouldBe(expected);
     }
 
     [Fact]
@@ -43,5 +45,6 @@ public sealed class Day05Tests : PuzzleTest
 
         // Assert
         puzzle.OverlappingVents.ShouldBe(5690);
+        puzzle.OverlappingVentsWithDiagonals.ShouldBe(17741);
     }
 }
