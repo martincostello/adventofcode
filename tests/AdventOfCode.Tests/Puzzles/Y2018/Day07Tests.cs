@@ -10,11 +10,16 @@ public sealed class Day07Tests : PuzzleTest
     {
     }
 
-    [Fact]
-    public static void Y2018_Day07_Assemble_Returns_Correct_Solution()
+    [Theory]
+    [InlineData(1, "CABDFE", 381)]
+    [InlineData(2, "CABFDE", 375)]
+    public static void Y2018_Day07_Assemble_Returns_Correct_Solution(
+        int workers,
+        string expectedOrder,
+        int expectedTime)
     {
         // Arrange
-        string[] coordinates =
+        string[] instructions =
         {
             "Step C must be finished before step A can begin.",
             "Step C must be finished before step F can begin.",
@@ -26,10 +31,11 @@ public sealed class Day07Tests : PuzzleTest
         };
 
         // Act
-        string actual = Day07.Assemble(coordinates);
+        (string actualOrder, int actualTime) = Day07.Assemble(instructions, workers);
 
         // Assert
-        actual.ShouldBe("CABDFE");
+        actualOrder.ShouldBe(expectedOrder);
+        actualTime.ShouldBe(expectedTime);
     }
 
     [Fact]
@@ -40,5 +46,6 @@ public sealed class Day07Tests : PuzzleTest
 
         // Assert
         puzzle.OrderOfAssembly.ShouldBe("BGJCNLQUYIFMOEZTADKSPVXRHW");
+        puzzle.TimeToAssemble.ShouldBe(1017);
     }
 }

@@ -10,20 +10,28 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2018;
 public sealed class Day07 : Puzzle
 {
     /// <summary>
-    /// Gets the order in which the parts of the sleigh should be assemblied.
+    /// Gets the order in which the parts of the sleigh should be assembled.
     /// </summary>
     public string OrderOfAssembly { get; private set; } = string.Empty;
+
+    /// <summary>
+    /// Gets the time, in seconds, it takes to assemble the sleigh.
+    /// </summary>
+    public int TimeToAssemble { get; private set; }
 
     /// <summary>
     /// Assembles the sleigh from the specified instructions.
     /// </summary>
     /// <param name="instructions">The assembly instructions.</param>
+    /// <param name="workers">How many workers can assembly the sleigh in parallel.</param>
     /// <returns>
-    /// The order in which the sleigh should be assembled.
+    /// The order in which the sleigh should be assembled and the time,
+    /// in seconds, it takes to assemble the sleigh.
     /// </returns>
-    public static string Assemble(IEnumerable<string> instructions)
+    public static (string OrderOfAssembly, int TimeToAssemble) Assemble(IEnumerable<string> instructions, int workers)
     {
         var available = new HashSet<string>();
+        var inProgress = new Dictionary<string, int>();
         var used = new List<string>();
         var constraints = new Dictionary<string, HashSet<string>>();
 
@@ -47,24 +55,46 @@ public sealed class Day07 : Puzzle
             available.Add(antecedent);
         }
 
+        int timeToAssemble = 0;
+
         while (available.Count > 0)
         {
+            foreach (string part in inProgress.Keys)
+            {
+                inProgress[part]--;
+            }
+
+            foreach (string part in inProgress.Where((p) => p.Value == 0).Select((p) => p.Key))
+            {
+                inProgress.Remove(part);
+                used.Add(part);
+            }
+
             foreach (string part in available.OrderBy((p) => p))
             {
                 bool ready =
-                    !constraints.TryGetValue(part, out var antecedents) ||
-                    antecedents.IsSubsetOf(used);
+                    inProgress.Count < workers &&
+                    (!constraints.TryGetValue(part, out var antecedents) ||
+                     antecedents.IsSubsetOf(used));
 
-                if (ready)
+                if (ready && workers > 0)
                 {
                     available.Remove(part);
-                    used.Add(part);
-                    break;
+                    inProgress.Add(part, 60 + (part[0] - 'A') + 1);
                 }
             }
+
+            timeToAssemble++;
         }
 
-        return string.Join(string.Empty, used);
+        var remaining = inProgress.Single();
+
+        used.Add(remaining.Key);
+        timeToAssemble += remaining.Value - 1;
+
+        string orderOfAssembly = string.Join(string.Empty, used);
+
+        return (orderOfAssembly, timeToAssemble);
     }
 
     /// <inheritdoc />
@@ -72,13 +102,15 @@ public sealed class Day07 : Puzzle
     {
         var instructions = await ReadResourceAsLinesAsync();
 
-        OrderOfAssembly = Assemble(instructions);
+        (OrderOfAssembly, _) = Assemble(instructions, workers: 1);
+        (_, TimeToAssemble) = Assemble(instructions, workers: 5);
 
         if (Verbose)
         {
-            Logger.WriteLine("The order of assembly for the sleigh is {0}.", OrderOfAssembly);
+            Logger.WriteLine("The order of assembly for the sleigh with one worker is {0}.", OrderOfAssembly);
+            Logger.WriteLine("The time to assemble the sleigh with 5 workers is {0}.", TimeToAssemble);
         }
 
-        return PuzzleResult.Create(OrderOfAssembly);
+        return PuzzleResult.Create(OrderOfAssembly, TimeToAssemble);
     }
 }
