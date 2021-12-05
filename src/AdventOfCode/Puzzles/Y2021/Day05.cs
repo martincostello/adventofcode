@@ -31,9 +31,9 @@ public sealed class Day05 : Puzzle
     /// <returns>
     /// The number of positions with more than one vent.
     /// </returns>
-    public static int NavigateVents(IEnumerable<string> lineSegments, bool useDiagonals)
+    public static int NavigateVents(ICollection<string> lineSegments, bool useDiagonals)
     {
-        var field = new Dictionary<Point, int>();
+        var field = new Dictionary<Point, int>(lineSegments.Count);
 
         foreach (string segment in lineSegments)
         {
