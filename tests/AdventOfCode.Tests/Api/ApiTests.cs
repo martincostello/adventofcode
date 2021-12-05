@@ -113,6 +113,7 @@ public class ApiTests : IntegrationTest
     [PuzzleData(2018, 04, 4716, 117061)]
     [PuzzleData(2018, 05, 10638, 4944)]
     [PuzzleData(2018, 06, 5626, 46554)]
+    [PuzzleData(2018, 07, "BGJCNLQUYIFMOEZTADKSPVXRHW", 1017)]
     [PuzzleData(2019, 01, 3226407, 4836738)]
     [PuzzleData(2019, 02, 9581917)]
     [PuzzleData(2019, 03, 855, 11238)]
