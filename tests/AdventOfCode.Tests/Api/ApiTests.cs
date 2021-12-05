@@ -110,7 +110,7 @@ public class ApiTests : IntegrationTest
     [InlineData(2018, 03, null, true, new object[] { 100595, "415" }, 0)]
     [InlineData(2018, 04, null, true, new object[] { 4716, 117061 }, 0)]
     [InlineData(2018, 05, null, true, new object[] { 10638, 4944 }, 0)]
-    [InlineData(2018, 06, null, true, new object[] { 5626 }, 0)]
+    [InlineData(2018, 06, null, true, new object[] { 5626, 46554 }, 0)]
     [InlineData(2019, 01, null, true, new object[] { 3226407, 4836738 }, 0)]
     [InlineData(2019, 02, null, true, new object[] { 9581917 }, 0)]
     [InlineData(2019, 03, null, true, new object[] { 855, 11238 }, 0)]

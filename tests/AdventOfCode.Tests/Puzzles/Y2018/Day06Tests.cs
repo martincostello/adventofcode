@@ -25,10 +25,11 @@ public sealed class Day06Tests : PuzzleTest
         };
 
         // Act
-        int actual = Day06.GetLargestArea(coordinates);
+        (int largestArea, int areaOfRegion) = Day06.GetLargestArea(coordinates, distanceLimit: 32);
 
         // Assert
-        actual.ShouldBe(17);
+        largestArea.ShouldBe(17);
+        areaOfRegion.ShouldBe(16);
     }
 
     [Fact]
@@ -39,5 +40,6 @@ public sealed class Day06Tests : PuzzleTest
 
         // Assert
         puzzle.LargestNonInfiniteArea.ShouldBe(5626);
+        puzzle.AreaOfRegion.ShouldBe(46554);
     }
 }
