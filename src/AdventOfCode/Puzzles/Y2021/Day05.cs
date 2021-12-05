@@ -52,7 +52,10 @@ public sealed class Day05 : Puzzle
 
                 for (int i = 0; i <= length; i++)
                 {
-                    var point = new Point(start.X + (i * deltaX), start.Y + (i * deltaY));
+                    int x = start.X + (i * deltaX);
+                    int y = start.Y + (i * deltaY);
+
+                    var point = new Point(x, y);
 
                     if (field.ContainsKey(point))
                     {
