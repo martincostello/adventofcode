@@ -23,12 +23,16 @@ public sealed class Day07 : Puzzle
     /// Assembles the sleigh from the specified instructions.
     /// </summary>
     /// <param name="instructions">The assembly instructions.</param>
+    /// <param name="partDuration">The amount of time, in seconds, each part takes to assemble.</param>
     /// <param name="workers">How many workers can assembly the sleigh in parallel.</param>
     /// <returns>
     /// The order in which the sleigh should be assembled and the time,
     /// in seconds, it takes to assemble the sleigh.
     /// </returns>
-    public static (string OrderOfAssembly, int TimeToAssemble) Assemble(IEnumerable<string> instructions, int workers)
+    public static (string OrderOfAssembly, int TimeToAssemble) Assemble(
+        IEnumerable<string> instructions,
+        int partDuration,
+        int workers)
     {
         var available = new HashSet<string>();
         var inProgress = new Dictionary<string, int>();
@@ -80,7 +84,7 @@ public sealed class Day07 : Puzzle
                 if (ready && workers > 0)
                 {
                     available.Remove(part);
-                    inProgress.Add(part, 60 + (part[0] - 'A') + 1);
+                    inProgress.Add(part, partDuration + (part[0] - 'A') + 1);
                 }
             }
 
@@ -102,8 +106,10 @@ public sealed class Day07 : Puzzle
     {
         var instructions = await ReadResourceAsLinesAsync();
 
-        (OrderOfAssembly, _) = Assemble(instructions, workers: 1);
-        (_, TimeToAssemble) = Assemble(instructions, workers: 5);
+        const int OneMinute = 60;
+
+        (OrderOfAssembly, _) = Assemble(instructions, workers: 1, partDuration: OneMinute);
+        (_, TimeToAssemble) = Assemble(instructions, workers: 5, partDuration: OneMinute);
 
         if (Verbose)
         {

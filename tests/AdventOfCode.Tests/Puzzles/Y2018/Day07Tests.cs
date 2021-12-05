@@ -11,10 +11,11 @@ public sealed class Day07Tests : PuzzleTest
     }
 
     [Theory]
-    [InlineData(1, "CABDFE", 381)]
-    [InlineData(2, "CABFDE", 375)]
+    [InlineData(1, 60, "CABDFE", 381)]
+    [InlineData(2, 0, "CABFDE", 15)]
     public static void Y2018_Day07_Assemble_Returns_Correct_Solution(
         int workers,
+        int partDuration,
         string expectedOrder,
         int expectedTime)
     {
@@ -31,7 +32,7 @@ public sealed class Day07Tests : PuzzleTest
         };
 
         // Act
-        (string actualOrder, int actualTime) = Day07.Assemble(instructions, workers);
+        (string actualOrder, int actualTime) = Day07.Assemble(instructions, partDuration, workers);
 
         // Assert
         actualOrder.ShouldBe(expectedOrder);
