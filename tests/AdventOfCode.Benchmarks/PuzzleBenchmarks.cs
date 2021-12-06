@@ -72,6 +72,7 @@ public class PuzzleBenchmarks
         yield return new PuzzleInput<Puzzles.Y2018.Day04>();
         yield return new PuzzleInput<Puzzles.Y2018.Day06>();
         yield return new PuzzleInput<Puzzles.Y2018.Day07>();
+        yield return new PuzzleInput<Puzzles.Y2018.Day08>();
         yield return new PuzzleInput<Puzzles.Y2019.Day01>();
         yield return new PuzzleInput<Puzzles.Y2019.Day02>();
         yield return new PuzzleInput<Puzzles.Y2019.Day03>();
