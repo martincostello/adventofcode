@@ -15,24 +15,28 @@ public sealed class Day08 : Puzzle
     public long SumOfMetadata { get; private set; }
 
     /// <summary>
+    /// Gets the value of the tree's root node.
+    /// </summary>
+    public long RootNodeValue { get; private set; }
+
+    /// <summary>
     /// Parses the specified tree of nodes.
     /// </summary>
     /// <param name="data">The raw node data for the tree.</param>
     /// <returns>
-    /// The sum of the tree's metadata entries.
+    /// The sum of the tree's metadata entries and the value of the root node.
     /// </returns>
-    public static long ParseTree(IEnumerable<int> data)
+    public static (long SumOfMetadata, long RootNodeValue) ParseTree(IEnumerable<int> data)
     {
         int[] span = data.ToArray();
 
-        Parse(span, out _, out long metadataSum);
+        var root = Parse(span, out _);
 
-        return metadataSum;
+        return (root.MetadataSum, root.Value);
 
-        static Node Parse(ReadOnlySpan<int> data, out int valuesRead, out long metadataSum)
+        static Node Parse(ReadOnlySpan<int> data, out int valuesRead)
         {
             int index = 0;
-            long sum = 0;
 
             var node = new Node()
             {
@@ -44,10 +48,10 @@ public sealed class Day08 : Puzzle
             {
                 for (int i = 0; i < node.ChildCount; i++)
                 {
-                    var child = Parse(data[index..], out int childValuesRead, out long childMetadataSum);
+                    var child = Parse(data[index..], out int childValuesRead);
 
                     index += childValuesRead;
-                    sum += childMetadataSum;
+                    node.MetadataSum += child.MetadataSum;
 
                     node.Children.Add(child);
                 }
@@ -61,10 +65,27 @@ public sealed class Day08 : Puzzle
                 }
             }
 
-            sum += node.Metadata.Sum();
-
             valuesRead = index;
-            metadataSum = sum;
+
+            long nodeMetadataSum = node.Metadata.Sum();
+            node.MetadataSum += nodeMetadataSum;
+
+            if (node.Children.Count < 1)
+            {
+                node.Value = nodeMetadataSum;
+            }
+            else
+            {
+                foreach (int metadata in node.Metadata)
+                {
+                    if (metadata < 1 || metadata > node.Children.Count)
+                    {
+                        continue;
+                    }
+
+                    node.Value += node.Children[metadata - 1].Value;
+                }
+            }
 
             return node;
         }
@@ -75,14 +96,15 @@ public sealed class Day08 : Puzzle
     {
         var data = (await ReadResourceAsStringAsync()).AsNumbers<int>(' ');
 
-        SumOfMetadata = ParseTree(data);
+        (SumOfMetadata, RootNodeValue) = ParseTree(data);
 
         if (Verbose)
         {
             Logger.WriteLine("The sum of the tree's metadata entries is {0}.", SumOfMetadata);
+            Logger.WriteLine("The value the tree's root node is {0}.", RootNodeValue);
         }
 
-        return PuzzleResult.Create(SumOfMetadata);
+        return PuzzleResult.Create(SumOfMetadata, RootNodeValue);
     }
 
     private sealed class Node
@@ -94,5 +116,9 @@ public sealed class Day08 : Puzzle
         public IList<Node> Children { get; } = new List<Node>();
 
         public IList<int> Metadata { get; } = new List<int>();
+
+        public long MetadataSum { get; set; }
+
+        public long Value { get; set; }
     }
 }

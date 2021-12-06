@@ -17,19 +17,21 @@ public sealed class Day08Tests : PuzzleTest
         int[] tree = { 2, 3, 0, 3, 10, 11, 12, 1, 1, 0, 1, 99, 2, 1, 1, 2 };
 
         // Act
-        long actual = Day08.ParseTree(tree);
+        (long metadataSum, long rootValue) = Day08.ParseTree(tree);
 
         // Assert
-        actual.ShouldBe(138);
+        metadataSum.ShouldBe(138);
+        rootValue.ShouldBe(66);
     }
 
     [Fact]
-    public async Task Y2018_Day07_Solve_Returns_Correct_Solution()
+    public async Task Y2018_Day08_Solve_Returns_Correct_Solution()
     {
         // Act
         var puzzle = await SolvePuzzleAsync<Day08>();
 
         // Assert
         puzzle.SumOfMetadata.ShouldBe(45210);
+        puzzle.RootNodeValue.ShouldBe(22793);
     }
 }
