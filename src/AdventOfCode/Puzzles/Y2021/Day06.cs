@@ -12,7 +12,7 @@ public sealed class Day06 : Puzzle
     /// <summary>
     /// Gets the number of lantern fish present after 80 days.
     /// </summary>
-    public int FishCount { get; private set; }
+    public long FishCount80 { get; private set; }
 
     /// <summary>
     /// Counts the number of fish present after the specified number of days.
@@ -22,7 +22,7 @@ public sealed class Day06 : Puzzle
     /// <returns>
     /// The total number of fish present after the number of days specified by <paramref name="days"/>.
     /// </returns>
-    public static int CountFish(IEnumerable<int> fish, int days)
+    public static long CountFish(IEnumerable<int> fish, int days)
     {
         var states = new List<int>(fish);
 
@@ -54,13 +54,13 @@ public sealed class Day06 : Puzzle
     {
         IList<int> fish = (await ReadResourceAsStringAsync()).AsNumbers<int>().ToArray();
 
-        FishCount = CountFish(fish, days: 80);
+        FishCount80 = CountFish(fish, days: 80);
 
         if (Verbose)
         {
-            Logger.WriteLine("There are {0:N0} lanternfish after 80 days.", FishCount);
+            Logger.WriteLine("There are {0:N0} lanternfish after 80 days.", FishCount80);
         }
 
-        return PuzzleResult.Create(FishCount);
+        return PuzzleResult.Create(FishCount80);
     }
 }

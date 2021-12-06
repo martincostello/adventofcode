@@ -10,17 +10,18 @@ public sealed class Day06Tests : PuzzleTest
     {
     }
 
-    [Fact]
-    public void Y2021_Day06_NavigateVents_Returns_Correct_Value()
+    [Theory]
+    [InlineData(80, 5934)]
+    public void Y2021_Day06_CountFish_Returns_Correct_Value(int days, long expected)
     {
         // Arrange
         int[] fish = { 3, 4, 3, 1, 2 };
 
         // Act
-        int actual = Day06.CountFish(fish, days: 80);
+        long actual = Day06.CountFish(fish, days);
 
         // Assert
-        actual.ShouldBe(5934);
+        actual.ShouldBe(expected);
     }
 
     [Fact]
@@ -30,6 +31,6 @@ public sealed class Day06Tests : PuzzleTest
         var puzzle = await SolvePuzzleAsync<Day06>();
 
         // Assert
-        puzzle.FishCount.ShouldBe(377263);
+        puzzle.FishCount80.ShouldBe(377263);
     }
 }
