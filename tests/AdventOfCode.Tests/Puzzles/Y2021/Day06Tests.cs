@@ -12,6 +12,7 @@ public sealed class Day06Tests : PuzzleTest
 
     [Theory]
     [InlineData(80, 5934)]
+    [InlineData(256, 26984457539)]
     public void Y2021_Day06_CountFish_Returns_Correct_Value(int days, long expected)
     {
         // Arrange
@@ -32,5 +33,6 @@ public sealed class Day06Tests : PuzzleTest
 
         // Assert
         puzzle.FishCount80.ShouldBe(377263);
+        puzzle.FishCount256.ShouldBe(1695929023803);
     }
 }
