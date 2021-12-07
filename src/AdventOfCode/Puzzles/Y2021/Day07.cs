@@ -10,37 +10,51 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2021;
 public sealed class Day07 : Puzzle
 {
     /// <summary>
-    /// Gets the optimal units of fuel consumed to align the crab submarines.
+    /// Gets the optimal units of fuel consumed to align the crab
+    /// submarines when the fuel has a constant burn rate.
     /// </summary>
-    public long FuelConsumed { get; private set; }
+    public long FuelConsumedWithConstantBurnRate { get; private set; }
+
+    /// <summary>
+    /// Gets the optimal units of fuel consumed to align the crab
+    /// submarines when the fuel has a variable burn rate.
+    /// </summary>
+    public long FuelConsumedWithVariableBurnRate { get; private set; }
 
     /// <summary>
     /// Determines the optimal units of fuel consumed to align the specified crab submarines.
     /// </summary>
     /// <param name="submarines">The initial positions of the submarines.</param>
+    /// <param name="withVariableBurnRate">Whether the fuel has a variable burn rate.</param>
     /// <returns>
     /// The total units of fuel consumed to align the submarines with
     /// positions specified by <paramref name="submarines"/>.
     /// </returns>
-    public static long AlignSubmarines(IList<int> submarines)
+    public static long AlignSubmarines(IList<int> submarines, bool withVariableBurnRate)
     {
         int limit = submarines.Max();
-
-        var fuelCosts = new Dictionary<int, long>(limit);
+        var costs = new List<long>(limit);
 
         for (int i = 0; i < limit; i++)
         {
-            long fuelCost = 0;
+            long cost = 0;
 
             for (int j = 0; j < submarines.Count; j++)
             {
-                fuelCost += Math.Abs(submarines[j] - i);
+                int steps = Math.Abs(submarines[j] - i);
+
+                if (withVariableBurnRate && steps > 1)
+                {
+                    steps = Enumerable.Range(1, steps).Sum();
+                }
+
+                cost += steps;
             }
 
-            fuelCosts[i] = fuelCost;
+            costs.Add(cost);
         }
 
-        return fuelCosts.MinBy((p) => p.Value).Value;
+        return costs.Min();
     }
 
     /// <inheritdoc />
@@ -48,13 +62,20 @@ public sealed class Day07 : Puzzle
     {
         IList<int> submarines = (await ReadResourceAsStringAsync()).AsNumbers<int>().ToArray();
 
-        FuelConsumed = AlignSubmarines(submarines);
+        FuelConsumedWithConstantBurnRate = AlignSubmarines(submarines, withVariableBurnRate: false);
+        FuelConsumedWithVariableBurnRate = AlignSubmarines(submarines, withVariableBurnRate: true);
 
         if (Verbose)
         {
-            Logger.WriteLine("The least fuel consumed to align the crabs' submarines is {0:N0}.", FuelConsumed);
+            Logger.WriteLine(
+                "The least fuel consumed to align the crabs' submarines with a constant burn rate is {0:N0}.",
+                FuelConsumedWithConstantBurnRate);
+
+            Logger.WriteLine(
+                "The least fuel consumed to align the crabs' submarines with a variable burn rate is {0:N0}.",
+                FuelConsumedWithVariableBurnRate);
         }
 
-        return PuzzleResult.Create(FuelConsumed);
+        return PuzzleResult.Create(FuelConsumedWithConstantBurnRate, FuelConsumedWithVariableBurnRate);
     }
 }

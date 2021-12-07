@@ -10,17 +10,19 @@ public sealed class Day07Tests : PuzzleTest
     {
     }
 
-    [Fact]
-    public void Y2021_Day07_AlignSubmarines_Returns_Correct_Value()
+    [Theory]
+    [InlineData(false, 37)]
+    [InlineData(true, 168)]
+    public void Y2021_Day07_AlignSubmarines_Returns_Correct_Value(bool withVariableBurnRate, long expected)
     {
         // Arrange
         int[] submarines = { 16, 1, 2, 0, 4, 2, 7, 1, 2, 14 };
 
         // Act
-        long actual = Day07.AlignSubmarines(submarines);
+        long actual = Day07.AlignSubmarines(submarines, withVariableBurnRate);
 
         // Assert
-        actual.ShouldBe(37);
+        actual.ShouldBe(expected);
     }
 
     [Fact]
@@ -30,6 +32,7 @@ public sealed class Day07Tests : PuzzleTest
         var puzzle = await SolvePuzzleAsync<Day07>();
 
         // Assert
-        puzzle.FuelConsumed.ShouldBe(335271);
+        puzzle.FuelConsumedWithConstantBurnRate.ShouldBe(335271);
+        puzzle.FuelConsumedWithVariableBurnRate.ShouldBe(95851339);
     }
 }
