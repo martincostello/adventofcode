@@ -23,8 +23,11 @@ public sealed class Day04 : Puzzle
     /// </summary>
     /// <param name="secretKey">The secret key to use.</param>
     /// <param name="zeroes">The number of zeroes to get the value for.</param>
-    /// <returns>The lowest positive integer that generates an MD5 hash with the number of zeroes specified.</returns>
-    internal static int GetLowestPositiveNumberWithStartingZeroes(string secretKey, int zeroes)
+    /// <returns>
+    /// A <see cref="Task{TResult}"/> that represents the asynchronous operation to find the
+    /// lowest positive integer that generates an MD5 hash with the number of zeroes specified.
+    /// </returns>
+    internal static async Task<int> GetLowestPositiveNumberWithStartingZeroesAsync(string secretKey, int zeroes)
     {
         var solutions = new ConcurrentBag<int>();
         var searchedRanges = new ConcurrentBag<int>();
@@ -32,71 +35,87 @@ public sealed class Day04 : Puzzle
         int fromInclusive = 1;
         int rangeSize = 50000;
 
-        var source = Partitioner.Create(fromInclusive, int.MaxValue - 1, rangeSize);
+        var chunks = Enumerable.Chunk(Enumerable.Range(fromInclusive, int.MaxValue - 1), rangeSize);
+        using var cts = new CancellationTokenSource();
 
-        Parallel.ForEach(
-            source,
-            (range, state) =>
-            {
-                try
+        try
+        {
+            await Parallel.ForEachAsync(
+                chunks,
+                cts.Token,
+                (range, cancellationToken) =>
                 {
-                    // Does this range start at a value greater than an already found value?
-                    if (!solutions.IsEmpty)
+                    try
                     {
-                        int bestSolution = solutions.Min();
-
-                        if (range.Item1 > bestSolution)
+                        // Does this range start at a value greater than an already found value?
+                        if (!solutions.IsEmpty)
                         {
-                            var orderedRanges = searchedRanges.ToList();
+                            int bestSolution = solutions.Min();
 
-                            if (orderedRanges.Count == 0)
+                            if (range[0] > bestSolution)
                             {
-                                return;
-                            }
+                                var orderedRanges = searchedRanges.ToList();
 
-                            orderedRanges.Sort();
-
-                            // Have we searched the first possible range already?
-                            if (orderedRanges[0] == fromInclusive)
-                            {
-                                for (int i = 1; i < orderedRanges.Count; i++)
+                                if (orderedRanges.Count == 0)
                                 {
-                                    int lastRange = orderedRanges[i - 1];
-                                    int thisRange = orderedRanges[i];
+                                    return ValueTask.CompletedTask;
+                                }
 
-                                    // Is this range the next range?
-                                    if (thisRange != lastRange + rangeSize)
-                                    {
-                                        // A range before the current best solution has not been searched yet
-                                        break;
-                                    }
+                                orderedRanges.Sort();
 
-                                    if (thisRange > bestSolution)
+                                // Have we searched the first possible range already?
+                                if (orderedRanges[0] == fromInclusive)
+                                {
+                                    for (int i = 1; i < orderedRanges.Count; i++)
                                     {
-                                        // We have found the best solution
-                                        state.Stop();
+                                        int lastRange = orderedRanges[i - 1];
+                                        int thisRange = orderedRanges[i];
+
+                                        // Is this range the next range?
+                                        if (thisRange != lastRange + rangeSize)
+                                        {
+                                            // A range before the current best solution has not been searched yet
+                                            break;
+                                        }
+
+                                        if (thisRange > bestSolution)
+                                        {
+                                            // We have found the best solution
+                                            cts.Cancel();
+                                        }
                                     }
                                 }
                             }
+
+                            return ValueTask.CompletedTask;
                         }
 
-                        return;
-                    }
-
-                    for (int i = range.Item1; !state.ShouldExitCurrentIteration && i < range.Item2; i++)
-                    {
-                        if (IsSolution(i, secretKey, zeroes))
+                        foreach (int i in range)
                         {
-                            solutions.Add(i);
-                            break;
+                            if (cancellationToken.IsCancellationRequested)
+                            {
+                                break;
+                            }
+
+                            if (IsSolution(i, secretKey, zeroes))
+                            {
+                                solutions.Add(i);
+                                break;
+                            }
                         }
                     }
-                }
-                finally
-                {
-                    searchedRanges.Add(range.Item1);
-                }
-            });
+                    finally
+                    {
+                        searchedRanges.Add(range[0]);
+                    }
+
+                    return ValueTask.CompletedTask;
+                });
+        }
+        catch (TaskCanceledException)
+        {
+            // Solution found
+        }
 
         if (solutions.IsEmpty)
         {
@@ -107,12 +126,12 @@ public sealed class Day04 : Puzzle
     }
 
     /// <inheritdoc />
-    protected override Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
+    protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
         string secretKey = args[0];
         int zeroes = Parse<int>(args[1]);
 
-        LowestZeroHash = GetLowestPositiveNumberWithStartingZeroes(secretKey, zeroes);
+        LowestZeroHash = await GetLowestPositiveNumberWithStartingZeroesAsync(secretKey, zeroes);
 
         if (Verbose)
         {
