@@ -46,7 +46,7 @@ public sealed class Day07 : Puzzle
         }
         else
         {
-            return submarines[submarines.Length / 2];
+            return submarines[submarines.Count / 2];
         }
     }
 
