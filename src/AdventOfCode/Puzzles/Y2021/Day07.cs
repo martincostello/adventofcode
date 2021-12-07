@@ -34,7 +34,7 @@ public sealed class Day07 : Puzzle
     {
         if (withVariableBurnRate)
         {
-            return submarines.Average();
+            return (long)submarines.Average();
         }
 
         submarines = submarines.OrderBy((p) => p).ToList();
