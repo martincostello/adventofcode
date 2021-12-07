@@ -32,38 +32,22 @@ public sealed class Day07 : Puzzle
     /// </returns>
     public static long AlignSubmarines(IList<int> submarines, bool withVariableBurnRate)
     {
-        int limit = submarines.Max();
-        var costs = new List<long>(limit);
-        var stepCosts = new Dictionary<int, int>(limit);
-
         if (withVariableBurnRate)
         {
-            for (int i = 0; i <= limit; i++)
-            {
-                stepCosts[i] = Enumerable.Range(1, i).Sum();
-            }
+            return submarines.Average();
         }
 
-        for (int i = 0; i < limit; i++)
+        submarines = submarines.OrderBy((p) => p).ToList();
+
+        if (submarines.Count % 2 == 0)
         {
-            long cost = 0;
-
-            for (int j = 0; j < submarines.Count; j++)
-            {
-                int steps = Math.Abs(submarines[j] - i);
-
-                if (withVariableBurnRate)
-                {
-                    steps = stepCosts[steps];
-                }
-
-                cost += steps;
-            }
-
-            costs.Add(cost);
+            int half = submarines.Count / 2;
+            return (submarines[half - 1] + submarines[half]) / 2;
         }
-
-        return costs.Min();
+        else
+        {
+            return submarines[submarines.Length / 2];
+        }
     }
 
     /// <inheritdoc />
