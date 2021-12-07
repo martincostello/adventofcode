@@ -34,6 +34,15 @@ public sealed class Day07 : Puzzle
     {
         int limit = submarines.Max();
         var costs = new List<long>(limit);
+        var stepCosts = new Dictionary<int, int>(limit);
+
+        if (withVariableBurnRate)
+        {
+            for (int i = 0; i <= limit; i++)
+            {
+                stepCosts[i] = Enumerable.Range(1, i).Sum();
+            }
+        }
 
         for (int i = 0; i < limit; i++)
         {
@@ -43,9 +52,9 @@ public sealed class Day07 : Puzzle
             {
                 int steps = Math.Abs(submarines[j] - i);
 
-                if (withVariableBurnRate && steps > 1)
+                if (withVariableBurnRate)
                 {
-                    steps = Enumerable.Range(1, steps).Sum();
+                    steps = stepCosts[steps];
                 }
 
                 cost += steps;
