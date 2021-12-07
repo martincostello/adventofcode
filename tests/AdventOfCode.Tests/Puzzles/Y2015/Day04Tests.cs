@@ -20,10 +20,10 @@ public sealed class Day04Tests : PuzzleTest
     [Theory]
     [InlineData("abcdef", 5, 609043)]
     [InlineData("pqrstuv", 5, 1048970)]
-    public static void Y2015_Day04_GetLowestPositiveNumberWithStartingZeroes(string secretKey, int zeroes, int expected)
+    public static async Task Y2015_Day04_GetLowestPositiveNumberWithStartingZeroesAsync(string secretKey, int zeroes, int expected)
     {
         // Act
-        int actual = Day04.GetLowestPositiveNumberWithStartingZeroes(secretKey, zeroes);
+        int actual = await Day04.GetLowestPositiveNumberWithStartingZeroesAsync(secretKey, zeroes);
 
         // Assert
         actual.ShouldBe(expected);
