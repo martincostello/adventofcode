@@ -10,21 +10,22 @@ public sealed class Day08Tests : PuzzleTest
     {
     }
 
-    ////[Fact]
-    ////public void Y2021_Day08_CountDigits_Returns_Correct_Value_1()
-    ////{
-    ////    // Arrange
-    ////    string[] entries = { "acedgfb cdfbe gcdfa fbcad dab cefabd cdfgeb eafb cagedb ab | cdfeb fcadb cdfeb cdbaf" };
-    ////
-    ////    // Act
-    ////    int actual = Day08.CountDigits(entries);
-    ////
-    ////    // Assert
-    ////    actual.ShouldBe(expected);
-    ////}
+    [Fact]
+    public void Y2021_Day08_DecodeDigits_Returns_Correct_Value_1()
+    {
+        // Arrange
+        string[] entries = { "acedgfb cdfbe gcdfa fbcad dab cefabd cdfgeb eafb cagedb ab | cdfeb fcadb cdfeb cdbaf" };
+
+        // Act
+        (int count, int sum) = Day08.DecodeDigits(entries);
+
+        // Assert
+        count.ShouldBe(0);
+        sum.ShouldBe(5353);
+    }
 
     [Fact]
-    public void Y2021_Day08_CountDigits_Returns_Correct_Value()
+    public void Y2021_Day08_DecodeDigits_Returns_Correct_Value_2()
     {
         // Arrange
         string[] entries =
@@ -42,10 +43,11 @@ public sealed class Day08Tests : PuzzleTest
         };
 
         // Act
-        int actual = Day08.CountDigits(entries);
+        (int count, int sum) = Day08.DecodeDigits(entries);
 
         // Assert
-        actual.ShouldBe(26);
+        count.ShouldBe(26);
+        sum.ShouldBe(61229);
     }
 
     [Fact]
@@ -56,5 +58,6 @@ public sealed class Day08Tests : PuzzleTest
 
         // Assert
         puzzle.Count.ShouldBe(294);
+        puzzle.Sum.ShouldBe(973292);
     }
 }
