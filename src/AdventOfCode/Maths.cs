@@ -12,6 +12,60 @@ namespace MartinCostello.AdventOfCode;
 internal static class Maths
 {
     /// <summary>
+    /// Returns the digits of the specified value in base 10.
+    /// </summary>
+    /// <param name="value">The value to get the digits for.</param>
+    /// <returns>
+    /// The digits of <paramref name="value"/> in base 10.
+    /// </returns>
+    internal static IReadOnlyList<int> Digits(int value)
+    {
+        if (value == 0)
+        {
+            return new[] { 0 };
+        }
+
+        value = Math.Abs(value);
+
+        var digits = new List<int>();
+
+        while (value > 0)
+        {
+            (int div, int rem) = Math.DivRem(value, 10);
+
+            digits.Add(rem);
+            value = div;
+        }
+
+        digits.Reverse();
+
+        return digits;
+    }
+
+    /// <summary>
+    /// Returns the number represented by the specified digits.
+    /// </summary>
+    /// <typeparam name="T">The type of the number.</typeparam>
+    /// <param name="collection">The digits of the number.</param>
+    /// <returns>
+    /// The <typeparamref name="T"/> represented by the digits in <paramref name="collection"/>.
+    /// </returns>
+    internal static T FromDigits<T>(IList<int> collection)
+        where T : INumber<T>
+    {
+        double result = 0;
+
+        for (int i = 0; i < collection.Count - 1; i++)
+        {
+            result += collection[i] * Math.Pow(10, collection.Count - i - 1);
+        }
+
+        result += collection[collection.Count - 1];
+
+        return T.Create(result);
+    }
+
+    /// <summary>
     /// Returns the combinations of values that add up to the specified total.
     /// </summary>
     /// <typeparam name="TTotal">The type of the total.</typeparam>
