@@ -9,6 +9,15 @@ namespace System.Drawing;
 internal static class PointExtensions
 {
     /// <summary>
+    /// Returns the absolute Manhattan Distance of a point.
+    /// </summary>
+    /// <param name="value">The value.</param>
+    /// <returns>
+    /// The Manhattan Distance of <paramref name="value"/>.
+    /// </returns>
+    public static int ManhattanDistance(this Point value) => value.ManhattanDistance(Point.Empty);
+
+    /// <summary>
     /// Returns the Manhattan Distance between two points.
     /// </summary>
     /// <param name="value">The origin value.</param>

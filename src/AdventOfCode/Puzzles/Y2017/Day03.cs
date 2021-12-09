@@ -100,7 +100,7 @@ public sealed class Day03 : Puzzle
             position += Down;
         }
 
-        return position.ManhattanDistance(Point.Empty);
+        return position.ManhattanDistance();
     }
 
     /// <summary>

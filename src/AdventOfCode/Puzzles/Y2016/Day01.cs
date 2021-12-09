@@ -82,7 +82,7 @@ public sealed class Day01 : Puzzle
             }
         }
 
-        return position.ManhattanDistance(Point.Empty);
+        return position.ManhattanDistance();
     }
 
     /// <inheritdoc />
