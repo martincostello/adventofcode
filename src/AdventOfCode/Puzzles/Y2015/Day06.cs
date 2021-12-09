@@ -209,7 +209,7 @@ public sealed class Day06 : Puzzle
                 termination = words.ElementAtOrDefault(3);
             }
 
-            if (action == null || origin == null || termination == null)
+            if (action is null || origin is null || termination is null)
             {
                 throw new PuzzleException("The specified instruction is invalid.");
             }
@@ -290,7 +290,7 @@ public sealed class Day06 : Puzzle
                 termination = words.ElementAtOrDefault(3);
             }
 
-            if (delta == null || origin == null || termination == null)
+            if (delta is null || origin is null || termination is null)
             {
                 throw new PuzzleException("The specified instruction is invalid.");
             }
@@ -309,7 +309,7 @@ public sealed class Day06 : Puzzle
         /// <summary>
         /// The brightnesses of lights by their position.
         /// </summary>
-        private readonly int[,] _lightBrightnesses;
+        private readonly Dictionary<Point, int> _lightBrightnesses;
 
         /// <summary>
         /// The bounds of the grid. This field is read-only.
@@ -340,57 +340,25 @@ public sealed class Day06 : Puzzle
             }
 
             _bounds = new(0, 0, width, height);
-            _lightBrightnesses = new int[width, height];
+            _lightBrightnesses = new(width * height);
         }
 
         /// <summary>
         /// Gets the total brightness of the grid.
         /// </summary>
-        internal int Brightness
-        {
-            get
-            {
-                int result = 0;
-
-                for (int x = 0; x < _bounds.Width; x++)
-                {
-                    for (int y = 0; y < _bounds.Height; y++)
-                    {
-                        result += _lightBrightnesses[x, y];
-                    }
-                }
-
-                return result;
-            }
-        }
+        internal int Brightness => _lightBrightnesses.Values.Sum();
 
         /// <summary>
         /// Gets the number of lights in the grid that have a brightness of at least one.
         /// </summary>
-        internal int Count
-        {
-            get
-            {
-                int result = 0;
-
-                for (int x = 0; x < _bounds.Width; x++)
-                {
-                    for (int y = 0; y < _bounds.Height; y++)
-                    {
-                        result += _lightBrightnesses[x, y] > 0 ? 1 : 0;
-                    }
-                }
-
-                return result;
-            }
-        }
+        internal int Count => _lightBrightnesses.Values.Where((p) => p > 0).Sum();
 
         /// <summary>
         /// Gets the brightness of the light at the specified position.
         /// </summary>
         /// <param name="position">The position of the light to get the state of.</param>
         /// <returns>The current brightness of the light at <paramref name="position"/>.</returns>
-        internal int this[Point position] => _lightBrightnesses[position.X, position.Y];
+        internal int this[Point position] => _lightBrightnesses.GetValueOrDefault(position);
 
         /// <inheritdoc />
         public override string ToString()
@@ -401,7 +369,7 @@ public sealed class Day06 : Puzzle
             {
                 for (int y = 0; y < _bounds.Height; y++)
                 {
-                    builder.Append(_lightBrightnesses[x, y]);
+                    builder.Append(_lightBrightnesses.GetValueOrDefault(new(x, y)));
                 }
 
                 builder.AppendLine();
@@ -523,7 +491,7 @@ public sealed class Day06 : Puzzle
         /// <returns>The new brightness of the light at <paramref name="position"/>.</returns>
         private int IncrementOrSetBrightness(Point position, int delta, bool set = false)
         {
-            int current = _lightBrightnesses[position.X, position.Y];
+            int current = _lightBrightnesses.GetValueOrDefault(position);
 
             if (set)
             {
@@ -539,7 +507,7 @@ public sealed class Day06 : Puzzle
                 current = 0;
             }
 
-            return _lightBrightnesses[position.X, position.Y] = current;
+            return _lightBrightnesses[position] = current;
         }
     }
 }

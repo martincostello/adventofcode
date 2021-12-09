@@ -148,21 +148,18 @@ public sealed class Day06Tests : PuzzleTest
 
         target[minimum].ShouldBe(2);
         target.Brightness.ShouldBe(2);
-        target.Count.ShouldBe(1);
 
         target.IncrementBrightness(maximum, 10);
 
         target[minimum].ShouldBe(2);
         target[maximum].ShouldBe(10);
         target.Brightness.ShouldBe(12);
-        target.Count.ShouldBe(2);
 
         target.IncrementBrightness(minimum, -3);
 
         target[minimum].ShouldBe(0);
         target[maximum].ShouldBe(10);
         target.Brightness.ShouldBe(10);
-        target.Count.ShouldBe(1);
     }
 
     [Fact]

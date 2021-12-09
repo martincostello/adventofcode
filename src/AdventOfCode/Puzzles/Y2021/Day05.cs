@@ -53,16 +53,7 @@ public sealed class Day05 : Puzzle
                     int x = start.X + (i * deltaX);
                     int y = start.Y + (i * deltaY);
 
-                    var point = new Point(x, y);
-
-                    if (field.ContainsKey(point))
-                    {
-                        field[point]++;
-                    }
-                    else
-                    {
-                        field[point] = 1;
-                    }
+                    field.AddOrIncrement(new(x, y), 1);
                 }
             }
         }

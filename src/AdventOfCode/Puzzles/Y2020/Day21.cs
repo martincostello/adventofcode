@@ -64,14 +64,7 @@ public sealed class Day21 : Puzzle
 
             foreach (string ingredient in ingredients)
             {
-                if (!occurrences.ContainsKey(ingredient))
-                {
-                    occurrences[ingredient] = 1;
-                }
-                else
-                {
-                    occurrences[ingredient] += 1;
-                }
+                occurrences.AddOrIncrement(ingredient, 1);
             }
         }
 

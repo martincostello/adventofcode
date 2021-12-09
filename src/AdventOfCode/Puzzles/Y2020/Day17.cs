@@ -163,14 +163,7 @@ public sealed class Day17 : Puzzle
         }
 
         static bool IsAdjacentCubeActive(Point position, Dictionary<Point, char> states)
-        {
-            if (!states.TryGetValue(position, out char state))
-            {
-                return false;
-            }
-
-            return state == Active;
-        }
+            => states.GetValueOrDefault(position) == Active;
     }
 
     /// <summary>
@@ -222,7 +215,7 @@ public sealed class Day17 : Puzzle
     /// <returns>
     /// The visualization of the data.
     /// </returns>
-    private static string WriteState(IDictionary<Point, char> states, ILogger? logger)
+    private static string WriteState(Dictionary<Point, char> states, ILogger? logger)
     {
         var builder = new StringBuilder();
 
@@ -254,10 +247,7 @@ public sealed class Day17 : Puzzle
                         {
                             var point = new Point(x, y, z, w);
 
-                            if (!states.TryGetValue(point, out char state))
-                            {
-                                state = Inactive;
-                            }
+                            char state = states.GetValueOrDefault(point, Inactive);
 
                             builder.Append(state);
                         }
@@ -283,10 +273,7 @@ public sealed class Day17 : Puzzle
                     {
                         var point = new Point(x, y, z);
 
-                        if (!states.TryGetValue(point, out char state))
-                        {
-                            state = Inactive;
-                        }
+                        char state = states.GetValueOrDefault(point, Inactive);
 
                         builder.Append(state);
                     }

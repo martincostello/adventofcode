@@ -57,11 +57,7 @@ public sealed class Day24 : Puzzle
                 };
             }
 
-            if (!floor.TryGetValue(destination, out bool isBlack))
-            {
-                isBlack = false;
-            }
-
+            bool isBlack = floor.GetValueOrDefault(destination);
             floor[destination] = !isBlack;
         }
 
@@ -92,16 +88,15 @@ public sealed class Day24 : Puzzle
 
                     var tile = new Tile(x, y, z);
 
-                    if (!floor.TryGetValue(tile, out bool isBlack))
-                    {
-                        isBlack = false;
-                    }
+                    bool isBlack = floor.GetValueOrDefault(tile);
 
                     int count = 0;
 
                     foreach (Tile neighbor in tile.Neighbors())
                     {
-                        if (floor.TryGetValue(neighbor, out bool isNeighborBlack) && isNeighborBlack)
+                        bool isNeighborBlack = floor.GetValueOrDefault(neighbor);
+
+                        if (isNeighborBlack)
                         {
                             count++;
                         }

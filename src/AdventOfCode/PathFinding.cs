@@ -57,12 +57,7 @@ public static class PathFinding
             }
         }
 
-        if (!costSoFar.TryGetValue(goal, out double minimumCost))
-        {
-            minimumCost = double.NaN;
-        }
-
-        return minimumCost;
+        return costSoFar.GetValueOrDefault(goal, double.NaN);
     }
 
     /// <summary>
