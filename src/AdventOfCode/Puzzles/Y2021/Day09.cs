@@ -17,13 +17,19 @@ public sealed class Day09 : Puzzle
     public int SumOfRiskLevels { get; private set; }
 
     /// <summary>
+    /// Gets the total area of the three largest basins in the heightmap.
+    /// </summary>
+    public int AreaOfThreeLargestBasins { get; private set; }
+
+    /// <summary>
     /// Determines the level of risk of the low points in the specified heightmap.
     /// </summary>
     /// <param name="heightmap">The heightmap to analyze.</param>
     /// <returns>
-    /// The sum of the risk levels of all the low points in the heightmap.
+    /// The sum of the risk levels of all the low points in the heightmap and
+    /// the total area of the three largest basins in the heightmap.
     /// </returns>
-    public static int AnalyzeRisk(IList<string> heightmap)
+    public static (int SumOfRiskLevels, int AreaOfThreeLargestBasins) AnalyzeRisk(IList<string> heightmap)
     {
         var grid = new Dictionary<Point, int>(heightmap.Count * heightmap[0].Length);
 
@@ -37,7 +43,7 @@ public sealed class Day09 : Puzzle
             }
         }
 
-        var lowPoints = new List<int>();
+        var lowPoints = new Dictionary<Point, int>();
 
         var directions = new Size[]
         {
@@ -67,11 +73,54 @@ public sealed class Day09 : Puzzle
 
             if (lowCount == adjacentPoints)
             {
-                lowPoints.Add(value);
+                lowPoints[point] = value;
             }
         }
 
-        return lowPoints.Select((p) => p + 1).Sum();
+        var basinAreas = new List<int>(lowPoints.Count);
+        var squareGrid = new SquareGrid(heightmap[0].Length, heightmap.Count);
+        var graph = new Graph<Point>();
+
+        foreach ((var point, int value) in grid)
+        {
+            if (value == 9)
+            {
+                squareGrid.Walls.Add(point);
+            }
+            else
+            {
+                squareGrid.Forests.Add(point);
+            }
+        }
+
+        foreach (var point in grid.Keys)
+        {
+            var neighbors = new List<Point>();
+
+            foreach (var next in squareGrid.Neighbors(point))
+            {
+                neighbors.Add(next);
+            }
+
+            graph.Edges[point] = neighbors;
+        }
+
+        foreach ((var point, int value) in lowPoints)
+        {
+            var basin = PathFinding.BreadthFirst(graph, point);
+            basinAreas.Add(basin.Count);
+        }
+
+        int sumOfRiskLevels = lowPoints.Values
+            .Select((p) => p + 1)
+            .Sum();
+
+        int areaOfThreeLargestBasins = basinAreas
+            .OrderByDescending((p) => p)
+            .Take(3)
+            .Aggregate((x, y) => x *= y);
+
+        return (sumOfRiskLevels, areaOfThreeLargestBasins);
     }
 
     /// <inheritdoc />
@@ -79,13 +128,14 @@ public sealed class Day09 : Puzzle
     {
         IList<string> heightmap = await ReadResourceAsLinesAsync();
 
-        SumOfRiskLevels = AnalyzeRisk(heightmap);
+        (SumOfRiskLevels, AreaOfThreeLargestBasins) = AnalyzeRisk(heightmap);
 
         if (Verbose)
         {
             Logger.WriteLine("The sum of the risk levels of all low points on the heightmap is {0:N0}.", SumOfRiskLevels);
+            Logger.WriteLine("The area of the three largest basins in the heightmap is {0:N0}.", AreaOfThreeLargestBasins);
         }
 
-        return PuzzleResult.Create(SumOfRiskLevels);
+        return PuzzleResult.Create(SumOfRiskLevels, AreaOfThreeLargestBasins);
     }
 }

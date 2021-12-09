@@ -24,10 +24,11 @@ public sealed class Day09Tests : PuzzleTest
         };
 
         // Act
-        int actual = Day09.AnalyzeRisk(heightmap);
+        (int sumOfRiskLevels, int areaOfThreeLargestBasins) = Day09.AnalyzeRisk(heightmap);
 
         // Assert
-        actual.ShouldBe(15);
+        sumOfRiskLevels.ShouldBe(15);
+        areaOfThreeLargestBasins.ShouldBe(1134);
     }
 
     [Fact]
@@ -38,5 +39,6 @@ public sealed class Day09Tests : PuzzleTest
 
         // Assert
         puzzle.SumOfRiskLevels.ShouldBe(607);
+        puzzle.AreaOfThreeLargestBasins.ShouldBe(900864);
     }
 }
