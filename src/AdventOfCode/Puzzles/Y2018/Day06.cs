@@ -64,7 +64,7 @@ public sealed class Day06 : Puzzle
                 // Get the Manhattan distance each coordinate is from this point
                 var distances = points
                     .Select((p) => new { Point = p, Distance = p - new Size(x, y) })
-                    .Select((p) => new { Point = p.Point, Distance = Math.Abs(p.Distance.X) + Math.Abs(p.Distance.Y) })
+                    .Select((p) => new { Point = p.Point, Distance = p.Distance.ManhattanDistance() })
                     .OrderBy((p) => p.Distance)
                     .ToList();
 

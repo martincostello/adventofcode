@@ -82,7 +82,7 @@ public sealed class Day01 : Puzzle
             }
         }
 
-        return Math.Abs(position.X) + Math.Abs(position.Y);
+        return position.ManhattanDistance();
     }
 
     /// <inheritdoc />

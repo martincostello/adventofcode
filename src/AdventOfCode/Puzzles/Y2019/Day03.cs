@@ -99,14 +99,14 @@ public sealed class Day03 : Puzzle
 
                 for (int j = 0; j < Math.Abs(deltaX); j++, steps++)
                 {
-                    MarkWire(new Point(x + (j * sign), y), (Wires)(i + 1), steps);
+                    MarkWire(new(x + (j * sign), y), (Wires)(i + 1), steps);
                 }
 
                 sign = Math.Sign(deltaY);
 
                 for (int j = 0; j < Math.Abs(deltaY); j++, steps++)
                 {
-                    MarkWire(new Point(x, y + (j * sign)), (Wires)(i + 1), steps);
+                    MarkWire(new(x, y + (j * sign)), (Wires)(i + 1), steps);
                 }
 
                 x += deltaX;
@@ -116,7 +116,7 @@ public sealed class Day03 : Puzzle
 
         int manhattanDistance = intersections
             .Skip(1)
-            .Min((p) => Math.Abs(p.X) + Math.Abs(p.Y));
+            .Min((p) => p.ManhattanDistance());
 
         int minimumSteps = stepsToIntersection
             .Where((p) => p.Key != default && intersections.Contains(p.Key))

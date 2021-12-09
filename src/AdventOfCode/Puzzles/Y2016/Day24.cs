@@ -50,7 +50,7 @@ public sealed class Day24 : Puzzle
                     break;
                 }
 
-                costs[(b, a)] = costs[(a, b)] = PathFinding.AStar(maze, a, b, ManhattanDistance);
+                costs[(b, a)] = costs[(a, b)] = PathFinding.AStar(maze, a, b, (a, b) => maze.Cost(a, b));
             }
         }
 
@@ -83,9 +83,6 @@ public sealed class Day24 : Puzzle
         }
 
         return (int)minimumCost;
-
-        static double ManhattanDistance(Point a, Point b)
-            => Math.Abs(a.X - b.X) + Math.Abs(a.Y - b.Y);
     }
 
     /// <inheritdoc />
@@ -119,7 +116,7 @@ public sealed class Day24 : Puzzle
     /// </returns>
     private static (SquareGrid Maze, Point Origin, IList<Point> Goals) BuildMaze(IList<string> layout)
     {
-        var maze = new SquareGrid(layout[0].Length, layout.Count);
+        var maze = new Maze(layout[0].Length, layout.Count);
         var origin = Point.Empty;
         var waypoints = new List<Point>();
 
@@ -131,19 +128,30 @@ public sealed class Day24 : Puzzle
 
                 if (content == '#')
                 {
-                    maze.Walls.Add(new Point(x, y));
+                    maze.Borders.Add(new(x, y));
                 }
                 else if (content == '0')
                 {
-                    origin = new Point(x, y);
+                    origin = new(x, y);
                 }
                 else if (content != '.')
                 {
-                    waypoints.Add(new Point(x, y));
+                    waypoints.Add(new(x, y));
                 }
             }
         }
 
         return (maze, origin, waypoints);
+    }
+
+    private sealed class Maze : SquareGrid
+    {
+        public Maze(int width, int height)
+            : base(width, height)
+        {
+        }
+
+        public override double Cost(Point a, Point b)
+            => a.ManhattanDistance(b);
     }
 }
