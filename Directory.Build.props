@@ -38,6 +38,7 @@
     <VersionSuffix></VersionSuffix>
   </PropertyGroup>
   <ItemGroup>
+    <Using Include="System.Drawing" />
     <Using Include="System.Globalization" />
     <Using Include="System.Text" />
   </ItemGroup>
