@@ -248,10 +248,7 @@ public sealed class Day03 : Puzzle
 
             foreach (Size offset in Offsets)
             {
-                if (TryGetValue(address + offset, out int value))
-                {
-                    sum += value;
-                }
+                sum += this.GetValueOrDefault(address + offset);
             }
 
             return sum;

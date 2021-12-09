@@ -79,10 +79,7 @@ public sealed class Day08 : Puzzle
 
         foreach (Instruction instruction in program)
         {
-            if (!cpu.TryGetValue(instruction.ConditionRegister, out int conditionRegisterValue))
-            {
-                conditionRegisterValue = cpu[instruction.ConditionRegister] = 0;
-            }
+            int conditionRegisterValue = cpu.GetValueOrDefault(instruction.ConditionRegister);
 
             if (!Evaluate(conditionRegisterValue, instruction.ConditionComparand, instruction.ConditionOperator))
             {

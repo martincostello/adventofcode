@@ -118,11 +118,7 @@ public sealed class Day04 : Puzzle
 
                 if (isSleepiest)
                 {
-                    if (!minutesAsleepForSleepiestGuard.ContainsKey(i))
-                    {
-                        minutesAsleepForSleepiestGuard.Add(i, 0);
-                    }
-
+                    minutesAsleepForSleepiestGuard.TryAdd(i, 0);
                     minutesAsleepForSleepiestGuard[i]++;
                 }
 
@@ -131,11 +127,7 @@ public sealed class Day04 : Puzzle
                     guardsAsleepInMinute = sleepiestGuardsByMinute[i] = new Dictionary<int, int>();
                 }
 
-                if (!guardsAsleepInMinute.ContainsKey(guard))
-                {
-                    guardsAsleepInMinute.Add(guard, 0);
-                }
-
+                guardsAsleepInMinute.TryAdd(guard, 0);
                 guardsAsleepInMinute[guard]++;
             }
         }
