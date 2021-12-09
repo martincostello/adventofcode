@@ -116,7 +116,7 @@ public sealed class Day03 : Puzzle
 
         int manhattanDistance = intersections
             .Skip(1)
-            .Min((p) => Math.Abs(p.X) + Math.Abs(p.Y));
+            .Min((p) => p.ManhattanDistance(Point.Empty));
 
         int minimumSteps = stepsToIntersection
             .Where((p) => p.Key != default && intersections.Contains(p.Key))

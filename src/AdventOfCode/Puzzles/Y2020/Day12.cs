@@ -83,7 +83,7 @@ public sealed class Day12 : Puzzle
             }
         }
 
-        return Math.Abs(ship.X) + Math.Abs(ship.Y);
+        return ship.ManhattanDistance(Point.Empty);
     }
 
     /// <summary>
@@ -149,7 +149,7 @@ public sealed class Day12 : Puzzle
             }
         }
 
-        return Math.Abs(ship.X) + Math.Abs(ship.Y);
+        return ship.ManhattanDistance(Point.Empty);
     }
 
     /// <inheritdoc />

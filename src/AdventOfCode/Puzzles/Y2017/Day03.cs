@@ -100,9 +100,7 @@ public sealed class Day03 : Puzzle
             position += Down;
         }
 
-        int manhattanDistance = Math.Abs(position.X) + Math.Abs(position.Y);
-
-        return manhattanDistance;
+        return position.ManhattanDistance(Point.Empty);
     }
 
     /// <summary>
