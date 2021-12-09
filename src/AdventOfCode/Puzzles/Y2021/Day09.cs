@@ -62,41 +62,32 @@ public sealed class Day09 : Puzzle
             }
         }
 
+        var graph = new Graph<Point>();
         var lowPoints = new Dictionary<Point, int>();
 
         foreach (Point point in basins.Locations)
         {
-            int lows = 0;
-            int neighbors = 0;
+            int lowerPoints = 0;
+            var neighbors = new List<Point>(4);
+
+            int thisHeight = heights[point];
 
             foreach (Point neighbor in basins.Neighbors(point))
             {
-                neighbors++;
+                neighbors.Add(neighbor);
 
-                if (heights[point] < heights[neighbor])
+                if (thisHeight < heights[neighbor])
                 {
-                    lows++;
+                    lowerPoints++;
                 }
             }
 
-            if (lows == neighbors)
-            {
-                lowPoints[point] = heights[point];
-            }
-        }
-
-        var graph = new Graph<Point>();
-
-        foreach (Point point in heights.Keys)
-        {
-            var neighbors = new List<Point>(4);
-
-            foreach (Point next in basins.Neighbors(point))
-            {
-                neighbors.Add(next);
-            }
-
             graph.Edges[point] = neighbors;
+
+            if (lowerPoints == neighbors.Count)
+            {
+                lowPoints[point] = thisHeight;
+            }
         }
 
         var basinAreas = new List<int>(lowPoints.Count);
