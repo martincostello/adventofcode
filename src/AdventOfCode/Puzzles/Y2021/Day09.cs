@@ -31,73 +31,67 @@ public sealed class Day09 : Puzzle
     /// </returns>
     public static (int SumOfRiskLevels, int AreaOfThreeLargestBasins) AnalyzeRisk(IList<string> heightmap)
     {
-        var grid = new Dictionary<Point, int>(heightmap.Count * heightmap[0].Length);
+        int width = heightmap[0].Length;
+        int height = heightmap.Count;
 
-        for (int y = 0; y < heightmap.Count; y++)
+        var heights = new Dictionary<Point, int>(width * height);
+
+        for (int y = 0; y < height; y++)
         {
             string row = heightmap[y];
 
-            for (int x = 0; x < row.Length; x++)
+            for (int x = 0; x < width; x++)
             {
-                grid[new(x, y)] = row[x] - '0';
+                heights[new(x, y)] = row[x] - '0';
+            }
+        }
+
+        var basins = new SquareGrid(width, height);
+
+        foreach ((var point, int value) in heights)
+        {
+            // The value of 9 does not count to a basin,
+            // so is effectively the wall/frontier to it.
+            if (value == 9)
+            {
+                basins.Walls.Add(point);
+            }
+            else
+            {
+                basins.Forests.Add(point);
             }
         }
 
         var lowPoints = new Dictionary<Point, int>();
 
-        var directions = new Size[]
+        foreach (Point point in basins.Forests)
         {
-            new(0, -1),
-            new(0, 1),
-            new(-1, 0),
-            new(1, 0),
-        };
+            int lows = 0;
+            int neighbors = 0;
 
-        foreach ((Point point, int value) in grid)
-        {
-            int lowCount = 0;
-            int adjacentPoints = 0;
-
-            foreach (Size direction in directions)
+            foreach (Point neighbor in basins.Neighbors(point))
             {
-                if (grid.TryGetValue(point + direction, out int other))
-                {
-                    adjacentPoints++;
+                neighbors++;
 
-                    if (value < other)
-                    {
-                        lowCount++;
-                    }
+                if (heights[point] < heights[neighbor])
+                {
+                    lows++;
                 }
             }
 
-            if (lowCount == adjacentPoints)
+            if (lows == neighbors)
             {
-                lowPoints[point] = value;
+                lowPoints[point] = heights[point];
             }
         }
 
-        var basinAreas = new List<int>(lowPoints.Count);
-        var squareGrid = new SquareGrid(heightmap[0].Length, heightmap.Count);
         var graph = new Graph<Point>();
 
-        foreach ((var point, int value) in grid)
+        foreach (Point point in heights.Keys)
         {
-            if (value == 9)
-            {
-                squareGrid.Walls.Add(point);
-            }
-            else
-            {
-                squareGrid.Forests.Add(point);
-            }
-        }
+            var neighbors = new List<Point>(4);
 
-        foreach (var point in grid.Keys)
-        {
-            var neighbors = new List<Point>();
-
-            foreach (var next in squareGrid.Neighbors(point))
+            foreach (Point next in basins.Neighbors(point))
             {
                 neighbors.Add(next);
             }
@@ -105,7 +99,9 @@ public sealed class Day09 : Puzzle
             graph.Edges[point] = neighbors;
         }
 
-        foreach ((var point, int value) in lowPoints)
+        var basinAreas = new List<int>(lowPoints.Count);
+
+        foreach ((Point point, int value) in lowPoints)
         {
             var basin = PathFinding.BreadthFirst(graph, point);
             basinAreas.Add(basin.Count);
