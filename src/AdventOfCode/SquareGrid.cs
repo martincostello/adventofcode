@@ -11,7 +11,7 @@ namespace MartinCostello.AdventOfCode;
 /// <remarks>
 /// Based on <c>https://www.redblobgames.com/pathfinding/a-star/implementation.html</c>.
 /// </remarks>
-public sealed class SquareGrid : IWeightedGraph<Point>
+public abstract class SquareGrid : IWeightedGraph<Point>
 {
     /// <summary>
     /// The valid vectors of movement around the grid.
@@ -29,7 +29,7 @@ public sealed class SquareGrid : IWeightedGraph<Point>
     /// </summary>
     /// <param name="width">The width of the grid.</param>
     /// <param name="height">The height of the grid.</param>
-    public SquareGrid(int width, int height)
+    protected SquareGrid(int width, int height)
     {
         Width = width;
         Height = height;
@@ -46,14 +46,14 @@ public sealed class SquareGrid : IWeightedGraph<Point>
     public int Width { get; private set; }
 
     /// <summary>
-    /// Gets the forests within the grid.
+    /// Gets the locations within the grid.
     /// </summary>
-    public HashSet<Point> Forests { get; } = new HashSet<Point>();
+    public HashSet<Point> Locations { get; } = new HashSet<Point>();
 
     /// <summary>
-    /// Gets the walls within the grid.
+    /// Gets the borders within the grid.
     /// </summary>
-    public HashSet<Point> Walls { get; } = new HashSet<Point>();
+    public HashSet<Point> Borders { get; } = new HashSet<Point>();
 
     /// <summary>
     /// Returns whether the specified point is in the bounds of the grid.
@@ -71,10 +71,10 @@ public sealed class SquareGrid : IWeightedGraph<Point>
     /// <returns>
     /// <see langword="true"/> if <paramref name="id"/> is passable; otherwise <see langword="false"/>.
     /// </returns>
-    public bool IsPassable(Point id) => !Walls.Contains(id);
+    public bool IsPassable(Point id) => !Borders.Contains(id);
 
     /// <inheritdoc/>
-    public double Cost(Point a, Point b) => Forests.Contains(b) ? 5 : 1;
+    public abstract double Cost(Point a, Point b);
 
     /// <inheritdoc/>
     public IEnumerable<Point> Neighbors(Point id)

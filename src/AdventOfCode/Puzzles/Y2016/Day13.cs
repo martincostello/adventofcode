@@ -104,7 +104,7 @@ public sealed class Day13 : Puzzle
     /// </returns>
     private static SquareGrid BuildMaze(int width, int height, int seed)
     {
-        var maze = new SquareGrid(width, height);
+        var maze = new Maze(width, height);
 
         for (int i = 0; i < maze.Width; i++)
         {
@@ -112,7 +112,7 @@ public sealed class Day13 : Puzzle
             {
                 if (IsWall(seed, i, j))
                 {
-                    maze.Walls.Add(new(i, j));
+                    maze.Borders.Add(new(i, j));
                 }
             }
         }
@@ -151,5 +151,16 @@ public sealed class Day13 : Puzzle
 
         static double ManhattanDistance(Point a, Point b)
             => Math.Abs(a.X - b.X) + Math.Abs(a.Y - b.Y);
+    }
+
+    private sealed class Maze : SquareGrid
+    {
+        public Maze(int width, int height)
+            : base(width, height)
+        {
+        }
+
+        public override double Cost(Point a, Point b)
+            => Locations.Contains(b) ? 5 : 1;
     }
 }

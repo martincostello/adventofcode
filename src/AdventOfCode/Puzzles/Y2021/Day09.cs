@@ -46,7 +46,7 @@ public sealed class Day09 : Puzzle
             }
         }
 
-        var basins = new SquareGrid(width, height);
+        var basins = new Heightmap(width, height);
 
         foreach ((var point, int value) in heights)
         {
@@ -54,17 +54,17 @@ public sealed class Day09 : Puzzle
             // so is effectively the wall/frontier to it.
             if (value == 9)
             {
-                basins.Walls.Add(point);
+                basins.Borders.Add(point);
             }
             else
             {
-                basins.Forests.Add(point);
+                basins.Locations.Add(point);
             }
         }
 
         var lowPoints = new Dictionary<Point, int>();
 
-        foreach (Point point in basins.Forests)
+        foreach (Point point in basins.Locations)
         {
             int lows = 0;
             int neighbors = 0;
@@ -133,5 +133,15 @@ public sealed class Day09 : Puzzle
         }
 
         return PuzzleResult.Create(SumOfRiskLevels, AreaOfThreeLargestBasins);
+    }
+
+    private sealed class Heightmap : SquareGrid
+    {
+        public Heightmap(int width, int height)
+            : base(width, height)
+        {
+        }
+
+        public override double Cost(Point a, Point b) => 1;
     }
 }
