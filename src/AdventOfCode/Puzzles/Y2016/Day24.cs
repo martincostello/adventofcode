@@ -152,6 +152,6 @@ public sealed class Day24 : Puzzle
         }
 
         public override double Cost(Point a, Point b)
-            => Math.Abs(a.X - b.X) + Math.Abs(a.Y - b.Y);
+            => a.ManhattanDistance(b);
     }
 }

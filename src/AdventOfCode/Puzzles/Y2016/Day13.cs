@@ -147,10 +147,7 @@ public sealed class Day13 : Puzzle
             maze,
             start,
             goal,
-            ManhattanDistance);
-
-        static double ManhattanDistance(Point a, Point b)
-            => Math.Abs(a.X - b.X) + Math.Abs(a.Y - b.Y);
+            (x, y) => x.ManhattanDistance(y));
     }
 
     private sealed class Maze : SquareGrid
