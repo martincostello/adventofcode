@@ -11,10 +11,10 @@ public sealed class Day10Tests : PuzzleTest
     }
 
     [Fact]
-    public void Y2021_Day10_AnalyzeRisk_Returns_Correct_Value()
+    public void Y2021_Day10_Compile_Returns_Correct_Value()
     {
         // Arrange
-        string[] heightmap =
+        string[] lines =
         {
             "[({(<(())[]>[[{[]{<()<>>",
             "[(()[<>])]({[<{<<[]>>(",
@@ -29,10 +29,11 @@ public sealed class Day10Tests : PuzzleTest
         };
 
         // Act
-        int actual = Day10.Compile(heightmap);
+        (int syntaxErrorScore, long middleAutoCompleteScore) = Day10.Compile(lines);
 
         // Assert
-        actual.ShouldBe(26397);
+        syntaxErrorScore.ShouldBe(26397);
+        middleAutoCompleteScore.ShouldBe(288957);
     }
 
     [Fact]
@@ -43,5 +44,6 @@ public sealed class Day10Tests : PuzzleTest
 
         // Assert
         puzzle.SyntaxErrorScore.ShouldBe(323613);
+        puzzle.MiddleAutoCompleteScore.ShouldBe(3103006161);
     }
 }

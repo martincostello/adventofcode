@@ -15,21 +15,39 @@ public sealed class Day10 : Puzzle
     public int SyntaxErrorScore { get; private set; }
 
     /// <summary>
+    /// Gets the middle auto-complete score for the navigation subsystem.
+    /// </summary>
+    public long MiddleAutoCompleteScore { get; private set; }
+
+    /// <summary>
     /// Compiles the specified lines of the navigation subsystem.
     /// </summary>
     /// <param name="lines">The lines of chunks to compile.</param>
     /// <returns>
-    /// The syntax error score for the navigation subsystem.
+    /// The syntax error score and the middle auto-complete score for the navigation subsystem.
     /// </returns>
-    public static int Compile(IList<string> lines)
+    public static (int SyntaxErrorScore, long MiddleAutoCompleteScore) Compile(IList<string> lines)
     {
+        var incompleteLines = new List<string>(lines);
         var illegalCharacters = new List<char>();
+
+        var pairs = new Dictionary<char, char>(4)
+        {
+            ['('] = ')',
+            ['['] = ']',
+            ['{'] = '}',
+            ['<'] = '>',
+            [')'] = '(',
+            [']'] = '[',
+            ['}'] = '{',
+            ['>'] = '<',
+        };
 
         foreach (string line in lines)
         {
             bool isCorrupted = false;
             char illegal = default;
-            var chunkStart = new Stack<char>();
+            var chunks = new Stack<char>();
 
             foreach (char value in line)
             {
@@ -41,46 +59,36 @@ public sealed class Day10 : Puzzle
                     case '[':
                     case '{':
                     case '<':
-                        chunkStart.Push(value);
+                        chunks.Push(value);
                         continue;
 
                     case ')':
-                        expected = '(';
-                        break;
-
                     case ']':
-                        expected = '[';
-                        break;
-
                     case '}':
-                        expected = '{';
-                        break;
-
                     case '>':
-                        expected = '<';
-                        break;
-
                     default:
+                        expected = pairs[value];
                         break;
                 }
 
-                if (chunkStart.Peek() != expected)
+                if (chunks.Peek() != expected)
                 {
                     illegal = value;
                     isCorrupted = true;
                     break;
                 }
 
-                chunkStart.Pop();
+                chunks.Pop();
             }
 
             if (isCorrupted)
             {
+                incompleteLines.Remove(line);
                 illegalCharacters.Add(illegal);
             }
         }
 
-        var scores = new Dictionary<char, int>(4)
+        var errorScores = new Dictionary<char, int>(4)
         {
             [')'] = 3,
             [']'] = 57,
@@ -88,9 +96,61 @@ public sealed class Day10 : Puzzle
             ['>'] = 25137,
         };
 
-        return illegalCharacters
-            .Select((p) => scores[p])
+        int syntaxErrorScore = illegalCharacters
+            .Select((p) => errorScores[p])
             .Sum();
+
+        var autoCompleteScores = new Dictionary<char, int>(4)
+        {
+            [')'] = 1,
+            [']'] = 2,
+            ['}'] = 3,
+            ['>'] = 4,
+        };
+
+        var scores = new List<long>(incompleteLines.Count);
+
+        foreach (string line in incompleteLines)
+        {
+            var chunks = new Stack<char>();
+
+            foreach (char value in line)
+            {
+                switch (value)
+                {
+                    case '(':
+                    case '[':
+                    case '{':
+                    case '<':
+                        chunks.Push(value);
+                        break;
+
+                    case ')':
+                    case ']':
+                    case '}':
+                    case '>':
+                    default:
+                        chunks.Pop();
+                        break;
+                }
+            }
+
+            long score = 0;
+
+            foreach (char value in chunks)
+            {
+                score *= 5;
+                score += autoCompleteScores[pairs[value]];
+            }
+
+            scores.Add(score);
+        }
+
+        long middleAutoCompleteScore = scores
+            .OrderBy((p) => p)
+            .ElementAt(scores.Count / 2);
+
+        return (syntaxErrorScore, middleAutoCompleteScore);
     }
 
     /// <inheritdoc />
@@ -98,13 +158,14 @@ public sealed class Day10 : Puzzle
     {
         IList<string> lines = await ReadResourceAsLinesAsync();
 
-        SyntaxErrorScore = Compile(lines);
+        (SyntaxErrorScore, MiddleAutoCompleteScore) = Compile(lines);
 
         if (Verbose)
         {
             Logger.WriteLine("The total syntax error score is {0:N0}.", SyntaxErrorScore);
+            Logger.WriteLine("The middle auto-complete score is {0:N0}.", MiddleAutoCompleteScore);
         }
 
-        return PuzzleResult.Create(SyntaxErrorScore);
+        return PuzzleResult.Create(SyntaxErrorScore, MiddleAutoCompleteScore);
     }
 }
