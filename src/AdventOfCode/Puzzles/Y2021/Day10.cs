@@ -28,10 +28,7 @@ public sealed class Day10 : Puzzle
     /// </returns>
     public static (int SyntaxErrorScore, long MiddleAutoCompleteScore) Compile(IList<string> lines)
     {
-        var incompleteLines = new List<string>(lines);
-        var illegalCharacters = new List<char>();
-
-        var pairs = new Dictionary<char, char>(4)
+        var pairs = new Dictionary<char, char>(8)
         {
             ['('] = ')',
             ['['] = ']',
@@ -42,6 +39,25 @@ public sealed class Day10 : Puzzle
             ['}'] = '{',
             ['>'] = '<',
         };
+
+        var completeScoreMap = new Dictionary<char, int>(4)
+        {
+            [')'] = 1,
+            [']'] = 2,
+            ['}'] = 3,
+            ['>'] = 4,
+        };
+
+        var errorScoreMap = new Dictionary<char, int>(4)
+        {
+            [')'] = 3,
+            [']'] = 57,
+            ['}'] = 1197,
+            ['>'] = 25137,
+        };
+
+        var autoCompleteScores = new List<long>();
+        var errorScores = new List<int>();
 
         foreach (string line in lines)
         {
@@ -83,72 +99,27 @@ public sealed class Day10 : Puzzle
 
             if (isCorrupted)
             {
-                incompleteLines.Remove(line);
-                illegalCharacters.Add(illegal);
+                errorScores.Add(errorScoreMap[illegal]);
             }
-        }
-
-        var errorScores = new Dictionary<char, int>(4)
-        {
-            [')'] = 3,
-            [']'] = 57,
-            ['}'] = 1197,
-            ['>'] = 25137,
-        };
-
-        int syntaxErrorScore = illegalCharacters
-            .Select((p) => errorScores[p])
-            .Sum();
-
-        var autoCompleteScores = new Dictionary<char, int>(4)
-        {
-            [')'] = 1,
-            [']'] = 2,
-            ['}'] = 3,
-            ['>'] = 4,
-        };
-
-        var scores = new List<long>(incompleteLines.Count);
-
-        foreach (string line in incompleteLines)
-        {
-            var chunks = new Stack<char>();
-
-            foreach (char value in line)
+            else
             {
-                switch (value)
+                long score = 0;
+
+                foreach (char value in chunks)
                 {
-                    case '(':
-                    case '[':
-                    case '{':
-                    case '<':
-                        chunks.Push(value);
-                        break;
-
-                    case ')':
-                    case ']':
-                    case '}':
-                    case '>':
-                    default:
-                        chunks.Pop();
-                        break;
+                    score *= 5;
+                    score += completeScoreMap[pairs[value]];
                 }
+
+                autoCompleteScores.Add(score);
             }
-
-            long score = 0;
-
-            foreach (char value in chunks)
-            {
-                score *= 5;
-                score += autoCompleteScores[pairs[value]];
-            }
-
-            scores.Add(score);
         }
 
-        long middleAutoCompleteScore = scores
+        int syntaxErrorScore = errorScores.Sum();
+
+        long middleAutoCompleteScore = autoCompleteScores
             .OrderBy((p) => p)
-            .ElementAt(scores.Count / 2);
+            .ElementAt(autoCompleteScores.Count / 2);
 
         return (syntaxErrorScore, middleAutoCompleteScore);
     }
