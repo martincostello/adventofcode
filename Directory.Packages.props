@@ -6,7 +6,7 @@
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.0.0" />
     <PackageVersion Include="Microsoft.Playwright" Version="1.17.2" />
     <PackageVersion Include="Microsoft.SourceLink.GitHub" Version="1.1.1" />
-    <PackageVersion Include="Microsoft.TypeScript.MSBuild" Version="4.5.2" />
+    <PackageVersion Include="Microsoft.TypeScript.MSBuild" Version="4.5.3" />
     <PackageVersion Include="Shouldly" Version="4.0.3" />
     <PackageVersion Include="StyleCop.Analyzers" Version="1.2.0-beta.354" />
     <PackageVersion Include="System.Runtime.Experimental" Version="6.0.0" />
