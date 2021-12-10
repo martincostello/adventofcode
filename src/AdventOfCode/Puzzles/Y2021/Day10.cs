@@ -117,9 +117,9 @@ public sealed class Day10 : Puzzle
 
         int syntaxErrorScore = errorScores.Sum();
 
-        long middleAutoCompleteScore = autoCompleteScores
-            .OrderBy((p) => p)
-            .ElementAt(autoCompleteScores.Count / 2);
+        autoCompleteScores.Sort();
+
+        long middleAutoCompleteScore = autoCompleteScores[autoCompleteScores.Count / 2];
 
         return (syntaxErrorScore, middleAutoCompleteScore);
     }
