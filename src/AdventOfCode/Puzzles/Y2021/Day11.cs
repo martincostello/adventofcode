@@ -15,14 +15,20 @@ public sealed class Day11 : Puzzle
     public int Flashes100 { get; private set; }
 
     /// <summary>
+    /// Gets the number of the first iteration where all the octopuses flash.
+    /// </summary>
+    public int IterationOfFirstSynchronizedFlash { get; private set; }
+
+    /// <summary>
     /// Simulates the energy levels of the specified octopuses.
     /// </summary>
     /// <param name="grid">The grid of octopus energy levels.</param>
-    /// <param name="iterations">The number of iterations to simulate the energy levels for.</param>
+    /// <param name="steps">The number of steps to simulate the energy levels for.</param>
     /// <returns>
-    /// The syntax error score and the middle auto-complete score for the navigation subsystem.
+    /// The number of flashes after 100 steps and the number of steps after which
+    /// all of the octopuses flash for the first time.
     /// </returns>
-    public static int Simulate(IList<string> grid, int iterations)
+    public static (int Flashes100, int IterationOfFirstSynchronizedFlash) Simulate(IList<string> grid, int? steps)
     {
         const int FlashPoint = 10;
 
@@ -42,8 +48,9 @@ public sealed class Day11 : Puzzle
         Dictionary<Point, int> current;
 
         int flashes = 0;
+        int iterationOfFirstSynchronizedFlash = 0;
 
-        for (int i = 0; i < iterations; i++)
+        for (int i = 0; i < steps; i++)
         {
             current = new Dictionary<Point, int>(previous.Count);
 
@@ -92,16 +99,26 @@ public sealed class Day11 : Puzzle
                 pointsToFlash = neighborsToFlash;
             }
 
+            int count = 0;
+
             foreach (Point point in flashedPoints)
             {
-                flashes++;
+                count++;
                 current[point] = 0;
+            }
+
+            flashes += count;
+
+            if (count == current.Count)
+            {
+                iterationOfFirstSynchronizedFlash = i + 1;
+                break;
             }
 
             previous = current;
         }
 
-        return flashes;
+        return (flashes, iterationOfFirstSynchronizedFlash);
 
         static List<Point> Neighbors(Point point, Dictionary<Point, int> grid)
         {
@@ -134,13 +151,15 @@ public sealed class Day11 : Puzzle
     {
         IList<string> lines = await ReadResourceAsLinesAsync();
 
-        Flashes100 = Simulate(lines, iterations: 100);
+        (Flashes100, _) = Simulate(lines, steps: 100);
+        (_, IterationOfFirstSynchronizedFlash) = Simulate(lines, steps: int.MaxValue);
 
         if (Verbose)
         {
             Logger.WriteLine("After 100 steps there are {0:N0} flashes.", Flashes100);
+            Logger.WriteLine("The octopuses all flash for the first time after {0:N0} steps.", IterationOfFirstSynchronizedFlash);
         }
 
-        return PuzzleResult.Create(Flashes100);
+        return PuzzleResult.Create(Flashes100, IterationOfFirstSynchronizedFlash);
     }
 }

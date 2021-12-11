@@ -24,7 +24,7 @@ public sealed class Day11Tests : PuzzleTest
         };
 
         // Act
-        long actual = Day11.Simulate(grid, iterations: 2);
+        (int actual, _) = Day11.Simulate(grid, steps: 2);
 
         // Assert
         actual.ShouldBe(9);
@@ -49,10 +49,35 @@ public sealed class Day11Tests : PuzzleTest
         };
 
         // Act
-        long actual = Day11.Simulate(grid, iterations: 100);
+        (int actual, _) = Day11.Simulate(grid, steps: 100);
 
         // Assert
         actual.ShouldBe(1656);
+    }
+
+    [Fact]
+    public void Y2021_Day11_Simulate_Returns_Correct_Value_3()
+    {
+        // Arrange
+        string[] grid =
+        {
+            "5483143223",
+            "2745854711",
+            "5264556173",
+            "6141336146",
+            "6357385478",
+            "4167524645",
+            "2176841721",
+            "6882881134",
+            "4846848554",
+            "5283751526",
+        };
+
+        // Act
+        (_, int actual) = Day11.Simulate(grid, steps: int.MaxValue);
+
+        // Assert
+        actual.ShouldBe(195);
     }
 
     [Fact]
@@ -63,5 +88,6 @@ public sealed class Day11Tests : PuzzleTest
 
         // Assert
         puzzle.Flashes100.ShouldBe(1739);
+        puzzle.IterationOfFirstSynchronizedFlash.ShouldBe(324);
     }
 }
