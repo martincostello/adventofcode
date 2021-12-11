@@ -15,9 +15,9 @@ public sealed class Day11 : Puzzle
     public int Flashes100 { get; private set; }
 
     /// <summary>
-    /// Gets the number of the first iteration where all the octopuses flash.
+    /// Gets the number of the first step where all the octopuses flash.
     /// </summary>
-    public int IterationOfFirstSynchronizedFlash { get; private set; }
+    public int StepOfFirstSynchronizedFlash { get; private set; }
 
     /// <summary>
     /// Simulates the energy levels of the specified octopuses.
@@ -28,7 +28,7 @@ public sealed class Day11 : Puzzle
     /// The number of flashes after 100 steps and the number of steps after which
     /// all of the octopuses flash for the first time.
     /// </returns>
-    public static (int Flashes100, int IterationOfFirstSynchronizedFlash) Simulate(IList<string> grid, int? steps)
+    public static (int Flashes100, int StepOfFirstSynchronizedFlash) Simulate(IList<string> grid, int steps)
     {
         const int FlashPoint = 10;
 
@@ -48,7 +48,7 @@ public sealed class Day11 : Puzzle
         Dictionary<Point, int> current;
 
         int flashes = 0;
-        int iterationOfFirstSynchronizedFlash = 0;
+        int stepOfFirstSynchronizedFlash = 0;
 
         for (int i = 0; i < steps; i++)
         {
@@ -111,14 +111,14 @@ public sealed class Day11 : Puzzle
 
             if (count == current.Count)
             {
-                iterationOfFirstSynchronizedFlash = i + 1;
+                stepOfFirstSynchronizedFlash = i + 1;
                 break;
             }
 
             previous = current;
         }
 
-        return (flashes, iterationOfFirstSynchronizedFlash);
+        return (flashes, stepOfFirstSynchronizedFlash);
 
         static List<Point> Neighbors(Point point, Dictionary<Point, int> grid)
         {
@@ -152,14 +152,14 @@ public sealed class Day11 : Puzzle
         IList<string> lines = await ReadResourceAsLinesAsync();
 
         (Flashes100, _) = Simulate(lines, steps: 100);
-        (_, IterationOfFirstSynchronizedFlash) = Simulate(lines, steps: int.MaxValue);
+        (_, StepOfFirstSynchronizedFlash) = Simulate(lines, steps: int.MaxValue);
 
         if (Verbose)
         {
             Logger.WriteLine("After 100 steps there are {0:N0} flashes.", Flashes100);
-            Logger.WriteLine("The octopuses all flash for the first time after {0:N0} steps.", IterationOfFirstSynchronizedFlash);
+            Logger.WriteLine("The octopuses all flash for the first time after {0:N0} steps.", StepOfFirstSynchronizedFlash);
         }
 
-        return PuzzleResult.Create(Flashes100, IterationOfFirstSynchronizedFlash);
+        return PuzzleResult.Create(Flashes100, StepOfFirstSynchronizedFlash);
     }
 }

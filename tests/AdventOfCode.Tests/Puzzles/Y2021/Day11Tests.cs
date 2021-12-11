@@ -88,6 +88,6 @@ public sealed class Day11Tests : PuzzleTest
 
         // Assert
         puzzle.Flashes100.ShouldBe(1739);
-        puzzle.IterationOfFirstSynchronizedFlash.ShouldBe(324);
+        puzzle.StepOfFirstSynchronizedFlash.ShouldBe(324);
     }
 }
