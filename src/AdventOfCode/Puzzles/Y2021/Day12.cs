@@ -30,7 +30,7 @@ public sealed class Day12 : Puzzle
     /// </returns>
     public static int Navigate(IList<string> nodes, int smallCaveVisitLimit)
     {
-        var caves = new CaveSystem();
+        var caves = new Graph<string>();
 
         foreach (string node in nodes)
         {
@@ -68,15 +68,15 @@ public sealed class Day12 : Puzzle
         return PuzzleResult.Create(Count1, Count2);
     }
 
-    private static int CountPaths(CaveSystem caves, int smallCaveVisitLimit)
+    private static int CountPaths(Graph<string> graph, int smallCaveVisitLimit)
     {
-        var visited = caves.Edges.ToDictionary((p) => p.Key, (_) => 0);
+        var visited = graph.Edges.ToDictionary((p) => p.Key, (_) => 0);
         bool allowOneDoubleVisit = smallCaveVisitLimit == 2;
 
-        return CountPaths(caves, "start", "end", visited, allowOneDoubleVisit);
+        return CountPaths(graph, "start", "end", visited, allowOneDoubleVisit);
 
         static int CountPaths(
-            CaveSystem caves,
+            Graph<string> graph,
             string current,
             string goal,
             Dictionary<string, int> visited,
@@ -91,7 +91,7 @@ public sealed class Day12 : Puzzle
 
             int count = 0;
 
-            foreach (string next in caves.Neighbors(current))
+            foreach (string next in graph.Neighbors(current))
             {
                 // Never return to the first cave
                 if (string.Equals(next, "start", StringComparison.Ordinal))
@@ -103,7 +103,7 @@ public sealed class Day12 : Puzzle
 
                 if (isUpper)
                 {
-                    count += CountPaths(caves, next, goal, visited, allowOneDoubleVisit);
+                    count += CountPaths(graph, next, goal, visited, allowOneDoubleVisit);
                 }
                 else
                 {
@@ -111,11 +111,11 @@ public sealed class Day12 : Puzzle
 
                     if (visits < 1)
                     {
-                        count += CountPaths(caves, next, goal, visited, allowOneDoubleVisit);
+                        count += CountPaths(graph, next, goal, visited, allowOneDoubleVisit);
                     }
                     else if (allowOneDoubleVisit)
                     {
-                        count += CountPaths(caves, next, goal, visited, false);
+                        count += CountPaths(graph, next, goal, visited, false);
                     }
                 }
             }
@@ -124,13 +124,5 @@ public sealed class Day12 : Puzzle
 
             return count;
         }
-    }
-
-    private class CaveSystem : Graph<string>, IWeightedGraph<string>
-    {
-        public double Cost(string a, string b) =>
-            char.IsUpper(b[0]) ? double.PositiveInfinity : 1;
-
-        IEnumerable<string> IWeightedGraph<string>.Neighbors(string id) => Neighbors(id);
     }
 }
