@@ -10,8 +10,10 @@ public sealed class Day12Tests : PuzzleTest
     {
     }
 
-    [Fact]
-    public void Y2021_Day12_Simulate_Returns_Correct_Value_1()
+    [Theory]
+    [InlineData(1, 10)]
+    [InlineData(2, 36)]
+    public void Y2021_Day12_Navigate_Returns_Correct_Value_1(int smallCaveVisitLimit, int expected)
     {
         // Arrange
         string[] nodes =
@@ -26,14 +28,16 @@ public sealed class Day12Tests : PuzzleTest
         };
 
         // Act
-        int actual = Day12.Navigate(nodes);
+        int actual = Day12.Navigate(nodes, smallCaveVisitLimit);
 
         // Assert
-        actual.ShouldBe(10);
+        actual.ShouldBe(expected);
     }
 
-    [Fact]
-    public void Y2021_Day12_Simulate_Returns_Correct_Value_2()
+    [Theory]
+    [InlineData(1, 19)]
+    [InlineData(2, 103)]
+    public void Y2021_Day12_Navigate_Returns_Correct_Value_2(int smallCaveVisitLimit, int expected)
     {
         // Arrange
         string[] nodes =
@@ -51,14 +55,16 @@ public sealed class Day12Tests : PuzzleTest
         };
 
         // Act
-        int actual = Day12.Navigate(nodes);
+        int actual = Day12.Navigate(nodes, smallCaveVisitLimit);
 
         // Assert
-        actual.ShouldBe(19);
+        actual.ShouldBe(expected);
     }
 
-    [Fact]
-    public void Y2021_Day12_Simulate_Returns_Correct_Value_3()
+    [Theory]
+    [InlineData(1, 226)]
+    [InlineData(2, 3509)]
+    public void Y2021_Day12_Navigate_Returns_Correct_Value_3(int smallCaveVisitLimit, int expected)
     {
         // Arrange
         string[] nodes =
@@ -84,10 +90,10 @@ public sealed class Day12Tests : PuzzleTest
         };
 
         // Act
-        int actual = Day12.Navigate(nodes);
+        int actual = Day12.Navigate(nodes, smallCaveVisitLimit);
 
         // Assert
-        actual.ShouldBe(226);
+        actual.ShouldBe(expected);
     }
 
     [Fact]
@@ -97,6 +103,7 @@ public sealed class Day12Tests : PuzzleTest
         var puzzle = await SolvePuzzleAsync<Day12>();
 
         // Assert
-        puzzle.Count.ShouldBe(4413);
+        puzzle.Count1.ShouldBe(4413);
+        puzzle.Count2.ShouldBe(118803);
     }
 }
