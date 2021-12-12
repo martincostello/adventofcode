@@ -29,7 +29,7 @@ public sealed class Day15 : Puzzle
     /// </returns>
     public static int GetSpokenNumber(IList<int> startingNumbers, int number)
     {
-        var numbers = new Dictionary<int, IList<int>>();
+        var numbers = new Dictionary<int, List<int>>();
 
         int lastSpoken = 0;
 
@@ -41,7 +41,9 @@ public sealed class Day15 : Puzzle
 
         for (int i = startingNumbers.Count; i < number; i++)
         {
-            if (!numbers.TryGetValue(lastSpoken, out IList<int>? times) || times.Count == 1)
+            var times = numbers.GetOrAdd(lastSpoken);
+
+            if (times.Count < 2)
             {
                 lastSpoken = 0;
             }
@@ -57,12 +59,7 @@ public sealed class Day15 : Puzzle
 
         void UpdateNumber(int value, int time)
         {
-            if (!numbers!.TryGetValue(value, out IList<int>? occasions))
-            {
-                occasions = numbers[value] = new List<int>();
-            }
-
-            occasions.Add(time);
+            numbers.GetOrAdd(value).Add(time);
         }
     }
 

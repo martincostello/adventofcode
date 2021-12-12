@@ -88,7 +88,7 @@ public sealed class Day05 : Puzzle
     /// </returns>
     internal static bool HasPairOfLettersWithMoreThanOneOccurence(string value)
     {
-        var letterPairs = new Dictionary<string, IList<int>>();
+        var letterPairs = new Dictionary<string, List<int>>();
 
         for (int i = 0; i < value.Length - 1; i++)
         {
@@ -97,10 +97,7 @@ public sealed class Day05 : Puzzle
 
             string pair = new(new[] { first, second });
 
-            if (!letterPairs.TryGetValue(pair, out IList<int>? indexes))
-            {
-                indexes = letterPairs[pair] = new List<int>();
-            }
+            var indexes = letterPairs.GetOrAdd(pair);
 
             if (!indexes.Contains(i - 1))
             {

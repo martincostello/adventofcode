@@ -48,12 +48,7 @@ public sealed class Day07 : Puzzle
 
             string part = constraint[..1];
 
-            if (!constraints.TryGetValue(part, out var antecedents))
-            {
-                antecedents = constraints[part] = new HashSet<string>();
-            }
-
-            constraints[part].Add(antecedent);
+            constraints.GetOrAdd(part).Add(antecedent);
 
             available.Add(part);
             available.Add(antecedent);

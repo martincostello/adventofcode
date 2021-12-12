@@ -121,12 +121,7 @@ public sealed class Day04 : Puzzle
                     minutesAsleepForSleepiestGuard.AddOrIncrement(i, 0);
                 }
 
-                if (!sleepiestGuardsByMinute.TryGetValue(i, out var guardsAsleepInMinute))
-                {
-                    guardsAsleepInMinute = sleepiestGuardsByMinute[i] = new Dictionary<int, int>();
-                }
-
-                guardsAsleepInMinute.AddOrIncrement(guard, 0);
+                sleepiestGuardsByMinute.GetOrAdd(i).AddOrIncrement(guard, 0);
             }
         }
 

@@ -223,12 +223,12 @@ public sealed class Day10 : Puzzle
         /// <summary>
         /// Gets the output bins, keyed by their number.
         /// </summary>
-        internal IDictionary<int, Bin> Bins { get; }
+        internal Dictionary<int, Bin> Bins { get; }
 
         /// <summary>
         /// Gets the bots, keyed by their number.
         /// </summary>
-        internal IDictionary<int, Bot> Bots { get; }
+        internal Dictionary<int, Bot> Bots { get; }
 
         /// <summary>
         /// Gets or sets a delegate to a method to invoke when to microchips are compared by a bot.
@@ -297,14 +297,7 @@ public sealed class Day10 : Puzzle
         /// The <see cref="Bot"/> with the specified number.
         /// </returns>
         private Bot GetBot(int number)
-        {
-            if (!Bots.TryGetValue(number, out Bot? bot))
-            {
-                Bots[number] = bot = new Bot(number, OnCompare!);
-            }
-
-            return bot;
-        }
+            => Bots.GetOrAdd(number, () => new(number, OnCompare!));
 
         /// <summary>
         /// Gets the bin with the specified number.
@@ -314,13 +307,6 @@ public sealed class Day10 : Puzzle
         /// The <see cref="Bin"/> with the specified number.
         /// </returns>
         private Bin GetBin(int number)
-        {
-            if (!Bins.TryGetValue(number, out Bin? bin))
-            {
-                Bins[number] = bin = new Bin(number);
-            }
-
-            return bin;
-        }
+            => Bins.GetOrAdd(number, () => new(number));
     }
 }

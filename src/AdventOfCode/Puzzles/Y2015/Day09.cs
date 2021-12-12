@@ -36,74 +36,41 @@ public sealed class Day09 : Puzzle
     /// </returns>
     internal static int GetDistanceBetweenPoints(ICollection<string> collection, bool findLongest)
     {
-        // Parse the input
-        var parsedDistances = collection
-            .Select((p) => p.Split(" = "))
-            .Select((p) => new { Locations = p[0].Split(" to "), Distance = Parse<int>(p[1]) })
-            .ToList();
+        var distances = new Dictionary<string, int>(collection.Count);
+        var vectors = new List<(string Start, string End)>(collection.Count);
 
-        if (parsedDistances.Count == 1)
+        foreach (string value in collection)
         {
-            // Trivial case
-            return parsedDistances[0].Distance;
+            string[] split = value.Split(" = ");
+            string[] locations = split[0].Split(" to ");
+
+            string start = locations[0];
+            string end = locations[1];
+
+            vectors.Add((start, end));
+
+            int distance = Parse<int>(split[1]);
+
+            distances[$"{start} to {end}"] = distance;
+            distances[$"{end} to {start}"] = distance;
         }
 
-        // How many unique locations can be started from?
-        var uniqueLocations = parsedDistances
-            .SelectMany((p) => p.Locations)
-            .Distinct(StringComparer.Ordinal)
-            .ToList();
+        var map = new Map(distances);
 
-        // Get the possible next destination and the distance to it from each unique location
-        var possibleDestinations = new Dictionary<string, IDictionary<string, int>>(uniqueLocations.Count);
-
-        foreach (string location in uniqueLocations)
+        foreach ((string start, string end) in vectors)
         {
-            var distancesFeaturingLocation = parsedDistances
-                .Where((p) => p.Locations.Contains(location))
-                .ToList();
-
-            var destinations = new Dictionary<string, int>(distancesFeaturingLocation.Count);
-
-            foreach (var distancePair in distancesFeaturingLocation)
-            {
-                string other;
-
-                if (string.Equals(location, distancePair.Locations[0], StringComparison.Ordinal))
-                {
-                    other = distancePair.Locations[1];
-                }
-                else
-                {
-                    other = distancePair.Locations[0];
-                }
-
-                destinations[other] = distancePair.Distance;
-            }
-
-            possibleDestinations[location] = destinations;
+            map.Edges.GetOrAdd(start).Add(end);
+            map.Edges.GetOrAdd(end).Add(start);
         }
 
-        // Get the distance of each possible path
-        var paths = new List<Path>(uniqueLocations.Count);
+        var routeDistances = new List<int>();
 
-        // Walk the paths from all of the possible origin points
-        foreach (string origin in uniqueLocations)
+        foreach (string location in map.Edges.Keys)
         {
-            paths.AddRange(WalkPaths(origin, possibleDestinations));
+            routeDistances.AddRange(GetRouteDistances(map, location));
         }
 
-        // Find the length of the longest path
-        int maxPathLength = paths.Max((p) => p.Steps.Count);
-
-        // Discount any paths that did not visit all locations
-        var completePaths = paths.Where((p) => p.Steps.Count == maxPathLength);
-
-        var orderedPaths = completePaths.OrderBy((p) => p.PathDistance);
-
-        var pathOfInterest = findLongest ? orderedPaths.Last() : orderedPaths.First();
-
-        return pathOfInterest.PathDistance;
+        return findLongest ? routeDistances.Max() : routeDistances.Min();
     }
 
     /// <inheritdoc />
@@ -132,137 +99,59 @@ public sealed class Day09 : Puzzle
         return PuzzleResult.Create(Solution);
     }
 
-    /// <summary>
-    /// Walks all of the possible paths from a specified origin point where each point is visited exactly once.
-    /// </summary>
-    /// <param name="origin">The origin point.</param>
-    /// <param name="pathsFromSources">The possible next paths and the distances to them from each location.</param>
-    /// <returns>An <see cref="IList{T}"/> containing all the possible paths that start at <paramref name="origin"/>.</returns>
-    private static IList<Path> WalkPaths(string origin, IDictionary<string, IDictionary<string, int>> pathsFromSources)
+    private static IList<int> GetRouteDistances(Map map, string start)
     {
-        var path = new Path(origin);
+        var visited = new List<string>(map.Edges.Count);
+        return GetRouteDistances(map, start, visited);
 
-        var pathsWalked = new List<Path>()
+        static IList<int> GetRouteDistances(Map map, string location, List<string> visited)
         {
-            path,
-        };
+            visited.Add(location);
 
-        // Walk all the possible paths from the origin point
-        foreach (var next in pathsFromSources[origin])
-        {
-            WalkPaths(next.Key, path, pathsWalked, pathsFromSources);
-        }
-
-        return pathsWalked;
-    }
-
-    /// <summary>
-    /// Walks all of the possible paths from a specified origin point where each point is visited exactly once.
-    /// </summary>
-    /// <param name="current">The current point.</param>
-    /// <param name="currentPath">The path that lead to the current point.</param>
-    /// <param name="pathsWalked">A collection of all the paths walked so far.</param>
-    /// <param name="pathsFromSources">The possible next paths and the distances to them from each location.</param>
-    private static void WalkPaths(
-        string current,
-        Path currentPath,
-        ICollection<Path> pathsWalked,
-        IDictionary<string, IDictionary<string, int>> pathsFromSources)
-    {
-        if (currentPath.HasVisited(current))
-        {
-            // We've already been here so walk no further down this route
-            return;
-        }
-
-        // Create a new path that is the scurrent path plus a step to this position
-        int distanceFromPreviousToCurrent = pathsFromSources[currentPath.Current][current];
-
-        Path nextPath = currentPath
-            .Clone()
-            .Visit(current, distanceFromPreviousToCurrent);
-
-        pathsWalked.Add(nextPath);
-
-        // Recursively continue down the path to the next possible destinations
-        foreach (var next in pathsFromSources[nextPath.Current])
-        {
-            WalkPaths(next.Key, nextPath, pathsWalked, pathsFromSources);
-        }
-    }
-
-    /// <summary>
-    /// A class representing a path between some locations. This class cannot be inherited.
-    /// </summary>
-    private sealed class Path
-    {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Path"/> class.
-        /// </summary>
-        /// <param name="origin">The origin point.</param>
-        internal Path(string origin)
-        {
-            Origin = origin;
-            Steps = new List<string>() { origin };
-        }
-
-        /// <summary>
-        /// Gets the origin point.
-        /// </summary>
-        internal string Origin { get; }
-
-        /// <summary>
-        /// Gets the current position on the path.
-        /// </summary>
-        internal string Current => Steps[^1];
-
-        /// <summary>
-        /// Gets the steps along the path.
-        /// </summary>
-        internal IList<string> Steps { get; private set; }
-
-        /// <summary>
-        /// Gets the total distance along the path.
-        /// </summary>
-        internal int PathDistance { get; private set; }
-
-        /// <inheritdoc />
-        public override string ToString() => string.Join(" -> ", Steps);
-
-        /// <summary>
-        /// Clones this instance.
-        /// </summary>
-        /// <returns>A new instance of <see cref="Path"/> cloned from the current instance.</returns>
-        internal Path Clone()
-        {
-            return new Path(Origin)
+            if (visited.Count == map.Edges.Count)
             {
-                Steps = new List<string>(Steps),
-                PathDistance = PathDistance,
-            };
-        }
+                string current = visited[0];
+                int distance = 0;
 
-        /// <summary>
-        /// Visits the specified location.
-        /// </summary>
-        /// <param name="location">The location to visit.</param>
-        /// <param name="distance">The distance to the location.</param>
-        /// <returns>The current <see cref="Path"/>.</returns>
-        internal Path Visit(string location, int distance)
+                for (int i = 1; i < visited.Count; i++)
+                {
+                    string next = visited[i];
+
+                    distance += map.Cost(current, next);
+
+                    current = next;
+                }
+
+                visited.Remove(location);
+
+                return new[] { distance };
+            }
+
+            var distances = new List<int>();
+
+            foreach (string next in map.Neighbors(location))
+            {
+                if (!visited.Contains(next))
+                {
+                    distances.AddRange(GetRouteDistances(map, next, visited));
+                }
+            }
+
+            visited.Remove(location);
+
+            return distances;
+        }
+    }
+
+    private sealed class Map : Graph<string>
+    {
+        private readonly Dictionary<string, int> _distances;
+
+        public Map(Dictionary<string, int> distances)
         {
-            Steps.Add(location);
-            PathDistance += distance;
-
-            return this;
+            _distances = distances;
         }
 
-        /// <summary>
-        /// Determines whether the specified location has already been visited.
-        /// </summary>
-        /// <param name="location">The location to test for.</param>
-        /// <returns>
-        /// <see langword="true"/> if <paramref name="location"/> has already been visited; otherwise <see langword="false"/>.
-        /// </returns>
-        internal bool HasVisited(string location) => Steps.Contains(location);
+        public int Cost(string a, string b) => _distances[$"{b} to {a}"];
     }
 }

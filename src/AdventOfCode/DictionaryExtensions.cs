@@ -30,24 +30,46 @@ internal static class DictionaryExtensions
     }
 
     /// <summary>
-    /// Gets the list with the specified key, adding it if not already present.
+    /// Gets the reference with the specified key, adding it if not already present.
     /// </summary>
     /// <typeparam name="TKey">The type of the key.</typeparam>
     /// <typeparam name="TValue">The type of the value.</typeparam>
-    /// <param name="dictionary">The dictionary to get the list for.</param>
-    /// <param name="key">The key to get the list for.</param>
-    /// <param name="factory">A delegate to a method to create the list if not found.</param>
+    /// <param name="dictionary">The dictionary to get the reference for.</param>
+    /// <param name="key">The key to get the reference for.</param>
+    /// <param name="factory">A delegate to a method to create the reference if not found.</param>
     /// <returns>
-    /// The list with the specified key.
+    /// The value reference with the specified key.
     /// </returns>
-    public static ICollection<TValue> GetOrAdd<TKey, TValue>(
-        this IDictionary<TKey, IList<TValue>> dictionary,
+    public static TValue GetOrAdd<TKey, TValue>(
+        this IDictionary<TKey, TValue> dictionary,
         TKey key,
-        Func<IList<TValue>> factory)
+        Func<TValue> factory)
+        where TValue : class
     {
         if (!dictionary.TryGetValue(key, out var result))
         {
             result = dictionary[key] = factory();
+        }
+
+        return result;
+    }
+
+    /// <summary>
+    /// Gets the reference with the specified key, adding it if not already present.
+    /// </summary>
+    /// <typeparam name="TKey">The type of the key.</typeparam>
+    /// <typeparam name="TValue">The type of the value.</typeparam>
+    /// <param name="dictionary">The dictionary to get the reference for.</param>
+    /// <param name="key">The key to get the reference for.</param>
+    /// <returns>
+    /// The value reference with the specified key.
+    /// </returns>
+    public static TValue GetOrAdd<TKey, TValue>(this IDictionary<TKey, TValue> dictionary, TKey key)
+        where TValue : class, new()
+    {
+        if (!dictionary.TryGetValue(key, out var result))
+        {
+            result = dictionary[key] = new();
         }
 
         return result;
