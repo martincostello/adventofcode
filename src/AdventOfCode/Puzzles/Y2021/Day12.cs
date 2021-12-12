@@ -39,11 +39,8 @@ public sealed class Day12 : Puzzle
             string start = pair[0];
             string end = pair[1];
 
-            var edges = caves.Edges.GetOrAdd(start, () => new List<string>());
-            edges.Add(end);
-
-            edges = caves.Edges.GetOrAdd(end, () => new List<string>());
-            edges.Add(start);
+            caves.Edges.GetOrAdd(start).Add(end);
+            caves.Edges.GetOrAdd(end).Add(start);
         }
 
         return CountPaths(caves, smallCaveVisitLimit);

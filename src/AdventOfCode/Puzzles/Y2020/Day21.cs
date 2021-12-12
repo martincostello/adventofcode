@@ -52,14 +52,8 @@ public sealed class Day21 : Puzzle
         {
             foreach (string allergen in allergens)
             {
-                if (!allergenCandidates.TryGetValue(allergen, out HashSet<string>? candidates))
-                {
-                    allergenCandidates[allergen] = new HashSet<string>(ingredients);
-                }
-                else
-                {
-                    candidates.IntersectWith(ingredients);
-                }
+                var candidates = allergenCandidates.GetOrAdd(allergen, () => new HashSet<string>(ingredients));
+                candidates.IntersectWith(ingredients);
             }
 
             foreach (string ingredient in ingredients)
