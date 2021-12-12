@@ -10,7 +10,7 @@ namespace MartinCostello.AdventOfCode;
 /// <remarks>
 /// Based on <c>https://www.redblobgames.com/pathfinding/a-star/implementation.html</c>.
 /// </remarks>
-public sealed class Graph<T>
+public class Graph<T>
     where T : notnull
 {
     /// <summary>

@@ -28,4 +28,28 @@ internal static class DictionaryExtensions
             dictionary[key] = value;
         }
     }
+
+    /// <summary>
+    /// Gets the list with the specified key, adding it if not already present.
+    /// </summary>
+    /// <typeparam name="TKey">The type of the key.</typeparam>
+    /// <typeparam name="TValue">The type of the value.</typeparam>
+    /// <param name="dictionary">The dictionary to get the list for.</param>
+    /// <param name="key">The key to get the list for.</param>
+    /// <param name="factory">A delegate to a method to create the list if not found.</param>
+    /// <returns>
+    /// The list with the specified key.
+    /// </returns>
+    public static ICollection<TValue> GetOrAdd<TKey, TValue>(
+        this IDictionary<TKey, IList<TValue>> dictionary,
+        TKey key,
+        Func<IList<TValue>> factory)
+    {
+        if (!dictionary.TryGetValue(key, out var result))
+        {
+            result = dictionary[key] = factory();
+        }
+
+        return result;
+    }
 }
