@@ -18,13 +18,13 @@ public sealed class Day13 : Puzzle
     /// Folds the transparent paper the specified number of times.
     /// </summary>
     /// <param name="instructions">The instructions to follow.</param>
-    /// <param name="folds">The number of times to fold the paper.</param>
+    /// <param name="folds">The number of times to fold the paper, otherwise all folds are performed.</param>
     /// <returns>
     /// The number of dots that are visible after completing the specified number of folds.
     /// </returns>
-    public static int Fold(IList<string> instructions, int folds)
+    public static int Fold(IList<string> instructions, int? folds)
     {
-        var paper = new Dictionary<Point, int>(instructions.Count - 1);
+        var paper = new Dictionary<Point, bool>(instructions.Count - 1);
         var foldLines = new List<Point>();
 
         foreach (string instruction in instructions)
@@ -54,16 +54,18 @@ public sealed class Day13 : Puzzle
 
             int[] points = instruction.AsNumbers<int>().ToArray();
 
-            paper[new(points[0], points[1])] = 1;
+            paper[new(points[0], points[1])] = true;
         }
 
-        for (int i = 0; i < folds && i < foldLines.Count; i++)
+        int folds2 = folds ?? int.MaxValue;
+
+        for (int i = 0; i < folds2 && i < foldLines.Count; i++)
         {
             var fold = foldLines[i];
 
             foreach (var point in paper.Keys.ToArray())
             {
-                if (paper.GetValueOrDefault(point) == 0)
+                if (!paper.GetValueOrDefault(point))
                 {
                     continue;
                 }
@@ -72,24 +74,41 @@ public sealed class Day13 : Puzzle
 
                 if (fold.X > 0 && point.X > fold.X)
                 {
-                    var delta = new Size(Math.Abs(point.X - fold.X) * 2, 0);
-                    transform = point - delta;
+                    transform = point - new Size(Math.Abs(point.X - fold.X) * 2, 0);
                 }
                 else if (fold.Y > 0 && point.Y > fold.Y)
                 {
-                    var delta = new Size(0, Math.Abs(point.Y - fold.Y) * 2);
-                    transform = point - delta;
+                    transform = point - new Size(0, Math.Abs(point.Y - fold.Y) * 2);
                 }
 
                 if (transform.HasValue)
                 {
-                    paper.AddOrIncrement(transform.Value, 1);
-                    paper[point]--;
+                    paper[transform.Value] = true;
+                    paper.Remove(point);
                 }
             }
         }
 
-        return paper.Values.Count((p) => p != 0);
+        ////var builder = new StringBuilder();
+        ////
+        ////for (int y = 0; y < paper.Keys.MaxBy((p) => p.Y).Y + 1; y++)
+        ////{
+        ////    for (int x = 0; x < paper.Keys.MaxBy((p) => p.X).X + 1; x++)
+        ////    {
+        ////        bool value = paper.GetValueOrDefault(new(x, y));
+        ////        builder.Append(value ? '*' : ' ');
+        ////    }
+        ////
+        ////    builder.AppendLine();
+        ////}
+        ////
+        ////string code = builder.ToString();
+        ////
+        ////if (code.Length > 0)
+        ////{
+        ////}
+
+        return paper.Values.Count((p) => p);
     }
 
     /// <inheritdoc />
@@ -98,11 +117,12 @@ public sealed class Day13 : Puzzle
         IList<string> instructions = await ReadResourceAsLinesAsync();
 
         DotCountAfterFold1 = Fold(instructions, folds: 1);
+        ////Code = Fold(instructions, folds: null);
 
         if (Verbose)
         {
             Logger.WriteLine(
-                "{0:N0} dots are visible after completing the first fold instruction.",
+                "{0:N0} dots are visible after completing the first fold.",
                 DotCountAfterFold1);
         }
 

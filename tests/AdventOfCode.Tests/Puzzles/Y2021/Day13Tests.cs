@@ -13,6 +13,7 @@ public sealed class Day13Tests : PuzzleTest
     [Theory]
     [InlineData(0, 18)]
     [InlineData(1, 17)]
+    [InlineData(2, 16)]
     public void Y2021_Day13_Navigate_Returns_Correct_Value(int folds, int expected)
     {
         // Arrange
@@ -56,5 +57,6 @@ public sealed class Day13Tests : PuzzleTest
 
         // Assert
         puzzle.DotCountAfterFold1.ShouldBe(647);
+        //// HEJHJRCJ
     }
 }
