@@ -15,6 +15,11 @@ public sealed class Day08 : Puzzle
     public int Checksum { get; private set; }
 
     /// <summary>
+    /// Gets the message.
+    /// </summary>
+    public string Message { get; private set; } = string.Empty;
+
+    /// <summary>
     /// Gets the checksum for the specified image.
     /// </summary>
     /// <param name="image">The image data to get the checksum for.</param>
@@ -22,9 +27,13 @@ public sealed class Day08 : Puzzle
     /// <param name="width">The width of the image.</param>
     /// <param name="logger">The optional logger to use.</param>
     /// <returns>
-    /// The checksum of the image data.
+    /// The checksum of the image data, the message and a visualization.
     /// </returns>
-    public static (int Checksum, string Visualization) GetImageChecksum(string image, int height, int width, ILogger? logger = null)
+    public static (int Checksum, string Message, string Visualization) GetImageChecksum(
+        string image,
+        int height,
+        int width,
+        ILogger? logger = null)
     {
         var layers = new List<int[,]>();
         int[,] current = new int[0, 0];
@@ -101,8 +110,9 @@ public sealed class Day08 : Puzzle
         }
 
         string visualization = WriteMessage(finalLayer, logger);
+        string message = CharacterRecognition.Read(finalLayer);
 
-        return (checksum, visualization);
+        return (checksum, message, visualization);
     }
 
     /// <inheritdoc />
@@ -110,18 +120,18 @@ public sealed class Day08 : Puzzle
     {
         string image = (await ReadResourceAsStringAsync()).TrimEnd('\n');
 
-        (int checksum, string visualization) = GetImageChecksum(image, 6, 25, Logger);
-
-        Checksum = checksum;
+        (Checksum, Message, string visualization) = GetImageChecksum(image, 6, 25, Logger);
 
         if (Verbose)
         {
             Logger.WriteLine("The checksum of the image data is {0}.", Checksum);
+            Logger.WriteLine("The message in the image data is {0}.", Message);
         }
 
         var result = new PuzzleResult();
 
         result.Solutions.Add(Checksum);
+        result.Solutions.Add(Message);
         result.Visualizations.Add(visualization);
 
         return result;

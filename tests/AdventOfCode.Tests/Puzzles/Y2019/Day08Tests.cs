@@ -23,7 +23,7 @@ public sealed class Day08Tests : PuzzleTest
     public void Y2019_Day08_GetImageChecksum_Returns_Correct_Output(string program, int height, int width, int expected)
     {
         // Act
-        (int actual, _) = Day08.GetImageChecksum(program, height, width);
+        (int actual, _, _) = Day08.GetImageChecksum(program, height, width);
 
         // Assert
         actual.ShouldBe(expected);
@@ -37,5 +37,6 @@ public sealed class Day08Tests : PuzzleTest
 
         // Assert
         puzzle.Checksum.ShouldBe(2080);
+        puzzle.Message.ShouldBe("AURCY");
     }
 }

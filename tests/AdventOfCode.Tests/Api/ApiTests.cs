@@ -122,7 +122,7 @@ public class ApiTests : IntegrationTest
     [PuzzleData(2019, 05, new[] { "1" }, 6745903, SendResource = true)]
     [PuzzleData(2019, 05, new[] { "5" }, 9168267, SendResource = true)]
     [PuzzleData(2019, 07, 77500, 22476942)]
-    [PuzzleData(2019, 08, 2080, ExpectedVisualizations = 1)]
+    [PuzzleData(2019, 08, 2080, "AURCY", ExpectedVisualizations = 1)]
     [PuzzleData(2019, 09, new[] { "1" }, 2494485073, SendResource = true)]
     [PuzzleData(2019, 09, new[] { "2" }, 44997, SendResource = true)]
     [PuzzleData(2019, 13, 315)]
