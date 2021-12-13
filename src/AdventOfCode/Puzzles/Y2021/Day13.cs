@@ -57,34 +57,34 @@ public sealed class Day13 : Puzzle
             paper[new(points[0], points[1])] = true;
         }
 
-        int folds2 = folds ?? int.MaxValue;
+        int timesToFold = folds ?? int.MaxValue;
 
-        for (int i = 0; i < folds2 && i < foldLines.Count; i++)
+        for (int i = 0; i < timesToFold && i < foldLines.Count; i++)
         {
-            var fold = foldLines[i];
+            Point fold = foldLines[i];
 
-            foreach (var point in paper.Keys.ToArray())
+            foreach (Point dot in paper.Keys.ToArray())
             {
-                if (!paper.GetValueOrDefault(point))
+                if (!paper.GetValueOrDefault(dot))
                 {
                     continue;
                 }
 
-                Point? transform = null;
+                Point? transformed = null;
 
-                if (fold.X > 0 && point.X > fold.X)
+                if (fold.X > 0 && dot.X > fold.X)
                 {
-                    transform = point - new Size(Math.Abs(point.X - fold.X) * 2, 0);
+                    transformed = dot - new Size(Math.Abs(dot.X - fold.X) * 2, 0);
                 }
-                else if (fold.Y > 0 && point.Y > fold.Y)
+                else if (fold.Y > 0 && dot.Y > fold.Y)
                 {
-                    transform = point - new Size(0, Math.Abs(point.Y - fold.Y) * 2);
+                    transformed = dot - new Size(0, Math.Abs(dot.Y - fold.Y) * 2);
                 }
 
-                if (transform.HasValue)
+                if (transformed.HasValue)
                 {
-                    paper[transform.Value] = true;
-                    paper.Remove(point);
+                    paper[transformed.Value] = true;
+                    paper.Remove(dot);
                 }
             }
         }
