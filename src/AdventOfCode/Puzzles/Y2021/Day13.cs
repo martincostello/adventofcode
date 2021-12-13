@@ -27,9 +27,10 @@ public sealed class Day13 : Puzzle
     /// <param name="logger">The optional logger to use.</param>
     /// <returns>
     /// The number of dots that are visible after completing the specified number of folds
-    /// and the activation code on the paper if <paramref name="folds"/> is <see langword="null"/>.
+    /// and the activation code on the paper if <paramref name="folds"/> is <see langword="null"/>,
+    /// and a visualization of the paper if <paramref name="folds"/> is <see langword="null"/>.
     /// </returns>
-    public static (int DotCount, string? ActivationCode) Fold(
+    public static (int DotCount, string? ActivationCode, string Visualization) Fold(
         IList<string> instructions,
         int? folds,
         ILogger? logger = null)
@@ -100,6 +101,7 @@ public sealed class Day13 : Puzzle
         }
 
         string? activationCode = null;
+        string? visualization = null;
 
         if (folds is null)
         {
@@ -121,14 +123,13 @@ public sealed class Day13 : Puzzle
                 builder.AppendLine();
             }
 
-            logger?.WriteGrid(array);
-
+            visualization = logger?.WriteGrid(array);
             activationCode = CharacterRecognition.Read(array);
         }
 
         int dotCount = paper.Values.Count((p) => p);
 
-        return (dotCount, activationCode);
+        return (dotCount, activationCode, string.Empty);
     }
 
     /// <inheritdoc />
@@ -136,8 +137,8 @@ public sealed class Day13 : Puzzle
     {
         IList<string> instructions = await ReadResourceAsLinesAsync();
 
-        (DotCountAfterFold1, _) = Fold(instructions, folds: 1);
-        (_, ActivationCode) = Fold(instructions, folds: null, Logger);
+        (DotCountAfterFold1, _, _) = Fold(instructions, folds: 1);
+        (_, ActivationCode, string visualization) = Fold(instructions, folds: null, Logger);
 
         if (Verbose)
         {
@@ -150,6 +151,12 @@ public sealed class Day13 : Puzzle
                 ActivationCode!);
         }
 
-        return PuzzleResult.Create(DotCountAfterFold1, ActivationCode!);
+        var result = new PuzzleResult();
+
+        result.Solutions.Add(DotCountAfterFold1);
+        result.Solutions.Add(ActivationCode!);
+        result.Visualizations.Add(visualization);
+
+        return result;
     }
 }

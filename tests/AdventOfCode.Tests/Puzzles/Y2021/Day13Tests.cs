@@ -43,7 +43,7 @@ public sealed class Day13Tests : PuzzleTest
         };
 
         // Act
-        (int actual, _) = Day13.Fold(instructions, folds);
+        (int actual, _, _) = Day13.Fold(instructions, folds);
 
         // Assert
         actual.ShouldBe(expected);

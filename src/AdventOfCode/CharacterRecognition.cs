@@ -72,6 +72,35 @@ internal static class CharacterRecognition
     /// Returns the string encoded in the specified array.
     /// </summary>
     /// <param name="array">The array to read.</param>
+    /// <param name="ink">The integer that signifies a value is part of a written character.</param>
+    /// <returns>
+    /// A string containing the characters encoded in <paramref name="array"/>.
+    /// </returns>
+    /// <remarks>
+    /// Each encoded character is assumed to be a 5x6 grid.
+    /// </remarks>
+    public static string Read(int[,] array, int ink = 1)
+    {
+        int width = array.GetLength(0);
+        int height = array.GetLength(1);
+
+        bool[,] bits = new bool[width, height];
+
+        for (int i = 0; i < width; i++)
+        {
+            for (int j = 0; j < height; j++)
+            {
+                bits[i, j] = array[i, j] == ink;
+            }
+        }
+
+        return Read(bits);
+    }
+
+    /// <summary>
+    /// Returns the string encoded in the specified array.
+    /// </summary>
+    /// <param name="array">The array to read.</param>
     /// <returns>
     /// A string containing the characters encoded in <paramref name="array"/>.
     /// </returns>
@@ -80,10 +109,15 @@ internal static class CharacterRecognition
     /// </remarks>
     public static string Read(bool[,] array)
     {
-        var builder = new StringBuilder();
-
         int width = array.GetLength(0);
         int height = array.GetLength(1);
+
+        if (width % 5 != 0 || height % 6 != 0)
+        {
+            return string.Empty;
+        }
+
+        var builder = new StringBuilder();
 
         for (int x = 0; x < width - 1; x += 5)
         {

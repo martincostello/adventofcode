@@ -163,7 +163,7 @@ public class ApiTests : IntegrationTest
     [PuzzleData(2021, 10, 323613, 3103006161L)]
     [PuzzleData(2021, 11, 1739, 324)]
     [PuzzleData(2021, 12, 4413, 118803)]
-    [PuzzleData(2021, 13, 647, "HEJHJRCJ")]
+    [PuzzleData(2021, 13, 647, "HEJHJRCJ", ExpectedVisualizations = 1)]
     public async Task Can_Solve_Puzzle(int year, int day, PuzzleDataAttribute testCase)
     {
         // Arrange
