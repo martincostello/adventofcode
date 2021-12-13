@@ -69,7 +69,7 @@ public class ApiTests : IntegrationTest
     [PuzzleData(2016, 05, new[] { "wtnhxymk" }, "2414bc77", "437e60fc")]
     [PuzzleData(2016, 06, "qzedlxso", "ucmifjae")]
     [PuzzleData(2016, 07, 118, 260)]
-    [PuzzleData(2016, 08, 121, ExpectedVisualizations = 1)]
+    [PuzzleData(2016, 08, 121, "RURUCEOEIL", ExpectedVisualizations = 1)]
     [PuzzleData(2016, 09, 98135, 10964557606)]
     [PuzzleData(2016, 10, 141, 1209)]
     [PuzzleData(2016, 12, 318020, 9227674)]
@@ -80,7 +80,7 @@ public class ApiTests : IntegrationTest
     [PuzzleData(2016, 16, new[] { "10010000000110000", "35651584" }, "01101011101100011")]
     [PuzzleData(2016, 17, new[] { "pvhmgsws" }, "DRRDRLDURD", 618)]
     [PuzzleData(2016, 18, new[] { "40" }, 1987, ExpectedVisualizations = 1, SendResource = true)]
-    [PuzzleData(2016, 18, new[] { "400000" }, 19984714, ExpectedVisualizations = 1, SendResource = true)]
+    [PuzzleData(2016, 18, new[] { "400000" }, 19984714, ExpectedVisualizations = 0, SendResource = true)]
     [PuzzleData(2016, 19, new[] { "5", "1" }, 3)]
     [PuzzleData(2016, 19, new[] { "5", "2" }, 2)]
     [PuzzleData(2016, 19, new[] { "3014387", "1" }, 1834471)]
@@ -122,7 +122,7 @@ public class ApiTests : IntegrationTest
     [PuzzleData(2019, 05, new[] { "1" }, 6745903, SendResource = true)]
     [PuzzleData(2019, 05, new[] { "5" }, 9168267, SendResource = true)]
     [PuzzleData(2019, 07, 77500, 22476942)]
-    [PuzzleData(2019, 08, 2080, ExpectedVisualizations = 1)]
+    [PuzzleData(2019, 08, 2080, "AURCY", ExpectedVisualizations = 1)]
     [PuzzleData(2019, 09, new[] { "1" }, 2494485073, SendResource = true)]
     [PuzzleData(2019, 09, new[] { "2" }, 44997, SendResource = true)]
     [PuzzleData(2019, 13, 315)]
@@ -163,6 +163,7 @@ public class ApiTests : IntegrationTest
     [PuzzleData(2021, 10, 323613, 3103006161L)]
     [PuzzleData(2021, 11, 1739, 324)]
     [PuzzleData(2021, 12, 4413, 118803)]
+    [PuzzleData(2021, 13, 647, "HEJHJRCJ", ExpectedVisualizations = 1)]
     public async Task Can_Solve_Puzzle(int year, int day, PuzzleDataAttribute testCase)
     {
         // Arrange

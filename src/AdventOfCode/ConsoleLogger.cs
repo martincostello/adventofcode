@@ -26,9 +26,9 @@ internal sealed class ConsoleLogger : ILogger
             int lengthX = array.GetLength(0);
             int lengthY = array.GetLength(1);
 
-            for (int x = 0; x < lengthX; x++)
+            for (int y = 0; y < lengthY; y++)
             {
-                for (int y = 0; y < lengthY; y++)
+                for (int x = 0; x < lengthX; x++)
                 {
                     Console.Write(array[x, y] ? trueChar : falseChar);
                 }

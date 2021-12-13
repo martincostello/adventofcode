@@ -40,9 +40,9 @@ public sealed partial class WebLogger : ILogger
 
         var builder = new StringBuilder((lengthX + 2) * lengthY);
 
-        for (int x = 0; x < lengthX; x++)
+        for (int y = 0; y < lengthY; y++)
         {
-            for (int y = 0; y < lengthY; y++)
+            for (int x = 0; x < lengthX; x++)
             {
                 builder.Append(array[x, y] ? trueChar : falseChar);
             }
