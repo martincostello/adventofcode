@@ -24,11 +24,15 @@ public sealed class Day13 : Puzzle
     /// </summary>
     /// <param name="instructions">The instructions to follow.</param>
     /// <param name="folds">The number of times to fold the paper, otherwise all folds are performed.</param>
+    /// <param name="logger">The optional logger to use.</param>
     /// <returns>
     /// The number of dots that are visible after completing the specified number of folds
     /// and the activation code on the paper if <paramref name="folds"/> is <see langword="null"/>.
     /// </returns>
-    public static (int DotCount, string? ActivationCode) Fold(IList<string> instructions, int? folds)
+    public static (int DotCount, string? ActivationCode) Fold(
+        IList<string> instructions,
+        int? folds,
+        ILogger? logger = null)
     {
         var paper = new Dictionary<Point, bool>(instructions.Count - 1);
         var foldLines = new List<Point>();
@@ -101,21 +105,26 @@ public sealed class Day13 : Puzzle
         {
             var builder = new StringBuilder(6 * 5 * 8);
 
-            int maxX = paper.Keys.MaxBy((p) => p.X).X + 1;
+            int maxX = paper.Keys.MaxBy((p) => p.X).X + 2;
             int maxY = paper.Keys.MaxBy((p) => p.Y).Y + 1;
+
+            char[,] array = new char[maxX, maxY];
 
             for (int y = 0; y < maxY; y++)
             {
                 for (int x = 0; x < maxX; x++)
                 {
                     bool value = paper.GetValueOrDefault(new(x, y));
-                    builder.Append(value ? '*' : ' ');
+                    builder.Append(array[x, y] = value ? '*' : ' ');
                 }
 
                 builder.AppendLine();
             }
 
+            logger?.WriteGrid(array);
+
             activationCode = builder.ToString();
+            activationCode = CharacterRecognition.Read(array);
         }
 
         int dotCount = paper.Values.Count((p) => p);
@@ -129,7 +138,7 @@ public sealed class Day13 : Puzzle
         IList<string> instructions = await ReadResourceAsLinesAsync();
 
         (DotCountAfterFold1, _) = Fold(instructions, folds: 1);
-        (_, ActivationCode) = Fold(instructions, folds: null);
+        (_, ActivationCode) = Fold(instructions, folds: null, Logger);
 
         if (Verbose)
         {
