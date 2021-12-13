@@ -30,7 +30,7 @@ public sealed class Day13 : Puzzle
     /// and the activation code on the paper if <paramref name="folds"/> is <see langword="null"/>,
     /// and a visualization of the paper if <paramref name="folds"/> is <see langword="null"/>.
     /// </returns>
-    public static (int DotCount, string? ActivationCode, string Visualization) Fold(
+    public static (int DotCount, string? ActivationCode, string? Visualization) Fold(
         IList<string> instructions,
         int? folds,
         ILogger? logger = null)
@@ -129,7 +129,7 @@ public sealed class Day13 : Puzzle
 
         int dotCount = paper.Values.Count((p) => p);
 
-        return (dotCount, activationCode, string.Empty);
+        return (dotCount, activationCode, visualization);
     }
 
     /// <inheritdoc />
@@ -138,7 +138,7 @@ public sealed class Day13 : Puzzle
         IList<string> instructions = await ReadResourceAsLinesAsync();
 
         (DotCountAfterFold1, _, _) = Fold(instructions, folds: 1);
-        (_, ActivationCode, string visualization) = Fold(instructions, folds: null, Logger);
+        (_, ActivationCode, string? visualization) = Fold(instructions, folds: null, Logger);
 
         if (Verbose)
         {
@@ -155,7 +155,7 @@ public sealed class Day13 : Puzzle
 
         result.Solutions.Add(DotCountAfterFold1);
         result.Solutions.Add(ActivationCode!);
-        result.Visualizations.Add(visualization);
+        result.Visualizations.Add(visualization!);
 
         return result;
     }

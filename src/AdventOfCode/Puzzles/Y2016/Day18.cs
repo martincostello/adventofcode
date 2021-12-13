@@ -30,13 +30,13 @@ public sealed class Day18 : Puzzle
     {
         int width = firstRowTiles.Length;
 
-        bool[,] tiles = new bool[rows, width];
+        bool[,] tiles = new bool[width, rows];
 
         for (int x = 0; x < width; x++)
         {
             if (firstRowTiles[x] == '^')
             {
-                tiles[0, x] = true;
+                tiles[x, 0] = true;
             }
         }
 
@@ -44,19 +44,24 @@ public sealed class Day18 : Puzzle
         {
             for (int x = 0; x < width; x++)
             {
-                bool left = x != 0 && tiles[y - 1, x - 1];
-                bool right = x != width - 1 && tiles[y - 1, x + 1];
+                bool left = x != 0 && tiles[x - 1, y - 1];
+                bool right = x != width - 1 && tiles[x + 1, y - 1];
 
                 bool isTrap = left ^ right;
 
                 if (isTrap)
                 {
-                    tiles[y, x] = true;
+                    tiles[x, y] = true;
                 }
             }
         }
 
-        string visualization = logger.WriteGrid(tiles, '.', '^');
+        string visualization = string.Empty;
+
+        if (rows <= 75)
+        {
+            visualization = logger.WriteGrid(tiles, '.', '^');
+        }
 
         return ((width * rows) - CountTrapTiles(tiles), visualization);
     }
@@ -79,7 +84,11 @@ public sealed class Day18 : Puzzle
         var result = new PuzzleResult();
 
         result.Solutions.Add(SafeTileCount);
-        result.Visualizations.Add(visualization);
+
+        if (!string.IsNullOrEmpty(visualization))
+        {
+            result.Visualizations.Add(visualization);
+        }
 
         return result;
     }

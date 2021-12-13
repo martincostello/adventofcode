@@ -128,7 +128,7 @@ public class UITests : IntegrationTest
             await solver.SolveAsync();
 
             // Assert
-            await solver.SolutionsAsync().ShouldBe(new[] { "121" });
+            await solver.SolutionsAsync().ShouldBe(new[] { "121", "RURUCEOEIL" });
             await solver.VisualizationsAsync().ShouldBe(1);
         });
     }

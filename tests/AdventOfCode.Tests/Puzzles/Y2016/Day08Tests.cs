@@ -22,7 +22,7 @@ public sealed class Day08Tests : PuzzleTest
     public void Y2016_Day08_GetPixelsLit_Returns_Correct_Solution(string[] instructions, int width, int height, int expected)
     {
         // Act
-        (int actual, _) = Day08.GetPixelsLit(instructions, width, height, Logger);
+        (int actual, _, _) = Day08.GetPixelsLit(instructions, width, height, Logger);
 
         // Assert
         actual.ShouldBe(expected);
@@ -36,5 +36,6 @@ public sealed class Day08Tests : PuzzleTest
 
         // Assert
         puzzle.PixelsLit.ShouldBe(121);
+        puzzle.Code.ShouldBe("RURUCEOEIL");
     }
 }

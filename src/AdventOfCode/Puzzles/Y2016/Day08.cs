@@ -15,6 +15,11 @@ public sealed class Day08 : Puzzle
     public int PixelsLit { get; private set; }
 
     /// <summary>
+    /// Gets the code displayed on the screen.
+    /// </summary>
+    public string Code { get; private set; } = string.Empty;
+
+    /// <summary>
     /// Gets the number of pixels lit in the specified grid after following the specified instructions.
     /// </summary>
     /// <param name="instructions">The instructions to use to manipulate the grid of lights.</param>
@@ -22,9 +27,10 @@ public sealed class Day08 : Puzzle
     /// <param name="height">The height of the grid.</param>
     /// <param name="logger">The logger to use.</param>
     /// <returns>
-    /// The number of pixels lit in the grid once the instructions are processed.
+    /// The number of pixels lit in the grid once the instructions are processed,
+    /// the code displayed, and a visualization.
     /// </returns>
-    internal static (int PixelsLit, string Visualization) GetPixelsLit(
+    internal static (int PixelsLit, string Code, string Visualization) GetPixelsLit(
         IEnumerable<string> instructions,
         int width,
         int height,
@@ -53,9 +59,23 @@ public sealed class Day08 : Puzzle
             }
         }
 
-        string visualization = logger.WriteGrid(grid, ' ', 'X');
+        // TODO Reverse the coordinate space of the puzzle to remove the need for this
+        bool[,] rotated = new bool[width, height];
 
-        return (CountLitPixels(grid), visualization);
+        for (int y = 0; y < width; y++)
+        {
+            for (int x = 0; x < height; x++)
+            {
+                rotated[y, x] = grid[x, y];
+            }
+        }
+
+        int pixelsLit = CountLitPixels(rotated);
+
+        string code = CharacterRecognition.Read(rotated);
+        string visualization = logger.WriteGrid(rotated, ' ', 'X');
+
+        return (pixelsLit, code, visualization);
     }
 
     /// <inheritdoc />
@@ -63,18 +83,18 @@ public sealed class Day08 : Puzzle
     {
         IList<string> instructions = await ReadResourceAsLinesAsync();
 
-        (int pixelsLit, string visualization) = GetPixelsLit(instructions, width: 50, height: 6, Logger);
-
-        PixelsLit = pixelsLit;
+        (PixelsLit, Code, string visualization) = GetPixelsLit(instructions, width: 50, height: 6, Logger);
 
         if (Verbose)
         {
             Logger.WriteLine($"There are {PixelsLit:N0} pixels lit.");
+            Logger.WriteLine($"The code displayed is {Code}.");
         }
 
         var result = new PuzzleResult();
 
         result.Solutions.Add(PixelsLit);
+        result.Solutions.Add(Code);
         result.Visualizations.Add(visualization);
 
         return result;
