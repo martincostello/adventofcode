@@ -15,14 +15,20 @@ public sealed class Day13 : Puzzle
     public int DotCountAfterFold1 { get; private set; }
 
     /// <summary>
+    /// Gets the activation code for the infrared thermal imaging camera system.
+    /// </summary>
+    public string? ActivationCode { get; private set; }
+
+    /// <summary>
     /// Folds the transparent paper the specified number of times.
     /// </summary>
     /// <param name="instructions">The instructions to follow.</param>
     /// <param name="folds">The number of times to fold the paper, otherwise all folds are performed.</param>
     /// <returns>
-    /// The number of dots that are visible after completing the specified number of folds.
+    /// The number of dots that are visible after completing the specified number of folds
+    /// and the activation code on the paper if <paramref name="folds"/> is <see langword="null"/>.
     /// </returns>
-    public static int Fold(IList<string> instructions, int? folds)
+    public static (int DotCount, string? ActivationCode) Fold(IList<string> instructions, int? folds)
     {
         var paper = new Dictionary<Point, bool>(instructions.Count - 1);
         var foldLines = new List<Point>();
@@ -89,26 +95,32 @@ public sealed class Day13 : Puzzle
             }
         }
 
-        ////var builder = new StringBuilder();
-        ////
-        ////for (int y = 0; y < paper.Keys.MaxBy((p) => p.Y).Y + 1; y++)
-        ////{
-        ////    for (int x = 0; x < paper.Keys.MaxBy((p) => p.X).X + 1; x++)
-        ////    {
-        ////        bool value = paper.GetValueOrDefault(new(x, y));
-        ////        builder.Append(value ? '*' : ' ');
-        ////    }
-        ////
-        ////    builder.AppendLine();
-        ////}
-        ////
-        ////string code = builder.ToString();
-        ////
-        ////if (code.Length > 0)
-        ////{
-        ////}
+        string? activationCode = null;
 
-        return paper.Values.Count((p) => p);
+        if (folds is null)
+        {
+            var builder = new StringBuilder(6 * 5 * 8);
+
+            int maxX = paper.Keys.MaxBy((p) => p.X).X + 1;
+            int maxY = paper.Keys.MaxBy((p) => p.Y).Y + 1;
+
+            for (int y = 0; y < maxY; y++)
+            {
+                for (int x = 0; x < maxX; x++)
+                {
+                    bool value = paper.GetValueOrDefault(new(x, y));
+                    builder.Append(value ? '*' : ' ');
+                }
+
+                builder.AppendLine();
+            }
+
+            activationCode = builder.ToString();
+        }
+
+        int dotCount = paper.Values.Count((p) => p);
+
+        return (dotCount, activationCode);
     }
 
     /// <inheritdoc />
@@ -116,16 +128,20 @@ public sealed class Day13 : Puzzle
     {
         IList<string> instructions = await ReadResourceAsLinesAsync();
 
-        DotCountAfterFold1 = Fold(instructions, folds: 1);
-        ////Code = Fold(instructions, folds: null);
+        (DotCountAfterFold1, _) = Fold(instructions, folds: 1);
+        (_, ActivationCode) = Fold(instructions, folds: null);
 
         if (Verbose)
         {
             Logger.WriteLine(
                 "{0:N0} dots are visible after completing the first fold.",
                 DotCountAfterFold1);
+
+            Logger.WriteLine(
+                "The code to activate the infrared thermal imaging camera system is {0}.",
+                ActivationCode!);
         }
 
-        return PuzzleResult.Create(DotCountAfterFold1);
+        return PuzzleResult.Create(DotCountAfterFold1, ActivationCode!);
     }
 }

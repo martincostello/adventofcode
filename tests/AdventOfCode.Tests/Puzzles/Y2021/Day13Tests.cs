@@ -43,7 +43,7 @@ public sealed class Day13Tests : PuzzleTest
         };
 
         // Act
-        int actual = Day13.Fold(instructions, folds);
+        (int actual, _) = Day13.Fold(instructions, folds);
 
         // Assert
         actual.ShouldBe(expected);
@@ -57,6 +57,6 @@ public sealed class Day13Tests : PuzzleTest
 
         // Assert
         puzzle.DotCountAfterFold1.ShouldBe(647);
-        //// HEJHJRCJ
+        puzzle.ActivationCode.ShouldBe("HEJHJRCJ");
     }
 }
