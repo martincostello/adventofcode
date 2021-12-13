@@ -9,6 +9,37 @@ namespace MartinCostello.AdventOfCode;
 internal static class CharacterRecognition
 {
     /// <summary>
+    /// Returns the characters encoded in the specified string.
+    /// </summary>
+    /// <param name="text">The string to read.</param>
+    /// <param name="ink">The char that signifies a value is part of a written character.</param>
+    /// <returns>
+    /// A string containing the characters encoded in <paramref name="text"/>.
+    /// </returns>
+    /// <remarks>
+    /// Each encoded character is assumed to be a 5x6 grid.
+    /// </remarks>
+    public static string Read(string text, char ink = '*')
+    {
+        string[] lines = text.Split(Environment.NewLine);
+
+        int width = lines[0].Length;
+        int height = lines.Length;
+
+        char[,] chars = new char[width, height];
+
+        for (int i = 0; i < width; i++)
+        {
+            for (int j = 0; j < height; j++)
+            {
+                chars[i, j] = lines[j][i];
+            }
+        }
+
+        return Read(chars, ink);
+    }
+
+    /// <summary>
     /// Returns the string encoded in the specified array.
     /// </summary>
     /// <param name="array">The array to read.</param>
@@ -79,6 +110,11 @@ internal static class CharacterRecognition
                 {
                     letter.Add(new(3, y));
                 }
+
+                if (array[x + 4, y])
+                {
+                    letter.Add(new(4, y));
+                }
             }
 
             builder.Append(Alphabet.Get(letter));
@@ -107,6 +143,43 @@ internal static class CharacterRecognition
         private static Dictionary<char, HashSet<Point>> CreateAlphabet()
         {
             Dictionary<char, HashSet<Point>> alphabet = new(26);
+
+            alphabet['A'] = new HashSet<Point>()
+            {
+                new(1, 0),
+                new(2, 0),
+                new(0, 1),
+                new(3, 1),
+                new(0, 2),
+                new(3, 2),
+                new(0, 3),
+                new(1, 3),
+                new(2, 3),
+                new(3, 3),
+                new(0, 4),
+                new(3, 4),
+                new(0, 5),
+                new(3, 5),
+            };
+
+            alphabet['B'] = new HashSet<Point>()
+            {
+                new(0, 0),
+                new(1, 0),
+                new(2, 0),
+                new(0, 1),
+                new(3, 1),
+                new(0, 2),
+                new(1, 2),
+                new(2, 2),
+                new(0, 3),
+                new(3, 3),
+                new(0, 4),
+                new(3, 4),
+                new(0, 5),
+                new(1, 5),
+                new(2, 5),
+            };
 
             alphabet['C'] = new HashSet<Point>()
             {
@@ -140,17 +213,36 @@ internal static class CharacterRecognition
                 new(3, 5),
             };
 
-            alphabet['J'] = new HashSet<Point>()
+            alphabet['F'] = new HashSet<Point>()
             {
+                new(0, 0),
+                new(1, 0),
                 new(2, 0),
                 new(3, 0),
+                new(0, 1),
+                new(0, 2),
+                new(1, 2),
+                new(2, 2),
+                new(0, 3),
+                new(0, 4),
+                new(0, 5),
+            };
+
+            alphabet['G'] = new HashSet<Point>()
+            {
+                new(1, 0),
+                new(2, 0),
+                new(0, 1),
                 new(3, 1),
-                new(3, 2),
+                new(0, 2),
+                new(0, 3),
+                new(2, 3),
                 new(3, 3),
                 new(0, 4),
                 new(3, 4),
                 new(1, 5),
                 new(2, 5),
+                new(3, 5),
             };
 
             alphabet['H'] = new HashSet<Point>()
@@ -171,6 +263,94 @@ internal static class CharacterRecognition
                 new(3, 5),
             };
 
+            alphabet['I'] = new HashSet<Point>()
+            {
+                new(1, 0),
+                new(2, 0),
+                new(3, 0),
+                new(2, 1),
+                new(2, 2),
+                new(2, 3),
+                new(2, 4),
+                new(1, 5),
+                new(2, 5),
+                new(3, 5),
+            };
+
+            alphabet['J'] = new HashSet<Point>()
+            {
+                new(2, 0),
+                new(3, 0),
+                new(3, 1),
+                new(3, 2),
+                new(3, 3),
+                new(0, 4),
+                new(3, 4),
+                new(1, 5),
+                new(2, 5),
+            };
+
+            alphabet['K'] = new HashSet<Point>()
+            {
+                new(0, 0),
+                new(3, 0),
+                new(0, 1),
+                new(2, 1),
+                new(0, 2),
+                new(1, 2),
+                new(0, 3),
+                new(2, 3),
+                new(0, 4),
+                new(2, 4),
+                new(0, 5),
+                new(3, 5),
+            };
+
+            alphabet['L'] = new HashSet<Point>()
+            {
+                new(0, 0),
+                new(0, 1),
+                new(0, 2),
+                new(0, 3),
+                new(0, 4),
+                new(0, 5),
+                new(1, 5),
+                new(2, 5),
+                new(3, 5),
+            };
+
+            alphabet['O'] = new HashSet<Point>()
+            {
+                new(1, 0),
+                new(2, 0),
+                new(0, 1),
+                new(3, 1),
+                new(0, 2),
+                new(3, 2),
+                new(0, 3),
+                new(3, 3),
+                new(0, 4),
+                new(3, 4),
+                new(1, 5),
+                new(2, 5),
+            };
+
+            alphabet['P'] = new HashSet<Point>()
+            {
+                new(0, 0),
+                new(1, 0),
+                new(2, 0),
+                new(0, 1),
+                new(3, 1),
+                new(0, 2),
+                new(3, 2),
+                new(0, 3),
+                new(1, 3),
+                new(2, 3),
+                new(0, 4),
+                new(0, 5),
+            };
+
             alphabet['R'] = new HashSet<Point>()
             {
                 new(0, 0),
@@ -186,6 +366,51 @@ internal static class CharacterRecognition
                 new(0, 4),
                 new(2, 4),
                 new(0, 5),
+                new(3, 5),
+            };
+
+            alphabet['U'] = new HashSet<Point>()
+            {
+                new(0, 0),
+                new(3, 0),
+                new(0, 1),
+                new(3, 1),
+                new(0, 2),
+                new(3, 2),
+                new(0, 3),
+                new(3, 3),
+                new(0, 4),
+                new(3, 4),
+                new(1, 5),
+                new(2, 5),
+            };
+
+            alphabet['Y'] = new HashSet<Point>()
+            {
+                new(0, 0),
+                new(4, 0),
+                new(0, 1),
+                new(4, 1),
+                new(1, 2),
+                new(3, 2),
+                new(2, 3),
+                new(2, 4),
+                new(2, 5),
+            };
+
+            alphabet['Z'] = new HashSet<Point>()
+            {
+                new(0, 0),
+                new(1, 0),
+                new(2, 0),
+                new(3, 0),
+                new(3, 1),
+                new(2, 2),
+                new(1, 3),
+                new(0, 4),
+                new(0, 5),
+                new(1, 5),
+                new(2, 5),
                 new(3, 5),
             };
 

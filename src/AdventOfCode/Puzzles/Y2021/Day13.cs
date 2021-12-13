@@ -123,7 +123,6 @@ public sealed class Day13 : Puzzle
 
             logger?.WriteGrid(array);
 
-            activationCode = builder.ToString();
             activationCode = CharacterRecognition.Read(array);
         }
 
