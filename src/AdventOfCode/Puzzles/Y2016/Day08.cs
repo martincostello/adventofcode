@@ -38,7 +38,7 @@ public sealed class Day08 : Puzzle
     {
         IList<Instruction> operations = instructions.Select(ParseInstruction).ToArray();
 
-        bool[,] grid = new bool[height, width];
+        bool[,] grid = new bool[width, height];
 
         foreach (Instruction instruction in operations)
         {
@@ -59,21 +59,10 @@ public sealed class Day08 : Puzzle
             }
         }
 
-        // TODO Reverse the coordinate space of the puzzle to remove the need for this
-        bool[,] rotated = new bool[width, height];
+        int pixelsLit = CountLitPixels(grid);
 
-        for (int y = 0; y < width; y++)
-        {
-            for (int x = 0; x < height; x++)
-            {
-                rotated[y, x] = grid[x, y];
-            }
-        }
-
-        int pixelsLit = CountLitPixels(rotated);
-
-        string code = CharacterRecognition.Read(rotated);
-        string visualization = logger.WriteGrid(rotated, ' ', 'X');
+        string code = CharacterRecognition.Read(grid);
+        string visualization = logger.WriteGrid(grid, ' ', 'X');
 
         return (pixelsLit, code, visualization);
     }
@@ -117,9 +106,9 @@ public sealed class Day08 : Puzzle
     /// <param name="height">The height of the rectangle.</param>
     private static void LightRectangle(bool[,] grid, int width, int height)
     {
-        for (int y = 0; y < width; y++)
+        for (int y = 0; y < height; y++)
         {
-            for (int x = 0; x < height; x++)
+            for (int x = 0; x < width; x++)
             {
                 grid[x, y] = true;
             }
@@ -134,20 +123,22 @@ public sealed class Day08 : Puzzle
     /// <param name="pixels">The number of pixels to rotate the column by.</param>
     private static void RotateColumn(bool[,] grid, int column, int pixels)
     {
-        for (int i = 0; i < pixels; i++)
+        int height = grid.GetLength(1);
+
+        for (int y = 0; y < pixels; y++)
         {
-            bool[] next = new bool[grid.GetLength(0)];
+            bool[] next = new bool[height];
 
             for (int row = 0; row < next.Length - 1; row++)
             {
-                next[row + 1] = grid[row, column];
+                next[row + 1] = grid[column, row];
             }
 
-            next[0] = grid[next.Length - 1, column];
+            next[0] = grid[column, next.Length - 1];
 
             for (int row = 0; row < next.Length; row++)
             {
-                grid[row, column] = next[row];
+                grid[column, row] = next[row];
             }
         }
     }
@@ -160,20 +151,22 @@ public sealed class Day08 : Puzzle
     /// <param name="pixels">The number of pixels to rotate the row by.</param>
     private static void RotateRow(bool[,] grid, int row, int pixels)
     {
-        for (int i = 0; i < pixels; i++)
+        int width = grid.GetLength(0);
+
+        for (int x = 0; x < pixels; x++)
         {
-            bool[] next = new bool[grid.GetLength(1)];
+            bool[] next = new bool[width];
 
             for (int column = 0; column < next.Length - 1; column++)
             {
-                next[column + 1] = grid[row, column];
+                next[column + 1] = grid[column, row];
             }
 
-            next[0] = grid[row, next.Length - 1];
+            next[0] = grid[next.Length - 1, row];
 
             for (int column = 0; column < next.Length; column++)
             {
-                grid[row, column] = next[column];
+                grid[column, row] = next[column];
             }
         }
     }
