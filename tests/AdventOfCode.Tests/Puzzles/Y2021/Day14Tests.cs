@@ -12,6 +12,7 @@ public sealed class Day14Tests : PuzzleTest
 
     [Theory]
     [InlineData(10, 1588)]
+    [InlineData(40, 2188189693529)]
     public void Y2021_Day14_Expand_Returns_Correct_Value(int steps, long expected)
     {
         // Arrange
@@ -51,6 +52,7 @@ public sealed class Day14Tests : PuzzleTest
         var puzzle = await SolvePuzzleAsync<Day14>();
 
         // Assert
-        puzzle.Score.ShouldBe(3587);
+        puzzle.Score10.ShouldBe(3587);
+        puzzle.Score40.ShouldBe(3906445077999);
     }
 }

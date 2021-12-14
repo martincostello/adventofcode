@@ -14,7 +14,14 @@ public sealed class Day14 : Puzzle
     /// which is the quantity of the most common element subtracted by
     /// the quantity of the least common element.
     /// </summary>
-    public long Score { get; private set; }
+    public long Score10 { get; private set; }
+
+    /// <summary>
+    /// Gets the "score" of the polymer after being expanded 40 times,
+    /// which is the quantity of the most common element subtracted by
+    /// the quantity of the least common element.
+    /// </summary>
+    public long Score40 { get; private set; }
 
     /// <summary>
     /// Expands the polymer template as specified by the instructions.
@@ -28,49 +35,58 @@ public sealed class Day14 : Puzzle
     {
         string template = instructions[0];
 
-        var pairs = new Dictionary<string, char>(instructions.Count - 2);
+        var insertions = new Dictionary<string, char>(instructions.Count - 2);
 
         foreach (string instruction in instructions.Skip(2))
         {
             string[] split = instruction.Split(" -> ");
-            pairs[split[0]] = split[1][0];
+            string pair = split[0];
+            char element = split[1][0];
+
+            insertions[pair] = element;
         }
 
-        var frequencies = template
-            .GroupBy((p) => p)
-            .Select((p) => new
-            {
-                Letter = p.Key,
-                Count = p.Count(),
-            })
-            .ToDictionary((p) => p.Letter, (p) => p.Count);
+        var pairCounts = new Dictionary<string, long>();
 
-        var current = new StringBuilder(template);
-        StringBuilder next;
-
-        for (int i = 0; i < steps; i++)
+        for (int i = 0; i < template.Length - 1; i++)
         {
-            string previous = current.ToString();
-            next = new StringBuilder(previous);
+            char first = template[i];
+            char second = template[i + 1];
 
-            for (int j = 0, k = 0; j < previous.Length - 1; j++)
+            string pair = new(new[] { first, second });
+
+            pairCounts.AddOrIncrement(pair, 1);
+        }
+
+        for (int i = 1; i <= steps; i++)
+        {
+            foreach ((string pair, long count) in pairCounts.ToArray())
             {
-                string pair = new(new[] { previous[j], previous[j + 1] });
-
-                if (pairs.TryGetValue(pair, out char element))
+                if (count > 0 && insertions.TryGetValue(pair, out char element))
                 {
-                    next.Insert(j + k++ + 1, element);
-                    frequencies.AddOrIncrement(element, 1);
+                    pairCounts[pair] -= count;
+
+                    string pair1 = new(new[] { pair[0], element });
+                    string pair2 = new(new[] { element, pair[1] });
+
+                    pairCounts.AddOrIncrement(pair1, count, count);
+                    pairCounts.AddOrIncrement(pair2, count, count);
                 }
             }
-
-            current = next;
         }
 
-        int max = frequencies.Values.Max();
-        int min = frequencies.Values.Min();
+        var frequencies = new Dictionary<char, long>();
 
-        return max - min;
+        foreach ((string pair, long count) in pairCounts)
+        {
+            frequencies.AddOrIncrement(pair[0], count, count);
+            frequencies.AddOrIncrement(pair[1], count, count);
+        }
+
+        long max = frequencies.Values.Max();
+        long min = frequencies.Values.Min();
+
+        return (max - min + 1) / 2;
     }
 
     /// <inheritdoc />
@@ -78,15 +94,15 @@ public sealed class Day14 : Puzzle
     {
         IList<string> instructions = await ReadResourceAsLinesAsync();
 
-        Score = Expand(instructions, steps: 10);
+        Score10 = Expand(instructions, steps: 10);
+        Score40 = Expand(instructions, steps: 40);
 
         if (Verbose)
         {
-            Logger.WriteLine(
-                "The \"score\" of the polymer after 10 steps of expansion is {0:N0}.",
-                Score);
+            Logger.WriteLine("The \"score\" of the polymer after 10 steps of expansion is {0:N0}.", Score10);
+            Logger.WriteLine("The \"score\" of the polymer after 40 steps of expansion is {0:N0}.", Score40);
         }
 
-        return PuzzleResult.Create(Score);
+        return PuzzleResult.Create(Score10, Score40);
     }
 }
