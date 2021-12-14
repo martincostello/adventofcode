@@ -14,7 +14,7 @@ public sealed class Day13Tests : PuzzleTest
     [InlineData(0, 18)]
     [InlineData(1, 17)]
     [InlineData(2, 16)]
-    public void Y2021_Day13_Navigate_Returns_Correct_Value(int folds, int expected)
+    public void Y2021_Day13_Fold_Returns_Correct_Value(int folds, int expected)
     {
         // Arrange
         string[] instructions =

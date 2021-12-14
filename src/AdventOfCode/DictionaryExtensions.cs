@@ -18,10 +18,23 @@ internal static class DictionaryExtensions
     /// <param name="value">The value to add to the dictionary if the key is not found.</param>
     public static void AddOrIncrement<TKey, TValue>(this IDictionary<TKey, TValue> dictionary, TKey key, TValue value)
         where TValue : INumber<TValue>
+        => dictionary.AddOrIncrement(key, value, TValue.One);
+
+    /// <summary>
+    /// Increments the value of the specified key by the specified value, or adds it if not already present.
+    /// </summary>
+    /// <typeparam name="TKey">The type of the key.</typeparam>
+    /// <typeparam name="TValue">The type of the value.</typeparam>
+    /// <param name="dictionary">The dictionary to add or increment the value for.</param>
+    /// <param name="key">The key to increment the value of or add to the dictionary.</param>
+    /// <param name="value">The value to add to the dictionary if the key is not found.</param>
+    /// <param name="increment">The value to increment by.</param>
+    public static void AddOrIncrement<TKey, TValue>(this IDictionary<TKey, TValue> dictionary, TKey key, TValue value, TValue increment)
+        where TValue : INumber<TValue>
     {
         if (dictionary.ContainsKey(key))
         {
-            dictionary[key]++;
+            dictionary[key] += increment;
         }
         else
         {
