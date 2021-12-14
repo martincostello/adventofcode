@@ -10,8 +10,9 @@ public sealed class Day14Tests : PuzzleTest
     {
     }
 
-    [Fact]
-    public void Y2021_Day14_Expand_Returns_Correct_Value()
+    [Theory]
+    [InlineData(10, 1588)]
+    public void Y2021_Day14_Expand_Returns_Correct_Value(int steps, long expected)
     {
         // Arrange
         string[] instructions =
@@ -37,10 +38,10 @@ public sealed class Day14Tests : PuzzleTest
         };
 
         // Act
-        int actual = Day14.Expand(instructions, steps: 10);
+        long actual = Day14.Expand(instructions, steps);
 
         // Assert
-        actual.ShouldBe(1588);
+        actual.ShouldBe(expected);
     }
 
     [Fact]

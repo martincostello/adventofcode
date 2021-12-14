@@ -14,7 +14,7 @@ public sealed class Day14 : Puzzle
     /// which is the quantity of the most common element subtracted by
     /// the quantity of the least common element.
     /// </summary>
-    public int Score { get; private set; }
+    public long Score { get; private set; }
 
     /// <summary>
     /// Expands the polymer template as specified by the instructions.
@@ -24,17 +24,26 @@ public sealed class Day14 : Puzzle
     /// <returns>
     /// The polymer's score after expansion.
     /// </returns>
-    public static int Expand(IList<string> instructions, int steps)
+    public static long Expand(IList<string> instructions, int steps)
     {
         string template = instructions[0];
 
-        var pairs = new Dictionary<string, string>(instructions.Count - 2);
+        var pairs = new Dictionary<string, char>(instructions.Count - 2);
 
         foreach (string instruction in instructions.Skip(2))
         {
             string[] split = instruction.Split(" -> ");
-            pairs[split[0]] = split[1];
+            pairs[split[0]] = split[1][0];
         }
+
+        var frequencies = template
+            .GroupBy((p) => p)
+            .Select((p) => new
+            {
+                Letter = p.Key,
+                Count = p.Count(),
+            })
+            .ToDictionary((p) => p.Letter, (p) => p.Count);
 
         var current = new StringBuilder(template);
         StringBuilder next;
@@ -48,27 +57,18 @@ public sealed class Day14 : Puzzle
             {
                 string pair = new(new[] { previous[j], previous[j + 1] });
 
-                if (pairs.TryGetValue(pair, out string? element))
+                if (pairs.TryGetValue(pair, out char element))
                 {
                     next.Insert(j + k++ + 1, element);
+                    frequencies.AddOrIncrement(element, 1);
                 }
             }
 
             current = next;
         }
 
-        string final = current.ToString();
-
-        var frequencies = final
-            .GroupBy((p) => p)
-            .Select((p) => new
-            {
-                Letter = p.Key,
-                Count = p.Count(),
-            });
-
-        int max = frequencies.MaxBy((p) => p.Count)!.Count;
-        int min = frequencies.MinBy((p) => p.Count)!.Count;
+        int max = frequencies.Values.Max();
+        int min = frequencies.Values.Min();
 
         return max - min;
     }
