@@ -128,7 +128,11 @@ public sealed class Day08 : Puzzle
                 output.Add(digits.Where((p) => p.Value.SetEquals(digit)).Single().Key);
             }
 
+#if FEATURE_GENERIC_MATH
             return Maths.FromDigits<int>(output);
+#else
+            return (int)Maths.FromDigits(output);
+#endif
         }
     }
 
