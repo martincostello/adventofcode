@@ -29,10 +29,20 @@ public sealed class Day15 : Puzzle
     /// </returns>
     public static int GetRiskLevel(IList<string> riskMap, bool largeMap)
     {
+        const int LargeMapFactor = 5;
+
         int width = riskMap[0].Length;
         int height = riskMap.Count;
 
-        var risks = new Dictionary<Point, int>(width * height);
+        int capacity = width * height;
+
+        if (largeMap)
+        {
+            capacity *= LargeMapFactor;
+            capacity *= LargeMapFactor;
+        }
+
+        var risks = new Dictionary<Point, int>(capacity);
 
         for (int y = 0; y < height; y++)
         {
@@ -40,10 +50,7 @@ public sealed class Day15 : Puzzle
 
             for (int x = 0; x < width; x++)
             {
-                var point = new Point(x, y);
-                int risk = row[x] - '0';
-
-                risks[point] = risk;
+                risks[new(x, y)] = row[x] - '0';
             }
         }
 
@@ -52,8 +59,8 @@ public sealed class Day15 : Puzzle
             int initialHeight = height;
             int initialWidth = width;
 
-            height *= 5;
-            width *= 5;
+            height *= LargeMapFactor;
+            width *= LargeMapFactor;
 
             var firstArea = new HashSet<Point>(risks.Keys);
 
@@ -69,22 +76,12 @@ public sealed class Day15 : Puzzle
                         continue;
                     }
 
-                    var up = new Point(point.X, point.Y - initialHeight);
-
-                    if (!risks.TryGetValue(up, out int risk))
+                    if (!risks.TryGetValue(new(point.X, point.Y - initialHeight), out int risk))
                     {
-                        var left = new Point(point.X - initialWidth, point.Y);
-                        risk = risks[left];
+                        risk = risks[new(point.X - initialWidth, point.Y)];
                     }
 
-                    risk++;
-
-                    if (risk > 9)
-                    {
-                        risk = 1;
-                    }
-
-                    risks[point] = risk;
+                    risks[point] = ++risk > 9 ? 1 : risk;
                 }
             }
         }
