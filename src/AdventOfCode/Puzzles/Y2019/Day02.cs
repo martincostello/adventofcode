@@ -6,7 +6,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019;
 /// <summary>
 /// A class representing the puzzle for <c>https://adventofcode.com/2019/day/2</c>. This class cannot be inherited.
 /// </summary>
-[Puzzle(2019, 02, RequiresData = true)]
+[Puzzle("1202 Program Alarm", 2019, 02, RequiresData = true)]
 public sealed class Day02 : Puzzle
 {
     /// <summary>
