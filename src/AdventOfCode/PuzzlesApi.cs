@@ -23,9 +23,9 @@ internal static partial class PuzzlesApi
         var puzzles = attributes
             .OrderBy((p) => p.Year)
             .ThenBy((p) => p.Day)
-            .Select((p) =>
-            new PuzzleMetadata
+            .Select((p) => new PuzzleMetadata()
             {
+                Name = p.Name,
                 Year = p.Year,
                 Day = p.Day,
                 MinimumArguments = p.MinimumArguments,
@@ -147,6 +147,12 @@ internal static partial class PuzzlesApi
     /// </summary>
     internal sealed class PuzzleMetadata
     {
+        /// <summary>
+        /// Gets or sets the puzzle's name.
+        /// </summary>
+        [JsonPropertyName("name")]
+        public string Name { get; set; } = string.Empty;
+
         /// <summary>
         /// Gets or sets the puzzle's year.
         /// </summary>

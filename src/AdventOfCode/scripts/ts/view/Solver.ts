@@ -137,7 +137,7 @@ export class Solver {
             element.setAttribute('data-year', puzzle.year.toString(10));
 
             element.setAttribute('value', day);
-            element.text = day;
+            element.text = `${day} - ${puzzle.name}`;
 
             this.elements.days.appendChild(element);
 

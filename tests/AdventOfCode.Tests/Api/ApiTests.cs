@@ -252,6 +252,7 @@ public class ApiTests : IntegrationTest
             puzzle.TryGetProperty("day", out _).ShouldBeTrue();
             puzzle.TryGetProperty("location", out _).ShouldBeTrue();
             puzzle.TryGetProperty("minimumArguments", out _).ShouldBeTrue();
+            puzzle.TryGetProperty("name", out _).ShouldBeTrue();
             puzzle.TryGetProperty("requiresData", out _).ShouldBeTrue();
             puzzle.TryGetProperty("year", out _).ShouldBeTrue();
         }
