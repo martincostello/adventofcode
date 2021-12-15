@@ -42,6 +42,7 @@ internal static class Maths
         return digits;
     }
 
+#if FEATURE_GENERIC_MATH
     /// <summary>
     /// Returns the number represented by the specified digits.
     /// </summary>
@@ -150,6 +151,130 @@ internal static class Maths
             }
         }
     }
+    /// <summary>
+    /// Returns the number represented by the specified digits.
+    /// </summary>
+    /// <typeparam name="T">The type of the number.</typeparam>
+    /// <param name="collection">The digits of the number.</param>
+    /// <returns>
+    /// The <typeparamref name="T"/> represented by the digits in <paramref name="collection"/>.
+    /// </returns>
+    internal static T FromDigits<T>(IList<int> collection)
+        where T : INumber<T>
+    {
+        double result = 0;
+
+        for (int i = 0; i < collection.Count - 1; i++)
+        {
+            result += collection[i] * Math.Pow(10, collection.Count - i - 1);
+        }
+
+        result += collection[collection.Count - 1];
+
+        return T.Create(result);
+    }
+#else
+    /// <summary>
+    /// Returns the combinations of values that add up to the specified total.
+    /// </summary>
+    /// <param name="total">The total required for the combination(s).</param>
+    /// <param name="values">The values to generate the combinations for.</param>
+    /// <returns>
+    /// The combinations of values whose total is the value specified by <paramref name="total"/>.
+    /// </returns>
+    internal static IList<ICollection<long>> GetCombinations(long total, IList<int> values)
+    {
+        int length = values.Count;
+        var bits = new BitArray(length);
+
+        int limit = (int)Math.Pow(2, length);
+        var result = new List<ICollection<long>>(limit);
+
+        for (int i = 0; i < limit; i++)
+        {
+            int sum = 0;
+
+            for (int j = 0; j < length; j++)
+            {
+                if (bits[j])
+                {
+                    sum += values[j];
+
+                    if (sum > total)
+                    {
+                        break;
+                    }
+                }
+            }
+
+            if (sum == total)
+            {
+                var combination = new List<long>(length);
+
+                for (int j = 0; j < length; j++)
+                {
+                    if (bits[j])
+                    {
+                        combination.Add(values[j]);
+                    }
+                }
+
+                result.Add(combination);
+            }
+
+            Increment(bits);
+        }
+
+        return result;
+    }
+
+    /// <summary>
+    /// Returns the factors of the specified number.
+    /// </summary>
+    /// <param name="value">The value to get the factors for.</param>
+    /// <returns>
+    /// An <see cref="IEnumerable{T}"/> containing the factors of the specified number.
+    /// </returns>
+    /// <remarks>
+    /// The values returned are unsorted.
+    /// </remarks>
+    internal static IEnumerable<int> GetFactorsUnordered(int value)
+    {
+        for (int i = 1; i * i <= value; i++)
+        {
+            if (value % i == 0)
+            {
+                yield return i;
+
+                if (i * i != value)
+                {
+                    yield return value / i;
+                }
+            }
+        }
+    }
+
+    /// <summary>
+    /// Returns the 64-bit integer represented by the specified digits.
+    /// </summary>
+    /// <param name="collection">The digits of the number.</param>
+    /// <returns>
+    /// The <see cref="long"/> represented by the digits in <paramref name="collection"/>.
+    /// </returns>
+    internal static long FromDigits(IList<int> collection)
+    {
+        double result = 0;
+
+        for (int j = 0; j < collection.Count - 1; j++)
+        {
+            result += collection[j] * Math.Pow(10, collection.Count - j - 1);
+        }
+
+        result += collection[collection.Count - 1];
+
+        return (long)result;
+    }
+#endif
 
     /// <summary>
     /// Returns all the permutations of the specified collection of values.
@@ -182,6 +307,7 @@ internal static class Maths
             .SelectMany((p) => collection.Where((r) => !p.Contains(r)), (set, value) => set.Append(value));
     }
 
+#if FEATURE_GENERIC_MATH
     /// <summary>
     /// Returns the Greatest Common Divisor of the two specified numbers.
     /// </summary>
@@ -216,6 +342,38 @@ internal static class Maths
     internal static T LowestCommonMultiple<T>(T a, T b)
         where T : INumber<T>
         => a / GreatestCommonDivisor(a, b) * b;
+#else
+    /// <summary>
+    /// Returns the Greatest Common Divisor of the two specified numbers.
+    /// </summary>
+    /// <param name="a">The first number.</param>
+    /// <param name="b">The second number.</param>
+    /// <returns>
+    /// The greatest common divisor of <paramref name="a"/> and <paramref name="b"/>.
+    /// </returns>
+    internal static long GreatestCommonDivisor(long a, long b)
+    {
+        while (b != 0)
+        {
+            long x = b;
+            b = a % b;
+            a = x;
+        }
+
+        return a;
+    }
+
+    /// <summary>
+    /// Returns the Lowest Common Multiple of the two specified numbers.
+    /// </summary>
+    /// <param name="a">The first number.</param>
+    /// <param name="b">The second number.</param>
+    /// <returns>
+    /// The lowest common multiple of <paramref name="a"/> and <paramref name="b"/>.
+    /// </returns>
+    internal static long LowestCommonMultiple(long a, long b)
+        => a / GreatestCommonDivisor(a, b) * b;
+#endif
 
     /// <summary>
     /// Increments the value of the specified <see cref="BitArray"/>.

@@ -8,6 +8,7 @@ namespace MartinCostello.AdventOfCode;
 /// </summary>
 internal static class DictionaryExtensions
 {
+#if FEATURE_GENERIC_MATH
     /// <summary>
     /// Increments the value of the specified key, or adds it if not already present.
     /// </summary>
@@ -41,6 +42,67 @@ internal static class DictionaryExtensions
             dictionary[key] = value;
         }
     }
+#else
+    /// <summary>
+    /// Increments the value of the specified key, or adds it if not already present.
+    /// </summary>
+    /// <typeparam name="TKey">The type of the key.</typeparam>
+    /// <param name="dictionary">The dictionary to add or increment the value for.</param>
+    /// <param name="key">The key to increment the value of or add to the dictionary.</param>
+    /// <param name="value">The value to add to the dictionary if the key is not found.</param>
+    public static void AddOrIncrement<TKey>(this IDictionary<TKey, int> dictionary, TKey key, int value)
+        => dictionary.AddOrIncrement(key, value, 1);
+
+    /// <summary>
+    /// Increments the value of the specified key by the specified value, or adds it if not already present.
+    /// </summary>
+    /// <typeparam name="TKey">The type of the key.</typeparam>
+    /// <param name="dictionary">The dictionary to add or increment the value for.</param>
+    /// <param name="key">The key to increment the value of or add to the dictionary.</param>
+    /// <param name="value">The value to add to the dictionary if the key is not found.</param>
+    /// <param name="increment">The value to increment by.</param>
+    public static void AddOrIncrement<TKey>(this IDictionary<TKey, int> dictionary, TKey key, int value, int increment)
+    {
+        if (dictionary.ContainsKey(key))
+        {
+            dictionary[key] += increment;
+        }
+        else
+        {
+            dictionary[key] = value;
+        }
+    }
+
+    /// <summary>
+    /// Increments the value of the specified key, or adds it if not already present.
+    /// </summary>
+    /// <typeparam name="TKey">The type of the key.</typeparam>
+    /// <param name="dictionary">The dictionary to add or increment the value for.</param>
+    /// <param name="key">The key to increment the value of or add to the dictionary.</param>
+    /// <param name="value">The value to add to the dictionary if the key is not found.</param>
+    public static void AddOrIncrement<TKey>(this IDictionary<TKey, long> dictionary, TKey key, long value)
+        => dictionary.AddOrIncrement(key, value, 1);
+
+    /// <summary>
+    /// Increments the value of the specified key by the specified value, or adds it if not already present.
+    /// </summary>
+    /// <typeparam name="TKey">The type of the key.</typeparam>
+    /// <param name="dictionary">The dictionary to add or increment the value for.</param>
+    /// <param name="key">The key to increment the value of or add to the dictionary.</param>
+    /// <param name="value">The value to add to the dictionary if the key is not found.</param>
+    /// <param name="increment">The value to increment by.</param>
+    public static void AddOrIncrement<TKey>(this IDictionary<TKey, long> dictionary, TKey key, long value, long increment)
+    {
+        if (dictionary.ContainsKey(key))
+        {
+            dictionary[key] += increment;
+        }
+        else
+        {
+            dictionary[key] = value;
+        }
+    }
+#endif
 
     /// <summary>
     /// Gets the reference with the specified key, adding it if not already present.

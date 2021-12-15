@@ -28,7 +28,7 @@ public sealed class Day17 : Puzzle
     /// <returns>
     /// The combinations of containers that can store the volume specified by <paramref name="volume"/>.
     /// </returns>
-    internal static IList<ICollection<int>> GetContainerCombinations(int volume, IList<int> containerVolumes)
+    internal static IList<ICollection<long>> GetContainerCombinations(int volume, IList<int> containerVolumes)
     {
         var containers = containerVolumes
             .OrderByDescending((p) => p)
