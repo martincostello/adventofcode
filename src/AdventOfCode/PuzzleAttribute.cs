@@ -12,10 +12,10 @@ public sealed class PuzzleAttribute : Attribute
     /// <summary>
     /// Initializes a new instance of the <see cref="PuzzleAttribute"/> class.
     /// </summary>
-    /// <param name="name">The name of the puzzle.</param>
     /// <param name="year">The year associated with the puzzle.</param>
     /// <param name="day">The day associated with the puzzle.</param>
-    public PuzzleAttribute(string name, int year, int day)
+    /// <param name="name">The name of the puzzle.</param>
+    public PuzzleAttribute(int year, int day, string name)
     {
         Name = name;
         Year = year;
