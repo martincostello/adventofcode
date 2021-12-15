@@ -10,8 +10,10 @@ public sealed class Day15Tests : PuzzleTest
     {
     }
 
-    [Fact]
-    public void Y2021_Day15_GetRiskLevel_Returns_Correct_Value()
+    [Theory]
+    [InlineData(false, 40)]
+    [InlineData(true, 315)]
+    public void Y2021_Day15_GetRiskLevel_Returns_Correct_Value(bool largeMap, int expected)
     {
         // Arrange
         string[] riskMap =
@@ -29,10 +31,10 @@ public sealed class Day15Tests : PuzzleTest
         };
 
         // Act
-        int actual = Day15.GetRiskLevel(riskMap);
+        int actual = Day15.GetRiskLevel(riskMap, largeMap);
 
         // Assert
-        actual.ShouldBe(40);
+        actual.ShouldBe(expected);
     }
 
     [Fact]
@@ -42,6 +44,7 @@ public sealed class Day15Tests : PuzzleTest
         var puzzle = await SolvePuzzleAsync<Day15>();
 
         // Assert
-        puzzle.RiskLevel.ShouldBe(487);
+        puzzle.RiskLevelSmall.ShouldBe(487);
+        puzzle.RiskLevelLarge.ShouldBe(2821);
     }
 }

@@ -10,18 +10,24 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2021;
 public sealed class Day15 : Puzzle
 {
     /// <summary>
-    /// Gets the path through the cave with the lowest total risk.
+    /// Gets the path through the cave with the lowest total risk using the small map.
     /// </summary>
-    public int RiskLevel { get; private set; }
+    public int RiskLevelSmall { get; private set; }
+
+    /// <summary>
+    /// Gets the path through the cave with the lowest total risk using the large map.
+    /// </summary>
+    public int RiskLevelLarge { get; private set; }
 
     /// <summary>
     /// Gets the minimum risk level from the specified path.
     /// </summary>
     /// <param name="riskMap">The map of the risk in the cave to determine the risk level for.</param>
+    /// <param name="largeMap">Whether the map is actually 5 times larger than specified.</param>
     /// <returns>
     /// The path through the cave with the lowest total risk.
     /// </returns>
-    public static int GetRiskLevel(IList<string> riskMap)
+    public static int GetRiskLevel(IList<string> riskMap, bool largeMap)
     {
         int width = riskMap[0].Length;
         int height = riskMap.Count;
@@ -34,7 +40,52 @@ public sealed class Day15 : Puzzle
 
             for (int x = 0; x < width; x++)
             {
-                risks[new(x, y)] = row[x] - '0';
+                var point = new Point(x, y);
+                int risk = row[x] - '0';
+
+                risks[point] = risk;
+            }
+        }
+
+        if (largeMap)
+        {
+            int initialHeight = height;
+            int initialWidth = width;
+
+            height *= 5;
+            width *= 5;
+
+            var firstArea = new HashSet<Point>(risks.Keys);
+
+            for (int y = 0; y < height; y++)
+            {
+                for (int x = 0; x < width; x++)
+                {
+                    var point = new Point(x, y);
+
+                    if (firstArea.Contains(point))
+                    {
+                        // We already have the risk level
+                        continue;
+                    }
+
+                    var up = new Point(point.X, point.Y - initialHeight);
+
+                    if (!risks.TryGetValue(up, out int risk))
+                    {
+                        var left = new Point(point.X - initialWidth, point.Y);
+                        risk = risks[left];
+                    }
+
+                    risk++;
+
+                    if (risk > 9)
+                    {
+                        risk = 1;
+                    }
+
+                    risks[point] = risk;
+                }
             }
         }
 
@@ -60,14 +111,21 @@ public sealed class Day15 : Puzzle
     {
         IList<string> riskMap = await ReadResourceAsLinesAsync();
 
-        RiskLevel = GetRiskLevel(riskMap);
+        RiskLevelSmall = GetRiskLevel(riskMap, largeMap: false);
+        RiskLevelLarge = GetRiskLevel(riskMap, largeMap: true);
 
         if (Verbose)
         {
-            Logger.WriteLine("The lowest total risk of any path from the top left to the bottom right is {0:N0}.", RiskLevel);
+            Logger.WriteLine(
+                "The lowest total risk of any path from the top left to the bottom right using the small map is {0:N0}.",
+                RiskLevelSmall);
+
+            Logger.WriteLine(
+                "The lowest total risk of any path from the top left to the bottom right using the large map is {0:N0}.",
+                RiskLevelLarge);
         }
 
-        return PuzzleResult.Create(RiskLevel);
+        return PuzzleResult.Create(RiskLevelSmall, RiskLevelLarge);
     }
 
     private sealed class RiskMap : SquareGrid
