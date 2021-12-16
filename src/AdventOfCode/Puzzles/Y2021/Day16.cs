@@ -14,7 +14,7 @@ public sealed class Day16 : Puzzle
     /// <summary>
     /// Gets the sum of the packet version numbers.
     /// </summary>
-    public int VersionNumberSum { get; private set; }
+    public long VersionNumberSum { get; private set; }
 
     /// <summary>
     /// Gets the evaluated value of the transmission.
@@ -28,7 +28,7 @@ public sealed class Day16 : Puzzle
     /// <returns>
     /// The sum of the packet version numbers and the value of the evaluated transmission.
     /// </returns>
-    public static (int VersionNumberSum, long Value) Decode(string transmission)
+    public static (long VersionNumberSum, long Value) Decode(string transmission)
     {
         bool[] bits = new bool[transmission.Length * 4];
 
@@ -47,33 +47,33 @@ public sealed class Day16 : Puzzle
             bits[offset + 3] = array[0];
         }
 
-        long result = ReadPacket(bits, out _, out int versionSum);
+        long result = ReadPacket(bits, out _, out long versionSum);
 
         return (versionSum, result);
 
-        static long ReadPacket(ReadOnlySpan<bool> bits, out int bitsRead, out int versionSum)
+        static long ReadPacket(ReadOnlySpan<bool> bits, out int bitsRead, out long versionSum)
         {
             bitsRead = 0;
             versionSum = 0;
 
-            int version = ReadInteger(bits[..3]);
+            long version = ReadInteger(bits[..3]);
             bitsRead += 3;
 
-            int typeId = ReadInteger(bits.Slice(bitsRead, 3));
+            long typeId = ReadInteger(bits.Slice(bitsRead, 3));
             bitsRead += 3;
 
             versionSum += version;
 
             if (typeId == 4)
             {
-                int value = ReadLiteral(bits[bitsRead..], out int literalBitsRead);
+                long value = ReadLiteral(bits[bitsRead..], out int literalBitsRead);
                 bitsRead += literalBitsRead;
 
                 return value;
             }
             else
             {
-                int lengthTypeId = ReadInteger(bits.Slice(bitsRead, 1));
+                long lengthTypeId = ReadInteger(bits.Slice(bitsRead, 1));
                 bitsRead++;
 
                 var values = new List<long>();
@@ -82,15 +82,15 @@ public sealed class Day16 : Puzzle
                 {
                     const int TotalLengthBits = 15;
 
-                    int length = ReadInteger(bits.Slice(bitsRead, TotalLengthBits));
+                    long length = ReadInteger(bits.Slice(bitsRead, TotalLengthBits));
                     bitsRead += TotalLengthBits;
 
                     int index = bitsRead;
-                    int toRead = length;
+                    long toRead = length;
 
                     while (toRead > 0)
                     {
-                        long childValue = ReadPacket(bits[index..], out int childBitsRead, out int childVersion);
+                        long childValue = ReadPacket(bits[index..], out int childBitsRead, out long childVersion);
                         bitsRead += childBitsRead;
 
                         versionSum += childVersion;
@@ -105,14 +105,14 @@ public sealed class Day16 : Puzzle
                 {
                     const int SubpacketCountBits = 11;
 
-                    int subpackets = ReadInteger(bits.Slice(bitsRead, SubpacketCountBits));
+                    long subpackets = ReadInteger(bits.Slice(bitsRead, SubpacketCountBits));
                     bitsRead += SubpacketCountBits;
 
                     int index = bitsRead;
 
                     for (int i = 0; i < subpackets; i++)
                     {
-                        long childValue = ReadPacket(bits[index..], out int childBitsRead, out int childVersion);
+                        long childValue = ReadPacket(bits[index..], out int childBitsRead, out long childVersion);
                         bitsRead += childBitsRead;
 
                         values.Add(childValue);
@@ -128,15 +128,15 @@ public sealed class Day16 : Puzzle
                     1 => values.Aggregate(1L, (x, y) => x * y),
                     2 => values.Min(),
                     3 => values.Max(),
-                    5 => values[0] > values[1] ? 1 : 0,
-                    6 => values[0] < values[1] ? 1 : 0,
-                    7 => values[0] == values[1] ? 1 : 0,
+                    5 => values[0] > values[1] ? 1L : 0,
+                    6 => values[0] < values[1] ? 1L : 0,
+                    7 => values[0] == values[1] ? 1L : 0,
                     _ => throw new PuzzleException($"The type ID {typeId} is invalid."),
                 };
             }
         }
 
-        static int ReadLiteral(ReadOnlySpan<bool> bits, out int bitsRead)
+        static long ReadLiteral(ReadOnlySpan<bool> bits, out int bitsRead)
         {
             // TODO Just allocate an array, then slice at the end to avoid the copy
             var chunks = new List<bool>();
@@ -160,9 +160,9 @@ public sealed class Day16 : Puzzle
             return ReadInteger(chunks.ToArray());
         }
 
-        static int ReadInteger(ReadOnlySpan<bool> bits)
+        static long ReadInteger(ReadOnlySpan<bool> bits)
         {
-            int value = 0;
+            long value = 0;
 
             for (int i = 0; i < bits.Length; i++)
             {
@@ -172,7 +172,7 @@ public sealed class Day16 : Puzzle
             return value;
         }
 
-        static void SetBit(ref int reference, int bit, int value)
+        static void SetBit(ref long reference, int bit, long value)
             => reference |= value << bit;
     }
 

@@ -18,10 +18,10 @@ public sealed class Day16Tests : PuzzleTest
     [InlineData("620080001611562C8802118E34", 12)]
     [InlineData("C0015000016115A2E0802F182340", 23)]
     [InlineData("A0016C880162017C3686B18A3D4780", 31)]
-    public void Y2021_Day16_Decode_Returns_Correct_Sum(string transmission, int expected)
+    public void Y2021_Day16_Decode_Returns_Correct_Sum(string transmission, long expected)
     {
         // Act
-        (int actual, _) = Day16.Decode(transmission);
+        (long actual, _) = Day16.Decode(transmission);
 
         // Assert
         actual.ShouldBe(expected);
@@ -53,6 +53,6 @@ public sealed class Day16Tests : PuzzleTest
 
         // Assert
         puzzle.VersionNumberSum.ShouldBe(974);
-        puzzle.Value.ShouldBe(-1); // x > 92676586646
+        puzzle.Value.ShouldBe(180616437720);
     }
 }
