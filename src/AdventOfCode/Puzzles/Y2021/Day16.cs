@@ -17,13 +17,18 @@ public sealed class Day16 : Puzzle
     public int VersionNumberSum { get; private set; }
 
     /// <summary>
+    /// Gets the evaluated value of the transmission.
+    /// </summary>
+    public long Value { get; private set; }
+
+    /// <summary>
     /// Decodes the packets in the specified transmission.
     /// </summary>
     /// <param name="transmission">The transmission to decode.</param>
     /// <returns>
-    /// The sum of the packet version numbers.
+    /// The sum of the packet version numbers and the value of the evaluated transmission.
     /// </returns>
-    public static int Decode(string transmission)
+    public static (int VersionNumberSum, long Value) Decode(string transmission)
     {
         bool[] bits = new bool[transmission.Length * 4];
 
@@ -42,11 +47,11 @@ public sealed class Day16 : Puzzle
             bits[offset + 3] = array[0];
         }
 
-        ReadPacket(bits, out _, out int versionSum);
+        long result = ReadPacket(bits, out _, out int versionSum);
 
-        return versionSum;
+        return (versionSum, result);
 
-        static int ReadPacket(ReadOnlySpan<bool> bits, out int bitsRead, out int versionSum)
+        static long ReadPacket(ReadOnlySpan<bool> bits, out int bitsRead, out int versionSum)
         {
             bitsRead = 0;
             versionSum = 0;
@@ -71,7 +76,7 @@ public sealed class Day16 : Puzzle
                 int lengthTypeId = ReadInteger(bits.Slice(bitsRead, 1));
                 bitsRead++;
 
-                int result = 0;
+                var values = new List<long>();
 
                 if (lengthTypeId == 0)
                 {
@@ -85,10 +90,12 @@ public sealed class Day16 : Puzzle
 
                     while (toRead > 0)
                     {
-                        result += ReadPacket(bits[index..], out int childBitsRead, out int childVersion);
+                        long childValue = ReadPacket(bits[index..], out int childBitsRead, out int childVersion);
                         bitsRead += childBitsRead;
 
                         versionSum += childVersion;
+
+                        values.Add(childValue);
 
                         index += childBitsRead;
                         toRead -= childBitsRead;
@@ -105,15 +112,27 @@ public sealed class Day16 : Puzzle
 
                     for (int i = 0; i < subpackets; i++)
                     {
-                        result += ReadPacket(bits[index..], out int childBitsRead, out int childVersion);
+                        long childValue = ReadPacket(bits[index..], out int childBitsRead, out int childVersion);
                         bitsRead += childBitsRead;
+
+                        values.Add(childValue);
 
                         versionSum += childVersion;
                         index += childBitsRead;
                     }
                 }
 
-                return result;
+                return typeId switch
+                {
+                    0 => values.Sum(),
+                    1 => values.Aggregate(1L, (x, y) => x * y),
+                    2 => values.Min(),
+                    3 => values.Max(),
+                    5 => values[0] > values[1] ? 1 : 0,
+                    6 => values[0] < values[1] ? 1 : 0,
+                    7 => values[0] == values[1] ? 1 : 0,
+                    _ => throw new PuzzleException($"The type ID {typeId} is invalid."),
+                };
             }
         }
 
@@ -162,11 +181,12 @@ public sealed class Day16 : Puzzle
     {
         string transmission = (await ReadResourceAsStringAsync()).Trim();
 
-        VersionNumberSum = Decode(transmission);
+        (VersionNumberSum, Value) = Decode(transmission);
 
         if (Verbose)
         {
             Logger.WriteLine("The sum of the version numbers in all packets is {0:N0}.", VersionNumberSum);
+            Logger.WriteLine("The result of evaluating the transmission is {0:N0}.", Value);
         }
 
         return PuzzleResult.Create(VersionNumberSum);
