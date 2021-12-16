@@ -189,6 +189,6 @@ public sealed class Day16 : Puzzle
             Logger.WriteLine("The result of evaluating the transmission is {0:N0}.", Value);
         }
 
-        return PuzzleResult.Create(VersionNumberSum);
+        return PuzzleResult.Create(VersionNumberSum, Value);
     }
 }
