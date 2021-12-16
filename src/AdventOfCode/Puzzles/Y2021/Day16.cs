@@ -138,17 +138,30 @@ public sealed class Day16 : Puzzle
 
         static long ReadLiteral(ReadOnlySpan<bool> bits, out int bitsRead)
         {
-            // TODO Just allocate an array, then slice at the end to avoid the copy
-            var chunks = new List<bool>();
+            int length = 0;
+
+            for (int i = 0; i < bits.Length; i += 5)
+            {
+                length += 4;
+
+                if (!bits[i])
+                {
+                    break;
+                }
+            }
+
+            bool[] valueBits = new bool[length];
+
+            int index = 0;
 
             for (int i = 0; i < bits.Length; i += 5)
             {
                 bool isLast = !bits[i];
 
-                chunks.Add(bits[i + 1]);
-                chunks.Add(bits[i + 2]);
-                chunks.Add(bits[i + 3]);
-                chunks.Add(bits[i + 4]);
+                valueBits[index++] = bits[i + 1];
+                valueBits[index++] = bits[i + 2];
+                valueBits[index++] = bits[i + 3];
+                valueBits[index++] = bits[i + 4];
 
                 if (isLast)
                 {
@@ -156,8 +169,8 @@ public sealed class Day16 : Puzzle
                 }
             }
 
-            bitsRead = chunks.Count + (chunks.Count / 4);
-            return ReadInteger(chunks.ToArray());
+            bitsRead = length + (length / 4);
+            return ReadInteger(valueBits);
         }
 
         static long ReadInteger(ReadOnlySpan<bool> bits)
