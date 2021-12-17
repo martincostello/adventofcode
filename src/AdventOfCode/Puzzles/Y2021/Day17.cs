@@ -79,13 +79,13 @@ public sealed class Day17 : Puzzle
 
         static List<Point> GetTrajectory(int x, int y, Point extent)
         {
+            var current = new Point(x, y);
+
             var trajectory = new List<Point>()
             {
                 Point.Empty,
-                new Point(x, y),
+                current,
             };
-
-            var current = new Point(x, y);
 
             for (int t = 2; ; t++)
             {
