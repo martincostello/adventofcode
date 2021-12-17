@@ -82,9 +82,7 @@ public abstract class Puzzle : IPuzzle
     /// The parsed value of <paramref name="s"/>.
     /// </returns>
     protected internal static T Parse<T>(string s)
-#if FEATURE_GENERIC_MATH
         where T : INumber<T>
-#endif
         => Parse<T>(s, NumberStyles.Integer);
 
     /// <summary>
@@ -96,9 +94,7 @@ public abstract class Puzzle : IPuzzle
     /// The parsed value of <paramref name="s"/>.
     /// </returns>
     protected internal static T Parse<T>(ReadOnlySpan<char> s)
-#if FEATURE_GENERIC_MATH
         where T : INumber<T>
-#endif
         => Parse<T>(s, NumberStyles.Integer);
 
     /// <summary>
@@ -114,39 +110,8 @@ public abstract class Puzzle : IPuzzle
     /// The parsed value of <paramref name="s"/>.
     /// </returns>
     protected internal static T Parse<T>(ReadOnlySpan<char> s, NumberStyles style = NumberStyles.Integer)
-#if FEATURE_GENERIC_MATH
         where T : INumber<T>
-#endif
-    {
-        object valueAsObj;
-
-        if (typeof(T) == typeof(int))
-        {
-            int value2 = int.Parse(s, style, CultureInfo.InvariantCulture);
-            valueAsObj = value2;
-        }
-        else if (typeof(T) == typeof(long))
-        {
-            long value2 = long.Parse(s, style, CultureInfo.InvariantCulture);
-            valueAsObj = value2;
-        }
-        else if (typeof(T) == typeof(uint))
-        {
-            uint value2 = uint.Parse(s, style, CultureInfo.InvariantCulture);
-            valueAsObj = value2;
-        }
-        else if (typeof(T) == typeof(ulong))
-        {
-            ulong value2 = ulong.Parse(s, style, CultureInfo.InvariantCulture);
-            valueAsObj = value2;
-        }
-        else
-        {
-            throw new NotSupportedException();
-        }
-
-        return (T)valueAsObj;
-    }
+        => T.Parse(s, style, CultureInfo.InvariantCulture);
 
     /// <summary>
     /// Tries to parse the specified <see cref="ReadOnlySpan{T}"/> as a number of type <typeparamref name="T"/>.
@@ -162,41 +127,8 @@ public abstract class Puzzle : IPuzzle
     /// successfully; otherwise <see langword="false"/>.
     /// </returns>
     protected internal static bool TryParse<T>(ReadOnlySpan<char> s, out T value)
-#if FEATURE_GENERIC_MATH
         where T : INumber<T>
-#endif
-    {
-        bool result;
-        object valueAsObj;
-
-        if (typeof(T) == typeof(int))
-        {
-            result = int.TryParse(s, NumberStyles.Integer, CultureInfo.InvariantCulture, out int value2);
-            valueAsObj = value2;
-        }
-        else if (typeof(T) == typeof(long))
-        {
-            result = long.TryParse(s, NumberStyles.Integer, CultureInfo.InvariantCulture, out long value2);
-            valueAsObj = value2;
-        }
-        else if (typeof(T) == typeof(uint))
-        {
-            result = uint.TryParse(s, NumberStyles.Integer, CultureInfo.InvariantCulture, out uint value2);
-            valueAsObj = value2;
-        }
-        else if (typeof(T) == typeof(ulong))
-        {
-            result = ulong.TryParse(s, NumberStyles.Integer, CultureInfo.InvariantCulture, out ulong value2);
-            valueAsObj = value2;
-        }
-        else
-        {
-            throw new NotSupportedException();
-        }
-
-        value = (T)valueAsObj;
-        return result;
-    }
+        => T.TryParse(s, NumberStyles.Integer, CultureInfo.InvariantCulture, out value);
 
     /// <summary>
     /// Ensures that the specified number of arguments are present.
@@ -262,9 +194,7 @@ public abstract class Puzzle : IPuzzle
     /// <see cref="IList{T}"/> containing the numbers in the resource associated with the puzzle.
     /// </returns>
     protected async Task<IList<T>> ReadResourceAsNumbersAsync<T>()
-#if FEATURE_GENERIC_MATH
         where T : INumber<T>
-#endif
     {
         var numbers = new List<T>();
 
@@ -274,14 +204,7 @@ public abstract class Puzzle : IPuzzle
 
         while ((value = await reader.ReadLineAsync()) != null)
         {
-            if (typeof(T) == typeof(int))
-            {
-                numbers.Add(Parse<T>(value));
-            }
-            else if (typeof(T) == typeof(long))
-            {
-                numbers.Add(Parse<T>(value));
-            }
+            numbers.Add(T.Parse(value, NumberStyles.Integer, CultureInfo.InvariantCulture));
         }
 
         return numbers;

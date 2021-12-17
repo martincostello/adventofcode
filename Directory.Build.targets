@@ -31,4 +31,16 @@
       </AssemblyAttribute>
     </ItemGroup>
   </Target>
+  <!--
+    HACK Workaround for https://github.com/dotnet/runtime/issues/62840#issuecomment-996304171
+  -->
+  <Target Name="RemoveSystemRuntimeFromRefPack"
+          BeforeTargets="_HandlePackageFileConflicts"
+          Condition="'@(Reference -> WithMetadataValue('NugetPackageId', 'System.Runtime.Experimental'))' != ''">
+    <ItemGroup>
+      <Reference Remove="@(Reference)"
+                 Condition="$([System.String]::Copy(%(Reference.Identity)).Contains('System.Runtime.dll')) and
+                            '%(Reference.NuGetPackageId)' == 'Microsoft.NETCore.App.Ref'" />
+    </ItemGroup>
+  </Target>
 </Project>
