@@ -12,16 +12,22 @@ public sealed class Day17 : Puzzle
     /// <summary>
     /// Gets the highest apogee reached by a velocity that is within the target area.
     /// </summary>
-    public int Apogee { get; private set; }
+    public int MaxApogee { get; private set; }
+
+    /// <summary>
+    /// Gets the number of initial velocities that will hit the target area.
+    /// </summary>
+    public int Count { get; private set; }
 
     /// <summary>
     /// Calculates a ballistic trajectory that lands the probe within the specified target area.
     /// </summary>
     /// <param name="target">The target area to land the probe within.</param>
     /// <returns>
-    /// The highest apogee reached by a velocity that is within the specified target area.
+    /// The highest apogee reached by a velocity that is within the specified target area
+    /// and the number of initial velocities that will hit the target area.
     /// </returns>
-    public static int Calculate(string target)
+    public static (int MaxApogee, int Count) Calculate(string target)
     {
         Rectangle targetArea = GetTargetArea(target);
         Point extent = new(targetArea.Right, targetArea.Top);
@@ -30,10 +36,11 @@ public sealed class Day17 : Puzzle
 
         int maxX = targetArea.Right;
         int maxY = Math.Abs(targetArea.Top);
+        int minY = -maxY;
 
-        for (int y = 0; y < maxY; y++)
+        for (int y = minY; y <= maxY; y++)
         {
-            for (int x = 0; x < maxX; x++)
+            for (int x = 0; x <= maxX; x++)
             {
                 int? apogee = GetApogee(x, y, targetArea);
 
@@ -44,7 +51,7 @@ public sealed class Day17 : Puzzle
             }
         }
 
-        return apogees.Max();
+        return (apogees.Max(), apogees.Count);
 
         static Rectangle GetTargetArea(string target)
         {
@@ -66,26 +73,26 @@ public sealed class Day17 : Puzzle
             return new Rectangle(
                 minX,
                 minY,
-                maxX - minX,
-                maxY - minY);
+                maxX - minX + 1,
+                maxY - minY + 1);
         }
 
-        static List<Point> GetTrajectory(int vx, int vy, Point extent)
+        static List<Point> GetTrajectory(int x, int y, Point extent)
         {
             var trajectory = new List<Point>()
             {
                 Point.Empty,
-                new Point(vx, vy),
+                new Point(x, y),
             };
 
-            var current = new Point(vx, vy);
+            var current = new Point(x, y);
 
             for (int t = 2; ; t++)
             {
-                vx = Math.Max(vx - 1, 0);
-                vy--;
+                x = Math.Max(x - 1, 0);
+                y--;
 
-                current += new Size(vx, vy);
+                current += new Size(x, y);
 
                 if (current.X > extent.X || current.Y < extent.Y)
                 {
@@ -120,15 +127,19 @@ public sealed class Day17 : Puzzle
     {
         string target = (await ReadResourceAsStringAsync()).Trim();
 
-        Apogee = Calculate(target);
+        (MaxApogee, Count) = Calculate(target);
 
         if (Verbose)
         {
             Logger.WriteLine(
                 "The highest y position reached on a trajectory that lands in the target area is {0:N0}.",
-                Apogee);
+                MaxApogee);
+
+            Logger.WriteLine(
+                "{0:N0} distinct initial velocity values cause the probe to land within the target area.",
+                Count);
         }
 
-        return PuzzleResult.Create(Apogee);
+        return PuzzleResult.Create(MaxApogee, Count);
     }
 }

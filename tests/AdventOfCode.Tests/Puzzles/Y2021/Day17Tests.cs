@@ -11,16 +11,17 @@ public sealed class Day17Tests : PuzzleTest
     }
 
     [Fact]
-    public void Y2021_Day17_Calculate_Returns_Correct_Sum()
+    public void Y2021_Day17_Calculate_Returns_Correct_Value()
     {
         // Arrange
         string target = "target area: x=20..30, y=-10..-5";
 
         // Act
-        int actual = Day17.Calculate(target);
+        (int actualMaxApogee, int actualCount) = Day17.Calculate(target);
 
         // Assert
-        actual.ShouldBe(45);
+        actualMaxApogee.ShouldBe(45);
+        actualCount.ShouldBe(112);
     }
 
     [Fact]
@@ -30,6 +31,7 @@ public sealed class Day17Tests : PuzzleTest
         var puzzle = await SolvePuzzleAsync<Day17>();
 
         // Assert
-        puzzle.Apogee.ShouldBe(8646);
+        puzzle.MaxApogee.ShouldBe(8646);
+        puzzle.Count.ShouldBe(5945);
     }
 }
