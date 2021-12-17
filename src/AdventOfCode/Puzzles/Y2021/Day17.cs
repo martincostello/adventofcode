@@ -89,7 +89,11 @@ public sealed class Day17 : Puzzle
 
             for (int t = 2; ; t++)
             {
-                x = Math.Max(x - 1, 0);
+                if (x > 0)
+                {
+                    x--;
+                }
+
                 y--;
 
                 current += new Size(x, y);
