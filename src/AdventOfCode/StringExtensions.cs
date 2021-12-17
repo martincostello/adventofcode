@@ -39,8 +39,6 @@ internal static class StringExtensions
     /// An <see cref="IEnumerable{T}"/> containing the parsed numbers.
     /// </returns>
     public static IEnumerable<T> AsNumbers<T>(this string value, char separator = ',', StringSplitOptions options = StringSplitOptions.None)
-#if FEATURE_GENERIC_MATH
         where T : INumber<T>
-#endif
         => value.Split(separator, options).Select(Puzzle.Parse<T>);
 }
