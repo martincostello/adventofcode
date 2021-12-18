@@ -72,7 +72,7 @@ public sealed class Day18Tests : PuzzleTest
     }
 
     [Fact]
-    public void Y2021_Day18_SumValues_Returns_Correct_Reduced_Value()
+    public void Y2021_Day18_SumValues_Returns_Correct_Reduced_Value_1()
     {
         // Arrange
         string x = "[[[0,[4,5]],[0,0]],[[[4,5],[2,6]],[9,5]]]";
@@ -83,6 +83,118 @@ public sealed class Day18Tests : PuzzleTest
 
         // Assert
         actual.ShouldBe("[[[[4,0],[5,4]],[[7,7],[6,0]]],[[8,[7,7]],[[7,9],[5,0]]]]");
+    }
+
+    [Fact]
+    public void Y2021_Day18_SumValues_Returns_Correct_Reduced_Value_2()
+    {
+        // Arrange
+        string x = "[[[[4,0],[5,4]],[[7,7],[6,0]]],[[8,[7,7]],[[7,9],[5,0]]]]";
+        string y = "[[2,[[0,8],[3,4]]],[[[6,7],1],[7,[1,6]]]]";
+
+        // Act
+        string actual = Day18.SumValues(x, y);
+
+        // Assert
+        actual.ShouldBe("[[[[6,7],[6,7]],[[7,7],[0,7]]],[[[8,7],[7,7]],[[8,8],[8,0]]]]");
+    }
+
+    [Fact]
+    public void Y2021_Day18_SumValues_Returns_Correct_Reduced_Value_3()
+    {
+        // Arrange
+        string x = "[[[[6,7],[6,7]],[[7,7],[0,7]]],[[[8,7],[7,7]],[[8,8],[8,0]]]]";
+        string y = "[[[[2,4],7],[6,[0,5]]],[[[6,8],[2,8]],[[2,1],[4,5]]]]";
+
+        // Act
+        string actual = Day18.SumValues(x, y);
+
+        // Assert
+        actual.ShouldBe("[[[[7,0],[7,7]],[[7,7],[7,8]]],[[[7,7],[8,8]],[[7,7],[8,7]]]]");
+    }
+
+    [Fact]
+    public void Y2021_Day18_SumValues_Returns_Correct_Reduced_Value_4()
+    {
+        // Arrange
+        string x = "[[[[7,0],[7,7]],[[7,7],[7,8]]],[[[7,7],[8,8]],[[7,7],[8,7]]]]";
+        string y = "[7,[5,[[3,8],[1,4]]]]";
+
+        // Act
+        string actual = Day18.SumValues(x, y);
+
+        // Assert
+        actual.ShouldBe("[[[[7,7],[7,8]],[[9,5],[8,7]]],[[[6,8],[0,8]],[[9,9],[9,0]]]]");
+    }
+
+    [Fact]
+    public void Y2021_Day18_SumValues_Returns_Correct_Reduced_Value_5()
+    {
+        // Arrange
+        string x = "[[[[7,7],[7,8]],[[9,5],[8,7]]],[[[6,8],[0,8]],[[9,9],[9,0]]]]";
+        string y = "[[2,[2,2]],[8,[8,1]]]";
+
+        // Act
+        string actual = Day18.SumValues(x, y);
+
+        // Assert
+        actual.ShouldBe("[[[[6,6],[6,6]],[[6,0],[6,7]]],[[[7,7],[8,9]],[8,[8,1]]]]");
+    }
+
+    [Fact]
+    public void Y2021_Day18_SumValues_Returns_Correct_Reduced_Value_6()
+    {
+        // Arrange
+        string x = "[[[[6,6],[6,6]],[[6,0],[6,7]]],[[[7,7],[8,9]],[8,[8,1]]]]";
+        string y = "[2,9]";
+
+        // Act
+        string actual = Day18.SumValues(x, y);
+
+        // Assert
+        actual.ShouldBe("[[[[6,6],[7,7]],[[0,7],[7,7]]],[[[5,5],[5,6]],9]]");
+    }
+
+    [Fact]
+    public void Y2021_Day18_SumValues_Returns_Correct_Reduced_Value_7()
+    {
+        // Arrange
+        string x = "[[[[6,6],[7,7]],[[0,7],[7,7]]],[[[5,5],[5,6]],9]]";
+        string y = "[1,[[[9,3],9],[[9,0],[0,7]]]]";
+
+        // Act
+        string actual = Day18.SumValues(x, y);
+
+        // Assert
+        actual.ShouldBe("[[[[7,8],[6,7]],[[6,8],[0,8]]],[[[7,7],[5,0]],[[5,5],[5,6]]]]");
+    }
+
+    [Fact]
+    public void Y2021_Day18_SumValues_Returns_Correct_Reduced_Value_8()
+    {
+        // Arrange
+        string x = "[[[[7,8],[6,7]],[[6,8],[0,8]]],[[[7,7],[5,0]],[[5,5],[5,6]]]]";
+        string y = "[[[5,[7,4]],7],1]";
+
+        // Act
+        string actual = Day18.SumValues(x, y);
+
+        // Assert
+        actual.ShouldBe("[[[[7,7],[7,7]],[[8,7],[8,7]]],[[[7,0],[7,7]],9]]");
+    }
+
+    [Fact]
+    public void Y2021_Day18_SumValues_Returns_Correct_Reduced_Value_9()
+    {
+        // Arrange
+        string x = "[[[[7,7],[7,7]],[[8,7],[8,7]]],[[[7,0],[7,7]],9]]";
+        string y = "[[[[4,2],2],6],[8,7]]";
+
+        // Act
+        string actual = Day18.SumValues(x, y);
+
+        // Assert
+        actual.ShouldBe("[[[[8,7],[7,7]],[[8,6],[7,7]]],[[[0,7],[6,6]],[8,7]]]");
     }
 
     [Fact]
