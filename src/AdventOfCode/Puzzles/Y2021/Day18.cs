@@ -37,18 +37,15 @@ public sealed class Day18 : Puzzle
 
         var magnitudes = new List<int>();
 
-        for (int i = 0; i < numbers.Count - 1; i++)
+        for (int i = 0; i < pairs.Count - 1; i++)
         {
-            for (int j = 0; j < numbers.Count; j++)
+            for (int j = 0; j < pairs.Count; j++)
             {
-                SnailPair x = ParseRaw(numbers[i]);
-                SnailPair y = ParseRaw(numbers[j]);
+                SnailPair x = pairs[i];
+                SnailPair y = pairs[j];
 
-                SnailPair z1 = (x + y).Reduce();
-                SnailPair z2 = (y + x).Reduce();
-
-                magnitudes.Add(z1.Magnitude());
-                magnitudes.Add(z2.Magnitude());
+                magnitudes.Add((x + y).Reduce().Magnitude());
+                magnitudes.Add((y + x).Reduce().Magnitude());
             }
         }
 
