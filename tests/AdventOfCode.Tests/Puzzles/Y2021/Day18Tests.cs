@@ -229,6 +229,6 @@ public sealed class Day18Tests : PuzzleTest
         var puzzle = await SolvePuzzleAsync<Day18>();
 
         // Assert
-        puzzle.MagnitudeOfSum.ShouldBe(-1); // x < 5028
+        puzzle.MagnitudeOfSum.ShouldBe(4323);
     }
 }

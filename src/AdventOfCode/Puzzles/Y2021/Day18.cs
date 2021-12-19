@@ -1,6 +1,8 @@
 ﻿// Copyright (c) Martin Costello, 2015. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
+using System.Diagnostics.CodeAnalysis;
+
 namespace MartinCostello.AdventOfCode.Puzzles.Y2021;
 
 /// <summary>
@@ -227,13 +229,14 @@ public sealed class Day18 : Puzzle
 
                 visited.Add(pair);
 
-                if (searchLeft && pair.Left is SnailPair leftPair && !visited.Contains(leftPair))
+                if (searchLeft && pair.Left is SnailPair leftPair &&
+                    !visited.Contains(leftPair))
                 {
                     visited.Add(leftPair);
 
                     bool direction = movedUp ? !searchLeft : searchLeft;
 
-                    var leftChild = FindNearest(leftPair, direction, false, visited);
+                    SnailValue? leftChild = FindNearest(leftPair, direction, false, visited);
 
                     if (leftChild is not null)
                     {
@@ -241,13 +244,14 @@ public sealed class Day18 : Puzzle
                     }
                 }
 
-                if (!searchLeft && pair.Right is SnailPair rightPair && !visited.Contains(rightPair))
+                if (!searchLeft && pair.Right is SnailPair rightPair &&
+                    !visited.Contains(rightPair))
                 {
                     visited.Add(rightPair);
 
                     bool direction = movedUp ? !searchLeft : searchLeft;
 
-                    var rightChild = FindNearest(rightPair, direction, false, visited);
+                    SnailValue? rightChild = FindNearest(rightPair, direction, false, visited);
 
                     if (rightChild is not null)
                     {
@@ -260,92 +264,125 @@ public sealed class Day18 : Puzzle
         }
 
         public SnailPair Reduce()
-        {
-            int unused = 0;
-            return Reduce(this, null, null, ref unused)!;
-        }
+            => Reduce(this);
 
-        private static SnailPair? Reduce(SnailPair number, SnailValue? left, SnailValue? right, ref int nested)
+        private static SnailPair Reduce(SnailPair pair)
         {
             while (true)
             {
-                if (nested == 4)
+                if (FindExplode(pair, depth: 0, out var toExplode))
                 {
+                    SnailValue? left = toExplode.FindNearest(left: true);
+                    SnailValue? right = toExplode.FindNearest(left: false);
+
                     if (left is not null)
                     {
-                        left.Value += (number.Left as SnailValue)!;
+                        left.Value += (toExplode.Left as SnailValue)!.Value;
                     }
 
                     if (right is not null)
                     {
-                        right.Value += (number.Right as SnailValue)!;
+                        right.Value += (toExplode.Right as SnailValue)!.Value;
                     }
 
-                    return null;
-                }
+                    SnailPair parent = toExplode.Parent!;
+                    SnailValue exploded = new(0, parent);
 
-                if (number.Left is SnailPair leftPair)
-                {
-                    nested++;
-
-                    try
+                    if (parent.Left == toExplode)
                     {
-                        SnailValue? childLeft = leftPair.FindNearest(left: true);
-                        SnailValue? childRight = leftPair.FindNearest(left: false);
-
-                        SnailPair? reduced = Reduce(leftPair, childLeft, childRight, ref nested);
-
-                        if (reduced is null)
-                        {
-                            number.Left = new SnailValue(0, number);
-                            continue;
-                        }
+                        parent.Left = exploded;
                     }
-                    finally
+                    else
                     {
-                        nested--;
+                        parent.Right = exploded;
                     }
-                }
 
-                if (number.Right is SnailPair rightPair)
-                {
-                    nested++;
-
-                    try
-                    {
-                        SnailValue? childLeft = rightPair.FindNearest(left: true);
-                        SnailValue? childRight = rightPair.FindNearest(left: false);
-
-                        SnailPair? reduced = Reduce(rightPair, childLeft, childRight, ref nested);
-
-                        if (reduced is null)
-                        {
-                            number.Right = new SnailValue(0, number);
-                            continue;
-                        }
-                    }
-                    finally
-                    {
-                        nested--;
-                    }
-                }
-
-                if (number.Left is SnailValue leftValue && leftValue >= 10)
-                {
-                    number.Left = leftValue.Split();
                     continue;
                 }
 
-                if (number.Right is SnailValue rightValue && rightValue >= 10)
+                if (FindSplit(pair, out var toSplit))
                 {
-                    number.Right = rightValue.Split();
+                    SnailPair parent = toSplit.Parent!;
+                    SnailPair split = toSplit.Split();
+
+                    if (parent.Left == toSplit)
+                    {
+                        parent.Left = split;
+                    }
+                    else
+                    {
+                        parent.Right = split;
+                    }
+
                     continue;
                 }
 
                 break;
             }
 
-            return number;
+            return pair;
+
+            static bool FindExplode(SnailPair pair, int depth, [NotNullWhen(true)] out SnailPair? value)
+            {
+                if (depth == 4)
+                {
+                    value = pair;
+                    return true;
+                }
+
+                if (pair.Left is SnailPair leftPair)
+                {
+                    if (FindExplode(leftPair, depth + 1, out value))
+                    {
+                        return true;
+                    }
+                }
+
+                if (pair.Right is SnailPair rightPair)
+                {
+                    if (FindExplode(rightPair, depth + 1, out value))
+                    {
+                        return true;
+                    }
+                }
+
+                value = null;
+                return false;
+            }
+
+            static bool FindSplit(SnailPair pair, [NotNullWhen(true)] out SnailValue? value)
+            {
+                const int SplitThreshold = 10;
+
+                if (pair.Left is SnailValue leftValue &&
+                    leftValue >= SplitThreshold)
+                {
+                    value = leftValue;
+                    return true;
+                }
+
+                if (pair.Left is SnailPair leftPair &&
+                    FindSplit(leftPair, out value))
+                {
+                    return true;
+                }
+
+                if (pair.Right is SnailValue rightValue &&
+                    rightValue >= SplitThreshold)
+                {
+                    value = rightValue;
+                    return true;
+                }
+
+                if (pair.Right is SnailPair rightPair &&
+                    FindSplit(rightPair, out value))
+                {
+                    return true;
+                }
+
+                value = null;
+                return false;
+            }
         }
     }
 
@@ -359,9 +396,11 @@ public sealed class Day18 : Puzzle
 
         public int Value { get; set; }
 
-        public static implicit operator int(SnailValue value) => value.Value;
+        public static implicit operator int(SnailValue value)
+            => value.Value;
 
-        public override int Magnitude() => Value;
+        public override int Magnitude()
+            => Value;
 
         public SnailPair Split()
         {
@@ -375,6 +414,7 @@ public sealed class Day18 : Puzzle
             return result;
         }
 
-        public override string ToString() => Value.ToString(CultureInfo.InvariantCulture);
+        public override string ToString()
+            => Value.ToString(CultureInfo.InvariantCulture);
     }
 }
