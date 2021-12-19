@@ -270,31 +270,31 @@ public sealed class Day19 : Puzzle
             static Point3D Rotate(Point3D point, double x, double y, double z)
             {
                 // Adapted from https://stackoverflow.com/a/34060479/1064169
-                double cosX = Math.Cos(x);
-                double sinX = Math.Sin(x);
+                int cosX = (int)Math.Round(Math.Cos(x), 0);
+                int sinX = (int)Math.Round(Math.Sin(x), 0);
 
-                double cosY = Math.Cos(y);
-                double sinY = Math.Sin(y);
+                int cosY = (int)Math.Round(Math.Cos(y), 0);
+                int sinY = (int)Math.Round(Math.Sin(y), 0);
 
-                double cosZ = Math.Cos(z);
-                double sinZ = Math.Sin(z);
+                int cosZ = (int)Math.Round(Math.Cos(z), 0);
+                int sinZ = (int)Math.Round(Math.Sin(z), 0);
 
-                double deltaXX = Math.Round(cosX * cosY, 0);
-                double deltaXY = Math.Round((cosX * sinY * sinZ) - (sinX * cosZ), 0);
-                double deltaXZ = Math.Round((cosX * sinY * cosZ) + (sinX * sinZ), 0);
+                int deltaXX = cosX * cosY;
+                int deltaXY = (cosX * sinY * sinZ) - (sinX * cosZ);
+                int deltaXZ = (cosX * sinY * cosZ) + (sinX * sinZ);
 
-                double deltaYX = Math.Round(sinX * cosY, 0);
-                double deltaYY = Math.Round((sinX * sinY * sinZ) + (cosX * cosZ), 0);
-                double deltaYZ = Math.Round((sinX * sinY * cosZ) - (cosX * sinZ), 0);
+                int deltaYX = sinX * cosY;
+                int deltaYY = (sinX * sinY * sinZ) + (cosX * cosZ);
+                int deltaYZ = (sinX * sinY * cosZ) - (cosX * sinZ);
 
-                double deltaZX = Math.Round(-sinY, 0);
-                double deltaZY = Math.Round(cosY * sinZ, 0);
-                double deltaZZ = Math.Round(cosY * cosZ, 0);
+                int deltaZX = -sinY;
+                int deltaZY = cosY * sinZ;
+                int deltaZZ = cosY * cosZ;
 
                 return new(
-                    (int)((deltaXX * point.X) + (deltaXY * point.Y) + (deltaXZ * point.Z)),
-                    (int)((deltaYX * point.X) + (deltaYY * point.Y) + (deltaYZ * point.Z)),
-                    (int)((deltaZX * point.X) + (deltaZY * point.Y) + (deltaZZ * point.Z)));
+                    (deltaXX * point.X) + (deltaXY * point.Y) + (deltaXZ * point.Z),
+                    (deltaYX * point.X) + (deltaYY * point.Y) + (deltaYZ * point.Z),
+                    (deltaZX * point.X) + (deltaZY * point.Y) + (deltaZZ * point.Z));
             }
 
             static double ToRadians(int value)
