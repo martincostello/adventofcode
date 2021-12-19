@@ -44,8 +44,8 @@ public sealed class Day18 : Puzzle
                 SnailPair x = ParseRaw(numbers[i]);
                 SnailPair y = ParseRaw(numbers[j]);
 
-                SnailPair z1 = (x.Clone() + y.Clone()).Reduce();
-                SnailPair z2 = (y.Clone() + x.Clone()).Reduce();
+                SnailPair z1 = (x + y).Reduce();
+                SnailPair z2 = (y + x).Reduce();
 
                 magnitudes.Add(z1.Magnitude());
                 magnitudes.Add(z2.Magnitude());
@@ -207,8 +207,8 @@ public sealed class Day18 : Puzzle
         {
             var result = new SnailPair()
             {
-                Left = a,
-                Right = b,
+                Left = ParseRaw(a.ToString()!),
+                Right = ParseRaw(b.ToString()!),
             };
 
             result.Left.Parent = result;
@@ -230,12 +230,6 @@ public sealed class Day18 : Puzzle
 
         public override int Magnitude()
             => (3 * Left.Magnitude()) + (2 * Right.Magnitude());
-
-        public SnailPair Clone()
-        {
-            string raw = ToString();
-            return ParseRaw(raw);
-        }
 
         public SnailValue? FindNearest(bool left)
         {
