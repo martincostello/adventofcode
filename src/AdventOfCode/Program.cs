@@ -11,7 +11,7 @@ using ILogger = MartinCostello.AdventOfCode.ILogger;
 
 if (args.FirstOrDefault() == "--solve")
 {
-    return await RunSolverAsync(args, new ConsoleLogger());
+    return await RunSolverAsync(args[1..], new ConsoleLogger());
 }
 
 var builder = WebApplication.CreateBuilder(args);

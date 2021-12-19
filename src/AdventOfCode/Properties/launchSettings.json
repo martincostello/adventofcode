@@ -17,6 +17,7 @@
     },
     "AdventOfCode": {
       "commandName": "Project",
+      "commandLineArgs": "",
       "launchBrowser": true,
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
