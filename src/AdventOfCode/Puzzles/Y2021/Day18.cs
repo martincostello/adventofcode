@@ -17,19 +17,42 @@ public sealed class Day18 : Puzzle
     public int MagnitudeOfSum { get; private set; }
 
     /// <summary>
+    /// Gets the largest magnitude of the sum of any two of the snail numbers.
+    /// </summary>
+    public int LargestSumMagnitude { get; private set; }
+
+    /// <summary>
     /// Calculates the sum of the specified snail numbers.
     /// </summary>
     /// <param name="numbers">The snail numbers to sum.</param>
     /// <returns>
-    /// The magnitude of the sum of the snail numbers.
+    /// The magnitude of the sum of the snail numbers and the
+    /// largest magnitude of any two of the snail numbers.
     /// </returns>
-    public static int Sum(IList<string> numbers)
+    public static (int MagnitudeOfSum, int LargestSumMagnitude) Sum(IList<string> numbers)
     {
         List<SnailPair> pairs = ParseRaw(numbers);
 
         SnailPair sum = pairs.Aggregate((x, y) => (x + y).Reduce());
 
-        return sum.Magnitude();
+        var magnitudes = new List<int>();
+
+        for (int i = 0; i < numbers.Count - 1; i++)
+        {
+            for (int j = 0; j < numbers.Count; j++)
+            {
+                SnailPair x = ParseRaw(new[] { numbers[i] })[0];
+                SnailPair y = ParseRaw(new[] { numbers[j] })[0];
+
+                SnailPair z1 = (x.Clone() + y.Clone()).Reduce();
+                SnailPair z2 = (y.Clone() + x.Clone()).Reduce();
+
+                magnitudes.Add(z1.Magnitude());
+                magnitudes.Add(z2.Magnitude());
+            }
+        }
+
+        return (sum.Magnitude(), magnitudes.Max());
     }
 
     /// <summary>
@@ -93,14 +116,15 @@ public sealed class Day18 : Puzzle
     {
         IList<string> numbers = await ReadResourceAsLinesAsync();
 
-        MagnitudeOfSum = Sum(numbers);
+        (MagnitudeOfSum, LargestSumMagnitude) = Sum(numbers);
 
         if (Verbose)
         {
             Logger.WriteLine("The magnitude of the final sum is {0:N0}.", MagnitudeOfSum);
+            Logger.WriteLine("The largest magnitude of any sum of two numbers is {0:N0}.", LargestSumMagnitude);
         }
 
-        return PuzzleResult.Create(MagnitudeOfSum);
+        return PuzzleResult.Create(MagnitudeOfSum, LargestSumMagnitude);
     }
 
     private static List<SnailPair> ParseRaw(IList<string> numbers)
@@ -200,6 +224,12 @@ public sealed class Day18 : Puzzle
 
         public override int Magnitude()
             => (3 * Left.Magnitude()) + (2 * Right.Magnitude());
+
+        public SnailPair Clone()
+        {
+            string raw = ToString();
+            return ParseRaw(new[] { raw })[0];
+        }
 
         public SnailValue? FindNearest(bool left)
         {

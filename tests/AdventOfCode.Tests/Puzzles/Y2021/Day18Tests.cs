@@ -62,6 +62,7 @@ public sealed class Day18Tests : PuzzleTest
     [InlineData("[[[[3,0],[5,3]],[4,4]],[5,5]]", 791)]
     [InlineData("[[[[5,0],[7,4]],[5,5]],[6,6]]", 1137)]
     [InlineData("[[[[8,7],[7,7]],[[8,6],[7,7]]],[[[0,7],[6,6]],[8,7]]]", 3488)]
+    [InlineData("[[[[7,8],[6,6]],[[6,0],[7,7]]],[[[7,8],[8,8]],[[7,9],[0,6]]]]", 3993)]
     public void Y2021_Day18_Magnitude_Returns_Correct_Value(string number, int expected)
     {
         // Act
@@ -198,6 +199,20 @@ public sealed class Day18Tests : PuzzleTest
     }
 
     [Fact]
+    public void Y2021_Day18_SumValues_Returns_Correct_Reduced_Value_10()
+    {
+        // Arrange
+        string x = "[[2,[[7,7],7]],[[5,8],[[9,3],[0,2]]]]";
+        string y = "[[[0,[5,8]],[[1,7],[9,6]]],[[4,[1,2]],[[1,4],2]]]";
+
+        // Act
+        string actual = Day18.SumValues(x, y);
+
+        // Assert
+        actual.ShouldBe("[[[[7,8],[6,6]],[[6,0],[7,7]]],[[[7,8],[8,8]],[[7,9],[0,6]]]]");
+    }
+
+    [Fact]
     public void Y2021_Day18_Sum_Returns_Correct_Value()
     {
         // Arrange
@@ -216,10 +231,11 @@ public sealed class Day18Tests : PuzzleTest
         };
 
         // Act
-        int actual = Day18.Sum(numbers);
+        (int actualMagnitudeOfSum, int actualLargestSumMagnitude) = Day18.Sum(numbers);
 
         // Assert
-        actual.ShouldBe(4140);
+        actualMagnitudeOfSum.ShouldBe(4140);
+        actualLargestSumMagnitude.ShouldBe(3993);
     }
 
     [Fact]
@@ -230,5 +246,6 @@ public sealed class Day18Tests : PuzzleTest
 
         // Assert
         puzzle.MagnitudeOfSum.ShouldBe(4323);
+        puzzle.LargestSumMagnitude.ShouldBe(4749);
     }
 }
