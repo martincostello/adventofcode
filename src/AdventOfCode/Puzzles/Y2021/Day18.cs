@@ -201,48 +201,62 @@ public sealed class Day18 : Puzzle
 
         public SnailValue? FindNearest(bool left)
         {
-            SnailPair? pair = Parent;
+            var visited = new HashSet<SnailPair>() { this };
+            return FindNearest(Parent, left, true, visited);
 
-            bool leftFirst = left;
-            bool up = true;
-
-            var searched = new HashSet<SnailPair>() { this };
-
-            while (pair is not null)
+            static SnailValue? FindNearest(
+                SnailPair? pair,
+                bool searchLeft,
+                bool movedUp,
+                HashSet<SnailPair> visited)
             {
-                searched.Add(pair);
+                if (pair is null)
+                {
+                    return null;
+                }
 
-                SnailNumber first = leftFirst ? pair.Left : pair.Right;
-                SnailNumber second = leftFirst ? pair.Right : pair.Left;
+                if (searchLeft && pair.Left is SnailValue leftValue)
+                {
+                    return leftValue;
+                }
 
-                if (first is SnailValue firstValue)
+                if (!searchLeft && pair.Right is SnailValue rightValue)
                 {
-                    return firstValue;
+                    return rightValue;
                 }
-                else if (!searched.Contains(first) && first is SnailPair firstPair)
+
+                visited.Add(pair);
+
+                if (searchLeft && pair.Left is SnailPair leftPair && !visited.Contains(leftPair))
                 {
-                    leftFirst = up && !leftFirst;
-                    up = false;
-                    pair = firstPair;
+                    visited.Add(leftPair);
+
+                    bool direction = movedUp ? !searchLeft : searchLeft;
+
+                    var leftChild = FindNearest(leftPair, direction, false, visited);
+
+                    if (leftChild is not null)
+                    {
+                        return leftChild;
+                    }
                 }
-                else if (!searched.Contains(first) && second is SnailValue secondValue)
+
+                if (!searchLeft && pair.Right is SnailPair rightPair && !visited.Contains(rightPair))
                 {
-                    return secondValue;
+                    visited.Add(rightPair);
+
+                    bool direction = movedUp ? !searchLeft : searchLeft;
+
+                    var rightChild = FindNearest(rightPair, direction, false, visited);
+
+                    if (rightChild is not null)
+                    {
+                        return rightChild;
+                    }
                 }
-                else if (!searched.Contains(first) && second != this && second is SnailPair secondPair)
-                {
-                    leftFirst = up && !leftFirst;
-                    up = false;
-                    pair = secondPair;
-                }
-                else
-                {
-                    up = true;
-                    pair = pair.Parent;
-                }
+
+                return FindNearest(pair.Parent, searchLeft, true, visited);
             }
-
-            return null;
         }
 
         public SnailPair Reduce()
