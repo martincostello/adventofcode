@@ -9,6 +9,33 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2021;
 [Puzzle(2021, 19, "Beacon Scanner", RequiresData = true)]
 public sealed class Day19 : Puzzle
 {
+    private static readonly Point3D[] Rotations =
+    {
+        new(0, 0, 90),
+        new(0, 0, 180),
+        new(0, 0, 270),
+        new(90, 0, 0),
+        new(90, 0, 90),
+        new(90, 0, 180),
+        new(90, 0, 270),
+        new(180, 0, 0),
+        new(180, 0, 90),
+        new(180, 0, 180),
+        new(180, 0, 270),
+        new(270, 0, 0),
+        new(270, 0, 90),
+        new(270, 0, 180),
+        new(270, 0, 270),
+        new(0, 90, 0),
+        new(0, 90, 90),
+        new(0, 90, 180),
+        new(0, 90, 270),
+        new(0, 270, 0),
+        new(0, 270, 90),
+        new(0, 270, 180),
+        new(0, 270, 270),
+    };
+
     /// <summary>
     /// Gets the number of beacons.
     /// </summary>
@@ -117,35 +144,22 @@ public sealed class Day19 : Puzzle
 
         static Scanner? TryAlign(Scanner aligned, Scanner unaligned)
         {
-            for (int z = 0; z < 360; z += 90)
+            foreach (var rotation in Rotations)
             {
-                for (int y = 0; y < 360; y += 90)
+                Scanner rotated = unaligned.Rotate(rotation);
+
+                foreach (Point3D first in aligned)
                 {
-                    for (int x = 0; x < 360; x += 90)
+                    foreach (Point3D second in rotated)
                     {
-                        var rotation = new Point3D(x, y, z);
+                        Point3D delta = first - second;
+                        Scanner transformed = rotated.Transform(delta);
 
-                        if (rotation == Point3D.Zero)
+                        int count = transformed.Intersect(aligned).Count();
+
+                        if (count >= 12)
                         {
-                            continue;
-                        }
-
-                        Scanner rotated = unaligned.Rotate(rotation);
-
-                        foreach (Point3D first in aligned)
-                        {
-                            foreach (Point3D second in rotated)
-                            {
-                                Point3D delta = first - second;
-                                Scanner transformed = rotated.Transform(delta);
-
-                                int count = transformed.Intersect(aligned).Count();
-
-                                if (count >= 12)
-                                {
-                                    return transformed;
-                                }
-                            }
+                            return transformed;
                         }
                     }
                 }
