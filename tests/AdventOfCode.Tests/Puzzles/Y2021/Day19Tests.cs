@@ -155,10 +155,11 @@ public sealed class Day19Tests : PuzzleTest
         };
 
         // Act
-        int actual = Day19.FindBeacons(data);
+        (int actualCount, int actualLargestDistance) = Day19.FindBeacons(data);
 
         // Assert
-        actual.ShouldBe(79);
+        actualCount.ShouldBe(79);
+        actualLargestDistance.ShouldBe(3621);
     }
 
     [Fact(Skip = "Too slow.")]
@@ -169,5 +170,6 @@ public sealed class Day19Tests : PuzzleTest
 
         // Assert
         puzzle.BeaconCount.ShouldBe(308);
+        puzzle.LargestScannerDistance.ShouldBe(12124);
     }
 }

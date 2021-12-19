@@ -15,13 +15,19 @@ public sealed class Day19 : Puzzle
     public int BeaconCount { get; private set; }
 
     /// <summary>
+    /// Gets the largest Manhattan distance between any two scanners.
+    /// </summary>
+    public int LargestScannerDistance { get; private set; }
+
+    /// <summary>
     /// Finds the beacons from the specified scanner results.
     /// </summary>
     /// <param name="data">The scanner data to use to find the beacons.</param>
     /// <returns>
-    /// The number of beacons found in the specified scanner data.
+    /// The number of beacons found in the specified scanner data and
+    /// the largest Manhattan distance between any two scanners.
     /// </returns>
-    public static int FindBeacons(IList<string> data)
+    public static (int BeaconCount, int LargestScannerDistance) FindBeacons(IList<string> data)
     {
         List<Scanner> unoriented = Parse(data);
 
@@ -60,7 +66,25 @@ public sealed class Day19 : Puzzle
             final.UnionWith(other);
         }
 
-        return final.Count;
+        int maxDistance = 0;
+
+        for (int i = 0; i < oriented.Count - 1; i++)
+        {
+            for (int j = i + 1; j < oriented.Count; j++)
+            {
+                Point3D x = oriented[i].Location;
+                Point3D y = oriented[j].Location;
+
+                int distance = Point3D.ManhattanDistance(x, y);
+
+                if (distance > maxDistance)
+                {
+                    maxDistance = distance;
+                }
+            }
+        }
+
+        return (final.Count, maxDistance);
 
         static List<Scanner> Parse(IList<string> data)
         {
@@ -136,14 +160,15 @@ public sealed class Day19 : Puzzle
     {
         IList<string> target = await ReadResourceAsLinesAsync();
 
-        BeaconCount = FindBeacons(target);
+        (BeaconCount, LargestScannerDistance) = FindBeacons(target);
 
         if (Verbose)
         {
             Logger.WriteLine("There are {0:N0} beacons.", BeaconCount);
+            Logger.WriteLine("There largest Manhattan distance between two scanners is {0:N0}.", LargestScannerDistance);
         }
 
-        return PuzzleResult.Create(BeaconCount);
+        return PuzzleResult.Create(BeaconCount, LargestScannerDistance);
     }
 
     [System.Diagnostics.DebuggerDisplay("({X}, {Y}, {Z})")]
@@ -176,6 +201,12 @@ public sealed class Day19 : Puzzle
         public static bool operator !=(Point3D a, Point3D b)
             => a.X != b.X || a.Y != b.Y || a.Z != b.Z;
 
+        public static int ManhattanDistance(Point3D a, Point3D b)
+        {
+            Point3D delta = a - b;
+            return Math.Abs(delta.X) + Math.Abs(delta.Y) + Math.Abs(delta.Z);
+        }
+
         public override bool Equals(object? obj)
             => obj is Point3D point && this == point;
 
@@ -200,13 +231,19 @@ public sealed class Day19 : Puzzle
 
         public int Id { get; init; }
 
+        public Point3D Location { get; init; }
+
         public Scanner Rotate(Point3D vector)
         {
-            var rotated = new Scanner(Count) { Id = Id };
-
             double radiansX = ToRadians(vector.X);
             double radiansY = ToRadians(vector.Y);
             double radiansZ = ToRadians(vector.Z);
+
+            var rotated = new Scanner(Count)
+            {
+                Id = Id,
+                Location = Rotate(Location, radiansX, radiansY, radiansZ),
+            };
 
             foreach (var point in this)
             {
@@ -252,7 +289,11 @@ public sealed class Day19 : Puzzle
 
         public Scanner Transform(Point3D vector)
         {
-            var transformed = new Scanner(Count) { Id = Id };
+            var transformed = new Scanner(Count)
+            {
+                Id = Id,
+                Location = Location + vector,
+            };
 
             foreach (var point in this)
             {
