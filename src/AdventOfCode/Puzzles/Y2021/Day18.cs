@@ -41,8 +41,8 @@ public sealed class Day18 : Puzzle
         {
             for (int j = 0; j < numbers.Count; j++)
             {
-                SnailPair x = ParseRaw(new[] { numbers[i] })[0];
-                SnailPair y = ParseRaw(new[] { numbers[j] })[0];
+                SnailPair x = ParseRaw(numbers[i]);
+                SnailPair y = ParseRaw(numbers[j]);
 
                 SnailPair z1 = (x.Clone() + y.Clone()).Reduce();
                 SnailPair z2 = (y.Clone() + x.Clone()).Reduce();
@@ -64,7 +64,7 @@ public sealed class Day18 : Puzzle
     /// </returns>
     internal static int Magnitude(string number)
     {
-        SnailPair pair = ParseRaw(new[] { number })[0];
+        SnailPair pair = ParseRaw(number);
         return pair.Magnitude();
     }
 
@@ -77,7 +77,7 @@ public sealed class Day18 : Puzzle
     /// </returns>
     internal static string Parse(string number)
     {
-        SnailPair pair = ParseRaw(new[] { number })[0];
+        SnailPair pair = ParseRaw(number);
         return pair.ToString();
     }
 
@@ -90,7 +90,7 @@ public sealed class Day18 : Puzzle
     /// </returns>
     internal static string Reduce(string number)
     {
-        SnailPair pair = ParseRaw(new[] { number })[0];
+        SnailPair pair = ParseRaw(number);
         pair = pair.Reduce();
         return pair.ToString();
     }
@@ -133,12 +133,18 @@ public sealed class Day18 : Puzzle
 
         foreach (string number in numbers)
         {
-            // Trim off the square brackets of the outer-most pair
-            var slice = number.AsSpan()[1..^1];
-            pairs.Add(Parse(slice, out _));
+            SnailPair parsed = ParseRaw(number);
+            pairs.Add(parsed);
         }
 
         return pairs;
+    }
+
+    private static SnailPair ParseRaw(string number)
+    {
+        // Trim off the square brackets of the outer-most pair
+        var slice = number.AsSpan()[1..^1];
+        return Parse(slice, out _);
 
         static SnailPair Parse(ReadOnlySpan<char> number, out int consumed)
         {
@@ -228,7 +234,7 @@ public sealed class Day18 : Puzzle
         public SnailPair Clone()
         {
             string raw = ToString();
-            return ParseRaw(new[] { raw })[0];
+            return ParseRaw(raw);
         }
 
         public SnailValue? FindNearest(bool left)
