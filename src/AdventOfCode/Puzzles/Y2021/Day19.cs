@@ -121,19 +121,29 @@ public sealed class Day19 : Puzzle
             // we can use the Pigeonhole Principle (hat-tip to @encse,
             // see https://en.wikipedia.org/wiki/Pigeonhole_principle)
             // to reduce the space of coordinates we need to search.
-            const int Limit = 12;
+            const int CommonBeacons = 12;
+            const int MaximumRange = 3000;
 
-            foreach (Point3D first in aligned.Skip(Limit))
+            foreach (Point3D first in aligned.Skip(CommonBeacons))
             {
                 foreach (var transformation in Transforms())
                 {
                     Scanner rotated = unaligned.Rotate(transformation);
 
-                    foreach (Point3D second in rotated.Skip(Limit))
+                    int withinReach = rotated
+                        .Where((p) => Point3D.ManhattanDistance(aligned.Location, first - p) <= MaximumRange)
+                        .Count();
+
+                    if (withinReach < CommonBeacons)
+                    {
+                        break;
+                    }
+
+                    foreach (Point3D second in rotated.Skip(CommonBeacons))
                     {
                         Point3D delta = first - second;
 
-                        if (Point3D.ManhattanDistance(aligned.Location, delta) > 3000)
+                        if (Point3D.ManhattanDistance(aligned.Location, delta) > MaximumRange)
                         {
                             // This beacon is too far from the other scanner to be detected by it
                             break;
@@ -145,7 +155,7 @@ public sealed class Day19 : Puzzle
 
                         foreach (Point3D common in transformed.Intersect(aligned))
                         {
-                            if (++count == Limit)
+                            if (++count == CommonBeacons)
                             {
                                 return transformed;
                             }
