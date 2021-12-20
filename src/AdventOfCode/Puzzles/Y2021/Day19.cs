@@ -128,7 +128,7 @@ public sealed class Day19 : Puzzle
             {
                 foreach (var transformation in Transforms())
                 {
-                    Scanner rotated = unaligned.Rotate(transformation);
+                    var rotated = unaligned.Select(transformation);
 
                     int withinReach = rotated
                         .Where((p) => Point3D.ManhattanDistance(aligned.Location, first - p) <= MaximumRange)
@@ -149,7 +149,7 @@ public sealed class Day19 : Puzzle
                             break;
                         }
 
-                        Scanner transformed = rotated.Transform(delta);
+                        var transformed = rotated.Select((p) => p + delta);
 
                         int count = 0;
 
@@ -157,7 +157,11 @@ public sealed class Day19 : Puzzle
                         {
                             if (++count == CommonBeacons)
                             {
-                                return transformed;
+                                return new Scanner(transformed)
+                                {
+                                    Id = unaligned.Id,
+                                    Location = transformation(unaligned.Location) + delta,
+                                };
                             }
                         }
                     }
@@ -165,33 +169,33 @@ public sealed class Day19 : Puzzle
             }
 
             return null;
-        }
 
-        static IEnumerable<Func<Point3D, Point3D>> Transforms()
-        {
-            yield return (p) => new(p.X, -p.Y, -p.Z);
-            yield return (p) => new(p.X, p.Z, -p.Y);
-            yield return (p) => new(p.X, -p.Z, p.Y);
-            yield return (p) => new(-p.X, -p.Y, p.Z);
-            yield return (p) => new(-p.X, p.Y, -p.Z);
-            yield return (p) => new(-p.X, p.Z, p.Y);
-            yield return (p) => new(-p.X, -p.Z, -p.Y);
-            yield return (p) => new(p.Y, p.Z, p.X);
-            yield return (p) => new(p.Y, -p.Z, -p.X);
-            yield return (p) => new(p.Y, p.X, -p.Z);
-            yield return (p) => new(p.Y, -p.X, p.Z);
-            yield return (p) => new(-p.Y, -p.Z, p.X);
-            yield return (p) => new(-p.Y, p.Z, -p.X);
-            yield return (p) => new(-p.Y, -p.X, -p.Z);
-            yield return (p) => new(-p.Y, p.X, p.Z);
-            yield return (p) => new(p.Z, p.X, p.Y);
-            yield return (p) => new(p.Z, -p.X, -p.Y);
-            yield return (p) => new(p.Z, p.Y, -p.X);
-            yield return (p) => new(p.Z, -p.Y, p.X);
-            yield return (p) => new(-p.Z, -p.X, p.Y);
-            yield return (p) => new(-p.Z, p.X, -p.Y);
-            yield return (p) => new(-p.Z, p.Y, p.X);
-            yield return (p) => new(-p.Z, -p.Y, -p.X);
+            static IEnumerable<Func<Point3D, Point3D>> Transforms()
+            {
+                yield return (p) => new(p.X, -p.Y, -p.Z);
+                yield return (p) => new(p.X, p.Z, -p.Y);
+                yield return (p) => new(p.X, -p.Z, p.Y);
+                yield return (p) => new(-p.X, -p.Y, p.Z);
+                yield return (p) => new(-p.X, p.Y, -p.Z);
+                yield return (p) => new(-p.X, p.Z, p.Y);
+                yield return (p) => new(-p.X, -p.Z, -p.Y);
+                yield return (p) => new(p.Y, p.Z, p.X);
+                yield return (p) => new(p.Y, -p.Z, -p.X);
+                yield return (p) => new(p.Y, p.X, -p.Z);
+                yield return (p) => new(p.Y, -p.X, p.Z);
+                yield return (p) => new(-p.Y, -p.Z, p.X);
+                yield return (p) => new(-p.Y, p.Z, -p.X);
+                yield return (p) => new(-p.Y, -p.X, -p.Z);
+                yield return (p) => new(-p.Y, p.X, p.Z);
+                yield return (p) => new(p.Z, p.X, p.Y);
+                yield return (p) => new(p.Z, -p.X, -p.Y);
+                yield return (p) => new(p.Z, p.Y, -p.X);
+                yield return (p) => new(p.Z, -p.Y, p.X);
+                yield return (p) => new(-p.Z, -p.X, p.Y);
+                yield return (p) => new(-p.Z, p.X, -p.Y);
+                yield return (p) => new(-p.Z, p.Y, p.X);
+                yield return (p) => new(-p.Z, -p.Y, -p.X);
+            }
         }
     }
 
@@ -264,46 +268,13 @@ public sealed class Day19 : Puzzle
         {
         }
 
-        private Scanner(int capacity)
-            : base(capacity)
+        public Scanner(IEnumerable<Point3D> collection)
+            : base(collection)
         {
         }
 
         public int Id { get; init; }
 
         public Point3D Location { get; init; }
-
-        public Scanner Rotate(Func<Point3D, Point3D> transform)
-        {
-            var rotated = new Scanner(Count)
-            {
-                Id = Id,
-                Location = transform(Location),
-            };
-
-            foreach (var point in this)
-            {
-                Point3D rotation = transform(point);
-                rotated.Add(rotation);
-            }
-
-            return rotated;
-        }
-
-        public Scanner Transform(Point3D vector)
-        {
-            var transformed = new Scanner(Count)
-            {
-                Id = Id,
-                Location = Location + vector,
-            };
-
-            foreach (var point in this)
-            {
-                transformed.Add(point + vector);
-            }
-
-            return transformed;
-        }
     }
 }
