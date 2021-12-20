@@ -117,13 +117,19 @@ public sealed class Day19 : Puzzle
 
         static Scanner? TryAlign(Scanner aligned, Scanner unaligned)
         {
-            foreach (var rotation in Transforms())
-            {
-                Scanner rotated = unaligned.Rotate(rotation);
+            // As we're looking for a commonality of at least 12 items
+            // we can use the Pigeonhole Principle (hat-tip to @encse,
+            // see https://en.wikipedia.org/wiki/Pigeonhole_principle)
+            // to reduce the space of coordinates we need to search.
+            const int Limit = 12;
 
-                foreach (Point3D first in aligned)
+            foreach (Point3D first in aligned.Skip(Limit))
+            {
+                foreach (var transformation in Transforms())
                 {
-                    foreach (Point3D second in rotated)
+                    Scanner rotated = unaligned.Rotate(transformation);
+
+                    foreach (Point3D second in rotated.Skip(Limit))
                     {
                         Point3D delta = first - second;
                         Scanner transformed = rotated.Transform(delta);
@@ -132,7 +138,7 @@ public sealed class Day19 : Puzzle
 
                         foreach (Point3D common in transformed.Intersect(aligned))
                         {
-                            if (++count == 12)
+                            if (++count == Limit)
                             {
                                 return transformed;
                             }

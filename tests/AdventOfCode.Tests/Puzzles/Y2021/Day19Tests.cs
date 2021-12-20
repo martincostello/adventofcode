@@ -162,7 +162,7 @@ public sealed class Day19Tests : PuzzleTest
         actualLargestDistance.ShouldBe(3621);
     }
 
-    [Fact(Skip = "Too slow.")]
+    [Fact]
     public async Task Y2021_Day19_Solve_Returns_Correct_Solution()
     {
         // Act
