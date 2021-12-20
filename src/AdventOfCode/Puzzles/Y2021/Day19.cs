@@ -9,33 +9,6 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2021;
 [Puzzle(2021, 19, "Beacon Scanner", RequiresData = true)]
 public sealed class Day19 : Puzzle
 {
-    private static readonly Point3D[] Rotations =
-    {
-        new(0, 0, 90),
-        new(0, 0, 180),
-        new(0, 0, 270),
-        new(90, 0, 0),
-        new(90, 0, 90),
-        new(90, 0, 180),
-        new(90, 0, 270),
-        new(180, 0, 0),
-        new(180, 0, 90),
-        new(180, 0, 180),
-        new(180, 0, 270),
-        new(270, 0, 0),
-        new(270, 0, 90),
-        new(270, 0, 180),
-        new(270, 0, 270),
-        new(0, 90, 0),
-        new(0, 90, 90),
-        new(0, 90, 180),
-        new(0, 90, 270),
-        new(0, 270, 0),
-        new(0, 270, 90),
-        new(0, 270, 180),
-        new(0, 270, 270),
-    };
-
     /// <summary>
     /// Gets the number of beacons.
     /// </summary>
@@ -144,7 +117,7 @@ public sealed class Day19 : Puzzle
 
         static Scanner? TryAlign(Scanner aligned, Scanner unaligned)
         {
-            foreach (var rotation in Rotations)
+            foreach (var rotation in Transforms())
             {
                 Scanner rotated = unaligned.Rotate(rotation);
 
@@ -166,6 +139,38 @@ public sealed class Day19 : Puzzle
             }
 
             return null;
+        }
+
+        static IEnumerable<Func<Point3D, Point3D>> Transforms()
+        {
+            yield return (p) => new(p.X, -p.Y, -p.Z);
+            yield return (p) => new(p.X, p.Z, -p.Y);
+            yield return (p) => new(p.X, -p.Z, p.Y);
+
+            yield return (p) => new(-p.X, -p.Y, p.Z);
+            yield return (p) => new(-p.X, p.Y, -p.Z);
+            yield return (p) => new(-p.X, p.Z, p.Y);
+            yield return (p) => new(-p.X, -p.Z, -p.Y);
+
+            yield return (p) => new(p.Y, p.Z, p.X);
+            yield return (p) => new(p.Y, -p.Z, -p.X);
+            yield return (p) => new(p.Y, p.X, -p.Z);
+            yield return (p) => new(p.Y, -p.X, p.Z);
+
+            yield return (p) => new(-p.Y, -p.Z, p.X);
+            yield return (p) => new(-p.Y, p.Z, -p.X);
+            yield return (p) => new(-p.Y, -p.X, -p.Z);
+            yield return (p) => new(-p.Y, p.X, p.Z);
+
+            yield return (p) => new(p.Z, p.X, p.Y);
+            yield return (p) => new(p.Z, -p.X, -p.Y);
+            yield return (p) => new(p.Z, p.Y, -p.X);
+            yield return (p) => new(p.Z, -p.Y, p.X);
+
+            yield return (p) => new(-p.Z, -p.X, p.Y);
+            yield return (p) => new(-p.Z, p.X, -p.Y);
+            yield return (p) => new(-p.Z, p.Y, p.X);
+            yield return (p) => new(-p.Z, -p.Y, -p.X);
         }
     }
 
@@ -247,58 +252,21 @@ public sealed class Day19 : Puzzle
 
         public Point3D Location { get; init; }
 
-        public Scanner Rotate(Point3D vector)
+        public Scanner Rotate(Func<Point3D, Point3D> transform)
         {
-            double radiansX = ToRadians(vector.X);
-            double radiansY = ToRadians(vector.Y);
-            double radiansZ = ToRadians(vector.Z);
-
             var rotated = new Scanner(Count)
             {
                 Id = Id,
-                Location = Rotate(Location, radiansX, radiansY, radiansZ),
+                Location = transform(Location),
             };
 
             foreach (var point in this)
             {
-                Point3D rotation = Rotate(point, radiansX, radiansY, radiansZ);
+                Point3D rotation = transform(point);
                 rotated.Add(rotation);
             }
 
             return rotated;
-
-            static Point3D Rotate(Point3D point, double x, double y, double z)
-            {
-                // Adapted from https://stackoverflow.com/a/34060479/1064169
-                int cosX = (int)Math.Round(Math.Cos(x), 0);
-                int sinX = (int)Math.Round(Math.Sin(x), 0);
-
-                int cosY = (int)Math.Round(Math.Cos(y), 0);
-                int sinY = (int)Math.Round(Math.Sin(y), 0);
-
-                int cosZ = (int)Math.Round(Math.Cos(z), 0);
-                int sinZ = (int)Math.Round(Math.Sin(z), 0);
-
-                int deltaXX = cosX * cosY;
-                int deltaXY = (cosX * sinY * sinZ) - (sinX * cosZ);
-                int deltaXZ = (cosX * sinY * cosZ) + (sinX * sinZ);
-
-                int deltaYX = sinX * cosY;
-                int deltaYY = (sinX * sinY * sinZ) + (cosX * cosZ);
-                int deltaYZ = (sinX * sinY * cosZ) - (cosX * sinZ);
-
-                int deltaZX = -sinY;
-                int deltaZY = cosY * sinZ;
-                int deltaZZ = cosY * cosZ;
-
-                return new(
-                    (deltaXX * point.X) + (deltaXY * point.Y) + (deltaXZ * point.Z),
-                    (deltaYX * point.X) + (deltaYY * point.Y) + (deltaYZ * point.Z),
-                    (deltaZX * point.X) + (deltaZY * point.Y) + (deltaZZ * point.Z));
-            }
-
-            static double ToRadians(int value)
-                => value * Math.PI / 180;
         }
 
         public Scanner Transform(Point3D vector)
