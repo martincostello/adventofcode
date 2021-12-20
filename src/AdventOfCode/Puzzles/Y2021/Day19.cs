@@ -132,6 +132,13 @@ public sealed class Day19 : Puzzle
                     foreach (Point3D second in rotated.Skip(Limit))
                     {
                         Point3D delta = first - second;
+
+                        if (Point3D.ManhattanDistance(aligned.Location, delta) > 3000)
+                        {
+                            // This beacon is too far from the other scanner to be detected by it
+                            break;
+                        }
+
                         Scanner transformed = rotated.Transform(delta);
 
                         int count = 0;
