@@ -17,7 +17,7 @@ public sealed class Day20 : Puzzle
     /// <summary>
     /// Enhances an image the specified number of times.
     /// </summary>
-    /// <param name="image">The image data to enhance.</param>
+    /// <param name="imageData">The image data to enhance.</param>
     /// <param name="enhancements">The number of times to enhance the image.</param>
     /// <param name="logger">The optional logger to use.</param>
     /// <returns>
@@ -25,37 +25,44 @@ public sealed class Day20 : Puzzle
     /// of enhancements and a visualization of the image.
     /// </returns>
     public static (int LitPixelCount, string Visualization) Enhance(
-        IList<string> image,
+        IList<string> imageData,
         int enhancements,
         ILogger? logger = null)
     {
-        string algorithm = image[0];
-        var current = new HashSet<Point>();
+        const char LitCharacter = '#';
+        const char UnlitCharacter = '.';
 
-        for (int y = 2; y < image.Count; y++)
+        string algorithm = imageData[0];
+        var image = new Dictionary<Point, bool>((imageData.Count - 2) * imageData[2].Length);
+
+        for (int y = 2; y < imageData.Count; y++)
         {
-            string row = image[y];
+            string row = imageData[y];
 
             for (int x = 0; x < row.Length; x++)
             {
-                if (row[x] == '#')
-                {
-                    current.Add(new(x, y - 2));
-                }
+                image.Add(new(x, y - 2), row[x] == LitCharacter);
             }
         }
 
-        bool[] bits = new bool[9];
+        bool[] indexBits = new bool[9];
+        bool isFirstBitLit = algorithm[0] == LitCharacter;
 
         for (int i = 0; i < enhancements; i++)
         {
-            int minX = current.MinBy((p) => p.X).X - 1;
-            int maxX = current.MaxBy((p) => p.X).X + 1;
+            int minX = image.Keys.Min((p) => p.X) - 1;
+            int maxX = image.Keys.Max((p) => p.X) + 1;
 
-            int minY = current.MinBy((p) => p.Y).Y - 1;
-            int maxY = current.MaxBy((p) => p.Y).Y + 1;
+            int minY = image.Keys.Min((p) => p.Y) - 1;
+            int maxY = image.Keys.Max((p) => p.Y) + 1;
 
-            var next = new HashSet<Point>();
+            // If bit 0 is lit in the algorithm, then every other iteration
+            // of enhancement will set the pixels outside the bounds of the
+            // known pixels to be lit because the value of `00000000` is zero,
+            // meaning that all of the "infinite" bits will change to being lit.
+            bool outOfBoundsValue = isFirstBitLit && i % 2 != 0;
+
+            var next = new Dictionary<Point, bool>(image.Count);
 
             for (int y = minY; y <= maxY; y++)
             {
@@ -67,49 +74,21 @@ public sealed class Day20 : Puzzle
 
                     foreach (Point neighbor in pixel.Neighbors(includeSelf: true))
                     {
-                        bits[j++] = current.Contains(neighbor);
+                        indexBits[j++] = image.GetValueOrDefault(neighbor, outOfBoundsValue);
                     }
 
-                    int index = ReadInteger(bits);
-                    bool lit = algorithm[index] == '#';
-
-                    if (lit)
-                    {
-                        next.Add(pixel);
-                    }
+                    int index = ReadInteger(indexBits);
+                    next[pixel] = algorithm[index] == LitCharacter;
                 }
             }
 
-            current = next;
+            image = next;
         }
 
-        string vizualization = string.Empty;
+        string visualization = BuildVisualization(image);
+        logger?.WriteLine(visualization);
 
-        if (current.Count > 1)
-        {
-            int minX = current.MinBy((p) => p.X).X - 1;
-            int maxX = current.MaxBy((p) => p.X).X + 1;
-
-            int minY = current.MinBy((p) => p.Y).Y - 1;
-            int maxY = current.MaxBy((p) => p.Y).Y + 1;
-
-            var builder = new StringBuilder((maxX - minX) * (maxY - minY));
-
-            for (int y = minY; y <= maxY; y++)
-            {
-                for (int x = minX; x <= maxX; x++)
-                {
-                    builder.Append(current.Contains(new(x, y)) ? '#' : '.');
-                }
-
-                builder.AppendLine();
-            }
-
-            vizualization = builder.ToString();
-            logger?.WriteLine(vizualization);
-        }
-
-        return (current.Count, vizualization);
+        return (image.Values.Count((p) => p), visualization);
 
         static int ReadInteger(ReadOnlySpan<bool> bits)
         {
@@ -125,14 +104,40 @@ public sealed class Day20 : Puzzle
 
         static void SetBit(ref int reference, int bit, int value)
             => reference |= value << bit;
+
+        static string BuildVisualization(Dictionary<Point, bool> image)
+        {
+            int minX = image.Keys.Min((p) => p.X) - 1;
+            int maxX = image.Keys.Max((p) => p.X) + 1;
+
+            int minY = image.Keys.Min((p) => p.Y) - 1;
+            int maxY = image.Keys.Max((p) => p.Y) + 1;
+
+            int deltaX = maxX - minX;
+            int deltaY = maxY - minY;
+
+            var builder = new StringBuilder((deltaX * deltaY) + (Environment.NewLine.Length * deltaY));
+
+            for (int y = minY; y <= maxY; y++)
+            {
+                for (int x = minX; x <= maxX; x++)
+                {
+                    builder.Append(image.GetValueOrDefault(new(x, y)) ? LitCharacter : UnlitCharacter);
+                }
+
+                builder.AppendLine();
+            }
+
+            return builder.ToString();
+        }
     }
 
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        IList<string> image = await ReadResourceAsLinesAsync();
+        IList<string> imageData = await ReadResourceAsLinesAsync();
 
-        (LitPixelCount, string visualization) = Enhance(image, enhancements: 2, Logger);
+        (LitPixelCount, string visualization) = Enhance(imageData, enhancements: 2, Logger);
 
         if (Verbose)
         {

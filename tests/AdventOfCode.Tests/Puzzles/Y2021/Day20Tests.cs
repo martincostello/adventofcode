@@ -28,7 +28,7 @@ public sealed class Day20Tests : PuzzleTest
             "..##..####..#...#.#.#...##..#.#..###..#####........#..####......#..#",
         };
 
-        string[] image =
+        string[] imageData =
         {
             string.Join(string.Empty, algorithm),
             string.Empty,
@@ -40,7 +40,7 @@ public sealed class Day20Tests : PuzzleTest
         };
 
         // Act
-        (int actual, _) = Day20.Enhance(image, enhancements, Logger);
+        (int actual, _) = Day20.Enhance(imageData, enhancements, Logger);
 
         // Assert
         actual.ShouldBe(expected);
@@ -53,6 +53,6 @@ public sealed class Day20Tests : PuzzleTest
         var puzzle = await SolvePuzzleAsync<Day20>();
 
         // Assert
-        puzzle.LitPixelCount.ShouldBe(-1); // 5843 > x > 5424
+        puzzle.LitPixelCount.ShouldBe(5437);
     }
 }
