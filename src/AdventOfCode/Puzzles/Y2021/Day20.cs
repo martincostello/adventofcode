@@ -29,7 +29,7 @@ public sealed class Day20 : Puzzle
     /// The number of lit pixels in the image after the specified number
     /// of enhancements and a visualization of the image.
     /// </returns>
-    public static (int LitPixelCount, string Visualization) Enhance(
+    public static (int LitPixelCount, string? Visualization) Enhance(
         IList<string> imageData,
         int enhancements,
         ILogger? logger = null)
@@ -90,8 +90,13 @@ public sealed class Day20 : Puzzle
             image = next;
         }
 
-        string visualization = BuildVisualization(image);
-        logger?.WriteLine(visualization);
+        string? visualization = null;
+
+        if (logger is not null)
+        {
+            visualization = BuildVisualization(image);
+            logger.WriteLine(visualization);
+        }
 
         return (image.Values.Count((p) => p), visualization);
 
@@ -142,8 +147,8 @@ public sealed class Day20 : Puzzle
     {
         IList<string> imageData = await ReadResourceAsLinesAsync();
 
-        (LitPixelCount2, string visualization2) = Enhance(imageData, enhancements: 2, Logger);
-        (LitPixelCount50, string visualization50) = Enhance(imageData, enhancements: 50, Logger);
+        (LitPixelCount2, _) = Enhance(imageData, enhancements: 2);
+        (LitPixelCount50, _) = Enhance(imageData, enhancements: 50);
 
         if (Verbose)
         {
@@ -151,14 +156,6 @@ public sealed class Day20 : Puzzle
             Logger.WriteLine("There are {0:N0} lit pixels after fifty enhancements of the image.", LitPixelCount50);
         }
 
-        var result = new PuzzleResult();
-
-        result.Solutions.Add(LitPixelCount2);
-        result.Solutions.Add(LitPixelCount50);
-
-        result.Visualizations.Add(visualization2);
-        result.Visualizations.Add(visualization50);
-
-        return result;
+        return PuzzleResult.Create(LitPixelCount2, LitPixelCount50);
     }
 }
