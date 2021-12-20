@@ -27,4 +27,30 @@ internal static class PointExtensions
     /// </returns>
     public static int ManhattanDistance(this Point value, Point other)
         => Math.Abs(value.X - other.X) + Math.Abs(value.Y - other.Y);
+
+    /// <summary>
+    /// Returns the neighbors in a 2D grid of the specified point from top-left to bottom-right.
+    /// </summary>
+    /// <param name="value">The value to get the neighbors of.</param>
+    /// <param name="includeSelf">Whether to return the value itself.</param>
+    /// <returns>
+    /// A sequence which returns the neighbors of the specified point.
+    /// </returns>
+    public static IEnumerable<Point> Neighbors(this Point value, bool includeSelf = false)
+    {
+        yield return new(value.X - 1, value.Y - 1);
+        yield return new(value.X, value.Y - 1);
+        yield return new(value.X + 1, value.Y - 1);
+        yield return new(value.X - 1, value.Y);
+
+        if (includeSelf)
+        {
+            yield return value;
+        }
+
+        yield return new(value.X + 1, value.Y);
+        yield return new(value.X - 1, value.Y + 1);
+        yield return new(value.X, value.Y + 1);
+        yield return new(value.X + 1, value.Y + 1);
+    }
 }
