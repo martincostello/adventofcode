@@ -12,7 +12,12 @@ public sealed class Day20 : Puzzle
     /// <summary>
     /// Gets the number of lit pixels after the image is enhanced twice.
     /// </summary>
-    public int LitPixelCount { get; private set; }
+    public int LitPixelCount2 { get; private set; }
+
+    /// <summary>
+    /// Gets the number of lit pixels after the image is enhanced fifty times.
+    /// </summary>
+    public int LitPixelCount50 { get; private set; }
 
     /// <summary>
     /// Enhances an image the specified number of times.
@@ -137,17 +142,22 @@ public sealed class Day20 : Puzzle
     {
         IList<string> imageData = await ReadResourceAsLinesAsync();
 
-        (LitPixelCount, string visualization) = Enhance(imageData, enhancements: 2, Logger);
+        (LitPixelCount2, string visualization2) = Enhance(imageData, enhancements: 2, Logger);
+        (LitPixelCount50, string visualization50) = Enhance(imageData, enhancements: 50, Logger);
 
         if (Verbose)
         {
-            Logger.WriteLine("There are {0:N0} lit pixels after two enhancements of the image.", LitPixelCount);
+            Logger.WriteLine("There are {0:N0} lit pixels after two enhancements of the image.", LitPixelCount2);
+            Logger.WriteLine("There are {0:N0} lit pixels after fifty enhancements of the image.", LitPixelCount50);
         }
 
         var result = new PuzzleResult();
 
-        result.Solutions.Add(LitPixelCount);
-        result.Visualizations.Add(visualization);
+        result.Solutions.Add(LitPixelCount2);
+        result.Solutions.Add(LitPixelCount50);
+
+        result.Visualizations.Add(visualization2);
+        result.Visualizations.Add(visualization50);
 
         return result;
     }

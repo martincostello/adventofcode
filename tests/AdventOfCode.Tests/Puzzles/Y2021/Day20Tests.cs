@@ -14,6 +14,7 @@ public sealed class Day20Tests : PuzzleTest
     [InlineData(0, 10)]
     [InlineData(1, 24)]
     [InlineData(2, 35)]
+    [InlineData(50, 3351)]
     public void Y2021_Day20_Enhance_Returns_Correct_Value(int enhancements, int expected)
     {
         // Arrange
@@ -53,6 +54,7 @@ public sealed class Day20Tests : PuzzleTest
         var puzzle = await SolvePuzzleAsync<Day20>();
 
         // Assert
-        puzzle.LitPixelCount.ShouldBe(5437);
+        puzzle.LitPixelCount2.ShouldBe(5437);
+        puzzle.LitPixelCount50.ShouldBe(19340);
     }
 }
