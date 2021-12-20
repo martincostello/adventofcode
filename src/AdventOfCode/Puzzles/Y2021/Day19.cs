@@ -149,27 +149,22 @@ public sealed class Day19 : Puzzle
             yield return (p) => new(p.X, -p.Y, -p.Z);
             yield return (p) => new(p.X, p.Z, -p.Y);
             yield return (p) => new(p.X, -p.Z, p.Y);
-
             yield return (p) => new(-p.X, -p.Y, p.Z);
             yield return (p) => new(-p.X, p.Y, -p.Z);
             yield return (p) => new(-p.X, p.Z, p.Y);
             yield return (p) => new(-p.X, -p.Z, -p.Y);
-
             yield return (p) => new(p.Y, p.Z, p.X);
             yield return (p) => new(p.Y, -p.Z, -p.X);
             yield return (p) => new(p.Y, p.X, -p.Z);
             yield return (p) => new(p.Y, -p.X, p.Z);
-
             yield return (p) => new(-p.Y, -p.Z, p.X);
             yield return (p) => new(-p.Y, p.Z, -p.X);
             yield return (p) => new(-p.Y, -p.X, -p.Z);
             yield return (p) => new(-p.Y, p.X, p.Z);
-
             yield return (p) => new(p.Z, p.X, p.Y);
             yield return (p) => new(p.Z, -p.X, -p.Y);
             yield return (p) => new(p.Z, p.Y, -p.X);
             yield return (p) => new(p.Z, -p.Y, p.X);
-
             yield return (p) => new(-p.Z, -p.X, p.Y);
             yield return (p) => new(-p.Z, p.X, -p.Y);
             yield return (p) => new(-p.Z, p.Y, p.X);
