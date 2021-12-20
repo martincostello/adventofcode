@@ -128,11 +128,14 @@ public sealed class Day19 : Puzzle
                         Point3D delta = first - second;
                         Scanner transformed = rotated.Transform(delta);
 
-                        int count = transformed.Intersect(aligned).Count();
+                        int count = 0;
 
-                        if (count >= 12)
+                        foreach (Point3D common in transformed.Intersect(aligned))
                         {
-                            return transformed;
+                            if (++count == 12)
+                            {
+                                return transformed;
+                            }
                         }
                     }
                 }
