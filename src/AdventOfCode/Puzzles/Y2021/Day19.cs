@@ -117,24 +117,51 @@ public sealed class Day19 : Puzzle
 
         static Scanner? TryAlign(Scanner aligned, Scanner unaligned)
         {
-            foreach (var rotation in Transforms())
-            {
-                Scanner rotated = unaligned.Rotate(rotation);
+            // As we're looking for a commonality of at least 12 items
+            // we can use the Pigeonhole Principle (hat-tip to @encse,
+            // see https://en.wikipedia.org/wiki/Pigeonhole_principle)
+            // to reduce the space of coordinates we need to search.
+            const int CommonBeacons = 12;
+            const int MaximumRange = 3000;
 
-                foreach (Point3D first in aligned)
+            foreach (Point3D first in aligned.Skip(CommonBeacons))
+            {
+                foreach (var transformation in Transforms())
                 {
-                    foreach (Point3D second in rotated)
+                    var rotated = unaligned.Select(transformation);
+
+                    int withinReach = rotated
+                        .Where((p) => Point3D.ManhattanDistance(aligned.Location, first - p) <= MaximumRange)
+                        .Count();
+
+                    if (withinReach < CommonBeacons)
+                    {
+                        break;
+                    }
+
+                    foreach (Point3D second in rotated.Skip(CommonBeacons))
                     {
                         Point3D delta = first - second;
-                        Scanner transformed = rotated.Transform(delta);
+
+                        if (Point3D.ManhattanDistance(aligned.Location, delta) > MaximumRange)
+                        {
+                            // This beacon is too far from the other scanner to be detected by it
+                            break;
+                        }
+
+                        var transformed = rotated.Select((p) => p + delta);
 
                         int count = 0;
 
                         foreach (Point3D common in transformed.Intersect(aligned))
                         {
-                            if (++count == 12)
+                            if (++count == CommonBeacons)
                             {
-                                return transformed;
+                                return new Scanner(transformed)
+                                {
+                                    Id = unaligned.Id,
+                                    Location = transformation(unaligned.Location) + delta,
+                                };
                             }
                         }
                     }
@@ -142,33 +169,33 @@ public sealed class Day19 : Puzzle
             }
 
             return null;
-        }
 
-        static IEnumerable<Func<Point3D, Point3D>> Transforms()
-        {
-            yield return (p) => new(p.X, -p.Y, -p.Z);
-            yield return (p) => new(p.X, p.Z, -p.Y);
-            yield return (p) => new(p.X, -p.Z, p.Y);
-            yield return (p) => new(-p.X, -p.Y, p.Z);
-            yield return (p) => new(-p.X, p.Y, -p.Z);
-            yield return (p) => new(-p.X, p.Z, p.Y);
-            yield return (p) => new(-p.X, -p.Z, -p.Y);
-            yield return (p) => new(p.Y, p.Z, p.X);
-            yield return (p) => new(p.Y, -p.Z, -p.X);
-            yield return (p) => new(p.Y, p.X, -p.Z);
-            yield return (p) => new(p.Y, -p.X, p.Z);
-            yield return (p) => new(-p.Y, -p.Z, p.X);
-            yield return (p) => new(-p.Y, p.Z, -p.X);
-            yield return (p) => new(-p.Y, -p.X, -p.Z);
-            yield return (p) => new(-p.Y, p.X, p.Z);
-            yield return (p) => new(p.Z, p.X, p.Y);
-            yield return (p) => new(p.Z, -p.X, -p.Y);
-            yield return (p) => new(p.Z, p.Y, -p.X);
-            yield return (p) => new(p.Z, -p.Y, p.X);
-            yield return (p) => new(-p.Z, -p.X, p.Y);
-            yield return (p) => new(-p.Z, p.X, -p.Y);
-            yield return (p) => new(-p.Z, p.Y, p.X);
-            yield return (p) => new(-p.Z, -p.Y, -p.X);
+            static IEnumerable<Func<Point3D, Point3D>> Transforms()
+            {
+                yield return (p) => new(p.X, -p.Y, -p.Z);
+                yield return (p) => new(p.X, p.Z, -p.Y);
+                yield return (p) => new(p.X, -p.Z, p.Y);
+                yield return (p) => new(-p.X, -p.Y, p.Z);
+                yield return (p) => new(-p.X, p.Y, -p.Z);
+                yield return (p) => new(-p.X, p.Z, p.Y);
+                yield return (p) => new(-p.X, -p.Z, -p.Y);
+                yield return (p) => new(p.Y, p.Z, p.X);
+                yield return (p) => new(p.Y, -p.Z, -p.X);
+                yield return (p) => new(p.Y, p.X, -p.Z);
+                yield return (p) => new(p.Y, -p.X, p.Z);
+                yield return (p) => new(-p.Y, -p.Z, p.X);
+                yield return (p) => new(-p.Y, p.Z, -p.X);
+                yield return (p) => new(-p.Y, -p.X, -p.Z);
+                yield return (p) => new(-p.Y, p.X, p.Z);
+                yield return (p) => new(p.Z, p.X, p.Y);
+                yield return (p) => new(p.Z, -p.X, -p.Y);
+                yield return (p) => new(p.Z, p.Y, -p.X);
+                yield return (p) => new(p.Z, -p.Y, p.X);
+                yield return (p) => new(-p.Z, -p.X, p.Y);
+                yield return (p) => new(-p.Z, p.X, -p.Y);
+                yield return (p) => new(-p.Z, p.Y, p.X);
+                yield return (p) => new(-p.Z, -p.Y, -p.X);
+            }
         }
     }
 
@@ -241,46 +268,13 @@ public sealed class Day19 : Puzzle
         {
         }
 
-        private Scanner(int capacity)
-            : base(capacity)
+        public Scanner(IEnumerable<Point3D> collection)
+            : base(collection)
         {
         }
 
         public int Id { get; init; }
 
         public Point3D Location { get; init; }
-
-        public Scanner Rotate(Func<Point3D, Point3D> transform)
-        {
-            var rotated = new Scanner(Count)
-            {
-                Id = Id,
-                Location = transform(Location),
-            };
-
-            foreach (var point in this)
-            {
-                Point3D rotation = transform(point);
-                rotated.Add(rotation);
-            }
-
-            return rotated;
-        }
-
-        public Scanner Transform(Point3D vector)
-        {
-            var transformed = new Scanner(Count)
-            {
-                Id = Id,
-                Location = Location + vector,
-            };
-
-            foreach (var point in this)
-            {
-                transformed.Add(point + vector);
-            }
-
-            return transformed;
-        }
     }
 }

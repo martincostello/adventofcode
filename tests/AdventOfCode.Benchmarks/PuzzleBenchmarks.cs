@@ -121,6 +121,7 @@ public class PuzzleBenchmarks
         yield return new PuzzleInput<Puzzles.Y2021.Day16>();
         yield return new PuzzleInput<Puzzles.Y2021.Day17>();
         yield return new PuzzleInput<Puzzles.Y2021.Day18>();
+        yield return new PuzzleInput<Puzzles.Y2021.Day19>();
         yield return new PuzzleInput<Puzzles.Y2021.Day20>();
     }
 
