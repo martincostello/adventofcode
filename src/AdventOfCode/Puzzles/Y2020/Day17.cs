@@ -295,45 +295,20 @@ public sealed class Day17 : Puzzle
     /// <summary>
     /// Represents a point (or vector) in 3 or 4 dimensional space.
     /// </summary>
-    private struct Point : IEquatable<Point>
+    private readonly struct Point : IEquatable<Point>
     {
-        /// <summary>
-        /// The origin point for 3D space.
-        /// </summary>
-        public static Point Zero3D = new(0, 0, 0, null);
+        public static Point Zero3D = new(0, 0, 0);
 
-        /// <summary>
-        /// The origin point for 4D space.
-        /// </summary>
         public static Point Zero4D = new(0, 0, 0, 0);
 
-        /// <summary>
-        /// The W coordinate.
-        /// </summary>
-        public int? W;
+        public readonly int? W;
 
-        /// <summary>
-        /// The X coordinate.
-        /// </summary>
-        public int X;
+        public readonly int X;
 
-        /// <summary>
-        /// The Y coordinate.
-        /// </summary>
-        public int Y;
+        public readonly int Y;
 
-        /// <summary>
-        /// The Z coordinate.
-        /// </summary>
-        public int Z;
+        public readonly int Z;
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Point"/> struct.
-        /// </summary>
-        /// <param name="x">The X coordinate.</param>
-        /// <param name="y">The Y coordinate.</param>
-        /// <param name="z">The Z coordinate.</param>
-        /// <param name="w">The optional W coordinate.</param>
         public Point(int x, int y, int z, int? w = default)
         {
             X = x;
@@ -357,8 +332,7 @@ public sealed class Day17 : Puzzle
         public static bool operator !=(Point a, Point b)
             => a.X != b.X || a.Y != b.Y || a.Z != b.Z || a.W != b.W;
 
-        /// <inheritdoc />
-        public override bool Equals(object? obj)
+        public override readonly bool Equals(object? obj)
         {
             if (obj is not Point p)
             {
@@ -368,21 +342,13 @@ public sealed class Day17 : Puzzle
             return this == p;
         }
 
-        /// <summary>
-        /// Indicates whether the current object is equal to another object of the same type.
-        /// </summary>
-        /// <param name="other">An object to compare with this object.</param>
-        /// <returns>
-        /// <see langword="true"/> if the current object is equal to the other parameter; otherwise, <see langword="false"/>.
-        /// </returns>
-        public bool Equals(Point other) => this == other;
+        public readonly bool Equals(Point other)
+            => this == other;
 
-        /// <inheritdoc />
-        public override int GetHashCode()
+        public override readonly int GetHashCode()
             => HashCode.Combine(X, Y, Z, W);
 
-        /// <inheritdoc />
-        public override string ToString()
+        public override readonly string ToString()
         {
             if (W.HasValue)
             {

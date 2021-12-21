@@ -138,34 +138,16 @@ public sealed class Day24 : Puzzle
     /// A struct representing a hexagonal tile.
     /// </summary>
     [System.Diagnostics.DebuggerDisplay("({X}, {Y}, {Z})")]
-    private struct Tile : IEquatable<Tile>
+    private readonly struct Tile : IEquatable<Tile>
     {
-        /// <summary>
-        /// A tile with all coordinates having a value of zero. This field is read-only.
-        /// </summary>
         public static readonly Tile Zero = new(0, 0, 0);
 
-        /// <summary>
-        /// The X coordinate.
-        /// </summary>
-        public int X;
+        public readonly int X;
 
-        /// <summary>
-        /// The Y coordinate.
-        /// </summary>
-        public int Y;
+        public readonly int Y;
 
-        /// <summary>
-        /// The Z coordinate.
-        /// </summary>
-        public int Z;
+        public readonly int Z;
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Tile"/> struct.
-        /// </summary>
-        /// <param name="x">The X coordinate.</param>
-        /// <param name="y">The Y coordinate.</param>
-        /// <param name="z">The Z coordinate.</param>
         public Tile(int x, int y, int z)
         {
             X = x;
@@ -181,73 +163,28 @@ public sealed class Day24 : Puzzle
                 point.Z + vector.Z);
         }
 
-        /// <inheritdoc/>
-        public override bool Equals(object? obj)
+        public override readonly bool Equals(object? obj)
             => obj is Tile tile && Equals(tile);
 
-        /// <inheritdoc/>
-        public bool Equals(Tile other)
+        public readonly bool Equals(Tile other)
             => X == other.X && Y == other.Y && Z == other.Z;
 
-        /// <inheritdoc/>
-        public override int GetHashCode()
+        public override readonly int GetHashCode()
             => HashCode.Combine(X, Y, Z);
 
-        /// <summary>
-        /// Returns the tile west of this tile.
-        /// </summary>
-        /// <returns>
-        /// The tile west of this tile.
-        /// </returns>
-        public Tile West() => this + new Tile(-1, 1, 0);
+        public readonly Tile West() => this + new Tile(-1, 1, 0);
 
-        /// <summary>
-        /// Returns the tile north west of this tile.
-        /// </summary>
-        /// <returns>
-        /// The tile north west of this tile.
-        /// </returns>
-        public Tile NorthWest() => this + new Tile(0, 1, -1);
+        public readonly Tile NorthWest() => this + new Tile(0, 1, -1);
 
-        /// <summary>
-        /// Returns the tile north east of this tile.
-        /// </summary>
-        /// <returns>
-        /// The tile north east of this tile.
-        /// </returns>
-        public Tile NorthEast() => this + new Tile(1, 0, -1);
+        public readonly Tile NorthEast() => this + new Tile(1, 0, -1);
 
-        /// <summary>
-        /// Returns the tile east of this tile.
-        /// </summary>
-        /// <returns>
-        /// The tile east of this tile.
-        /// </returns>
-        public Tile East() => this + new Tile(1, -1, 0);
+        public readonly Tile East() => this + new Tile(1, -1, 0);
 
-        /// <summary>
-        /// Returns the tile south east of this tile.
-        /// </summary>
-        /// <returns>
-        /// The tile south east of this tile.
-        /// </returns>
-        public Tile SouthEast() => this + new Tile(0, -1, 1);
+        public readonly Tile SouthEast() => this + new Tile(0, -1, 1);
 
-        /// <summary>
-        /// Returns the tile south west of this tile.
-        /// </summary>
-        /// <returns>
-        /// The tile south east of this tile.
-        /// </returns>
-        public Tile SouthWest() => this + new Tile(-1, 0, 1);
+        public readonly Tile SouthWest() => this + new Tile(-1, 0, 1);
 
-        /// <summary>
-        /// Enumerates the tile's neighbors.
-        /// </summary>
-        /// <returns>
-        /// The neighbors of this tile.
-        /// </returns>
-        public IEnumerable<Tile> Neighbors()
+        public readonly IEnumerable<Tile> Neighbors()
         {
             yield return West();
             yield return NorthWest();
