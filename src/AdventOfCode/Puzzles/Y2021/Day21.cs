@@ -97,65 +97,50 @@ public sealed class Day21 : Puzzle
     {
         (Player player1, Player player2) = Parse(players);
 
-        var states = new Dictionary<(Player P1, Player P2, int NextDice, int Rolls, bool MovePlayer1), (long Wins1, long Wins2)>();
+        var states = new Dictionary<(Player P1, Player P2, int NextDice, int Rolls), (long Wins1, long Wins2)>();
 
-        (long wins1, long wins2) = Play((player1, player2, 0, -1, true));
+        (long wins1, long wins2) = Play((player1, player2, 0, -1));
 
         return Math.Max(wins1, wins2);
 
-        (long Wins1, long Wins2) Play((Player P1, Player P2, int NextDice, int Rolls, bool MovePlayer1) state)
+        (long Wins1, long Wins2) Play((Player P1, Player P2, int NextDice, int Rolls) state)
         {
             if (states.TryGetValue(state, out var score))
             {
+                // We already know the result for this game state
                 return score;
             }
+
+            (Player player1, Player player2, int nextDice, int rolls) = state;
+
+            int nextPosition = Move(player1.Position, nextDice);
 
             const int RollLimit = 2;
             const int WinningScore = 21;
 
-            (Player player1, Player player2, int nextDice, int rolls, bool movePlayer1) = state;
-
-            if (movePlayer1)
+            if (rolls == RollLimit)
             {
-                int pos1 = Move(player1.Position, nextDice);
+                // Move the player and update their score
+                player1 = new(nextPosition, player1.Score + nextPosition);
 
-                if (rolls == RollLimit)
+                if (player1.Score >= WinningScore)
                 {
-                    player1 = new(pos1, player1.Score + pos1);
-
-                    if (player1.Score >= WinningScore)
-                    {
-                        return states[state] = (1, 0);
-                    }
-                }
-                else
-                {
-                    player1 = new(pos1, player1.Score);
+                    return states[state] = (1, 0);
                 }
             }
             else
             {
-                int pos2 = Move(player2.Position, nextDice);
-
-                if (rolls == RollLimit)
-                {
-                    player2 = new(pos2, player2.Score + pos2);
-
-                    if (player2.Score >= WinningScore)
-                    {
-                        return states[state] = (0, 1);
-                    }
-                }
-                else
-                {
-                    player2 = new(pos2, player2.Score);
-                }
+                // Just move the player
+                player1 = new(nextPosition, player1.Score);
             }
+
+            bool swappedPlayers = false;
 
             if (rolls == RollLimit)
             {
-                movePlayer1 = !movePlayer1;
                 rolls = 0;
+                swappedPlayers = true;
+                (player1, player2) = (player2, player1);
             }
             else
             {
@@ -167,7 +152,13 @@ public sealed class Day21 : Puzzle
 
             for (int i = 1; i <= 3; i++)
             {
-                (long w1, long w2) = Play((player1, player2, i, rolls, movePlayer1));
+                (long w1, long w2) = Play((player1, player2, i, rolls));
+
+                if (swappedPlayers)
+                {
+                    (w1, w2) = (w2, w1);
+                }
+
                 wins1 += w1;
                 wins2 += w2;
             }
