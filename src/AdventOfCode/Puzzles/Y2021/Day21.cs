@@ -71,11 +71,11 @@ public sealed class Day21 : Puzzle
 
             while (true)
             {
-                int a = value;
-                int b = Increment(ref value);
-                int c = Increment(ref value);
+                int result = value;
+                result += Increment(ref value);
+                result += Increment(ref value);
 
-                yield return a + b + c;
+                yield return result;
 
                 Increment(ref value);
             }
