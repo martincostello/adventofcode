@@ -97,53 +97,82 @@ public sealed class Day21 : Puzzle
     {
         (Player player1, Player player2) = Parse(players);
 
-        var winStates = new Dictionary<(Player P1, Player P2), (long Wins1, long Wins2)>();
+        var states = new Dictionary<(Player P1, Player P2, int NextDice, int Rolls, bool MovePlayer1), (long Wins1, long Wins2)>();
 
-        // The frequency distribution for each possiblity of throwing three three-sided dice (3d3).
-        // See https://www.wolframalpha.com/input/?i2d=true&i=3d3 for the actual distribution.
-        (int Roll, int Frequency)[] rolls3D3 =
-        {
-            new(3, 1),
-            new(4, 3),
-            new(5, 6),
-            new(6, 7),
-            new(7, 6),
-            new(8, 3),
-            new(9, 1),
-        };
-
-        (long wins1, long wins2) = Play(player1, player2);
+        (long wins1, long wins2) = Play((player1, player2, 0, -1, true));
 
         return Math.Max(wins1, wins2);
 
-        (long Wins1, long Wins2) Play(Player player1, Player player2)
+        (long Wins1, long Wins2) Play((Player P1, Player P2, int NextDice, int Rolls, bool MovePlayer1) state)
         {
+            if (states.TryGetValue(state, out var score))
+            {
+                return score;
+            }
+
+            const int RollLimit = 2;
             const int WinningScore = 21;
 
-            if (player2.Score >= WinningScore)
+            (Player player1, Player player2, int nextDice, int rolls, bool movePlayer1) = state;
+
+            if (movePlayer1)
             {
-                return (0, 1);
+                int pos1 = Move(player1.Position, nextDice);
+
+                if (rolls == RollLimit)
+                {
+                    player1 = new(pos1, player1.Score + pos1);
+
+                    if (player1.Score >= WinningScore)
+                    {
+                        return states[state] = (1, 0);
+                    }
+                }
+                else
+                {
+                    player1 = new(pos1, player1.Score);
+                }
             }
-            else if (winStates.TryGetValue((player1, player2), out var wins))
+            else
             {
-                // We already know the result for this game state
-                return wins;
+                int pos2 = Move(player2.Position, nextDice);
+
+                if (rolls == RollLimit)
+                {
+                    player2 = new(pos2, player2.Score + pos2);
+
+                    if (player2.Score >= WinningScore)
+                    {
+                        return states[state] = (0, 1);
+                    }
+                }
+                else
+                {
+                    player2 = new(pos2, player2.Score);
+                }
+            }
+
+            if (rolls == RollLimit)
+            {
+                movePlayer1 = !movePlayer1;
+                rolls = 0;
+            }
+            else
+            {
+                rolls++;
             }
 
             long wins1 = 0;
             long wins2 = 0;
 
-            foreach ((int roll, int frequency) in rolls3D3)
+            for (int i = 1; i <= 3; i++)
             {
-                Player next = Move(player1, roll);
-
-                (long next2, long next1) = Play(player2, next);
-
-                wins1 += next1 * frequency;
-                wins2 += next2 * frequency;
+                (long w1, long w2) = Play((player1, player2, i, rolls, movePlayer1));
+                wins1 += w1;
+                wins2 += w2;
             }
 
-            return (wins1, wins2);
+            return states[state] = (wins1, wins2);
         }
     }
 
@@ -171,9 +200,12 @@ public sealed class Day21 : Puzzle
 
     private static Player Move(Player player, int roll)
     {
-        int position = ((player.Position - 1 + roll) % 10) + 1;
+        int position = Move(player.Position, roll);
         return new(position, player.Score + position);
     }
+
+    private static int Move(int position, int roll)
+        => ((position - 1 + roll) % 10) + 1;
 
     private static (Player Player1, Player Player2) Parse(IList<string> players)
     {
