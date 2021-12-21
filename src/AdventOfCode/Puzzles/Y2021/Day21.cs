@@ -32,37 +32,34 @@ public sealed class Day21 : Puzzle
     /// </returns>
     public static int PlayPractice(IList<string> players)
     {
-        (int position1, int position2) = Parse(players);
+        (Player player1, Player player2) = Parse(players);
 
         bool player1Turn = true;
         int rolls = 0;
-
-        int score1 = 0;
-        int score2 = 0;
 
         var deterministicDie = Roll3D100();
         using var die = deterministicDie.GetEnumerator();
 
         const long WinningScore = 1000;
 
-        while (score1 < WinningScore && score2 < WinningScore && die.MoveNext())
+        while (player1.Score < WinningScore && player2.Score < WinningScore && die.MoveNext())
         {
             int roll = die.Current;
 
             if (player1Turn)
             {
-                score1 += Move(ref position1, roll);
+                player1 = Move(player1, roll);
             }
             else
             {
-                score2 += Move(ref position2, roll);
+                player2 = Move(player2, roll);
             }
 
             player1Turn = !player1Turn;
             rolls++;
         }
 
-        int losingScore = Math.Min(score1, score2);
+        int losingScore = Math.Min(player1.Score, player2.Score);
 
         return losingScore * rolls * 3;
 
@@ -98,11 +95,11 @@ public sealed class Day21 : Puzzle
     /// </returns>
     public static long Play(IList<string> players)
     {
-        (int position1, int position2) = Parse(players);
+        (Player player1, Player player2) = Parse(players);
 
         var winStates = new Dictionary<(Player P1, Player P2), (long Wins1, long Wins2)>();
 
-        (long wins1, long wins2) = Play(new(position1), new(position2));
+        (long wins1, long wins2) = Play(player1, player2);
 
         return Math.Max(wins1, wins2);
 
@@ -125,11 +122,9 @@ public sealed class Day21 : Puzzle
 
             foreach ((int roll, int frequency) in Roll3D3())
             {
-                (int position1, int score1) = player1;
+                Player next = Move(player1, roll);
 
-                score1 += Move(ref position1, roll);
-
-                (long next2, long next1) = Play(player2, new(position1, score1));
+                (long next2, long next1) = Play(player2, next);
 
                 wins1 += next1 * frequency;
                 wins2 += next2 * frequency;
@@ -172,17 +167,20 @@ public sealed class Day21 : Puzzle
         return PuzzleResult.Create(PracticeOutcome, WinningUniverses);
     }
 
-    private static int Move(ref int position, int roll)
-        => position = ((position - 1 + roll) % 10) + 1;
+    private static Player Move(Player player, int roll)
+    {
+        int position = ((player.Position - 1 + roll) % 10) + 1;
+        return new(position, player.Score + position);
+    }
 
-    private static (int Player1, int Player2) Parse(IList<string> players)
+    private static (Player Player1, Player Player2) Parse(IList<string> players)
     {
         const string Prefix = "Player X starting position: ";
 
         int position1 = Parse<int>(players[0][Prefix.Length..]);
         int position2 = Parse<int>(players[1][Prefix.Length..]);
 
-        return (position1, position2);
+        return (new(position1), new(position2));
     }
 
     private readonly struct Player
