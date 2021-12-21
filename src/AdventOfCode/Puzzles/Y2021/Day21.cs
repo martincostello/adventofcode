@@ -13,7 +13,7 @@ public sealed class Day21 : Puzzle
     /// Gets the product of the score of the losing player and
     /// the number of times the die was rolled during the game.
     /// </summary>
-    public long Outcome { get; private set; }
+    public int Outcome { get; private set; }
 
     /// <summary>
     /// Plays a game of Dirac Dice.
@@ -23,7 +23,7 @@ public sealed class Day21 : Puzzle
     /// The product of the score of the losing player and
     /// the number of times the die was rolled during the game.
     /// </returns>
-    public static long Play(IList<string> players)
+    public static int Play(IList<string> players)
     {
         const string Prefix = "Player X starting position: ";
 
@@ -31,10 +31,10 @@ public sealed class Day21 : Puzzle
         int position2 = Parse<int>(players[1][Prefix.Length..]);
 
         bool player1Turn = true;
-        long score1 = 0;
-        long score2 = 0;
+        int rolls = 0;
 
-        long rolls = 0;
+        int score1 = 0;
+        int score2 = 0;
 
         var deterministicDie = Roll3();
         using var die = deterministicDie.GetEnumerator();
@@ -58,14 +58,12 @@ public sealed class Day21 : Puzzle
             rolls++;
         }
 
-        long losingScore = Math.Min(score1, score2);
+        int losingScore = Math.Min(score1, score2);
 
         return losingScore * rolls * 3;
 
-        static long Move(ref int position, int roll)
-        {
-            return position = ((position - 1 + roll) % 10) + 1;
-        }
+        static int Move(ref int position, int roll)
+            => position = ((position - 1 + roll) % 10) + 1;
 
         static IEnumerable<int> Roll3()
         {
@@ -84,7 +82,8 @@ public sealed class Day21 : Puzzle
 
             static int Increment(ref int value)
             {
-                return value = (value % 100) + 1;
+                const int Faces = 100;
+                return value = (value % Faces) + 1;
             }
         }
     }

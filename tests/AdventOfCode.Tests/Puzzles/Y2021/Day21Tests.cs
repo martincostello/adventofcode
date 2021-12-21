@@ -21,7 +21,7 @@ public sealed class Day21Tests : PuzzleTest
         };
 
         // Act
-        long actual = Day21.Play(players);
+        int actual = Day21.Play(players);
 
         // Assert
         actual.ShouldBe(739785);
