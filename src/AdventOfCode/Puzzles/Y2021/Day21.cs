@@ -99,6 +99,19 @@ public sealed class Day21 : Puzzle
 
         var winStates = new Dictionary<(Player P1, Player P2), (long Wins1, long Wins2)>();
 
+        // The frequency distribution for each possiblity of throwing three three-sided dice (3d3).
+        // See https://www.wolframalpha.com/input/?i2d=true&i=3d3 for the actual distribution.
+        (int Roll, int Frequency)[] rolls3D3 =
+        {
+            new(3, 1),
+            new(4, 3),
+            new(5, 6),
+            new(6, 7),
+            new(7, 6),
+            new(8, 3),
+            new(9, 1),
+        };
+
         (long wins1, long wins2) = Play(player1, player2);
 
         return Math.Max(wins1, wins2);
@@ -120,7 +133,7 @@ public sealed class Day21 : Puzzle
             long wins1 = 0;
             long wins2 = 0;
 
-            foreach ((int roll, int frequency) in Roll3D3())
+            foreach ((int roll, int frequency) in rolls3D3)
             {
                 Player next = Move(player1, roll);
 
@@ -131,17 +144,6 @@ public sealed class Day21 : Puzzle
             }
 
             return (wins1, wins2);
-        }
-
-        static IEnumerable<(int Roll, int Frequency)> Roll3D3()
-        {
-            yield return (3, 1);
-            yield return (4, 3);
-            yield return (5, 6);
-            yield return (6, 7);
-            yield return (7, 6);
-            yield return (8, 3);
-            yield return (9, 1);
         }
     }
 
