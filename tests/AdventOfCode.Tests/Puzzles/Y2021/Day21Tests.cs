@@ -11,6 +11,23 @@ public sealed class Day21Tests : PuzzleTest
     }
 
     [Fact]
+    public void Y2021_Day21_PlayPractice_Returns_Correct_Value()
+    {
+        // Arrange
+        string[] players =
+        {
+            "Player 1 starting position: 4",
+            "Player 2 starting position: 8",
+        };
+
+        // Act
+        int actual = Day21.PlayPractice(players);
+
+        // Assert
+        actual.ShouldBe(739785);
+    }
+
+    [Fact]
     public void Y2021_Day21_Play_Returns_Correct_Value()
     {
         // Arrange
@@ -21,10 +38,10 @@ public sealed class Day21Tests : PuzzleTest
         };
 
         // Act
-        int actual = Day21.Play(players);
+        long actual = Day21.Play(players);
 
         // Assert
-        actual.ShouldBe(739785);
+        actual.ShouldBe(444356092776315);
     }
 
     [Fact]
@@ -34,6 +51,7 @@ public sealed class Day21Tests : PuzzleTest
         var puzzle = await SolvePuzzleAsync<Day21>();
 
         // Assert
-        puzzle.Outcome.ShouldBe(713328);
+        puzzle.PracticeOutcome.ShouldBe(713328);
+        puzzle.WinningUniverses.ShouldBe(92399285032143);
     }
 }
