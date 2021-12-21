@@ -251,13 +251,13 @@ public sealed class Day19 : Puzzle
             return Math.Abs(delta.X) + Math.Abs(delta.Y) + Math.Abs(delta.Z);
         }
 
-        public override bool Equals(object? obj)
+        public override readonly bool Equals(object? obj)
             => obj is Point3D point && this == point;
 
-        public bool Equals(Point3D other)
+        public readonly bool Equals(Point3D other)
             => this == other;
 
-        public override int GetHashCode()
+        public override readonly int GetHashCode()
             => HashCode.Combine(X, Y, Z);
     }
 
