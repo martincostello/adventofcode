@@ -50,8 +50,8 @@ public sealed class Day06 : Puzzle
         // Get the maximum extent of the grid we need
         // to search within, which is one containing
         // all points with at least 1 space around each.
-        int maxX = points.MaxBy((p) => p.X).X + 1;
-        int maxY = points.MaxBy((p) => p.Y).Y + 1;
+        int maxX = points.Max((p) => p.X) + 1;
+        int maxY = points.Max((p) => p.Y) + 1;
 
         for (int y = 0; y <= maxY; y++)
         {
