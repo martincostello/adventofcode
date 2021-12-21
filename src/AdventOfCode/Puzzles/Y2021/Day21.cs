@@ -97,13 +97,13 @@ public sealed class Day21 : Puzzle
     {
         (Player player1, Player player2) = Parse(players);
 
-        var states = new Dictionary<(Player P1, Player P2, int NextDice, int Rolls), (long Wins1, long Wins2)>();
+        var states = new Dictionary<(Player P1, Player P2, int NextDie, int Rolls), (long Wins1, long Wins2)>();
 
         (long wins1, long wins2) = Play((player1, player2, 0, -1));
 
         return Math.Max(wins1, wins2);
 
-        (long Wins1, long Wins2) Play((Player P1, Player P2, int NextDice, int Rolls) state)
+        (long Wins1, long Wins2) Play((Player P1, Player P2, int NextDie, int Rolls) state)
         {
             if (states.TryGetValue(state, out var score))
             {
@@ -111,9 +111,9 @@ public sealed class Day21 : Puzzle
                 return score;
             }
 
-            (Player player1, Player player2, int nextDice, int rolls) = state;
+            (Player player1, Player player2, int nextDie, int rolls) = state;
 
-            int nextPosition = Move(player1.Position, nextDice);
+            int nextPosition = Move(player1.Position, nextDie);
 
             const int RollLimit = 2;
             const int WinningScore = 21;
