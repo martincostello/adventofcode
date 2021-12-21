@@ -119,7 +119,7 @@ public sealed class Day17 : Puzzle
 
             if (hasImpact)
             {
-                return trajectory.MaxBy((p) => p.Y).Y;
+                return trajectory.Max((p) => p.Y);
             }
 
             return null;

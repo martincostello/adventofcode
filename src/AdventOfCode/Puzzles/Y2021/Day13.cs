@@ -107,8 +107,8 @@ public sealed class Day13 : Puzzle
         {
             var builder = new StringBuilder(6 * 5 * 8);
 
-            int maxX = paper.Keys.MaxBy((p) => p.X).X + 2;
-            int maxY = paper.Keys.MaxBy((p) => p.Y).Y + 1;
+            int maxX = paper.Keys.Max((p) => p.X) + 2;
+            int maxY = paper.Keys.Max((p) => p.Y) + 1;
 
             char[,] array = new char[maxX, maxY];
 
