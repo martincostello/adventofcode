@@ -97,53 +97,73 @@ public sealed class Day21 : Puzzle
     {
         (Player player1, Player player2) = Parse(players);
 
-        var winStates = new Dictionary<(Player P1, Player P2), (long Wins1, long Wins2)>();
+        var states = new Dictionary<(Player P1, Player P2, int NextDie, int Rolls), (long Wins1, long Wins2)>();
 
-        // The frequency distribution for each possiblity of throwing three three-sided dice (3d3).
-        // See https://www.wolframalpha.com/input/?i2d=true&i=3d3 for the actual distribution.
-        (int Roll, int Frequency)[] rolls3D3 =
-        {
-            new(3, 1),
-            new(4, 3),
-            new(5, 6),
-            new(6, 7),
-            new(7, 6),
-            new(8, 3),
-            new(9, 1),
-        };
-
-        (long wins1, long wins2) = Play(player1, player2);
+        (long wins1, long wins2) = Play((player1, player2, 0, -1));
 
         return Math.Max(wins1, wins2);
 
-        (long Wins1, long Wins2) Play(Player player1, Player player2)
+        (long Wins1, long Wins2) Play((Player P1, Player P2, int NextDie, int Rolls) state)
         {
-            const int WinningScore = 21;
-
-            if (player2.Score >= WinningScore)
-            {
-                return (0, 1);
-            }
-            else if (winStates.TryGetValue((player1, player2), out var wins))
+            if (states.TryGetValue(state, out var score))
             {
                 // We already know the result for this game state
-                return wins;
+                return score;
+            }
+
+            (Player player1, Player player2, int nextDie, int rolls) = state;
+
+            int nextPosition = Move(player1.Position, nextDie);
+
+            const int RollLimit = 2;
+            const int WinningScore = 21;
+
+            if (rolls == RollLimit)
+            {
+                // Move the player and update their score
+                player1 = new(nextPosition, player1.Score + nextPosition);
+
+                if (player1.Score >= WinningScore)
+                {
+                    return states[state] = (1, 0);
+                }
+            }
+            else
+            {
+                // Just move the player
+                player1 = new(nextPosition, player1.Score);
+            }
+
+            bool swappedPlayers = false;
+
+            if (rolls == RollLimit)
+            {
+                rolls = 0;
+                swappedPlayers = true;
+                (player1, player2) = (player2, player1);
+            }
+            else
+            {
+                rolls++;
             }
 
             long wins1 = 0;
             long wins2 = 0;
 
-            foreach ((int roll, int frequency) in rolls3D3)
+            for (int i = 1; i <= 3; i++)
             {
-                Player next = Move(player1, roll);
+                (long w1, long w2) = Play((player1, player2, i, rolls));
 
-                (long next2, long next1) = Play(player2, next);
+                if (swappedPlayers)
+                {
+                    (w1, w2) = (w2, w1);
+                }
 
-                wins1 += next1 * frequency;
-                wins2 += next2 * frequency;
+                wins1 += w1;
+                wins2 += w2;
             }
 
-            return (wins1, wins2);
+            return states[state] = (wins1, wins2);
         }
     }
 
@@ -171,9 +191,12 @@ public sealed class Day21 : Puzzle
 
     private static Player Move(Player player, int roll)
     {
-        int position = ((player.Position - 1 + roll) % 10) + 1;
+        int position = Move(player.Position, roll);
         return new(position, player.Score + position);
     }
+
+    private static int Move(int position, int roll)
+        => ((position - 1 + roll) % 10) + 1;
 
     private static (Player Player1, Player Player2) Parse(IList<string> players)
     {
