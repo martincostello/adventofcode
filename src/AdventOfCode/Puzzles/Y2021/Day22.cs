@@ -1,6 +1,8 @@
 ﻿// Copyright (c) Martin Costello, 2015. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
+using System.Collections;
+
 namespace MartinCostello.AdventOfCode.Puzzles.Y2021;
 
 /// <summary>
@@ -98,7 +100,7 @@ public sealed class Day22 : Puzzle
     }
 
     [System.Diagnostics.DebuggerDisplay("({Origin.X}, {Origin.Y}, {Origin.Z}), ({Length.X}, {Length.Y}, {Length.Z})")]
-    private readonly struct Cuboid
+    private readonly struct Cuboid : IEnumerable<Point3D>
     {
         public readonly Point3D Origin;
 
@@ -194,8 +196,34 @@ public sealed class Day22 : Puzzle
             return result;
         }
 
-        public readonly int Volume()
-            => Length.X * Length.Y * Length.Z;
+        public IEnumerator<Point3D> GetEnumerator()
+        {
+            return Points(this).GetEnumerator();
+
+            static IEnumerable<Point3D> Points(Cuboid value)
+            {
+                int lengthX = value.Origin.X + value.Length.X;
+                int lengthY = value.Origin.Y + value.Length.Y;
+                int lengthZ = value.Origin.Z + value.Length.Z;
+
+                for (int z = value.Origin.Z; z <= lengthZ; z++)
+                {
+                    for (int y = value.Origin.Y; y <= lengthY; y++)
+                    {
+                        for (int x = value.Origin.X; x <= lengthX; x++)
+                        {
+                            yield return new(x, y, z);
+                        }
+                    }
+                }
+            }
+        }
+
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+
+        public readonly HashSet<Point3D> ToHashSet() => new(this);
+
+        public readonly int Volume() => Length.X * Length.Y * Length.Z;
 
         private IEnumerable<Point3D> Verticies()
         {
