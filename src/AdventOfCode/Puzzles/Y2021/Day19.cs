@@ -215,52 +215,6 @@ public sealed class Day19 : Puzzle
         return PuzzleResult.Create(BeaconCount, LargestScannerDistance);
     }
 
-    [System.Diagnostics.DebuggerDisplay("({X}, {Y}, {Z})")]
-    private readonly struct Point3D : IEquatable<Point3D>
-    {
-        public static readonly Point3D Zero = new(0, 0, 0);
-
-        public readonly int X;
-
-        public readonly int Y;
-
-        public readonly int Z;
-
-        public Point3D(int x, int y, int z)
-        {
-            X = x;
-            Y = y;
-            Z = z;
-        }
-
-        public static Point3D operator +(Point3D a, Point3D b)
-            => new(a.X + b.X, a.Y + b.Y, a.Z + b.Z);
-
-        public static Point3D operator -(Point3D a, Point3D b)
-            => new(a.X - b.X, a.Y - b.Y, a.Z - b.Z);
-
-        public static bool operator ==(Point3D a, Point3D b)
-            => a.X == b.X && a.Y == b.Y && a.Z == b.Z;
-
-        public static bool operator !=(Point3D a, Point3D b)
-            => a.X != b.X || a.Y != b.Y || a.Z != b.Z;
-
-        public static int ManhattanDistance(Point3D a, Point3D b)
-        {
-            Point3D delta = a - b;
-            return Math.Abs(delta.X) + Math.Abs(delta.Y) + Math.Abs(delta.Z);
-        }
-
-        public override readonly bool Equals(object? obj)
-            => obj is Point3D point && this == point;
-
-        public readonly bool Equals(Point3D other)
-            => this == other;
-
-        public override readonly int GetHashCode()
-            => HashCode.Combine(X, Y, Z);
-    }
-
     private sealed class Scanner : HashSet<Point3D>
     {
         public Scanner()
