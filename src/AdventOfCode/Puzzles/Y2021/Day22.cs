@@ -47,7 +47,7 @@ public sealed class Day22 : Puzzle
 
             foreach ((Cuboid cuboid, bool turnOn) in cuboids)
             {
-                var points = cuboid.Intersection(bounds);
+                var points = cuboid.IntersectWith(bounds);
 
                 if (turnOn)
                 {
@@ -178,7 +178,7 @@ public sealed class Day22 : Puzzle
             return false;
         }
 
-        public readonly HashSet<Point3D> Intersection(in Cuboid other)
+        public readonly HashSet<Point3D> IntersectWith(in Cuboid other)
         {
             var result = new HashSet<Point3D>();
 
