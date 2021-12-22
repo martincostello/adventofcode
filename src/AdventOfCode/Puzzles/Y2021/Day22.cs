@@ -1,8 +1,6 @@
 ﻿// Copyright (c) Martin Costello, 2015. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
-using System.Collections;
-
 namespace MartinCostello.AdventOfCode.Puzzles.Y2021;
 
 /// <summary>
@@ -123,33 +121,16 @@ public sealed class Day22 : Puzzle
     }
 
     [System.Diagnostics.DebuggerDisplay("({Origin.X}, {Origin.Y}, {Origin.Z}), ({Length.X}, {Length.Y}, {Length.Z})")]
-    private readonly struct Cuboid : IEnumerable<Point3D>
+    private readonly struct Cuboid
     {
         public readonly Point3D Origin;
 
         public readonly Point3D Length;
 
-        private static readonly Cuboid _unit = new(Point3D.Origin, new(1, 1, 1));
-
         public Cuboid(Point3D origin, Point3D length)
         {
             Origin = origin;
             Length = length;
-        }
-
-        public static ref readonly Cuboid Unit => ref _unit;
-
-        public readonly bool Contains(in Cuboid other)
-        {
-            foreach (Point3D vertex in other.Verticies())
-            {
-                if (!Contains(vertex))
-                {
-                    return false;
-                }
-            }
-
-            return true;
         }
 
         public override readonly int GetHashCode()
@@ -222,34 +203,7 @@ public sealed class Day22 : Puzzle
             return result;
         }
 
-        public readonly HashSet<Point3D> ToHashSet() => new(this);
-
         public readonly long Volume() => (long)Length.X * Length.Y * Length.Z;
-
-        public readonly IEnumerator<Point3D> GetEnumerator()
-        {
-            return Points(this).GetEnumerator();
-
-            static IEnumerable<Point3D> Points(Cuboid value)
-            {
-                int lengthX = value.Origin.X + value.Length.X;
-                int lengthY = value.Origin.Y + value.Length.Y;
-                int lengthZ = value.Origin.Z + value.Length.Z;
-
-                for (int z = value.Origin.Z; z <= lengthZ; z++)
-                {
-                    for (int y = value.Origin.Y; y <= lengthY; y++)
-                    {
-                        for (int x = value.Origin.X; x <= lengthX; x++)
-                        {
-                            yield return new(x, y, z);
-                        }
-                    }
-                }
-            }
-        }
-
-        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
         private readonly IEnumerable<Point3D> Verticies()
         {
