@@ -147,6 +147,9 @@ public sealed class Day22 : Puzzle
             return true;
         }
 
+        public override readonly int GetHashCode()
+            => HashCode.Combine(Origin.GetHashCode(), Length.GetHashCode());
+
         public readonly bool Contains(in Point3D point)
             => Origin.X <= point.X &&
                point.X <= Origin.X + Length.X &&
@@ -214,7 +217,7 @@ public sealed class Day22 : Puzzle
             return result;
         }
 
-        public IEnumerator<Point3D> GetEnumerator()
+        public readonly IEnumerator<Point3D> GetEnumerator()
         {
             return Points(this).GetEnumerator();
 
@@ -243,7 +246,7 @@ public sealed class Day22 : Puzzle
 
         public readonly int Volume() => Length.X * Length.Y * Length.Z;
 
-        private IEnumerable<Point3D> Verticies()
+        private readonly IEnumerable<Point3D> Verticies()
         {
             yield return Origin;
             yield return Origin + new Point3D(Length.X, 0, 0);
