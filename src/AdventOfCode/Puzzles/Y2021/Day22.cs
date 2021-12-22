@@ -12,20 +12,25 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2021;
 public sealed class Day22 : Puzzle
 {
     /// <summary>
+    /// Gets the number of cubes that are on once the reactor has been initialized.
+    /// </summary>
+    public long InitializedCubeCount { get; private set; }
+
+    /// <summary>
     /// Gets the number of cubes that are on once the reactor has been rebooted.
     /// </summary>
-    public int OnCubeCount { get; private set; }
+    public long RebootedCubeCount { get; private set; }
 
     /// <summary>
     /// Reboots the reactor.
     /// </summary>
     /// <param name="instructions">The instructions to follow to reboot the reactor.</param>
+    /// <param name="initialize">Whether to only initialize the reactor, rather than fully reboot it.</param>
     /// <returns>
     /// The number of cubes that are on once the reactor has been rebooted.
     /// </returns>
-    public static int Reboot(IList<string> instructions)
+    public static long Reboot(IList<string> instructions, bool initialize)
     {
-        var bounds = new Cuboid(new(-50, -50, -50), new(100, 100, 100));
         var cuboids = new List<(Cuboid Cuboid, bool TurnOn)>(instructions.Count);
 
         foreach (string instruction in instructions)
@@ -33,23 +38,34 @@ public sealed class Day22 : Puzzle
             cuboids.Add(Parse(instruction));
         }
 
-        var reactor = new HashSet<Point3D>();
+        return initialize ? Initialize(cuboids) : Reboot(cuboids);
 
-        foreach ((Cuboid cuboid, bool turnOn) in cuboids)
+        static long Initialize(List<(Cuboid Cuboid, bool TurnOn)> cuboids)
         {
-            var points = cuboid.Intersection(bounds);
+            var bounds = new Cuboid(new(-50, -50, -50), new(100, 100, 100));
+            var reactor = new HashSet<Point3D>();
 
-            if (turnOn)
+            foreach ((Cuboid cuboid, bool turnOn) in cuboids)
             {
-                reactor.UnionWith(points);
+                var points = cuboid.Intersection(bounds);
+
+                if (turnOn)
+                {
+                    reactor.UnionWith(points);
+                }
+                else
+                {
+                    reactor.ExceptWith(points);
+                }
             }
-            else
-            {
-                reactor.ExceptWith(points);
-            }
+
+            return reactor.Count;
         }
 
-        return reactor.Count;
+        static long Reboot(List<(Cuboid Cuboid, bool TurnOn)> cuboids)
+        {
+            return 0;
+        }
 
         static (Cuboid Cuboid, bool TurnOn) Parse(string instruction)
         {
@@ -89,14 +105,16 @@ public sealed class Day22 : Puzzle
     {
         IList<string> instructions = await ReadResourceAsLinesAsync();
 
-        OnCubeCount = Reboot(instructions);
+        InitializedCubeCount = Reboot(instructions, initialize: true);
+        RebootedCubeCount = Reboot(instructions, initialize: false);
 
         if (Verbose)
         {
-            Logger.WriteLine("{0:N0} cubes in the reactor are on after reboot.", OnCubeCount);
+            Logger.WriteLine("{0:N0} cubes in the reactor are on after initialization.", InitializedCubeCount);
+            Logger.WriteLine("{0:N0} cubes in the reactor are on after reboot.", RebootedCubeCount);
         }
 
-        return PuzzleResult.Create(OnCubeCount);
+        return PuzzleResult.Create(InitializedCubeCount, RebootedCubeCount);
     }
 
     [System.Diagnostics.DebuggerDisplay("({Origin.X}, {Origin.Y}, {Origin.Z}), ({Length.X}, {Length.Y}, {Length.Z})")]

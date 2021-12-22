@@ -23,14 +23,16 @@ public sealed class Day22Tests : PuzzleTest
         };
 
         // Act
-        int actual = Day22.Reboot(instructions);
+        long actual = Day22.Reboot(instructions, initialize: true);
 
         // Assert
         actual.ShouldBe(39);
     }
 
-    [Fact]
-    public void Y2021_Day22_Reboot_Returns_Correct_Value_2()
+    [Theory]
+    [InlineData(true, 590784)]
+    [InlineData(false, 2758514936282235)]
+    public void Y2021_Day22_Reboot_Returns_Correct_Value_2(bool initialize, long expected)
     {
         // Arrange
         string[] instructions =
@@ -60,10 +62,10 @@ public sealed class Day22Tests : PuzzleTest
         };
 
         // Act
-        int actual = Day22.Reboot(instructions);
+        long actual = Day22.Reboot(instructions, initialize);
 
         // Assert
-        actual.ShouldBe(590784);
+        actual.ShouldBe(expected);
     }
 
     [Fact]
@@ -73,6 +75,7 @@ public sealed class Day22Tests : PuzzleTest
         var puzzle = await SolvePuzzleAsync<Day22>();
 
         // Assert
-        puzzle.OnCubeCount.ShouldBe(537042);
+        puzzle.InitializedCubeCount.ShouldBe(537042);
+        puzzle.RebootedCubeCount.ShouldBe(-1);
     }
 }
