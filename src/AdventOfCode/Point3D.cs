@@ -42,7 +42,7 @@ internal readonly struct Point3D : IEquatable<Point3D>
     /// <summary>
     /// Gets the origin point. This field is read-only.
     /// </summary>
-    public static ref readonly Point3D Zero => ref _origin;
+    public static ref readonly Point3D Origin => ref _origin;
 
     public static Point3D operator +(in Point3D a, in Point3D b)
         => new(a.X + b.X, a.Y + b.Y, a.Z + b.Z);
