@@ -67,7 +67,37 @@ public sealed class Day22 : Puzzle
 
         static long Reboot(List<(Cuboid Cuboid, bool TurnOn)> cuboids)
         {
-            return 0;
+            var reactor = new Dictionary<Cuboid, long>();
+
+            foreach ((Cuboid cuboid, bool turnOn) in cuboids)
+            {
+                var newCuboids = new Dictionary<Cuboid, long>();
+
+                // Remove the new cuboid from each existing cuboid.
+                // This will effectively perform the operation to
+                // turn it off if that is the required action.
+                foreach ((Cuboid existing, long count) in reactor)
+                {
+                    Cuboid? abjunction = cuboid.Abjunction(existing);
+
+                    if (abjunction is { } value)
+                    {
+                        newCuboids.AddOrDecrement(value, -count, count);
+                    }
+                }
+
+                if (turnOn)
+                {
+                    newCuboids.AddOrIncrement(cuboid, 1);
+                }
+
+                foreach ((Cuboid newCuboid, long count) in newCuboids)
+                {
+                    reactor.AddOrIncrement(newCuboid, count, count);
+                }
+            }
+
+            return reactor.Sum((p) => p.Key.Volume() * p.Value);
         }
 
         static (Cuboid Cuboid, bool TurnOn) Parse(string instruction)
@@ -143,6 +173,26 @@ public sealed class Day22 : Puzzle
                point.Y <= Origin.Y + Length.Y &&
                Origin.Z <= point.Z &&
                point.Z <= Origin.Z + Length.Z;
+
+        public readonly Cuboid? Abjunction(in Cuboid other)
+        {
+            int minX = Math.Max(Origin.X, other.Origin.X);
+            int maxX = Math.Min(Origin.X + Length.X, other.Origin.X + other.Length.X);
+            int minY = Math.Max(Origin.Y, other.Origin.Y);
+            int maxY = Math.Min(Origin.Y + Length.Y, other.Origin.Y + other.Length.Y);
+            int minZ = Math.Max(Origin.Z, other.Origin.Z);
+            int maxZ = Math.Min(Origin.Z + Length.Z, other.Origin.Z + other.Length.Z);
+
+            if (minX <= maxX && minY <= maxY && minZ <= maxZ)
+            {
+                var origin = new Point3D(minX, minY, minZ);
+                var length = new Point3D(maxX - minX, maxY - minY, maxZ - minZ);
+
+                return new(origin, length);
+            }
+
+            return null;
+        }
 
         public readonly bool IntersectsWith(in Cuboid other)
         {

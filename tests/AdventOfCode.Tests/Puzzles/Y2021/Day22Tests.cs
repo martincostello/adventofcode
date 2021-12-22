@@ -149,6 +149,6 @@ public sealed class Day22Tests : PuzzleTest
 
         // Assert
         puzzle.InitializedCubeCount.ShouldBe(537042);
-        puzzle.RebootedCubeCount.ShouldBe(-1);
+        puzzle.RebootedCubeCount.ShouldBe(1304385553084863);
     }
 }

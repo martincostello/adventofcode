@@ -43,6 +43,40 @@ internal static class DictionaryExtensions
     }
 
     /// <summary>
+    /// Decrements the value of the specified key, or adds it if not already present.
+    /// </summary>
+    /// <typeparam name="TKey">The type of the key.</typeparam>
+    /// <typeparam name="TValue">The type of the value.</typeparam>
+    /// <param name="dictionary">The dictionary to add or decrement the value for.</param>
+    /// <param name="key">The key to decrement the value of or add to the dictionary.</param>
+    /// <param name="value">The value to add to the dictionary if the key is not found.</param>
+    public static void AddOrDecrement<TKey, TValue>(this IDictionary<TKey, TValue> dictionary, TKey key, TValue value)
+        where TValue : INumber<TValue>
+        => dictionary.AddOrDecrement(key, value, TValue.One);
+
+    /// <summary>
+    /// Decrements the value of the specified key by the specified value, or adds it if not already present.
+    /// </summary>
+    /// <typeparam name="TKey">The type of the key.</typeparam>
+    /// <typeparam name="TValue">The type of the value.</typeparam>
+    /// <param name="dictionary">The dictionary to add or decrement the value for.</param>
+    /// <param name="key">The key to decrement the value of or add to the dictionary.</param>
+    /// <param name="value">The value to add to the dictionary if the key is not found.</param>
+    /// <param name="decrement">The value to decrement by.</param>
+    public static void AddOrDecrement<TKey, TValue>(this IDictionary<TKey, TValue> dictionary, TKey key, TValue value, TValue decrement)
+        where TValue : INumber<TValue>
+    {
+        if (dictionary.ContainsKey(key))
+        {
+            dictionary[key] -= decrement;
+        }
+        else
+        {
+            dictionary[key] = value;
+        }
+    }
+
+    /// <summary>
     /// Gets the reference with the specified key, adding it if not already present.
     /// </summary>
     /// <typeparam name="TKey">The type of the key.</typeparam>
