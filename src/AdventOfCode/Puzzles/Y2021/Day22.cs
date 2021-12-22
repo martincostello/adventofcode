@@ -160,8 +160,8 @@ public sealed class Day22 : Puzzle
 
         public readonly bool IntersectsWith(in Cuboid other)
         {
-            int volumeThis = Volume();
-            int volumeOther = other.Volume();
+            long volumeThis = Volume();
+            long volumeOther = other.Volume();
 
             bool otherIsLarger = volumeOther > volumeThis;
             Cuboid largest = otherIsLarger ? other : this;
@@ -187,8 +187,8 @@ public sealed class Day22 : Puzzle
                 return result;
             }
 
-            int volumeThis = Volume();
-            int volumeOther = other.Volume();
+            long volumeThis = Volume();
+            long volumeOther = other.Volume();
 
             bool otherIsLarger = volumeOther > volumeThis;
             Cuboid largest = otherIsLarger ? other : this;
@@ -244,7 +244,7 @@ public sealed class Day22 : Puzzle
 
         public readonly HashSet<Point3D> ToHashSet() => new(this);
 
-        public readonly int Volume() => Length.X * Length.Y * Length.Z;
+        public readonly long Volume() => (long)Length.X * Length.Y * Length.Z;
 
         private readonly IEnumerable<Point3D> Verticies()
         {
