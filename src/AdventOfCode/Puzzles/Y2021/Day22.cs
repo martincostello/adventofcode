@@ -35,7 +35,12 @@ public sealed class Day22 : Puzzle
 
         foreach (string instruction in instructions)
         {
-            cuboids.Add(Parse(instruction));
+            var parsed = Parse(instruction);
+
+            if (parsed.TurnOn || cuboids.Count > 0)
+            {
+                cuboids.Add(Parse(instruction));
+            }
         }
 
         return initialize ? Initialize(cuboids) : Reboot(cuboids);
@@ -217,6 +222,10 @@ public sealed class Day22 : Puzzle
             return result;
         }
 
+        public readonly HashSet<Point3D> ToHashSet() => new(this);
+
+        public readonly long Volume() => (long)Length.X * Length.Y * Length.Z;
+
         public readonly IEnumerator<Point3D> GetEnumerator()
         {
             return Points(this).GetEnumerator();
@@ -241,10 +250,6 @@ public sealed class Day22 : Puzzle
         }
 
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
-
-        public readonly HashSet<Point3D> ToHashSet() => new(this);
-
-        public readonly long Volume() => (long)Length.X * Length.Y * Length.Z;
 
         private readonly IEnumerable<Point3D> Verticies()
         {
