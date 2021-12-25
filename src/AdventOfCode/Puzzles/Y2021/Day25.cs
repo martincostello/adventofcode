@@ -112,7 +112,7 @@ public sealed class Day25 : Puzzle
                     var (sourceX, sourceY) = from[i];
                     var (destinationX, destinationY) = to[i];
 
-                    seaFloor[destinationX, destinationY] = seaFloor[sourceX, sourceY];
+                    seaFloor[destinationX, destinationY] = candidate;
                     seaFloor[sourceX, sourceY] = Empty;
                 }
 
