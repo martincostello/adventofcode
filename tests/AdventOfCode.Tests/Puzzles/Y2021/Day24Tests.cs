@@ -18,5 +18,6 @@ public sealed class Day24Tests : PuzzleTest
 
         // Assert
         puzzle.MaximumValidModelNumber.ShouldBe(92928914999991);
+        puzzle.MinimumValidModelNumber.ShouldBe(91811211611981);
     }
 }

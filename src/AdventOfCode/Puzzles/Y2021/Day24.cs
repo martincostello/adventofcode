@@ -15,14 +15,20 @@ public sealed class Day24 : Puzzle
     public long MaximumValidModelNumber { get; private set; }
 
     /// <summary>
+    /// Gets the smallest valid 14 digit model number accepted by MONAD.
+    /// </summary>
+    public long MinimumValidModelNumber { get; private set; }
+
+    /// <summary>
     /// Executes the specified MONAD instructions using the Arithmetic Logic Unit (ALU)
-    /// to find the largest valid 14 digit model number accepted by MONAD.
+    /// to find the largest or smallest valid 14 digit model number accepted by MONAD.
     /// </summary>
     /// <param name="instructions">The instructions to execute using the ALU.</param>
+    /// <param name="maximumValue">Whether to return the maximum ALU value instead of the minimum.</param>
     /// <returns>
-    /// The largest valid 14 digit model number accepted by MONAD.
+    /// The largest or smallest valid 14 digit model number accepted by MONAD.
     /// </returns>
-    public static long Execute(IList<string> instructions)
+    public static long Execute(IList<string> instructions, bool maximumValue)
     {
         var constants = new List<(int A, int B)>();
 
@@ -58,8 +64,8 @@ public sealed class Day24 : Puzzle
 
         foreach ((int key, (int x, int y)) in keys)
         {
-            output[key] = Math.Min(9, 9 + y);
-            output[x] = Math.Min(9, 9 - y);
+            output[key] = maximumValue ? Math.Min(9, 9 + y) : Math.Max(1, 1 + y);
+            output[x] = maximumValue ? Math.Min(9, 9 - y) : Math.Max(1, 1 - y);
         }
 
         int[] digits = output
@@ -75,13 +81,15 @@ public sealed class Day24 : Puzzle
     {
         IList<string> instructions = await ReadResourceAsLinesAsync();
 
-        MaximumValidModelNumber = Execute(instructions);
+        MaximumValidModelNumber = Execute(instructions, maximumValue: true);
+        MinimumValidModelNumber = Execute(instructions, maximumValue: false);
 
         if (Verbose)
         {
             Logger.WriteLine("The largest model number accepted by MONAD is {0:N0}.", MaximumValidModelNumber);
+            Logger.WriteLine("The smallest model number accepted by MONAD is {0:N0}.", MinimumValidModelNumber);
         }
 
-        return PuzzleResult.Create(MaximumValidModelNumber);
+        return PuzzleResult.Create(MaximumValidModelNumber, MinimumValidModelNumber);
     }
 }
