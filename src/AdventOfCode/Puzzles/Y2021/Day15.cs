@@ -96,11 +96,7 @@ public sealed class Day15 : Puzzle
         var start = new Point(0, 0);
         var goal = new Point(width - 1, height - 1);
 
-        return (int)PathFinding.AStar(
-            map,
-            start,
-            goal,
-            (x, y) => map.Cost(x, y));
+        return (int)PathFinding.AStar(map, start, goal);
     }
 
     /// <inheritdoc />

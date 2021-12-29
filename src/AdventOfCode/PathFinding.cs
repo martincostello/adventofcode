@@ -18,13 +18,15 @@ public static class PathFinding
     /// <param name="graph">A graph of nodes.</param>
     /// <param name="start">The starting node.</param>
     /// <param name="goal">The goal node to find a path to.</param>
-    /// <param name="heuristic">A heuristic to determine the cost of moving from one node to another.</param>
+    /// <param name="heuristic">An optional heuristic to determine the cost of moving from one node to another.</param>
     /// <returns>
     /// The minimum cost to traverse the graph from <paramref name="start"/> to <paramref name="goal"/>.
     /// </returns>
-    public static double AStar<T>(IWeightedGraph<T> graph, T start, T goal, Func<T, T, double> heuristic)
+    public static double AStar<T>(IWeightedGraph<T> graph, T start, T goal, Func<T, T, double>? heuristic = default)
         where T : notnull
     {
+        heuristic ??= (x, y) => graph.Cost(x, y);
+
         var frontier = new PriorityQueue<T, double>();
         frontier.Enqueue(start, 0);
 

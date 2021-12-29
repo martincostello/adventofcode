@@ -48,7 +48,7 @@ public sealed class Day24 : Puzzle
                     break;
                 }
 
-                costs[(b, a)] = costs[(a, b)] = PathFinding.AStar(maze, a, b, (a, b) => maze.Cost(a, b));
+                costs[(b, a)] = costs[(a, b)] = PathFinding.AStar(maze, a, b);
             }
         }
 
