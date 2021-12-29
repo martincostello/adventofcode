@@ -28,7 +28,6 @@ public static class PathFinding
         var frontier = new PriorityQueue<T, double>();
         frontier.Enqueue(start, 0);
 
-        var cameFrom = new Dictionary<T, T>() { [start] = start };
         var costSoFar = new Dictionary<T, double>() { [start] = 0 };
 
         while (frontier.Count > 0)
@@ -51,8 +50,6 @@ public static class PathFinding
                     double priority = newCost + heuristic(next, goal);
 
                     frontier.Enqueue(next, priority);
-
-                    cameFrom[next] = current;
                 }
             }
         }
