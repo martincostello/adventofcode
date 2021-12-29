@@ -25,5 +25,5 @@ public class Graph<T> : IGraph<T>
     /// <returns>
     /// The neigbors of the specified node.
     /// </returns>
-    public IList<T> Neighbors(T id) => Edges[id];
+    public IEnumerable<T> Neighbors(T id) => Edges[id];
 }

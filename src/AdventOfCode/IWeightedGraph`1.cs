@@ -7,7 +7,7 @@ namespace MartinCostello.AdventOfCode;
 /// Defines a weighted graph of nodes.
 /// </summary>
 /// <typeparam name="T">The type of the nodes.</typeparam>
-public interface IWeightedGraph<T>
+public interface IWeightedGraph<T> : IGraph<T>
     where T : notnull
 {
     /// <summary>
@@ -19,13 +19,4 @@ public interface IWeightedGraph<T>
     /// The cost of moving from node <paramref name="a"/> to node <paramref name="b"/>.
     /// </returns>
     long Cost(T a, T b);
-
-    /// <summary>
-    /// Enumerates the neighbors of the specified node.
-    /// </summary>
-    /// <param name="id">The Id of the node to find the neighbors of.</param>
-    /// <returns>
-    /// The neigbors of the node specified by <paramref name="id"/>.
-    /// </returns>
-    IEnumerable<T> Neighbors(T id);
 }

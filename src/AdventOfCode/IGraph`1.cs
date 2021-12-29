@@ -14,16 +14,11 @@ public interface IGraph<T>
     where T : notnull
 {
     /// <summary>
-    /// Gets the edges of the graph.
-    /// </summary>
-    Dictionary<T, List<T>> Edges { get; }
-
-    /// <summary>
     /// Returns the neighbors of the specified node.
     /// </summary>
     /// <param name="id">The Id of the node.</param>
     /// <returns>
     /// The neigbors of the specified node.
     /// </returns>
-    IList<T> Neighbors(T id);
+    IEnumerable<T> Neighbors(T id);
 }
