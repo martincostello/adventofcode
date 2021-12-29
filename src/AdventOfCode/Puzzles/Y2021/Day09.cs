@@ -131,6 +131,6 @@ public sealed class Day09 : Puzzle
         {
         }
 
-        public override double Cost(Point a, Point b) => 1;
+        public override long Cost(Point a, Point b) => 1;
     }
 }

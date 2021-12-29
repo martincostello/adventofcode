@@ -18,7 +18,7 @@ public interface IWeightedGraph<T>
     /// <returns>
     /// The cost of moving from node <paramref name="a"/> to node <paramref name="b"/>.
     /// </returns>
-    double Cost(T a, T b);
+    long Cost(T a, T b);
 
     /// <summary>
     /// Enumerates the neighbors of the specified node.

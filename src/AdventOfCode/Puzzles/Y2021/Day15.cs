@@ -131,6 +131,6 @@ public sealed class Day15 : Puzzle
             _risks = risks;
         }
 
-        public override double Cost(Point a, Point b) => _risks.GetValueOrDefault(b);
+        public override long Cost(Point a, Point b) => _risks.GetValueOrDefault(b);
     }
 }

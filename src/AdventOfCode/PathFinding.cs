@@ -22,15 +22,15 @@ public static class PathFinding
     /// <returns>
     /// The minimum cost to traverse the graph from <paramref name="start"/> to <paramref name="goal"/>.
     /// </returns>
-    public static double AStar<T>(IWeightedGraph<T> graph, T start, T goal, Func<T, T, double>? heuristic = default)
+    public static long AStar<T>(IWeightedGraph<T> graph, T start, T goal, Func<T, T, long>? heuristic = default)
         where T : notnull
     {
         heuristic ??= (x, y) => graph.Cost(x, y);
 
-        var frontier = new PriorityQueue<T, double>();
+        var frontier = new PriorityQueue<T, long>();
         frontier.Enqueue(start, 0);
 
-        var costSoFar = new Dictionary<T, double>() { [start] = 0 };
+        var costSoFar = new Dictionary<T, long>() { [start] = 0 };
 
         while (frontier.Count > 0)
         {
@@ -43,20 +43,20 @@ public static class PathFinding
 
             foreach (T next in graph.Neighbors(current))
             {
-                double newCost = costSoFar[current] + graph.Cost(current, next);
+                long newCost = costSoFar[current] + graph.Cost(current, next);
 
-                if (!costSoFar.TryGetValue(next, out double otherCost) || newCost < otherCost)
+                if (!costSoFar.TryGetValue(next, out long otherCost) || newCost < otherCost)
                 {
                     costSoFar[next] = newCost;
 
-                    double priority = newCost + heuristic(next, goal);
+                    long priority = newCost + heuristic(next, goal);
 
                     frontier.Enqueue(next, priority);
                 }
             }
         }
 
-        return costSoFar.GetValueOrDefault(goal, double.NaN);
+        return costSoFar.GetValueOrDefault(goal, long.MaxValue);
     }
 
     /// <summary>

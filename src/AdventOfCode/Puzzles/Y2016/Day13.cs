@@ -137,7 +137,7 @@ public sealed class Day13 : Puzzle
     /// <returns>
     /// The minimum number of steps required to reach <paramref name="goal"/>.
     /// </returns>
-    private static double GetMinimumStepsToGoal(SquareGrid maze, Point goal)
+    private static long GetMinimumStepsToGoal(SquareGrid maze, Point goal)
     {
         var start = new Point(1, 1);
 
@@ -155,7 +155,7 @@ public sealed class Day13 : Puzzle
         {
         }
 
-        public override double Cost(Point a, Point b)
+        public override long Cost(Point a, Point b)
             => Locations.Contains(b) ? 5 : 1;
     }
 }
