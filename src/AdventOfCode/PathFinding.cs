@@ -18,18 +18,19 @@ public static class PathFinding
     /// <param name="graph">A graph of nodes.</param>
     /// <param name="start">The starting node.</param>
     /// <param name="goal">The goal node to find a path to.</param>
-    /// <param name="heuristic">A heuristic to determine the cost of moving from one node to another.</param>
+    /// <param name="heuristic">An optional heuristic to determine the cost of moving from one node to another.</param>
     /// <returns>
     /// The minimum cost to traverse the graph from <paramref name="start"/> to <paramref name="goal"/>.
     /// </returns>
-    public static double AStar<T>(IWeightedGraph<T> graph, T start, T goal, Func<T, T, double> heuristic)
+    public static long AStar<T>(IWeightedGraph<T> graph, T start, T goal, Func<T, T, long>? heuristic = default)
         where T : notnull
     {
-        var frontier = new PriorityQueue<T, double>();
+        heuristic ??= (x, y) => graph.Cost(x, y);
+
+        var frontier = new PriorityQueue<T, long>();
         frontier.Enqueue(start, 0);
 
-        var cameFrom = new Dictionary<T, T>() { [start] = start };
-        var costSoFar = new Dictionary<T, double>() { [start] = 0 };
+        var costSoFar = new Dictionary<T, long>() { [start] = 0 };
 
         while (frontier.Count > 0)
         {
@@ -42,22 +43,20 @@ public static class PathFinding
 
             foreach (T next in graph.Neighbors(current))
             {
-                double newCost = costSoFar[current] + graph.Cost(current, next);
+                long newCost = costSoFar[current] + heuristic(current, next);
 
-                if (!costSoFar.TryGetValue(next, out double otherCost) || newCost < otherCost)
+                if (!costSoFar.TryGetValue(next, out long otherCost) || newCost < otherCost)
                 {
                     costSoFar[next] = newCost;
 
-                    double priority = newCost + heuristic(next, goal);
+                    long priority = newCost + heuristic(next, goal);
 
                     frontier.Enqueue(next, priority);
-
-                    cameFrom[next] = current;
                 }
             }
         }
 
-        return costSoFar.GetValueOrDefault(goal, double.NaN);
+        return costSoFar.GetValueOrDefault(goal, long.MaxValue);
     }
 
     /// <summary>
@@ -69,7 +68,7 @@ public static class PathFinding
     /// <returns>
     /// An <see cref="IReadOnlySet{T}"/> of the visited nodes.
     /// </returns>
-    public static IReadOnlySet<T> BreadthFirst<T>(Graph<T> graph, T start)
+    public static IReadOnlySet<T> BreadthFirst<T>(IGraph<T> graph, T start)
         where T : notnull
     {
         var frontier = new Queue<T>();

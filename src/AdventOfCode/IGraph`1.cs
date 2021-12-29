@@ -10,14 +10,9 @@ namespace MartinCostello.AdventOfCode;
 /// <remarks>
 /// Based on <c>https://www.redblobgames.com/pathfinding/a-star/implementation.html</c>.
 /// </remarks>
-public class Graph<T> : IGraph<T>
+public interface IGraph<T>
     where T : notnull
 {
-    /// <summary>
-    /// Gets the edges of the graph.
-    /// </summary>
-    public Dictionary<T, List<T>> Edges { get; } = new Dictionary<T, List<T>>();
-
     /// <summary>
     /// Returns the neighbors of the specified node.
     /// </summary>
@@ -25,5 +20,5 @@ public class Graph<T> : IGraph<T>
     /// <returns>
     /// The neigbors of the specified node.
     /// </returns>
-    public IEnumerable<T> Neighbors(T id) => Edges[id];
+    IEnumerable<T> Neighbors(T id);
 }

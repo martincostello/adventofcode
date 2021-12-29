@@ -31,9 +31,9 @@ public sealed class Day24 : Puzzle
     {
         (SquareGrid maze, Point origin, IList<Point> waypoints) = BuildMaze(layout);
 
-        double minimumCost = double.MaxValue;
+        long minimumCost = long.MaxValue;
 
-        var costs = new Dictionary<(Point A, Point B), double>();
+        var costs = new Dictionary<(Point A, Point B), long>();
 
         Point[] allWaypoints = waypoints
             .Prepend(origin)
@@ -48,13 +48,13 @@ public sealed class Day24 : Puzzle
                     break;
                 }
 
-                costs[(b, a)] = costs[(a, b)] = PathFinding.AStar(maze, a, b, (a, b) => maze.Cost(a, b));
+                costs[(b, a)] = costs[(a, b)] = PathFinding.AStar(maze, a, b);
             }
         }
 
         foreach (IEnumerable<Point> goals in Maths.GetPermutations(waypoints))
         {
-            double cost = 0;
+            long cost = 0;
             Point current = origin;
 
             foreach (Point goal in goals)
@@ -149,7 +149,7 @@ public sealed class Day24 : Puzzle
         {
         }
 
-        public override double Cost(Point a, Point b)
+        public override long Cost(Point a, Point b)
             => a.ManhattanDistance(b);
     }
 }

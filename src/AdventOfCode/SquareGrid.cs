@@ -72,7 +72,7 @@ public abstract class SquareGrid : IWeightedGraph<Point>
     public bool IsPassable(Point id) => !Borders.Contains(id);
 
     /// <inheritdoc/>
-    public abstract double Cost(Point a, Point b);
+    public abstract long Cost(Point a, Point b);
 
     /// <inheritdoc/>
     public IEnumerable<Point> Neighbors(Point id)
