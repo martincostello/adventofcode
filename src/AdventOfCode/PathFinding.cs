@@ -66,7 +66,7 @@ public static class PathFinding
     /// <returns>
     /// An <see cref="IReadOnlySet{T}"/> of the visited nodes.
     /// </returns>
-    public static IReadOnlySet<T> BreadthFirst<T>(Graph<T> graph, T start)
+    public static IReadOnlySet<T> BreadthFirst<T>(IGraph<T> graph, T start)
         where T : notnull
     {
         var frontier = new Queue<T>();
