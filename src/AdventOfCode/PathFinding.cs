@@ -43,7 +43,7 @@ public static class PathFinding
 
             foreach (T next in graph.Neighbors(current))
             {
-                long newCost = costSoFar[current] + graph.Cost(current, next);
+                long newCost = costSoFar[current] + heuristic(current, next);
 
                 if (!costSoFar.TryGetValue(next, out long otherCost) || newCost < otherCost)
                 {
