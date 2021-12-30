@@ -95,6 +95,8 @@ public sealed class Day23 : Puzzle
 
         public bool HasSpace(char burrow) => Burrow(burrow).Contains(' ', StringComparison.Ordinal);
 
+        public bool IsEmpty(char burrow) => string.IsNullOrWhiteSpace(Burrow(burrow));
+
         public bool IsOrganized(char burrow) => Burrow(burrow) == new string(burrow, 2);
 
         public bool IsPathClear(char sourceBurrow, int destinationBurrow, bool occupied)
@@ -335,15 +337,20 @@ public sealed class Day23 : Puzzle
             // Move any amphipods from their burrow to the hallway
             foreach (char amphipod in Amphipods)
             {
-                if (id.IsOrganized(amphipod))
+                if (id.IsOrganized(amphipod) || id.IsEmpty(amphipod))
                 {
                     continue;
                 }
 
                 string burrow = id.Burrow(amphipod);
 
-                if ((burrow[0] == ' ' && burrow[1] == amphipod) ||
-                    !TryVacate(burrow, out char moved, out string? vacated))
+                if (burrow[0] == ' ' && burrow[1] == amphipod)
+                {
+                    // Already in the right place
+                    continue;
+                }
+
+                if (!TryVacate(burrow, out char moved, out string? vacated))
                 {
                     continue;
                 }
@@ -354,6 +361,7 @@ public sealed class Day23 : Puzzle
                 {
                     if (!id.IsPathClear(amphipod, space, occupied: false))
                     {
+                        // Something is blocking the hallway
                         continue;
                     }
 
@@ -376,8 +384,8 @@ public sealed class Day23 : Puzzle
                 char amphipod = id.Hallway[space];
 
                 if (amphipod == ' ' ||
-                    !id.IsPathClear(space, State.Entrance(amphipod), occupied: true) ||
-                    !id.HasSpace(amphipod))
+                    !id.HasSpace(amphipod) ||
+                    !id.IsPathClear(space, State.Entrance(amphipod), occupied: true))
                 {
                     continue;
                 }
