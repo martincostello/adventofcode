@@ -200,15 +200,31 @@ public sealed class Day23 : Puzzle
             }
 
             int differences = !string.Equals(a.Hallway, b.Hallway, StringComparison.Ordinal) ? 1 : 0;
-            differences += !string.Equals(a.Amber, b.Amber, StringComparison.Ordinal) ? 1 : 0;
-            differences += !string.Equals(a.Bronze, b.Bronze, StringComparison.Ordinal) ? 1 : 0;
-            differences += !string.Equals(a.Copper, b.Copper, StringComparison.Ordinal) ? 1 : 0;
-            differences += !string.Equals(a.Desert, b.Desert, StringComparison.Ordinal) ? 1 : 0;
 
-#pragma warning disable CA1508
-            if (differences != 2)
-#pragma warning restore CA1508
+            if (!string.Equals(a.Amber, b.Amber, StringComparison.Ordinal))
             {
+                differences++;
+            }
+
+            if (!string.Equals(a.Bronze, b.Bronze, StringComparison.Ordinal))
+            {
+                differences++;
+            }
+
+            if (!string.Equals(a.Copper, b.Copper, StringComparison.Ordinal))
+            {
+                differences++;
+            }
+
+            if (!string.Equals(a.Desert, b.Desert, StringComparison.Ordinal))
+            {
+                differences++;
+            }
+
+            if (differences != 2)
+            {
+                // If more than two parts (the hallway and one burrow) are different,
+                // then there is more than one move between the A and B states.
                 return 0;
             }
 
