@@ -300,7 +300,7 @@ public sealed class Day23 : Puzzle
                     steps += burrowBefore[0] == moved ? 1 : 2;
                 }
 
-                int multiplier = (int)Math.Pow(10, moved - 'A');
+                int multiplier = Multiplier(moved);
 
                 return steps * multiplier;
             }
@@ -355,10 +355,12 @@ public sealed class Day23 : Puzzle
                     _ => throw new InvalidOperationException(),
                 };
 
-                int multiplier = (int)Math.Pow(10, moved - 'A');
+                int multiplier = Multiplier(moved);
 
                 return steps * multiplier;
             }
+
+            static int Multiplier(char amphipod) => (int)Math.Pow(10, amphipod - 'A');
         }
 
         public IEnumerable<State> Neighbors(State id)
