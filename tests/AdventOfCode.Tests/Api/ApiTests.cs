@@ -173,6 +173,7 @@ public class ApiTests : IntegrationTest
     [PuzzleData(2021, 20, 5437, 19340)]
     [PuzzleData(2021, 21, 713328, 92399285032143)]
     [PuzzleData(2021, 22, 537042, 1304385553084863)]
+    [PuzzleData(2021, 23, 12240, 44618)]
     [PuzzleData(2021, 24, 92928914999991, 91811211611981)]
     [PuzzleData(2021, 25, 532)]
     public async Task Can_Solve_Puzzle(int year, int day, PuzzleDataAttribute testCase)
