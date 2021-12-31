@@ -194,11 +194,6 @@ public sealed class Day23 : Puzzle
 
         public long Cost(State a, State b)
         {
-            if (a.Equals(b))
-            {
-                return 0;
-            }
-
             int differences = !string.Equals(a.Hallway, b.Hallway, StringComparison.Ordinal) ? 1 : 0;
 
             if (!string.Equals(a.Amber, b.Amber, StringComparison.Ordinal))
@@ -206,17 +201,17 @@ public sealed class Day23 : Puzzle
                 differences++;
             }
 
-            if (!string.Equals(a.Bronze, b.Bronze, StringComparison.Ordinal))
+            if (differences < 2 && !string.Equals(a.Bronze, b.Bronze, StringComparison.Ordinal))
             {
                 differences++;
             }
 
-            if (!string.Equals(a.Copper, b.Copper, StringComparison.Ordinal))
+            if (differences < 2 && !string.Equals(a.Copper, b.Copper, StringComparison.Ordinal))
             {
                 differences++;
             }
 
-            if (!string.Equals(a.Desert, b.Desert, StringComparison.Ordinal))
+            if (differences < 2 && !string.Equals(a.Desert, b.Desert, StringComparison.Ordinal))
             {
                 differences++;
             }
@@ -224,7 +219,8 @@ public sealed class Day23 : Puzzle
             if (differences != 2)
             {
                 // If more than two parts (the hallway and one burrow) are different,
-                // then there is more than one move between the A and B states.
+                // then there is more than one move between the A and B states. If there
+                // are no differences, then they are equal and the cost is genuinely zero.
                 return 0;
             }
 
