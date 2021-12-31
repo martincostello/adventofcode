@@ -118,6 +118,37 @@ public sealed class Day23 : Puzzle
 
             return string.IsNullOrWhiteSpace(Hallway.Substring(startIndex, length));
         }
+
+        public override string ToString()
+        {
+            var builder = new StringBuilder()
+                .AppendLine("#############")
+                .Append('#')
+                .Append(Hallway.Replace(' ', '.'))
+                .Append('#')
+                .AppendLine()
+                .Append("###")
+                .Append(Amber[0])
+                .Append('#')
+                .Append(Bronze[0])
+                .Append('#')
+                .Append(Copper[0])
+                .Append('#')
+                .Append(Desert[0])
+                .AppendLine("###")
+                .Append("  #")
+                .Append(Amber[1])
+                .Append('#')
+                .Append(Bronze[1])
+                .Append('#')
+                .Append(Copper[1])
+                .Append('#')
+                .Append(Desert[1])
+                .AppendLine("#  ")
+                .AppendLine("  #########  ");
+
+            return builder.ToString();
+        }
     }
 
     private sealed class Burrow : IWeightedGraph<State>
