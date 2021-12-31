@@ -11,44 +11,62 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2021;
 [Puzzle(2021, 23, "Amphipod", RequiresData = true)]
 public sealed class Day23 : Puzzle
 {
-    private static readonly string EmptyBurrow = new(' ', 2);
+    /// <summary>
+    /// Gets the least energy required to organize the amphipods with the diagram unfolded.
+    /// </summary>
+    public int MinimumEnergyFolded { get; private set; }
 
     /// <summary>
-    /// Gets the least energy required to organize the amphipods.
+    /// Gets the least energy required to organize the amphipods with the diagram folded.
     /// </summary>
-    public int MinimumEnergy { get; private set; }
+    public int MinimumEnergyUnfolded { get; private set; }
 
     /// <summary>
     /// Organizes the specified amphipods into the correct burrows.
     /// </summary>
     /// <param name="diagram">The diagram of the burrows occupied by the amphipods.</param>
+    /// <param name="unfoldDiagram">Whether to unfold the diagram to reveal the missing lines.</param>
     /// <returns>
     /// The least energy required to organize the amphipods.
     /// </returns>
-    public static int Organize(IList<string> diagram)
+    public static int Organize(IList<string> diagram, bool unfoldDiagram)
     {
         string amber = $"{diagram[2][3]}{diagram[3][3]}";
         string bronze = $"{diagram[2][5]}{diagram[3][5]}";
         string copper = $"{diagram[2][7]}{diagram[3][7]}";
         string desert = $"{diagram[2][9]}{diagram[3][9]}";
 
+        if (unfoldDiagram)
+        {
+            amber = amber.Insert(1, "DD");
+            bronze = bronze.Insert(1, "CB");
+            copper = copper.Insert(1, "BA");
+            desert = desert.Insert(1, "AC");
+        }
+
         const int HallwayLength = 11;
 
-        var start = new State(new(' ', HallwayLength), amber, bronze, copper, desert);
-        var goal = new State(new(' ', HallwayLength), "AA", "BB", "CC", "DD");
+        int burrowDepth = unfoldDiagram ? 4 : 2;
+
+        var start = new State(
+            new(' ', HallwayLength),
+            amber,
+            bronze,
+            copper,
+            desert,
+            burrowDepth);
+
+        var goal = new State(
+            new(' ', HallwayLength),
+            new('A', burrowDepth),
+            new('B', burrowDepth),
+            new('C', burrowDepth),
+            new('D', burrowDepth),
+            burrowDepth);
+
         var burrow = new Burrow();
 
-        return (int)PathFinding.AStar(burrow, start, goal, (x, y) =>
-        {
-            long cost = burrow.Cost(x, y);
-
-            if (cost == int.MaxValue)
-            {
-                cost = 0;
-            }
-
-            return cost;
-        });
+        return (int)PathFinding.AStar(burrow, start, goal);
     }
 
     /// <summary>
@@ -63,8 +81,8 @@ public sealed class Day23 : Puzzle
         (string Hallway, string Amber, string Bronze, string Copper, string Desert) x,
         (string Hallway, string Amber, string Bronze, string Copper, string Desert) y)
     {
-        var a = new State(x.Hallway, x.Amber, x.Bronze, x.Copper, x.Desert);
-        var b = new State(y.Hallway, y.Amber, y.Bronze, y.Copper, y.Desert);
+        var a = new State(x.Hallway, x.Amber, x.Bronze, x.Copper, x.Desert, 2);
+        var b = new State(y.Hallway, y.Amber, y.Bronze, y.Copper, y.Desert, 2);
         var burrow = new Burrow();
 
         return (int)burrow.Cost(a, b);
@@ -75,17 +93,19 @@ public sealed class Day23 : Puzzle
     {
         IList<string> diagram = await ReadResourceAsLinesAsync();
 
-        MinimumEnergy = Organize(diagram);
+        MinimumEnergyFolded = Organize(diagram, unfoldDiagram: false);
+        MinimumEnergyUnfolded = Organize(diagram, unfoldDiagram: true);
 
         if (Verbose)
         {
-            Logger.WriteLine("The least energy required to organize the amphipods is {0:N0}.", MinimumEnergy);
+            Logger.WriteLine("The least energy required to organize the amphipods is {0:N0}.", MinimumEnergyFolded);
+            Logger.WriteLine("The least energy required to organize the amphipods with the diagram unfolded is {0:N0}.", MinimumEnergyUnfolded);
         }
 
-        return PuzzleResult.Create(MinimumEnergy);
+        return PuzzleResult.Create(MinimumEnergyFolded, MinimumEnergyUnfolded);
     }
 
-    private record struct State(string Hallway, string Amber, string Bronze, string Copper, string Desert)
+    private record struct State(string Hallway, string Amber, string Bronze, string Copper, string Desert, int Depth)
     {
         public static int Entrance(char burrow) => burrow switch
         {
@@ -109,7 +129,7 @@ public sealed class Day23 : Puzzle
 
         public bool IsEmpty(char burrow) => string.IsNullOrWhiteSpace(Burrow(burrow));
 
-        public bool IsOrganized(char burrow) => Burrow(burrow) == new string(burrow, 2);
+        public bool IsOrganized(char burrow) => Burrow(burrow).TrimStart().All((p) => p == burrow);
 
         public bool IsPathClear(char sourceBurrow, int destinationBurrow, bool fromHallway)
             => IsPathClear(Entrance(sourceBurrow), destinationBurrow, fromHallway);
@@ -145,26 +165,23 @@ public sealed class Day23 : Puzzle
                 .Append('#')
                 .Append(Hallway.Replace(' ', '.'))
                 .Append('#')
-                .AppendLine()
-                .Append("###")
-                .Append(Amber[0])
-                .Append('#')
-                .Append(Bronze[0])
-                .Append('#')
-                .Append(Copper[0])
-                .Append('#')
-                .Append(Desert[0])
-                .AppendLine("###")
-                .Append("  #")
-                .Append(Amber[1])
-                .Append('#')
-                .Append(Bronze[1])
-                .Append('#')
-                .Append(Copper[1])
-                .Append('#')
-                .Append(Desert[1])
-                .AppendLine("#  ")
-                .AppendLine("  #########  ");
+                .AppendLine();
+
+            for (int i = 0; i < Depth; i++)
+            {
+                builder
+                    .Append("###")
+                    .Append(Amber[i])
+                    .Append('#')
+                    .Append(Bronze[i])
+                    .Append('#')
+                    .Append(Copper[i])
+                    .Append('#')
+                    .Append(Desert[i])
+                    .AppendLine("###");
+            }
+
+            builder.AppendLine("  #########  ");
 
             return builder.ToString();
         }
@@ -192,7 +209,7 @@ public sealed class Day23 : Puzzle
             if (differences != 2)
 #pragma warning restore CA1508
             {
-                return int.MaxValue;
+                return 0;
             }
 
             char moved = default;
@@ -297,27 +314,12 @@ public sealed class Day23 : Puzzle
                 burrowAfter = b.Burrow(to);
 
                 int steps = Math.Abs(State.Entrance(burrowChanged) - index);
-
-                if (burrowAfter[0] == ' ')
-                {
-                    steps += burrowAfter[1] != moved ? 1 : 2;
-                }
-                else
-                {
-                    steps += burrowBefore[1] == moved ? 1 : 2;
-                }
+                steps += Math.Max(burrowAfter.Count((p) => p == ' '), burrowBefore.Count((p) => p == ' '));
 
                 burrowBefore = a.Burrow(from);
                 burrowAfter = b.Burrow(from);
 
-                if (burrowBefore[0] == ' ')
-                {
-                    steps += burrowAfter[1] != moved ? 1 : 2;
-                }
-                else
-                {
-                    steps += burrowBefore[0] == moved ? 1 : 2;
-                }
+                steps += Math.Max(burrowAfter.Count((p) => p == ' '), burrowBefore.Count((p) => p == ' '));
 
                 int multiplier = Multiplier(moved);
 
@@ -360,19 +362,7 @@ public sealed class Day23 : Puzzle
 
                 int steps = Math.Abs(State.Entrance(burrowChanged) - index);
 
-                steps += burrowAfter.Count((p) => p == ' ') switch
-                {
-                    0 => 1,
-                    1 => burrowBefore.Count((p) => p == ' ') switch
-                    {
-                        0 => 1,
-                        1 => 2,
-                        2 => 2,
-                        _ => throw new InvalidOperationException(),
-                    },
-                    2 => 2,
-                    _ => throw new InvalidOperationException(),
-                };
+                steps += Math.Max(burrowAfter.Count((p) => p == ' '), burrowBefore.Count((p) => p == ' '));
 
                 int multiplier = Multiplier(moved);
 
@@ -396,12 +386,6 @@ public sealed class Day23 : Puzzle
 
                 string burrow = id.Burrow(amphipod);
 
-                if (burrow[0] == ' ' && burrow[1] == amphipod)
-                {
-                    // Already in the right place
-                    continue;
-                }
-
                 if (!TryVacate(burrow, out char moved, out string? vacated))
                 {
                     continue;
@@ -421,10 +405,10 @@ public sealed class Day23 : Puzzle
 
                     result.Add(amphipod switch
                     {
-                        'A' => new(newHallway, vacated, id.Bronze, id.Copper, id.Desert),
-                        'B' => new(newHallway, id.Amber, vacated, id.Copper, id.Desert),
-                        'C' => new(newHallway, id.Amber, id.Bronze, vacated, id.Desert),
-                        'D' => new(newHallway, id.Amber, id.Bronze, id.Copper, vacated),
+                        'A' => new(newHallway, vacated, id.Bronze, id.Copper, id.Desert, id.Depth),
+                        'B' => new(newHallway, id.Amber, vacated, id.Copper, id.Desert, id.Depth),
+                        'C' => new(newHallway, id.Amber, id.Bronze, vacated, id.Desert, id.Depth),
+                        'D' => new(newHallway, id.Amber, id.Bronze, id.Copper, vacated, id.Depth),
                         _ => throw new InvalidOperationException(),
                     });
                 }
@@ -444,20 +428,21 @@ public sealed class Day23 : Puzzle
 
                 string burrow = id.Burrow(amphipod);
 
-                if (burrow[0] == ' ' && burrow[1] != ' ' && burrow[1] != amphipod)
+                if (!id.IsOrganized(amphipod))
                 {
                     continue;
                 }
 
+                int firstSpace = burrow.LastIndexOf(' ');
+                string populated = Move(burrow, amphipod, firstSpace);
                 string newHallway = Move(id.Hallway, ' ', space);
-                string populated = string.IsNullOrWhiteSpace(burrow) ? " " + amphipod : new string(amphipod, 2);
 
                 result.Add(amphipod switch
                 {
-                    'A' => new(newHallway, populated, id.Bronze, id.Copper, id.Desert),
-                    'B' => new(newHallway, id.Amber, populated, id.Copper, id.Desert),
-                    'C' => new(newHallway, id.Amber, id.Bronze, populated, id.Desert),
-                    'D' => new(newHallway, id.Amber, id.Bronze, id.Copper, populated),
+                    'A' => new(newHallway, populated, id.Bronze, id.Copper, id.Desert, id.Depth),
+                    'B' => new(newHallway, id.Amber, populated, id.Copper, id.Desert, id.Depth),
+                    'C' => new(newHallway, id.Amber, id.Bronze, populated, id.Desert, id.Depth),
+                    'D' => new(newHallway, id.Amber, id.Bronze, id.Copper, populated, id.Depth),
                     _ => throw new InvalidOperationException(),
                 });
             }
@@ -481,13 +466,11 @@ public sealed class Day23 : Puzzle
                 return false;
             }
 
-            char top = burrow[0];
-            char bottom = burrow[1];
+            int toMove = burrow.LastIndexOf(' ');
+            toMove++;
 
-            bool isTopEmpty = top == ' ';
-
-            moved = isTopEmpty ? bottom : top;
-            vacated = isTopEmpty ? EmptyBurrow : (" " + bottom);
+            moved = burrow[toMove];
+            vacated = string.Concat(new string(' ', toMove + 1), burrow.AsSpan(toMove + 1));
 
             return true;
         }

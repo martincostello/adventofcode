@@ -38,8 +38,10 @@ public sealed class Day23Tests : PuzzleTest
         actual.ShouldBe(expected);
     }
 
-    [Fact]
-    public void Y2021_Day23_Organize_Returns_Correct_Value()
+    [Theory]
+    [InlineData(false, 12521)]
+    [InlineData(true, 44169)]
+    public void Y2021_Day23_Organize_Returns_Correct_Value(bool unfoldDiagram, int expected)
     {
         // Arrange
         string[] diagram =
@@ -52,10 +54,10 @@ public sealed class Day23Tests : PuzzleTest
         };
 
         // Act
-        int actual = Day23.Organize(diagram);
+        int actual = Day23.Organize(diagram, unfoldDiagram);
 
         // Assert
-        actual.ShouldBe(12521);
+        actual.ShouldBe(expected);
     }
 
     [Fact]
@@ -65,6 +67,7 @@ public sealed class Day23Tests : PuzzleTest
         var puzzle = await SolvePuzzleAsync<Day23>();
 
         // Assert
-        puzzle.MinimumEnergy.ShouldBe(12240);
+        puzzle.MinimumEnergyFolded.ShouldBe(12240);
+        puzzle.MinimumEnergyUnfolded.ShouldBe(44618);
     }
 }
