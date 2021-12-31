@@ -110,7 +110,14 @@ public sealed class Day23 : Puzzle
 
             if (fromHallway)
             {
-                length--;
+                if (startIndex == 0)
+                {
+                    startIndex++;
+                }
+                else
+                {
+                    length--;
+                }
             }
             else
             {
