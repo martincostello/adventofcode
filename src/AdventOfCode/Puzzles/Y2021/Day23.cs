@@ -114,10 +114,8 @@ public sealed class Day23 : Puzzle
                 {
                     startIndex++;
                 }
-                else if (endIndex != 10)
-                {
-                    length--;
-                }
+
+                length--;
             }
             else
             {
