@@ -99,16 +99,16 @@ public sealed class Day23 : Puzzle
 
         public bool IsOrganized(char burrow) => Burrow(burrow) == new string(burrow, 2);
 
-        public bool IsPathClear(char sourceBurrow, int destinationBurrow, bool occupied)
-            => IsPathClear(Entrance(sourceBurrow), destinationBurrow, occupied);
+        public bool IsPathClear(char sourceBurrow, int destinationBurrow, bool fromHallway)
+            => IsPathClear(Entrance(sourceBurrow), destinationBurrow, fromHallway);
 
-        public bool IsPathClear(int sourceBurrow, int destinationBurrow, bool occupied)
+        public bool IsPathClear(int sourceBurrow, int destinationBurrow, bool fromHallway)
         {
             int startIndex = Math.Min(sourceBurrow, destinationBurrow);
             int endIndex = Math.Max(sourceBurrow, destinationBurrow);
             int length = Math.Abs(endIndex - startIndex);
 
-            if (occupied)
+            if (fromHallway)
             {
                 length--;
             }
@@ -389,7 +389,7 @@ public sealed class Day23 : Puzzle
 
                 foreach (int space in HallwaySpaces.OrderBy((p) => Math.Abs(burrowEntrance - p)))
                 {
-                    if (!id.IsPathClear(amphipod, space, occupied: false))
+                    if (!id.IsPathClear(amphipod, space, fromHallway: false))
                     {
                         // Something is blocking the hallway
                         continue;
@@ -415,7 +415,7 @@ public sealed class Day23 : Puzzle
 
                 if (amphipod == ' ' ||
                     !id.HasSpace(amphipod) ||
-                    !id.IsPathClear(space, State.Entrance(amphipod), occupied: true))
+                    !id.IsPathClear(space, State.Entrance(amphipod), fromHallway: true))
                 {
                     continue;
                 }
