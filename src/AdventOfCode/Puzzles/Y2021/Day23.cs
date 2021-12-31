@@ -272,7 +272,7 @@ public sealed class Day23 : Puzzle
                 });
             }
 
-            return result.ToList();
+            return result;
         }
 
         private static string Move(string hallway, char moved, int index)
