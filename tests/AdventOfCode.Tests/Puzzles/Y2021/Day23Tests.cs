@@ -65,6 +65,6 @@ public sealed class Day23Tests : PuzzleTest
         var puzzle = await SolvePuzzleAsync<Day23>();
 
         // Assert
-        puzzle.MinimumEnergy.ShouldBe(-1);
+        puzzle.MinimumEnergy.ShouldBe(12240);
     }
 }
