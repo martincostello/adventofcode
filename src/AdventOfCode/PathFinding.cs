@@ -49,7 +49,8 @@ public static class PathFinding
                 {
                     costSoFar[next] = newCost;
 
-                    long priority = newCost + heuristic(next, goal);
+                    long goalCost = heuristic(next, goal);
+                    long priority = newCost + goalCost;
 
                     frontier.Enqueue(next, priority);
                 }

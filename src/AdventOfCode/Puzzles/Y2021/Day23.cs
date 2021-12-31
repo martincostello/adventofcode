@@ -32,11 +32,23 @@ public sealed class Day23 : Puzzle
         string copper = $"{diagram[2][7]}{diagram[3][7]}";
         string desert = $"{diagram[2][9]}{diagram[3][9]}";
 
-        var start = new State(new(' ', 11), amber, bronze, copper, desert);
-        var goal = new State(new(' ', 11), "AA", "BB", "CC", "DD");
+        const int HallwayLength = 11;
+
+        var start = new State(new(' ', HallwayLength), amber, bronze, copper, desert);
+        var goal = new State(new(' ', HallwayLength), "AA", "BB", "CC", "DD");
         var burrow = new Burrow();
 
-        return (int)PathFinding.AStar(burrow, start, goal);
+        return (int)PathFinding.AStar(burrow, start, goal, (x, y) =>
+        {
+            long cost = burrow.Cost(x, y);
+
+            if (cost == int.MaxValue)
+            {
+                cost = 0;
+            }
+
+            return cost;
+        });
     }
 
     /// <summary>
@@ -106,21 +118,22 @@ public sealed class Day23 : Puzzle
         {
             int startIndex = Math.Min(sourceBurrow, destinationBurrow);
             int endIndex = Math.Max(sourceBurrow, destinationBurrow);
-            int length = Math.Abs(endIndex - startIndex);
 
             if (fromHallway)
             {
-                if (startIndex == 0)
+                bool leftToRight = sourceBurrow < destinationBurrow;
+
+                if (leftToRight)
                 {
                     startIndex++;
                 }
+                else
+                {
+                    endIndex--;
+                }
+            }
 
-                length--;
-            }
-            else
-            {
-                length++;
-            }
+            int length = endIndex - startIndex + 1;
 
             return string.IsNullOrWhiteSpace(Hallway.Substring(startIndex, length));
         }
