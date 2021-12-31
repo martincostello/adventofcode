@@ -112,6 +112,10 @@ public sealed class Day23 : Puzzle
             {
                 length--;
             }
+            else
+            {
+                length++;
+            }
 
             return string.IsNullOrWhiteSpace(Hallway.Substring(startIndex, length));
         }
