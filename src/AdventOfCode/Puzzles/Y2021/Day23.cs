@@ -351,8 +351,7 @@ public sealed class Day23 : Puzzle
                 return false;
             }
 
-            int toMove = burrow.LastIndexOf(' ');
-            toMove++;
+            int toMove = burrow.LastIndexOf(' ') + 1;
 
             moved = burrow[toMove];
             vacated = string.Concat(new string(' ', toMove + 1), burrow.AsSpan(toMove + 1));
