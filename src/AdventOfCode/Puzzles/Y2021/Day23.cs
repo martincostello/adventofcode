@@ -46,46 +46,14 @@ public sealed class Day23 : Puzzle
 
         const int HallwayLength = 11;
 
-        int burrowDepth = unfoldDiagram ? 4 : 2;
+        int depth = unfoldDiagram ? 4 : 2;
 
-        var start = new State(
-            new(' ', HallwayLength),
-            amber,
-            bronze,
-            copper,
-            desert,
-            burrowDepth);
-
-        var goal = new State(
-            new(' ', HallwayLength),
-            new('A', burrowDepth),
-            new('B', burrowDepth),
-            new('C', burrowDepth),
-            new('D', burrowDepth),
-            burrowDepth);
+        var start = new State(new(' ', HallwayLength), amber, bronze, copper, desert);
+        var goal = new State(new(' ', HallwayLength), new('A', depth), new('B', depth), new('C', depth), new('D', depth));
 
         var burrow = new Burrow();
 
         return (int)PathFinding.AStar(burrow, start, goal);
-    }
-
-    /// <summary>
-    /// Gets the energy required to move between two states.
-    /// </summary>
-    /// <param name="x">The first state.</param>
-    /// <param name="y">The second state.</param>
-    /// <returns>
-    /// The amount of energy required to move between the two states.
-    /// </returns>
-    internal static int Cost(
-        (string Hallway, string Amber, string Bronze, string Copper, string Desert) x,
-        (string Hallway, string Amber, string Bronze, string Copper, string Desert) y)
-    {
-        var a = new State(x.Hallway, x.Amber, x.Bronze, x.Copper, x.Desert, 2);
-        var b = new State(y.Hallway, y.Amber, y.Bronze, y.Copper, y.Desert, 2);
-        var burrow = new Burrow();
-
-        return (int)burrow.Cost(a, b);
     }
 
     /// <inheritdoc />
@@ -105,7 +73,7 @@ public sealed class Day23 : Puzzle
         return PuzzleResult.Create(MinimumEnergyFolded, MinimumEnergyUnfolded);
     }
 
-    private record struct State(string Hallway, string Amber, string Bronze, string Copper, string Desert, int Depth)
+    private record struct State(string Hallway, string Amber, string Bronze, string Copper, string Desert)
     {
         public static int Entrance(char burrow) => burrow switch
         {
@@ -156,34 +124,6 @@ public sealed class Day23 : Puzzle
             int length = endIndex - startIndex + 1;
 
             return string.IsNullOrWhiteSpace(Hallway.Substring(startIndex, length));
-        }
-
-        public override string ToString()
-        {
-            var builder = new StringBuilder()
-                .AppendLine("#############")
-                .Append('#')
-                .Append(Hallway.Replace(' ', '.'))
-                .Append('#')
-                .AppendLine();
-
-            for (int i = 0; i < Depth; i++)
-            {
-                builder
-                    .Append("###")
-                    .Append(Amber[i])
-                    .Append('#')
-                    .Append(Bronze[i])
-                    .Append('#')
-                    .Append(Copper[i])
-                    .Append('#')
-                    .Append(Desert[i])
-                    .AppendLine("###");
-            }
-
-            builder.AppendLine("  #########  ");
-
-            return builder.ToString();
         }
     }
 
@@ -290,10 +230,10 @@ public sealed class Day23 : Puzzle
 
                     result.Add(amphipod switch
                     {
-                        'A' => new(newHallway, vacated, id.Bronze, id.Copper, id.Desert, id.Depth),
-                        'B' => new(newHallway, id.Amber, vacated, id.Copper, id.Desert, id.Depth),
-                        'C' => new(newHallway, id.Amber, id.Bronze, vacated, id.Desert, id.Depth),
-                        'D' => new(newHallway, id.Amber, id.Bronze, id.Copper, vacated, id.Depth),
+                        'A' => new(newHallway, vacated, id.Bronze, id.Copper, id.Desert),
+                        'B' => new(newHallway, id.Amber, vacated, id.Copper, id.Desert),
+                        'C' => new(newHallway, id.Amber, id.Bronze, vacated, id.Desert),
+                        'D' => new(newHallway, id.Amber, id.Bronze, id.Copper, vacated),
                         _ => throw new InvalidOperationException(),
                     });
                 }
@@ -324,10 +264,10 @@ public sealed class Day23 : Puzzle
 
                 result.Add(amphipod switch
                 {
-                    'A' => new(newHallway, populated, id.Bronze, id.Copper, id.Desert, id.Depth),
-                    'B' => new(newHallway, id.Amber, populated, id.Copper, id.Desert, id.Depth),
-                    'C' => new(newHallway, id.Amber, id.Bronze, populated, id.Desert, id.Depth),
-                    'D' => new(newHallway, id.Amber, id.Bronze, id.Copper, populated, id.Depth),
+                    'A' => new(newHallway, populated, id.Bronze, id.Copper, id.Desert),
+                    'B' => new(newHallway, id.Amber, populated, id.Copper, id.Desert),
+                    'C' => new(newHallway, id.Amber, id.Bronze, populated, id.Desert),
+                    'D' => new(newHallway, id.Amber, id.Bronze, id.Copper, populated),
                     _ => throw new InvalidOperationException(),
                 });
             }
