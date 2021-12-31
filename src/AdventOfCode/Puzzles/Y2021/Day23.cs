@@ -12,12 +12,12 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2021;
 public sealed class Day23 : Puzzle
 {
     /// <summary>
-    /// Gets the least energy required to organize the amphipods with the diagram unfolded.
+    /// Gets the least energy required to organize the amphipods with the diagram folded.
     /// </summary>
     public int MinimumEnergyFolded { get; private set; }
 
     /// <summary>
-    /// Gets the least energy required to organize the amphipods with the diagram folded.
+    /// Gets the least energy required to organize the amphipods with the diagram unfolded.
     /// </summary>
     public int MinimumEnergyUnfolded { get; private set; }
 
@@ -66,7 +66,7 @@ public sealed class Day23 : Puzzle
 
         if (Verbose)
         {
-            Logger.WriteLine("The least energy required to organize the amphipods is {0:N0}.", MinimumEnergyFolded);
+            Logger.WriteLine("The least energy required to organize the amphipods with the diagram folded is {0:N0}.", MinimumEnergyFolded);
             Logger.WriteLine("The least energy required to organize the amphipods with the diagram unfolded is {0:N0}.", MinimumEnergyUnfolded);
         }
 
@@ -81,7 +81,7 @@ public sealed class Day23 : Puzzle
             'B' => 4,
             'C' => 6,
             'D' => 8,
-            _ => throw new NotImplementedException(),
+            _ => throw new InvalidOperationException(),
         };
 
         public string Burrow(char burrow) => burrow switch
@@ -90,7 +90,7 @@ public sealed class Day23 : Puzzle
             'B' => Bronze,
             'C' => Copper,
             'D' => Desert,
-            _ => throw new NotImplementedException(),
+            _ => throw new InvalidOperationException(),
         };
 
         public bool HasSpace(char burrow) => Burrow(burrow).Contains(' ', StringComparison.Ordinal);
@@ -129,7 +129,7 @@ public sealed class Day23 : Puzzle
 
     private sealed class Burrow : IWeightedGraph<State>
     {
-        private static readonly char[] Amphipods = { 'A', 'B', 'C', 'D' };
+        private static readonly char[] Amphipods = { 'D', 'C', 'B', 'A' };
         private static readonly int[] HallwaySpaces = { 0, 1, 3, 5, 7, 9, 10 };
 
         public long Cost(State a, State b)
@@ -204,7 +204,7 @@ public sealed class Day23 : Puzzle
             // Move any amphipods from their burrow to the hallway
             foreach (char amphipod in Amphipods)
             {
-                if (id.IsOrganized(amphipod) || id.IsEmpty(amphipod))
+                if (id.IsEmpty(amphipod) || id.IsOrganized(amphipod))
                 {
                     continue;
                 }
