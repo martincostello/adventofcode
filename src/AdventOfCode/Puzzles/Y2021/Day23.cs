@@ -105,15 +105,12 @@ public sealed class Day23 : Puzzle
         public bool IsPathClear(int sourceBurrow, int destinationBurrow, bool occupied)
         {
             int startIndex = Math.Min(sourceBurrow, destinationBurrow);
-            int length = Math.Abs(sourceBurrow - destinationBurrow);
+            int endIndex = Math.Max(sourceBurrow, destinationBurrow);
+            int length = Math.Abs(endIndex - startIndex);
 
             if (occupied)
             {
-                startIndex++;
-            }
-            else
-            {
-                length++;
+                length--;
             }
 
             return string.IsNullOrWhiteSpace(Hallway.Substring(startIndex, length));
