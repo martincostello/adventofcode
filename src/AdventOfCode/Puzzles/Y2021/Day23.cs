@@ -196,23 +196,29 @@ public sealed class Day23 : Puzzle
         {
             int differences = !string.Equals(a.Hallway, b.Hallway, StringComparison.Ordinal) ? 1 : 0;
 
+            char burrowChanged = default;
+
             if (!string.Equals(a.Amber, b.Amber, StringComparison.Ordinal))
             {
+                burrowChanged = 'A';
                 differences++;
             }
 
             if (differences < 2 && !string.Equals(a.Bronze, b.Bronze, StringComparison.Ordinal))
             {
+                burrowChanged = 'B';
                 differences++;
             }
 
             if (differences < 2 && !string.Equals(a.Copper, b.Copper, StringComparison.Ordinal))
             {
+                burrowChanged = 'C';
                 differences++;
             }
 
             if (differences < 2 && !string.Equals(a.Desert, b.Desert, StringComparison.Ordinal))
             {
+                burrowChanged = 'D';
                 differences++;
             }
 
@@ -224,7 +230,7 @@ public sealed class Day23 : Puzzle
                 return 0;
             }
 
-            char moved = default;
+            char amphipod = default;
             int index = -1;
 
             for (int i = 0; i < a.Hallway.Length; i++)
@@ -235,53 +241,20 @@ public sealed class Day23 : Puzzle
                 if (hallwayA != hallwayB)
                 {
                     index = i;
-                    moved = hallwayA == ' ' ? hallwayB : hallwayA;
+                    amphipod = hallwayA == ' ' ? hallwayB : hallwayA;
                     break;
                 }
             }
 
-            string burrowBefore = a.Burrow(moved);
-            string burrowAfter = b.Burrow(moved);
-
-            char burrowChanged = moved;
-
-            if (burrowBefore == burrowAfter)
-            {
-                if (!string.Equals(a.Amber, b.Amber, StringComparison.Ordinal))
-                {
-                    burrowChanged = 'A';
-                    burrowBefore = a.Amber;
-                    burrowAfter = b.Amber;
-                }
-                else if (!string.Equals(a.Bronze, b.Bronze, StringComparison.Ordinal))
-                {
-                    burrowChanged = 'B';
-                    burrowBefore = a.Bronze;
-                    burrowAfter = b.Bronze;
-                }
-                else if (!string.Equals(a.Copper, b.Copper, StringComparison.Ordinal))
-                {
-                    burrowChanged = 'C';
-                    burrowBefore = a.Copper;
-                    burrowAfter = b.Copper;
-                }
-                else
-                {
-                    burrowChanged = 'D';
-                    burrowBefore = a.Desert;
-                    burrowAfter = b.Desert;
-                }
-            }
+            string before = a.Burrow(burrowChanged);
+            string after = b.Burrow(burrowChanged);
 
             int steps = Math.Abs(State.Entrance(burrowChanged) - index);
+            steps += Math.Max(before.Count((p) => p == ' '), after.Count((p) => p == ' '));
 
-            steps += Math.Max(burrowAfter.Count((p) => p == ' '), burrowBefore.Count((p) => p == ' '));
-
-            int multiplier = Multiplier(moved);
+            int multiplier = (int)Math.Pow(10, amphipod - 'A');
 
             return steps * multiplier;
-
-            static int Multiplier(char amphipod) => (int)Math.Pow(10, amphipod - 'A');
         }
 
         public IEnumerable<State> Neighbors(State id)
