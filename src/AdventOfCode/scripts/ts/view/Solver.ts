@@ -42,6 +42,9 @@ export class Solver {
 
         const puzzles = await this.client.getPuzzles();
 
+        const thisYear = new Date().getFullYear();
+        let yearWasSelected = false;
+
         puzzles.forEach((puzzle) => {
 
             const year = puzzle.year.toString();
@@ -68,11 +71,19 @@ export class Solver {
 
                 this.elements.years.appendChild(element);
 
-                if (puzzle.year === new Date().getFullYear()) {
+                if (puzzle.year === thisYear) {
                     element.selected = true;
+                    yearWasSelected = true;
                 }
             }
         });
+
+        if (!yearWasSelected) {
+            const latestYear = this.elements.years.lastChild as HTMLOptionElement;
+            if (latestYear) {
+                latestYear.selected = true;
+            }
+        }
 
         this.elements.years.dispatchEvent(new Event('change'));
     }
