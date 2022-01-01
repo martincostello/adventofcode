@@ -44,16 +44,13 @@ public sealed class Day23 : Puzzle
             desert = desert.Insert(1, "AC");
         }
 
-        const int HallwayLength = 11;
-
+        string emptyHallway = new(' ', 11);
         int depth = unfoldDiagram ? 4 : 2;
 
-        var start = new State(new(' ', HallwayLength), amber, bronze, copper, desert);
-        var goal = new State(new(' ', HallwayLength), new('A', depth), new('B', depth), new('C', depth), new('D', depth));
+        var start = new State(emptyHallway, amber, bronze, copper, desert);
+        var goal = new State(emptyHallway, new('A', depth), new('B', depth), new('C', depth), new('D', depth));
 
-        var burrow = new Burrow();
-
-        return (int)PathFinding.AStar(burrow, start, goal);
+        return (int)PathFinding.AStar(new Burrow(), start, goal);
     }
 
     /// <inheritdoc />
