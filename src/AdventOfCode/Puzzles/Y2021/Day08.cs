@@ -60,68 +60,60 @@ public sealed class Day08 : Puzzle
 
             foreach (string signal in signals)
             {
-                switch (signal.Length)
+                int? key = signal.Length switch
                 {
-                    // A signal with two elements must be 1
-                    case 2:
-                        digits[1] = new HashSet<char>(signal);
-                        break;
+                    // A signal with these numbers of elements must be a specific digit
+                    2 => 1,
+                    3 => 7,
+                    4 => 4,
+                    7 => 8,
+                    _ => null,
+                };
 
-                    // A signal with three elements must be 7
-                    case 3:
-                        digits[7] = new HashSet<char>(signal);
-                        break;
-
-                    // A signal with four elements must be 4
-                    case 4:
-                        digits[4] = new HashSet<char>(signal);
-                        break;
-
-                    // A signal with seven elements must be 8
-                    case 7:
-                        digits[8] = new HashSet<char>(signal);
-                        break;
+                if (key is { } value)
+                {
+                    digits[value] = new(signal);
                 }
             }
 
             // 3 is the same as 7 plus two other elements
-            digits[3] = new HashSet<char>(signals
+            digits[3] = new(signals
                 .Where((p) => p.Length == 5)
                 .Where((p) => digits[7].IsSubsetOf(p))
                 .Single());
 
             // 9 is the same as 3 plus one other element
-            digits[9] = new HashSet<char>(signals
+            digits[9] = new(signals
                 .Where((p) => p.Length == 6)
                 .Where((p) => digits[3].IsSubsetOf(p))
                 .Single());
 
             // 0 is the only remaining unknown signal that contains 7's elements
-            digits[0] = new HashSet<char>(signals
+            digits[0] = new(signals
                 .Where((p) => p.Length == 6)
                 .Where((p) => digits[7].IsSubsetOf(p))
                 .Where((p) => !digits.Any((r) => r.Value.SetEquals(p)))
                 .Single());
 
             // 6 is the only remaining signal with six elements
-            digits[6] = new HashSet<char>(signals
+            digits[6] = new(signals
                 .Where((p) => p.Length == 6)
                 .Where((p) => !digits.Any((r) => r.Value.SetEquals(p)))
                 .Single());
 
             // 5 is a proper subset of 6
-            digits[5] = new HashSet<char>(signals
+            digits[5] = new(signals
                 .Where((p) => p.Length == 5)
                 .Where((p) => new HashSet<char>(p).IsProperSubsetOf(digits[6]))
                 .Single());
 
             // 2 is the only remaining signal with 5 elements
-            digits[2] = new HashSet<char>(signals
+            digits[2] = new(signals
                 .Where((p) => p.Length == 5)
                 .Where((p) => !digits.Any((r) => r.Value.SetEquals(p)))
                 .Single());
 
-            var output = new List<int>();
+            var output = new List<int>(numbers.Length);
 
             foreach (string digit in numbers)
             {

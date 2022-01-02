@@ -53,7 +53,7 @@ public sealed class Day14 : Puzzle
             char first = template[i];
             char second = template[i + 1];
 
-            string pair = new(new[] { first, second });
+            string pair = first + string.Empty + second;
 
             pairCounts.AddOrIncrement(pair, 1);
         }
@@ -66,8 +66,8 @@ public sealed class Day14 : Puzzle
                 {
                     pairCounts[pair] -= count;
 
-                    string pair1 = new(new[] { pair[0], element });
-                    string pair2 = new(new[] { element, pair[1] });
+                    string pair1 = pair[0] + string.Empty + element;
+                    string pair2 = element + string.Empty + pair[1];
 
                     pairCounts.AddOrIncrement(pair1, count, count);
                     pairCounts.AddOrIncrement(pair2, count, count);
