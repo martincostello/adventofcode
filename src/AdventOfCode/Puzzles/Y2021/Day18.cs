@@ -35,7 +35,7 @@ public sealed class Day18 : Puzzle
 
         SnailPair sum = pairs.Aggregate((x, y) => (x + y).Reduce());
 
-        var magnitudes = new List<int>();
+        var magnitudes = new List<int>(pairs.Count * pairs.Count * 2);
 
         for (int i = 0; i < pairs.Count - 1; i++)
         {

@@ -83,13 +83,13 @@ public sealed class Day03 : Puzzle
                 }
             }
 
-            string rating = candidates.Single();
+            string rating = candidates[0];
 
             int result = 0;
 
             for (int i = 0; i < rating.Length; i++)
             {
-                SetBit(ref result, bits - i - 1, rating[i] == Zero ? 0 : 1);
+                SetBit(ref result, bits - i - 1, rating[i] - '0');
             }
 
             return result;

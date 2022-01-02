@@ -81,7 +81,7 @@ public sealed class Day15 : Puzzle
                         risk = risks[new(point.X - initialWidth, point.Y)];
                     }
 
-                    risks[point] = ++risk > 9 ? 1 : risk;
+                    risks[point] = risk > 8 ? 1 : ++risk;
                 }
             }
         }
@@ -93,7 +93,7 @@ public sealed class Day15 : Puzzle
             map.Locations.Add(point);
         }
 
-        var start = new Point(0, 0);
+        var start = Point.Empty;
         var goal = new Point(width - 1, height - 1);
 
         return (int)PathFinding.AStar(map, start, goal);

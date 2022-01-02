@@ -33,14 +33,14 @@ public sealed class Day04 : Puzzle
             .AsNumbers<int>()
             .ToArray();
 
-        var cards = ParseCards(game);
+        IList<BingoCard> cards = ParseCards(game);
 
         int? firstWinningScore = null;
         int? lastWinningScore = null;
 
         foreach (int number in numbers)
         {
-            foreach (var card in cards)
+            foreach (BingoCard card in cards)
             {
                 if (card.Mark(number) && card.HasWon())
                 {
@@ -140,7 +140,7 @@ public sealed class Day04 : Puzzle
 
                 for (int y = 0; y < lengthY; y++)
                 {
-                    var square = _squares[x, y];
+                    Square square = _squares[x, y];
 
                     if (square.IsMarked)
                     {
@@ -161,7 +161,7 @@ public sealed class Day04 : Puzzle
 
                 for (int x = 0; x < lengthX; x++)
                 {
-                    var square = _squares[x, y];
+                    Square square = _squares[x, y];
 
                     if (square.IsMarked)
                     {
@@ -195,7 +195,7 @@ public sealed class Day04 : Puzzle
             {
                 for (int y = 0; y < lengthY; y++)
                 {
-                    var square = _squares[x, y];
+                    Square square = _squares[x, y];
 
                     if (square.Number == number)
                     {
@@ -219,7 +219,7 @@ public sealed class Day04 : Puzzle
             {
                 for (int y = 0; y < lengthY; y++)
                 {
-                    var square = _squares[x, y];
+                    Square square = _squares[x, y];
 
                     if (!square.IsMarked)
                     {

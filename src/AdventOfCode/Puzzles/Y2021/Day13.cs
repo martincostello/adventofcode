@@ -92,9 +92,9 @@ public sealed class Day13 : Puzzle
                     transformed = dot - new Size(0, Math.Abs(dot.Y - fold.Y) * 2);
                 }
 
-                if (transformed.HasValue)
+                if (transformed is { } point)
                 {
-                    paper[transformed.Value] = true;
+                    paper[point] = true;
                     paper.Remove(dot);
                 }
             }

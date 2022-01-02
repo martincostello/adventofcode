@@ -223,7 +223,7 @@ public sealed class Day23 : Puzzle
                         continue;
                     }
 
-                    string newHallway = Move(id.Hallway, moved, space);
+                    string newHallway = Replace(id.Hallway, moved, space);
 
                     result.Add(amphipod switch
                     {
@@ -256,8 +256,8 @@ public sealed class Day23 : Puzzle
                 }
 
                 int firstSpace = burrow.LastIndexOf(' ');
-                string populated = Move(burrow, amphipod, firstSpace);
-                string newHallway = Move(id.Hallway, ' ', space);
+                string populated = Replace(burrow, amphipod, firstSpace);
+                string newHallway = Replace(id.Hallway, ' ', space);
 
                 result.Add(amphipod switch
                 {
@@ -272,9 +272,9 @@ public sealed class Day23 : Puzzle
             return result;
         }
 
-        private static string Move(string hallway, char moved, int index)
+        private static string Replace(string value, char moved, int index)
         {
-            string result = hallway.Remove(index, 1);
+            string result = value.Remove(index, 1);
             return result.Insert(index, char.ToString(moved));
         }
 
