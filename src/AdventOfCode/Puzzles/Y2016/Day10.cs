@@ -263,7 +263,7 @@ public sealed class Day10 : Puzzle
         /// <param name="instruction">The instruction to process.</param>
         private void Process(string instruction)
         {
-            string[] split = instruction.Split(' ', StringSplitOptions.None);
+            string[] split = instruction.Split(' ');
 
             if (string.Equals(split[0], "value", StringComparison.Ordinal))
             {

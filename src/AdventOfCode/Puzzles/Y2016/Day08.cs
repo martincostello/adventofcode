@@ -182,12 +182,12 @@ public sealed class Day08 : Puzzle
     {
         var result = new Instruction();
 
-        string[] split = instruction.Split(' ', StringSplitOptions.None);
+        string[] split = instruction.Split(' ');
 
         switch (split[0])
         {
             case "rect":
-                split = split[1].Split('x', StringSplitOptions.None);
+                split = split[1].Split('x');
                 result.A = Parse<int>(split[0]);
                 result.B = Parse<int>(split[1]);
                 break;
@@ -195,7 +195,7 @@ public sealed class Day08 : Puzzle
             case "rotate":
                 result.IsRotation = true;
                 result.IsColumn = string.Equals(split[1], "column", StringComparison.Ordinal);
-                result.A = Parse<int>(split[2].Split('=', StringSplitOptions.None)[1]);
+                result.A = Parse<int>(split[2].Split('=')[1]);
                 result.B = Parse<int>(split[4]);
                 break;
 
