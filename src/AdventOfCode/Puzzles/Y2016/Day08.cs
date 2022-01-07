@@ -96,7 +96,7 @@ public sealed class Day08 : Puzzle
     /// <returns>
     /// The number of pixels lit in <paramref name="grid"/>.
     /// </returns>
-    private static int CountLitPixels(bool[,] grid) => grid.TrueCount();
+    private static int CountLitPixels(bool[,] grid) => grid.Count(true);
 
     /// <summary>
     /// Lights a rectangle of the specified size in the top-left of the specified grid.
