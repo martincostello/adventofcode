@@ -150,7 +150,7 @@ public sealed class Day16 : Puzzle
 
             result.Number = Parse<int>(split[1].TrimEnd(':'));
 
-            split = string.Join(" ", split, 2, split.Length - 2).Split(',');
+            split = string.Join(' ', split, 2, split.Length - 2).Split(',');
 
             foreach (string item in split)
             {
