@@ -62,10 +62,9 @@ public sealed class Day19 : Puzzle
 
             foreach (string rule in input)
             {
-                string[] split = rule.Split(':');
+                (string key, string rawValue) = rule.Bifurcate(':');
 
-                string key = split[0];
-                var value = split[1]
+                var value = rawValue
                     .TrimStart()
                     .Trim('"')
                     .Split(' ')

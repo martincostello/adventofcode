@@ -30,10 +30,10 @@ public sealed class Day04 : Puzzle
     /// </returns>
     public static int GetPasswordsInRange(string range, int rulesVersion)
     {
-        string[] split = range.Split('-');
+        (string first, string second) = range.Bifurcate('-');
 
-        int start = Parse<int>(split[0]);
-        int end = Parse<int>(split[1]) + 1;
+        int start = Parse<int>(first);
+        int end = Parse<int>(second) + 1;
 
         int count = 0;
 

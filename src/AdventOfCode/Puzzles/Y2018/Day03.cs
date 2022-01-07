@@ -190,15 +190,15 @@ public sealed class Day03 : Puzzle
             string offset = split[2].TrimEnd(':');
             string area = split[3];
 
-            split = offset.Split(',');
+            (string first, string second) = offset.Bifurcate(',');
 
-            int x = Parse<int>(split[0]);
-            int y = Parse<int>(split[1]);
+            int x = Parse<int>(first);
+            int y = Parse<int>(second);
 
-            split = area.Split('x');
+            (first, second) = area.Bifurcate('x');
 
-            int width = Parse<int>(split[0]);
-            int height = Parse<int>(split[1]);
+            int width = Parse<int>(first);
+            int height = Parse<int>(second);
 
             return new Claim()
             {

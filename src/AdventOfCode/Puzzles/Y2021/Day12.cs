@@ -34,10 +34,7 @@ public sealed class Day12 : Puzzle
 
         foreach (string node in nodes)
         {
-            string[] pair = node.Split('-');
-
-            string start = pair[0];
-            string end = pair[1];
+            (string start, string end) = node.Bifurcate('-');
 
             caves.Edges.GetOrAdd(start).Add(end);
             caves.Edges.GetOrAdd(end).Add(start);

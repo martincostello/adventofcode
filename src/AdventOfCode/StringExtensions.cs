@@ -9,6 +9,27 @@ namespace MartinCostello.AdventOfCode;
 internal static class StringExtensions
 {
     /// <summary>
+    /// Birfurcates the specified string.
+    /// </summary>
+    /// <param name="value">The string to bifurcate.</param>
+    /// <param name="separator">The separator between the two strings.</param>
+    /// <returns>
+    /// The two strings separated by the specified character.
+    /// </returns>
+    public static (string First, string Second) Bifurcate(this string value, char separator)
+    {
+        var tokens = value.Tokenize(separator);
+
+        tokens.MoveNext();
+        var first = tokens.Current;
+
+        tokens.MoveNext();
+        var second = tokens.Current;
+
+        return (first.ToString(), second.ToString());
+    }
+
+    /// <summary>
     /// Returns a string that is a mirror image of the string.
     /// </summary>
     /// <param name="value">The string to mirror.</param>

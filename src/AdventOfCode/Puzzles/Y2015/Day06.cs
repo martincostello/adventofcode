@@ -107,14 +107,14 @@ public sealed class Day06 : Puzzle
         protected static Rectangle ParseBounds(string origin, string termination)
         {
             // Determine the termination and origin points of the bounds of the lights to operate on
-            string[] originPoints = origin.Split(',');
-            string[] terminationPoints = termination.Split(',');
+            (string origin1, string origin2) = origin.Bifurcate(',');
+            (string termination1, string termination2) = termination.Bifurcate(',');
 
-            int left = Parse<int>(originPoints[0]);
-            int bottom = Parse<int>(originPoints[1]);
+            int left = Parse<int>(origin1);
+            int bottom = Parse<int>(origin2);
 
-            int right = Parse<int>(terminationPoints[0]);
-            int top = Parse<int>(terminationPoints[1]);
+            int right = Parse<int>(termination1);
+            int top = Parse<int>(termination2);
 
             // Add one to the termination point so that the grid always has a width of at least one light
             return Rectangle.FromLTRB(left, bottom, right + 1, top + 1);

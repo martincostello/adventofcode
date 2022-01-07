@@ -38,9 +38,9 @@ public sealed class Day21 : Puzzle
 
         foreach (string recipe in foods)
         {
-            string[] split = recipe.Split('(');
-            string[] ingredients = split[0].Split(' ', StringSplitOptions.RemoveEmptyEntries);
-            string[] allergens = split[1][9..].TrimEnd(')').Split(", ");
+            (string first, string second) = recipe.Bifurcate('(');
+            string[] ingredients = first.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+            string[] allergens = second[9..].TrimEnd(')').Split(", ");
 
             parsedFoods.Add((ingredients, allergens));
         }

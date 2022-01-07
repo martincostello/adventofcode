@@ -47,10 +47,10 @@ public sealed class Day16 : Puzzle
 
             foreach (string range in split)
             {
-                string[] parts = range.Split('-');
+                (string first, string second) = range.Bifurcate('-');
 
-                int start = Parse<int>(parts[0]);
-                int end = Parse<int>(parts[1]);
+                int start = Parse<int>(first);
+                int end = Parse<int>(second);
 
                 ranges.Add(new(start, end));
             }

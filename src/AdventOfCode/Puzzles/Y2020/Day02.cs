@@ -30,10 +30,10 @@ public sealed class Day02 : Puzzle
     public static bool IsPasswordValid(string value, int policyVersion)
     {
         string[] parts = value.Split(' ');
-        string[] numbers = parts[0].Split('-');
+        (string first, string second) = parts[0].Bifurcate('-');
 
-        int firstNumber = Parse<int>(numbers[0]);
-        int secondNumber = Parse<int>(numbers[1]);
+        int firstNumber = Parse<int>(first);
+        int secondNumber = Parse<int>(second);
 
         char requiredCharacter = parts[1][0];
         string password = parts[2];
