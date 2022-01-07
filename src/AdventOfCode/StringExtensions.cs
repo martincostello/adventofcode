@@ -17,6 +17,17 @@ internal static class StringExtensions
     /// The two strings separated by the specified character.
     /// </returns>
     public static (string First, string Second) Bifurcate(this string value, char separator)
+        => value.AsSpan().Bifurcate(separator);
+
+    /// <summary>
+    /// Birfurcates the specified span.
+    /// </summary>
+    /// <param name="value">The span to bifurcate.</param>
+    /// <param name="separator">The separator between the two spans.</param>
+    /// <returns>
+    /// The two strings separated by the specified character.
+    /// </returns>
+    public static (string First, string Second) Bifurcate(this ReadOnlySpan<char> value, char separator)
     {
         var tokens = value.Tokenize(separator);
 
