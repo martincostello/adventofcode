@@ -46,7 +46,7 @@ public sealed class Day14 : Puzzle
                 // Flip the mask to match the endianness of BitArray
                 string maskValue = instruction[MaskPrefix.Length..];
                 mask = maskValue.Mirror();
-                floatingBits = mask.Count((p) => p == 'X');
+                floatingBits = mask.Count('X');
             }
             else
             {

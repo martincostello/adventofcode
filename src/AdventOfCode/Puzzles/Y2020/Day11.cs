@@ -58,9 +58,7 @@ public sealed class Day11 : Puzzle
             previous = current;
         }
 
-        int occupiedSeats = current
-            .SelectMany((p) => p)
-            .Count((p) => p == Occupied);
+        int occupiedSeats = current.Sum((p) => p.Count(Occupied));
 
         return (occupiedSeats, visualization);
     }

@@ -43,7 +43,7 @@ public sealed class Day02 : Puzzle
             int minimumCount = firstNumber;
             int maximumCount = secondNumber;
 
-            int count = password.Count((p) => p == requiredCharacter);
+            int count = password.Count(requiredCharacter);
             return count >= minimumCount && count <= maximumCount;
         }
         else
