@@ -147,12 +147,12 @@ public sealed class Day11 : Puzzle
     /// </returns>
     private static IList<CardinalDirection> ParsePath(string path)
     {
-        string[] split = path.Split(',');
-        var result = new List<CardinalDirection>(split.Length);
+        var split = path.Tokenize(',');
+        var result = new List<CardinalDirection>();
 
-        foreach (string direction in split)
+        foreach (var direction in split)
         {
-            var parsed = direction switch
+            var parsed = direction.ToString() switch
             {
                 "n" => CardinalDirection.North,
                 "ne" => CardinalDirection.NorthEast,

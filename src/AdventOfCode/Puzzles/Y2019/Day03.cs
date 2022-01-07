@@ -83,13 +83,13 @@ public sealed class Day03 : Puzzle
         for (int i = 0; i < wires.Count; i++)
         {
             string wire = wires[i];
-            string[] path = wire.Split(',');
+            var path = wire.Tokenize(',');
 
             int x = 0;
             int y = 0;
             int steps = 0;
 
-            foreach (string instruction in path)
+            foreach (var instruction in path)
             {
                 (int deltaX, int deltaY) = GetDelta(instruction);
 
@@ -146,10 +146,10 @@ public sealed class Day03 : Puzzle
     /// <returns>
     /// The x and y coordinates to move the grid by.
     /// </returns>
-    private static (int X, int Y) GetDelta(string instruction)
+    private static (int X, int Y) GetDelta(ReadOnlySpan<char> instruction)
     {
         char direction = instruction[0];
-        int distance = Parse<int>(instruction.AsSpan(1));
+        int distance = Parse<int>(instruction[1..]);
 
         return direction switch
         {

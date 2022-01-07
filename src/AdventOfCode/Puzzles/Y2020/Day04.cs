@@ -48,12 +48,19 @@ public sealed class Day04 : Puzzle
                 continue;
             }
 
-            string[] split = line.Split(' ');
+            var split = line.Tokenize(' ');
 
-            foreach (string pair in split)
+            foreach (var pair in split)
             {
-                string[] attribute = pair.Split(':');
-                current[attribute[0]] = attribute[1];
+                var attribute = pair.Tokenize(':');
+
+                attribute.MoveNext();
+                var name = attribute.Current;
+
+                attribute.MoveNext();
+                var value = attribute.Current;
+
+                current[name.ToString()] = value.ToString();
             }
         }
 

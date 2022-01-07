@@ -231,8 +231,8 @@ public sealed class Day22 : Puzzle
             int indexX = split[0].IndexOf('x', StringComparison.Ordinal);
             int indexY = split[0].IndexOf('y', StringComparison.Ordinal);
 
-            int x = Parse<int>(split[0].Substring(indexX + 1, indexY - indexX - 2));
-            int y = Parse<int>(split[0][(indexY + 1)..]);
+            int x = Parse<int>(split[0].AsSpan().Slice(indexX + 1, indexY - indexX - 2));
+            int y = Parse<int>(split[0].AsSpan()[(indexY + 1)..]);
 
             return new Node(
                 split[0],
