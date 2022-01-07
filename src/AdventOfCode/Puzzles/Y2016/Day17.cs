@@ -55,7 +55,7 @@ public sealed class Day17 : Puzzle
 
         return (shortestPath, longestPath);
 
-        void GetPathsToVault(Point current, Stack<char> path, ICollection<string> routes)
+        void GetPathsToVault(Point current, Stack<char> path, List<string> routes)
         {
             char[] reversed = path.ToArray();
             Array.Reverse(reversed);

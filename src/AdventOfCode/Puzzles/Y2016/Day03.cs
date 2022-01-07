@@ -29,7 +29,7 @@ public sealed class Day03 : Puzzle
     /// </returns>
     internal static int GetPossibleTriangleCount(ICollection<string> dimensions, bool readAsColumns)
     {
-        IList<(int A, int B, int C)> triangles = ParseTriangles(dimensions, readAsColumns);
+        var triangles = ParseTriangles(dimensions, readAsColumns);
         return triangles.Count((p) => IsValidTriangle(p.A, p.B, p.C));
     }
 
@@ -75,7 +75,7 @@ public sealed class Day03 : Puzzle
     /// <returns>
     /// An <see cref="IList{T}"/> containing the parsed triangle dimensions.
     /// </returns>
-    private static IList<(int A, int B, int C)> ParseTriangles(ICollection<string> dimensions, bool readAsColumns)
+    private static List<(int A, int B, int C)> ParseTriangles(ICollection<string> dimensions, bool readAsColumns)
     {
         var result = new List<(int A, int B, int C)>(dimensions.Count);
 

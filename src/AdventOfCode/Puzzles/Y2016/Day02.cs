@@ -77,7 +77,7 @@ public sealed class Day02 : Puzzle
     /// </returns>
     internal static string GetBathroomCode(ICollection<string> instructions, char[][] grid)
     {
-        IList<IList<Direction>> directions = ParseInstructions(instructions);
+        var directions = ParseInstructions(instructions);
         var code = new StringBuilder(instructions.Count);
 
         var origin = Point.Empty;
@@ -88,7 +88,7 @@ public sealed class Day02 : Puzzle
             {
                 if (grid[y][x] == '5')
                 {
-                    origin = new Point(x, y);
+                    origin = new(x, y);
                     break;
                 }
             }
@@ -96,7 +96,7 @@ public sealed class Day02 : Puzzle
 
         Point position = origin;
 
-        foreach (IList<Direction> sequence in directions)
+        foreach (var sequence in directions)
         {
             foreach (Direction direction in sequence)
             {
@@ -117,7 +117,7 @@ public sealed class Day02 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        ICollection<string> instructions = await ReadResourceAsLinesAsync();
+        var instructions = await ReadResourceAsLinesAsync();
 
         BathroomCodeDigitKeypad = GetBathroomCode(instructions, DigitGrid);
         BathroomCodeAlphanumericKeypad = GetBathroomCode(instructions, AlphanumericGrid);
@@ -147,10 +147,10 @@ public sealed class Day02 : Puzzle
     {
         return direction switch
         {
-            Direction.Down => new Size(0, 1),
-            Direction.Left => new Size(-1, 0),
-            Direction.Right => new Size(1, 0),
-            Direction.Up => new Size(0, -1),
+            Direction.Down => new(0, 1),
+            Direction.Left => new(-1, 0),
+            Direction.Right => new(1, 0),
+            Direction.Up => new(0, -1),
             _ => default,
         };
     }
@@ -180,17 +180,17 @@ public sealed class Day02 : Puzzle
     /// <returns>
     /// An <see cref="IList{T}"/> containing the instructions to open the bathroom door.
     /// </returns>
-    private static IList<IList<Direction>> ParseInstructions(ICollection<string> instructions)
+    private static List<List<Direction>> ParseInstructions(ICollection<string> instructions)
     {
-        var result = new List<IList<Direction>>(instructions.Count);
+        var result = new List<List<Direction>>(instructions.Count);
 
         foreach (string instruction in instructions)
         {
             var instructionsForDigit = new List<Direction>(instruction.Length);
 
-            foreach (char ch in instruction)
+            foreach (var item in instruction.Enumerate())
             {
-                Direction direction = ch switch
+                var direction = item.Value switch
                 {
                     'D' => Direction.Down,
                     'L' => Direction.Left,

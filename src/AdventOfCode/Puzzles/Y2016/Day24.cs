@@ -29,7 +29,7 @@ public sealed class Day24 : Puzzle
     /// </returns>
     public static int GetMinimumStepsToVisitLocations(IList<string> layout, bool returnToOrigin)
     {
-        (SquareGrid maze, Point origin, IList<Point> waypoints) = BuildMaze(layout);
+        (SquareGrid maze, Point origin, List<Point> waypoints) = BuildMaze(layout);
 
         long minimumCost = long.MaxValue;
 
@@ -112,7 +112,7 @@ public sealed class Day24 : Puzzle
     /// <returns>
     /// A <see cref="SquareGrid"/> representing the maze, the origin point and the goal locations in the maze.
     /// </returns>
-    private static (SquareGrid Maze, Point Origin, IList<Point> Goals) BuildMaze(IList<string> layout)
+    private static (SquareGrid Maze, Point Origin, List<Point> Goals) BuildMaze(IList<string> layout)
     {
         var maze = new Maze(layout[0].Length, layout.Count);
         var origin = Point.Empty;

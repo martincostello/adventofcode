@@ -26,7 +26,7 @@ public sealed class Day19 : Puzzle
     /// </returns>
     internal static ICollection<string> GetPossibleMolecules(
         string molecule,
-        ICollection<string> replacements,
+        List<string> replacements,
         CancellationToken cancellationToken)
     {
         var molecules = new HashSet<string>();
@@ -51,10 +51,7 @@ public sealed class Day19 : Puzzle
                         target +
                         molecule[(index + source.Length)..];
 
-                    if (!molecules.Contains(newMolecule))
-                    {
-                        molecules.Add(newMolecule);
-                    }
+                    molecules.Add(newMolecule);
                 }
             }
         }
@@ -75,7 +72,7 @@ public sealed class Day19 : Puzzle
     /// The minimum number of steps required to create <paramref name="molecule"/> using the possible
     /// replacements specified by <paramref name="replacements"/>.
     /// </returns>
-    internal static int GetMinimumSteps(string molecule, ICollection<string> replacements, ILogger logger, CancellationToken cancellationToken)
+    internal static int GetMinimumSteps(string molecule, List<string> replacements, ILogger logger, CancellationToken cancellationToken)
         => GetMinimumSteps(molecule, replacements, "e", 1, logger, cancellationToken);
 
     /// <summary>
@@ -93,13 +90,13 @@ public sealed class Day19 : Puzzle
     /// </returns>
     internal static int GetMinimumSteps(
         string molecule,
-        ICollection<string> replacements,
+        List<string> replacements,
         string current,
         int step,
         ILogger logger,
         CancellationToken cancellationToken)
     {
-        ICollection<string> nextSteps = GetPossibleMolecules(current, replacements, cancellationToken);
+        var nextSteps = GetPossibleMolecules(current, replacements, cancellationToken);
 
         if (nextSteps.Contains(molecule))
         {
@@ -134,7 +131,7 @@ public sealed class Day19 : Puzzle
 
         string molecule = lines[^1];
 
-        ICollection<string> replacements = lines
+        var replacements = lines
             .Take(lines.Count - 1)
             .Where((p) => !string.IsNullOrEmpty(p))
             .ToList();
@@ -150,7 +147,7 @@ public sealed class Day19 : Puzzle
         }
         else
         {
-            ICollection<string> molecules = GetPossibleMolecules(molecule, replacements, cancellationToken);
+            var molecules = GetPossibleMolecules(molecule, replacements, cancellationToken);
 
             Solution = molecules.Count;
 

@@ -9,6 +9,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016;
 [Puzzle(2016, 01, "No Time for a Taxicab", RequiresData = true)]
 public sealed class Day01 : Puzzle
 {
+    private static readonly char[] Separators = { ',', ' ' };
+
     /// <summary>
     /// An enumeration of directions.
     /// </summary>
@@ -48,8 +50,8 @@ public sealed class Day01 : Puzzle
         var bearing = CardinalDirection.North;
         var position = Point.Empty;
 
-        IList<Instruction> instructions = ParseDirections(input);
-        IList<Point> positions = new List<Point>(instructions.Count);
+        var instructions = ParseDirections(input);
+        var positions = new List<Point>(instructions.Count);
 
         foreach (Instruction instruction in instructions)
         {
@@ -110,11 +112,11 @@ public sealed class Day01 : Puzzle
     /// </summary>
     /// <param name="input">The directions to parse.</param>
     /// <returns>
-    /// An <see cref="IList{T}"/> containing the directions to Easter Bunny HQ.
+    /// An <see cref="List{T}"/> containing the directions to Easter Bunny HQ.
     /// </returns>
-    private static IList<Instruction> ParseDirections(string input)
+    private static List<Instruction> ParseDirections(string input)
     {
-        string[] instructions = input.Split(new[] { ',', ' ' }, StringSplitOptions.RemoveEmptyEntries);
+        string[] instructions = input.Split(Separators, StringSplitOptions.RemoveEmptyEntries);
 
         var result = new List<Instruction>(instructions.Length);
 

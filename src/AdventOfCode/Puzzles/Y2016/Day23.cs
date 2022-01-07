@@ -21,7 +21,7 @@ public sealed class Day23 : Puzzle
 
         IList<string> instructions = await ReadResourceAsLinesAsync();
 
-        IDictionary<char, int> registers = Day12.Process(instructions, initialValueOfA: input, cancellationToken: cancellationToken);
+        var registers = Day12.Process(instructions, initialValueOfA: input, cancellationToken: cancellationToken);
         SafeValue = registers['a'];
 
         if (Verbose)

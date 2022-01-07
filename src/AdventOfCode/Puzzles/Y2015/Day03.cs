@@ -27,18 +27,14 @@ public class Day03 : Puzzle
     /// <returns>The number of unique houses that receive a delivery of at least one present.</returns>
     internal static int GetUniqueHousesVisitedBySanta(string instructions, ILogger logger)
     {
-        ICollection<CardinalDirection> directions = GetDirections(instructions, logger);
+        var directions = GetDirections(instructions, logger);
 
         var santa = new SantaGps();
-        var coordinates = new HashSet<Point>();
+        var coordinates = new HashSet<Point>(directions.Count);
 
         foreach (var direction in directions)
         {
-            if (!coordinates.Contains(santa.Location))
-            {
-                coordinates.Add(santa.Location);
-            }
-
+            coordinates.Add(santa.Location);
             santa.Move(direction);
         }
 
@@ -53,19 +49,19 @@ public class Day03 : Puzzle
     /// <returns>The number of unique houses that receive a delivery of at least one present.</returns>
     internal static int GetUniqueHousesVisitedBySantaAndRoboSanta(string instructions, ILogger logger)
     {
-        ICollection<CardinalDirection> directions = GetDirections(instructions, logger);
+        var directions = GetDirections(instructions, logger);
 
         var santa = new SantaGps();
         var roboSanta = new SantaGps();
         var current = santa;
 
-        var coordinates = new HashSet<Point>();
+        var coordinates = new HashSet<Point>(directions.Count);
 
         foreach (var direction in directions)
         {
             current.Move(direction);
 
-            if (current.Location != Point.Empty && !coordinates.Contains(current.Location))
+            if (current.Location != Point.Empty)
             {
                 coordinates.Add(current.Location);
             }
@@ -103,16 +99,16 @@ public class Day03 : Puzzle
     /// </summary>
     /// <param name="instructions">The path of the file containing the directions.</param>
     /// <param name="logger">The logger to use.</param>
-    /// <returns>An <see cref="ICollection{T}"/> containing the directions from from the specified file.</returns>
-    private static ICollection<CardinalDirection> GetDirections(string instructions, ILogger logger)
+    /// <returns>An <see cref="List{T}"/> containing the directions from from the specified file.</returns>
+    private static List<CardinalDirection> GetDirections(string instructions, ILogger logger)
     {
         var directions = new List<CardinalDirection>(instructions.Length);
 
-        for (int i = 0; i < instructions.Length; i++)
+        foreach (var item in instructions.Enumerate())
         {
             CardinalDirection direction;
 
-            switch (instructions[i])
+            switch (item.Value)
             {
                 case '^':
                     direction = CardinalDirection.North;
@@ -131,7 +127,7 @@ public class Day03 : Puzzle
                     break;
 
                 default:
-                    logger.WriteLine("Invalid direction: '{0}'.", instructions[i]);
+                    logger.WriteLine("Invalid direction: '{0}'.", item.Value);
                     continue;
             }
 
@@ -147,9 +143,9 @@ public class Day03 : Puzzle
     private sealed class SantaGps
     {
         /// <summary>
-        /// Gets or sets the location of the Santa-type figure.
+        /// Gets the location of the Santa-type figure.
         /// </summary>
-        internal Point Location { get; set; }
+        internal Point Location { get; private set; }
 
         /// <summary>
         /// Moves the Santa-type figure in the specified direction.

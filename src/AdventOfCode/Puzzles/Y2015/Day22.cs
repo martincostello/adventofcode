@@ -25,7 +25,7 @@ public sealed class Day22 : Puzzle
     /// <returns>
     /// A named tuple that returns whether the wizard won and the amount of mana spent by the wizard.
     /// </returns>
-    internal static (bool DidWizardWin, int ManaSpent) Fight(Func<Wizard, ICollection<string>, string> spellSelector, string difficulty)
+    internal static (bool DidWizardWin, int ManaSpent) Fight(Func<Wizard, List<string>, string> spellSelector, string difficulty)
     {
         var wizard = new Wizard(spellSelector);
         var boss = new Boss();
@@ -171,18 +171,18 @@ public sealed class Day22 : Puzzle
         /// <summary>
         /// A delegate to a method to use to select the next spell to conjure. This field is read-only.
         /// </summary>
-        private readonly Func<Wizard, ICollection<string>, string> _spellSelector;
+        private readonly Func<Wizard, List<string>, string> _spellSelector;
 
         /// <summary>
         /// The spells the wizard currently has equipped, including any that have lost their power.
         /// </summary>
-        private readonly ICollection<Spell> _spells = new List<Spell>();
+        private readonly List<Spell> _spells = new();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Wizard"/> class.
         /// </summary>
         /// <param name="spellSelector">A delegate to a method to use to select the next spell to conjure.</param>
-        internal Wizard(Func<Wizard, ICollection<string>, string> spellSelector)
+        internal Wizard(Func<Wizard, List<string>, string> spellSelector)
             : this(50, 500, spellSelector)
         {
         }
@@ -193,7 +193,7 @@ public sealed class Day22 : Puzzle
         /// <param name="hitPoints">The number of hit points the wizard has.</param>
         /// <param name="mana">The amount of mana the wizard has.</param>
         /// <param name="spellSelector">A delegate to a method to use to select the next spell to conjure.</param>
-        internal Wizard(int hitPoints, int mana, Func<Wizard, ICollection<string>, string> spellSelector)
+        internal Wizard(int hitPoints, int mana, Func<Wizard, List<string>, string> spellSelector)
             : base("Player", hitPoints, 0)
         {
             Mana = mana;
@@ -203,12 +203,12 @@ public sealed class Day22 : Puzzle
         /// <summary>
         /// Gets the names of the active spells cast by the wizard.
         /// </summary>
-        internal ICollection<string> ActiveSpells => _spells.Where((p) => p.TurnsLeft > 0).Select((p) => p.Name).ToArray();
+        internal IList<string> ActiveSpells => _spells.Where((p) => p.TurnsLeft > 0).Select((p) => p.Name).ToArray();
 
         /// <summary>
         /// Gets the names of all the spells cast by the wizard.
         /// </summary>
-        internal ICollection<string> SpellsCast => _spells.Select((p) => p.Name).ToArray();
+        internal IList<string> SpellsCast => _spells.Select((p) => p.Name).ToArray();
 
         /// <summary>
         /// Gets or sets the amount of mana the wizard has.
@@ -339,7 +339,7 @@ public sealed class Day22 : Puzzle
         /// <summary>
         /// Information about the spells that can be cast, their cost, and a method to conjure one. This field is read-only.
         /// </summary>
-        internal static readonly IDictionary<string, SpellInfo> Spells = new Dictionary<string, SpellInfo>()
+        internal static readonly Dictionary<string, SpellInfo> Spells = new()
         {
             ["MagicMissile"] = new("MagicMissile", 53, () => new MagicMissile()),
             ["Drain"] = new("Drain", 73, () => new Drain()),

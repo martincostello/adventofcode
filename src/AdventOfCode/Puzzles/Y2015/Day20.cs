@@ -47,10 +47,8 @@ public sealed class Day20 : Puzzle
 
         var visitingElves = Maths.GetFactorsUnordered(house);
 
-        if (maximumVisits.HasValue)
+        if (maximumVisits is { } max)
         {
-            int max = maximumVisits.Value;
-
             foreach (int elf in visitingElves)
             {
                 if (house <= elf * max)

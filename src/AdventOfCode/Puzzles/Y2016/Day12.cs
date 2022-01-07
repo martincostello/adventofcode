@@ -36,7 +36,7 @@ public sealed class Day12 : Puzzle
     /// An <see cref="IDictionary{TKey, TValue}"/> containing the values of the CPU
     /// registers after processing the instructions specified by <paramref name="instructions"/>.
     /// </returns>
-    internal static IDictionary<char, int> Process(
+    internal static Dictionary<char, int> Process(
         IList<string> instructions,
         int initialValueOfA = 0,
         int initialValueOfC = 0,
@@ -178,7 +178,7 @@ public sealed class Day12 : Puzzle
     {
         IList<string> instructions = await ReadResourceAsLinesAsync();
 
-        IDictionary<char, int> registers = Process(instructions, initialValueOfC: 0, cancellationToken: cancellationToken);
+        var registers = Process(instructions, initialValueOfC: 0, cancellationToken: cancellationToken);
         ValueInRegisterA = registers['a'];
 
         registers = Process(instructions, initialValueOfC: 1, cancellationToken: cancellationToken);

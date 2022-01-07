@@ -13,18 +13,18 @@ public sealed class Day16 : Puzzle
     /// The result of the forensic analysis of the gift from Aunt Sue X
     /// as provided by the My First Crime Scene Analysis Machine (MFCSAM).
     /// </summary>
-    private static readonly IDictionary<string, Tuple<int, int>> ForensicAnalysis = new Dictionary<string, Tuple<int, int>>()
+    private static readonly Dictionary<string, (int Count, int Operand)> ForensicAnalysis = new(10)
     {
-        ["children"] = Tuple.Create(3, 0),
-        ["cats"] = Tuple.Create(7, 1),
-        ["samoyeds"] = Tuple.Create(2, 0),
-        ["pomeranians"] = Tuple.Create(3, -1),
-        ["akitas"] = Tuple.Create(0, 0),
-        ["vizslas"] = Tuple.Create(0, 0),
-        ["goldfish"] = Tuple.Create(5, -1),
-        ["trees"] = Tuple.Create(3, 1),
-        ["cars"] = Tuple.Create(2, 0),
-        ["perfumes"] = Tuple.Create(1, 0),
+        ["children"] = (3, 0),
+        ["cats"] = (7, 1),
+        ["samoyeds"] = (2, 0),
+        ["pomeranians"] = (3, -1),
+        ["akitas"] = (0, 0),
+        ["vizslas"] = (0, 0),
+        ["goldfish"] = (5, -1),
+        ["trees"] = (3, 1),
+        ["cars"] = (2, 0),
+        ["perfumes"] = (1, 0),
     };
 
     /// <summary>
@@ -47,13 +47,13 @@ public sealed class Day16 : Puzzle
     /// </returns>
     internal static int WhichAuntSueSentTheGift(ICollection<string> metadata, bool compensateForRetroEncabulator = false)
     {
-        var parsed = metadata.Select(AuntSue.Parse);
+        var parsed = metadata.Select((p) => AuntSue.Parse(p));
 
         foreach (var item in ForensicAnalysis)
         {
-            if (compensateForRetroEncabulator && item.Value.Item2 != 0)
+            if (compensateForRetroEncabulator && item.Value.Operand != 0)
             {
-                if (item.Value.Item2 == 1)
+                if (item.Value.Operand == 1)
                 {
                     bool NotFoundOrMore(AuntSue p)
                     {
@@ -62,10 +62,10 @@ public sealed class Day16 : Puzzle
                             return true;
                         }
 
-                        return value > item.Value.Item1;
+                        return value > item.Value.Count;
                     }
 
-                    parsed = parsed.Where(NotFoundOrMore);
+                    parsed = parsed.Where((p) => NotFoundOrMore(p));
                 }
                 else
                 {
@@ -76,10 +76,10 @@ public sealed class Day16 : Puzzle
                             return true;
                         }
 
-                        return value < item.Value.Item1;
+                        return value < item.Value.Count;
                     }
 
-                    parsed = parsed.Where(NotFoundOrLess);
+                    parsed = parsed.Where((p) => NotFoundOrLess(p));
                 }
             }
             else
@@ -91,10 +91,10 @@ public sealed class Day16 : Puzzle
                         return true;
                     }
 
-                    return value == item.Value.Item1;
+                    return value == item.Value.Count;
                 }
 
-                parsed = parsed.Where(NotFoundOrEqual);
+                parsed = parsed.Where((p) => NotFoundOrEqual(p));
             }
         }
 
@@ -133,7 +133,7 @@ public sealed class Day16 : Puzzle
         /// <summary>
         /// Gets the metadata about this Aunt Sue.
         /// </summary>
-        internal IDictionary<string, int> Metadata { get; private set; } = new Dictionary<string, int>();
+        internal Dictionary<string, int> Metadata { get; } = new();
 
         /// <summary>
         /// Parses an instance of <see cref="AuntSue"/> from the specified <see cref="string"/>.
@@ -150,12 +150,10 @@ public sealed class Day16 : Puzzle
 
             result.Number = Parse<int>(split[1].TrimEnd(':'));
 
-            split = string.Join(' ', split, 2, split.Length - 2).Split(',');
-
-            foreach (string item in split)
+            foreach (var item in string.Join(' ', split, 2, split.Length - 2).Tokenize(','))
             {
-                string[] itemSplit = item.Split(':');
-                result.Metadata[itemSplit[0].Trim()] = Parse<int>(itemSplit[1].Trim());
+                (string first, string second) = item.Bifurcate(':');
+                result.Metadata[first.Trim()] = Parse<int>(second.Trim());
             }
 
             return result;

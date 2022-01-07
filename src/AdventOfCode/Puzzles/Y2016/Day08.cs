@@ -36,7 +36,7 @@ public sealed class Day08 : Puzzle
         int height,
         ILogger logger)
     {
-        IList<Instruction> operations = instructions.Select(ParseInstruction).ToArray();
+        var operations = instructions.Select(ParseInstruction).ToArray();
 
         bool[,] grid = new bool[width, height];
 
@@ -187,9 +187,7 @@ public sealed class Day08 : Puzzle
         switch (split[0])
         {
             case "rect":
-                split = split[1].Split('x');
-                result.A = Parse<int>(split[0]);
-                result.B = Parse<int>(split[1]);
+                (result.A, result.B) = split[1].AsNumberPair<int>('x');
                 break;
 
             case "rotate":

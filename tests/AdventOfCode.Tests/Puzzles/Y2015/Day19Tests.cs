@@ -22,10 +22,10 @@ public sealed class Day19Tests : PuzzleTest
     {
         // Arrange
         string molecule = "HOH";
-        string[] replacements = new[] { "H => HO", "H => OH", "O => HH" };
+        List<string> replacements = new() { "H => HO", "H => OH", "O => HH" };
 
         // Act
-        ICollection<string> actual = Day19.GetPossibleMolecules(molecule, replacements, CancellationToken.None);
+        var actual = Day19.GetPossibleMolecules(molecule, replacements, CancellationToken.None);
 
         // Assert
         actual.ShouldNotBeNull();
@@ -37,7 +37,7 @@ public sealed class Day19Tests : PuzzleTest
     {
         // Arrange
         string molecule = "HOH";
-        string[] replacements = new[] { "e => H", "e => O", "H => HO", "H => OH", "O => HH" };
+        List<string> replacements = new() { "e => H", "e => O", "H => HO", "H => OH", "O => HH" };
 
         // Act
         int actual = Day19.GetMinimumSteps(molecule, replacements, Logger, CancellationToken.None);

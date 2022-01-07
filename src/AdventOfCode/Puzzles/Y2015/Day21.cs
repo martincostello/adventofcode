@@ -28,7 +28,7 @@ public sealed class Day21 : Puzzle
     /// <returns>
     /// A named tuple that returns whether the human player won and the amount of gold spent.
     /// </returns>
-    internal static (bool DidHumanWin, int GoldSpent) Fight(string weapon, string? armor, ICollection<string>? rings)
+    internal static (bool DidHumanWin, int GoldSpent) Fight(string weapon, string? armor, List<string>? rings)
     {
         var shop = new Shop();
         var human = new Human();
@@ -68,10 +68,7 @@ public sealed class Day21 : Puzzle
         while (attacker.HitPoints > 0 && defender.HitPoints > 0)
         {
             defender.AcceptAttack(attacker);
-
-            var player = attacker;
-            attacker = defender;
-            defender = player;
+            (attacker, defender) = (defender, attacker);
         }
 
         return player1.HitPoints > 0 ? player1 : player2;
@@ -83,23 +80,23 @@ public sealed class Day21 : Puzzle
         string[] potentialWeapons = Shop.PotentialWeapons.Keys.ToArray();
         string?[] potentialArmor = Shop.PotentialArmor.Keys.Append(null!).ToArray();
 
-        ICollection<string> keys = Shop.PotentialRings.Keys.ToArray();
+        var keys = Shop.PotentialRings.Keys;
 
-        var potentialRings = new List<ICollection<string>>((keys.Count * 2) + 1)
+        var potentialRings = new List<List<string>>((keys.Count * 2) + 1)
         {
-            Array.Empty<string>(),
+            new(),
         };
 
         foreach (string ring in keys)
         {
-            potentialRings.Add(new[] { ring });
+            potentialRings.Add(new() { ring });
         }
 
         var permutations = Maths.GetPermutations(keys, 2);
 
         foreach (var permutation in permutations)
         {
-            potentialRings.Add(permutation.ToArray());
+            potentialRings.Add(permutation.ToList());
         }
 
         var costsToLose = new List<int>((potentialArmor.Length + potentialRings.Count + potentialWeapons.Length) / 2);
@@ -263,7 +260,7 @@ public sealed class Day21 : Puzzle
         /// <summary>
         /// The armor inventory. This field is read-only.
         /// </summary>
-        internal static readonly IDictionary<string, Item> PotentialArmor = new Dictionary<string, Item>()
+        internal static readonly Dictionary<string, Item> PotentialArmor = new()
         {
             ["Leather"] = new() { Cost = 13, Armor = 1 },
             ["Chainmail"] = new() { Cost = 31, Armor = 2 },
@@ -275,7 +272,7 @@ public sealed class Day21 : Puzzle
         /// <summary>
         /// The ring inventory. This field is read-only.
         /// </summary>
-        internal static readonly IDictionary<string, Item> PotentialRings = new Dictionary<string, Item>()
+        internal static readonly Dictionary<string, Item> PotentialRings = new()
         {
             ["Damage +1"] = new() { Cost = 25, Damage = 1 },
             ["Damage +2"] = new() { Cost = 50, Damage = 2 },
@@ -288,7 +285,7 @@ public sealed class Day21 : Puzzle
         /// <summary>
         /// The weapon inventory. This field is read-only.
         /// </summary>
-        internal static readonly IDictionary<string, Item> PotentialWeapons = new Dictionary<string, Item>()
+        internal static readonly Dictionary<string, Item> PotentialWeapons = new()
         {
             ["Dagger"] = new() { Cost = 8, Damage = 4 },
             ["Shortsword"] = new() { Cost = 10, Damage = 5 },
@@ -300,17 +297,17 @@ public sealed class Day21 : Puzzle
         /// <summary>
         /// The shop's current armor inventory. This field is read-only.
         /// </summary>
-        private readonly IDictionary<string, Item> _armor = new Dictionary<string, Item>(PotentialArmor);
+        private readonly Dictionary<string, Item> _armor = new(PotentialArmor);
 
         /// <summary>
         /// The shop's current ring inventory. This field is read-only.
         /// </summary>
-        private readonly IDictionary<string, Item> _rings = new Dictionary<string, Item>(PotentialRings);
+        private readonly Dictionary<string, Item> _rings = new(PotentialRings);
 
         /// <summary>
         /// The shop's current weapon inventory. This field is read-only.
         /// </summary>
-        private readonly IDictionary<string, Item> _weapons = new Dictionary<string, Item>(PotentialWeapons);
+        private readonly Dictionary<string, Item> _weapons = new(PotentialWeapons);
 
         /// <summary>
         /// Purchases the specified armor.

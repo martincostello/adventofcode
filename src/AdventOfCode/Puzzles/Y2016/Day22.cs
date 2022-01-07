@@ -30,9 +30,9 @@ public sealed class Day22 : Puzzle
     /// </returns>
     public static (int ViableNodes, int StepsToExtract) CountViableNodePairs(IEnumerable<string> output, ILogger? logger = null)
     {
-        IList<Node> nodes = output
+        var nodes = output
             .Skip(2)
-            .Select(Node.Parse)
+            .Select((p) => Node.Parse(p))
             .ToList();
 
         int viableCount = 0;
@@ -238,7 +238,7 @@ public sealed class Day22 : Puzzle
                 split[0],
                 Parse<int>(split[1].TrimEnd('T')),
                 Parse<int>(split[2].TrimEnd('T')),
-                new Point(x, y));
+                new(x, y));
         }
 
         /// <summary>

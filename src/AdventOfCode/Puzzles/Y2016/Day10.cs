@@ -66,7 +66,7 @@ public sealed class Day10 : Puzzle
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
         IList<string> instructions = await ReadResourceAsLinesAsync();
-        IList<int> binsOfInterest = new[] { 0, 1, 2 };
+        int[] binsOfInterest = { 0, 1, 2 };
 
         (BotThatCompares61And17Microchips, ProductOfMicrochipsInBins012) = GetBotNumber(instructions, 61, 17, binsOfInterest);
 

@@ -49,19 +49,10 @@ public sealed class Day21 : Puzzle
     /// <param name="values">The value to reverse characters for.</param>
     /// <param name="start">The index at which to start reversing the characters.</param>
     /// <param name="end">The index at which to end reversing the characters.</param>
-    internal static void Reverse(char[] values, int start, int end)
+    internal static void Reverse(Span<char> values, int start, int end)
     {
-        char[] slice = values
-            .Skip(start)
-            .Take(end - start + 1)
-            .ToArray();
-
-        Array.Reverse(slice);
-
-        for (int i = start, j = 0; i <= end; i++, j++)
-        {
-            values[i] = slice[j];
-        }
+        var slice = values.Slice(start, end - start + 1);
+        slice.Reverse();
     }
 
     /// <summary>
@@ -72,7 +63,7 @@ public sealed class Day21 : Puzzle
     /// <param name="right">Whether to rotate right (instead of left).</param>
     /// <param name="steps">The number of steps to rotate by.</param>
     /// <param name="reverse">Whether to reverse the process.</param>
-    internal static void RotateDirection(char[] values, bool right, int steps, bool reverse)
+    internal static void RotateDirection(Span<char> values, bool right, int steps, bool reverse)
     {
         if (reverse)
         {
@@ -185,7 +176,7 @@ public sealed class Day21 : Puzzle
     /// <param name="x">The index to remove the letter from.</param>
     /// <param name="y">The index to insert the removed letter at.</param>
     /// <param name="reverse">Whether to reverse the process.</param>
-    private static void Move(char[] values, int x, int y, bool reverse)
+    private static void Move(Span<char> values, int x, int y, bool reverse)
     {
         if (reverse)
         {
@@ -198,7 +189,7 @@ public sealed class Day21 : Puzzle
         value = value.Remove(x, 1);
         value = value.Insert(y, ch);
 
-        Array.Copy(value.ToCharArray(), values, values.Length);
+        value.CopyTo(values);
     }
 
     /// <summary>

@@ -24,7 +24,8 @@ public sealed class Day08 : Puzzle
     /// </summary>
     /// <param name="collection">The values to get the encoded number of characters from.</param>
     /// <returns>The number of characters in <paramref name="collection"/> when encoded.</returns>
-    internal static int GetEncodedCharacterCount(IEnumerable<string> collection) => collection.Sum(GetEncodedCharacterCount);
+    internal static int GetEncodedCharacterCount(IEnumerable<string> collection)
+        => collection.Sum((p) => GetEncodedCharacterCount(p));
 
     /// <summary>
     /// Returns the number of characters in the specified <see cref="string"/> if literals are encoded.
@@ -35,11 +36,9 @@ public sealed class Day08 : Puzzle
     {
         var builder = new StringBuilder(value.Length + 2).Append('\"');
 
-        for (int i = 0; i < value.Length; i++)
+        foreach (var item in value.Enumerate())
         {
-            char current = value[i];
-
-            switch (current)
+            switch (item.Value)
             {
                 case '\"':
                 case '\\':
@@ -51,7 +50,7 @@ public sealed class Day08 : Puzzle
                     break;
             }
 
-            builder.Append(current);
+            builder.Append(item.Value);
         }
 
         builder.Append('\"');
@@ -64,14 +63,15 @@ public sealed class Day08 : Puzzle
     /// </summary>
     /// <param name="collection">The values to get the number of literal characters from.</param>
     /// <returns>The number of literal characters in <paramref name="collection"/>.</returns>
-    internal static int GetLiteralCharacterCount(IEnumerable<string> collection) => collection.Sum(GetLiteralCharacterCount);
+    internal static int GetLiteralCharacterCount(IEnumerable<string> collection)
+        => collection.Sum((p) => GetLiteralCharacterCount(p));
 
     /// <summary>
     /// Returns the number of literal characters in the specified <see cref="string"/>.
     /// </summary>
     /// <param name="value">The value to get the number of literal characters from.</param>
     /// <returns>The number of literal characters in <paramref name="value"/>.</returns>
-    internal static int GetLiteralCharacterCount(string value)
+    internal static int GetLiteralCharacterCount(ReadOnlySpan<char> value)
     {
         int count = 0;
 
@@ -91,7 +91,7 @@ public sealed class Day08 : Puzzle
 
         if (value.Length > 0)
         {
-            var characters = new Queue<char>(value);
+            var characters = new Queue<char>(value.ToString());
 
             while (characters.Count > 0)
             {

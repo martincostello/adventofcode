@@ -37,16 +37,11 @@ public sealed class Day06 : Puzzle
         var lines = await ReadResourceAsLinesAsync();
         var instructions = new List<Instruction>(lines.Count);
 
+        Func<string, Instruction> parser = version == 1 ? InstructionV1.Parse : InstructionV2.Parse;
+
         foreach (string line in lines)
         {
-            if (version == 1)
-            {
-                instructions.Add(InstructionV1.Parse(line));
-            }
-            else
-            {
-                instructions.Add(InstructionV2.Parse(line));
-            }
+            instructions.Add(parser(line));
         }
 
         if (Verbose)
@@ -54,7 +49,8 @@ public sealed class Day06 : Puzzle
             Logger.WriteLine("Processing instructions using set {0}...", version);
         }
 
-        var grid = new LightGrid(1000, 1000);
+        const int Length = 1_000;
+        var grid = new LightGrid(Length, Length);
 
         foreach (Instruction instruction in instructions)
         {
@@ -421,17 +417,11 @@ public sealed class Day06 : Puzzle
         internal bool Toggle(Point position)
         {
             bool isOff = this[position] == 0;
+            int delta = isOff ? 1 : -1;
 
-            if (isOff)
-            {
-                IncrementBrightness(position, 1);
-                return true;
-            }
-            else
-            {
-                IncrementBrightness(position, -1);
-                return false;
-            }
+            IncrementBrightness(position, delta);
+
+            return isOff;
         }
 
         /// <summary>
@@ -485,7 +475,7 @@ public sealed class Day06 : Puzzle
         /// <returns>The new brightness of the light at <paramref name="position"/>.</returns>
         private int IncrementOrSetBrightness(Point position, int delta, bool set = false)
         {
-            int current = _lightBrightnesses.GetValueOrDefault(position);
+            int current;
 
             if (set)
             {
@@ -493,15 +483,10 @@ public sealed class Day06 : Puzzle
             }
             else
             {
-                current += delta;
+                current = _lightBrightnesses.GetValueOrDefault(position) + delta;
             }
 
-            if (current < 0)
-            {
-                current = 0;
-            }
-
-            return _lightBrightnesses[position] = current;
+            return _lightBrightnesses[position] = Math.Max(current, 0);
         }
     }
 }

@@ -32,12 +32,12 @@ public sealed class Day02 : Puzzle
     {
         // Parse the dimensions of the presents
         var presents = dimensions
-            .Select(Present.Parse)
+            .Select((p) => Present.Parse(p))
             .ToList();
 
         // Determine the total area of wrapping paper required and the amount of ribbon
-        int totalArea = presents.Sum(GetWrappingPaperArea);
-        int length = presents.Sum(GetRibbonLength);
+        int totalArea = presents.Sum((p) => GetWrappingPaperArea(p));
+        int length = presents.Sum((p) => GetRibbonLength(p));
 
         return (totalArea, length);
     }
@@ -68,14 +68,8 @@ public sealed class Day02 : Puzzle
     /// <returns>The length of ribbon, in feet, required to wrap the present.</returns>
     private static int GetRibbonLength(Present present)
     {
-        int[] perimetersOfSides = new[]
-        {
-            (present.Length + present.Width) * 2,
-            (present.Width + present.Height) * 2,
-            (present.Height + present.Length) * 2,
-        };
-
-        int smallestPerimeter = perimetersOfSides.Min();
+        int smallestPerimeter = Math.Min((present.Length + present.Width) * 2, (present.Width + present.Height) * 2);
+        smallestPerimeter = Math.Min(smallestPerimeter, (present.Height + present.Length) * 2);
 
         int lengthForBow = present.Height * present.Length * present.Width;
 
@@ -94,25 +88,19 @@ public sealed class Day02 : Puzzle
             (2 * present.Width * present.Height) +
             (2 * present.Height * present.Length);
 
-        int[] areasOfSides = new[]
-        {
-            present.Length * present.Width,
-            present.Width * present.Height,
-            present.Height * present.Length,
-        };
-
-        int extra = areasOfSides.Min();
+        int extra = Math.Min(present.Length * present.Width, present.Width * present.Height);
+        extra = Math.Min(extra, present.Height * present.Length);
 
         return surfaceArea + extra;
     }
 
     /// <summary>
-    /// A class representing a Christmas present. This class cannot be inherited.
+    /// Represents a Christmas present.
     /// </summary>
-    internal sealed class Present
+    internal readonly struct Present
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="Present"/> class.
+        /// Initializes a new instance of the <see cref="Present"/> struct.
         /// </summary>
         /// <param name="length">The length of the present.</param>
         /// <param name="width">The width of the present.</param>
@@ -127,17 +115,17 @@ public sealed class Day02 : Puzzle
         /// <summary>
         /// Gets the length of the present.
         /// </summary>
-        internal int Length { get; }
+        internal readonly int Length { get; }
 
         /// <summary>
         /// Gets the width of the present.
         /// </summary>
-        internal int Width { get; }
+        internal readonly int Width { get; }
 
         /// <summary>
         /// Gets the height of the present.
         /// </summary>
-        internal int Height { get; }
+        internal readonly int Height { get; }
 
         /// <summary>
         /// Parses the specified <see cref="string"/> to an instance of <see cref="Present"/>.

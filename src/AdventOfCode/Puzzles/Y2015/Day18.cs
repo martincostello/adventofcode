@@ -34,7 +34,7 @@ public sealed class Day18 : Puzzle
     /// An <see cref="IList{T}"/> of <see cref="string"/> containing the light
     /// configuration after the number of steps specified by the value of <paramref name="steps"/>.
     /// </returns>
-    internal static IList<string> GetGridConfigurationAfterSteps(IList<string> initial, int steps, bool areCornerLightsBroken)
+    internal static List<string> GetGridConfigurationAfterSteps(IList<string> initial, int steps, bool areCornerLightsBroken)
     {
         bool[,] current = ParseInitialState(initial);
 
@@ -70,7 +70,7 @@ public sealed class Day18 : Puzzle
         int steps = Parse<int>(args[0]);
         bool areCornerLightsBroken = args.Length == 2 && string.Equals(args[1], bool.TrueString, StringComparison.OrdinalIgnoreCase);
 
-        IList<string> final = GetGridConfigurationAfterSteps(initial, steps, areCornerLightsBroken);
+        var final = GetGridConfigurationAfterSteps(initial, steps, areCornerLightsBroken);
 
         for (int x = 0; x < final.Count; x++)
         {
@@ -111,7 +111,7 @@ public sealed class Day18 : Puzzle
 
         bool[,] output = new bool[width, height];
 
-        IList<Point> cornerLights;
+        Point[] cornerLights;
 
         if (areCornerLightsBroken)
         {

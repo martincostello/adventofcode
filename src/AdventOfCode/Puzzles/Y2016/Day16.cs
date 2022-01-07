@@ -26,7 +26,7 @@ public sealed class Day16 : Puzzle
     /// </returns>
     internal static string GetDiskChecksum(string initial, int size)
     {
-        IList<char> data = GenerateData(initial, size);
+        var data = GenerateData(initial, size);
         return ComputeChecksum(data);
     }
 
@@ -53,7 +53,7 @@ public sealed class Day16 : Puzzle
     /// <returns>
     /// The checksum for the data specified by <paramref name="data"/>.
     /// </returns>
-    private static string ComputeChecksum(IList<char> data)
+    private static string ComputeChecksum(List<char> data)
     {
         string? result = null;
 
@@ -92,7 +92,7 @@ public sealed class Day16 : Puzzle
     /// An <see cref="IList{T}"/> containing the generated data for
     /// the disk which is equal in length to the value of <paramref name="size"/>.
     /// </returns>
-    private static IList<char> GenerateData(string initial, int size)
+    private static List<char> GenerateData(string initial, int size)
     {
         var a = new List<char>(initial);
 
