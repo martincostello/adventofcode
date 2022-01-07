@@ -47,11 +47,7 @@ public sealed class Day16 : Puzzle
 
             foreach (string range in split)
             {
-                (string first, string second) = range.Bifurcate('-');
-
-                int start = Parse<int>(first);
-                int end = Parse<int>(second);
-
+                (int start, int end) = range.AsNumberPair<int>('-');
                 ranges.Add(new(start, end));
             }
 

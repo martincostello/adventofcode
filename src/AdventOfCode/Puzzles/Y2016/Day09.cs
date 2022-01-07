@@ -79,10 +79,7 @@ public sealed class Day09 : Puzzle
                 {
                     isInMarker = false;
 
-                    (string first, string second) = marker.ToString().Bifurcate('x');
-
-                    repeatLength = Parse<int>(first);
-                    repeatCount = Parse<int>(second);
+                    (repeatLength, repeatCount) = marker.ToString().AsNumberPair<int>('x');
 
                     isInRepeat = true;
                     marker.Clear();

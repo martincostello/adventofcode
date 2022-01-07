@@ -50,6 +50,42 @@ internal static class StringExtensions
     }
 
     /// <summary>
+    /// Parses the specified string as a pair of numbers.
+    /// </summary>
+    /// <typeparam name="T">The type of the numbers.</typeparam>
+    /// <param name="value">The string to parse as a pair of numbers.</param>
+    /// <param name="separator">The optional separator between the two numbers.</param>
+    /// <returns>
+    /// The two numbers parsed from the string.
+    /// </returns>
+    public static (T First, T Second) AsNumberPair<T>(this string value, char separator = ',')
+        where T : INumber<T>
+        => value.AsSpan().AsNumberPair<T>(separator);
+
+    /// <summary>
+    /// Parses the specified span as a pair of numbers.
+    /// </summary>
+    /// <typeparam name="T">The type of the numbers.</typeparam>
+    /// <param name="value">The span to parse as a pair of numbers.</param>
+    /// <param name="separator">The optional separator between the two numbers.</param>
+    /// <returns>
+    /// The two numbers parsed from the span.
+    /// </returns>
+    public static (T First, T Second) AsNumberPair<T>(this ReadOnlySpan<char> value, char separator = ',')
+        where T : INumber<T>
+    {
+        var tokens = value.Tokenize(separator);
+
+        tokens.MoveNext();
+        T first = Puzzle.Parse<T>(tokens.Current);
+
+        tokens.MoveNext();
+        T second = Puzzle.Parse<T>(tokens.Current);
+
+        return (first, second);
+    }
+
+    /// <summary>
     /// Parse the specified string as a sequence of numbers.
     /// </summary>
     /// <typeparam name="T">The type of the numbers.</typeparam>
