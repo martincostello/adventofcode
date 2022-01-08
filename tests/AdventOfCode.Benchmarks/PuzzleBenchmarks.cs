@@ -205,6 +205,17 @@ public class PuzzleBenchmarks
         }
 
         public override IPuzzle Puzzle { get; }
+
+        private sealed class NullLogger : ILogger
+        {
+            public string WriteGrid(bool[,] array, char falseChar, char trueChar)
+                => string.Empty;
+
+            public void WriteLine(string format, params object[] args)
+            {
+                // No-op
+            }
+        }
     }
 
     public abstract class PuzzleInput
@@ -237,17 +248,6 @@ public class PuzzleBenchmarks
             }
 
             return name;
-        }
-    }
-
-    private sealed class NullLogger : ILogger
-    {
-        public string WriteGrid(bool[,] array, char falseChar, char trueChar)
-            => string.Empty;
-
-        public void WriteLine(string format, params object[] args)
-        {
-            // No-op
         }
     }
 }
