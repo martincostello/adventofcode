@@ -28,12 +28,12 @@ public sealed class Day21 : Puzzle
     /// </returns>
     internal static string Scramble(string text, IEnumerable<string> instructions, bool reverse)
     {
-        char[] values = text.ToCharArray();
-
         if (reverse)
         {
             instructions = instructions.Reverse();
         }
+
+        char[] values = text.ToCharArray();
 
         foreach (string instruction in instructions)
         {
@@ -123,7 +123,7 @@ public sealed class Day21 : Puzzle
     /// <param name="instruction">The instruction to process.</param>
     /// <param name="values">The characters to apply the instruction to when processes.</param>
     /// <param name="reverse">Whether to reverse the instruction.</param>
-    private static void Process(string instruction, char[] values, bool reverse)
+    private static void Process(string instruction, Span<char> values, bool reverse)
     {
         string[] split = instruction.Split(' ');
 
@@ -201,9 +201,9 @@ public sealed class Day21 : Puzzle
     /// <param name="values">The value to rotate characters for.</param>
     /// <param name="letter">The letter to use to perform the rotation.</param>
     /// <param name="reverse">Whether to reverse the process.</param>
-    private static void RotatePosition(char[] values, string letter, bool reverse)
+    private static void RotatePosition(Span<char> values, string letter, bool reverse)
     {
-        int index = Array.IndexOf(values, letter[0]);
+        int index = values.IndexOf(letter[0]);
 
         int steps;
 
@@ -236,7 +236,7 @@ public sealed class Day21 : Puzzle
     /// <param name="values">The value to swap characters for.</param>
     /// <param name="x">The first character to swap.</param>
     /// <param name="y">The second character to swap.</param>
-    private static void SwapLetters(char[] values, string x, string y)
+    private static void SwapLetters(Span<char> values, string x, string y)
     {
         char first = x[0];
         char second = y[0];
@@ -276,6 +276,6 @@ public sealed class Day21 : Puzzle
     /// <param name="x">The index of the first location to swap.</param>
     /// <param name="y">The index of the second location to swap.</param>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    private static void SwapPosition(char[] values, int x, int y)
+    private static void SwapPosition(Span<char> values, int x, int y)
         => (values[x], values[y]) = (values[y], values[x]);
 }
