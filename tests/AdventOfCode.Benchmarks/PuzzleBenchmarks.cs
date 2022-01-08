@@ -10,9 +10,10 @@ namespace MartinCostello.AdventOfCode.Benchmarks;
 [MemoryDiagnoser]
 public class PuzzleBenchmarks
 {
-    public static IEnumerable<object> Puzzles()
+    //// Classes not benchmarked are either too slow or not implemented
+
+    public static IEnumerable<object> Puzzles2015()
     {
-        // Classes not benchmarked are either too slow or not implemented
         yield return new PuzzleInput<Puzzles.Y2015.Day01>();
         yield return new PuzzleInput<Puzzles.Y2015.Day02>();
         yield return new PuzzleInput<Puzzles.Y2015.Day03>();
@@ -32,6 +33,10 @@ public class PuzzleBenchmarks
         yield return new PuzzleInput<Puzzles.Y2015.Day21>();
         yield return new PuzzleInput<Puzzles.Y2015.Day23>();
         yield return new PuzzleInput<Puzzles.Y2015.Day25>("2947", "3029");
+    }
+
+    public static IEnumerable<object> Puzzles2016()
+    {
         yield return new PuzzleInput<Puzzles.Y2016.Day01>();
         yield return new PuzzleInput<Puzzles.Y2016.Day02>();
         yield return new PuzzleInput<Puzzles.Y2016.Day03>();
@@ -53,6 +58,10 @@ public class PuzzleBenchmarks
         yield return new PuzzleInput<Puzzles.Y2016.Day22>();
         yield return new PuzzleInput<Puzzles.Y2016.Day23>("7");
         yield return new PuzzleInput<Puzzles.Y2016.Day24>();
+    }
+
+    public static IEnumerable<object> Puzzles2017()
+    {
         yield return new PuzzleInput<Puzzles.Y2017.Day01>();
         yield return new PuzzleInput<Puzzles.Y2017.Day02>();
         yield return new PuzzleInput<Puzzles.Y2017.Day03>("312051");
@@ -67,12 +76,20 @@ public class PuzzleBenchmarks
         yield return new PuzzleInput<Puzzles.Y2017.Day12>();
         yield return new PuzzleInput<Puzzles.Y2017.Day13>();
         yield return new PuzzleInput<Puzzles.Y2017.Day14>("hwlqcszp");
+    }
+
+    public static IEnumerable<object> Puzzles2018()
+    {
         yield return new PuzzleInput<Puzzles.Y2018.Day02>();
         yield return new PuzzleInput<Puzzles.Y2018.Day03>("312051");
         yield return new PuzzleInput<Puzzles.Y2018.Day04>();
         yield return new PuzzleInput<Puzzles.Y2018.Day06>();
         yield return new PuzzleInput<Puzzles.Y2018.Day07>();
         yield return new PuzzleInput<Puzzles.Y2018.Day08>();
+    }
+
+    public static IEnumerable<object> Puzzles2019()
+    {
         yield return new PuzzleInput<Puzzles.Y2019.Day01>();
         yield return new PuzzleInput<Puzzles.Y2019.Day02>();
         yield return new PuzzleInput<Puzzles.Y2019.Day03>();
@@ -81,6 +98,10 @@ public class PuzzleBenchmarks
         yield return new PuzzleInput<Puzzles.Y2019.Day07>();
         yield return new PuzzleInput<Puzzles.Y2019.Day08>();
         yield return new PuzzleInput<Puzzles.Y2019.Day09>("1");
+    }
+
+    public static IEnumerable<object> Puzzles2020()
+    {
         yield return new PuzzleInput<Puzzles.Y2020.Day01>();
         yield return new PuzzleInput<Puzzles.Y2020.Day02>();
         yield return new PuzzleInput<Puzzles.Y2020.Day03>();
@@ -103,6 +124,10 @@ public class PuzzleBenchmarks
         yield return new PuzzleInput<Puzzles.Y2020.Day22>();
         yield return new PuzzleInput<Puzzles.Y2020.Day24>();
         yield return new PuzzleInput<Puzzles.Y2020.Day25>();
+    }
+
+    public static IEnumerable<object> Puzzles2021()
+    {
         yield return new PuzzleInput<Puzzles.Y2021.Day01>();
         yield return new PuzzleInput<Puzzles.Y2021.Day02>();
         yield return new PuzzleInput<Puzzles.Y2021.Day03>();
@@ -131,8 +156,38 @@ public class PuzzleBenchmarks
     }
 
     [Benchmark]
-    [ArgumentsSource(nameof(Puzzles))]
-    public async Task<PuzzleResult> Solve(PuzzleInput input)
+    [ArgumentsSource(nameof(Puzzles2015))]
+    public async Task<PuzzleResult> Solve2015(PuzzleInput input)
+        => await input.Puzzle.SolveAsync(input.Args, CancellationToken.None);
+
+    [Benchmark]
+    [ArgumentsSource(nameof(Puzzles2016))]
+    public async Task<PuzzleResult> Solve2016(PuzzleInput input)
+        => await input.Puzzle.SolveAsync(input.Args, CancellationToken.None);
+
+    [Benchmark]
+    [ArgumentsSource(nameof(Puzzles2017))]
+    public async Task<PuzzleResult> Solve2017(PuzzleInput input)
+        => await input.Puzzle.SolveAsync(input.Args, CancellationToken.None);
+
+    [Benchmark]
+    [ArgumentsSource(nameof(Puzzles2018))]
+    public async Task<PuzzleResult> Solve2018(PuzzleInput input)
+        => await input.Puzzle.SolveAsync(input.Args, CancellationToken.None);
+
+    [Benchmark]
+    [ArgumentsSource(nameof(Puzzles2019))]
+    public async Task<PuzzleResult> Solve2019(PuzzleInput input)
+        => await input.Puzzle.SolveAsync(input.Args, CancellationToken.None);
+
+    [Benchmark]
+    [ArgumentsSource(nameof(Puzzles2020))]
+    public async Task<PuzzleResult> Solve2020(PuzzleInput input)
+        => await input.Puzzle.SolveAsync(input.Args, CancellationToken.None);
+
+    [Benchmark]
+    [ArgumentsSource(nameof(Puzzles2021))]
+    public async Task<PuzzleResult> Solve2021(PuzzleInput input)
         => await input.Puzzle.SolveAsync(input.Args, CancellationToken.None);
 
     public sealed class PuzzleInput<T> : PuzzleInput
