@@ -36,7 +36,9 @@ public sealed class Day08 : Puzzle
         int height,
         ILogger logger)
     {
-        var operations = instructions.Select(ParseInstruction).ToArray();
+        var operations = instructions
+            .Select((p) => ParseInstruction(p))
+            .ToArray();
 
         bool[,] grid = new bool[width, height];
 
