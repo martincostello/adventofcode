@@ -154,9 +154,9 @@ public sealed class Day08 : Puzzle
 
         for (int y = 0; y < height; y++)
         {
-            for (int x = 0; x < width; x++)
+            foreach (int value in message.GetColumn(y))
             {
-                builder.Append(message[x, y] == 1 ? 'x' : ' ');
+                builder.Append(value == 1 ? 'x' : ' ');
             }
 
             builder.AppendLine();

@@ -135,10 +135,8 @@ public sealed class Day04 : Puzzle
             {
                 int rowCount = 0;
 
-                for (int y = 0; y < lengthY; y++)
+                foreach (Square square in _squares.GetRowSpan(x))
                 {
-                    Square square = _squares[x, y];
-
                     if (square.IsMarked)
                     {
                         rowCount++;
@@ -156,10 +154,8 @@ public sealed class Day04 : Puzzle
             {
                 int columnCount = 0;
 
-                for (int x = 0; x < lengthX; x++)
+                foreach (Square square in _squares.GetColumn(y))
                 {
-                    Square square = _squares[x, y];
-
                     if (square.IsMarked)
                     {
                         columnCount++;
@@ -186,14 +182,11 @@ public sealed class Day04 : Puzzle
             _lastMarked = number;
 
             int lengthX = _squares.GetLength(0);
-            int lengthY = _squares.GetLength(1);
 
             for (int x = 0; x < lengthX; x++)
             {
-                for (int y = 0; y < lengthY; y++)
+                foreach (Square square in _squares.GetRowSpan(x))
                 {
-                    Square square = _squares[x, y];
-
                     if (square.Number == number)
                     {
                         square.IsMarked = true;
@@ -208,16 +201,12 @@ public sealed class Day04 : Puzzle
         public int Score()
         {
             int lengthX = _squares.GetLength(0);
-            int lengthY = _squares.GetLength(1);
-
             int sum = 0;
 
             for (int x = 0; x < lengthX; x++)
             {
-                for (int y = 0; y < lengthY; y++)
+                foreach (Square square in _squares.GetRowSpan(x))
                 {
-                    Square square = _squares[x, y];
-
                     if (!square.IsMarked)
                     {
                         sum += square.Number;

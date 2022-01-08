@@ -74,15 +74,7 @@ public sealed class Day18 : Puzzle
 
         for (int x = 0; x < final.Count; x++)
         {
-            string value = final[x];
-
-            for (int y = 0; y < value.Length; y++)
-            {
-                if (value[y] == On)
-                {
-                    LightsIlluminated++;
-                }
-            }
+            LightsIlluminated += final[x].Count(On);
         }
 
         if (Verbose)
