@@ -12,6 +12,44 @@ public class PuzzleBenchmarks
 {
     //// Classes not benchmarked are either too slow or not implemented
 
+    public static IEnumerable<object> AllPuzzles()
+    {
+        foreach (object puzzle in Puzzles2015())
+        {
+            yield return puzzle;
+        }
+
+        foreach (object puzzle in Puzzles2016())
+        {
+            yield return puzzle;
+        }
+
+        foreach (object puzzle in Puzzles2017())
+        {
+            yield return puzzle;
+        }
+
+        foreach (object puzzle in Puzzles2018())
+        {
+            yield return puzzle;
+        }
+
+        foreach (object puzzle in Puzzles2019())
+        {
+            yield return puzzle;
+        }
+
+        foreach (object puzzle in Puzzles2020())
+        {
+            yield return puzzle;
+        }
+
+        foreach (object puzzle in Puzzles2021())
+        {
+            yield return puzzle;
+        }
+    }
+
     public static IEnumerable<object> Puzzles2015()
     {
         yield return new PuzzleInput<Puzzles.Y2015.Day01>();
@@ -237,10 +275,7 @@ public class PuzzleBenchmarks
             var type = Puzzle.GetType();
             string[] split = type.FullName!.Split('.');
 
-            string year = split[3];
-            string day = split[4].Replace("Day", string.Empty, StringComparison.Ordinal);
-
-            string name = $"{year}-{day}";
+            string name = split[4].Replace("Day", string.Empty, StringComparison.Ordinal);
 
             if (Args?.Length > 0)
             {

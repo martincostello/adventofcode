@@ -9,7 +9,7 @@ public static class BenchmarkTests
 {
     public static IEnumerable<object[]> Benchmarks()
     {
-        foreach (object puzzle in PuzzleBenchmarks.Puzzles())
+        foreach (object puzzle in AllPuzzles())
         {
             yield return new[] { puzzle };
         }
@@ -18,12 +18,5 @@ public static class BenchmarkTests
     [Theory]
     [MemberData(nameof(Benchmarks))]
     public static async Task Can_Run_Benchmarks(PuzzleInput input)
-    {
-        // Arrange
-        IPuzzle puzzle = input.Puzzle;
-        string[] args = input.Args;
-
-        // Act (no Assert)
-        await puzzle.SolveAsync(args, CancellationToken.None);
-    }
+        => await input.SolveAsync(); // Act (no Assert)
 }
