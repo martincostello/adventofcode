@@ -91,6 +91,8 @@ public sealed class Day22 : Puzzle
                     newCuboids.AddOrIncrement(cuboid, 1);
                 }
 
+                reactor.EnsureCapacity(newCuboids.Count);
+
                 foreach ((Cuboid newCuboid, long count) in newCuboids)
                 {
                     reactor.AddOrIncrement(newCuboid, count, count);

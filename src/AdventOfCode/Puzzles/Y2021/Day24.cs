@@ -30,11 +30,12 @@ public sealed class Day24 : Puzzle
     /// </returns>
     public static long Execute(IList<string> instructions, bool maximumValue)
     {
-        var constants = new List<(int A, int B)>();
-
         const int Sections = 18;
+        const int Instructions = 14;
 
-        foreach (int i in Enumerable.Range(0, 14))
+        var constants = new List<(int A, int B)>(Instructions);
+
+        foreach (int i in Enumerable.Range(0, Instructions))
         {
             int section = i * Sections;
 
@@ -60,7 +61,7 @@ public sealed class Day24 : Puzzle
             }
         }
 
-        var output = new Dictionary<int, int>(14);
+        var output = new Dictionary<int, int>(Instructions);
 
         foreach ((int key, (int x, int y)) in keys)
         {

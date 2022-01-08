@@ -56,7 +56,7 @@ public sealed class Day08 : Puzzle
 
         static int Decode(string[] signals, string[] numbers)
         {
-            var digits = new Dictionary<int, HashSet<char>>();
+            var digits = new Dictionary<int, HashSet<char>>(10);
 
             foreach (string signal in signals)
             {
