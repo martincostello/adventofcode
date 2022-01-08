@@ -35,7 +35,7 @@ public sealed class Day08 : Puzzle
         int width,
         ILogger? logger = null)
     {
-        var layers = new List<int[,]>();
+        var layers = new List<int[,]>(height);
         int[,] current = new int[0, 0];
 
         int pixelsPerLayer = height * width;
@@ -73,7 +73,7 @@ public sealed class Day08 : Puzzle
 
         for (i = 0; i < layers.Count; i++)
         {
-            int countOfZeroes = GetCountOfDigit(layers[i], 0);
+            int countOfZeroes = layers[i].Count(0);
 
             if (countOfZeroes < countOfZeroesInLastLayer)
             {
@@ -83,8 +83,8 @@ public sealed class Day08 : Puzzle
         }
 
         int[,] layerWithLeastZeroes = layers[indexOfLayerWithLeastZeros];
-        int ones = GetCountOfDigit(layerWithLeastZeroes, 1);
-        int twos = GetCountOfDigit(layerWithLeastZeroes, 2);
+        int ones = layerWithLeastZeroes.Count(1);
+        int twos = layerWithLeastZeroes.Count(2);
 
         int checksum = ones * twos;
 
@@ -135,34 +135,6 @@ public sealed class Day08 : Puzzle
         result.Visualizations.Add(visualization);
 
         return result;
-    }
-
-    /// <summary>
-    /// Gets the number of occurences of the specified digit in the array.
-    /// </summary>
-    /// <param name="layer">The array representing the layer to count the digits in.</param>
-    /// <param name="digit">The digit to count in the layer.</param>
-    /// <returns>
-    /// The number of occurences of the digit specified by <paramref name="digit"/> in the array.
-    /// </returns>
-    private static int GetCountOfDigit(int[,] layer, int digit)
-    {
-        int count = 0;
-        int width = layer.GetLength(0);
-        int height = layer.GetLength(1);
-
-        for (int x = 0; x < width; x++)
-        {
-            for (int y = 0; y < height; y++)
-            {
-                if (layer[x, y] == digit)
-                {
-                    count++;
-                }
-            }
-        }
-
-        return count;
     }
 
     /// <summary>

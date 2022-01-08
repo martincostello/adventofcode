@@ -18,16 +18,16 @@ public sealed class Day04Tests : PuzzleTest
     }
 
     [Theory]
-    [InlineData("111111", 1, true)]
-    [InlineData("111123", 1, true)]
-    [InlineData("122345", 1, true)]
-    [InlineData("135679", 1, false)]
-    [InlineData("123789", 1, false)]
-    [InlineData("223450", 1, false)]
-    [InlineData("112233", 2, true)]
-    [InlineData("123444", 2, false)]
-    [InlineData("111122", 2, true)]
-    public void Y2019_Day04_Is_Valid_Returns_Correct_Value(string password, int version, bool expected)
+    [InlineData(111111, 1, true)]
+    [InlineData(111123, 1, true)]
+    [InlineData(122345, 1, true)]
+    [InlineData(135679, 1, false)]
+    [InlineData(123789, 1, false)]
+    [InlineData(223450, 1, false)]
+    [InlineData(112233, 2, true)]
+    [InlineData(123444, 2, false)]
+    [InlineData(111122, 2, true)]
+    public void Y2019_Day04_Is_Valid_Returns_Correct_Value(int password, int version, bool expected)
     {
         // Act
         bool actual = Day04.IsValid(password, version);

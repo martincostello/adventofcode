@@ -67,7 +67,7 @@ internal sealed class IntcodeVM
     /// </returns>
     internal static long[] ParseProgram(string program)
     {
-        var instructions = new List<long>();
+        var instructions = new List<long>(program.Count(','));
 
         foreach (var instruction in program.Tokenize(','))
         {

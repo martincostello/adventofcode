@@ -64,16 +64,9 @@ public sealed class Day03 : Puzzle
                 intersections.Add(point);
             }
 
-            int[] stepsForWires = Array.Empty<int>();
-
-            if (!stepsToIntersection.ContainsKey(point))
+            if (!stepsToIntersection.TryGetValue(point, out int[]? stepsForWires))
             {
-                stepsForWires = stepsToIntersection[point] = new int[2];
-                Array.Fill(stepsForWires, int.MaxValue);
-            }
-            else
-            {
-                stepsForWires = stepsToIntersection[point];
+                stepsForWires = stepsToIntersection[point] = new[] { int.MaxValue, int.MaxValue };
             }
 
             int index = (int)wire - 1;
@@ -82,27 +75,26 @@ public sealed class Day03 : Puzzle
 
         for (int i = 0; i < wires.Count; i++)
         {
-            string wire = wires[i];
-            var path = wire.Tokenize(',');
-
             int x = 0;
             int y = 0;
             int steps = 0;
 
-            foreach (var instruction in path)
+            foreach (var instruction in wires[i].Tokenize(','))
             {
                 (int deltaX, int deltaY) = GetDelta(instruction);
 
                 int sign = Math.Sign(deltaX);
+                int magnitude = Math.Abs(deltaX);
 
-                for (int j = 0; j < Math.Abs(deltaX); j++, steps++)
+                for (int j = 0; j < magnitude; j++, steps++)
                 {
                     MarkWire(new(x + (j * sign), y), (Wires)(i + 1), steps);
                 }
 
                 sign = Math.Sign(deltaY);
+                magnitude = Math.Abs(deltaY);
 
-                for (int j = 0; j < Math.Abs(deltaY); j++, steps++)
+                for (int j = 0; j < magnitude; j++, steps++)
                 {
                     MarkWire(new(x, y + (j * sign)), (Wires)(i + 1), steps);
                 }
