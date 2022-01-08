@@ -41,6 +41,41 @@ internal static class StringExtensions
     }
 
     /// <summary>
+    /// Trifurcates the specified string.
+    /// </summary>
+    /// <param name="value">The string to trifurcate.</param>
+    /// <param name="separator">The separator between the three strings.</param>
+    /// <returns>
+    /// The three strings separated by the specified character.
+    /// </returns>
+    public static (string First, string Second, string Third) Trifurcate(this string value, char separator)
+        => value.AsSpan().Trifurcate(separator);
+
+    /// <summary>
+    /// Trifurcates the specified span.
+    /// </summary>
+    /// <param name="value">The span to trifurcate.</param>
+    /// <param name="separator">The separator between the three spans.</param>
+    /// <returns>
+    /// The three strings separated by the specified character.
+    /// </returns>
+    public static (string First, string Second, string Third) Trifurcate(this ReadOnlySpan<char> value, char separator)
+    {
+        var tokens = value.Tokenize(separator);
+
+        tokens.MoveNext();
+        var first = tokens.Current;
+
+        tokens.MoveNext();
+        var second = tokens.Current;
+
+        tokens.MoveNext();
+        var third = tokens.Current;
+
+        return (first.ToString(), second.ToString(), third.ToString());
+    }
+
+    /// <summary>
     /// Returns a string that is a mirror image of the string.
     /// </summary>
     /// <param name="value">The string to mirror.</param>
@@ -94,6 +129,45 @@ internal static class StringExtensions
         T second = Puzzle.Parse<T>(tokens.Current);
 
         return (first, second);
+    }
+
+    /// <summary>
+    /// Parses the specified string as a triple of numbers.
+    /// </summary>
+    /// <typeparam name="T">The type of the numbers.</typeparam>
+    /// <param name="value">The string to parse as a triple of numbers.</param>
+    /// <param name="separator">The optional separator between the three numbers.</param>
+    /// <returns>
+    /// The three numbers parsed from the string.
+    /// </returns>
+    public static (T First, T Second, T Third) AsNumberTriple<T>(this string value, char separator = ',')
+        where T : INumber<T>
+        => value.AsSpan().AsNumberTriple<T>(separator);
+
+    /// <summary>
+    /// Parses the specified span as a triple of numbers.
+    /// </summary>
+    /// <typeparam name="T">The type of the numbers.</typeparam>
+    /// <param name="value">The span to parse as a triple of numbers.</param>
+    /// <param name="separator">The optional separator between the three numbers.</param>
+    /// <returns>
+    /// The three numbers parsed from the span.
+    /// </returns>
+    public static (T First, T Second, T Third) AsNumberTriple<T>(this ReadOnlySpan<char> value, char separator = ',')
+        where T : INumber<T>
+    {
+        var tokens = value.Tokenize(separator);
+
+        tokens.MoveNext();
+        T first = Puzzle.Parse<T>(tokens.Current);
+
+        tokens.MoveNext();
+        T second = Puzzle.Parse<T>(tokens.Current);
+
+        tokens.MoveNext();
+        T third = Puzzle.Parse<T>(tokens.Current);
+
+        return (first, second, third);
     }
 
     /// <summary>

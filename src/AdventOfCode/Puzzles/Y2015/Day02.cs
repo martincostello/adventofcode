@@ -134,12 +134,7 @@ public sealed class Day02 : Puzzle
         /// <returns>The result of parsing <paramref name="value"/>.</returns>
         internal static Present Parse(string value)
         {
-            string[] split = value.Split('x');
-
-            int length = Parse<int>(split[0]);
-            int width = Parse<int>(split[1]);
-            int height = Parse<int>(split[2]);
-
+            (int length, int width, int height) = value.AsNumberTriple<int>('x');
             return new Present(length, width, height);
         }
     }

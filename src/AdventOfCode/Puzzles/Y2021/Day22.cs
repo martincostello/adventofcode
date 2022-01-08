@@ -102,16 +102,13 @@ public sealed class Day22 : Puzzle
 
         static (Cuboid Cuboid, bool TurnOn) Parse(string instruction)
         {
-            string[] split = instruction.Split(' ');
-            string[] dimensions = split[1].Split(',');
+            (string state, string coordinates) = instruction.Bifurcate(' ');
+            (string rangeX, string rangeY, string rangeZ) = coordinates.Trifurcate(',');
 
-            string rangeX = dimensions[0][2..];
-            string rangeY = dimensions[1][2..];
-            string rangeZ = dimensions[2][2..];
-
-            string[] valuesX = rangeX.Split("..");
-            string[] valuesY = rangeY.Split("..");
-            string[] valuesZ = rangeZ.Split("..");
+            const string Range = "..";
+            string[] valuesX = rangeX[2..].Split(Range);
+            string[] valuesY = rangeY[2..].Split(Range);
+            string[] valuesZ = rangeZ[2..].Split(Range);
 
             int minX = Parse<int>(valuesX[0]);
             int maxX = Parse<int>(valuesX[1]);
@@ -127,7 +124,7 @@ public sealed class Day22 : Puzzle
             int lengthZ = maxZ - minZ + 1;
 
             var cuboid = new Cuboid(new(minX, minY, minZ), new(lengthX, lengthY, lengthZ));
-            bool turnOn = string.Equals(split[0], "on", StringComparison.Ordinal);
+            bool turnOn = string.Equals(state, "on", StringComparison.Ordinal);
 
             return (cuboid, turnOn);
         }

@@ -37,11 +37,8 @@ public sealed class Day16 : Puzzle
         // Parse the rules
         foreach (string line in notes.Take(indexOfFirstTicket - 2))
         {
-            string[] split = line.Split(':');
-
-            string name = split[0];
-
-            split = split[1].Split(" or ", StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+            (string name, string instruction) = line.Bifurcate(':');
+            string[] split = instruction.Split(" or ", StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
 
             var ranges = new List<Range>();
 

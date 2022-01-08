@@ -29,11 +29,10 @@ public sealed class Day02 : Puzzle
     /// </returns>
     public static bool IsPasswordValid(string value, int policyVersion)
     {
-        string[] parts = value.Split(' ');
-        (int firstNumber, int secondNumber) = parts[0].AsNumberPair<int>('-');
+        var (first, second, password) = value.Trifurcate(' ');
+        (int firstNumber, int secondNumber) = first.AsNumberPair<int>('-');
 
-        char requiredCharacter = parts[1][0];
-        string password = parts[2];
+        char requiredCharacter = second[0];
 
         if (policyVersion == 1)
         {
