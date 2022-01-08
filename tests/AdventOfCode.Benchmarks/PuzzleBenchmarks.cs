@@ -158,37 +158,37 @@ public class PuzzleBenchmarks
     [Benchmark]
     [ArgumentsSource(nameof(Puzzles2015))]
     public async Task<PuzzleResult> Solve2015(PuzzleInput input)
-        => await input.Puzzle.SolveAsync(input.Args, CancellationToken.None);
+        => await input.SolveAsync();
 
     [Benchmark]
     [ArgumentsSource(nameof(Puzzles2016))]
     public async Task<PuzzleResult> Solve2016(PuzzleInput input)
-        => await input.Puzzle.SolveAsync(input.Args, CancellationToken.None);
+        => await input.SolveAsync();
 
     [Benchmark]
     [ArgumentsSource(nameof(Puzzles2017))]
     public async Task<PuzzleResult> Solve2017(PuzzleInput input)
-        => await input.Puzzle.SolveAsync(input.Args, CancellationToken.None);
+        => await input.SolveAsync();
 
     [Benchmark]
     [ArgumentsSource(nameof(Puzzles2018))]
     public async Task<PuzzleResult> Solve2018(PuzzleInput input)
-        => await input.Puzzle.SolveAsync(input.Args, CancellationToken.None);
+        => await input.SolveAsync();
 
     [Benchmark]
     [ArgumentsSource(nameof(Puzzles2019))]
     public async Task<PuzzleResult> Solve2019(PuzzleInput input)
-        => await input.Puzzle.SolveAsync(input.Args, CancellationToken.None);
+        => await input.SolveAsync();
 
     [Benchmark]
     [ArgumentsSource(nameof(Puzzles2020))]
     public async Task<PuzzleResult> Solve2020(PuzzleInput input)
-        => await input.Puzzle.SolveAsync(input.Args, CancellationToken.None);
+        => await input.SolveAsync();
 
     [Benchmark]
     [ArgumentsSource(nameof(Puzzles2021))]
     public async Task<PuzzleResult> Solve2021(PuzzleInput input)
-        => await input.Puzzle.SolveAsync(input.Args, CancellationToken.None);
+        => await input.SolveAsync();
 
     public sealed class PuzzleInput<T> : PuzzleInput
         where T : IPuzzle, new()
@@ -217,6 +217,9 @@ public class PuzzleBenchmarks
         public string[] Args { get; }
 
         public abstract IPuzzle Puzzle { get; }
+
+        public async Task<PuzzleResult> SolveAsync()
+            => await Puzzle.SolveAsync(Args, CancellationToken.None);
 
         public override string ToString()
         {
