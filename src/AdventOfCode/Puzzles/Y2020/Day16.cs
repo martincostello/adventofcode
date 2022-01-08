@@ -28,11 +28,10 @@ public sealed class Day16 : Puzzle
     /// </returns>
     public static (int ErrorRate, IDictionary<string, int> Ticket) ScanTickets(IList<string> notes)
     {
-        var rules = new Dictionary<string, ICollection<Range>>();
-        var allTickets = new List<IList<int>>();
-
         int indexOfFirstTicket = notes.IndexOf("your ticket:") + 1;
         int indexOfSecondTicket = notes.IndexOf("nearby tickets:") + 1;
+
+        var rules = new Dictionary<string, ICollection<Range>>(indexOfFirstTicket - 2);
 
         // Parse the rules
         foreach (string line in notes.Take(indexOfFirstTicket - 2))
@@ -50,6 +49,8 @@ public sealed class Day16 : Puzzle
 
             rules[name] = ranges;
         }
+
+        var allTickets = new List<IList<int>>(notes.Count - indexOfSecondTicket + 1);
 
         // Parse the nearby tickets
         foreach (string line in notes.Skip(indexOfSecondTicket).Prepend(notes[indexOfFirstTicket]))

@@ -90,7 +90,7 @@ public sealed class Day13 : Puzzle
             period = buses
                 .Take(i)
                 .Select((p) => p.id)
-                .Aggregate(Maths.LowestCommonMultiple);
+                .Aggregate((x, y) => Maths.LowestCommonMultiple(x, y));
         }
 
         return timestamp;

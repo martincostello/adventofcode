@@ -35,13 +35,13 @@ public sealed class Day22 : Puzzle
         var deck1 = startingDeck
             .Skip(1)
             .Take(index - 1)
-            .Select(Parse<int>)
+            .Select((p) => Parse<int>(p))
             .ToList();
 
         var deck2 = startingDeck
             .Skip(index + 2)
             .TakeWhile((p) => !string.IsNullOrEmpty(p))
-            .Select(Parse<int>)
+            .Select((p) => Parse<int>(p))
             .ToList();
 
         return Play(new Queue<int>(deck1), new Queue<int>(deck2), recursive);

@@ -33,7 +33,7 @@ public sealed class Day19 : Puzzle
     {
         int delimiter = input.IndexOf(string.Empty);
 
-        IDictionary<string, string> rules = ParseRules(input.Take(delimiter));
+        var rules = ParseRules(input.Take(delimiter));
 
         var messages = input.Skip(delimiter + 1);
 
@@ -56,9 +56,10 @@ public sealed class Day19 : Puzzle
         string pattern = $"^{rules["0"]}$";
         return messages.Count((p) => Regex.IsMatch(p, pattern));
 
-        static IDictionary<string, string> ParseRules(IEnumerable<string> input)
+        static Dictionary<string, string> ParseRules(IEnumerable<string> input)
         {
-            var rawRules = new Dictionary<string, List<string>>();
+            Dictionary<string, List<string>> rawRules =
+                input.TryGetNonEnumeratedCount(out int count) ? new(count) : new();
 
             foreach (string rule in input)
             {

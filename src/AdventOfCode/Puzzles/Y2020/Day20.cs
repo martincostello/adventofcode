@@ -402,7 +402,7 @@ public sealed class Day20 : Puzzle
             return (corners, edges, others);
         }
 
-        static IDictionary<long, Tile> ParseTiles(IList<string> tiles)
+        static Dictionary<long, Tile> ParseTiles(IList<string> tiles)
         {
             var image = new Dictionary<long, Tile>();
             var current = new Tile();
@@ -483,12 +483,12 @@ public sealed class Day20 : Puzzle
         /// <summary>
         /// Gets the candidates for the edges of the tile.
         /// </summary>
-        public HashSet<string> EdgeCandidates { get; } = new HashSet<string>();
+        public HashSet<string> EdgeCandidates { get; } = new();
 
         /// <summary>
         /// Gets the original grid of the image.
         /// </summary>
-        public IList<string> Grid { get; private set; } = new List<string>();
+        public List<string> Grid { get; private set; } = new();
 
         /// <summary>
         /// Flips the tile's grid around the Y axis.
