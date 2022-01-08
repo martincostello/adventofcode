@@ -32,8 +32,7 @@ public sealed class Day06 : Puzzle
     {
         var points = coordinates
             .Select((p) => p.AsNumbers<int>())
-            .Select((p) => p.ToArray())
-            .Select((p) => new Point(p[0], p[1]))
+            .Select((p) => new Point(p.ElementAt(0), p.ElementAt(1)))
             .ToList();
 
         var ids = new Dictionary<Point, int>(points.Count);
@@ -89,7 +88,7 @@ public sealed class Day06 : Puzzle
         }
 
         // Find the areas which touch the bounds and are therefore infinite
-        var infiniteAreas = new HashSet<int>();
+        var infiniteAreas = new HashSet<int>(maxX * maxY);
 
         for (int x = 0; x <= maxX; x++)
         {
@@ -107,8 +106,8 @@ public sealed class Day06 : Puzzle
         int largestNonInfiniteArea = closestPoints
             .Where((p) => !infiniteAreas.Contains(p.Value))
             .GroupBy((p) => p.Value)
-            .OrderByDescending((p) => p.Count())
             .Select((p) => p.Count())
+            .OrderByDescending((p) => p)
             .First();
 
         int areaOfRegion = closeRegion.Count;
