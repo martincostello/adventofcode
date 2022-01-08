@@ -65,7 +65,7 @@ public sealed class Day04 : Puzzle
 
         foreach (var passport in passports)
         {
-            bool isValid = passport.AllKeys.Intersect(RequiredKeys).Count() == RequiredKeys.Length;
+            bool isValid = passport.AllKeys.Intersect(RequiredKeys).ExactCount(RequiredKeys.Length);
 
             if (isValid)
             {

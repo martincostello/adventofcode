@@ -26,7 +26,7 @@ public sealed class Day09 : Puzzle
     /// <returns>
     /// The total score for the groups in the stream specified by <paramref name="stream"/>.
     /// </returns>
-    public static (int Score, int GarbageCount) ParseStream(string stream)
+    public static (int Score, int GarbageCount) ParseStream(ReadOnlySpan<char> stream)
     {
         int score = 0;
         int level = 0;

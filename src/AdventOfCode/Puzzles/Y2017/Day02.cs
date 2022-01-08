@@ -27,12 +27,12 @@ public sealed class Day02 : Puzzle
     /// <returns>
     /// The checksum of the spreadsheet encoded by <paramref name="spreadsheet"/>.
     /// </returns>
-    public static int CalculateChecksum(IEnumerable<IEnumerable<int>> spreadsheet, bool forEvenlyDivisible)
+    public static int CalculateChecksum(IList<IList<int>> spreadsheet, bool forEvenlyDivisible)
     {
         IEnumerable<int> sequence =
             forEvenlyDivisible ?
-            spreadsheet.Select(ComputeDivisionOfEvenlyDivisible) :
-            spreadsheet.Select(ComputeDifference);
+            spreadsheet.Select((p) => ComputeDivisionOfEvenlyDivisible(p)) :
+            spreadsheet.Select((p) => ComputeDifference(p));
 
         return sequence.Sum();
     }
@@ -44,7 +44,7 @@ public sealed class Day02 : Puzzle
     /// <returns>
     /// The difference between the minimum and maximum values in the row.
     /// </returns>
-    public static int ComputeDifference(IEnumerable<int> row)
+    public static int ComputeDifference(IList<int> row)
     {
         int minimum = row.Min();
         int maximum = row.Max();
@@ -55,14 +55,12 @@ public sealed class Day02 : Puzzle
     /// <summary>
     /// Computes the result of dividing the two evenly divisible values for the specified row of a spreadsheet.
     /// </summary>
-    /// <param name="row">The values in the row of the spreadsheet.</param>
+    /// <param name="values">The values in the row of the spreadsheet.</param>
     /// <returns>
     /// The result of dividing the two evenly divisible values in the row.
     /// </returns>
-    public static int ComputeDivisionOfEvenlyDivisible(IEnumerable<int> row)
+    public static int ComputeDivisionOfEvenlyDivisible(IList<int> values)
     {
-        IList<int> values = row.ToList();
-
         for (int i = 0; i < values.Count - 1; i++)
         {
             int x = values[i];
@@ -113,15 +111,15 @@ public sealed class Day02 : Puzzle
     /// </summary>
     /// <param name="rows">The rows of the spreadsheet.</param>
     /// <returns>
-    /// An <see cref="IEnumerable{T}"/> containing the columns for each row of the spreadsheet.
+    /// An <see cref="List{T}"/> containing the columns for each row of the spreadsheet.
     /// </returns>
-    private static IEnumerable<IEnumerable<int>> ParseSpreadsheet(ICollection<string> rows)
+    private static List<IList<int>> ParseSpreadsheet(ICollection<string> rows)
     {
-        var spreadsheet = new List<IEnumerable<int>>(rows.Count);
+        var spreadsheet = new List<IList<int>>(rows.Count);
 
         foreach (string line in rows)
         {
-            IList<int> columns = line
+            var columns = line
                 .AsNumbers<int>('\t')
                 .ToList();
 

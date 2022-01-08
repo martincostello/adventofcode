@@ -272,7 +272,7 @@ public sealed class Day11 : Puzzle
         {
             return State[floor]
                 .GroupBy((p) => p.Name)
-                .Where((p) => p.Count() == 1)
+                .Where((p) => p.ExactCount(1))
                 .SelectMany((p) => p)
                 .ToList();
         }

@@ -62,7 +62,7 @@ public sealed class Day11 : Puzzle
     /// </returns>
     public static (int Minimum, int Maximum) FindStepRange(string path)
     {
-        IList<CardinalDirection> directions = ParsePath(path);
+        var directions = ParsePath(path);
 
         var vectors = new List<Vector2>(directions.Count);
         var distances = new List<int>(directions.Count);
@@ -143,14 +143,13 @@ public sealed class Day11 : Puzzle
     /// </summary>
     /// <param name="path">The path to parse.</param>
     /// <returns>
-    /// An <see cref="IList{T}"/> containing the parsed directions from the path.
+    /// An <see cref="List{T}"/> containing the parsed directions from the path.
     /// </returns>
-    private static IList<CardinalDirection> ParsePath(string path)
+    private static List<CardinalDirection> ParsePath(string path)
     {
-        var split = path.Tokenize(',');
-        var result = new List<CardinalDirection>();
+        var result = new List<CardinalDirection>(path.Count(','));
 
-        foreach (var direction in split)
+        foreach (var direction in path.Tokenize(','))
         {
             var parsed = direction.ToString() switch
             {

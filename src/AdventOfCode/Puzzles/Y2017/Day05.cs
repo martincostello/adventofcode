@@ -40,11 +40,11 @@ public sealed class Day05 : Puzzle
 
             if (version == 2 && offset >= 3)
             {
-                jumps[index]--;
+                jumps[index] = offset - 1;
             }
             else
             {
-                jumps[index]++;
+                jumps[index] = offset + 1;
             }
 
             index += offset;

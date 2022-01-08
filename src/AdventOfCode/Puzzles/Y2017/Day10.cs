@@ -15,6 +15,11 @@ public sealed class Day10 : Puzzle
     private const int SequenceLength = 256;
 
     /// <summary>
+    /// The suffix for all hash operations.
+    /// </summary>
+    private static readonly int[] Suffix = { 17, 31, 73, 47, 23 };
+
+    /// <summary>
     /// Gets the product of multiplying the first two elements after the hash is applied to the input.
     /// </summary>
     public int ProductOfFirstTwoElements { get; private set; }
@@ -35,7 +40,7 @@ public sealed class Day10 : Puzzle
     {
         int[] lengths = Encoding.ASCII.GetBytes(asciiBytes)
             .Select((p) => (int)p)
-            .Concat(new[] { 17, 31, 73, 47, 23 })
+            .Concat(Suffix)
             .ToArray();
 
         int index = 0;
@@ -79,7 +84,7 @@ public sealed class Day10 : Puzzle
     {
         string rawLengths = (await ReadResourceAsStringAsync()).Trim();
 
-        ICollection<int> lengths = rawLengths
+        var lengths = rawLengths
             .AsNumbers<int>()
             .ToList();
 
@@ -183,5 +188,15 @@ public sealed class Day10 : Puzzle
     /// <returns>
     /// An array containing an ascending sequence of numbers of the length specified by <paramref name="length"/>.
     /// </returns>
-    private static int[] CreateSequence(int length) => Enumerable.Range(0, length).ToArray();
+    private static int[] CreateSequence(int length)
+    {
+        int[] sequence = new int[length];
+
+        for (int i = 1; i < length; i++)
+        {
+            sequence[i] = i;
+        }
+
+        return sequence;
+    }
 }
