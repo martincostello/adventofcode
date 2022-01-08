@@ -37,7 +37,7 @@ public sealed class Day04 : Puzzle
 
         for (int i = start; i < end; i++)
         {
-            if (IsValid(i, rulesVersion))
+            if (IsValid(i.ToString(CultureInfo.InvariantCulture), rulesVersion))
             {
                 count++;
             }
@@ -54,16 +54,14 @@ public sealed class Day04 : Puzzle
     /// <returns>
     /// <see langword="true"/> if <paramref name="password"/> is valid; otherwise <see langword="false"/>.
     /// </returns>
-    public static bool IsValid(int password, int rulesVersion)
+    public static bool IsValid(ReadOnlySpan<char> password, int rulesVersion)
     {
         bool foundAdjacent = false;
 
-        var digits = Maths.Digits(password);
-
-        for (int i = 0; i < digits.Count - 1; i++)
+        for (int i = 0; i < password.Length - 1; i++)
         {
-            int first = digits[i];
-            int second = digits[i + 1];
+            int first = password[i] - '0';
+            int second = password[i + 1] - '0';
 
             if (first == second)
             {
@@ -78,15 +76,15 @@ public sealed class Day04 : Puzzle
 
         if (foundAdjacent && rulesVersion > 1)
         {
-            int last = digits[0];
+            char last = password[0];
             int run = 1;
             var runs = new List<int>();
 
-            for (int i = 1; i < digits.Count; i++)
+            for (int i = 1; i < password.Length; i++)
             {
-                int current = digits[i];
+                char current = password[i];
 
-                if (digits[i] == last)
+                if (password[i] == last)
                 {
                     run++;
                 }
