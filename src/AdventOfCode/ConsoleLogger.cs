@@ -19,18 +19,17 @@ internal sealed class ConsoleLogger : ILogger
     /// </returns>
     public string WriteGrid(bool[,] array, char falseChar, char trueChar)
     {
-        if (!Console.IsOutputRedirected && array.GetLength(0) <= Console.WindowHeight)
+        int lengthY;
+
+        if (!Console.IsOutputRedirected && (lengthY = array.GetLength(1)) <= Console.WindowHeight)
         {
             Console.WriteLine();
 
-            int lengthX = array.GetLength(0);
-            int lengthY = array.GetLength(1);
-
             for (int y = 0; y < lengthY; y++)
             {
-                for (int x = 0; x < lengthX; x++)
+                foreach (bool value in array.GetColumn(y))
                 {
-                    Console.Write(array[x, y] ? trueChar : falseChar);
+                    Console.Write(value ? trueChar : falseChar);
                 }
 
                 Console.WriteLine();

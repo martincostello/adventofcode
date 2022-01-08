@@ -26,16 +26,17 @@ internal sealed class TestLogger : ILogger
     /// <inheritdoc />
     public string WriteGrid(bool[,] array, char falseChar, char trueChar)
     {
-        var builder = new StringBuilder().AppendLine();
-
         int lengthX = array.GetLength(0);
         int lengthY = array.GetLength(1);
 
-        for (int x = 0; x < lengthX; x++)
+        var builder = new StringBuilder(((lengthX + 2) * lengthY) + 4)
+            .AppendLine();
+
+        for (int y = 0; y < lengthY; y++)
         {
-            for (int y = 0; y < lengthY; y++)
+            foreach (bool value in array.GetColumn(y))
             {
-                builder.Append(array[x, y] ? trueChar : falseChar);
+                builder.Append(value ? trueChar : falseChar);
             }
 
             builder.AppendLine();
