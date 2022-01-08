@@ -124,7 +124,7 @@ public sealed class Day09 : Puzzle
 
                 visited.Remove(location);
 
-                return new() { distance };
+                return new(1) { distance };
             }
 
             var distances = new List<int>();

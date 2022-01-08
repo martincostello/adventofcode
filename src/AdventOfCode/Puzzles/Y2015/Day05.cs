@@ -40,16 +40,18 @@ public sealed class Day05 : Puzzle
         // The string is nice if it has three or more vowels and at least two consecutive letters
         bool IsNice() => hasAnyConsecutiveLetters && vowels > 2;
 
-        foreach (var item in value.Enumerate())
+        for (int i = 0; i < value.Length; i++)
         {
-            if (IsVowel(item.Value))
+            char current = value[i];
+
+            if (IsVowel(current))
             {
                 vowels++;
             }
 
-            if (item.Index > 0 && !hasAnyConsecutiveLetters)
+            if (i > 0 && !hasAnyConsecutiveLetters)
             {
-                hasAnyConsecutiveLetters = item.Value == value[item.Index - 1];
+                hasAnyConsecutiveLetters = current == value[i - 1];
             }
 
             if (IsNice())

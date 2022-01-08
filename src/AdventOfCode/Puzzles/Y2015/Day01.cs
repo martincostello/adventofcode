@@ -35,9 +35,9 @@ public sealed class Day01 : Puzzle
 
         bool hasVisitedBasement = false;
 
-        foreach (var item in value.Enumerate())
+        for (int i = 0; i < value.Length; i++)
         {
-            switch (item.Value)
+            switch (value[i])
             {
                 case '(':
                     floor++;
@@ -55,7 +55,7 @@ public sealed class Day01 : Puzzle
             {
                 if (floor == -1)
                 {
-                    instructionThatEntersBasement = item.Index + 1;
+                    instructionThatEntersBasement = i + 1;
                     hasVisitedBasement = true;
                 }
             }

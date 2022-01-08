@@ -188,9 +188,9 @@ public sealed class Day02 : Puzzle
         {
             var instructionsForDigit = new List<Direction>(instruction.Length);
 
-            foreach (var item in instruction.Enumerate())
+            foreach (char ch in instruction)
             {
-                var direction = item.Value switch
+                var direction = ch switch
                 {
                     'D' => Direction.Down,
                     'L' => Direction.Left,

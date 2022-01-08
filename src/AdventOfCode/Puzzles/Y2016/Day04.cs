@@ -118,16 +118,16 @@ public sealed class Day04 : Puzzle
         var builder = new StringBuilder(encryptedName.Length);
         int sectorIdValue = Parse<int>(sectorId);
 
-        foreach (var item in encryptedName.Enumerate())
+        foreach (char ch in encryptedName)
         {
-            if (item.Value == '-')
+            if (ch == '-')
             {
                 builder.Append(' ');
             }
             else
             {
                 int shift = sectorIdValue % 26;
-                int shifted = item.Value + shift;
+                int shifted = ch + shift;
 
                 if (shifted > 'z')
                 {

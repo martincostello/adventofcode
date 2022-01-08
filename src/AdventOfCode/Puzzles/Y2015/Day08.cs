@@ -36,9 +36,11 @@ public sealed class Day08 : Puzzle
     {
         var builder = new StringBuilder(value.Length + 2).Append('\"');
 
-        foreach (var item in value.Enumerate())
+        for (int i = 0; i < value.Length; i++)
         {
-            switch (item.Value)
+            char current = value[i];
+
+            switch (current)
             {
                 case '\"':
                 case '\\':
@@ -50,7 +52,7 @@ public sealed class Day08 : Puzzle
                     break;
             }
 
-            builder.Append(item.Value);
+            builder.Append(current);
         }
 
         builder.Append('\"');
@@ -67,7 +69,7 @@ public sealed class Day08 : Puzzle
         => collection.Sum((p) => GetLiteralCharacterCount(p));
 
     /// <summary>
-    /// Returns the number of literal characters in the specified <see cref="string"/>.
+    /// Returns the number of literal characters in the specified span.
     /// </summary>
     /// <param name="value">The value to get the number of literal characters from.</param>
     /// <returns>The number of literal characters in <paramref name="value"/>.</returns>
