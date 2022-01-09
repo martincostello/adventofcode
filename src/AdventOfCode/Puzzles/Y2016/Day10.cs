@@ -150,7 +150,7 @@ public sealed class Day10 : Puzzle
         /// <param name="chip">The microchip to accept.</param>
         public override void Accept(Chip chip)
         {
-            if (Microchip == null)
+            if (Microchip is null)
             {
                 Microchip = chip;
             }

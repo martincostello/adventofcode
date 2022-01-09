@@ -57,7 +57,7 @@ public sealed class Day16 : Puzzle
     {
         string? result = null;
 
-        while (result == null)
+        while (result is null)
         {
             int length = data.Count - 1;
             var builder = new StringBuilder(length / 2);

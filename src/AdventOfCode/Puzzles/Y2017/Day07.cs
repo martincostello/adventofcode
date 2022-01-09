@@ -137,7 +137,7 @@ public sealed class Day07 : Puzzle
         var childWeights = root.Children.GroupBy((p) => p.TotalWeight);
         ProgramDisc? unbalanced = childWeights.FirstOrDefault((p) => p.ExactCount(1))?.FirstOrDefault();
 
-        if (unbalanced == null)
+        if (unbalanced is null)
         {
             // All children's trees weigh the same
             return 0;
