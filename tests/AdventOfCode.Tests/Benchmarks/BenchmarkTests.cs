@@ -9,7 +9,7 @@ public static class BenchmarkTests
 {
     public static IEnumerable<object[]> Benchmarks()
     {
-        foreach (object puzzle in AllPuzzles())
+        foreach (object puzzle in PuzzleBenchmarks.Puzzles())
         {
             yield return new[] { puzzle };
         }
