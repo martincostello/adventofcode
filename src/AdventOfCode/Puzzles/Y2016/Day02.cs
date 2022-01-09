@@ -183,17 +183,17 @@ public sealed class Day02 : Puzzle
     /// <returns>
     /// An <see cref="IList{T}"/> containing the instructions to open the bathroom door.
     /// </returns>
-    private static List<List<Direction>> ParseInstructions(ICollection<string> instructions)
+    private static List<Direction[]> ParseInstructions(ICollection<string> instructions)
     {
-        var result = new List<List<Direction>>(instructions.Count);
+        var result = new List<Direction[]>(instructions.Count);
 
         foreach (string instruction in instructions)
         {
-            var instructionsForDigit = new List<Direction>(instruction.Length);
+            var instructionsForDigit = new Direction[instruction.Length];
 
-            foreach (char ch in instruction)
+            for (int i = 0; i < instruction.Length; i++)
             {
-                var direction = ch switch
+                instructionsForDigit[i] = instruction[i] switch
                 {
                     'D' => Direction.Down,
                     'L' => Direction.Left,
@@ -201,8 +201,6 @@ public sealed class Day02 : Puzzle
                     'U' => Direction.Up,
                     _ => default,
                 };
-
-                instructionsForDigit.Add(direction);
             }
 
             result.Add(instructionsForDigit);

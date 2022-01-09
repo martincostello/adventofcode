@@ -89,8 +89,8 @@ internal static class StringExtensions
             return value;
         }
 
-        char[] reversed = value.ToCharArray();
-        Array.Reverse(reversed);
+        Span<char> reversed = value.ToCharArray();
+        reversed.Reverse();
 
         return new(reversed);
     }

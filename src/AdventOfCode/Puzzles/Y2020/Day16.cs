@@ -50,23 +50,25 @@ public sealed class Day16 : Puzzle
             rules[name] = ranges;
         }
 
-        var allTickets = new List<IList<int>>(notes.Count - indexOfSecondTicket + 1);
+        var allTickets = new IList<int>[notes.Count - indexOfSecondTicket + 1];
+
+        allTickets[0] = notes[indexOfFirstTicket]
+            .AsNumbers<int>()
+            .ToArray();
 
         // Parse the nearby tickets
-        foreach (string line in notes.Skip(indexOfSecondTicket).Prepend(notes[indexOfFirstTicket]))
+        for (int i = indexOfSecondTicket; i < notes.Count; i++)
         {
-            int[] ticket = line
+            allTickets[i - indexOfSecondTicket + 1] = notes[i]
                 .AsNumbers<int>()
                 .ToArray();
-
-            allTickets.Add(ticket);
         }
 
         int invalidValues = 0;
         var validTickets = new List<IList<int>>();
 
         // Find the valid tickets
-        for (int i = 1; i < allTickets.Count; i++)
+        for (int i = 1; i < allTickets.Length; i++)
         {
             var ticket = allTickets[i];
             bool isValid = true;

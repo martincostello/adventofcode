@@ -157,7 +157,7 @@ public sealed class Day10 : Puzzle
     {
         const int BlockSize = 16;
 
-        var denseHash = new List<int>(sparseHash.Length / BlockSize);
+        int[] denseHash = new int[sparseHash.Length / BlockSize];
 
         for (int i = 0; i < sparseHash.Length; i += BlockSize)
         {
@@ -168,10 +168,10 @@ public sealed class Day10 : Puzzle
                 part ^= sparseHash[i + j];
             }
 
-            denseHash.Add(part);
+            denseHash[i / BlockSize] = part;
         }
 
-        var builder = new StringBuilder(denseHash.Count);
+        var builder = new StringBuilder(denseHash.Length);
 
         foreach (int value in denseHash)
         {

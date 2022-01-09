@@ -29,7 +29,7 @@ public sealed class Day06 : Puzzle
     /// </returns>
     public static (int CycleCount, int LoopSize) Debug(IList<int> memory)
     {
-        var copy = new List<int>(memory);
+        int[] copy = memory.ToArray();
 
         int cycles = GetRepeatCount(copy);
         int loopSize = GetRepeatCount(copy);
@@ -62,7 +62,7 @@ public sealed class Day06 : Puzzle
     /// <returns>
     /// The number of times the memory can be redistributed before the configuration repeats.
     /// </returns>
-    private static int GetRepeatCount(List<int> memory)
+    private static int GetRepeatCount(int[] memory)
     {
         var patterns = new HashSet<string>();
         string pattern = string.Join(',', memory);
@@ -87,17 +87,17 @@ public sealed class Day06 : Puzzle
     /// Redistributes the memory.
     /// </summary>
     /// <param name="memory">The memory to redistribute.</param>
-    private static void Redistribute(List<int> memory)
+    private static void Redistribute(int[] memory)
     {
         int blocks = memory.Max();
-        int index = memory.IndexOf(blocks);
+        int index = Array.IndexOf(memory, blocks);
 
         memory[index] = 0;
         int next = index + 1;
 
         while (blocks > 0)
         {
-            if (next >= memory.Count)
+            if (next >= memory.Length)
             {
                 next = 0;
             }

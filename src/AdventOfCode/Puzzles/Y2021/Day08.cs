@@ -30,15 +30,15 @@ public sealed class Day08 : Puzzle
     /// </returns>
     public static (int Count, int Sum) DecodeDigits(IList<string> entries)
     {
-        var panels = new List<(string[] Signals, string[] Numbers)>(entries.Count);
+        var panels = new (string[] Signals, string[] Numbers)[entries.Count];
 
-        foreach (string entry in entries)
+        for (int i = 0; i < entries.Count; i++)
         {
-            string[] parts = entry.Split(" | ");
+            string[] parts = entries[i].Split(" | ");
             string[] signals = parts[0].Split(' ');
             string[] numbers = parts[1].Split(' ');
 
-            panels.Add((signals, numbers));
+            panels[i] = (signals, numbers);
         }
 
         int count = 0;
@@ -113,11 +113,11 @@ public sealed class Day08 : Puzzle
                 .Where((p) => !digits.Any((r) => r.Value.SetEquals(p)))
                 .Single());
 
-            var output = new List<int>(numbers.Length);
+            int[] output = new int[numbers.Length];
 
-            foreach (string digit in numbers)
+            for (int i = 0; i < numbers.Length; i++)
             {
-                output.Add(digits.Where((p) => p.Value.SetEquals(digit)).Single().Key);
+                output[i] = digits.Where((p) => p.Value.SetEquals(numbers[i])).Single().Key;
             }
 
             return Maths.FromDigits<int>(output);

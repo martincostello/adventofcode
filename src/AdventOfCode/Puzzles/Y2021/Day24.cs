@@ -33,16 +33,16 @@ public sealed class Day24 : Puzzle
         const int Sections = 18;
         const int Instructions = 14;
 
-        var constants = new List<(int A, int B)>(Instructions);
+        var constants = new (int A, int B)[Instructions];
 
-        foreach (int i in Enumerable.Range(0, Instructions))
+        for (int i = 0; i < constants.Length; i++)
         {
             int section = i * Sections;
 
             int a = Parse<int>(instructions[section + 5][6..]);
             int b = Parse<int>(instructions[section + 15][6..]);
 
-            constants.Add((a, b));
+            constants[i] = (a, b);
         }
 
         var stack = new Stack<(int, int)>();

@@ -62,12 +62,11 @@ public sealed class Day15 : Puzzle
         }
 
         // Calculate the total score for each possible recipe
-        var scores = new List<int>(recipies.Count);
+        int[] scores = new int[recipies.Count];
 
-        foreach (var recipe in recipies)
+        for (int i = 0; i < recipies.Count; i++)
         {
-            int score = GetRecipeScore(recipe, ingredientProperties, calorieCount);
-            scores.Add(score);
+            scores[i] = GetRecipeScore(recipies[i], ingredientProperties, calorieCount);
         }
 
         // Return the best recipe

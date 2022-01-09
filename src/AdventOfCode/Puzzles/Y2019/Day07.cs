@@ -55,17 +55,17 @@ public sealed class Day07 : Puzzle
             }
             else
             {
-                var amplifiers = new List<IntcodeVM>(phases.Length);
-                var inputs = new List<Channel<long>>(phases.Length);
+                var amplifiers = new IntcodeVM[phases.Length];
+                var inputs = new Channel<long>[phases.Length];
 
                 for (int i = 0; i < phases.Length; i++)
                 {
-                    amplifiers.Add(new IntcodeVM(instructions));
+                    amplifiers[i] = new(instructions);
 
                     var input = Channel.CreateUnbounded<long>();
                     await input.Writer.WriteAsync(phases[i], cancellationToken);
 
-                    inputs.Add(input);
+                    inputs[i] = input;
                 }
 
                 await inputs[0].Writer.WriteAsync(0, cancellationToken);

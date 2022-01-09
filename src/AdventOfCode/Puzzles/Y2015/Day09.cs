@@ -22,7 +22,7 @@ public sealed class Day09 : Puzzle
     /// <returns>
     /// The shortest possible distance to visit all the specified locations exactly once.
     /// </returns>
-    internal static int GetShortestDistanceBetweenPoints(ICollection<string> collection)
+    internal static int GetShortestDistanceBetweenPoints(IList<string> collection)
         => GetDistanceBetweenPoints(collection, findLongest: false);
 
     /// <summary>
@@ -34,20 +34,20 @@ public sealed class Day09 : Puzzle
     /// <returns>
     /// The shortest or longest possible distance to visit all the specified locations exactly once.
     /// </returns>
-    internal static int GetDistanceBetweenPoints(ICollection<string> collection, bool findLongest)
+    internal static int GetDistanceBetweenPoints(IList<string> collection, bool findLongest)
     {
         var distances = new Dictionary<string, int>(collection.Count);
-        var vectors = new List<(string Start, string End)>(collection.Count);
+        var vectors = new (string Start, string End)[collection.Count];
 
-        foreach (string value in collection)
+        for (int i = 0; i < collection.Count; i++)
         {
-            string[] split = value.Split(" = ");
+            string[] split = collection[i].Split(" = ");
             string[] locations = split[0].Split(" to ");
 
             string start = locations[0];
             string end = locations[1];
 
-            vectors.Add((start, end));
+            vectors[i] = (start, end);
 
             int distance = Parse<int>(split[1]);
 

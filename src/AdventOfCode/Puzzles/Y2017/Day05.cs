@@ -29,12 +29,12 @@ public sealed class Day05 : Puzzle
     /// </returns>
     public static int Execute(IEnumerable<int> program, int version)
     {
-        var jumps = new List<int>(program);
+        int[] jumps = program.ToArray();
 
         int counter = 0;
         int index = 0;
 
-        while (index >= 0 && index < jumps.Count)
+        while (index >= 0 && index < jumps.Length)
         {
             int offset = jumps[index];
 

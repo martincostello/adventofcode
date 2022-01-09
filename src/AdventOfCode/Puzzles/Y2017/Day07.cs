@@ -117,7 +117,7 @@ public sealed class Day07 : Puzzle
     /// </returns>
     private static int FindDesiredWeightOfUnbalancedDisc(ProgramDisc root)
     {
-        if (root.ProgramsHeld.Count == 0)
+        if (root.ProgramsHeld.Length == 0)
         {
             // Leaf node, no children to inspect
             return 0;
@@ -186,7 +186,7 @@ public sealed class Day07 : Puzzle
         /// <summary>
         /// Gets the names of the programs held by this program.
         /// </summary>
-        public ICollection<string> ProgramsHeld { get; }
+        public string[] ProgramsHeld { get; }
 
         /// <summary>
         /// Gets or sets the parent of the program.

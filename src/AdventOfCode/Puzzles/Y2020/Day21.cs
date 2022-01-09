@@ -30,19 +30,19 @@ public sealed class Day21 : Puzzle
     /// the canonical sorted list of ingredients which are allergens.
     /// </returns>
     public static (int Occurences, string CanonicalAllergens) GetIngredientsWithNoAllergens(
-        IEnumerable<string> foods,
+        IList<string> foods,
         CancellationToken cancellationToken = default)
     {
         // Based on https://github.com/DanaL/AdventOfCode/blob/master/2020/Day21.cs
-        var parsedFoods = new List<(string[] Ingredients, string[] Allergens)>();
+        var parsedFoods = new (string[] Ingredients, string[] Allergen)[foods.Count];
 
-        foreach (string recipe in foods)
+        for (int i = 0; i < foods.Count; i++)
         {
-            (string first, string second) = recipe.Bifurcate('(');
+            (string first, string second) = foods[i].Bifurcate('(');
             string[] ingredients = first.Split(' ', StringSplitOptions.RemoveEmptyEntries);
             string[] allergens = second[9..].TrimEnd(')').Split(", ");
 
-            parsedFoods.Add((ingredients, allergens));
+            parsedFoods[i] = (ingredients, allergens);
         }
 
         var allergenCandidates = new Dictionary<string, HashSet<string>>();

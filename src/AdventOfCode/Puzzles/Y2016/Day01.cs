@@ -51,7 +51,7 @@ public sealed class Day01 : Puzzle
         var position = Point.Empty;
 
         var instructions = ParseDirections(input);
-        var positions = new List<Point>(instructions.Count);
+        var positions = new List<Point>(instructions.Length);
 
         foreach (Instruction instruction in instructions)
         {
@@ -112,23 +112,23 @@ public sealed class Day01 : Puzzle
     /// </summary>
     /// <param name="input">The directions to parse.</param>
     /// <returns>
-    /// An <see cref="List{T}"/> containing the directions to Easter Bunny HQ.
+    /// An array of <see cref="Instruction"/> containing the directions to Easter Bunny HQ.
     /// </returns>
-    private static List<Instruction> ParseDirections(string input)
+    private static Instruction[] ParseDirections(string input)
     {
         string[] instructions = input.Split(Separators, StringSplitOptions.RemoveEmptyEntries);
 
-        var result = new List<Instruction>(instructions.Length);
+        var result = new Instruction[instructions.Length];
 
-        foreach (string rawInstruction in instructions)
+        for (int i = 0; i < instructions.Length; i++)
         {
-            var instruction = new Instruction()
+            ReadOnlySpan<char> rawInstruction = instructions[i];
+
+            result[i] = new Instruction()
             {
                 Direction = rawInstruction[0] == 'L' ? Direction.Left : Direction.Right,
                 Distance = Parse<int>(rawInstruction[1..]),
             };
-
-            result.Add(instruction);
         }
 
         return result;

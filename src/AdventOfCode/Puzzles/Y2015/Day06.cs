@@ -35,13 +35,13 @@ public sealed class Day06 : Puzzle
         }
 
         var lines = await ReadResourceAsLinesAsync();
-        var instructions = new List<Instruction>(lines.Count);
+        var instructions = new Instruction[lines.Count];
 
         Func<string, Instruction> parser = version == 1 ? InstructionV1.Parse : InstructionV2.Parse;
 
-        foreach (string line in lines)
+        for (int i = 0; i < lines.Count; i++)
         {
-            instructions.Add(parser(line));
+            instructions[i] = parser(lines[i]);
         }
 
         if (Verbose)

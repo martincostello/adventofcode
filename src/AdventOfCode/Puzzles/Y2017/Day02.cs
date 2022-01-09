@@ -44,7 +44,7 @@ public sealed class Day02 : Puzzle
     /// <returns>
     /// The difference between the minimum and maximum values in the row.
     /// </returns>
-    public static int ComputeDifference(IList<int> row)
+    public static int ComputeDifference(IEnumerable<int> row)
     {
         int minimum = row.Min();
         int maximum = row.Max();
@@ -111,19 +111,15 @@ public sealed class Day02 : Puzzle
     /// </summary>
     /// <param name="rows">The rows of the spreadsheet.</param>
     /// <returns>
-    /// An <see cref="List{T}"/> containing the columns for each row of the spreadsheet.
+    /// An array containing the columns for each row of the spreadsheet.
     /// </returns>
-    private static List<IList<int>> ParseSpreadsheet(ICollection<string> rows)
+    private static IList<int>[] ParseSpreadsheet(IList<string> rows)
     {
-        var spreadsheet = new List<IList<int>>(rows.Count);
+        var spreadsheet = new IList<int>[rows.Count];
 
-        foreach (string line in rows)
+        for (int i = 0; i < spreadsheet.Length; i++)
         {
-            var columns = line
-                .AsNumbers<int>('\t')
-                .ToList();
-
-            spreadsheet.Add(columns);
+            spreadsheet[i] = rows[i].AsNumbers<int>('\t').ToArray();
         }
 
         return spreadsheet;
