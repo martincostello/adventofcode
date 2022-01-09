@@ -21,7 +21,7 @@ public sealed class Day11 : Puzzle
     /// <returns>The next password.</returns>
     internal static string GenerateNextPassword(string current)
     {
-        char[] next = current.ToCharArray();
+        Span<char> next = current.ToCharArray();
 
         do
         {
@@ -33,11 +33,11 @@ public sealed class Day11 : Puzzle
     }
 
     /// <summary>
-    /// Returns whether the specified array contains an increasing sequence of three characters at least once.
+    /// Returns whether the specified span contains an increasing sequence of three characters at least once.
     /// </summary>
-    /// <param name="value">The array to test.</param>
+    /// <param name="value">The span to test.</param>
     /// <returns><see langword="true"/> if <paramref name="value"/> meets the rule; otherwise <see langword="false"/>.</returns>
-    internal static bool ContainsTriumvirateOfLetters(char[] value)
+    internal static bool ContainsTriumvirateOfLetters(ReadOnlySpan<char> value)
     {
         bool result = false;
 
@@ -50,19 +50,19 @@ public sealed class Day11 : Puzzle
     }
 
     /// <summary>
-    /// Returns whether the specified array contains only valid characters.
+    /// Returns whether the specified span contains only valid characters.
     /// </summary>
-    /// <param name="value">The array to test.</param>
+    /// <param name="value">The span to test.</param>
     /// <returns><see langword="true"/> if <paramref name="value"/> meets the rule; otherwise <see langword="false"/>.</returns>
-    internal static bool ContainsNoForbiddenCharacters(char[] value)
+    internal static bool ContainsNoForbiddenCharacters(ReadOnlySpan<char> value)
         => !value.Contains('i') && !value.Contains('o') && !value.Contains('l');
 
     /// <summary>
-    /// Tests whether an array contains a pair of any two letters that appear at least twice in the string without overlapping.
+    /// Tests whether an span contains a pair of any two letters that appear at least twice in the string without overlapping.
     /// </summary>
     /// <param name="value">The value to test against the rule.</param>
     /// <returns><see langword="true"/> if <paramref name="value"/> meets the rule; otherwise <see langword="false"/>.</returns>
-    internal static bool HasMoreThanOneDistinctPairOfLetters(char[] value)
+    internal static bool HasMoreThanOneDistinctPairOfLetters(ReadOnlySpan<char> value)
     {
         var letterPairs = new Dictionary<string, List<int>>();
 
@@ -76,7 +76,7 @@ public sealed class Day11 : Puzzle
                 continue;
             }
 
-            string pair = new(new[] { first, second });
+            string pair = new(value.Slice(i, 2));
 
             var indexes = letterPairs.GetOrAdd(pair);
 
@@ -104,10 +104,10 @@ public sealed class Day11 : Puzzle
     }
 
     /// <summary>
-    /// Rotates the specified array of characters as if they were integers.
+    /// Rotates the specified span of characters as if they were integers.
     /// </summary>
-    /// <param name="value">The character array to rotate.</param>
-    private static void Rotate(char[] value)
+    /// <param name="value">The character span to rotate.</param>
+    private static void Rotate(Span<char> value)
     {
         bool done = false;
 

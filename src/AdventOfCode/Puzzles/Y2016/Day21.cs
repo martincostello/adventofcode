@@ -33,7 +33,7 @@ public sealed class Day21 : Puzzle
             instructions = instructions.Reverse();
         }
 
-        char[] values = text.ToCharArray();
+        Span<char> values = text.ToCharArray();
 
         foreach (string instruction in instructions)
         {
