@@ -35,18 +35,13 @@ public sealed class Day06 : Puzzle
         }
 
         var lines = await ReadResourceAsLinesAsync();
-        var instructions = new List<Instruction>(lines.Count);
+        var instructions = new Instruction[lines.Count];
 
-        foreach (string line in lines)
+        Func<string, Instruction> parser = version == 1 ? InstructionV1.Parse : InstructionV2.Parse;
+
+        for (int i = 0; i < lines.Count; i++)
         {
-            if (version == 1)
-            {
-                instructions.Add(InstructionV1.Parse(line));
-            }
-            else
-            {
-                instructions.Add(InstructionV2.Parse(line));
-            }
+            instructions[i] = parser(lines[i]);
         }
 
         if (Verbose)
@@ -54,7 +49,8 @@ public sealed class Day06 : Puzzle
             Logger.WriteLine("Processing instructions using set {0}...", version);
         }
 
-        var grid = new LightGrid(1000, 1000);
+        const int Length = 1_000;
+        var grid = new LightGrid(Length, Length);
 
         foreach (Instruction instruction in instructions)
         {
@@ -107,14 +103,8 @@ public sealed class Day06 : Puzzle
         protected static Rectangle ParseBounds(string origin, string termination)
         {
             // Determine the termination and origin points of the bounds of the lights to operate on
-            string[] originPoints = origin.Split(',');
-            string[] terminationPoints = termination.Split(',');
-
-            int left = Parse<int>(originPoints[0]);
-            int bottom = Parse<int>(originPoints[1]);
-
-            int right = Parse<int>(terminationPoints[0]);
-            int top = Parse<int>(terminationPoints[1]);
+            (int left, int bottom) = origin.AsNumberPair<int>();
+            (int right, int top) = termination.AsNumberPair<int>();
 
             // Add one to the termination point so that the grid always has a width of at least one light
             return Rectangle.FromLTRB(left, bottom, right + 1, top + 1);
@@ -427,17 +417,11 @@ public sealed class Day06 : Puzzle
         internal bool Toggle(Point position)
         {
             bool isOff = this[position] == 0;
+            int delta = isOff ? 1 : -1;
 
-            if (isOff)
-            {
-                IncrementBrightness(position, 1);
-                return true;
-            }
-            else
-            {
-                IncrementBrightness(position, -1);
-                return false;
-            }
+            IncrementBrightness(position, delta);
+
+            return isOff;
         }
 
         /// <summary>
@@ -491,7 +475,7 @@ public sealed class Day06 : Puzzle
         /// <returns>The new brightness of the light at <paramref name="position"/>.</returns>
         private int IncrementOrSetBrightness(Point position, int delta, bool set = false)
         {
-            int current = _lightBrightnesses.GetValueOrDefault(position);
+            int current;
 
             if (set)
             {
@@ -499,15 +483,10 @@ public sealed class Day06 : Puzzle
             }
             else
             {
-                current += delta;
+                current = _lightBrightnesses.GetValueOrDefault(position) + delta;
             }
 
-            if (current < 0)
-            {
-                current = 0;
-            }
-
-            return _lightBrightnesses[position] = current;
+            return _lightBrightnesses[position] = Math.Max(current, 0);
         }
     }
 }

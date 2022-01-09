@@ -27,9 +27,9 @@ public sealed class Day03 : Puzzle
     /// <returns>
     /// The number of valid triangles in the dimensions specified in <paramref name="dimensions"/>.
     /// </returns>
-    internal static int GetPossibleTriangleCount(ICollection<string> dimensions, bool readAsColumns)
+    internal static int GetPossibleTriangleCount(IList<string> dimensions, bool readAsColumns)
     {
-        IList<(int A, int B, int C)> triangles = ParseTriangles(dimensions, readAsColumns);
+        var triangles = ParseTriangles(dimensions, readAsColumns);
         return triangles.Count((p) => IsValidTriangle(p.A, p.B, p.C));
     }
 
@@ -75,34 +75,34 @@ public sealed class Day03 : Puzzle
     /// <returns>
     /// An <see cref="IList{T}"/> containing the parsed triangle dimensions.
     /// </returns>
-    private static IList<(int A, int B, int C)> ParseTriangles(ICollection<string> dimensions, bool readAsColumns)
+    private static (int A, int B, int C)[] ParseTriangles(IList<string> dimensions, bool readAsColumns)
     {
-        var result = new List<(int A, int B, int C)>(dimensions.Count);
+        var result = new (int A, int B, int C)[dimensions.Count];
 
-        foreach (string dimension in dimensions)
+        for (int i = 0; i < dimensions.Count; i++)
         {
-            string[] components = dimension.Trim().Split(' ', StringSplitOptions.RemoveEmptyEntries);
+            string[] components = dimensions[i].Trim().Split(' ', StringSplitOptions.RemoveEmptyEntries);
 
             int a = Parse<int>(components[0]);
             int b = Parse<int>(components[1]);
             int c = Parse<int>(components[2]);
 
-            result.Add((a, b, c));
+            result[i] = (a, b, c);
         }
 
         if (readAsColumns)
         {
-            var resultFromColumns = new List<(int A, int B, int C)>(result.Count);
+            var resultFromColumns = new (int A, int B, int C)[result.Length];
 
-            for (int i = 0; i < result.Count; i += 3)
+            for (int i = 0; i < result.Length; i += 3)
             {
                 var (a1, b1, c1) = result[i];
                 var (a2, b2, c2) = result[i + 1];
                 var (a3, b3, c3) = result[i + 2];
 
-                resultFromColumns.Add((a1, a2, a3));
-                resultFromColumns.Add((b1, b2, b3));
-                resultFromColumns.Add((c1, c2, c3));
+                resultFromColumns[i] = (a1, a2, a3);
+                resultFromColumns[i + 1] = (b1, b2, b3);
+                resultFromColumns[i + 2] = (c1, c2, c3);
             }
 
             result = resultFromColumns;

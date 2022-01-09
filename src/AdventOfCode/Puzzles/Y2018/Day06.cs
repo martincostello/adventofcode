@@ -31,9 +31,8 @@ public sealed class Day06 : Puzzle
     public static (int LargestNonInfiniteArea, int AreaOfRegion) GetLargestArea(ICollection<string> coordinates, int distanceLimit)
     {
         var points = coordinates
-            .Select((p) => p.AsNumbers<int>())
-            .Select((p) => p.ToArray())
-            .Select((p) => new Point(p[0], p[1]))
+            .Select((p) => p.AsNumberPair<int>())
+            .Select((p) => new Point(p.First, p.Second))
             .ToList();
 
         var ids = new Dictionary<Point, int>(points.Count);
@@ -107,8 +106,8 @@ public sealed class Day06 : Puzzle
         int largestNonInfiniteArea = closestPoints
             .Where((p) => !infiniteAreas.Contains(p.Value))
             .GroupBy((p) => p.Value)
-            .OrderByDescending((p) => p.Count())
             .Select((p) => p.Count())
+            .OrderByDescending((p) => p)
             .First();
 
         int areaOfRegion = closeRegion.Count;

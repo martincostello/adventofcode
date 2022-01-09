@@ -26,7 +26,7 @@ public sealed class Day05 : Puzzle
     /// <returns>
     /// The row, column and Id of the specified boarding pass.
     /// </returns>
-    public static (int Row, int Column, int Id) ScanBoardingPass(string boardingPass)
+    public static (int Row, int Column, int Id) ScanBoardingPass(ReadOnlySpan<char> boardingPass)
     {
         var rowRange = new Range(0, 127);
         var columnRange = new Range(0, 7);
@@ -80,30 +80,7 @@ public sealed class Day05 : Puzzle
     {
         IList<string> boardingPasses = await ReadResourceAsLinesAsync();
 
-        var ids = new List<int>(boardingPasses.Count);
-
-        foreach (string boardingPass in boardingPasses)
-        {
-            (_, _, int id) = ScanBoardingPass(boardingPass);
-            ids.Add(id);
-        }
-
-        ids.Sort();
-
-        int last = ids[0];
-
-        foreach (int id in ids.Skip(1))
-        {
-            if (id != last + 1)
-            {
-                MySeatId = id - 1;
-                break;
-            }
-
-            last = id;
-        }
-
-        HighestSeatId = ids[^1];
+        (MySeatId, HighestSeatId) = Process(boardingPasses);
 
         if (Verbose)
         {
@@ -112,5 +89,35 @@ public sealed class Day05 : Puzzle
         }
 
         return PuzzleResult.Create(HighestSeatId, MySeatId);
+    }
+
+    private static (int MySetId, int HighestSeatId) Process(IList<string> boardingPasses)
+    {
+        Span<int> ids = new int[boardingPasses.Count];
+
+        for (int i = 0; i < boardingPasses.Count; i++)
+        {
+            (_, _, ids[i]) = ScanBoardingPass(boardingPasses[i]);
+        }
+
+        ids.Sort();
+
+        int previous = ids[0];
+        int mySeatId = -1;
+
+        foreach (int id in ids[1..])
+        {
+            if (id != previous + 1)
+            {
+                mySeatId = id - 1;
+                break;
+            }
+
+            previous = id;
+        }
+
+        int highestSeatId = ids[^1];
+
+        return (mySeatId, highestSeatId);
     }
 }

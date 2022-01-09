@@ -38,11 +38,7 @@ public sealed class Day08 : Puzzle
         {
             int index = 0;
 
-            var node = new Node()
-            {
-                ChildCount = data[index++],
-                MetadataCount = data[index++],
-            };
+            var node = new Node(data[index++], data[index++]);
 
             if (node.ChildCount > 0)
             {
@@ -70,7 +66,7 @@ public sealed class Day08 : Puzzle
             long nodeMetadataSum = node.Metadata.Sum();
             node.MetadataSum += nodeMetadataSum;
 
-            if (node.Children.Count < 1)
+            if (node.ChildCount < 1)
             {
                 node.Value = nodeMetadataSum;
             }
@@ -78,7 +74,7 @@ public sealed class Day08 : Puzzle
             {
                 foreach (int metadata in node.Metadata)
                 {
-                    if (metadata < 1 || metadata > node.Children.Count)
+                    if (metadata < 1 || metadata > node.ChildCount)
                     {
                         continue;
                     }
@@ -109,13 +105,21 @@ public sealed class Day08 : Puzzle
 
     private sealed class Node
     {
+        public Node(int childCount, int metadataCount)
+        {
+            ChildCount = childCount;
+            MetadataCount = metadataCount;
+            Children = new(childCount);
+            Metadata = new(metadataCount);
+        }
+
         public int ChildCount { get; init; }
 
         public int MetadataCount { get; init; }
 
-        public IList<Node> Children { get; } = new List<Node>();
+        public List<Node> Children { get; }
 
-        public IList<int> Metadata { get; } = new List<int>();
+        public List<int> Metadata { get; }
 
         public long MetadataSum { get; set; }
 

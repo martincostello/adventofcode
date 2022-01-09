@@ -27,8 +27,8 @@ public sealed class Day13 : Puzzle
     internal static int GetMaximumTotalChangeInHappiness(ICollection<string> potentialHappiness)
     {
         // Parse the input data
-        IList<Potential> potentials = potentialHappiness
-            .Select(ParsePotentialHappiness)
+        var potentials = potentialHappiness
+            .Select((p) => ParsePotentialHappiness(p))
             .ToList();
 
         // Determine all of the possible seating arrangements
@@ -38,11 +38,11 @@ public sealed class Day13 : Puzzle
             .ToList();
 
         var permutations = Maths.GetPermutations(names)
-            .Select((p) => new List<string>(p) as IList<string>)
+            .Select((p) => new List<string>(p))
             .ToList();
 
         // Key the happiness for each person for the people they could sit next to
-        IDictionary<string, Dictionary<string, int>> happinesses = names.ToDictionary(
+        var happinesses = names.ToDictionary(
             (p) => p,
             (p) => potentials.Where((r) => r.Name == p).ToDictionary((r) => r.AdjacentName, (r) => r.Happiness));
 
@@ -99,7 +99,7 @@ public sealed class Day13 : Puzzle
     /// <param name="setting">The place setting.</param>
     /// <param name="happinesses">The potential happinesses.</param>
     /// <returns>The total change in happiness for the given place setting.</returns>
-    private static int GetHappiness(IList<string> setting, IDictionary<string, Dictionary<string, int>> happinesses)
+    private static int GetHappiness(List<string> setting, Dictionary<string, Dictionary<string, int>> happinesses)
     {
         string head = setting[0];
         string tail = setting[^1];
@@ -108,7 +108,7 @@ public sealed class Day13 : Puzzle
         int happiness = happinesses[head][tail];
         happiness += happinesses[tail][head];
         happiness += happinesses[head][setting[1]];
-        happiness += happinesses[tail][setting[setting.Count - 2]];
+        happiness += happinesses[tail][setting[^2]];
 
         // Find the happiness for each seat which has a seat on either side
         for (int i = 1; i < setting.Count - 1; i++)

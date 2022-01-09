@@ -38,12 +38,7 @@ public sealed class Day20 : Puzzle
 
         foreach (string range in denyList)
         {
-            string[] split = range.Split('-');
-
-            uint low = Parse<uint>(split[0]);
-            uint high = Parse<uint>(split[1]);
-
-            ranges.Add((low, high));
+            ranges.Add(range.AsNumberPair<uint>('-'));
         }
 
         ranges = ranges

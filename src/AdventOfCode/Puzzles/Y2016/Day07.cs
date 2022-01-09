@@ -30,7 +30,7 @@ public sealed class Day07 : Puzzle
     /// </returns>
     internal static bool DoesIPAddressSupportSsl(string address)
     {
-        ParseIPAddress(address, out IList<string> supernets, out IList<string> hypernets);
+        ParseIPAddress(address, out List<string> supernets, out List<string> hypernets);
 
         var abas = new List<string>(supernets.Count);
 
@@ -46,7 +46,7 @@ public sealed class Day07 : Puzzle
 
         foreach (string aba in abas)
         {
-            string bab = new(new[] { aba[1], aba[0], aba[1] });
+            string bab = aba[1] + aba[0..2];
 
             foreach (string hypernet in hypernets)
             {
@@ -69,10 +69,10 @@ public sealed class Day07 : Puzzle
     /// </returns>
     internal static bool DoesIPAddressSupportTls(string address)
     {
-        ParseIPAddress(address, out IList<string> supernets, out IList<string> hypernets);
+        ParseIPAddress(address, out List<string> supernets, out List<string> hypernets);
 
-        bool foundAbbaInSupernet = supernets.Any(DoesStringContainAbba);
-        bool foundAbbaInHypernet = hypernets.Any(DoesStringContainAbba);
+        bool foundAbbaInSupernet = supernets.Any((p) => DoesStringContainAbba(p));
+        bool foundAbbaInHypernet = hypernets.Any((p) => DoesStringContainAbba(p));
 
         return foundAbbaInSupernet && !foundAbbaInHypernet;
     }
@@ -82,8 +82,8 @@ public sealed class Day07 : Puzzle
     {
         IList<string> addresses = await ReadResourceAsLinesAsync();
 
-        IPAddressesSupportingTls = addresses.Count(DoesIPAddressSupportTls);
-        IPAddressesSupportingSsl = addresses.Count(DoesIPAddressSupportSsl);
+        IPAddressesSupportingTls = addresses.Count((p) => DoesIPAddressSupportTls(p));
+        IPAddressesSupportingSsl = addresses.Count((p) => DoesIPAddressSupportSsl(p));
 
         if (Verbose)
         {
@@ -146,7 +146,7 @@ public sealed class Day07 : Puzzle
 
                 if (ch1 != ch2 && ch1 == ch3)
                 {
-                    result.Add(new string(shared.AsSpan(0, 3)));
+                    result.Add(new(shared.AsSpan(0, 3)));
                 }
             }
             finally
@@ -164,7 +164,7 @@ public sealed class Day07 : Puzzle
     /// <param name="address">The IP addresses to parse.</param>
     /// <param name="supernets">When the method returns, contains the supernets.</param>
     /// <param name="hypernets">When the method returns, contains the hypernets.</param>
-    private static void ParseIPAddress(string address, out IList<string> supernets, out IList<string> hypernets)
+    private static void ParseIPAddress(string address, out List<string> supernets, out List<string> hypernets)
     {
         supernets = new List<string>();
         hypernets = new List<string>();

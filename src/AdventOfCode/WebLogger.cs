@@ -38,13 +38,13 @@ public sealed partial class WebLogger : ILogger
         int lengthX = array.GetLength(0);
         int lengthY = array.GetLength(1);
 
-        var builder = new StringBuilder((lengthX + 2) * lengthY);
+        var builder = new StringBuilder(((lengthX + 2) * lengthY) + 2);
 
         for (int y = 0; y < lengthY; y++)
         {
-            for (int x = 0; x < lengthX; x++)
+            foreach (bool value in array.GetColumn(y))
             {
-                builder.Append(array[x, y] ? trueChar : falseChar);
+                builder.Append(value ? trueChar : falseChar);
             }
 
             builder.AppendLine();

@@ -28,20 +28,16 @@ public sealed class Day12 : Puzzle
     /// </returns>
     public static int GetGroupsInNetwork(ICollection<string> pipes)
     {
-        IDictionary<int, Node> graph = BuildGraph(pipes);
+        var graph = BuildGraph(pipes);
 
-        var groups = new HashSet<string>();
+        var groups = new HashSet<string>(pipes.Count);
 
         foreach (Node target in graph.Values)
         {
-            ICollection<Node> members = GetMembersOfGroup(target);
+            var members = GetMembersOfGroup(target);
 
-            string groupId = string.Join(",", members.Select((p) => p.Id).OrderBy((p) => p));
-
-            if (!groups.Contains(groupId))
-            {
-                groups.Add(groupId);
-            }
+            string groupId = string.Join(',', members.Select((p) => p.Id).OrderBy((p) => p));
+            groups.Add(groupId);
         }
 
         return groups.Count;
@@ -57,10 +53,10 @@ public sealed class Day12 : Puzzle
     /// </returns>
     public static int GetProgramsInGroup(int programId, ICollection<string> pipes)
     {
-        IDictionary<int, Node> graph = BuildGraph(pipes);
+        var graph = BuildGraph(pipes);
         Node target = graph[programId];
 
-        ICollection<Node> members = GetMembersOfGroup(target);
+        var members = GetMembersOfGroup(target);
 
         return members.Count;
     }
@@ -87,9 +83,9 @@ public sealed class Day12 : Puzzle
     /// </summary>
     /// <param name="pipes">A collection of strings describing the pipes connecting the programs.</param>
     /// <returns>
-    /// An <see cref="IDictionary{TKey, TValue}"/> containing the network of programs keyed by their Id.
+    /// An <see cref="Dictionary{TKey, TValue}"/> containing the network of programs keyed by their Id.
     /// </returns>
-    private static IDictionary<int, Node> BuildGraph(IEnumerable<string> pipes)
+    private static Dictionary<int, Node> BuildGraph(IEnumerable<string> pipes)
     {
         var graph = pipes
             .Select((p) => new Node(p))
@@ -113,12 +109,9 @@ public sealed class Day12 : Puzzle
     /// <returns>
     /// The programs that in the same group as the program specified by <paramref name="target"/>.
     /// </returns>
-    private static ICollection<Node> GetMembersOfGroup(Node target)
+    private static List<Node> GetMembersOfGroup(Node target)
     {
-        var members = new List<Node>()
-        {
-            target,
-        };
+        List<Node> members = new() { target };
 
         foreach (Node edge in target.Edges)
         {
@@ -133,7 +126,7 @@ public sealed class Day12 : Puzzle
     /// </summary>
     /// <param name="node">The node to visit.</param>
     /// <param name="members">The current members of the group of the target node.</param>
-    private static void Visit(Node node, ICollection<Node> members)
+    private static void Visit(Node node, List<Node> members)
     {
         if (!members.Contains(node))
         {
@@ -178,11 +171,11 @@ public sealed class Day12 : Puzzle
         /// <summary>
         /// Gets the Ids of the edges of the node.
         /// </summary>
-        public ICollection<int> EdgeIds { get; }
+        public List<int> EdgeIds { get; }
 
         /// <summary>
         /// Gets the edges of the node.
         /// </summary>
-        public ICollection<Node> Edges { get; } = new List<Node>();
+        public List<Node> Edges { get; } = new();
     }
 }

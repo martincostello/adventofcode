@@ -175,7 +175,7 @@ public abstract class Puzzle : IPuzzle
 
         string? value;
 
-        while ((value = await reader.ReadLineAsync()) != null)
+        while ((value = await reader.ReadLineAsync()) is not null)
         {
             lines.Add(value);
         }
@@ -202,7 +202,7 @@ public abstract class Puzzle : IPuzzle
 
         string? value;
 
-        while ((value = await reader.ReadLineAsync()) != null)
+        while ((value = await reader.ReadLineAsync()) is not null)
         {
             numbers.Add(T.Parse(value, NumberStyles.Integer, CultureInfo.InvariantCulture));
         }

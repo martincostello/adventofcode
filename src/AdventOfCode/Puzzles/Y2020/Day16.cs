@@ -28,57 +28,54 @@ public sealed class Day16 : Puzzle
     /// </returns>
     public static (int ErrorRate, IDictionary<string, int> Ticket) ScanTickets(IList<string> notes)
     {
-        var rules = new Dictionary<string, ICollection<Range>>();
-        var allTickets = new List<IList<int>>();
-
         int indexOfFirstTicket = notes.IndexOf("your ticket:") + 1;
         int indexOfSecondTicket = notes.IndexOf("nearby tickets:") + 1;
+
+        var rules = new Dictionary<string, ICollection<Range>>(indexOfFirstTicket - 2);
 
         // Parse the rules
         foreach (string line in notes.Take(indexOfFirstTicket - 2))
         {
-            string[] split = line.Split(':');
+            (string name, string instruction) = line.Bifurcate(':');
+            string[] split = instruction.Split(" or ", StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
 
-            string name = split[0];
+            var ranges = new Range[split.Length];
 
-            split = split[1].Split(" or ", StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
-
-            var ranges = new List<Range>();
-
-            foreach (string range in split)
+            for (int i = 0; i < split.Length; i++)
             {
-                string[] parts = range.Split('-');
-
-                int start = Parse<int>(parts[0]);
-                int end = Parse<int>(parts[1]);
-
-                ranges.Add(new(start, end));
+                (int start, int end) = split[i].AsNumberPair<int>('-');
+                ranges[i] = new(start, end);
             }
 
             rules[name] = ranges;
         }
 
+        var allTickets = new IList<int>[notes.Count - indexOfSecondTicket + 1];
+
+        allTickets[0] = notes[indexOfFirstTicket]
+            .AsNumbers<int>()
+            .ToArray();
+
         // Parse the nearby tickets
-        foreach (string line in notes.Skip(indexOfSecondTicket).Prepend(notes[indexOfFirstTicket]))
+        for (int i = indexOfSecondTicket; i < notes.Count; i++)
         {
-            int[] ticket = line
+            allTickets[i - indexOfSecondTicket + 1] = notes[i]
                 .AsNumbers<int>()
                 .ToArray();
-
-            allTickets.Add(ticket);
         }
 
         int invalidValues = 0;
         var validTickets = new List<IList<int>>();
 
         // Find the valid tickets
-        foreach (IList<int> ticket in allTickets.Skip(1))
+        for (int i = 1; i < allTickets.Length; i++)
         {
+            var ticket = allTickets[i];
             bool isValid = true;
 
-            for (int i = 0; i < ticket.Count && isValid; i++)
+            for (int j = 0; j < ticket.Count && isValid; j++)
             {
-                int value = ticket[i];
+                int value = ticket[j];
 
                 foreach (ICollection<Range> ranges in rules.Values)
                 {

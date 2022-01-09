@@ -30,10 +30,8 @@ public sealed class Day04 : Puzzle
     /// </returns>
     public static int GetPasswordsInRange(string range, int rulesVersion)
     {
-        string[] split = range.Split('-');
-
-        int start = Parse<int>(split[0]);
-        int end = Parse<int>(split[1]) + 1;
+        (int start, int end) = range.AsNumberPair<int>('-');
+        end++;
 
         int count = 0;
 
@@ -56,7 +54,7 @@ public sealed class Day04 : Puzzle
     /// <returns>
     /// <see langword="true"/> if <paramref name="password"/> is valid; otherwise <see langword="false"/>.
     /// </returns>
-    public static bool IsValid(string password, int rulesVersion)
+    public static bool IsValid(ReadOnlySpan<char> password, int rulesVersion)
     {
         bool foundAdjacent = false;
 

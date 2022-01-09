@@ -45,13 +45,13 @@ public sealed class Day17 : Puzzle
         int dimensions,
         ILogger? logger = null)
     {
-        var currentState = new Dictionary<Point, char>();
+        var currentState = new Dictionary<Point, char>(initialStates.Count * initialStates.Count);
 
         for (int y = 0; y < initialStates.Count; y++)
         {
             for (int x = 0; x < initialStates.Count; x++)
             {
-                var point = dimensions == 4 ? new Point(x, y, z: 0, w: 0) : new Point(x, y, z: 0);
+                var point = dimensions == 4 ? new Point(x, y, 0, 0) : new Point(x, y, 0);
                 currentState[point] = initialStates[y][x];
             }
         }
@@ -60,7 +60,7 @@ public sealed class Day17 : Puzzle
 
         for (int i = 0; i < cycles; i++)
         {
-            Extend(currentState);
+            Extend(currentState, dimensions);
 
             currentState = Iterate(currentState);
 
@@ -73,13 +73,17 @@ public sealed class Day17 : Puzzle
 
         return (activeCubes, visualization);
 
-        static void Extend(IDictionary<Point, char> states)
+        static void Extend(Dictionary<Point, char> states, int dimensions)
         {
-            foreach (Point point in states.Keys.ToArray())
+            var keys = states.Keys.ToArray();
+
+            states.EnsureCapacity(keys.Length + ((int)Math.Pow(3, dimensions) * keys.Length));
+
+            foreach (Point point in keys)
             {
                 foreach (Point adjacent in AdjacentCubes(point))
                 {
-                    if (!states.TryGetValue(adjacent, out _))
+                    if (!states.ContainsKey(adjacent))
                     {
                         states[adjacent] = Inactive;
                     }

@@ -24,7 +24,7 @@ public sealed class Day03Tests : PuzzleTest
     public void Y2015_Day03_GetUniqueHousesVisitedBySanta(string instructions, int expected)
     {
         // Act
-        int actual = Day03.GetUniqueHousesVisitedBySanta(instructions, Logger);
+        int actual = Day03.GetUniqueHousesVisitedBySanta(instructions);
 
         // Assert
         actual.ShouldBe(expected);
@@ -37,7 +37,7 @@ public sealed class Day03Tests : PuzzleTest
     public void Y2015_Day03_GetUniqueHousesVisitedBySantaAndRoboSanta(string instructions, int expected)
     {
         // Act
-        int actual = Day03.GetUniqueHousesVisitedBySantaAndRoboSanta(instructions, Logger);
+        int actual = Day03.GetUniqueHousesVisitedBySantaAndRoboSanta(instructions);
 
         // Assert
         actual.ShouldBe(expected);

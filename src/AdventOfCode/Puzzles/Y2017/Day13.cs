@@ -29,12 +29,12 @@ public sealed class Day13 : Puzzle
     public static int GetSeverityOfTrip(ICollection<string> depthRanges)
     {
         var configuration = depthRanges
-            .Select((p) => p.Split(':'))
-            .Select((p) => new { layer = Parse<int>(p[0]), range = Parse<int>(p[1].Trim()) })
+            .Select((p) => p.Bifurcate(':'))
+            .Select((p) => new { Layer = Parse<int>(p.First), Range = Parse<int>(p.Second.Trim()) })
             .ToList();
 
-        int[] depths = configuration.Select((p) => p.layer).ToArray();
-        int[] ranges = configuration.Select((p) => p.range).ToArray();
+        int[] depths = configuration.Select((p) => p.Layer).ToArray();
+        int[] ranges = configuration.Select((p) => p.Range).ToArray();
 
         int severity = 0;
 
@@ -65,12 +65,12 @@ public sealed class Day13 : Puzzle
     public static int GetShortestDelayForNeverCaught(ICollection<string> depthRanges)
     {
         var configuration = depthRanges
-            .Select((p) => p.Split(':'))
-            .Select((p) => new { layer = Parse<int>(p[0]), range = Parse<int>(p[1].Trim()) })
+            .Select((p) => p.Bifurcate(':'))
+            .Select((p) => new { Layer = Parse<int>(p.First), Range = Parse<int>(p.Second.Trim()) })
             .ToList();
 
-        int[] depths = configuration.Select((p) => p.layer).ToArray();
-        int[] ranges = configuration.Select((p) => p.range).ToArray();
+        int[] depths = configuration.Select((p) => p.Layer).ToArray();
+        int[] ranges = configuration.Select((p) => p.Range).ToArray();
 
         bool caught = false;
         int delay = 0;

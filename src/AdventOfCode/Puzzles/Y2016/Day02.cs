@@ -48,23 +48,23 @@ public sealed class Day02 : Puzzle
     /// <summary>
     /// Gets the keypad grid containing digits and letters.
     /// </summary>
-    internal static char[][] AlphanumericGrid { get; } = new[]
+    internal static char[,] AlphanumericGrid { get; } =
     {
-        new[] { '\0', '\0', '1', '\0', '\0' },
-        new[] { '\0', '2', '3', '4', '\0' },
-        new[] { '5', '6', '7', '8', '9' },
-        new[] { '\0', 'A', 'B', 'C', '\0' },
-        new[] { '\0', '\0', 'D', '\0', '\0' },
+        { '\0', '\0', '1', '\0', '\0' },
+        { '\0', '2', '3', '4', '\0' },
+        { '5', '6', '7', '8', '9' },
+        { '\0', 'A', 'B', 'C', '\0' },
+        { '\0', '\0', 'D', '\0', '\0' },
     };
 
     /// <summary>
     /// Gets the keypad grid containing only digits.
     /// </summary>
-    internal static char[][] DigitGrid { get; } = new[]
+    internal static char[,] DigitGrid { get; } =
     {
-        new[] { '1', '2', '3' },
-        new[] { '4', '5', '6' },
-        new[] { '7', '8', '9' },
+        { '1', '2', '3' },
+        { '4', '5', '6' },
+        { '7', '8', '9' },
     };
 
     /// <summary>
@@ -75,20 +75,23 @@ public sealed class Day02 : Puzzle
     /// <returns>
     /// The bathroom code to use given the instructions in <paramref name="instructions"/>.
     /// </returns>
-    internal static string GetBathroomCode(ICollection<string> instructions, char[][] grid)
+    internal static string GetBathroomCode(ICollection<string> instructions, char[,] grid)
     {
-        IList<IList<Direction>> directions = ParseInstructions(instructions);
+        var directions = ParseInstructions(instructions);
         var code = new StringBuilder(instructions.Count);
 
         var origin = Point.Empty;
 
-        for (int y = 0; y < grid.Length && origin == Point.Empty; y++)
+        int height = grid.GetLength(0);
+        int width = grid.GetLength(1);
+
+        for (int y = 0; y < height && origin == Point.Empty; y++)
         {
-            for (int x = 0; x < grid[y].Length; x++)
+            for (int x = 0; x < width; x++)
             {
-                if (grid[y][x] == '5')
+                if (grid[y, x] == '5')
                 {
-                    origin = new Point(x, y);
+                    origin = new(x, y);
                     break;
                 }
             }
@@ -96,7 +99,7 @@ public sealed class Day02 : Puzzle
 
         Point position = origin;
 
-        foreach (IList<Direction> sequence in directions)
+        foreach (var sequence in directions)
         {
             foreach (Direction direction in sequence)
             {
@@ -108,7 +111,7 @@ public sealed class Day02 : Puzzle
                 }
             }
 
-            code.Append(grid[position.Y][position.X]);
+            code.Append(grid[position.Y, position.X]);
         }
 
         return code.ToString();
@@ -117,7 +120,7 @@ public sealed class Day02 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        ICollection<string> instructions = await ReadResourceAsLinesAsync();
+        var instructions = await ReadResourceAsLinesAsync();
 
         BathroomCodeDigitKeypad = GetBathroomCode(instructions, DigitGrid);
         BathroomCodeAlphanumericKeypad = GetBathroomCode(instructions, AlphanumericGrid);
@@ -147,10 +150,10 @@ public sealed class Day02 : Puzzle
     {
         return direction switch
         {
-            Direction.Down => new Size(0, 1),
-            Direction.Left => new Size(-1, 0),
-            Direction.Right => new Size(1, 0),
-            Direction.Up => new Size(0, -1),
+            Direction.Down => new(0, 1),
+            Direction.Left => new(-1, 0),
+            Direction.Right => new(1, 0),
+            Direction.Up => new(0, -1),
             _ => default,
         };
     }
@@ -163,14 +166,14 @@ public sealed class Day02 : Puzzle
     /// <returns>
     /// <see langword="true"/> if the position is within the bounds of the grid; otherwise <see langword="false"/>.
     /// </returns>
-    private static bool IsInBounds(char[][] grid, Point position)
+    private static bool IsInBounds(char[,] grid, Point position)
     {
         return
             position.Y >= 0 &&
-            position.Y < grid.Length &&
+            position.Y < grid.GetLength(0) &&
             position.X >= 0 &&
-            position.X < grid[position.Y].Length &&
-            grid[position.Y][position.X] != '\0';
+            position.X < grid.GetLength(1) &&
+            grid[position.Y, position.X] != '\0';
     }
 
     /// <summary>
@@ -180,17 +183,17 @@ public sealed class Day02 : Puzzle
     /// <returns>
     /// An <see cref="IList{T}"/> containing the instructions to open the bathroom door.
     /// </returns>
-    private static IList<IList<Direction>> ParseInstructions(ICollection<string> instructions)
+    private static List<Direction[]> ParseInstructions(ICollection<string> instructions)
     {
-        var result = new List<IList<Direction>>(instructions.Count);
+        var result = new List<Direction[]>(instructions.Count);
 
         foreach (string instruction in instructions)
         {
-            var instructionsForDigit = new List<Direction>(instruction.Length);
+            var instructionsForDigit = new Direction[instruction.Length];
 
-            foreach (char ch in instruction)
+            for (int i = 0; i < instruction.Length; i++)
             {
-                Direction direction = ch switch
+                instructionsForDigit[i] = instruction[i] switch
                 {
                     'D' => Direction.Down,
                     'L' => Direction.Left,
@@ -198,8 +201,6 @@ public sealed class Day02 : Puzzle
                     'U' => Direction.Up,
                     _ => default,
                 };
-
-                instructionsForDigit.Add(direction);
             }
 
             result.Add(instructionsForDigit);

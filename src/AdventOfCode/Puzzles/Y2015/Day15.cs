@@ -31,24 +31,24 @@ public sealed class Day15 : Puzzle
     {
         // Parse the ingredients
         var ingredientProperties = collection
-            .Select(Ingredient.Parse)
+            .Select((p) => Ingredient.Parse(p))
             .ToDictionary((p) => p.Name, (p) => p);
 
         // Get the possible combinations of teaspoons for each of the ingredients
-        IList<IList<int>> teaspoonPermutations = GetTeaspoonPermutations(ingredientProperties.Count);
+        var teaspoonPermutations = GetTeaspoonPermutations(ingredientProperties.Count);
 
         // Get all the permutations which the ingredients could be ordered by
         var ingredientPermutations = Maths.GetPermutations(ingredientProperties.Keys).ToList();
 
-        var recipies = new List<IDictionary<string, int>>(ingredientPermutations.Count * teaspoonPermutations.Count);
+        var recipies = new List<Dictionary<string, int>>(ingredientPermutations.Count * teaspoonPermutations.Count);
 
         // For each permutation of ingredients, create a recipe for each
         // permutation of the number of teaspoons of each one there is.
         foreach (var ordering in ingredientPermutations)
         {
-            IList<string> ingredients = ordering.ToList();
+            var ingredients = ordering.ToList();
 
-            foreach (IList<int> teaspoons in teaspoonPermutations)
+            foreach (var teaspoons in teaspoonPermutations)
             {
                 var recipe = new Dictionary<string, int>(ingredients.Count);
 
@@ -62,12 +62,11 @@ public sealed class Day15 : Puzzle
         }
 
         // Calculate the total score for each possible recipe
-        var scores = new List<int>(recipies.Count);
+        int[] scores = new int[recipies.Count];
 
-        foreach (var recipe in recipies)
+        for (int i = 0; i < recipies.Count; i++)
         {
-            int score = GetRecipeScore(recipe, ingredientProperties, calorieCount);
-            scores.Add(score);
+            scores[i] = GetRecipeScore(recipies[i], ingredientProperties, calorieCount);
         }
 
         // Return the best recipe
@@ -99,8 +98,8 @@ public sealed class Day15 : Puzzle
     /// An <see cref="IList{T}"/> containing the number of teaspoons to use of an ingredient where
     /// at least one spoon of ingredient is required and no more than 100 teaspoons can be used.
     /// </returns>
-    private static IList<IList<int>> GetTeaspoonPermutations(int recipeCount)
-        => GetTeaspoonPermutations(Array.Empty<int>(), 0, recipeCount);
+    private static List<List<int>> GetTeaspoonPermutations(int recipeCount)
+        => GetTeaspoonPermutations(new(0), 0, recipeCount);
 
     /// <summary>
     /// Gets the permutation of teaspoon values for a recipe with the specified number of ingredients.
@@ -112,12 +111,12 @@ public sealed class Day15 : Puzzle
     /// An <see cref="IList{T}"/> containing the number of teaspoons to use of an ingredient where
     /// at least one spoon of ingredient is required and no more than 100 teaspoons can be used.
     /// </returns>
-    private static IList<IList<int>> GetTeaspoonPermutations(IList<int> seed, int index, int count)
+    private static List<List<int>> GetTeaspoonPermutations(List<int> seed, int index, int count)
     {
         const int MaxTeaspoons = 100;
 
         // Holds the permutations of teaspoons for the number of ingredients at this index (i.e. count - index)
-        var thisLevel = new List<IList<int>>(seed.Count);
+        var thisLevel = new List<List<int>>(seed.Count);
 
         if (seed.Count < index + 1)
         {
@@ -156,7 +155,7 @@ public sealed class Day15 : Puzzle
         }
 
         // Find the permutations for the next ingredient from the ones we just found
-        var result = new List<IList<int>>(thisLevel.Count);
+        var result = new List<List<int>>(thisLevel.Count);
 
         foreach (var amount in thisLevel)
         {
@@ -176,8 +175,8 @@ public sealed class Day15 : Puzzle
     /// The total score for the specified recipe.
     /// </returns>
     private static int GetRecipeScore(
-        IDictionary<string, int> recipe,
-        IDictionary<string, Ingredient> ingredients,
+        Dictionary<string, int> recipe,
+        Dictionary<string, Ingredient> ingredients,
         int? calorieCount)
     {
         int capacity = 0;

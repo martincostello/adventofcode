@@ -43,6 +43,6 @@ public sealed class Day11Tests : PuzzleTest
         var puzzle = await SolvePuzzleAsync<Day11>();
 
         // Assert
-        puzzle.MinimumStepsForAssembly.ShouldNotBe(0);
+        puzzle.MinimumStepsForAssembly.ShouldBe(47);
     }
 }

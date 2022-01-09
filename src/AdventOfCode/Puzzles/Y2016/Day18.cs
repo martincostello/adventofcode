@@ -100,5 +100,5 @@ public sealed class Day18 : Puzzle
     /// <returns>
     /// The number of safe tiles in <paramref name="grid"/>.
     /// </returns>
-    private static int CountTrapTiles(bool[,] grid) => grid.TrueCount();
+    private static int CountTrapTiles(bool[,] grid) => grid.Count(true);
 }

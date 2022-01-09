@@ -10,9 +10,53 @@ namespace MartinCostello.AdventOfCode.Benchmarks;
 [MemoryDiagnoser]
 public class PuzzleBenchmarks
 {
+    //// Classes not benchmarked are either too slow or not implemented
+
     public static IEnumerable<object> Puzzles()
     {
-        // Classes not benchmarked are either too slow or not implemented
+        foreach (object puzzle in Puzzles2015())
+        {
+            yield return puzzle;
+        }
+
+        foreach (object puzzle in Puzzles2016())
+        {
+            yield return puzzle;
+        }
+
+        foreach (object puzzle in Puzzles2017())
+        {
+            yield return puzzle;
+        }
+
+        foreach (object puzzle in Puzzles2018())
+        {
+            yield return puzzle;
+        }
+
+        foreach (object puzzle in Puzzles2019())
+        {
+            yield return puzzle;
+        }
+
+        foreach (object puzzle in Puzzles2020())
+        {
+            yield return puzzle;
+        }
+
+        foreach (object puzzle in Puzzles2021())
+        {
+            yield return puzzle;
+        }
+    }
+
+    [Benchmark]
+    [ArgumentsSource(nameof(Puzzles))]
+    public async Task<PuzzleResult> Solve(PuzzleInput input)
+        => await input.SolveAsync();
+
+    private static IEnumerable<object> Puzzles2015()
+    {
         yield return new PuzzleInput<Puzzles.Y2015.Day01>();
         yield return new PuzzleInput<Puzzles.Y2015.Day02>();
         yield return new PuzzleInput<Puzzles.Y2015.Day03>();
@@ -32,6 +76,10 @@ public class PuzzleBenchmarks
         yield return new PuzzleInput<Puzzles.Y2015.Day21>();
         yield return new PuzzleInput<Puzzles.Y2015.Day23>();
         yield return new PuzzleInput<Puzzles.Y2015.Day25>("2947", "3029");
+    }
+
+    private static IEnumerable<object> Puzzles2016()
+    {
         yield return new PuzzleInput<Puzzles.Y2016.Day01>();
         yield return new PuzzleInput<Puzzles.Y2016.Day02>();
         yield return new PuzzleInput<Puzzles.Y2016.Day03>();
@@ -53,6 +101,10 @@ public class PuzzleBenchmarks
         yield return new PuzzleInput<Puzzles.Y2016.Day22>();
         yield return new PuzzleInput<Puzzles.Y2016.Day23>("7");
         yield return new PuzzleInput<Puzzles.Y2016.Day24>();
+    }
+
+    private static IEnumerable<object> Puzzles2017()
+    {
         yield return new PuzzleInput<Puzzles.Y2017.Day01>();
         yield return new PuzzleInput<Puzzles.Y2017.Day02>();
         yield return new PuzzleInput<Puzzles.Y2017.Day03>("312051");
@@ -67,12 +119,20 @@ public class PuzzleBenchmarks
         yield return new PuzzleInput<Puzzles.Y2017.Day12>();
         yield return new PuzzleInput<Puzzles.Y2017.Day13>();
         yield return new PuzzleInput<Puzzles.Y2017.Day14>("hwlqcszp");
+    }
+
+    private static IEnumerable<object> Puzzles2018()
+    {
         yield return new PuzzleInput<Puzzles.Y2018.Day02>();
         yield return new PuzzleInput<Puzzles.Y2018.Day03>("312051");
         yield return new PuzzleInput<Puzzles.Y2018.Day04>();
         yield return new PuzzleInput<Puzzles.Y2018.Day06>();
         yield return new PuzzleInput<Puzzles.Y2018.Day07>();
         yield return new PuzzleInput<Puzzles.Y2018.Day08>();
+    }
+
+    private static IEnumerable<object> Puzzles2019()
+    {
         yield return new PuzzleInput<Puzzles.Y2019.Day01>();
         yield return new PuzzleInput<Puzzles.Y2019.Day02>();
         yield return new PuzzleInput<Puzzles.Y2019.Day03>();
@@ -81,6 +141,10 @@ public class PuzzleBenchmarks
         yield return new PuzzleInput<Puzzles.Y2019.Day07>();
         yield return new PuzzleInput<Puzzles.Y2019.Day08>();
         yield return new PuzzleInput<Puzzles.Y2019.Day09>("1");
+    }
+
+    private static IEnumerable<object> Puzzles2020()
+    {
         yield return new PuzzleInput<Puzzles.Y2020.Day01>();
         yield return new PuzzleInput<Puzzles.Y2020.Day02>();
         yield return new PuzzleInput<Puzzles.Y2020.Day03>();
@@ -103,6 +167,10 @@ public class PuzzleBenchmarks
         yield return new PuzzleInput<Puzzles.Y2020.Day22>();
         yield return new PuzzleInput<Puzzles.Y2020.Day24>();
         yield return new PuzzleInput<Puzzles.Y2020.Day25>();
+    }
+
+    private static IEnumerable<object> Puzzles2021()
+    {
         yield return new PuzzleInput<Puzzles.Y2021.Day01>();
         yield return new PuzzleInput<Puzzles.Y2021.Day02>();
         yield return new PuzzleInput<Puzzles.Y2021.Day03>();
@@ -130,11 +198,6 @@ public class PuzzleBenchmarks
         yield return new PuzzleInput<Puzzles.Y2021.Day25>();
     }
 
-    [Benchmark]
-    [ArgumentsSource(nameof(Puzzles))]
-    public async Task<PuzzleResult> Solve(PuzzleInput input)
-        => await input.Puzzle.SolveAsync(input.Args, CancellationToken.None);
-
     public sealed class PuzzleInput<T> : PuzzleInput
         where T : IPuzzle, new()
     {
@@ -150,6 +213,17 @@ public class PuzzleBenchmarks
         }
 
         public override IPuzzle Puzzle { get; }
+
+        private sealed class NullLogger : ILogger
+        {
+            public string WriteGrid(bool[,] array, char falseChar, char trueChar)
+                => string.Empty;
+
+            public void WriteLine(string format, params object[] args)
+            {
+                // No-op
+            }
+        }
     }
 
     public abstract class PuzzleInput
@@ -163,33 +237,17 @@ public class PuzzleBenchmarks
 
         public abstract IPuzzle Puzzle { get; }
 
+        public async Task<PuzzleResult> SolveAsync()
+            => await Puzzle.SolveAsync(Args, CancellationToken.None);
+
         public override string ToString()
         {
-            var type = Puzzle.GetType();
-            string[] split = type.FullName!.Split('.');
+            string[] split = Puzzle.GetType().FullName!.Split('.');
 
             string year = split[3];
             string day = split[4].Replace("Day", string.Empty, StringComparison.Ordinal);
 
-            string name = $"{year}-{day}";
-
-            if (Args?.Length > 0)
-            {
-                name += "-" + string.Join("-", Args);
-            }
-
-            return name;
-        }
-    }
-
-    private sealed class NullLogger : ILogger
-    {
-        public string WriteGrid(bool[,] array, char falseChar, char trueChar)
-            => string.Empty;
-
-        public void WriteLine(string format, params object[] args)
-        {
-            // No-op
+            return $"{year}-{day}";
         }
     }
 }

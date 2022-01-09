@@ -72,6 +72,7 @@ public class ApiTests : IntegrationTest
     [PuzzleData(2016, 08, 121, "RURUCEOEIL", ExpectedVisualizations = 1)]
     [PuzzleData(2016, 09, 98135, 10964557606)]
     [PuzzleData(2016, 10, 141, 1209)]
+    [PuzzleData(2016, 11, 47, 71, Skip = "Not implemented.")]
     [PuzzleData(2016, 12, 318020, 9227674)]
     [PuzzleData(2016, 13, new[] { "1362" }, 82, 138)]
     [PuzzleData(2016, 14, new[] { "ihaygndm" }, 15035, 19968, Skip = "Too slow.")]

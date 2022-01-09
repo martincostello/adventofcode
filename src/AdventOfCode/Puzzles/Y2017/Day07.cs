@@ -28,7 +28,7 @@ public sealed class Day07 : Puzzle
     /// </returns>
     public static string FindBottomProgramName(IEnumerable<string> structure)
     {
-        IDictionary<string, ProgramDisc> tower = BuildStructure(structure);
+        var tower = BuildStructure(structure);
         return FindBottomProgramName(tower.Values);
     }
 
@@ -41,7 +41,7 @@ public sealed class Day07 : Puzzle
     /// </returns>
     public static int FindDesiredWeightOfUnbalancedDisc(IEnumerable<string> structure)
     {
-        IDictionary<string, ProgramDisc> tower = BuildStructure(structure);
+        var tower = BuildStructure(structure);
         string bottomName = FindBottomProgramName(tower.Values);
 
         ProgramDisc bottom = tower[bottomName];
@@ -73,7 +73,7 @@ public sealed class Day07 : Puzzle
     /// <returns>
     /// An <see cref="IDictionary{TKey, TValue}"/> containing the programs with references to their parent and children, keyed by their names.
     /// </returns>
-    private static IDictionary<string, ProgramDisc> BuildStructure(IEnumerable<string> structure)
+    private static Dictionary<string, ProgramDisc> BuildStructure(IEnumerable<string> structure)
     {
         var programs = structure
             .Select((p) => new ProgramDisc(p))
@@ -103,7 +103,7 @@ public sealed class Day07 : Puzzle
     private static string FindBottomProgramName(ICollection<ProgramDisc> tower)
     {
         return tower
-            .Where((p) => p.Parent == null)
+            .Where((p) => p.Parent is null)
             .Select((p) => p.Name)
             .Single();
     }
@@ -117,7 +117,7 @@ public sealed class Day07 : Puzzle
     /// </returns>
     private static int FindDesiredWeightOfUnbalancedDisc(ProgramDisc root)
     {
-        if (root.ProgramsHeld.Count == 0)
+        if (root.ProgramsHeld.Length == 0)
         {
             // Leaf node, no children to inspect
             return 0;
@@ -125,7 +125,7 @@ public sealed class Day07 : Puzzle
 
         var unbalancedSubtree = root.Children
             .GroupBy((p) => FindDesiredWeightOfUnbalancedDisc(p))
-            .Where((p) => p.Key != 0)
+            .Where((p) => p.Key is not 0)
             .SingleOrDefault();
 
         if (unbalancedSubtree != null)
@@ -135,16 +135,16 @@ public sealed class Day07 : Puzzle
         }
 
         var childWeights = root.Children.GroupBy((p) => p.TotalWeight);
-        ProgramDisc? unbalanced = childWeights.FirstOrDefault((p) => p.Count() == 1)?.FirstOrDefault();
+        ProgramDisc? unbalanced = childWeights.FirstOrDefault((p) => p.ExactCount(1))?.FirstOrDefault();
 
-        if (unbalanced == null)
+        if (unbalanced is null)
         {
             // All children's trees weigh the same
             return 0;
         }
 
         int currentWeight = unbalanced.TotalWeight;
-        int targetWeight = childWeights.First((p) => p.Count() != 1).Key;
+        int targetWeight = childWeights.First((p) => !p.ExactCount(1)).Key;
 
         int delta = currentWeight - targetWeight;
 
@@ -186,7 +186,7 @@ public sealed class Day07 : Puzzle
         /// <summary>
         /// Gets the names of the programs held by this program.
         /// </summary>
-        public ICollection<string> ProgramsHeld { get; }
+        public string[] ProgramsHeld { get; }
 
         /// <summary>
         /// Gets or sets the parent of the program.

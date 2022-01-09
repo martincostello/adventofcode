@@ -48,12 +48,10 @@ public sealed class Day04 : Puzzle
                 continue;
             }
 
-            string[] split = line.Split(' ');
-
-            foreach (string pair in split)
+            foreach (var pair in line.Tokenize(' '))
             {
-                string[] attribute = pair.Split(':');
-                current[attribute[0]] = attribute[1];
+                (string name, string value) = pair.Bifurcate(':');
+                current[name] = value;
             }
         }
 
@@ -67,7 +65,7 @@ public sealed class Day04 : Puzzle
 
         foreach (var passport in passports)
         {
-            bool isValid = passport.AllKeys.Intersect(RequiredKeys).Count() == RequiredKeys.Length;
+            bool isValid = passport.AllKeys.Intersect(RequiredKeys).ExactCount(RequiredKeys.Length);
 
             if (isValid)
             {
@@ -133,9 +131,9 @@ public sealed class Day04 : Puzzle
             return Regex.IsMatch(value, "#[0-9a-f]{6}", RegexOptions.IgnoreCase);
         }
 
-        static bool IsValidHeight(string? value)
+        static bool IsValidHeight(ReadOnlySpan<char> value)
         {
-            if (string.IsNullOrEmpty(value))
+            if (value.IsEmpty)
             {
                 return false;
             }
@@ -152,7 +150,7 @@ public sealed class Day04 : Puzzle
             return false;
         }
 
-        static bool IsValidNumber(string? value, int minimum, int maximum)
+        static bool IsValidNumber(ReadOnlySpan<char> value, int minimum, int maximum)
         {
             if (!TryParse(value, out int number))
             {
@@ -162,7 +160,7 @@ public sealed class Day04 : Puzzle
             return number >= minimum && number <= maximum;
         }
 
-        static bool IsValidYear(string? value, int minimum, int maximum)
+        static bool IsValidYear(ReadOnlySpan<char> value, int minimum, int maximum)
             => IsValidNumber(value, minimum, maximum) && value!.Length == 4;
 
         foreach (string? key in passport.AllKeys)

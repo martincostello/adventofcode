@@ -68,10 +68,7 @@ public sealed class Day21 : Puzzle
         while (attacker.HitPoints > 0 && defender.HitPoints > 0)
         {
             defender.AcceptAttack(attacker);
-
-            var player = attacker;
-            attacker = defender;
-            defender = player;
+            (attacker, defender) = (defender, attacker);
         }
 
         return player1.HitPoints > 0 ? player1 : player2;
@@ -85,7 +82,7 @@ public sealed class Day21 : Puzzle
 
         ICollection<string> keys = Shop.PotentialRings.Keys.ToArray();
 
-        var potentialRings = new List<ICollection<string>>((keys.Count * 2) + 1)
+        var potentialRings = new List<IList<string>>((keys.Count * 2) + 1)
         {
             Array.Empty<string>(),
         };
@@ -263,7 +260,7 @@ public sealed class Day21 : Puzzle
         /// <summary>
         /// The armor inventory. This field is read-only.
         /// </summary>
-        internal static readonly IDictionary<string, Item> PotentialArmor = new Dictionary<string, Item>()
+        internal static readonly Dictionary<string, Item> PotentialArmor = new(5)
         {
             ["Leather"] = new() { Cost = 13, Armor = 1 },
             ["Chainmail"] = new() { Cost = 31, Armor = 2 },
@@ -275,7 +272,7 @@ public sealed class Day21 : Puzzle
         /// <summary>
         /// The ring inventory. This field is read-only.
         /// </summary>
-        internal static readonly IDictionary<string, Item> PotentialRings = new Dictionary<string, Item>()
+        internal static readonly Dictionary<string, Item> PotentialRings = new(6)
         {
             ["Damage +1"] = new() { Cost = 25, Damage = 1 },
             ["Damage +2"] = new() { Cost = 50, Damage = 2 },
@@ -288,7 +285,7 @@ public sealed class Day21 : Puzzle
         /// <summary>
         /// The weapon inventory. This field is read-only.
         /// </summary>
-        internal static readonly IDictionary<string, Item> PotentialWeapons = new Dictionary<string, Item>()
+        internal static readonly Dictionary<string, Item> PotentialWeapons = new(5)
         {
             ["Dagger"] = new() { Cost = 8, Damage = 4 },
             ["Shortsword"] = new() { Cost = 10, Damage = 5 },
@@ -300,17 +297,17 @@ public sealed class Day21 : Puzzle
         /// <summary>
         /// The shop's current armor inventory. This field is read-only.
         /// </summary>
-        private readonly IDictionary<string, Item> _armor = new Dictionary<string, Item>(PotentialArmor);
+        private readonly Dictionary<string, Item> _armor = new(PotentialArmor);
 
         /// <summary>
         /// The shop's current ring inventory. This field is read-only.
         /// </summary>
-        private readonly IDictionary<string, Item> _rings = new Dictionary<string, Item>(PotentialRings);
+        private readonly Dictionary<string, Item> _rings = new(PotentialRings);
 
         /// <summary>
         /// The shop's current weapon inventory. This field is read-only.
         /// </summary>
-        private readonly IDictionary<string, Item> _weapons = new Dictionary<string, Item>(PotentialWeapons);
+        private readonly Dictionary<string, Item> _weapons = new(PotentialWeapons);
 
         /// <summary>
         /// Purchases the specified armor.

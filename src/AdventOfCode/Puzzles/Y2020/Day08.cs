@@ -50,7 +50,7 @@ public sealed class Day08 : Puzzle
     /// </returns>
     public static int RunProgram(IList<string> program, bool fix)
     {
-        IList<Instruction> instructions = ParseProgram(program);
+        var instructions = ParseProgram(program);
 
         int result = 0;
 
@@ -111,13 +111,13 @@ public sealed class Day08 : Puzzle
     /// <returns>
     /// The parsed CPU instructions.
     /// </returns>
-    private static IList<Instruction> ParseProgram(ICollection<string> program)
+    private static List<Instruction> ParseProgram(ICollection<string> program)
     {
         var result = new List<Instruction>(program.Count);
 
-        foreach (string operation in program)
+        foreach (ReadOnlySpan<char> operation in program)
         {
-            var op = operation.Substring(0, 3) switch
+            var op = new string(operation[..3]) switch
             {
                 "acc" => Operation.Accumulate,
                 "jmp" => Operation.Jump,
@@ -128,7 +128,7 @@ public sealed class Day08 : Puzzle
 
             if (op != Operation.NoOp)
             {
-                argument = Parse<int>(operation.AsSpan(4), NumberStyles.Number);
+                argument = Parse<int>(operation[4..], NumberStyles.Number);
             }
 
             result.Add(new Instruction() with { Operation = op, Argument = argument });
@@ -182,7 +182,7 @@ public sealed class Day08 : Puzzle
     /// <summary>
     /// Represents a CPU instruction.
     /// </summary>
-    private record Instruction
+    private record struct Instruction
     {
         /// <summary>
         /// Gets the operation to perform.

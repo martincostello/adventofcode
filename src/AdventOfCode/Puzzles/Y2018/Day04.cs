@@ -30,7 +30,7 @@ public sealed class Day04 : Puzzle
     public static (int GuardMinute, int MinuteGuard) GetSleepiestGuardsMinutes(IEnumerable<string> log)
     {
         var parsedAndSortedLog = log
-            .Select(LogEntry.Parse)
+            .Select((p) => LogEntry.Parse(p))
             .OrderBy((p) => p.Timestamp)
             .ToList();
 
@@ -89,7 +89,7 @@ public sealed class Day04 : Puzzle
 
         foreach (var activity in guardsAsleepByMinute)
         {
-            foreach (int guard in activity.Value.Where((p) => p != 0))
+            foreach (int guard in activity.Value.Where((p) => p is not 0))
             {
                 sleepinessPerGuard[guard]++;
             }

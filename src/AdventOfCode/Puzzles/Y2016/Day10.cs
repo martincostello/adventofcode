@@ -66,7 +66,7 @@ public sealed class Day10 : Puzzle
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
         IList<string> instructions = await ReadResourceAsLinesAsync();
-        IList<int> binsOfInterest = new[] { 0, 1, 2 };
+        int[] binsOfInterest = { 0, 1, 2 };
 
         (BotThatCompares61And17Microchips, ProductOfMicrochipsInBins012) = GetBotNumber(instructions, 61, 17, binsOfInterest);
 
@@ -150,7 +150,7 @@ public sealed class Day10 : Puzzle
         /// <param name="chip">The microchip to accept.</param>
         public override void Accept(Chip chip)
         {
-            if (Microchip == null)
+            if (Microchip is null)
             {
                 Microchip = chip;
             }
@@ -263,7 +263,7 @@ public sealed class Day10 : Puzzle
         /// <param name="instruction">The instruction to process.</param>
         private void Process(string instruction)
         {
-            string[] split = instruction.Split(' ', StringSplitOptions.None);
+            string[] split = instruction.Split(' ');
 
             if (string.Equals(split[0], "value", StringComparison.Ordinal))
             {

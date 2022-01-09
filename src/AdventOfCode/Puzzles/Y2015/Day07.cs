@@ -24,9 +24,9 @@ public sealed class Day07 : Puzzle
     /// </summary>
     /// <param name="instructions">The instructions to get the wire values for.</param>
     /// <returns>
-    /// An <see cref="IDictionary{TKey, TValue}"/> containing the values for wires keyed by their Ids.
+    /// An <see cref="Dictionary{TKey, TValue}"/> containing the values for wires keyed by their Ids.
     /// </returns>
-    internal static IDictionary<string, ushort> GetWireValues(IEnumerable<string> instructions)
+    internal static Dictionary<string, ushort> GetWireValues(IEnumerable<string> instructions)
     {
         // Create a map of wire Ids to the instructions to get their value
         var instructionMap = instructions
@@ -105,7 +105,7 @@ public sealed class Day07 : Puzzle
         IList<string> instructions = await ReadResourceAsLinesAsync();
 
         // Get the wire values for the initial instructions
-        IDictionary<string, ushort> values = GetWireValues(instructions);
+        Dictionary<string, ushort> values = GetWireValues(instructions);
 
         FirstSignal = values["a"];
 

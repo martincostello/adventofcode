@@ -28,7 +28,7 @@ public sealed class Day03 : Puzzle
     /// </returns>
     public static int GetAreaWithTwoOrMoreOverlappingClaims(IEnumerable<string> claims)
     {
-        (Square[,] fabric, var _) = ParseFabric(claims);
+        (Square[,] fabric, _) = ParseFabric(claims);
 
         int result = 0;
 
@@ -115,7 +115,7 @@ public sealed class Day03 : Puzzle
     private static (Square[,] Fabric, IList<Claim> Claims) ParseFabric(IEnumerable<string> claims)
     {
         IList<Claim> fabricClaims = claims
-            .Select(Claim.Parse)
+            .Select((p) => Claim.Parse(p))
             .ToList();
 
         int totalWidth = fabricClaims.Max((p) => p.X + p.Width);
@@ -190,15 +190,8 @@ public sealed class Day03 : Puzzle
             string offset = split[2].TrimEnd(':');
             string area = split[3];
 
-            split = offset.Split(',');
-
-            int x = Parse<int>(split[0]);
-            int y = Parse<int>(split[1]);
-
-            split = area.Split('x');
-
-            int width = Parse<int>(split[0]);
-            int height = Parse<int>(split[1]);
+            (int x, int y) = offset.AsNumberPair<int>();
+            (int width, int height) = area.AsNumberPair<int>('x');
 
             return new Claim()
             {

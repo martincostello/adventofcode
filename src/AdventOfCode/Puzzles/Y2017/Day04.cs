@@ -30,17 +30,20 @@ public sealed class Day04 : Puzzle
     internal static bool IsPassphraseValid(string passphrase, int version)
     {
         string[] words = passphrase.Split(' ');
-        bool isValid = words.Distinct().Count() == words.Length;
+        bool isValid = words.Distinct().ExactCount(words.Length);
 
         if (isValid && version == 2)
         {
             string[] sorted = words
-                .Select((p) => p.ToCharArray())
-                .Select((p) => p.OrderBy((r) => r).ToArray())
-                .Select((p) => new string(p))
+                .Select((p) =>
+                {
+                    Span<char> span = p.ToCharArray();
+                    span.Sort();
+                    return new string(span);
+                })
                 .ToArray();
 
-            isValid = sorted.Distinct().Count() == words.Length;
+            isValid = sorted.Distinct().ExactCount(words.Length);
         }
 
         return isValid;
@@ -51,8 +54,8 @@ public sealed class Day04 : Puzzle
     {
         ICollection<string> passphrases = await ReadResourceAsLinesAsync();
 
-        ValidPassphraseCountV1 = passphrases.Where((p) => IsPassphraseValid(p, 1)).Count();
-        ValidPassphraseCountV2 = passphrases.Where((p) => IsPassphraseValid(p, 2)).Count();
+        ValidPassphraseCountV1 = passphrases.Count((p) => IsPassphraseValid(p, 1));
+        ValidPassphraseCountV2 = passphrases.Count((p) => IsPassphraseValid(p, 2));
 
         if (Verbose)
         {

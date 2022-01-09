@@ -24,7 +24,8 @@ public sealed class Day08 : Puzzle
     /// </summary>
     /// <param name="collection">The values to get the encoded number of characters from.</param>
     /// <returns>The number of characters in <paramref name="collection"/> when encoded.</returns>
-    internal static int GetEncodedCharacterCount(IEnumerable<string> collection) => collection.Sum(GetEncodedCharacterCount);
+    internal static int GetEncodedCharacterCount(IEnumerable<string> collection)
+        => collection.Sum((p) => GetEncodedCharacterCount(p));
 
     /// <summary>
     /// Returns the number of characters in the specified <see cref="string"/> if literals are encoded.
@@ -64,14 +65,15 @@ public sealed class Day08 : Puzzle
     /// </summary>
     /// <param name="collection">The values to get the number of literal characters from.</param>
     /// <returns>The number of literal characters in <paramref name="collection"/>.</returns>
-    internal static int GetLiteralCharacterCount(IEnumerable<string> collection) => collection.Sum(GetLiteralCharacterCount);
+    internal static int GetLiteralCharacterCount(IEnumerable<string> collection)
+        => collection.Sum((p) => GetLiteralCharacterCount(p));
 
     /// <summary>
-    /// Returns the number of literal characters in the specified <see cref="string"/>.
+    /// Returns the number of literal characters in the specified span.
     /// </summary>
     /// <param name="value">The value to get the number of literal characters from.</param>
     /// <returns>The number of literal characters in <paramref name="value"/>.</returns>
-    internal static int GetLiteralCharacterCount(string value)
+    internal static int GetLiteralCharacterCount(ReadOnlySpan<char> value)
     {
         int count = 0;
 
@@ -91,7 +93,7 @@ public sealed class Day08 : Puzzle
 
         if (value.Length > 0)
         {
-            var characters = new Queue<char>(value);
+            var characters = new Queue<char>(new string(value));
 
             while (characters.Count > 0)
             {

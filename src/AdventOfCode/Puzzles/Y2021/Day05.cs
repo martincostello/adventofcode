@@ -36,11 +36,11 @@ public sealed class Day05 : Puzzle
         foreach (string segment in lineSegments)
         {
             string[] points = segment.Split(" -> ");
-            int[] startCoordinates = points[0].AsNumbers<int>().ToArray();
-            int[] endCoordinates = points[1].AsNumbers<int>().ToArray();
+            (int startX, int startY) = points[0].AsNumberPair<int>();
+            (int endX, int endY) = points[1].AsNumberPair<int>();
 
-            var start = new Point(startCoordinates[0], startCoordinates[1]);
-            var end = new Point(endCoordinates[0], endCoordinates[1]);
+            var start = new Point(startX, startY);
+            var end = new Point(endX, endY);
 
             if (useDiagonals || start.X == end.X || start.Y == end.Y)
             {

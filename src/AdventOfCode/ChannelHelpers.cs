@@ -25,7 +25,7 @@ internal static class ChannelHelpers
     {
         var channel = Channel.CreateUnbounded<T>();
 
-        if (values != null)
+        if (values is not null)
         {
             foreach (T value in values)
             {

@@ -36,7 +36,9 @@ public sealed class Day08 : Puzzle
         int height,
         ILogger logger)
     {
-        IList<Instruction> operations = instructions.Select(ParseInstruction).ToArray();
+        var operations = instructions
+            .Select((p) => ParseInstruction(p))
+            .ToArray();
 
         bool[,] grid = new bool[width, height];
 
@@ -96,7 +98,7 @@ public sealed class Day08 : Puzzle
     /// <returns>
     /// The number of pixels lit in <paramref name="grid"/>.
     /// </returns>
-    private static int CountLitPixels(bool[,] grid) => grid.TrueCount();
+    private static int CountLitPixels(bool[,] grid) => grid.Count(true);
 
     /// <summary>
     /// Lights a rectangle of the specified size in the top-left of the specified grid.
@@ -182,20 +184,18 @@ public sealed class Day08 : Puzzle
     {
         var result = new Instruction();
 
-        string[] split = instruction.Split(' ', StringSplitOptions.None);
+        string[] split = instruction.Split(' ');
 
         switch (split[0])
         {
             case "rect":
-                split = split[1].Split('x', StringSplitOptions.None);
-                result.A = Parse<int>(split[0]);
-                result.B = Parse<int>(split[1]);
+                (result.A, result.B) = split[1].AsNumberPair<int>('x');
                 break;
 
             case "rotate":
                 result.IsRotation = true;
                 result.IsColumn = string.Equals(split[1], "column", StringComparison.Ordinal);
-                result.A = Parse<int>(split[2].Split('=', StringSplitOptions.None)[1]);
+                result.A = Parse<int>(split[2].Split('=')[1]);
                 result.B = Parse<int>(split[4]);
                 break;
 

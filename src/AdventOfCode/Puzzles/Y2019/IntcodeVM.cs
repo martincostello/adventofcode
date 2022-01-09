@@ -67,10 +67,16 @@ internal sealed class IntcodeVM
     /// </returns>
     internal static long[] ParseProgram(string program)
     {
-        return program
-            .Split(',')
-            .Select((p) => Puzzle.Parse<long>(p))
-            .ToArray();
+        long[] instructions = new long[program.Count(',') + 1];
+
+        int i = 0;
+
+        foreach (var instruction in program.Tokenize(','))
+        {
+            instructions[i++] = Puzzle.Parse<long>(instruction);
+        }
+
+        return instructions;
     }
 
     /// <summary>

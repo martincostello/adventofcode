@@ -60,9 +60,8 @@ public sealed class Day02 : Puzzle
 
         static Size ParseInstruction(string text)
         {
-            string[] split = text.Split(' ');
-            string direction = split[0];
-            int magnitude = Parse<int>(split[1]);
+            (string direction, string rawMagnitude) = text.Bifurcate(' ');
+            int magnitude = Parse<int>(rawMagnitude);
 
             return direction switch
             {

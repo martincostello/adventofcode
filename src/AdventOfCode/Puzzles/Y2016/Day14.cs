@@ -116,7 +116,7 @@ public sealed class Day14 : Puzzle
     private static string GenerateKey(
         string value,
         bool useKeyStretching,
-        IDictionary<string, string> cache)
+        Dictionary<string, string> cache)
     {
         string key = string.Concat(value, useKeyStretching ? "|s" : "|u");
 

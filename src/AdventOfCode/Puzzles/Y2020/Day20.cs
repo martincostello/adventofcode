@@ -32,7 +32,7 @@ public sealed class Day20 : Puzzle
         IList<string> input,
         ILogger logger)
     {
-        IDictionary<long, Tile> tiles = ParseTiles(input);
+        var tiles = ParseTiles(input);
 
         (List<Tile> corners, List<Tile> edges, List<Tile> others) = Geometry(tiles.Values);
 
@@ -53,7 +53,7 @@ public sealed class Day20 : Puzzle
             tile.RemoveBorder();
         }
 
-        int tileWidth = image[0, 0].Grid.Count;
+        int tileWidth = image[0, 0].Grid.Length;
         int finalWidth = tileWidth * width;
 
         char[,] finalImage = new char[finalWidth, finalWidth];
@@ -402,35 +402,47 @@ public sealed class Day20 : Puzzle
             return (corners, edges, others);
         }
 
-        static IDictionary<long, Tile> ParseTiles(IList<string> tiles)
+        static Dictionary<long, Tile> ParseTiles(IList<string> tiles)
         {
             var image = new Dictionary<long, Tile>();
-            var current = new Tile();
+
+            var grid = new List<string>();
+            long id = 0;
 
             foreach (string line in tiles)
             {
                 if (string.IsNullOrEmpty(line))
                 {
-                    image[current.Id] = current;
-                    current = new Tile();
+                    image[id] = new Tile(grid.ToArray(), id);
+                    grid.Clear();
                 }
                 else if (line.StartsWith("Tile ", StringComparison.Ordinal))
                 {
-                    current.Id = Parse<long>(line[5..^1].AsSpan());
+                    id = Parse<long>(line[5..^1].AsSpan());
                 }
                 else
                 {
-                    current.Grid.Add(line);
+                    grid.Add(line);
                 }
             }
 
             foreach (Tile tile in image.Values)
             {
-                foreach (string edge in new[] { tile.Top(), tile.Bottom(), tile.Left(), tile.Right() })
-                {
-                    tile.EdgeCandidates.Add(edge);
-                    tile.EdgeCandidates.Add(edge.Mirror());
-                }
+                string edge = tile.Top();
+                tile.EdgeCandidates.Add(edge);
+                tile.EdgeCandidates.Add(edge.Mirror());
+
+                edge = tile.Bottom();
+                tile.EdgeCandidates.Add(edge);
+                tile.EdgeCandidates.Add(edge.Mirror());
+
+                edge = tile.Left();
+                tile.EdgeCandidates.Add(edge);
+                tile.EdgeCandidates.Add(edge.Mirror());
+
+                edge = tile.Right();
+                tile.EdgeCandidates.Add(edge);
+                tile.EdgeCandidates.Add(edge.Mirror());
             }
 
             return image;
@@ -476,25 +488,36 @@ public sealed class Day20 : Puzzle
         private uint _iterations;
 
         /// <summary>
-        /// Gets or sets the Id of the tile.
+        /// Initializes a new instance of the <see cref="Tile"/> class.
         /// </summary>
-        public long Id { get; set; }
+        /// <param name="grid">The tile's grid.</param>
+        /// <param name="id">The tile's Id.</param>
+        public Tile(string[] grid, long id)
+        {
+            Grid = grid;
+            Id = id;
+        }
+
+        /// <summary>
+        /// Gets the Id of the tile.
+        /// </summary>
+        public long Id { get; }
 
         /// <summary>
         /// Gets the candidates for the edges of the tile.
         /// </summary>
-        public HashSet<string> EdgeCandidates { get; } = new HashSet<string>();
+        public HashSet<string> EdgeCandidates { get; } = new();
 
         /// <summary>
         /// Gets the original grid of the image.
         /// </summary>
-        public IList<string> Grid { get; private set; } = new List<string>();
+        public string[] Grid { get; private set; }
 
         /// <summary>
         /// Flips the tile's grid around the Y axis.
         /// </summary>
         public void Flip()
-            => Grid = Grid.Select((p) => p.Mirror()).ToList();
+            => Grid = Grid.Select((p) => p.Mirror()).ToArray();
 
         /// <summary>
         /// Returns whether the specified tile is a neighbor of this tile.
@@ -512,11 +535,16 @@ public sealed class Day20 : Puzzle
         /// </summary>
         public void RemoveBorder()
         {
-            Grid = Grid
-                .Skip(1)
-                .Take(Grid.Count - 2)
-                .Select((p) => p[1..^1])
-                .ToList();
+            ReadOnlySpan<string> grid = Grid.AsSpan()[1..(Grid.Length - 1)];
+
+            string[] trimmed = new string[grid.Length];
+
+            for (int i = 0; i < grid.Length; i++)
+            {
+                trimmed[i] = grid[i][1..^1];
+            }
+
+            Grid = trimmed;
         }
 
         /// <summary>
@@ -524,20 +552,20 @@ public sealed class Day20 : Puzzle
         /// </summary>
         public void Rotate()
         {
-            int length = Grid.Count;
+            int length = Grid.Length;
 
-            var rotated = new List<string>(length);
+            string[] rotated = new string[length];
 
             for (int x = 0; x < length; x++)
             {
-                char[] rotation = new char[length];
+                Span<char> rotation = new char[length];
 
                 for (int y = length - 1; y > -1; y--)
                 {
                     rotation[length - y - 1] = Grid[y][x];
                 }
 
-                rotated.Add(new(rotation));
+                rotated[x] = new(rotation);
             }
 
             Grid = rotated;

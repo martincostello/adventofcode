@@ -33,7 +33,7 @@ public sealed class Day13 : Puzzle
         int[] buses = notes[1]
             .Split(',')
             .Where((p) => !string.Equals(p, "x", StringComparison.Ordinal))
-            .Select(Parse<int>)
+            .Select((p) => Parse<int>(p))
             .ToArray();
 
         var nextBusesInMinutes = new Dictionary<int, int>(buses.Length);
@@ -90,7 +90,7 @@ public sealed class Day13 : Puzzle
             period = buses
                 .Take(i)
                 .Select((p) => p.id)
-                .Aggregate(Maths.LowestCommonMultiple);
+                .Aggregate((x, y) => Maths.LowestCommonMultiple(x, y));
         }
 
         return timestamp;

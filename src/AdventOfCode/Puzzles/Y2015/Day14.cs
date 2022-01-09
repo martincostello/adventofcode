@@ -30,7 +30,7 @@ public sealed class Day14 : Puzzle
     internal static int GetMaximumDistanceOfFastestReindeer(ICollection<string> flightData, int timeIndex)
     {
         var data = flightData
-            .Select(FlightData.Parse)
+            .Select((p) => FlightData.Parse(p))
             .ToList();
 
         return data
@@ -49,7 +49,7 @@ public sealed class Day14 : Puzzle
     internal static int GetMaximumPointsOfFastestReindeer(ICollection<string> flightData, int timeIndex)
     {
         var data = flightData
-            .Select(FlightData.Parse)
+            .Select((p) => FlightData.Parse(p))
             .ToList();
 
         var scoreboard = data.ToDictionary((p) => p.Name, (p) => 0);

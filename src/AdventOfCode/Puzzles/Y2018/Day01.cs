@@ -98,5 +98,5 @@ public sealed class Day01 : Puzzle
     /// <see langword="true"/> if the sequence tends towards positive or negative infinity.
     /// </returns>
     private static bool TendsToInfinity(IList<int> sequence)
-        => Math.Abs(sequence.Sum(Math.Sign)) == sequence.Count((p) => p != 0);
+        => Math.Abs(sequence.Sum(Math.Sign)) == sequence.Count((p) => p is not 0);
 }

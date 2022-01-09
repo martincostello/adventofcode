@@ -187,7 +187,7 @@ public sealed class Day23 : Puzzle
             string after = b.Burrow(burrowChanged);
 
             int steps = Math.Abs(State.Entrance(burrowChanged) - index);
-            steps += Math.Max(before.Count((p) => p == ' '), after.Count((p) => p == ' '));
+            steps += Math.Max(before.Count(' '), after.Count(' '));
 
             int multiplier = (int)Math.Pow(10, amphipod - 'A');
 

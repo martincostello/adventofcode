@@ -125,7 +125,7 @@ public sealed class Day13 : Puzzle
 
             string binary = Convert.ToString(z, toBase: 2);
 
-            return binary.Count((p) => p == '1') % 2 != 0;
+            return binary.Count('1') % 2 != 0;
         }
     }
 

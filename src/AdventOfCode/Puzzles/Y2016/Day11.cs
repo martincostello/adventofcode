@@ -24,7 +24,7 @@ public sealed class Day11 : Puzzle
     /// </returns>
     internal static int GetMinimumStepsForAssembly(IList<string> initialState)
     {
-        IDictionary<int, ICollection<Element>> state = ParseInitialState(initialState);
+        var state = ParseInitialState(initialState);
 
         var facility = new Facility(state);
 
@@ -78,9 +78,9 @@ public sealed class Day11 : Puzzle
     /// An <see cref="IDictionary{TKey, TValue}"/> containing the items on each
     /// floor of the Radioisotope Testing Facility, keyed by their zero-based floor.
     /// </returns>
-    private static IDictionary<int, ICollection<Element>> ParseInitialState(IList<string> initialState)
+    private static Dictionary<int, List<Element>> ParseInitialState(IList<string> initialState)
     {
-        IDictionary<int, ICollection<Element>> state = new Dictionary<int, ICollection<Element>>();
+        Dictionary<int, List<Element>> state = new(4);
 
         for (int i = 0; i < initialState.Count; i++)
         {
@@ -231,7 +231,7 @@ public sealed class Day11 : Puzzle
         /// Initializes a new instance of the <see cref="Facility"/> class.
         /// </summary>
         /// <param name="initialState">The initial state of the facility.</param>
-        internal Facility(IDictionary<int, ICollection<Element>> initialState)
+        internal Facility(Dictionary<int, List<Element>> initialState)
         {
             State = initialState;
 
@@ -259,20 +259,20 @@ public sealed class Day11 : Puzzle
         /// <summary>
         /// Gets the current state of the facility.
         /// </summary>
-        internal IDictionary<int, ICollection<Element>> State { get; }
+        internal Dictionary<int, List<Element>> State { get; }
 
         /// <summary>
         /// Returns the orphan generators and/or microchips on the specified floor.
         /// </summary>
         /// <param name="floor">The floor to get the orphans from.</param>
         /// <returns>
-        /// An <see cref="IList{T}"/> containing the orphans on the specified floor, if any.
+        /// An <see cref="List{T}"/> containing the orphans on the specified floor, if any.
         /// </returns>
-        internal IList<Element> GetOrphansOnFloor(int floor)
+        internal List<Element> GetOrphansOnFloor(int floor)
         {
             return State[floor]
                 .GroupBy((p) => p.Name)
-                .Where((p) => p.Count() == 1)
+                .Where((p) => p.ExactCount(1))
                 .SelectMany((p) => p)
                 .ToList();
         }

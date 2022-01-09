@@ -82,7 +82,9 @@ public sealed class Day24 : Puzzle
 
             for (int x = -n; x <= n; x++)
             {
-                for (int y = Math.Max(-n, -x - n); y <= Math.Min(n, -x + n); y++)
+                int limit = Math.Min(n, -x + n);
+
+                for (int y = Math.Max(-n, -x - n); y <= limit; y++)
                 {
                     int z = -x - y;
 

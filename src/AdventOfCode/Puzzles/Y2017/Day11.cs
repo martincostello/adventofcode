@@ -62,25 +62,23 @@ public sealed class Day11 : Puzzle
     /// </returns>
     public static (int Minimum, int Maximum) FindStepRange(string path)
     {
-        IList<CardinalDirection> directions = ParsePath(path);
+        var directions = ParsePath(path);
 
-        var vectors = new List<Vector2>(directions.Count);
-        var distances = new List<int>(directions.Count);
+        Span<Vector2> vectors = new Vector2[directions.Length];
 
+        int minimum = 0;
         int maximum = 0;
 
-        foreach (CardinalDirection direction in directions)
+        for (int i = 0; i < directions.Length; i++)
         {
-            Vector2 vector = ToVector(direction);
-            vectors.Add(vector);
+            Vector2 vector = ToVector(directions[i]);
+            vectors[i] = vector;
 
-            int distance = GetSteps(vectors);
+            int distance = GetSteps(vectors[..(i + 1)]);
 
-            distances.Add(distance);
+            minimum = distance;
             maximum = Math.Max(maximum, distance);
         }
-
-        int minimum = distances[^1];
 
         return (minimum, maximum);
     }
@@ -108,9 +106,15 @@ public sealed class Day11 : Puzzle
     /// <returns>
     /// The number of steps along the vector path specified by <paramref name="path"/>.
     /// </returns>
-    private static int GetSteps(IList<Vector2> path)
+    private static int GetSteps(ReadOnlySpan<Vector2> path)
     {
-        Vector2 magnitude = path.Aggregate((i, j) => i + j);
+        Vector2 magnitude = path[0];
+
+        for (int i = 1; i < path.Length; i++)
+        {
+            magnitude += path[i];
+        }
+
         float absoluteX = Math.Abs(magnitude.X);
         float absoluteY = Math.Abs(magnitude.Y);
 
@@ -143,16 +147,17 @@ public sealed class Day11 : Puzzle
     /// </summary>
     /// <param name="path">The path to parse.</param>
     /// <returns>
-    /// An <see cref="IList{T}"/> containing the parsed directions from the path.
+    /// An array of <see cref="CardinalDirection"/> containing the parsed directions from the path.
     /// </returns>
-    private static IList<CardinalDirection> ParsePath(string path)
+    private static CardinalDirection[] ParsePath(string path)
     {
-        string[] split = path.Split(',');
-        var result = new List<CardinalDirection>(split.Length);
+        var result = new CardinalDirection[path.Count(',') + 1];
 
-        foreach (string direction in split)
+        int i = 0;
+
+        foreach (var direction in path.Tokenize(','))
         {
-            var parsed = direction switch
+            result[i++] = new string(direction) switch
             {
                 "n" => CardinalDirection.North,
                 "ne" => CardinalDirection.NorthEast,
@@ -162,8 +167,6 @@ public sealed class Day11 : Puzzle
                 "sw" => CardinalDirection.SouthWest,
                 _ => throw new PuzzleException($"Unknown direction '{direction}'."),
             };
-
-            result.Add(parsed);
         }
 
         return result;

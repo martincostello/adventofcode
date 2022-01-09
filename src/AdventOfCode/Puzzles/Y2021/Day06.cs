@@ -54,7 +54,7 @@ public sealed class Day06 : Puzzle
             foreach (int state in states.Keys)
             {
                 long count = states[state];
-                states[state] -= count;
+                states[state] = 0;
 
                 if (state == 0)
                 {

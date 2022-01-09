@@ -34,7 +34,7 @@ public sealed class Day23 : Puzzle
         int minimum = circle.Min();
         int maximum = circle.Max();
 
-        var nodeMap = new Dictionary<int, LinkedListNode<int>>();
+        var nodeMap = new Dictionary<int, LinkedListNode<int>>(circle.Count);
         var current = circle.First;
 
         while (current is not null)

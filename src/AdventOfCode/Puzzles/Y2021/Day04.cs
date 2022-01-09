@@ -33,7 +33,7 @@ public sealed class Day04 : Puzzle
             .AsNumbers<int>()
             .ToArray();
 
-        IList<BingoCard> cards = ParseCards(game);
+        var cards = ParseCards(game);
 
         int? firstWinningScore = null;
         int? lastWinningScore = null;
@@ -75,7 +75,7 @@ public sealed class Day04 : Puzzle
         return PuzzleResult.Create(FirstWinningScore, LastWinningScore);
     }
 
-    private static IList<BingoCard> ParseCards(IEnumerable<string> game)
+    private static List<BingoCard> ParseCards(IEnumerable<string> game)
     {
         var lines = new List<string>();
         var cards = new List<BingoCard>();

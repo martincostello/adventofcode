@@ -35,8 +35,6 @@ public sealed class Day07 : Puzzle
         int workers)
     {
         var available = new HashSet<string>();
-        var inProgress = new Dictionary<string, int>();
-        var used = new List<string>();
         var constraints = new Dictionary<string, HashSet<string>>();
 
         foreach (string instruction in instructions)
@@ -53,6 +51,9 @@ public sealed class Day07 : Puzzle
             available.Add(part);
             available.Add(antecedent);
         }
+
+        var inProgress = new Dictionary<string, int>();
+        var used = new List<string>();
 
         int timeToAssemble = 0;
 

@@ -51,9 +51,9 @@ public sealed class Day13 : Puzzle
 
         for (int i = 0; i < outputs.Count; i += 3)
         {
-            int x = (int)outputs[i];
-            int y = (int)outputs[i + 1];
-            int tileId = (int)outputs[i + 2];
+            long x = outputs[i];
+            long y = outputs[i + 1];
+            long tileId = outputs[i + 2];
 
             if (x == 1 && y == 0)
             {
@@ -61,7 +61,7 @@ public sealed class Day13 : Puzzle
             }
             else
             {
-                grid[new Point(x, y)] = tileId;
+                grid[new((int)x, (int)y)] = (int)tileId;
             }
         }
 
