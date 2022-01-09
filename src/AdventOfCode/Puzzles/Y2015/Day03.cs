@@ -29,7 +29,7 @@ public class Day03 : Puzzle
         var directions = GetDirections(instructions);
 
         var santa = new SantaGps();
-        var coordinates = new HashSet<Point>(directions.Count);
+        var coordinates = new HashSet<Point>();
 
         foreach (var direction in directions)
         {
@@ -53,7 +53,7 @@ public class Day03 : Puzzle
         var roboSanta = new SantaGps();
         var current = santa;
 
-        var coordinates = new HashSet<Point>(directions.Count);
+        var coordinates = new HashSet<Point>();
 
         foreach (var direction in directions)
         {

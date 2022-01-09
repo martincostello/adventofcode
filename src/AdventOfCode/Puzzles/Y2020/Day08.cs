@@ -115,9 +115,9 @@ public sealed class Day08 : Puzzle
     {
         var result = new List<Instruction>(program.Count);
 
-        foreach (string operation in program)
+        foreach (ReadOnlySpan<char> operation in program)
         {
-            var op = operation[..3].ToString() switch
+            var op = new string(operation[..3]) switch
             {
                 "acc" => Operation.Accumulate,
                 "jmp" => Operation.Jump,
@@ -128,7 +128,7 @@ public sealed class Day08 : Puzzle
 
             if (op != Operation.NoOp)
             {
-                argument = Parse<int>(operation.AsSpan(4), NumberStyles.Number);
+                argument = Parse<int>(operation[4..], NumberStyles.Number);
             }
 
             result.Add(new Instruction() with { Operation = op, Argument = argument });

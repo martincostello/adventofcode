@@ -79,7 +79,9 @@ public sealed class Day03 : Puzzle
             int y = 0;
             int steps = 0;
 
-            foreach (var instruction in wires[i].Tokenize(','))
+            var wireToMark = (Wires)(i + 1);
+
+            foreach (ReadOnlySpan<char> instruction in wires[i].Split(','))
             {
                 (int deltaX, int deltaY) = GetDelta(instruction);
 
@@ -88,7 +90,7 @@ public sealed class Day03 : Puzzle
 
                 for (int j = 0; j < magnitude; j++, steps++)
                 {
-                    MarkWire(new(x + (j * sign), y), (Wires)(i + 1), steps);
+                    MarkWire(new(x + (j * sign), y), wireToMark, steps);
                 }
 
                 sign = Math.Sign(deltaY);
@@ -96,7 +98,7 @@ public sealed class Day03 : Puzzle
 
                 for (int j = 0; j < magnitude; j++, steps++)
                 {
-                    MarkWire(new(x, y + (j * sign)), (Wires)(i + 1), steps);
+                    MarkWire(new(x, y + (j * sign)), wireToMark, steps);
                 }
 
                 x += deltaX;

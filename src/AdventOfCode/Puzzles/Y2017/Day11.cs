@@ -151,7 +151,7 @@ public sealed class Day11 : Puzzle
 
         foreach (var direction in path.Tokenize(','))
         {
-            var parsed = direction.ToString() switch
+            var parsed = new string(direction) switch
             {
                 "n" => CardinalDirection.North,
                 "ne" => CardinalDirection.NorthEast,

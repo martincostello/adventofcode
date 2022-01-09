@@ -104,7 +104,7 @@ public sealed class Day09 : Puzzle
         var visited = new List<string>(map.Edges.Count);
         return GetRouteDistances(map, start, visited);
 
-        static List<int> GetRouteDistances(Map map, string location, List<string> visited)
+        static IList<int> GetRouteDistances(Map map, string location, List<string> visited)
         {
             visited.Add(location);
 
@@ -124,7 +124,7 @@ public sealed class Day09 : Puzzle
 
                 visited.Remove(location);
 
-                return new(1) { distance };
+                return new[] { distance };
             }
 
             var distances = new List<int>();

@@ -86,14 +86,15 @@ public sealed class Day05 : Puzzle
     /// <returns>
     /// <see langword="true"/> if <paramref name="value"/> meets the rule; otherwise <see langword="false"/>.
     /// </returns>
-    internal static bool HasPairOfLettersWithMoreThanOneOccurence(string value)
+    internal static bool HasPairOfLettersWithMoreThanOneOccurence(ReadOnlySpan<char> value)
     {
         var letterPairs = new Dictionary<string, List<int>>();
 
         for (int i = 0; i < value.Length - 1; i++)
         {
-            var pair = value.AsSpan(i, 2);
-            var indexes = letterPairs.GetOrAdd(pair.ToString());
+            string pair = new(value.Slice(i, 2));
+
+            var indexes = letterPairs.GetOrAdd(pair);
 
             if (!indexes.Contains(i - 1))
             {

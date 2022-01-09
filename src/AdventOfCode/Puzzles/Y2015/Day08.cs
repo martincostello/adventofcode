@@ -93,7 +93,7 @@ public sealed class Day08 : Puzzle
 
         if (value.Length > 0)
         {
-            var characters = new Queue<char>(value.ToString());
+            var characters = new Queue<char>(new string(value));
 
             while (characters.Count > 0)
             {

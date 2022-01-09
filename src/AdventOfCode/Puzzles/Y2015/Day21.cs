@@ -28,7 +28,7 @@ public sealed class Day21 : Puzzle
     /// <returns>
     /// A named tuple that returns whether the human player won and the amount of gold spent.
     /// </returns>
-    internal static (bool DidHumanWin, int GoldSpent) Fight(string weapon, string? armor, List<string>? rings)
+    internal static (bool DidHumanWin, int GoldSpent) Fight(string weapon, string? armor, ICollection<string>? rings)
     {
         var shop = new Shop();
         var human = new Human();
@@ -80,23 +80,23 @@ public sealed class Day21 : Puzzle
         string[] potentialWeapons = Shop.PotentialWeapons.Keys.ToArray();
         string?[] potentialArmor = Shop.PotentialArmor.Keys.Append(null!).ToArray();
 
-        var keys = Shop.PotentialRings.Keys;
+        ICollection<string> keys = Shop.PotentialRings.Keys.ToArray();
 
-        var potentialRings = new List<List<string>>((keys.Count * 2) + 1)
+        var potentialRings = new List<IList<string>>((keys.Count * 2) + 1)
         {
-            new(),
+            Array.Empty<string>(),
         };
 
         foreach (string ring in keys)
         {
-            potentialRings.Add(new() { ring });
+            potentialRings.Add(new[] { ring });
         }
 
         var permutations = Maths.GetPermutations(keys, 2);
 
         foreach (var permutation in permutations)
         {
-            potentialRings.Add(permutation.ToList());
+            potentialRings.Add(permutation.ToArray());
         }
 
         var costsToLose = new List<int>((potentialArmor.Length + potentialRings.Count + potentialWeapons.Length) / 2);
@@ -260,7 +260,7 @@ public sealed class Day21 : Puzzle
         /// <summary>
         /// The armor inventory. This field is read-only.
         /// </summary>
-        internal static readonly Dictionary<string, Item> PotentialArmor = new()
+        internal static readonly Dictionary<string, Item> PotentialArmor = new(5)
         {
             ["Leather"] = new() { Cost = 13, Armor = 1 },
             ["Chainmail"] = new() { Cost = 31, Armor = 2 },
@@ -272,7 +272,7 @@ public sealed class Day21 : Puzzle
         /// <summary>
         /// The ring inventory. This field is read-only.
         /// </summary>
-        internal static readonly Dictionary<string, Item> PotentialRings = new()
+        internal static readonly Dictionary<string, Item> PotentialRings = new(6)
         {
             ["Damage +1"] = new() { Cost = 25, Damage = 1 },
             ["Damage +2"] = new() { Cost = 50, Damage = 2 },
@@ -285,7 +285,7 @@ public sealed class Day21 : Puzzle
         /// <summary>
         /// The weapon inventory. This field is read-only.
         /// </summary>
-        internal static readonly Dictionary<string, Item> PotentialWeapons = new()
+        internal static readonly Dictionary<string, Item> PotentialWeapons = new(5)
         {
             ["Dagger"] = new() { Cost = 8, Damage = 4 },
             ["Shortsword"] = new() { Cost = 10, Damage = 5 },

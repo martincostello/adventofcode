@@ -30,12 +30,12 @@ public sealed class Day07 : Puzzle
     /// in seconds, it takes to assemble the sleigh.
     /// </returns>
     public static (string OrderOfAssembly, int TimeToAssemble) Assemble(
-        ICollection<string> instructions,
+        IEnumerable<string> instructions,
         int partDuration,
         int workers)
     {
-        var available = new HashSet<string>(instructions.Count * 2);
-        var constraints = new Dictionary<string, HashSet<string>>(instructions.Count);
+        var available = new HashSet<string>();
+        var constraints = new Dictionary<string, HashSet<string>>();
 
         foreach (string instruction in instructions)
         {

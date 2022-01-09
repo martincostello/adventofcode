@@ -88,7 +88,7 @@ public sealed class Day06 : Puzzle
         }
 
         // Find the areas which touch the bounds and are therefore infinite
-        var infiniteAreas = new HashSet<int>(maxX + maxY + 4);
+        var infiniteAreas = new HashSet<int>();
 
         for (int x = 0; x <= maxX; x++)
         {

@@ -37,7 +37,7 @@ public sealed class Day04 : Puzzle
             string[] sorted = words
                 .Select((p) =>
                 {
-                    var span = p.ToCharArray().AsSpan();
+                    Span<char> span = p.ToCharArray();
                     span.Sort();
                     return new string(span);
                 })

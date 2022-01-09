@@ -37,7 +37,7 @@ internal static class StringExtensions
         tokens.MoveNext();
         var second = tokens.Current;
 
-        return (first.ToString(), second.ToString());
+        return (new(first), new(second));
     }
 
     /// <summary>
@@ -72,7 +72,7 @@ internal static class StringExtensions
         tokens.MoveNext();
         var third = tokens.Current;
 
-        return (first.ToString(), second.ToString(), third.ToString());
+        return (new(first), new(second), new(third));
     }
 
     /// <summary>

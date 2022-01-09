@@ -72,10 +72,7 @@ public sealed class Day18 : Puzzle
 
         var final = GetGridConfigurationAfterSteps(initial, steps, areCornerLightsBroken);
 
-        for (int x = 0; x < final.Count; x++)
-        {
-            LightsIlluminated += final[x].Count(On);
-        }
+        LightsIlluminated = final.Sum((p) => p.Count(On));
 
         if (Verbose)
         {
@@ -103,7 +100,7 @@ public sealed class Day18 : Puzzle
 
         bool[,] output = new bool[width, height];
 
-        Point[] cornerLights;
+        IList<Point> cornerLights;
 
         if (areCornerLightsBroken)
         {
@@ -132,7 +129,7 @@ public sealed class Day18 : Puzzle
                 }
                 else
                 {
-                    var neighbors = new List<Point>(8)
+                    Point[] neighbors =
                     {
                         new(x - 1, y - 1),
                         new(x, y - 1),

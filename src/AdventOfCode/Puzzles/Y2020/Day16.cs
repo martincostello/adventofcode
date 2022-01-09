@@ -39,12 +39,12 @@ public sealed class Day16 : Puzzle
             (string name, string instruction) = line.Bifurcate(':');
             string[] split = instruction.Split(" or ", StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
 
-            var ranges = new List<Range>();
+            var ranges = new Range[split.Length];
 
-            foreach (string range in split)
+            for (int i = 0; i < split.Length; i++)
             {
-                (int start, int end) = range.AsNumberPair<int>('-');
-                ranges.Add(new(start, end));
+                (int start, int end) = split[i].AsNumberPair<int>('-');
+                ranges[i] = new(start, end);
             }
 
             rules[name] = ranges;
@@ -66,13 +66,14 @@ public sealed class Day16 : Puzzle
         var validTickets = new List<IList<int>>();
 
         // Find the valid tickets
-        foreach (IList<int> ticket in allTickets.Skip(1))
+        for (int i = 1; i < allTickets.Count; i++)
         {
+            var ticket = allTickets[i];
             bool isValid = true;
 
-            for (int i = 0; i < ticket.Count && isValid; i++)
+            for (int j = 0; j < ticket.Count && isValid; j++)
             {
-                int value = ticket[i];
+                int value = ticket[j];
 
                 foreach (ICollection<Range> ranges in rules.Values)
                 {

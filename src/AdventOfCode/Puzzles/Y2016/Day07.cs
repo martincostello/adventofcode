@@ -146,7 +146,7 @@ public sealed class Day07 : Puzzle
 
                 if (ch1 != ch2 && ch1 == ch3)
                 {
-                    result.Add(shared.AsSpan(0, 3).ToString());
+                    result.Add(new(shared.AsSpan(0, 3)));
                 }
             }
             finally

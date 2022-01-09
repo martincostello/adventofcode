@@ -67,7 +67,7 @@ public sealed class Day22 : Puzzle
 
         static long Reboot(List<(Cuboid Cuboid, bool TurnOn)> cuboids)
         {
-            var reactor = new Dictionary<Cuboid, long>();
+            var reactor = new Dictionary<Cuboid, long>(cuboids.Count * 2);
 
             foreach ((Cuboid cuboid, bool turnOn) in cuboids)
             {
@@ -91,11 +91,14 @@ public sealed class Day22 : Puzzle
                     newCuboids.AddOrIncrement(cuboid, 1);
                 }
 
-                reactor.EnsureCapacity(newCuboids.Count);
-
-                foreach ((Cuboid newCuboid, long count) in newCuboids)
+                if (newCuboids.Count > 0)
                 {
-                    reactor.AddOrIncrement(newCuboid, count, count);
+                    reactor.EnsureCapacity(reactor.Count + (newCuboids.Count * 2));
+
+                    foreach ((Cuboid newCuboid, long count) in newCuboids)
+                    {
+                        reactor.AddOrIncrement(newCuboid, count, count);
+                    }
                 }
             }
 
