@@ -6,6 +6,7 @@ using System.IO.Compression;
 using System.Reflection;
 using MartinCostello.AdventOfCode;
 using Microsoft.AspNetCore.Http.Json;
+using Microsoft.AspNetCore.Http.Metadata;
 using Microsoft.AspNetCore.ResponseCompression;
 using ILogger = MartinCostello.AdventOfCode.ILogger;
 
@@ -81,7 +82,8 @@ app.MapRazorPages();
 
 app.MapGet("/api/puzzles", PuzzlesApi.GetPuzzlesAsync);
 
-app.MapPost("/api/puzzles/{year:int}/{day:int}/solve", PuzzlesApi.SolvePuzzleAsync);
+app.MapPost("/api/puzzles/{year:int}/{day:int}/solve", PuzzlesApi.SolvePuzzleAsync)
+   .WithMetadata(new FormMetadata());
 
 await app.RunAsync();
 
@@ -180,4 +182,17 @@ static async Task<int> SolvePuzzleAsync(
     logger.WriteLine();
 
     return 0;
+}
+
+#pragma warning disable CA1050
+#pragma warning disable SA1600
+#pragma warning disable SA1649
+
+public sealed class FormMetadata : IAcceptsMetadata
+{
+    public IReadOnlyList<string> ContentTypes => new[] { "multipart/form-data" };
+
+    public Type? RequestType => null;
+
+    public bool IsOptional => true;
 }

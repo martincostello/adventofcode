@@ -42,7 +42,7 @@ internal static partial class PuzzlesApi
     /// </summary>
     /// <param name="year">The year the puzzle to solve is from.</param>
     /// <param name="day">The day the puzzle to solve is from.</param>
-    /// <param name="request">The HTTP request.</param>
+    /// <param name="form">The form read from the HTTP request.</param>
     /// <param name="factory">The <see cref="PuzzleFactory"/> to use.</param>
     /// <param name="logger">The <see cref="ILogger"/> to use.</param>
     /// <param name="cancellationToken">The <see cref="CancellationToken"/> to use.</param>
@@ -52,16 +52,11 @@ internal static partial class PuzzlesApi
     internal static async Task<IResult> SolvePuzzleAsync(
         int year,
         int day,
-        HttpRequest request,
+        IFormCollection form,
         PuzzleFactory factory,
         ILogger<Puzzle> logger,
         CancellationToken cancellationToken)
     {
-        if (!request.HasFormContentType)
-        {
-            return Results.Problem("The specified media type is not supported.", statusCode: StatusCodes.Status415UnsupportedMediaType);
-        }
-
         Puzzle puzzle;
 
         try
@@ -84,8 +79,6 @@ internal static partial class PuzzlesApi
 
         if (metadata.RequiresData || metadata.MinimumArguments > 0)
         {
-            var form = await request.ReadFormAsync(cancellationToken);
-
             if (metadata.RequiresData)
             {
                 if (form.Files["resource"] is not { } resource)
