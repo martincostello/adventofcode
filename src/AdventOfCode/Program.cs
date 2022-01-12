@@ -46,6 +46,13 @@ builder.Services.Configure<JsonOptions>((p) =>
 
 builder.Services.AddRazorPages();
 
+builder.Services.AddEndpointsApiExplorer();
+
+builder.Services.AddSwaggerGen(options =>
+{
+    options.SwaggerDoc("v1", new() { Title = "Advent of Code", Version = "v1" });
+});
+
 builder.Services.Configure<GzipCompressionProviderOptions>((p) => p.Level = CompressionLevel.Fastest);
 
 builder.Services.Configure<BrotliCompressionProviderOptions>((p) => p.Level = CompressionLevel.Fastest);
@@ -76,7 +83,7 @@ app.UseResponseCompression();
 
 app.UseStaticFiles();
 
-app.UseRouting();
+app.UseSwagger();
 
 app.MapRazorPages();
 
@@ -84,6 +91,12 @@ app.MapGet("/api/puzzles", PuzzlesApi.GetPuzzlesAsync);
 
 app.MapPost("/api/puzzles/{year:int}/{day:int}/solve", PuzzlesApi.SolvePuzzleAsync)
    .WithMetadata(new FormMetadata());
+
+if (app.Environment.IsDevelopment())
+{
+    app.MapGet("/api", () => Results.Redirect("/swagger-ui/index.html"))
+       .ExcludeFromDescription();
+}
 
 await app.RunAsync();
 
