@@ -198,7 +198,7 @@ public class ApiTests : IntegrationTest
         if (testCase.SendResource)
         {
 #pragma warning disable CA2000
-            content.Add(new StringContent(GetPuzzleInput(year, day)), "resource");
+            content.Add(new StringContent(GetPuzzleInput(year, day)), "resource", "input.txt");
 #pragma warning restore CA2000
         }
 

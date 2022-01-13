@@ -88,12 +88,12 @@ internal static partial class PuzzlesApi
 
             if (metadata.RequiresData)
             {
-                if (!form.TryGetValue("resource", out var resource))
+                if (form.Files["resource"] is not { } resource)
                 {
                     return Results.Problem("No puzzle resource provided.", statusCode: StatusCodes.Status400BadRequest);
                 }
 
-                puzzle.Resource = new MemoryStream(Encoding.UTF8.GetBytes(resource));
+                puzzle.Resource = resource.OpenReadStream();
             }
 
             if (form.TryGetValue("arguments", out var values))

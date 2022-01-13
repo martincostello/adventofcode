@@ -199,7 +199,7 @@ export class Solver {
                 this.solve(url, form);
             };
 
-            form.append('resource', file);
+            form.append('resource', file, 'input.txt');
         } else {
             await this.solve(url, form);
         }
