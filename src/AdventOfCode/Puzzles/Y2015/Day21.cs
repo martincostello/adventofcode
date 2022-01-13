@@ -6,7 +6,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015;
 /// <summary>
 /// A class representing the puzzle for <c>https://adventofcode.com/2015/day/21</c>. This class cannot be inherited.
 /// </summary>
-[Puzzle(2015, 21, "RPG Simulator 20XX")]
+[Puzzle(2015, 21, "RPG Simulator 20XX", RequiresData = true)]
 public sealed class Day21 : Puzzle
 {
     /// <summary>
@@ -25,10 +25,15 @@ public sealed class Day21 : Puzzle
     /// <param name="weapon">The weapon to purchase.</param>
     /// <param name="armor">The armor to purchase, if any.</param>
     /// <param name="rings">The rings to purchase, if any.</param>
+    /// <param name="bossStats">The boss' stats.</param>
     /// <returns>
     /// A named tuple that returns whether the human player won and the amount of gold spent.
     /// </returns>
-    internal static (bool DidHumanWin, int GoldSpent) Fight(string weapon, string? armor, ICollection<string>? rings)
+    internal static (bool DidHumanWin, int GoldSpent) Fight(
+        string weapon,
+        string? armor,
+        ICollection<string>? rings,
+        (int HitPoints, int Damage, int Armor) bossStats)
     {
         var shop = new Shop();
         var human = new Human();
@@ -45,7 +50,7 @@ public sealed class Day21 : Puzzle
             goldSpent += human.Upgrade(shop.PurchaseRing(ring));
         }
 
-        var boss = new Boss();
+        var boss = new Player(bossStats.HitPoints, bossStats.Damage, bossStats.Armor);
 
         Player winner = Fight(human, boss);
 
@@ -75,8 +80,16 @@ public sealed class Day21 : Puzzle
     }
 
     /// <inheritdoc />
-    protected override Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
+    protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
+        IList<string> stats = await ReadResourceAsLinesAsync();
+
+        int bossHitPoints = Parse<int>(stats[0].Split(':')[1]);
+        int bossDamage = Parse<int>(stats[1].Split(':')[1]);
+        int bossArmor = Parse<int>(stats[2].Split(':')[1]);
+
+        var bossStats = (bossHitPoints, bossDamage, bossArmor);
+
         string[] potentialWeapons = Shop.PotentialWeapons.Keys.ToArray();
         string?[] potentialArmor = Shop.PotentialArmor.Keys.Append(null!).ToArray();
 
@@ -104,11 +117,16 @@ public sealed class Day21 : Puzzle
 
         foreach (string weapon in potentialWeapons)
         {
+            if (cancellationToken.IsCancellationRequested)
+            {
+                break;
+            }
+
             foreach (string? armor in potentialArmor)
             {
                 foreach (var rings in potentialRings)
                 {
-                    (bool didHumanWin, int goldSpent) = Fight(weapon, armor, rings);
+                    (bool didHumanWin, int goldSpent) = Fight(weapon, armor, rings, bossStats);
 
                     if (didHumanWin)
                     {
@@ -186,20 +204,6 @@ public sealed class Day21 : Puzzle
             }
 
             HitPoints -= damage;
-        }
-    }
-
-    /// <summary>
-    /// A class representing the boss. This class cannot be inherited.
-    /// </summary>
-    private sealed class Boss : Player
-    {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Boss"/> class.
-        /// </summary>
-        internal Boss()
-            : base(104, 8, 1)
-        {
         }
     }
 

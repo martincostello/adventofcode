@@ -54,7 +54,7 @@ public class ApiTests : IntegrationTest
     [PuzzleData(2015, 19, new[] { "fabricate" }, 207, Skip = "Too slow.")]
     [PuzzleData(2015, 20, new[] { "34000000" }, 786240)]
     [PuzzleData(2015, 20, new[] { "34000000", "50" }, 831600)]
-    [PuzzleData(2015, 21, 148, 78, SendResource = false)]
+    [PuzzleData(2015, 21, 148, 78)]
     [PuzzleData(2015, 22, new[] { "easy" }, 953)]
     [PuzzleData(2015, 22, new[] { "hard" }, 1289)]
     [PuzzleData(2015, 23, 1u, 170u, SendResource = true)]
