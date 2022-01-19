@@ -59,12 +59,12 @@ if ($installDotNetSdk -eq $true) {
             $installScript = Join-Path $env:DOTNET_INSTALL_DIR "install.sh"
             Invoke-WebRequest "https://dot.net/v1/dotnet-install.sh" -OutFile $installScript -UseBasicParsing
             chmod +x $installScript
-            & $installScript --version "$dotnetVersion" --install-dir "$env:DOTNET_INSTALL_DIR" --no-path
+            & $installScript --version "$dotnetVersion" --install-dir "$env:DOTNET_INSTALL_DIR" --no-path --azure-feed https://dotnetbuilds.azureedge.net/public
         }
         else {
             $installScript = Join-Path $env:DOTNET_INSTALL_DIR "install.ps1"
             Invoke-WebRequest "https://dot.net/v1/dotnet-install.ps1" -OutFile $installScript -UseBasicParsing
-            & $installScript -Version "$dotnetVersion" -InstallDir "$env:DOTNET_INSTALL_DIR" -NoPath
+            & $installScript -Version "$dotnetVersion" -InstallDir "$env:DOTNET_INSTALL_DIR" -NoPath -AzureFeed https://dotnetbuilds.azureedge.net/public
         }
     }
 }
