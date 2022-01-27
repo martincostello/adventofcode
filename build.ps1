@@ -88,9 +88,17 @@ if ($LASTEXITCODE -ne 0) {
 
 if ($SkipTests -eq $false) {
     Write-Host "Running tests..." -ForegroundColor Green
+
+    $additionalArgs = @()
+
+    if (![string]::IsNullOrEmpty($env:GITHUB_SHA)) {
+        $additionalArgs += "--logger"
+        $additionalArgs += "GitHubActions;report-warnings=false"
+    }
+
     ForEach ($testProject in $testProjects) {
 
-        & $dotnet test $testProject --output $OutputPath --configuration $Configuration
+        & $dotnet test $testProject --output $OutputPath --configuration $Configuration $additionalArgs
 
         if ($LASTEXITCODE -ne 0) {
             throw "dotnet test failed with exit code $LASTEXITCODE"
