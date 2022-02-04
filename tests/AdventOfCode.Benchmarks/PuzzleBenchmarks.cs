@@ -50,12 +50,7 @@ public class PuzzleBenchmarks
         }
     }
 
-    [Benchmark]
-    [ArgumentsSource(nameof(Puzzles))]
-    public async Task<PuzzleResult> Solve(PuzzleInput input)
-        => await input.SolveAsync();
-
-    private static IEnumerable<object> Puzzles2015()
+    public static IEnumerable<object> Puzzles2015()
     {
         yield return new PuzzleInput<Puzzles.Y2015.Day01>();
         yield return new PuzzleInput<Puzzles.Y2015.Day02>();
@@ -78,7 +73,7 @@ public class PuzzleBenchmarks
         yield return new PuzzleInput<Puzzles.Y2015.Day25>("2947", "3029");
     }
 
-    private static IEnumerable<object> Puzzles2016()
+    public static IEnumerable<object> Puzzles2016()
     {
         yield return new PuzzleInput<Puzzles.Y2016.Day01>();
         yield return new PuzzleInput<Puzzles.Y2016.Day02>();
@@ -103,7 +98,7 @@ public class PuzzleBenchmarks
         yield return new PuzzleInput<Puzzles.Y2016.Day24>();
     }
 
-    private static IEnumerable<object> Puzzles2017()
+    public static IEnumerable<object> Puzzles2017()
     {
         yield return new PuzzleInput<Puzzles.Y2017.Day01>();
         yield return new PuzzleInput<Puzzles.Y2017.Day02>();
@@ -121,7 +116,7 @@ public class PuzzleBenchmarks
         yield return new PuzzleInput<Puzzles.Y2017.Day14>("hwlqcszp");
     }
 
-    private static IEnumerable<object> Puzzles2018()
+    public static IEnumerable<object> Puzzles2018()
     {
         yield return new PuzzleInput<Puzzles.Y2018.Day02>();
         yield return new PuzzleInput<Puzzles.Y2018.Day03>("312051");
@@ -131,7 +126,7 @@ public class PuzzleBenchmarks
         yield return new PuzzleInput<Puzzles.Y2018.Day08>();
     }
 
-    private static IEnumerable<object> Puzzles2019()
+    public static IEnumerable<object> Puzzles2019()
     {
         yield return new PuzzleInput<Puzzles.Y2019.Day01>();
         yield return new PuzzleInput<Puzzles.Y2019.Day02>();
@@ -143,7 +138,7 @@ public class PuzzleBenchmarks
         yield return new PuzzleInput<Puzzles.Y2019.Day09>("1");
     }
 
-    private static IEnumerable<object> Puzzles2020()
+    public static IEnumerable<object> Puzzles2020()
     {
         yield return new PuzzleInput<Puzzles.Y2020.Day01>();
         yield return new PuzzleInput<Puzzles.Y2020.Day02>();
@@ -169,7 +164,7 @@ public class PuzzleBenchmarks
         yield return new PuzzleInput<Puzzles.Y2020.Day25>();
     }
 
-    private static IEnumerable<object> Puzzles2021()
+    public static IEnumerable<object> Puzzles2021()
     {
         yield return new PuzzleInput<Puzzles.Y2021.Day01>();
         yield return new PuzzleInput<Puzzles.Y2021.Day02>();
@@ -197,6 +192,41 @@ public class PuzzleBenchmarks
         yield return new PuzzleInput<Puzzles.Y2021.Day24>();
         yield return new PuzzleInput<Puzzles.Y2021.Day25>();
     }
+
+    [Benchmark]
+    [ArgumentsSource(nameof(Puzzles2015))]
+    public async Task<PuzzleResult> Solve2015(PuzzleInput input)
+        => await input.SolveAsync();
+
+    [Benchmark]
+    [ArgumentsSource(nameof(Puzzles2016))]
+    public async Task<PuzzleResult> Solve2016(PuzzleInput input)
+    => await input.SolveAsync();
+
+    [Benchmark]
+    [ArgumentsSource(nameof(Puzzles2017))]
+    public async Task<PuzzleResult> Solve2017(PuzzleInput input)
+        => await input.SolveAsync();
+
+    [Benchmark]
+    [ArgumentsSource(nameof(Puzzles2018))]
+    public async Task<PuzzleResult> Solve2018(PuzzleInput input)
+        => await input.SolveAsync();
+
+    [Benchmark]
+    [ArgumentsSource(nameof(Puzzles2019))]
+    public async Task<PuzzleResult> Solve2019(PuzzleInput input)
+        => await input.SolveAsync();
+
+    [Benchmark]
+    [ArgumentsSource(nameof(Puzzles2020))]
+    public async Task<PuzzleResult> Solve2020(PuzzleInput input)
+        => await input.SolveAsync();
+
+    [Benchmark]
+    [ArgumentsSource(nameof(Puzzles2021))]
+    public async Task<PuzzleResult> Solve2021(PuzzleInput input)
+    => await input.SolveAsync();
 
     public sealed class PuzzleInput<T> : PuzzleInput
         where T : IPuzzle, new()
