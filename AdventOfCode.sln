@@ -10,10 +10,14 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		.vsconfig = .vsconfig
 		AdventOfCode.ruleset = AdventOfCode.ruleset
 		AdventOfCode.snk = AdventOfCode.snk
+		benchmark-crank.ps1 = benchmark-crank.ps1
 		benchmark.ps1 = benchmark.ps1
+		benchmark.yml = benchmark.yml
 		build.ps1 = build.ps1
 		CODE_OF_CONDUCT.md = CODE_OF_CONDUCT.md
 		CommonAssemblyInfo.cs = CommonAssemblyInfo.cs
+		crank.ps1 = crank.ps1
+		crank.yml = crank.yml
 		Directory.Build.props = Directory.Build.props
 		Directory.Build.targets = Directory.Build.targets
 		Directory.Packages.props = Directory.Packages.props
@@ -45,6 +49,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AdventOfCode.Benchmarks", "
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{F8B9BBE9-B047-466F-8E3C-42D625F27C85}"
 	ProjectSection(SolutionItems) = preProject
+		.github\workflows\benchmark.yml = .github\workflows\benchmark.yml
 		.github\workflows\build.yml = .github\workflows\build.yml
 		.github\workflows\update-dotnet-sdk.yml = .github\workflows\update-dotnet-sdk.yml
 	EndProjectSection

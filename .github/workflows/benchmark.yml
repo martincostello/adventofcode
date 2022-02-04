@@ -1,0 +1,115 @@
+name: benchmark
+
+on:
+  issue_comment:
+    types: [ created ]
+
+jobs:
+  benchmark:
+    name: ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    if: github.repository == 'martincostello/adventofcode' && github.event.issue.pull_request != '' && contains(github.event.comment.body, '/benchmark')
+
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ windows-latest ]
+
+    steps:
+
+    - name: Extract benchmark argument
+      uses: actions/github-script@v4
+      id: benchmark-argument
+      with:
+        result-encoding: string
+        script: |
+          // Documents all available commands
+          const availableBenchmarks = {
+            "root": "Runs the root benchmark"
+          };
+
+          // Verify the user is a collaborator
+          const repoOwner = context.payload.repository.owner.login;
+          const repoName = context.payload.repository.name;
+          const commentUser = context.payload.comment.user.login;
+
+          try {
+            var membership = await github.repos.checkCollaborator({
+              owner: repoOwner,
+              repo: repoName,
+              username: commentUser
+            });
+          } catch (error) {
+            var message = `Error: @${commentUser} is not a repo collaborator, benchmarking is not allowed.`;
+            await github.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: message
+            });
+            throw message;
+          }
+
+          core.info(`Verified ${commentUser} is a repo collaborator.`);
+
+          if (context.eventName !== "issue_comment") {
+            throw "Error: This action only works on issue_comment events.";
+          }
+
+          // Extract the benchmark arguments from the trigger phrase containing these characters: a-z, A-Z, digits, forward slash, dot, hyphen, underscore
+          const regex = /\/benchmark ([a-zA-Z\d\/\.\-\_]+)/;
+          const arguments = regex.exec(context.payload.comment.body);
+
+          // Generate help text with all available commands
+          if (arguments == null || arguments.length < 2 || !availableBenchmarks.hasOwnProperty(arguments[1])) {
+
+              var body = 'The `/benchmark` command accepts these benchmarks:\n';
+              for (var key in availableBenchmarks) {
+                body += `- \`/benchmark ${key}\`: ${availableBenchmarks[key]}\n`;
+              }
+
+              await github.issues.createComment({
+                issue_number: context.issue.number,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                body: body
+              });
+
+              throw "Error: Invalid arguments, workflow stopped.";
+          }
+
+          const benchmark = arguments[1];
+          core.info(`Benchmark: ${benchmark}`);
+
+          const start_body = `Started [${benchmark} benchmark](https://github.com/${context.repo.owner}/${context.repo.repo}/actions/runs/${process.env.GITHUB_RUN_ID}).`;
+          await github.issues.createComment({
+            issue_number: context.issue.number,
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            body: start_body
+          });
+
+          return benchmark;
+
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Setup .NET SDK
+      uses: actions/setup-dotnet@v1
+
+    - name: Install crank
+      shell: pwsh
+      run: |
+        dotnet tool install --global Microsoft.Crank.Controller --version "0.2.0-*"
+        dotnet tool install --global Microsoft.Crank.Agent --version "0.2.0-*"
+        dotnet tool install --global Microsoft.Crank.PullRequestBot --version "0.2.0-*"
+
+    - name: Run crank
+      shell: pwsh
+      run: ./benchmark-crank.ps1 -Benchmark ${{ steps.benchmark-argument.outputs.result }} -Repository https://github.com/${{ github.repository }} -PullRequestId ${{ github.event.issue.number }} -AccessToken ${{ secrets.GITHUB_TOKEN }}
+      env:
+        DOTNET_CLI_TELEMETRY_OPTOUT: true
+        DOTNET_NOLOGO: true
+        DOTNET_ROLL_FORWARD: Major
+        DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
+        NUGET_XMLDOC_MODE: skip

@@ -4,7 +4,7 @@
 
 ## Overview
 
-My solutions for [https://adventofcode.com/](https://adventofcode.com/) in C# using .NET Core.
+My solutions for [https://adventofcode.com/](https://adventofcode.com/) in C# using .NET.
 
 ## Feedback
 
