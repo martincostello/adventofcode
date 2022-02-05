@@ -114,7 +114,7 @@ if ($SkipPublish -eq $false) {
 
     Write-Host "Publishing application..." -ForegroundColor Green
 
-    $project = (Join-Path $solutionPath "src" "AdventOfCode" "AdventOfCode.csproj")
+    $project = (Join-Path $solutionPath "src" "AdventOfCode.Site" "AdventOfCode.Site.csproj")
     $publishPath = (Join-Path $OutputPath "publish")
 
     $additionalArgs = @()

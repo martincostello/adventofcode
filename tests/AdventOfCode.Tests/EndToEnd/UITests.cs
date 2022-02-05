@@ -5,11 +5,12 @@ using Microsoft.Playwright;
 
 namespace MartinCostello.AdventOfCode.EndToEnd;
 
-public class UITests : EndToEndTest
+public class UITests : EndToEndTest, IClassFixture<PlaywrightFixture>
 {
-    public UITests(SiteFixture fixture, ITestOutputHelper outputHelper)
+    public UITests(SiteFixture fixture, PlaywrightFixture playwrightFixture, ITestOutputHelper outputHelper)
         : base(fixture)
     {
+        ArgumentNullException.ThrowIfNull(playwrightFixture);
         OutputHelper = outputHelper;
     }
 
@@ -25,7 +26,6 @@ public class UITests : EndToEndTest
     {
         // Arrange
         var browser = new BrowserFixture(OutputHelper);
-
         await browser.WithPageAsync(async (page) =>
         {
             PuzzleSolver solver = await LoadApplication(page);
@@ -52,8 +52,6 @@ public class UITests : EndToEndTest
     {
         // Arrange
         var browser = new BrowserFixture(OutputHelper);
-
-        // Act
         await browser.WithPageAsync(async (page) =>
         {
             PuzzleSolver solver = await LoadApplication(page);

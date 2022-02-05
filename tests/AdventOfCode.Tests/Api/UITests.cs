@@ -5,11 +5,12 @@ using Microsoft.Playwright;
 
 namespace MartinCostello.AdventOfCode.Api;
 
-public class UITests : IntegrationTest
+public class UITests : IntegrationTest, IClassFixture<PlaywrightFixture>
 {
-    public UITests(HttpServerFixture fixture, ITestOutputHelper outputHelper)
-        : base(fixture, outputHelper)
+    public UITests(HttpServerFixture httpFixture, PlaywrightFixture playwrightFixture, ITestOutputHelper outputHelper)
+        : base(httpFixture, outputHelper)
     {
+        ArgumentNullException.ThrowIfNull(playwrightFixture);
     }
 
     [Theory]
@@ -23,7 +24,6 @@ public class UITests : IntegrationTest
     {
         // Arrange
         var browser = new BrowserFixture(OutputHelper);
-
         await browser.WithPageAsync(async (page) =>
         {
             PuzzleSolver solver = await LoadApplication(page);
@@ -51,8 +51,6 @@ public class UITests : IntegrationTest
     {
         // Arrange
         var browser = new BrowserFixture(OutputHelper);
-
-        // Act
         await browser.WithPageAsync(async (page) =>
         {
             PuzzleSolver solver = await LoadApplication(page);
@@ -82,8 +80,6 @@ public class UITests : IntegrationTest
     {
         // Arrange
         var browser = new BrowserFixture(OutputHelper);
-
-        // Act
         await browser.WithPageAsync(async (page) =>
         {
             PuzzleSolver solver = await LoadApplication(page);
@@ -112,8 +108,6 @@ public class UITests : IntegrationTest
         string day = "8";
 
         var browser = new BrowserFixture(OutputHelper);
-
-        // Act
         await browser.WithPageAsync(async (page) =>
         {
             PuzzleSolver solver = await LoadApplication(page);

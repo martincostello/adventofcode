@@ -23,7 +23,7 @@ public abstract class Puzzle : IPuzzle
     /// <summary>
     /// Gets or sets the logger to use.
     /// </summary>
-    internal ILogger Logger { get; set; } = new ConsoleLogger();
+    internal ILogger Logger { get; set; } = default!;
 
     /// <summary>
     /// Gets the minimum number of arguments required to solve the puzzle.
@@ -57,7 +57,7 @@ public abstract class Puzzle : IPuzzle
     /// <returns>
     /// The puzzle's metadata.
     /// </returns>
-    internal PuzzleAttribute Metadata()
+    public PuzzleAttribute Metadata()
         => GetType().GetCustomAttribute<PuzzleAttribute>()!;
 
     /// <summary>

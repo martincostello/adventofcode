@@ -17,7 +17,7 @@ namespace MartinCostello.AdventOfCode.Api;
 /// <summary>
 /// A test fixture representing an HTTP server hosting the application. This class cannot be inherited.
 /// </summary>
-public sealed class HttpServerFixture : WebApplicationFactory<Puzzle>, ITestOutputHelperAccessor
+public sealed class HttpServerFixture : WebApplicationFactory<Site.Program>, ITestOutputHelperAccessor
 {
     private IHost? _host;
     private bool _disposed;
