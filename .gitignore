@@ -17,7 +17,7 @@ obj
 packages
 profile.arm.json
 project.lock.json
-src/AdventOfCode/wwwroot/static/js/
+src/AdventOfCode.Site/wwwroot/static/js/
 TestResults
 UpgradeLog*.htm
 UpgradeLog*.XML
