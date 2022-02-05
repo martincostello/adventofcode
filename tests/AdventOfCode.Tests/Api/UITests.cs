@@ -7,6 +7,7 @@ namespace MartinCostello.AdventOfCode.Api;
 
 public class UITests : IntegrationTest
 {
+    private static readonly object _playwrightInstallLock = new();
     private static bool _playwrightInstalled;
 
     public UITests(HttpServerFixture fixture, ITestOutputHelper outputHelper)
@@ -156,14 +157,22 @@ public class UITests : IntegrationTest
             return;
         }
 
-        int exitCode = Microsoft.Playwright.Program.Main(new[] { "install" });
-
-        if (exitCode != 0)
+        lock (_playwrightInstallLock)
         {
-            throw new InvalidOperationException($"Playwright exited with code {exitCode}.");
-        }
+            if (_playwrightInstalled)
+            {
+                return;
+            }
 
-        _playwrightInstalled = true;
+            int exitCode = Microsoft.Playwright.Program.Main(new[] { "install" });
+
+            if (exitCode != 0)
+            {
+                throw new InvalidOperationException($"Playwright exited with code {exitCode}.");
+            }
+
+            _playwrightInstalled = true;
+        }
     }
 
     private async Task<PuzzleSolver> LoadApplication(IPage page)
