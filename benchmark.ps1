@@ -34,7 +34,7 @@ else {
 
 if ($installDotNetSdk -eq $true) {
     $env:DOTNET_INSTALL_DIR = Join-Path "$(Convert-Path "$PSScriptRoot")" ".dotnet"
-    $sdkPath = Join-Path $env:DOTNET_INSTALL_DIR "sdk\$dotnetVersion"
+    $sdkPath = Join-Path $env:DOTNET_INSTALL_DIR "sdk" $dotnetVersion
 
     if (!(Test-Path $sdkPath)) {
         if (!(Test-Path $env:DOTNET_INSTALL_DIR)) {
@@ -65,7 +65,7 @@ if ($installDotNetSdk -eq $true) {
     $env:PATH = "$env:DOTNET_INSTALL_DIR;$env:PATH"
 }
 
-$benchmarks = (Join-Path $solutionPath "tests\AdventOfCode.Benchmarks\AdventOfCode.Benchmarks.csproj")
+$benchmarks = (Join-Path $solutionPath "tests" "AdventOfCode.Benchmarks" "AdventOfCode.Benchmarks.csproj")
 
 Write-Host "Running benchmarks..." -ForegroundColor Green
 
