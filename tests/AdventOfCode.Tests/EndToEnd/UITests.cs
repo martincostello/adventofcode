@@ -26,7 +26,6 @@ public class UITests : EndToEndTest, IClassFixture<PlaywrightFixture>
     {
         // Arrange
         var browser = new BrowserFixture(OutputHelper);
-
         await browser.WithPageAsync(async (page) =>
         {
             PuzzleSolver solver = await LoadApplication(page);
@@ -53,8 +52,6 @@ public class UITests : EndToEndTest, IClassFixture<PlaywrightFixture>
     {
         // Arrange
         var browser = new BrowserFixture(OutputHelper);
-
-        // Act
         await browser.WithPageAsync(async (page) =>
         {
             PuzzleSolver solver = await LoadApplication(page);
