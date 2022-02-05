@@ -8,6 +8,8 @@ namespace MartinCostello.AdventOfCode;
 
 public class BrowserFixture
 {
+    private const string VideosDirectory = "videos";
+
     public BrowserFixture(ITestOutputHelper outputHelper)
     {
         OutputHelper = outputHelper;
@@ -22,13 +24,24 @@ public class BrowserFixture
         string browserType = "chromium",
         [CallerMemberName] string? testName = null)
     {
-        using IPlaywright playwright = await Playwright.CreateAsync();
+        using var playwright = await Playwright.CreateAsync();
+        await using var browser = await CreateBrowserAsync(playwright, browserType);
 
-        await using IBrowser browser = await CreateBrowserAsync(playwright, browserType);
+        var options = CreateContextOptions();
+        await using var context = await browser.NewContextAsync(options);
 
-        BrowserNewPageOptions options = CreatePageOptions();
+        if (IsRunningInGitHubActions)
+        {
+            await context.Tracing.StartAsync(new()
+            {
+                Screenshots = true,
+                Snapshots = true,
+                Sources = true,
+                Title = testName,
+            });
+        }
 
-        IPage page = await browser.NewPageAsync(options);
+        var page = await context.NewPageAsync();
 
         page.Console += (_, e) => OutputHelper.WriteLine(e.Text);
         page.PageError += (_, e) => OutputHelper.WriteLine(e);
@@ -39,6 +52,16 @@ public class BrowserFixture
         }
         catch (Exception)
         {
+            if (IsRunningInGitHubActions)
+            {
+                string traceName = GenerateFileName(testName!, browserType, ".zip");
+                string path = Path.Combine("traces", traceName);
+
+                await context.Tracing.StopAsync(new() { Path = path });
+
+                OutputHelper.WriteLine($"Trace saved to {path}.");
+            }
+
             await TryCaptureScreenshotAsync(page, testName!, browserType);
             throw;
         }
@@ -48,9 +71,9 @@ public class BrowserFixture
         }
     }
 
-    protected virtual BrowserNewPageOptions CreatePageOptions()
+    protected virtual BrowserNewContextOptions CreateContextOptions()
     {
-        var options = new BrowserNewPageOptions()
+        var options = new BrowserNewContextOptions()
         {
             IgnoreHTTPSErrors = true,
             Locale = "en-GB",
@@ -59,7 +82,7 @@ public class BrowserFixture
 
         if (IsRunningInGitHubActions)
         {
-            options.RecordVideoDir = "videos";
+            options.RecordVideoDir = VideosDirectory;
         }
 
         return options;
@@ -110,12 +133,9 @@ public class BrowserFixture
         try
         {
             string fileName = GenerateFileName(testName, browserType, ".png");
-            string path = Path.Combine("screenshots", fileName);
+            string path = Path.GetFullPath(Path.Combine("screenshots", fileName));
 
-            await page.ScreenshotAsync(new PageScreenshotOptions()
-            {
-                Path = path,
-            });
+            await page.ScreenshotAsync(new() { Path = path });
 
             OutputHelper.WriteLine($"Screenshot saved to {path}.");
         }
@@ -132,7 +152,7 @@ public class BrowserFixture
         string testName,
         string browserType)
     {
-        if (!IsRunningInGitHubActions)
+        if (!IsRunningInGitHubActions || page.Video is null)
         {
             return;
         }
@@ -141,7 +161,7 @@ public class BrowserFixture
         {
             await page.CloseAsync();
 
-            string videoSource = await page.Video!.PathAsync();
+            string videoSource = await page.Video.PathAsync();
 
             string? directory = Path.GetDirectoryName(videoSource);
             string? extension = Path.GetExtension(videoSource);
