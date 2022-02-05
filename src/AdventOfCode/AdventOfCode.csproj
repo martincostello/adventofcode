@@ -3,7 +3,7 @@
     <Description>Solutions for Advent of Code.</Description>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <NoWarn>$(NoWarn);CA2007;CA2225;CA5351</NoWarn>
-    <OutputType>Exe</OutputType>
+    <OutputType>Library</OutputType>
     <RootNamespace>MartinCostello.AdventOfCode</RootNamespace>
     <TargetFramework>net6.0</TargetFramework>
   </PropertyGroup>

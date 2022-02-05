@@ -1,0 +1,12 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <Description>Console app for solving Advent of Code.</Description>
+    <NoWarn>$(NoWarn);CA2007</NoWarn>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>MartinCostello.AdventOfCode.Console</RootNamespace>
+    <TargetFramework>net6.0</TargetFramework>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\AdventOfCode\AdventOfCode.csproj" />
+  </ItemGroup>
+</Project>

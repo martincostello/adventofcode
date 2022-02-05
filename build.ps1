@@ -120,6 +120,7 @@ if ($SkipPublish -eq $false) {
     $additionalArgs = @()
 
     if (![string]::IsNullOrEmpty($Runtime)) {
+        $additionalArgs += "--self-contained"
         $additionalArgs += "--runtime"
         $additionalArgs += $Runtime
     }

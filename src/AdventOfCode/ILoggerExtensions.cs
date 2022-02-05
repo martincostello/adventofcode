@@ -9,13 +9,13 @@ namespace MartinCostello.AdventOfCode;
 /// A class containing extension methods for <see cref="ILogger"/>. This class cannot be inherited.
 /// </summary>
 [EditorBrowsable(EditorBrowsableState.Never)]
-internal static class ILoggerExtensions
+public static class ILoggerExtensions
 {
     /// <summary>
     /// Writes a new line to the log.
     /// </summary>
     /// <param name="logger">The logger to write to.</param>
-    internal static void WriteLine(this ILogger logger)
+    public static void WriteLine(this ILogger logger)
         => logger.WriteLine(string.Empty);
 
     /// <summary>
@@ -26,7 +26,7 @@ internal static class ILoggerExtensions
     /// <returns>
     /// The visualization of the grid.
     /// </returns>
-    internal static string WriteGrid(this ILogger logger, char[,] array)
+    public static string WriteGrid(this ILogger logger, char[,] array)
     {
         int width = array.GetLength(0);
         int height = array.GetLength(1);
