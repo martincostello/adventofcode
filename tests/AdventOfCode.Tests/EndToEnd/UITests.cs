@@ -5,11 +5,12 @@ using Microsoft.Playwright;
 
 namespace MartinCostello.AdventOfCode.EndToEnd;
 
-public class UITests : EndToEndTest
+public class UITests : EndToEndTest, IClassFixture<PlaywrightFixture>
 {
-    public UITests(SiteFixture fixture, ITestOutputHelper outputHelper)
+    public UITests(SiteFixture fixture, PlaywrightFixture playwrightFixture, ITestOutputHelper outputHelper)
         : base(fixture)
     {
+        ArgumentNullException.ThrowIfNull(playwrightFixture);
         OutputHelper = outputHelper;
     }
 
