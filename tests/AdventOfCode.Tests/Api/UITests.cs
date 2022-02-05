@@ -5,11 +5,14 @@ using Microsoft.Playwright;
 
 namespace MartinCostello.AdventOfCode.Api;
 
-public class UITests : IntegrationTest, IAsyncLifetime
+public class UITests : IntegrationTest
 {
+    private static bool _playwrightInstalled;
+
     public UITests(HttpServerFixture fixture, ITestOutputHelper outputHelper)
         : base(fixture, outputHelper)
     {
+        InstallPlaywright();
     }
 
     [Theory]
@@ -133,14 +136,6 @@ public class UITests : IntegrationTest, IAsyncLifetime
         });
     }
 
-    public Task InitializeAsync()
-    {
-        InstallPlaywright();
-        return Task.CompletedTask;
-    }
-
-    public Task DisposeAsync() => Task.CompletedTask;
-
     private static async Task<string> GetPuzzleInputAsync(string year, string day)
     {
         var type = typeof(Puzzle);
@@ -156,12 +151,19 @@ public class UITests : IntegrationTest, IAsyncLifetime
 
     private static void InstallPlaywright()
     {
+        if (_playwrightInstalled)
+        {
+            return;
+        }
+
         int exitCode = Microsoft.Playwright.Program.Main(new[] { "install" });
 
         if (exitCode != 0)
         {
             throw new InvalidOperationException($"Playwright exited with code {exitCode}.");
         }
+
+        _playwrightInstalled = true;
     }
 
     private async Task<PuzzleSolver> LoadApplication(IPage page)
