@@ -116,6 +116,6 @@ jobs:
 
     - name: Run end-to-end tests
       shell: pwsh
-      run: dotnet test ./tests/AdventOfCode.Tests --filter Category=EndToEnd /p:CollectCoverage=false
+      run: dotnet test ./tests/AdventOfCode.Tests --configuration Release --filter Category=EndToEnd /p:CollectCoverage=false
       env:
         WEBSITE_URL: ${{ env.WEBSITE_URL_PROD }}
