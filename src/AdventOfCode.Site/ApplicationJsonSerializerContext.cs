@@ -4,7 +4,7 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Text.Json.Serialization;
 
-namespace MartinCostello.AdventOfCode;
+namespace MartinCostello.AdventOfCode.Site;
 
 [ExcludeFromCodeCoverage]
 [JsonSerializable(typeof(int))]

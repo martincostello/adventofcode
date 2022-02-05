@@ -3,7 +3,7 @@
 
 using System.Reflection;
 
-namespace MartinCostello.AdventOfCode;
+namespace MartinCostello.AdventOfCode.Site;
 
 /// <summary>
 /// A class containing Git metadata for the assembly. This class cannot be inherited.

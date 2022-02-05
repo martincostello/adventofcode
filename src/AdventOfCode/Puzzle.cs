@@ -57,7 +57,7 @@ public abstract class Puzzle : IPuzzle
     /// <returns>
     /// The puzzle's metadata.
     /// </returns>
-    internal PuzzleAttribute Metadata()
+    public PuzzleAttribute Metadata()
         => GetType().GetCustomAttribute<PuzzleAttribute>()!;
 
     /// <summary>
