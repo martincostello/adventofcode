@@ -5,15 +5,12 @@ using Microsoft.Playwright;
 
 namespace MartinCostello.AdventOfCode.Api;
 
-public class UITests : IntegrationTest
+public class UITests : IntegrationTest, IClassFixture<PlaywrightFixture>
 {
-    private static readonly object _playwrightInstallLock = new();
-    private static bool _playwrightInstalled;
-
-    public UITests(HttpServerFixture fixture, ITestOutputHelper outputHelper)
-        : base(fixture, outputHelper)
+    public UITests(HttpServerFixture httpFixture, PlaywrightFixture playwrightFixture, ITestOutputHelper outputHelper)
+        : base(httpFixture, outputHelper)
     {
-        InstallPlaywright();
+        ArgumentNullException.ThrowIfNull(playwrightFixture);
     }
 
     [Theory]
@@ -27,7 +24,6 @@ public class UITests : IntegrationTest
     {
         // Arrange
         var browser = new BrowserFixture(OutputHelper);
-
         await browser.WithPageAsync(async (page) =>
         {
             PuzzleSolver solver = await LoadApplication(page);
@@ -55,8 +51,6 @@ public class UITests : IntegrationTest
     {
         // Arrange
         var browser = new BrowserFixture(OutputHelper);
-
-        // Act
         await browser.WithPageAsync(async (page) =>
         {
             PuzzleSolver solver = await LoadApplication(page);
@@ -86,8 +80,6 @@ public class UITests : IntegrationTest
     {
         // Arrange
         var browser = new BrowserFixture(OutputHelper);
-
-        // Act
         await browser.WithPageAsync(async (page) =>
         {
             PuzzleSolver solver = await LoadApplication(page);
@@ -116,8 +108,6 @@ public class UITests : IntegrationTest
         string day = "8";
 
         var browser = new BrowserFixture(OutputHelper);
-
-        // Act
         await browser.WithPageAsync(async (page) =>
         {
             PuzzleSolver solver = await LoadApplication(page);
@@ -148,31 +138,6 @@ public class UITests : IntegrationTest
         using var reader = new StreamReader(stream);
 
         return await reader.ReadToEndAsync();
-    }
-
-    private static void InstallPlaywright()
-    {
-        if (_playwrightInstalled)
-        {
-            return;
-        }
-
-        lock (_playwrightInstallLock)
-        {
-            if (_playwrightInstalled)
-            {
-                return;
-            }
-
-            int exitCode = Microsoft.Playwright.Program.Main(new[] { "install" });
-
-            if (exitCode != 0)
-            {
-                throw new InvalidOperationException($"Playwright exited with code {exitCode}.");
-            }
-
-            _playwrightInstalled = true;
-        }
     }
 
     private async Task<PuzzleSolver> LoadApplication(IPage page)
