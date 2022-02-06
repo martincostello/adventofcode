@@ -5,7 +5,9 @@
 
 param(
     [Parameter(Mandatory = $false)][string] $Configuration = "Release",
-    [Parameter(Mandatory = $false)][string] $Framework = "net6.0"
+    [Parameter(Mandatory = $false)][string] $Framework = "net6.0",
+    [Parameter(Mandatory = $false)][string] $Filter = "*",
+    [Parameter(Mandatory = $false)][string] $Job = "short"
 )
 
 $ErrorActionPreference = "Stop"
@@ -73,4 +75,21 @@ $benchmarks = (Join-Path $solutionPath "tests" "AdventOfCode.Benchmarks" "Advent
 
 Write-Host "Running benchmarks..." -ForegroundColor Green
 
-& $dotnet run --project $benchmarks --configuration $Configuration --framework $Framework
+$additionalArgs = @()
+
+if (![string]::IsNullOrEmpty($Filter)) {
+    $additionalArgs += "--filter"
+    $additionalArgs += $Filter
+}
+
+if (![string]::IsNullOrEmpty($Job)) {
+    $additionalArgs += "--job"
+    $additionalArgs += $Job
+}
+
+& $dotnet run `
+    --project $benchmarks `
+    --configuration $Configuration `
+    --framework $Framework `
+    -- `
+    $additionalArgs
