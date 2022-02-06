@@ -2,6 +2,17 @@ imports:
   - https://raw.githubusercontent.com/dotnet/crank/main/src/Microsoft.Crank.Jobs.Bombardier/bombardier.yml
 
 jobs:
+  microbenchmarks:
+    source:
+      repository: https://github.com/martincostello/adventofcode
+      branchOrCommit: main
+      project: tests/AdventOfCode.Benchmarks/AdventOfCode.Benchmarks.csproj
+    variables:
+      filterArg: "*"
+      jobArg: short
+    arguments: --job {{jobArg}} --filter {{filterArg}} --memory
+    options:
+      benchmarkDotNet: true
   server:
     source:
       repository: https://github.com/martincostello/adventofcode
@@ -10,6 +21,11 @@ jobs:
     readyStateText: Application started.
 
 scenarios:
+  microbenchmarks-2021:
+    application:
+      job: microbenchmarks
+      variables:
+        filterArg: "*2021*"
   root:
     application:
       job: server
