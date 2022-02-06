@@ -1,7 +1,7 @@
 components:
   app:
     script: |
-      pwsh build.ps1 -SkipTests
+      pwsh build.ps1 -SkipPublish -SkipTests
     arguments: ""
 
 defaults: --config ./crank.yml
