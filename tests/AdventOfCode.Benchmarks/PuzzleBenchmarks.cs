@@ -6,7 +6,7 @@ using BenchmarkDotNet.Diagnosers;
 
 namespace MartinCostello.AdventOfCode.Benchmarks;
 
-[EventPipeProfiler(EventPipeProfile.CpuSampling)]
+////[EventPipeProfiler(EventPipeProfile.CpuSampling)] // Appears to hang when run via crank
 [MemoryDiagnoser]
 public class PuzzleBenchmarks
 {

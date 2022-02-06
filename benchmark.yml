@@ -12,6 +12,9 @@ profiles:
     arguments: --profile local
 
 benchmarks:
+  microbenchmarks-2021:
+    description: Microbenchmarks for 2021
+    arguments: --config ./crank.yml --scenario microbenchmarks-2021
   root:
     description: Root
     arguments: --config ./crank.yml --scenario root
