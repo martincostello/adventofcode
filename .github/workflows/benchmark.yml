@@ -18,7 +18,7 @@ jobs:
     steps:
 
     - name: Extract benchmark argument
-      uses: actions/github-script@v4
+      uses: actions/github-script@v5
       id: benchmark-argument
       with:
         result-encoding: string
@@ -35,14 +35,14 @@ jobs:
           const commentUser = context.payload.comment.user.login;
 
           try {
-            var membership = await github.repos.checkCollaborator({
+            var membership = await github.rest.repos.checkCollaborator({
               owner: repoOwner,
               repo: repoName,
               username: commentUser
             });
           } catch (error) {
             var message = `Error: @${commentUser} is not a repo collaborator, benchmarking is not allowed.`;
-            await github.issues.createComment({
+            await github.rest.issues.createComment({
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
@@ -69,7 +69,7 @@ jobs:
                 body += `- \`/benchmark ${key}\`: ${availableBenchmarks[key]}\n`;
               }
 
-              await github.issues.createComment({
+              await github.rest.issues.createComment({
                 issue_number: context.issue.number,
                 owner: context.repo.owner,
                 repo: context.repo.repo,
@@ -83,7 +83,7 @@ jobs:
           core.info(`Benchmark: ${benchmark}`);
 
           const start_body = `Started [${benchmark} benchmark](https://github.com/${context.repo.owner}/${context.repo.repo}/actions/runs/${process.env.GITHUB_RUN_ID}).`;
-          await github.issues.createComment({
+          await github.rest.issues.createComment({
             issue_number: context.issue.number,
             owner: context.repo.owner,
             repo: context.repo.repo,
