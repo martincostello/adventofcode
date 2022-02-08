@@ -10,7 +10,7 @@ updates:
     - "martincostello"
   open-pull-requests-limit: 99
 - package-ecosystem: npm
-  directory: "/src/AdventOfCode"
+  directory: "/src/AdventOfCode.Site"
   schedule:
     interval: daily
     time: "05:30"
