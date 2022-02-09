@@ -25,6 +25,12 @@ jobs:
         script: |
           // Documents all available commands
           const availableBenchmarks = {
+            "microbenchmarks-2015": "Runs the 2015 microbenchmarks",
+            "microbenchmarks-2016": "Runs the 2016 microbenchmarks",
+            "microbenchmarks-2017": "Runs the 2017 microbenchmarks",
+            "microbenchmarks-2018": "Runs the 2018 microbenchmarks",
+            "microbenchmarks-2019": "Runs the 2019 microbenchmarks",
+            "microbenchmarks-2020": "Runs the 2020 microbenchmarks",
             "microbenchmarks-2021": "Runs the 2021 microbenchmarks",
             "root": "Runs the root benchmark"
           };

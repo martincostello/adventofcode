@@ -21,11 +21,9 @@ jobs:
     readyStateText: Application started.
 
 scenarios:
-  microbenchmarks-2021:
+  microbenchmarks:
     application:
       job: microbenchmarks
-      variables:
-        filterArg: "*2021*"
   root:
     application:
       job: server
