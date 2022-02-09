@@ -12,9 +12,27 @@ profiles:
     arguments: --profile local
 
 benchmarks:
+  microbenchmarks-2015:
+    description: Microbenchmarks for 2015
+    arguments: --config ./crank.yml --scenario microbenchmarks --variable filterArg=*2015*
+  microbenchmarks-2016:
+    description: Microbenchmarks for 2016
+    arguments: --config ./crank.yml --scenario microbenchmarks --variable filterArg=*2016*
+  microbenchmarks-2017:
+    description: Microbenchmarks for 2017
+    arguments: --config ./crank.yml --scenario microbenchmarks --variable filterArg=*2017*
+  microbenchmarks-2018:
+    description: Microbenchmarks for 2018
+    arguments: --config ./crank.yml --scenario microbenchmarks --variable filterArg=*2018*
+  microbenchmarks-2019:
+    description: Microbenchmarks for 2019
+    arguments: --config ./crank.yml --scenario microbenchmarks --variable filterArg=*2019*
+  microbenchmarks-2020:
+    description: Microbenchmarks for 2020
+    arguments: --config ./crank.yml --scenario microbenchmarks --variable filterArg=*2020*
   microbenchmarks-2021:
     description: Microbenchmarks for 2021
-    arguments: --config ./crank.yml --scenario microbenchmarks-2021
+    arguments: --config ./crank.yml --scenario microbenchmarks --variable filterArg=*2021*
   root:
     description: Root
     arguments: --config ./crank.yml --scenario root
