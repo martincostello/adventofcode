@@ -28,7 +28,7 @@ if ($IsWindows) {
 Start-Sleep -Seconds 2
 
 try {
-    crank --config $config --scenario $Scenario --profile $Profile $additionalArgs
+    dotnet tool run crank --config $config --scenario $Scenario --profile $Profile $additionalArgs
 }
 finally {
     Stop-Process -InputObject $agent -Force | Out-Null

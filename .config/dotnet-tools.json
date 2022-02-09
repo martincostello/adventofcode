@@ -1,0 +1,24 @@
+{
+  "version": 1,
+  "isRoot": true,
+  "tools": {
+    "microsoft.crank.agent": {
+      "version": "0.2.0-ci",
+      "commands": [
+        "crank-agent"
+      ]
+    },
+    "microsoft.crank.controller": {
+      "version": "0.2.0-ci",
+      "commands": [
+        "crank"
+      ]
+    },
+    "microsoft.crank.pullrequestbot": {
+      "version": "0.2.0-ci",
+      "commands": [
+        "crank-pr"
+      ]
+    }
+  }
+}
