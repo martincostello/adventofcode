@@ -1,6 +1,6 @@
 {
   "profiles": {
-    "AdventOfCode": {
+    "AdventOfCode.Site": {
       "commandName": "Project",
       "commandLineArgs": "",
       "launchBrowser": true,
