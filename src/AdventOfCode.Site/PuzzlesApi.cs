@@ -43,6 +43,7 @@ internal static partial class PuzzlesApi
     /// <param name="year">The year the puzzle to solve is from.</param>
     /// <param name="day">The day the puzzle to solve is from.</param>
     /// <param name="request">The HTTP request.</param>
+    /// <param name="resource">The optional resource to use to solve the puzzle.</param>
     /// <param name="factory">The <see cref="PuzzleFactory"/> to use.</param>
     /// <param name="logger">The <see cref="ILogger"/> to use.</param>
     /// <param name="cancellationToken">The <see cref="CancellationToken"/> to use.</param>
@@ -53,6 +54,7 @@ internal static partial class PuzzlesApi
         int year,
         int day,
         HttpRequest request,
+        IFormFile? resource,
         PuzzleFactory factory,
         ILogger<Puzzle> logger,
         CancellationToken cancellationToken)
@@ -88,7 +90,7 @@ internal static partial class PuzzlesApi
 
             if (metadata.RequiresData)
             {
-                if (form.Files["resource"] is not { } resource)
+                if (resource is null)
                 {
                     return Results.Problem("No puzzle resource provided.", statusCode: StatusCodes.Status400BadRequest);
                 }
