@@ -98,7 +98,7 @@ internal static partial class PuzzlesApi
 
             if (form.TryGetValue("arguments", out var values))
             {
-                arguments = values.Select((p) => p).ToArray();
+                arguments = values.Select((p) => p).ToArray()!;
             }
         }
 
