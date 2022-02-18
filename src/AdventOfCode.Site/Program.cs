@@ -6,7 +6,6 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using MartinCostello.AdventOfCode;
 using MartinCostello.AdventOfCode.Site;
-using Microsoft.AspNetCore.Http.Json;
 using Microsoft.AspNetCore.ResponseCompression;
 using ILogger = MartinCostello.AdventOfCode.ILogger;
 
@@ -35,7 +34,7 @@ foreach (var puzzle in puzzles)
     builder.Services.AddSingleton(puzzle!);
 }
 
-builder.Services.Configure<JsonOptions>((p) =>
+builder.Services.ConfigureRouteHandlerJsonOptions((p) =>
 {
     p.SerializerOptions.WriteIndented = true;
     p.SerializerOptions.AddContext<ApplicationJsonSerializerContext>();
