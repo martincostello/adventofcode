@@ -241,20 +241,18 @@ public sealed class Day17 : Puzzle
 
     private static class Cubes4D
     {
-        private static readonly Quaternion Zero = new(0, 0, 0, 0);
-
         public static (int ActiveCubes, string Visualization) GetActiveCubes(
             IList<string> initialStates,
             int cycles,
             ILogger? logger = null)
         {
-            var currentState = new Dictionary<Quaternion, char>(initialStates.Count * initialStates.Count);
+            var currentState = new Dictionary<Vector4, char>(initialStates.Count * initialStates.Count);
 
             for (int y = 0; y < initialStates.Count; y++)
             {
                 for (int x = 0; x < initialStates.Count; x++)
                 {
-                    var point = new Quaternion(x, y, 0, 0);
+                    var point = new Vector4(x, y, 0, 0);
                     currentState[point] = initialStates[y][x];
                 }
             }
@@ -276,15 +274,15 @@ public sealed class Day17 : Puzzle
 
             return (activeCubes, visualization);
 
-            static void Extend(Dictionary<Quaternion, char> states)
+            static void Extend(Dictionary<Vector4, char> states)
             {
                 var keys = states.Keys.ToArray();
 
                 states.EnsureCapacity(keys.Length + ((int)Math.Pow(3, 4) * keys.Length));
 
-                foreach (Quaternion point in keys)
+                foreach (Vector4 point in keys)
                 {
-                    foreach (Quaternion adjacent in AdjacentCubes(point))
+                    foreach (Vector4 adjacent in AdjacentCubes(point))
                     {
                         if (!states.ContainsKey(adjacent))
                         {
@@ -295,9 +293,9 @@ public sealed class Day17 : Puzzle
             }
         }
 
-        private static Dictionary<Quaternion, char> Iterate(Dictionary<Quaternion, char> states)
+        private static Dictionary<Vector4, char> Iterate(Dictionary<Vector4, char> states)
         {
-            var updated = new Dictionary<Quaternion, char>(states);
+            var updated = new Dictionary<Vector4, char>(states);
 
             foreach (var point in states)
             {
@@ -317,11 +315,11 @@ public sealed class Day17 : Puzzle
 
             return updated;
 
-            static int CountActiveCubes(Quaternion point, Dictionary<Quaternion, char> states)
+            static int CountActiveCubes(Vector4 point, Dictionary<Vector4, char> states)
             {
                 int count = 0;
 
-                foreach (Quaternion adjacent in AdjacentCubes(point))
+                foreach (Vector4 adjacent in AdjacentCubes(point))
                 {
                     if (IsAdjacentCubeActive(adjacent, states))
                     {
@@ -332,11 +330,11 @@ public sealed class Day17 : Puzzle
                 return count;
             }
 
-            static bool IsAdjacentCubeActive(Quaternion position, Dictionary<Quaternion, char> states)
+            static bool IsAdjacentCubeActive(Vector4 position, Dictionary<Vector4, char> states)
                 => states.GetValueOrDefault(position) == Active;
         }
 
-        private static IEnumerable<Quaternion> AdjacentCubes(Quaternion position)
+        private static IEnumerable<Vector4> AdjacentCubes(Vector4 position)
         {
             for (float z = -1; z <= 1; z++)
             {
@@ -346,9 +344,9 @@ public sealed class Day17 : Puzzle
                     {
                         for (float w = -1; w <= 1; w++)
                         {
-                            var adjacent = new Quaternion(x, y, z, w);
+                            var adjacent = new Vector4(x, y, z, w);
 
-                            if (adjacent != Zero)
+                            if (adjacent != Vector4.Zero)
                             {
                                 yield return position + adjacent;
                             }
@@ -358,7 +356,7 @@ public sealed class Day17 : Puzzle
             }
         }
 
-        private static string WriteState(Dictionary<Quaternion, char> states, ILogger? logger)
+        private static string WriteState(Dictionary<Vector4, char> states, ILogger? logger)
         {
             var builder = new StringBuilder();
 
@@ -383,7 +381,7 @@ public sealed class Day17 : Puzzle
                     {
                         for (float x = 0; x <= maxX; x++)
                         {
-                            var point = new Quaternion(x, y, z, w);
+                            var point = new Vector4(x, y, z, w);
 
                             char state = states.GetValueOrDefault(point, Inactive);
 
