@@ -180,17 +180,13 @@ public sealed class Day22 : Puzzle
 
         public readonly Cuboid? Abjunction(in Cuboid other)
         {
-            float minX = MathF.Max(Origin.X, other.Origin.X);
-            float maxX = MathF.Min(Origin.X + Length.X, other.Origin.X + other.Length.X);
-            float minY = MathF.Max(Origin.Y, other.Origin.Y);
-            float maxY = MathF.Min(Origin.Y + Length.Y, other.Origin.Y + other.Length.Y);
-            float minZ = MathF.Max(Origin.Z, other.Origin.Z);
-            float maxZ = MathF.Min(Origin.Z + Length.Z, other.Origin.Z + other.Length.Z);
+            var min = Vector3.Max(Origin, other.Origin);
+            var max = Vector3.Min(Origin + Length, other.Origin + other.Length);
 
-            if (minX <= maxX && minY <= maxY && minZ <= maxZ)
+            if (min.X <= max.X && min.Y <= max.Y && min.Z <= max.Z)
             {
-                var origin = new Vector3(minX, minY, minZ);
-                var length = new Vector3(maxX - minX, maxY - minY, maxZ - minZ);
+                var origin = min;
+                var length = max - min;
 
                 return new(origin, length);
             }
@@ -234,15 +230,13 @@ public sealed class Day22 : Puzzle
             Cuboid largest = otherIsLarger ? other : this;
             Cuboid smallest = !otherIsLarger ? other : this;
 
-            float lengthX = smallest.Origin.X + smallest.Length.X;
-            float lengthY = smallest.Origin.Y + smallest.Length.Y;
-            float lengthZ = smallest.Origin.Z + smallest.Length.Z;
+            var length = smallest.Origin + smallest.Length;
 
-            for (float z = Origin.Z; z < lengthZ; z++)
+            for (float z = Origin.Z; z < length.Z; z++)
             {
-                for (float y = Origin.Y; y < lengthY; y++)
+                for (float y = Origin.Y; y < length.Y; y++)
                 {
-                    for (float x = Origin.X; x < lengthX; x++)
+                    for (float x = Origin.X; x < length.X; x++)
                     {
                         var point = new Vector3(x, y, z);
 
@@ -268,7 +262,7 @@ public sealed class Day22 : Puzzle
             yield return Origin + new Vector3(0, Length.Y, Length.Z);
             yield return Origin + new Vector3(Length.X, 0, Length.Z);
             yield return Origin + new Vector3(Length.X, Length.Y, 0);
-            yield return Origin + new Vector3(Length.X, Length.Y, Length.Z);
+            yield return Origin + Length;
         }
     }
 }
