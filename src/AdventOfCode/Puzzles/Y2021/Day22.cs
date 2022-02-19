@@ -180,12 +180,12 @@ public sealed class Day22 : Puzzle
 
         public readonly Cuboid? Abjunction(in Cuboid other)
         {
-            float minX = Math.Max(Origin.X, other.Origin.X);
-            float maxX = Math.Min(Origin.X + Length.X, other.Origin.X + other.Length.X);
-            float minY = Math.Max(Origin.Y, other.Origin.Y);
-            float maxY = Math.Min(Origin.Y + Length.Y, other.Origin.Y + other.Length.Y);
-            float minZ = Math.Max(Origin.Z, other.Origin.Z);
-            float maxZ = Math.Min(Origin.Z + Length.Z, other.Origin.Z + other.Length.Z);
+            float minX = MathF.Max(Origin.X, other.Origin.X);
+            float maxX = MathF.Min(Origin.X + Length.X, other.Origin.X + other.Length.X);
+            float minY = MathF.Max(Origin.Y, other.Origin.Y);
+            float maxY = MathF.Min(Origin.Y + Length.Y, other.Origin.Y + other.Length.Y);
+            float minZ = MathF.Max(Origin.Z, other.Origin.Z);
+            float maxZ = MathF.Min(Origin.Z + Length.Z, other.Origin.Z + other.Length.Z);
 
             if (minX <= maxX && minY <= maxY && minZ <= maxZ)
             {
@@ -200,8 +200,8 @@ public sealed class Day22 : Puzzle
 
         public readonly bool IntersectsWith(in Cuboid other)
         {
-            long volumeThis = Volume();
-            long volumeOther = other.Volume();
+            float volumeThis = Volume();
+            float volumeOther = other.Volume();
 
             bool otherIsLarger = volumeOther > volumeThis;
             Cuboid largest = otherIsLarger ? other : this;
@@ -227,8 +227,8 @@ public sealed class Day22 : Puzzle
                 return result;
             }
 
-            long volumeThis = Volume();
-            long volumeOther = other.Volume();
+            float volumeThis = Volume();
+            float volumeOther = other.Volume();
 
             bool otherIsLarger = volumeOther > volumeThis;
             Cuboid largest = otherIsLarger ? other : this;
@@ -257,7 +257,7 @@ public sealed class Day22 : Puzzle
             return result;
         }
 
-        public readonly long Volume() => (long)(Length.X * Length.Y * Length.Z);
+        public readonly long Volume() => (long)Length.X * (long)Length.Y * (long)Length.Z;
 
         private readonly IEnumerable<Vector3> Verticies()
         {

@@ -77,7 +77,7 @@ public sealed class Day19 : Puzzle
                 Vector3 x = oriented[i].Location;
                 Vector3 y = oriented[j].Location;
 
-                float distance = Vector3.Distance(x, y);
+                float distance = x.ManhattanDistance(y);
 
                 if (distance > maxDistance)
                 {
@@ -133,7 +133,7 @@ public sealed class Day19 : Puzzle
                     var rotated = unaligned.Select(transformation);
 
                     int withinReach = rotated
-                        .Where((p) => Vector3.Distance(aligned.Location, first - p) <= MaximumRange)
+                        .Where((p) => aligned.Location.ManhattanDistance(first - p) <= MaximumRange)
                         .Count();
 
                     if (withinReach < CommonBeacons)
@@ -145,7 +145,7 @@ public sealed class Day19 : Puzzle
                     {
                         Vector3 delta = first - second;
 
-                        if (Vector3.Distance(aligned.Location, delta) > MaximumRange)
+                        if (aligned.Location.ManhattanDistance(delta) > MaximumRange)
                         {
                             // This beacon is too far from the other scanner to be detected by it
                             break;
