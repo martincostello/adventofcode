@@ -256,16 +256,20 @@ public sealed class Day22 : Puzzle
 
         public readonly long Volume() => (long)Length.X * (long)Length.Y * (long)Length.Z;
 
-        private readonly IEnumerable<Vector3> Verticies()
+        private readonly Vector3[] Verticies()
         {
-            yield return Origin;
-            yield return Origin + new Vector3(Length.X, 0, 0);
-            yield return Origin + new Vector3(0, Length.Y, 0);
-            yield return Origin + new Vector3(0, 0, Length.Z);
-            yield return Origin + new Vector3(0, Length.Y, Length.Z);
-            yield return Origin + new Vector3(Length.X, 0, Length.Z);
-            yield return Origin + new Vector3(Length.X, Length.Y, 0);
-            yield return Origin + Length;
+            var limit = Origin + Length;
+            return new[]
+            {
+                Origin,
+                new Vector3(limit.X,  0,       0),
+                new Vector3(0,        limit.Y, 0),
+                new Vector3(0,        0,       limit.Z),
+                new Vector3(0,        limit.Y, limit.Z),
+                new Vector3(Length.X, 0,       limit.Z),
+                new Vector3(limit.X,  limit.Y, 0),
+                limit,
+            };
         }
     }
 }
