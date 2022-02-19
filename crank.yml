@@ -17,7 +17,7 @@ jobs:
     source:
       repository: https://github.com/martincostello/adventofcode
       branchOrCommit: main
-      project: src/AdventOfCode/AdventOfCode.csproj
+      project: src/AdventOfCode.Site/AdventOfCode.Site.csproj
     readyStateText: Application started.
 
 scenarios:
