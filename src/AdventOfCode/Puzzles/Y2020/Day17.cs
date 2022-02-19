@@ -1,6 +1,8 @@
 ﻿// Copyright (c) Martin Costello, 2015. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
+using System.Numerics;
+
 namespace MartinCostello.AdventOfCode.Puzzles.Y2020;
 
 /// <summary>
@@ -45,51 +47,12 @@ public sealed class Day17 : Puzzle
         int dimensions,
         ILogger? logger = null)
     {
-        var currentState = new Dictionary<Point, char>(initialStates.Count * initialStates.Count);
-
-        for (int y = 0; y < initialStates.Count; y++)
+        return dimensions switch
         {
-            for (int x = 0; x < initialStates.Count; x++)
-            {
-                var point = dimensions == 4 ? new Point(x, y, 0, 0) : new Point(x, y, 0);
-                currentState[point] = initialStates[y][x];
-            }
-        }
-
-        string visualization = WriteState(currentState, logger);
-
-        for (int i = 0; i < cycles; i++)
-        {
-            Extend(currentState, dimensions);
-
-            currentState = Iterate(currentState);
-
-            visualization = WriteState(currentState, logger);
-        }
-
-        int activeCubes = currentState.Values
-            .Where((p) => p == Active)
-            .Count();
-
-        return (activeCubes, visualization);
-
-        static void Extend(Dictionary<Point, char> states, int dimensions)
-        {
-            var keys = states.Keys.ToArray();
-
-            states.EnsureCapacity(keys.Length + ((int)Math.Pow(3, dimensions) * keys.Length));
-
-            foreach (Point point in keys)
-            {
-                foreach (Point adjacent in AdjacentCubes(point))
-                {
-                    if (!states.ContainsKey(adjacent))
-                    {
-                        states[adjacent] = Inactive;
-                    }
-                }
-            }
-        }
+            3 => Cubes3D.GetActiveCubes(initialStates, cycles, logger),
+            4 => Cubes4D.GetActiveCubes(initialStates, cycles, logger),
+            _ => throw new NotSupportedException(),
+        };
     }
 
     /// <inheritdoc />
@@ -122,86 +85,112 @@ public sealed class Day17 : Puzzle
         return result;
     }
 
-    /// <summary>
-    /// Iterates the state of the cubes.
-    /// </summary>
-    /// <param name="states">The states to iterate.</param>
-    /// <returns>
-    /// The new states.
-    /// </returns>
-    private static Dictionary<Point, char> Iterate(Dictionary<Point, char> states)
+    private static class Cubes3D
     {
-        var updated = new Dictionary<Point, char>(states);
-
-        foreach (var point in states)
+        public static (int ActiveCubes, string Visualization) GetActiveCubes(
+            IList<string> initialStates,
+            int cycles,
+            ILogger? logger = null)
         {
-            char state = point.Value;
+            var currentState = new Dictionary<Vector3, char>(initialStates.Count * initialStates.Count);
 
-            int count = CountActiveCubes(point.Key, states);
-
-            if (state == Active && count != 2 && count != 3)
+            for (int y = 0; y < initialStates.Count; y++)
             {
-                updated[point.Key] = Inactive;
-            }
-            else if (state == Inactive && count == 3)
-            {
-                updated[point.Key] = Active;
-            }
-        }
-
-        return updated;
-
-        static int CountActiveCubes(Point point, Dictionary<Point, char> states)
-        {
-            int count = 0;
-
-            foreach (Point adjacent in AdjacentCubes(point))
-            {
-                if (IsAdjacentCubeActive(adjacent, states))
+                for (int x = 0; x < initialStates.Count; x++)
                 {
-                    count++;
+                    var point = new Vector3(x, y, 0);
+                    currentState[point] = initialStates[y][x];
                 }
             }
 
-            return count;
-        }
+            string visualization = WriteState(currentState, logger);
 
-        static bool IsAdjacentCubeActive(Point position, Dictionary<Point, char> states)
-            => states.GetValueOrDefault(position) == Active;
-    }
-
-    /// <summary>
-    /// Gets the adjacent cubes for the specified point.
-    /// </summary>
-    /// <param name="position">The point to enumerate the adjacent points for.</param>
-    /// <returns>
-    /// A sequence of adjacent points in space to <paramref name="position"/>.
-    /// </returns>
-    private static IEnumerable<Point> AdjacentCubes(Point position)
-    {
-        for (int z = -1; z <= 1; z++)
-        {
-            for (int y = -1; y <= 1; y++)
+            for (int i = 0; i < cycles; i++)
             {
-                for (int x = -1; x <= 1; x++)
-                {
-                    if (position.W.HasValue)
-                    {
-                        for (int w = -1; w <= 1; w++)
-                        {
-                            var adjacent = new Point(x, y, z, w);
+                Extend(currentState);
 
-                            if (adjacent != Point.Zero4D)
-                            {
-                                yield return position + adjacent;
-                            }
+                currentState = Iterate(currentState);
+
+                visualization = WriteState(currentState, logger);
+            }
+
+            int activeCubes = currentState.Values
+                .Where((p) => p == Active)
+                .Count();
+
+            return (activeCubes, visualization);
+
+            static void Extend(Dictionary<Vector3, char> states)
+            {
+                var keys = states.Keys.ToArray();
+
+                states.EnsureCapacity(keys.Length + ((int)Math.Pow(3, 3) * keys.Length));
+
+                foreach (Vector3 point in keys)
+                {
+                    foreach (Vector3 adjacent in AdjacentCubes(point))
+                    {
+                        if (!states.ContainsKey(adjacent))
+                        {
+                            states[adjacent] = Inactive;
                         }
                     }
-                    else
-                    {
-                        var adjacent = new Point(x, y, z);
+                }
+            }
+        }
 
-                        if (adjacent != Point.Zero3D)
+        private static Dictionary<Vector3, char> Iterate(Dictionary<Vector3, char> states)
+        {
+            var updated = new Dictionary<Vector3, char>(states);
+
+            foreach (var point in states)
+            {
+                char state = point.Value;
+
+                int count = CountActiveCubes(point.Key, states);
+
+                if (state == Active && count != 2 && count != 3)
+                {
+                    updated[point.Key] = Inactive;
+                }
+                else if (state == Inactive && count == 3)
+                {
+                    updated[point.Key] = Active;
+                }
+            }
+
+            return updated;
+
+            static int CountActiveCubes(Vector3 point, Dictionary<Vector3, char> states)
+            {
+                int count = 0;
+
+                foreach (Vector3 adjacent in AdjacentCubes(point))
+                {
+                    if (IsAdjacentCubeActive(adjacent, states))
+                    {
+                        count++;
+                    }
+                }
+
+                return count;
+            }
+
+            static bool IsAdjacentCubeActive(Vector3 position, Dictionary<Vector3, char> states)
+                => states.GetValueOrDefault(position) == Active;
+        }
+
+        private static IEnumerable<Vector3> AdjacentCubes(Vector3 position)
+        {
+            for (float z = -1; z <= 1; z++)
+            {
+                for (float y = -1; y <= 1; y++)
+                {
+                    for (float x = -1; x <= 1; x++)
+                    {
+                        var adjacent = new Vector3(x, y, z);
+
+                        if (adjacent != Vector3.Zero)
                         {
                             yield return position + adjacent;
                         }
@@ -209,35 +198,178 @@ public sealed class Day17 : Puzzle
                 }
             }
         }
+
+        private static string WriteState(Dictionary<Vector3, char> states, ILogger? logger)
+        {
+            var builder = new StringBuilder();
+
+            float maxY = states.Max((p) => p.Key.Y);
+            float maxX = states.Max((p) => p.Key.X);
+            float maxZ = states.Max((p) => p.Key.Z);
+            float minZ = -maxZ;
+
+            for (float z = minZ; z <= maxZ; z++)
+            {
+                builder.Append("z=")
+                       .Append(z)
+                       .AppendLine();
+
+                for (float y = 0; y <= maxY; y++)
+                {
+                    for (float x = 0; x <= maxX; x++)
+                    {
+                        var point = new Vector3(x, y, z);
+
+                        char state = states.GetValueOrDefault(point, Inactive);
+
+                        builder.Append(state);
+                    }
+
+                    builder.AppendLine();
+                }
+
+                builder.AppendLine();
+            }
+
+            string visualization = builder.ToString();
+
+            logger?.WriteLine(visualization);
+
+            return visualization;
+        }
     }
 
-    /// <summary>
-    /// Writes the specified message.
-    /// </summary>
-    /// <param name="states">The message to write.</param>
-    /// <param name="logger">The logger to write the message to.</param>
-    /// <returns>
-    /// The visualization of the data.
-    /// </returns>
-    private static string WriteState(Dictionary<Point, char> states, ILogger? logger)
+    private static class Cubes4D
     {
-        var builder = new StringBuilder();
-
-        int maxY = states.Max((p) => p.Key.Y);
-        int maxX = states.Max((p) => p.Key.X);
-        int maxZ = states.Max((p) => p.Key.Z);
-        int minZ = -maxZ;
-
-        bool is4D = states.Keys.First().W.HasValue;
-
-        if (is4D)
+        public static (int ActiveCubes, string Visualization) GetActiveCubes(
+            IList<string> initialStates,
+            int cycles,
+            ILogger? logger = null)
         {
-            int maxW = states.Max((p) => p.Key.W!.Value);
-            int minW = -maxW;
+            var currentState = new Dictionary<Vector4, char>(initialStates.Count * initialStates.Count);
 
-            for (int w = minW; w <= maxW; w++)
+            for (int y = 0; y < initialStates.Count; y++)
             {
-                for (int z = minZ; z <= maxZ; z++)
+                for (int x = 0; x < initialStates.Count; x++)
+                {
+                    var point = new Vector4(x, y, 0, 0);
+                    currentState[point] = initialStates[y][x];
+                }
+            }
+
+            string visualization = WriteState(currentState, logger);
+
+            for (int i = 0; i < cycles; i++)
+            {
+                Extend(currentState);
+
+                currentState = Iterate(currentState);
+
+                visualization = WriteState(currentState, logger);
+            }
+
+            int activeCubes = currentState.Values
+                .Where((p) => p == Active)
+                .Count();
+
+            return (activeCubes, visualization);
+
+            static void Extend(Dictionary<Vector4, char> states)
+            {
+                var keys = states.Keys.ToArray();
+
+                states.EnsureCapacity(keys.Length + ((int)Math.Pow(3, 4) * keys.Length));
+
+                foreach (Vector4 point in keys)
+                {
+                    foreach (Vector4 adjacent in AdjacentCubes(point))
+                    {
+                        if (!states.ContainsKey(adjacent))
+                        {
+                            states[adjacent] = Inactive;
+                        }
+                    }
+                }
+            }
+        }
+
+        private static Dictionary<Vector4, char> Iterate(Dictionary<Vector4, char> states)
+        {
+            var updated = new Dictionary<Vector4, char>(states);
+
+            foreach (var point in states)
+            {
+                char state = point.Value;
+
+                int count = CountActiveCubes(point.Key, states);
+
+                if (state == Active && count != 2 && count != 3)
+                {
+                    updated[point.Key] = Inactive;
+                }
+                else if (state == Inactive && count == 3)
+                {
+                    updated[point.Key] = Active;
+                }
+            }
+
+            return updated;
+
+            static int CountActiveCubes(Vector4 point, Dictionary<Vector4, char> states)
+            {
+                int count = 0;
+
+                foreach (Vector4 adjacent in AdjacentCubes(point))
+                {
+                    if (IsAdjacentCubeActive(adjacent, states))
+                    {
+                        count++;
+                    }
+                }
+
+                return count;
+            }
+
+            static bool IsAdjacentCubeActive(Vector4 position, Dictionary<Vector4, char> states)
+                => states.GetValueOrDefault(position) == Active;
+        }
+
+        private static IEnumerable<Vector4> AdjacentCubes(Vector4 position)
+        {
+            for (float z = -1; z <= 1; z++)
+            {
+                for (float y = -1; y <= 1; y++)
+                {
+                    for (float x = -1; x <= 1; x++)
+                    {
+                        for (float w = -1; w <= 1; w++)
+                        {
+                            var adjacent = new Vector4(x, y, z, w);
+
+                            if (adjacent != Vector4.Zero)
+                            {
+                                yield return position + adjacent;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        private static string WriteState(Dictionary<Vector4, char> states, ILogger? logger)
+        {
+            var builder = new StringBuilder();
+
+            float maxW = states.Max((p) => p.Key.W);
+            float maxY = states.Max((p) => p.Key.Y);
+            float maxX = states.Max((p) => p.Key.X);
+            float maxZ = states.Max((p) => p.Key.Z);
+            float minW = -maxW;
+            float minZ = -maxZ;
+
+            for (float w = minW; w <= maxW; w++)
+            {
+                for (float z = minZ; z <= maxZ; z++)
                 {
                     builder.Append("z=")
                            .Append(z)
@@ -245,11 +377,11 @@ public sealed class Day17 : Puzzle
                            .Append(w)
                            .AppendLine();
 
-                    for (int y = 0; y <= maxY; y++)
+                    for (float y = 0; y <= maxY; y++)
                     {
-                        for (int x = 0; x <= maxX; x++)
+                        for (float x = 0; x <= maxX; x++)
                         {
-                            var point = new Point(x, y, z, w);
+                            var point = new Vector4(x, y, z, w);
 
                             char state = states.GetValueOrDefault(point, Inactive);
 
@@ -262,106 +394,12 @@ public sealed class Day17 : Puzzle
                     builder.AppendLine();
                 }
             }
-        }
-        else
-        {
-            for (int z = minZ; z <= maxZ; z++)
-            {
-                builder.Append("z=")
-                       .Append(z)
-                       .AppendLine();
 
-                for (int y = 0; y <= maxY; y++)
-                {
-                    for (int x = 0; x <= maxX; x++)
-                    {
-                        var point = new Point(x, y, z);
+            string visualization = builder.ToString();
 
-                        char state = states.GetValueOrDefault(point, Inactive);
+            logger?.WriteLine(visualization);
 
-                        builder.Append(state);
-                    }
-
-                    builder.AppendLine();
-                }
-
-                builder.AppendLine();
-            }
-        }
-
-        string visualization = builder.ToString();
-
-        logger?.WriteLine(visualization);
-
-        return visualization;
-    }
-
-    /// <summary>
-    /// Represents a point (or vector) in 3 or 4 dimensional space.
-    /// </summary>
-    private readonly struct Point : IEquatable<Point>
-    {
-        public static Point Zero3D = new(0, 0, 0);
-
-        public static Point Zero4D = new(0, 0, 0, 0);
-
-        public readonly int? W;
-
-        public readonly int X;
-
-        public readonly int Y;
-
-        public readonly int Z;
-
-        public Point(int x, int y, int z, int? w = default)
-        {
-            X = x;
-            Y = y;
-            Z = z;
-            W = w;
-        }
-
-        public static Point operator +(Point point, Point vector)
-        {
-            return new(
-                point.X + vector.X,
-                point.Y + vector.Y,
-                point.Z + vector.Z,
-                point.W + vector.W);
-        }
-
-        public static bool operator ==(Point a, Point b)
-            => a.X == b.X && a.Y == b.Y && a.Z == b.Z && a.W == b.W;
-
-        public static bool operator !=(Point a, Point b)
-            => a.X != b.X || a.Y != b.Y || a.Z != b.Z || a.W != b.W;
-
-        public override readonly bool Equals(object? obj)
-        {
-            if (obj is not Point p)
-            {
-                return false;
-            }
-
-            return this == p;
-        }
-
-        public readonly bool Equals(Point other)
-            => this == other;
-
-        public override readonly int GetHashCode()
-            => HashCode.Combine(X, Y, Z, W);
-
-        public override readonly string ToString()
-        {
-            if (W.HasValue)
-            {
-                return '(' + string.Join(", ", X, Y, Z, W.Value) + ')';
-            }
-            else
-            {
-                return '(' + string.Join(", ", X, Y, Z) + ')';
-            }
+            return visualization;
         }
     }
 }

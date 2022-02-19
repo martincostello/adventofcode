@@ -1,6 +1,8 @@
 ﻿// Copyright (c) Martin Costello, 2015. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
+using System.Numerics;
+
 namespace MartinCostello.AdventOfCode.Puzzles.Y2021;
 
 /// <summary>
@@ -46,7 +48,7 @@ public sealed class Day22 : Puzzle
         static long Initialize(List<(Cuboid Cuboid, bool TurnOn)> cuboids)
         {
             var bounds = new Cuboid(new(-50, -50, -50), new(100, 100, 100));
-            var reactor = new HashSet<Point3D>();
+            var reactor = new HashSet<Vector3>();
 
             foreach ((Cuboid cuboid, bool turnOn) in cuboids)
             {
@@ -155,11 +157,11 @@ public sealed class Day22 : Puzzle
     [System.Diagnostics.DebuggerDisplay("({Origin.X}, {Origin.Y}, {Origin.Z}), ({Length.X}, {Length.Y}, {Length.Z})")]
     private readonly struct Cuboid
     {
-        public readonly Point3D Origin;
+        public readonly Vector3 Origin;
 
-        public readonly Point3D Length;
+        public readonly Vector3 Length;
 
-        public Cuboid(Point3D origin, Point3D length)
+        public Cuboid(Vector3 origin, Vector3 length)
         {
             Origin = origin;
             Length = length;
@@ -168,27 +170,26 @@ public sealed class Day22 : Puzzle
         public override readonly int GetHashCode()
             => HashCode.Combine(Origin.GetHashCode(), Length.GetHashCode());
 
-        public readonly bool Contains(in Point3D point)
-            => Origin.X <= point.X &&
-               point.X <= Origin.X + Length.X &&
+        public readonly bool Contains(in Vector3 point)
+        {
+            var limit = Origin + Length;
+            return Origin.X <= point.X &&
+               point.X <= limit.X &&
                Origin.Y <= point.Y &&
-               point.Y <= Origin.Y + Length.Y &&
+               point.Y <= limit.Y &&
                Origin.Z <= point.Z &&
-               point.Z <= Origin.Z + Length.Z;
+               point.Z <= limit.Z;
+        }
 
         public readonly Cuboid? Abjunction(in Cuboid other)
         {
-            int minX = Math.Max(Origin.X, other.Origin.X);
-            int maxX = Math.Min(Origin.X + Length.X, other.Origin.X + other.Length.X);
-            int minY = Math.Max(Origin.Y, other.Origin.Y);
-            int maxY = Math.Min(Origin.Y + Length.Y, other.Origin.Y + other.Length.Y);
-            int minZ = Math.Max(Origin.Z, other.Origin.Z);
-            int maxZ = Math.Min(Origin.Z + Length.Z, other.Origin.Z + other.Length.Z);
+            var min = Vector3.Max(Origin, other.Origin);
+            var max = Vector3.Min(Origin + Length, other.Origin + other.Length);
 
-            if (minX <= maxX && minY <= maxY && minZ <= maxZ)
+            if (min.X <= max.X && min.Y <= max.Y && min.Z <= max.Z)
             {
-                var origin = new Point3D(minX, minY, minZ);
-                var length = new Point3D(maxX - minX, maxY - minY, maxZ - minZ);
+                var origin = min;
+                var length = max - min;
 
                 return new(origin, length);
             }
@@ -198,14 +199,14 @@ public sealed class Day22 : Puzzle
 
         public readonly bool IntersectsWith(in Cuboid other)
         {
-            long volumeThis = Volume();
-            long volumeOther = other.Volume();
+            float volumeThis = Volume();
+            float volumeOther = other.Volume();
 
             bool otherIsLarger = volumeOther > volumeThis;
             Cuboid largest = otherIsLarger ? other : this;
             Cuboid smallest = !otherIsLarger ? other : this;
 
-            foreach (Point3D vertex in smallest.Verticies())
+            foreach (Vector3 vertex in smallest.Verticies())
             {
                 if (largest.Contains(vertex))
                 {
@@ -216,33 +217,31 @@ public sealed class Day22 : Puzzle
             return false;
         }
 
-        public readonly HashSet<Point3D> IntersectWith(in Cuboid other)
+        public readonly HashSet<Vector3> IntersectWith(in Cuboid other)
         {
-            var result = new HashSet<Point3D>();
+            var result = new HashSet<Vector3>();
 
             if (!IntersectsWith(other))
             {
                 return result;
             }
 
-            long volumeThis = Volume();
-            long volumeOther = other.Volume();
+            float volumeThis = Volume();
+            float volumeOther = other.Volume();
 
             bool otherIsLarger = volumeOther > volumeThis;
             Cuboid largest = otherIsLarger ? other : this;
             Cuboid smallest = !otherIsLarger ? other : this;
 
-            int lengthX = smallest.Origin.X + smallest.Length.X;
-            int lengthY = smallest.Origin.Y + smallest.Length.Y;
-            int lengthZ = smallest.Origin.Z + smallest.Length.Z;
+            var length = smallest.Origin + smallest.Length;
 
-            for (int z = Origin.Z; z < lengthZ; z++)
+            for (float z = Origin.Z; z < length.Z; z++)
             {
-                for (int y = Origin.Y; y < lengthY; y++)
+                for (float y = Origin.Y; y < length.Y; y++)
                 {
-                    for (int x = Origin.X; x < lengthX; x++)
+                    for (float x = Origin.X; x < length.X; x++)
                     {
-                        var point = new Point3D(x, y, z);
+                        var point = new Vector3(x, y, z);
 
                         if (largest.Contains(point))
                         {
@@ -255,18 +254,22 @@ public sealed class Day22 : Puzzle
             return result;
         }
 
-        public readonly long Volume() => (long)Length.X * Length.Y * Length.Z;
+        public readonly long Volume() => (long)Length.X * (long)Length.Y * (long)Length.Z;
 
-        private readonly IEnumerable<Point3D> Verticies()
+        private readonly Vector3[] Verticies()
         {
-            yield return Origin;
-            yield return Origin + new Point3D(Length.X, 0, 0);
-            yield return Origin + new Point3D(0, Length.Y, 0);
-            yield return Origin + new Point3D(0, 0, Length.Z);
-            yield return Origin + new Point3D(0, Length.Y, Length.Z);
-            yield return Origin + new Point3D(Length.X, 0, Length.Z);
-            yield return Origin + new Point3D(Length.X, Length.Y, 0);
-            yield return Origin + new Point3D(Length.X, Length.Y, Length.Z);
+            var limit = Origin + Length;
+            return new[]
+            {
+                Origin,
+                new Vector3(limit.X,  0,       0),
+                new Vector3(0,        limit.Y, 0),
+                new Vector3(0,        0,       limit.Z),
+                new Vector3(0,        limit.Y, limit.Z),
+                new Vector3(Length.X, 0,       limit.Z),
+                new Vector3(limit.X,  limit.Y, 0),
+                limit,
+            };
         }
     }
 }

@@ -1,6 +1,8 @@
 ﻿// Copyright (c) Martin Costello, 2015. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
+using System.Numerics;
+
 namespace MartinCostello.AdventOfCode.Puzzles.Y2021;
 
 /// <summary>
@@ -66,16 +68,16 @@ public sealed class Day19 : Puzzle
             final.UnionWith(other);
         }
 
-        int maxDistance = 0;
+        float maxDistance = 0;
 
         for (int i = 0; i < oriented.Count - 1; i++)
         {
             for (int j = i + 1; j < oriented.Count; j++)
             {
-                Point3D x = oriented[i].Location;
-                Point3D y = oriented[j].Location;
+                Vector3 x = oriented[i].Location;
+                Vector3 y = oriented[j].Location;
 
-                int distance = Point3D.ManhattanDistance(x, y);
+                float distance = x.ManhattanDistance(y);
 
                 if (distance > maxDistance)
                 {
@@ -84,7 +86,7 @@ public sealed class Day19 : Puzzle
             }
         }
 
-        return (final.Count, maxDistance);
+        return (final.Count, (int)maxDistance);
 
         static List<Scanner> Parse(IList<string> data)
         {
@@ -122,16 +124,16 @@ public sealed class Day19 : Puzzle
             // see https://en.wikipedia.org/wiki/Pigeonhole_principle)
             // to reduce the space of coordinates we need to search.
             const int CommonBeacons = 12;
-            const int MaximumRange = 3000;
+            const float MaximumRange = 3000;
 
-            foreach (Point3D first in aligned.Skip(CommonBeacons))
+            foreach (Vector3 first in aligned.Skip(CommonBeacons))
             {
                 foreach (var transformation in Transforms())
                 {
                     var rotated = unaligned.Select(transformation);
 
                     int withinReach = rotated
-                        .Where((p) => Point3D.ManhattanDistance(aligned.Location, first - p) <= MaximumRange)
+                        .Where((p) => aligned.Location.ManhattanDistance(first - p) <= MaximumRange)
                         .Count();
 
                     if (withinReach < CommonBeacons)
@@ -139,11 +141,11 @@ public sealed class Day19 : Puzzle
                         break;
                     }
 
-                    foreach (Point3D second in rotated.Skip(CommonBeacons))
+                    foreach (Vector3 second in rotated.Skip(CommonBeacons))
                     {
-                        Point3D delta = first - second;
+                        Vector3 delta = first - second;
 
-                        if (Point3D.ManhattanDistance(aligned.Location, delta) > MaximumRange)
+                        if (aligned.Location.ManhattanDistance(delta) > MaximumRange)
                         {
                             // This beacon is too far from the other scanner to be detected by it
                             break;
@@ -153,7 +155,7 @@ public sealed class Day19 : Puzzle
 
                         int count = 0;
 
-                        foreach (Point3D common in transformed.Intersect(aligned))
+                        foreach (Vector3 common in transformed.Intersect(aligned))
                         {
                             if (++count == CommonBeacons)
                             {
@@ -170,7 +172,7 @@ public sealed class Day19 : Puzzle
 
             return null;
 
-            static IEnumerable<Func<Point3D, Point3D>> Transforms()
+            static IEnumerable<Func<Vector3, Vector3>> Transforms()
             {
                 yield return (p) => new(p.X, -p.Y, -p.Z);
                 yield return (p) => new(p.X, p.Z, -p.Y);
@@ -215,20 +217,20 @@ public sealed class Day19 : Puzzle
         return PuzzleResult.Create(BeaconCount, LargestScannerDistance);
     }
 
-    private sealed class Scanner : HashSet<Point3D>
+    private sealed class Scanner : HashSet<Vector3>
     {
         public Scanner()
             : base()
         {
         }
 
-        public Scanner(IEnumerable<Point3D> collection)
+        public Scanner(IEnumerable<Vector3> collection)
             : base(collection)
         {
         }
 
         public int Id { get; init; }
 
-        public Point3D Location { get; init; }
+        public Vector3 Location { get; init; }
     }
 }
