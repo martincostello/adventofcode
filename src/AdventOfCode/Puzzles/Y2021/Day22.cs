@@ -171,12 +171,15 @@ public sealed class Day22 : Puzzle
             => HashCode.Combine(Origin.GetHashCode(), Length.GetHashCode());
 
         public readonly bool Contains(in Vector3 point)
-            => Origin.X <= point.X &&
-               point.X <= Origin.X + Length.X &&
+        {
+            var limit = Origin + Length;
+            return Origin.X <= point.X &&
+               point.X <= limit.X &&
                Origin.Y <= point.Y &&
-               point.Y <= Origin.Y + Length.Y &&
+               point.Y <= limit.Y &&
                Origin.Z <= point.Z &&
-               point.Z <= Origin.Z + Length.Z;
+               point.Z <= limit.Z;
+        }
 
         public readonly Cuboid? Abjunction(in Cuboid other)
         {
