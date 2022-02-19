@@ -13,15 +13,15 @@ internal static class Vector3Extensions
     /// <summary>
     /// Gets the Manhattan distance between two vectors.
     /// </summary>
-    /// <param name="a">The first vector.</param>
-    /// <param name="b">The second vector.</param>
+    /// <param name="value">The first vector.</param>
+    /// <param name="other">The second vector.</param>
     /// <returns>
-    /// The Manhattan distance between <paramref name="a"/> and <paramref name="b"/>.
+    /// The Manhattan distance between <paramref name="value"/> and <paramref name="other"/>.
     /// </returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static float ManhattanDistance(this in Vector3 a, in Vector3 b)
+    public static float ManhattanDistance(this in Vector3 value, in Vector3 other)
     {
-        var abs = Vector3.Abs(a - b);
-        return abs.X + abs.Y + abs.Z;
+        var delta = Vector3.Abs(value - other);
+        return delta.X + delta.Y + delta.Z;
     }
 }
