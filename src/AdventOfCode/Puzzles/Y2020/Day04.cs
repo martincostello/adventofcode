@@ -10,7 +10,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020;
 /// A class representing the puzzle for <c>https://adventofcode.com/2020/day/4</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2020, 04, "Passport Processing", RequiresData = true)]
-public sealed class Day04 : Puzzle
+public sealed partial class Day04 : Puzzle
 {
     /// <summary>
     /// The required keys for passports. This field is read-only.
@@ -128,7 +128,7 @@ public sealed class Day04 : Puzzle
                 return false;
             }
 
-            return Regex.IsMatch(value, "#[0-9a-f]{6}", RegexOptions.IgnoreCase);
+            return HexColor().IsMatch(value);
         }
 
         static bool IsValidHeight(ReadOnlySpan<char> value)
@@ -187,4 +187,7 @@ public sealed class Day04 : Puzzle
 
         return true;
     }
+
+    [RegexGenerator("#[0-9a-f]{6}", RegexOptions.IgnoreCase)]
+    private static partial Regex HexColor();
 }
