@@ -47,7 +47,7 @@ public sealed class Day16 : Puzzle
     /// </returns>
     internal static int WhichAuntSueSentTheGift(ICollection<string> metadata, bool compensateForRetroEncabulator = false)
     {
-        var parsed = metadata.Select((p) => AuntSue.Parse(p));
+        var parsed = metadata.Select(AuntSue.Parse);
 
         foreach (var item in ForensicAnalysis)
         {

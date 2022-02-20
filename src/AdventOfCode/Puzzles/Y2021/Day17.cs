@@ -115,7 +115,7 @@ public sealed class Day17 : Puzzle
 
             List<Point> trajectory = GetTrajectory(vx, vy, extent);
 
-            bool hasImpact = trajectory.Any((p) => target.Contains(p));
+            bool hasImpact = trajectory.Any(target.Contains);
 
             if (hasImpact)
             {

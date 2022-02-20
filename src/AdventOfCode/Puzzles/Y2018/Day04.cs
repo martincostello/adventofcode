@@ -30,7 +30,7 @@ public sealed class Day04 : Puzzle
     public static (int GuardMinute, int MinuteGuard) GetSleepiestGuardsMinutes(IEnumerable<string> log)
     {
         var parsedAndSortedLog = log
-            .Select((p) => LogEntry.Parse(p))
+            .Select(LogEntry.Parse)
             .OrderBy((p) => p.Timestamp)
             .ToList();
 

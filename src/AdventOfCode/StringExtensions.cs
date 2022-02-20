@@ -182,5 +182,5 @@ internal static class StringExtensions
     /// </returns>
     public static IEnumerable<T> AsNumbers<T>(this string value, char separator = ',', StringSplitOptions options = StringSplitOptions.None)
         where T : INumber<T>
-        => value.Split(separator, options).Select((p) => Puzzle.Parse<T>(p));
+        => value.Split(separator, options).Select(Puzzle.Parse<T>);
 }

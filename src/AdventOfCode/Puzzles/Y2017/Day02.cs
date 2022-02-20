@@ -31,8 +31,8 @@ public sealed class Day02 : Puzzle
     {
         IEnumerable<int> sequence =
             forEvenlyDivisible ?
-            spreadsheet.Select((p) => ComputeDivisionOfEvenlyDivisible(p)) :
-            spreadsheet.Select((p) => ComputeDifference(p));
+            spreadsheet.Select(ComputeDivisionOfEvenlyDivisible) :
+            spreadsheet.Select(ComputeDifference);
 
         return sequence.Sum();
     }

@@ -71,8 +71,8 @@ public sealed class Day07 : Puzzle
     {
         ParseIPAddress(address, out List<string> supernets, out List<string> hypernets);
 
-        bool foundAbbaInSupernet = supernets.Any((p) => DoesStringContainAbba(p));
-        bool foundAbbaInHypernet = hypernets.Any((p) => DoesStringContainAbba(p));
+        bool foundAbbaInSupernet = supernets.Any(DoesStringContainAbba);
+        bool foundAbbaInHypernet = hypernets.Any(DoesStringContainAbba);
 
         return foundAbbaInSupernet && !foundAbbaInHypernet;
     }
@@ -82,8 +82,8 @@ public sealed class Day07 : Puzzle
     {
         IList<string> addresses = await ReadResourceAsLinesAsync();
 
-        IPAddressesSupportingTls = addresses.Count((p) => DoesIPAddressSupportTls(p));
-        IPAddressesSupportingSsl = addresses.Count((p) => DoesIPAddressSupportSsl(p));
+        IPAddressesSupportingTls = addresses.Count(DoesIPAddressSupportTls);
+        IPAddressesSupportingSsl = addresses.Count(DoesIPAddressSupportSsl);
 
         if (Verbose)
         {

@@ -124,7 +124,7 @@ public sealed class Day07 : Puzzle
         }
 
         var unbalancedSubtree = root.Children
-            .GroupBy((p) => FindDesiredWeightOfUnbalancedDisc(p))
+            .GroupBy(FindDesiredWeightOfUnbalancedDisc)
             .Where((p) => p.Key is not 0)
             .SingleOrDefault();
 

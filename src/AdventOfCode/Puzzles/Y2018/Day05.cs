@@ -64,7 +64,7 @@ public sealed class Day05 : Puzzle
 
         string optimized = units
             .Select((p) => polymer.Replace(p, string.Empty, StringComparison.OrdinalIgnoreCase))
-            .Select((p) => Reduce(p))
+            .Select(Reduce)
             .OrderBy((p) => p.Length)
             .First();
 

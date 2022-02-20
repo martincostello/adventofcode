@@ -37,7 +37,7 @@ public sealed class Day14 : Puzzle
                 .ToArray();
 
             var bits = numbers
-                .Select((p) => BitConverter.GetBytes(p))
+                .Select(BitConverter.GetBytes)
                 .Select((p) => new BitArray(p))
                 .ToArray();
 

@@ -28,7 +28,7 @@ public sealed class Day13 : Puzzle
     {
         // Parse the input data
         var potentials = potentialHappiness
-            .Select((p) => ParsePotentialHappiness(p))
+            .Select(ParsePotentialHappiness)
             .ToList();
 
         // Determine all of the possible seating arrangements

@@ -36,7 +36,7 @@ public sealed class Day15 : Puzzle
     internal static int FindTimeForCapsuleRelease(IEnumerable<string> input)
     {
         var discs = input
-            .Select((p) => Disc.Parse(p))
+            .Select(Disc.Parse)
             .ToList();
 
         for (int t = 0; ; t++)
