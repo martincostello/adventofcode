@@ -40,6 +40,7 @@ public class LambdaTests : IAsyncLifetime
         {
             RequestContext = new()
             {
+                DomainName = "adventofcode.local",
                 Http = new()
                 {
                     Method = HttpMethods.Get,
@@ -68,6 +69,66 @@ public class LambdaTests : IAsyncLifetime
             puzzle.TryGetProperty("requiresData", out _).ShouldBeTrue();
             puzzle.TryGetProperty("year", out _).ShouldBeTrue();
         }
+    }
+
+    [Theory(Timeout = 10_000)]
+    [InlineData(2015, 11, new[] { "cqjxjnds" }, new[] { "cqjxxyzz" })]
+    public async Task Can_Solve_Puzzle(int year, int day, string[] arguments, string[] expected)
+    {
+        // Arrange
+        using var content = new MultipartFormDataContent("----puzzle----");
+
+#pragma warning disable CA2000
+        foreach (string value in arguments)
+        {
+            content.Add(new StringContent(value), "arguments");
+        }
+#pragma warning restore CA2000
+
+        using var stream = new MemoryStream();
+        await content.CopyToAsync(stream);
+
+        stream.Seek(0, SeekOrigin.Begin);
+
+        byte[] buffer = stream.ToArray();
+        string body = Convert.ToBase64String(buffer);
+
+        var request = new APIGatewayHttpApiV2ProxyRequest()
+        {
+            Body = body,
+            IsBase64Encoded = true,
+            Headers = new Dictionary<string, string>()
+            {
+                ["content-type"] = content.Headers.ContentType!.ToString(),
+            },
+            RequestContext = new()
+            {
+                DomainName = "adventofcode.local",
+                Http = new()
+                {
+                    Method = HttpMethods.Post,
+                    Path = $"/api/puzzles/{year}/{day}/solve",
+                },
+            },
+        };
+
+        // Act
+        APIGatewayHttpApiV2ProxyResponse actual = await AssertApiGatewayHttpRequestIsHandledAsync(request);
+
+        actual.ShouldNotBeNull();
+        actual.StatusCode.ShouldBe(StatusCodes.Status200OK);
+        actual.Headers.ShouldContainKeyAndValue("Content-Type", "application/json; charset=utf-8");
+
+        using var solution = JsonDocument.Parse(actual.Body);
+
+        solution.RootElement.GetProperty("year").GetInt32().ShouldBe(year);
+        solution.RootElement.GetProperty("day").GetInt32().ShouldBe(day);
+        solution.RootElement.GetProperty("timeToSolve").GetDouble().ShouldBeGreaterThan(0);
+        solution.RootElement.GetProperty("visualizations").GetArrayLength().ShouldBe(0);
+
+        solution.RootElement.TryGetProperty("solutions", out var solutions).ShouldBeTrue();
+        solutions.GetArrayLength().ShouldBe(1);
+        solutions.EnumerateArray().ToArray().Select((p) => p.GetString()).ToArray().ShouldBe(expected);
     }
 
     private static CancellationTokenSource GetCancellationTokenSourceForResponseAvailable(
