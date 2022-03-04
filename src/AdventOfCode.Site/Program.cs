@@ -62,7 +62,7 @@ builder.Services.AddResponseCompression((p) =>
     p.Providers.Add<GzipCompressionProvider>();
 });
 
-builder.Services.AddAWSLambdaHosting(LambdaEventSource.HttpApi);
+builder.Services.AddAWSLambdaHosting(LambdaEventSource.RestApi);
 
 var app = builder.Build();
 

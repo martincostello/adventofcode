@@ -37,25 +37,19 @@ public class LambdaTests : IAsyncLifetime
     public async Task Can_Get_Puzzle_Metadata()
     {
         // Arrange
-        var request = new APIGatewayHttpApiV2ProxyRequest()
+        var request = new APIGatewayProxyRequest()
         {
-            RequestContext = new()
-            {
-                DomainName = "adventofcode.local",
-                Http = new()
-                {
-                    Method = HttpMethods.Get,
-                    Path = "/api/puzzles",
-                },
-            },
+            HttpMethod = HttpMethods.Get,
+            Path = "/api/puzzles",
         };
 
         // Act
-        APIGatewayHttpApiV2ProxyResponse actual = await AssertApiGatewayHttpRequestIsHandledAsync(request);
+        APIGatewayProxyResponse actual = await AssertApiGatewayRequestIsHandledAsync(request);
 
         actual.ShouldNotBeNull();
         actual.StatusCode.ShouldBe(StatusCodes.Status200OK);
-        actual.Headers.ShouldContainKeyAndValue("Content-Type", "application/json; charset=utf-8");
+        actual.MultiValueHeaders.ShouldContainKey("Content-Type");
+        actual.MultiValueHeaders["Content-Type"].ShouldBe(new[] { "application/json; charset=utf-8" });
 
         using var puzzles = JsonDocument.Parse(actual.Body);
 
@@ -94,7 +88,7 @@ public class LambdaTests : IAsyncLifetime
         byte[] buffer = stream.ToArray();
         string body = Convert.ToBase64String(buffer);
 
-        var request = new APIGatewayHttpApiV2ProxyRequest()
+        var request = new APIGatewayProxyRequest()
         {
             Body = body,
             IsBase64Encoded = true,
@@ -102,23 +96,17 @@ public class LambdaTests : IAsyncLifetime
             {
                 ["content-type"] = content.Headers.ContentType!.ToString(),
             },
-            RequestContext = new()
-            {
-                DomainName = "adventofcode.local",
-                Http = new()
-                {
-                    Method = HttpMethods.Post,
-                    Path = $"/api/puzzles/{year}/{day}/solve",
-                },
-            },
+            HttpMethod = HttpMethods.Post,
+            Path = $"/api/puzzles/{year}/{day}/solve",
         };
 
         // Act
-        APIGatewayHttpApiV2ProxyResponse actual = await AssertApiGatewayHttpRequestIsHandledAsync(request);
+        APIGatewayProxyResponse actual = await AssertApiGatewayRequestIsHandledAsync(request);
 
         actual.ShouldNotBeNull();
         actual.StatusCode.ShouldBe(StatusCodes.Status200OK);
-        actual.Headers.ShouldContainKeyAndValue("Content-Type", "application/json; charset=utf-8");
+        actual.MultiValueHeaders.ShouldContainKey("Content-Type");
+        actual.MultiValueHeaders["Content-Type"].ShouldBe(new[] { "application/json; charset=utf-8" });
 
         using var solution = JsonDocument.Parse(actual.Body);
 
@@ -173,8 +161,8 @@ public class LambdaTests : IAsyncLifetime
         return socketException.SocketErrorCode == SocketError.ConnectionRefused;
     }
 
-    private async Task<APIGatewayHttpApiV2ProxyResponse> AssertApiGatewayHttpRequestIsHandledAsync(
-        APIGatewayHttpApiV2ProxyRequest request)
+    private async Task<APIGatewayProxyResponse> AssertApiGatewayRequestIsHandledAsync(
+        APIGatewayProxyRequest request)
     {
         // Arrange
         var options = new JsonSerializerOptions(JsonSerializerDefaults.Web);
@@ -210,7 +198,7 @@ public class LambdaTests : IAsyncLifetime
         response.Content.ShouldNotBeEmpty();
 
         // Assert
-        var actual = JsonSerializer.Deserialize<APIGatewayHttpApiV2ProxyResponse>(response.Content, options);
+        var actual = JsonSerializer.Deserialize<APIGatewayProxyResponse>(response.Content, options);
 
         actual.ShouldNotBeNull();
 
