@@ -34,12 +34,7 @@ internal sealed class HttpLambdaTestServer : LambdaTestServer, IAsyncLifetime, I
     }
 
     public async Task InitializeAsync()
-    {
-        Options.Configure = (services) =>
-            services.AddLogging((builder) => builder.AddXUnit(this));
-
-        await StartAsync(_cts.Token);
-    }
+        => await StartAsync(_cts.Token);
 
     protected override IServer CreateServer(WebHostBuilder builder)
     {
