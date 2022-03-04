@@ -10,6 +10,7 @@
     <TypeScriptToolsVersion>latest</TypeScriptToolsVersion>
   </PropertyGroup>
   <ItemGroup>
+    <PackageReference Include="Amazon.Lambda.AspNetCoreServer.Hosting" />
     <PackageReference Include="Microsoft.TypeScript.MSBuild" PrivateAssets="all" />
     <PackageReference Include="Swashbuckle.AspNetCore" />
     <None Remove="scripts\ts\**\*.ts" />
