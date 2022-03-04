@@ -32,7 +32,7 @@ public class LambdaTests : IAsyncLifetime
     public async Task InitializeAsync()
         => await _server.InitializeAsync();
 
-    [Fact(Timeout = 10_000)]
+    [Fact(Timeout = 30_000)]
     public async Task Can_Get_Puzzle_Metadata()
     {
         // Arrange
@@ -71,7 +71,7 @@ public class LambdaTests : IAsyncLifetime
         }
     }
 
-    [Theory(Timeout = 10_000)]
+    [Theory(Timeout = 30_000)]
     [InlineData(2015, 11, new[] { "cqjxjnds" }, new[] { "cqjxxyzz" })]
     public async Task Can_Solve_Puzzle(int year, int day, string[] arguments, string[] expected)
     {
