@@ -13,6 +13,7 @@ namespace MartinCostello.AdventOfCode.Api;
 /// <summary>
 /// A class containing tests for the API when hosted in AWS Lambda.
 /// </summary>
+[Collection(nameof(LambdaTestsCollection))]
 public class LambdaTests : IAsyncLifetime
 {
     private readonly HttpLambdaTestServer _server;
