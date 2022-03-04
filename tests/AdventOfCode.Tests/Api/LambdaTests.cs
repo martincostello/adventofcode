@@ -143,15 +143,19 @@ public class LambdaTests : IAsyncLifetime
         var cts = new CancellationTokenSource(timeout.Value);
 
         // Queue a task to stop the test server from listening as soon as the response is available
-        _ = Task.Run(async () =>
-        {
-            await context.Response.WaitToReadAsync(cts.Token);
-
-            if (!cts.IsCancellationRequested)
+        _ = Task.Factory.StartNew(
+            async () =>
             {
-                cts.Cancel();
-            }
-        });
+                await context.Response.WaitToReadAsync(cts.Token);
+
+                if (!cts.IsCancellationRequested)
+                {
+                    cts.Cancel();
+                }
+            },
+            cts.Token,
+            TaskCreationOptions.None,
+            TaskScheduler.Default);
 
         return cts;
     }
@@ -189,8 +193,8 @@ public class LambdaTests : IAsyncLifetime
                 }
                 catch (Exception ex) when (LambdaServerWasShutDown(ex))
                 {
-                // The Lambda runtime server was shut down
-            }
+                    // The Lambda runtime server was shut down
+                }
             },
             cts.Token,
             TaskCreationOptions.None,
