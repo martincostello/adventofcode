@@ -48,40 +48,8 @@ public class LambdaTests : IAsyncLifetime
             },
         };
 
-        var options = new JsonSerializerOptions(JsonSerializerDefaults.Web);
-        string json = JsonSerializer.Serialize(request, options);
-
-        LambdaTestContext context = await _server.EnqueueAsync(json);
-
-        using var cts = GetCancellationTokenSourceForResponseAvailable(context);
-
         // Act
-        _ = Task.Factory.StartNew(
-            () =>
-            {
-                try
-                {
-                    typeof(Site.Program).Assembly.EntryPoint!.Invoke(null, new[] { Array.Empty<string>() });
-                }
-                catch (Exception ex) when (LambdaServerWasShutDown(ex))
-                {
-                    // The Lambda runtime server was shut down
-                }
-            },
-            cts.Token,
-            TaskCreationOptions.None,
-            TaskScheduler.Default);
-
-        // Assert
-        await context.Response.WaitToReadAsync(cts.IsCancellationRequested ? default : cts.Token);
-
-        context.Response.TryRead(out LambdaTestResponse? response).ShouldBeTrue();
-        response.IsSuccessful.ShouldBeTrue($"Failed to process request: {await response.ReadAsStringAsync()}");
-        response.Duration.ShouldBeInRange(TimeSpan.Zero, TimeSpan.FromSeconds(2));
-        response.Content.ShouldNotBeEmpty();
-
-        // Assert
-        var actual = JsonSerializer.Deserialize<APIGatewayHttpApiV2ProxyResponse>(response.Content, options);
+        APIGatewayHttpApiV2ProxyResponse actual = await AssertApiGatewayHttpRequestIsHandledAsync(request);
 
         actual.ShouldNotBeNull();
         actual.StatusCode.ShouldBe(StatusCodes.Status200OK);
@@ -137,5 +105,49 @@ public class LambdaTests : IAsyncLifetime
         }
 
         return socketException.SocketErrorCode == SocketError.ConnectionRefused;
+    }
+
+    private async Task<APIGatewayHttpApiV2ProxyResponse> AssertApiGatewayHttpRequestIsHandledAsync(
+        APIGatewayHttpApiV2ProxyRequest request)
+    {
+        // Arrange
+        var options = new JsonSerializerOptions(JsonSerializerDefaults.Web);
+        string json = JsonSerializer.Serialize(request, options);
+
+        LambdaTestContext context = await _server.EnqueueAsync(json);
+
+        using var cts = GetCancellationTokenSourceForResponseAvailable(context);
+
+        // Act
+        _ = Task.Factory.StartNew(
+            () =>
+            {
+                try
+                {
+                    typeof(Site.Program).Assembly.EntryPoint!.Invoke(null, new[] { Array.Empty<string>() });
+                }
+                catch (Exception ex) when (LambdaServerWasShutDown(ex))
+                {
+                // The Lambda runtime server was shut down
+            }
+            },
+            cts.Token,
+            TaskCreationOptions.None,
+            TaskScheduler.Default);
+
+        // Assert
+        await context.Response.WaitToReadAsync(cts.IsCancellationRequested ? default : cts.Token);
+
+        context.Response.TryRead(out LambdaTestResponse? response).ShouldBeTrue();
+        response.IsSuccessful.ShouldBeTrue($"Failed to process request: {await response.ReadAsStringAsync()}");
+        response.Duration.ShouldBeInRange(TimeSpan.Zero, TimeSpan.FromSeconds(2));
+        response.Content.ShouldNotBeEmpty();
+
+        // Assert
+        var actual = JsonSerializer.Deserialize<APIGatewayHttpApiV2ProxyResponse>(response.Content, options);
+
+        actual.ShouldNotBeNull();
+
+        return actual;
     }
 }
