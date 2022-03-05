@@ -3,7 +3,7 @@
   "Transform": "AWS::Serverless-2016-10-31",
   "Description": "The Advent of Code as a Service web application running in Amazon Lambda.",
   "Parameters": {},
-    "Outputs": {
+  "Outputs": {
     "ApplicationUrl": {
       "Description": "The endpoint URL for the Prod environment.",
       "Value": {
