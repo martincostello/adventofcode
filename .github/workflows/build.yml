@@ -158,9 +158,9 @@ jobs:
         $templatePath = Join-Path $pwd $templateName
         Add-Type -AssemblyName System.IO.Compression.FileSystem
         $package = [System.IO.Compression.ZipFile]::OpenRead($packagePath)
-        $config = $zip.GetEntry($configName)
+        $config = $package.GetEntry($configName)
         [System.IO.Compression.ZipFileExtensions]::ExtractToFile($config, $configPath, $true)
-        $template = $zip.GetEntry($templateName)
+        $template = $package.GetEntry($templateName)
         [System.IO.Compression.ZipFileExtensions]::ExtractToFile($template, $templatePath, $true)
         $package.Dispose()
 
