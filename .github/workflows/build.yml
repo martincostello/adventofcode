@@ -134,7 +134,7 @@ jobs:
 
   deploy-aws:
     name: deploy-aws
-    needs: test-production
+    needs: test
     runs-on: ubuntu-latest
     concurrency: aws_environment
     environment:
