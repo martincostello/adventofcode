@@ -158,9 +158,9 @@ jobs:
         $templatePath = Join-Path $pwd $templateName
         Add-Type -AssemblyName System.IO.Compression.FileSystem
         $package = [System.IO.Compression.ZipFile]::OpenRead($packagePath)
-        $config = $zip.GetEntry($configName)
+        $config = $package.GetEntry($configName)
         [System.IO.Compression.ZipFileExtensions]::ExtractToFile($config, $configPath, $true)
-        $template = $zip.GetEntry($templateName)
+        $template = $package.GetEntry($templateName)
         [System.IO.Compression.ZipFileExtensions]::ExtractToFile($template, $templatePath, $true)
         $package.Dispose()
 
@@ -181,10 +181,11 @@ jobs:
     - name: Deploy CloudFormation Template
       shell: pwsh
       run: |
-        $configName = "aws-lambda-tools-defaults.json"
-        $packageName = "lambda.zip"
-        $configPath = Join-Path $pwd $configName
-        $packagePath = Join-Path $pwd $packageName
+        $configPath = Join-Path $pwd "aws-lambda-tools-defaults.json"
+        $packagePath = Join-Path $pwd "lambda.zip"
+        $config = Get-Content $configPath -Raw | ConvertFrom-Json
+        $config."function-description" = "Deploy build ${{ github.run_number }} to AWS via GitHub Actions"
+        $config | ConvertTo-Json | Set-Content $configPath
         dotnet-lambda \
             deploy-serverless \
             ${{ env.AWS_CLOUDFORMATION_STACK }} \
