@@ -181,18 +181,19 @@ jobs:
     - name: Deploy CloudFormation Template
       shell: pwsh
       run: |
+        $description = "Deploy build ${{ github.run_number }} to AWS via GitHub Actions"
         $configPath = Join-Path $pwd "aws-lambda-tools-defaults.json"
         $packagePath = Join-Path $pwd "lambda.zip"
-        $config = Get-Content $configPath -Raw | ConvertFrom-Json
-        $config."function-description" = "Deploy build ${{ github.run_number }} to AWS via GitHub Actions"
-        $config | ConvertTo-Json | Set-Content $configPath
         dotnet-lambda `
             deploy-serverless `
             ${{ env.AWS_CLOUDFORMATION_STACK }} `
+            --cloudformation-role "${{ secrets.AWS_CLOUDFORMATION_ROLE }}" `
             --config-file $configPath `
             --disable-interactive true `
             --package $packagePath `
-            --stack-wait true
+            --stack-wait true `
+            --tags "GITHUB_ACTIONS_RUN=${{ github.run_number }}" `
+            --template-substitutions "Description=$description"
 
   test-aws:
     name: test-aws
