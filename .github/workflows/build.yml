@@ -186,12 +186,12 @@ jobs:
         $config = Get-Content $configPath -Raw | ConvertFrom-Json
         $config."function-description" = "Deploy build ${{ github.run_number }} to AWS via GitHub Actions"
         $config | ConvertTo-Json | Set-Content $configPath
-        dotnet-lambda \
-            deploy-serverless \
-            ${{ env.AWS_CLOUDFORMATION_STACK }} \
-            --config-file $configPath \
-            --disable-interactive true \
-            --package $packagePath \
+        dotnet-lambda `
+            deploy-serverless `
+            ${{ env.AWS_CLOUDFORMATION_STACK }} `
+            --config-file $configPath `
+            --disable-interactive true `
+            --package $packagePath `
             --stack-wait true
 
   test-aws:
