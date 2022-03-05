@@ -22,7 +22,7 @@
       },
       "applicationUrl": "http://localhost:5050/runtime"
     },
-    "Lambda Test Tool": {
+    "Mock Lambda Test Tool": {
       "commandName": "Executable",
       "commandLineArgs": "--port 5050",
       "workingDirectory": ".\\bin\\$(Configuration)\\net6.0",
