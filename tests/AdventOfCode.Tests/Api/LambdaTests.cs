@@ -71,22 +71,13 @@ public class LambdaTests : IAsyncLifetime
     public async Task Can_Solve_Puzzle_With_Input_Arguments(int year, int day, string[] arguments, string[] expected)
     {
         // Arrange
-        using var content = new MultipartFormDataContent("----puzzle----");
-
-#pragma warning disable CA2000
-        foreach (string value in arguments)
+        var (body, contentType) = await GetFormContentAsync((content) =>
         {
-            content.Add(new StringContent(value), "arguments");
-        }
-#pragma warning restore CA2000
-
-        using var stream = new MemoryStream();
-        await content.CopyToAsync(stream);
-
-        stream.Seek(0, SeekOrigin.Begin);
-
-        byte[] buffer = stream.ToArray();
-        string body = Convert.ToBase64String(buffer);
+            foreach (string value in arguments)
+            {
+                content.Add(new StringContent(value), "arguments");
+            }
+        });
 
         var request = new APIGatewayProxyRequest()
         {
@@ -94,7 +85,7 @@ public class LambdaTests : IAsyncLifetime
             IsBase64Encoded = true,
             Headers = new Dictionary<string, string>()
             {
-                ["content-type"] = content.Headers.ContentType!.ToString(),
+                ["content-type"] = contentType,
             },
             HttpMethod = HttpMethods.Post,
             Path = $"/api/puzzles/{year}/{day}/solve",
@@ -125,20 +116,8 @@ public class LambdaTests : IAsyncLifetime
     public async Task Can_Solve_Puzzle_With_Input_File(int year, int day, int[] expected)
     {
         // Arrange
-#pragma warning disable CA2000
-        using var content = new MultipartFormDataContent("----puzzle----")
-        {
-            { new StringContent(GetPuzzleInput(year, day)), "resource", "input.txt" },
-        };
-#pragma warning restore CA2000
-
-        using var stream = new MemoryStream();
-        await content.CopyToAsync(stream);
-
-        stream.Seek(0, SeekOrigin.Begin);
-
-        byte[] buffer = stream.ToArray();
-        string body = Convert.ToBase64String(buffer);
+        var (body, contentType) = await GetFormContentAsync(
+            (content) => content.Add(new StringContent(GetPuzzleInput(year, day)), "resource", "input.txt"));
 
         var request = new APIGatewayProxyRequest()
         {
@@ -146,7 +125,7 @@ public class LambdaTests : IAsyncLifetime
             IsBase64Encoded = true,
             Headers = new Dictionary<string, string>()
             {
-                ["content-type"] = content.Headers.ContentType!.ToString(),
+                ["content-type"] = contentType,
             },
             HttpMethod = HttpMethods.Post,
             Path = $"/api/puzzles/{year}/{day}/solve",
@@ -170,6 +149,21 @@ public class LambdaTests : IAsyncLifetime
         solution.RootElement.TryGetProperty("solutions", out var solutions).ShouldBeTrue();
         solutions.GetArrayLength().ShouldBe(expected.Length);
         solutions.EnumerateArray().ToArray().Select((p) => p.GetInt32()).ToArray().ShouldBe(expected);
+    }
+
+    private static async Task<(string Body, string ContentType)> GetFormContentAsync(Action<MultipartFormDataContent> configure)
+    {
+        using var content = new MultipartFormDataContent("----puzzle----");
+
+        configure(content);
+
+        using var stream = new MemoryStream();
+        await content.CopyToAsync(stream);
+
+        stream.Seek(0, SeekOrigin.Begin);
+
+        byte[] buffer = stream.ToArray();
+        return (Convert.ToBase64String(buffer), content.Headers.ContentType!.ToString());
     }
 
     private static CancellationTokenSource GetCancellationTokenSourceForResponseAvailable(
