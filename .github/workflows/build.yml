@@ -181,10 +181,8 @@ jobs:
     - name: Deploy CloudFormation Template
       shell: pwsh
       run: |
-        $configName = "aws-lambda-tools-defaults.json"
-        $packageName = "lambda.zip"
-        $configPath = Join-Path $pwd $configName
-        $packagePath = Join-Path $pwd $packageName
+        $configPath = Join-Path $pwd "aws-lambda-tools-defaults.json"
+        $packagePath = Join-Path $pwd "lambda.zip"
         dotnet-lambda \
             deploy-serverless \
             ${{ env.AWS_CLOUDFORMATION_STACK }} \
