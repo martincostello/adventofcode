@@ -114,7 +114,8 @@ if ($SkipPublish -eq $false) {
 
     Write-Host "Publishing application..." -ForegroundColor Green
 
-    $project = (Join-Path $solutionPath "src" "AdventOfCode.Site" "AdventOfCode.Site.csproj")
+    $projectPath = (Join-Path $solutionPath "src" "AdventOfCode.Site")
+    $projectFile = Join-Path $projectPath "AdventOfCode.Site.csproj"
     $publishPath = (Join-Path $OutputPath "publish")
 
     $additionalArgs = @()
@@ -125,9 +126,25 @@ if ($SkipPublish -eq $false) {
         $additionalArgs += $Runtime
     }
 
-    & $dotnet publish $project --output $publishPath --configuration $Configuration $additionalArgs
+    & $dotnet `
+        publish `
+        $projectFile `
+        --configuration $Configuration `
+        --output $publishPath `
+        $additionalArgs
 
     if ($LASTEXITCODE -ne 0) {
         throw "dotnet publish failed with exit code $LASTEXITCODE"
+    }
+
+    $packageFile = Join-Path $OutputPath "lambda.zip"
+
+    dotnet-lambda `
+        package `
+        --output-package $packageFile `
+        --project-location $projectPath
+
+    if ($LASTEXITCODE -ne 0) {
+        throw "dotnet-lambda package failed with exit code $LASTEXITCODE"
     }
 }

@@ -6,6 +6,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.5.0/swagger-ui.min.css" integrity="sha512-5Qqi9k+ey4yJCfC/8NemvXAcL9PMUE2ROvmIZ1TXd2sO0KXXZyykItptL710pH2qURIhzeqeidjZIDVtt3sHDA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="icon" type="image/png" href="./favicon-32x32.png" sizes="32x32" />
     <link rel="icon" type="image/png" href="./favicon-16x16.png" sizes="16x16" />
+    <link rel="swagger" href="../swagger/v1/swagger.json" />
     <style>
         html {
             box-sizing: border-box;
@@ -31,8 +32,9 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.5.0/swagger-ui-standalone-preset.min.js" integrity="sha512-cJ0dDir2AlZZEqVqk1nGxR46egeHwv8i96rCobSqDj2x0vTMJt9DCaE8aB0735jKe3U69z8KVCckRWdYi3v+nA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script>
         window.onload = function () {
+            const url = document.querySelector('link[rel="swagger"]');
             window.ui = SwaggerUIBundle({
-                url: "/swagger/v1/swagger.json",
+                url: url.getAttribute('href'),
                 dom_id: '#swagger-ui',
                 deepLinking: true,
                 presets: [

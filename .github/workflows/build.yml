@@ -12,6 +12,9 @@ on:
   workflow_dispatch:
 
 env:
+  AWS_CLOUDFORMATION_STACK: adventofcode
+  AWS_LAMBDA_PACKAGE_PATH: ./artifacts/lambda.zip
+  AWS_REGION: eu-west-2
   AZURE_WEBAPP_NAME: aoc
   AZURE_WEBAPP_PACKAGE_PATH: ./artifacts/publish
   DOTNET_CLI_TELEMETRY_OPTOUT: true
@@ -40,16 +43,27 @@ jobs:
     - name: Setup .NET SDK
       uses: actions/setup-dotnet@v2
 
+    - name: Install .NET Lambda tool
+      shell: pwsh
+      run: dotnet tool install --global Amazon.Lambda.Tools
+
     - name: Build, test and publish
       shell: pwsh
       run: ./build.ps1 -Runtime win10-x64
 
-    - name: Publish artifacts
+    - name: Publish web app
       uses: actions/upload-artifact@v2
       if: ${{ runner.os == 'Windows' }}
       with:
         name: webapp
         path: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
+
+    - name: Publish lambda
+      uses: actions/upload-artifact@v2
+      if: ${{ runner.os == 'Windows' }}
+      with:
+        name: lambda
+        path: ${{ env.AWS_LAMBDA_PACKAGE_PATH }}
 
     - name: Publish screenshots
       uses: actions/upload-artifact@v2
@@ -117,3 +131,84 @@ jobs:
       run: dotnet test ./tests/AdventOfCode.Tests --configuration Release --filter Category=EndToEnd /p:CollectCoverage=false
       env:
         WEBSITE_URL: ${{ env.WEBSITE_URL_PROD }}
+
+  deploy-aws:
+    name: deploy-aws
+    needs: test
+    runs-on: ubuntu-latest
+    concurrency: aws_environment
+    environment:
+      name: aws
+
+    steps:
+
+    - name: Download artifacts
+      uses: actions/download-artifact@v2
+      with:
+        name: lambda
+
+    - name: Extract CloudFormation Template
+      shell: pwsh
+      run: |
+        $configName = "aws-lambda-tools-defaults.json"
+        $packageName = "lambda.zip"
+        $templateName = "serverless.template"
+        $configPath = Join-Path $pwd $configName
+        $packagePath = Join-Path $pwd $packageName
+        $templatePath = Join-Path $pwd $templateName
+        Add-Type -AssemblyName System.IO.Compression.FileSystem
+        $package = [System.IO.Compression.ZipFile]::OpenRead($packagePath)
+        $config = $zip.GetEntry($configName)
+        [System.IO.Compression.ZipFileExtensions]::ExtractToFile($config, $configPath, $true)
+        $template = $zip.GetEntry($templateName)
+        [System.IO.Compression.ZipFileExtensions]::ExtractToFile($template, $templatePath, $true)
+        $package.Dispose()
+
+    - name: Setup .NET SDK
+      uses: actions/setup-dotnet@v2
+
+    - name: Install .NET Lambda tool
+      shell: pwsh
+      run: dotnet tool install --global Amazon.Lambda.Tools
+
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
+        aws-region: ${{ env.AWS_REGION }}
+
+    - name: Deploy CloudFormation Template
+      shell: pwsh
+      run: |
+        $configName = "aws-lambda-tools-defaults.json"
+        $packageName = "lambda.zip"
+        $configPath = Join-Path $pwd $configName
+        $packagePath = Join-Path $pwd $packageName
+        dotnet-lambda \
+            deploy-serverless \
+            ${{ env.AWS_CLOUDFORMATION_STACK }} \
+            --config-file $configPath \
+            --disable-interactive true \
+            --package $packagePath \
+            --stack-wait true
+
+  test-aws:
+    name: test-aws
+    needs: deploy-aws
+    runs-on: ubuntu-latest
+    concurrency: aws_environment
+
+    steps:
+
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Setup .NET SDK
+      uses: actions/setup-dotnet@v2
+
+    - name: Run end-to-end tests
+      shell: pwsh
+      run: dotnet test ./tests/AdventOfCode.Tests --configuration Release --filter Category=EndToEnd /p:CollectCoverage=false
+      env:
+        WEBSITE_URL:  https://iuynnjhie6.execute-api.eu-west-2.amazonaws.com/Prod/
