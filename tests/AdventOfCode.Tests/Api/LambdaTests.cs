@@ -68,7 +68,7 @@ public class LambdaTests : IAsyncLifetime
 
     [Theory(Timeout = 5_000)]
     [InlineData(2015, 11, new[] { "cqjxjnds" }, new[] { "cqjxxyzz" })]
-    public async Task Can_Solve_Puzzle(int year, int day, string[] arguments, string[] expected)
+    public async Task Can_Solve_Puzzle_With_Input_Arguments(int year, int day, string[] arguments, string[] expected)
     {
         // Arrange
         using var content = new MultipartFormDataContent("----puzzle----");
@@ -116,8 +116,60 @@ public class LambdaTests : IAsyncLifetime
         solution.RootElement.GetProperty("visualizations").GetArrayLength().ShouldBe(0);
 
         solution.RootElement.TryGetProperty("solutions", out var solutions).ShouldBeTrue();
-        solutions.GetArrayLength().ShouldBe(1);
+        solutions.GetArrayLength().ShouldBe(expected.Length);
         solutions.EnumerateArray().ToArray().Select((p) => p.GetString()).ToArray().ShouldBe(expected);
+    }
+
+    [Theory(Timeout = 5_000)]
+    [InlineData(2015, 1, new[] { 232, 1783 })]
+    public async Task Can_Solve_Puzzle_With_Input_File(int year, int day, int[] expected)
+    {
+        // Arrange
+#pragma warning disable CA2000
+        using var content = new MultipartFormDataContent("----puzzle----")
+        {
+            { new StringContent(GetPuzzleInput(year, day)), "resource", "input.txt" },
+        };
+#pragma warning restore CA2000
+
+        using var stream = new MemoryStream();
+        await content.CopyToAsync(stream);
+
+        stream.Seek(0, SeekOrigin.Begin);
+
+        byte[] buffer = stream.ToArray();
+        string body = Convert.ToBase64String(buffer);
+
+        var request = new APIGatewayProxyRequest()
+        {
+            Body = body,
+            IsBase64Encoded = true,
+            Headers = new Dictionary<string, string>()
+            {
+                ["content-type"] = content.Headers.ContentType!.ToString(),
+            },
+            HttpMethod = HttpMethods.Post,
+            Path = $"/api/puzzles/{year}/{day}/solve",
+        };
+
+        // Act
+        APIGatewayProxyResponse actual = await AssertApiGatewayRequestIsHandledAsync(request);
+
+        actual.ShouldNotBeNull();
+        actual.StatusCode.ShouldBe(StatusCodes.Status200OK);
+        actual.MultiValueHeaders.ShouldContainKey("Content-Type");
+        actual.MultiValueHeaders["Content-Type"].ShouldBe(new[] { "application/json; charset=utf-8" });
+
+        using var solution = JsonDocument.Parse(actual.Body);
+
+        solution.RootElement.GetProperty("year").GetInt32().ShouldBe(year);
+        solution.RootElement.GetProperty("day").GetInt32().ShouldBe(day);
+        solution.RootElement.GetProperty("timeToSolve").GetDouble().ShouldBeGreaterThan(0);
+        solution.RootElement.GetProperty("visualizations").GetArrayLength().ShouldBe(0);
+
+        solution.RootElement.TryGetProperty("solutions", out var solutions).ShouldBeTrue();
+        solutions.GetArrayLength().ShouldBe(expected.Length);
+        solutions.EnumerateArray().ToArray().Select((p) => p.GetInt32()).ToArray().ShouldBe(expected);
     }
 
     private static CancellationTokenSource GetCancellationTokenSourceForResponseAvailable(
@@ -147,6 +199,19 @@ public class LambdaTests : IAsyncLifetime
             TaskScheduler.Default);
 
         return cts;
+    }
+
+    private static string GetPuzzleInput(int year, int day)
+    {
+        var type = typeof(Puzzle);
+
+        string name = FormattableString.Invariant(
+            $"MartinCostello.{type.Assembly.GetName().Name}.Input.Y{year}.Day{day:00}.input.txt");
+
+        using var stream = type.Assembly.GetManifestResourceStream(name)!;
+        using var reader = new StreamReader(stream);
+
+        return reader.ReadToEnd();
     }
 
     private static bool LambdaServerWasShutDown(Exception exception)
