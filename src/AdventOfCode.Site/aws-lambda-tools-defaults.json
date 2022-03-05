@@ -1,6 +1,6 @@
 {
   "region": "eu-west-2",
-  "profile": "martincostello",
+  "profile": "",
   "configuration": "Release",
   "framework": "net6.0",
   "function-architecture": "arm64",
