@@ -1,0 +1,20 @@
+{
+  "region": "eu-west-2",
+  "profile": "martincostello",
+  "configuration": "Release",
+  "framework": "net6.0",
+  "function-architecture": "arm64",
+  "function-description": "The Advent of Code as a Service function.",
+  "function-handler": "AdventOfCode.Site",
+  "function-memory-size": 256,
+  "function-name": "adventofcode",
+  "function-runtime": "dotnet6",
+  "function-timeout": 30,
+  "msbuild-parameters": "/p:PublishReadyToRun=true /p:TieredCompilation=false",
+  "package-type": "Zip",
+  "s3-bucket": "adventofcode",
+  "s3-prefix": "adventofcode/",
+  "stack-name": "adventofcode",
+  "template": "serverless.template",
+  "tracing-mode": "PassThrough"
+}

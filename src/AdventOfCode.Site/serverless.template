@@ -1,0 +1,47 @@
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Transform": "AWS::Serverless-2016-10-31",
+  "Description": "The Advent of Code as a Service web application running in Amazon Lambda.",
+  "Parameters": {},
+    "Outputs": {
+    "ApplicationUrl": {
+      "Description": "The endpoint URL for the Prod environment.",
+      "Value": {
+        "Fn::Sub": "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/"
+      }
+    }
+  },
+  "Resources": {
+    "AdventOfCodeFunction": {
+      "Type": "AWS::Serverless::Function",
+      "Properties": {
+        "Description": "The Advent of Code as a Service function.",
+        "FunctionName": "adventofcode",
+        "Handler": "AdventOfCode.Site",
+        "Runtime": "dotnet6",
+        "Architectures": [ "arm64" ],
+        "MemorySize": 256,
+        "Timeout": 30,
+        "Policies": [
+          "AWSLambdaBasicExecutionRole"
+        ],
+        "Events": {
+          "ProxyResource": {
+            "Type": "Api",
+            "Properties": {
+              "Path": "/{proxy+}",
+              "Method": "ANY"
+            }
+          },
+          "RootResource": {
+            "Type": "Api",
+            "Properties": {
+              "Path": "/",
+              "Method": "ANY"
+            }
+          }
+        }
+      }
+    }
+  }
+}
