@@ -25,6 +25,12 @@
         "Policies": [
           "AWSLambdaBasicExecutionRole"
         ],
+        "Environment": {
+          "Variables": {
+            "Logging__Console__DisableColors": "true",
+            "Logging__Console__FormatterName": "Json"
+          }
+        },
         "Events": {
           "ProxyResource": {
             "Type": "Api",
