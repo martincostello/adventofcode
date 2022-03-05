@@ -187,6 +187,7 @@ jobs:
         dotnet-lambda `
             deploy-serverless `
             ${{ env.AWS_CLOUDFORMATION_STACK }} `
+            --cloudformation-role "${{ secrets.AWS_CLOUDFORMATION_ROLE }}" `
             --config-file $configPath `
             --disable-interactive true `
             --package $packagePath `
