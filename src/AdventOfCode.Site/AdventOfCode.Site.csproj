@@ -1,5 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
   <PropertyGroup>
+    <AssemblyName>bootstrap</AssemblyName>
     <AWSProjectType>Lambda</AWSProjectType>
     <Description>Web app for solving Advent of Code.</Description>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
