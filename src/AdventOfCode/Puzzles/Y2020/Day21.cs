@@ -70,7 +70,7 @@ public sealed class Day21 : Puzzle
         {
             bool hasUnidentified = false;
 
-            foreach (string allergen in allergenCandidates.Keys.Where((p) => !knownAllergens.Contains(p)))
+            foreach (string allergen in allergenCandidates.Keys.Except(knownAllergens))
             {
                 HashSet<string> candidates = allergenCandidates[allergen];
 
