@@ -27,12 +27,16 @@ public sealed class Day15 : Puzzle
     /// <returns>
     /// The highest total cookie score for the specified ingredients.
     /// </returns>
-    internal static int GetHighestTotalCookieScore(ICollection<string> collection, int? calorieCount = null)
+    internal static int GetHighestTotalCookieScore(IList<string> collection, int? calorieCount = null)
     {
         // Parse the ingredients
-        var ingredientProperties = collection
-            .Select((p) => Ingredient.Parse(p))
-            .ToDictionary((p) => p.Name, (p) => p);
+        var ingredientProperties = new Dictionary<string, Ingredient>(collection.Count);
+
+        for (int i = 0; i < collection.Count; i++)
+        {
+            var ingredient = Ingredient.Parse(collection[i]);
+            ingredientProperties[ingredient.Name] = ingredient;
+        }
 
         // Get the possible combinations of teaspoons for each of the ingredients
         var teaspoonPermutations = GetTeaspoonPermutations(ingredientProperties.Count);
@@ -62,15 +66,19 @@ public sealed class Day15 : Puzzle
         }
 
         // Calculate the total score for each possible recipe
-        int[] scores = new int[recipies.Count];
+        int bestScore = -1;
 
         for (int i = 0; i < recipies.Count; i++)
         {
-            scores[i] = GetRecipeScore(recipies[i], ingredientProperties, calorieCount);
+            int thisScore = GetRecipeScore(recipies[i], ingredientProperties, calorieCount);
+
+            if (thisScore > bestScore)
+            {
+                bestScore = thisScore;
+            }
         }
 
-        // Return the best recipe
-        return scores.Max();
+        return bestScore;
     }
 
     /// <inheritdoc />
@@ -104,7 +112,7 @@ public sealed class Day15 : Puzzle
     /// <summary>
     /// Gets the permutation of teaspoon values for a recipe with the specified number of ingredients.
     /// </summary>
-    /// <param name="seed">The seed partial teaspoon count to use to calculate further premutations.</param>
+    /// <param name="seed">The seed partial teaspoon count to use to calculate further permutations.</param>
     /// <param name="index">The index of the current teaspoon to calculate the values for.</param>
     /// <param name="count">The number of ingredients to get the permutations for.</param>
     /// <returns>
@@ -185,15 +193,20 @@ public sealed class Day15 : Puzzle
         int texture = 0;
         int calories = 0;
 
-        foreach (var item in recipe.Where((p) => p.Value > 0))
+        foreach ((string name, int teaspoons) in recipe)
         {
-            Ingredient ingredient = ingredients[item.Key];
+            if (teaspoons < 1)
+            {
+                continue;
+            }
 
-            calories += ingredient.Calories * item.Value;
-            capacity += ingredient.Capacity * item.Value;
-            durability += ingredient.Durability * item.Value;
-            flavor += ingredient.Flavor * item.Value;
-            texture += ingredient.Texture * item.Value;
+            Ingredient ingredient = ingredients[name];
+
+            calories += ingredient.Calories * teaspoons;
+            capacity += ingredient.Capacity * teaspoons;
+            durability += ingredient.Durability * teaspoons;
+            flavor += ingredient.Flavor * teaspoons;
+            texture += ingredient.Texture * teaspoons;
         }
 
         int score;
@@ -208,7 +221,7 @@ public sealed class Day15 : Puzzle
             score = capacity * durability * flavor * texture;
         }
 
-        if (calorieCount.HasValue && calories != calorieCount.Value)
+        if (calorieCount.HasValue && calories != calorieCount.GetValueOrDefault())
         {
             // Does not have the target number of calories, so discount
             score = 0;
@@ -218,39 +231,64 @@ public sealed class Day15 : Puzzle
     }
 
     /// <summary>
-    /// A class representing an ingredient. This class cannot be inherited.
+    /// A structure representing an ingredient.
     /// </summary>
-    private sealed class Ingredient
+    private readonly struct Ingredient
     {
         /// <summary>
         /// Gets or sets the name of the ingredient.
         /// </summary>
-        internal string Name { get; set; } = string.Empty;
+        internal readonly string Name;
 
         /// <summary>
-        /// Gets or sets the capacity.
+        /// Gets the calories.
         /// </summary>
-        internal int Capacity { get; set; }
+        internal readonly int Calories;
 
         /// <summary>
-        /// Gets or sets the durability.
+        /// Gets the capacity.
         /// </summary>
-        internal int Durability { get; set; }
+        internal readonly int Capacity;
 
         /// <summary>
-        /// Gets or sets the flavor.
+        /// Gets the durability.
         /// </summary>
-        internal int Flavor { get; set; }
+        internal readonly int Durability;
 
         /// <summary>
-        /// Gets or sets the texture.
+        /// Gets the flavor.
         /// </summary>
-        internal int Texture { get; set; }
+        internal readonly int Flavor;
 
         /// <summary>
-        /// Gets or sets the calories.
+        /// Gets the texture.
         /// </summary>
-        internal int Calories { get; set; }
+        internal readonly int Texture;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Ingredient"/> struct.
+        /// </summary>
+        /// <param name="name">The name.</param>
+        /// <param name="calories">The calories.</param>
+        /// <param name="capacity">The capacity.</param>
+        /// <param name="durability">The durability.</param>
+        /// <param name="flavor">The flavor.</param>
+        /// <param name="texture">The texture.</param>
+        private Ingredient(
+            string name,
+            int calories,
+            int capacity,
+            int durability,
+            int flavor,
+            int texture)
+        {
+            Name = name;
+            Calories = calories;
+            Capacity = capacity;
+            Durability = durability;
+            Flavor = flavor;
+            Texture = texture;
+        }
 
         /// <summary>
         /// Parses the specified <see cref="string"/> to an instance of <see cref="Ingredient"/>.
@@ -262,21 +300,24 @@ public sealed class Day15 : Puzzle
         internal static Ingredient Parse(string value)
         {
             string[] split = value.Split(':');
+            string name = split[0];
 
-            var result = new Ingredient()
-            {
-                Name = split[0],
-            };
+            split = string.Join(string.Empty, split, 1, split.Length - 1)
+                .Split(',', StringSplitOptions.TrimEntries);
 
-            split = string.Join(string.Empty, split, 1, split.Length - 1).Split(',');
+            (_, string rawCapacity) = split[0].Bifurcate(' ');
+            (_, string rawDurability) = split[1].Bifurcate(' ');
+            (_, string rawFlavor) = split[2].Bifurcate(' ');
+            (_, string rawTexture) = split[3].Bifurcate(' ');
+            (_, string rawCalories) = split[4].Bifurcate(' ');
 
-            result.Calories = Parse<int>(split[4].Trim().Split(' ')[1]);
-            result.Capacity = Parse<int>(split[0].Trim().Split(' ')[1]);
-            result.Durability = Parse<int>(split[1].Trim().Split(' ')[1]);
-            result.Flavor = Parse<int>(split[2].Trim().Split(' ')[1]);
-            result.Texture = Parse<int>(split[3].Trim().Split(' ')[1]);
-
-            return result;
+            return new(
+                name,
+                Parse<int>(rawCalories),
+                Parse<int>(rawCapacity),
+                Parse<int>(rawDurability),
+                Parse<int>(rawFlavor),
+                Parse<int>(rawTexture));
         }
     }
 }

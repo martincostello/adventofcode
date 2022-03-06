@@ -32,9 +32,9 @@ internal static class DictionaryExtensions
     public static void AddOrIncrement<TKey, TValue>(this IDictionary<TKey, TValue> dictionary, TKey key, TValue value, TValue increment)
         where TValue : INumber<TValue>
     {
-        if (dictionary.ContainsKey(key))
+        if (dictionary.TryGetValue(key, out var current))
         {
-            dictionary[key] += increment;
+            dictionary[key] = current + increment;
         }
         else
         {
@@ -66,9 +66,9 @@ internal static class DictionaryExtensions
     public static void AddOrDecrement<TKey, TValue>(this IDictionary<TKey, TValue> dictionary, TKey key, TValue value, TValue decrement)
         where TValue : INumber<TValue>
     {
-        if (dictionary.ContainsKey(key))
+        if (dictionary.TryGetValue(key, out var current))
         {
-            dictionary[key] -= decrement;
+            dictionary[key] = current - decrement;
         }
         else
         {

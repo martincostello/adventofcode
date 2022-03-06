@@ -20,7 +20,7 @@
         "Handler": "AdventOfCode.Site",
         "Runtime": "dotnet6",
         "Architectures": [ "arm64" ],
-        "MemorySize": 256,
+        "MemorySize": 384,
         "Timeout": 30,
         "Policies": [
           "AWSLambdaBasicExecutionRole"

@@ -6,7 +6,7 @@
   "function-architecture": "arm64",
   "function-description": "The Advent of Code as a Service function.",
   "function-handler": "AdventOfCode.Site",
-  "function-memory-size": 256,
+  "function-memory-size": 384,
   "function-name": "adventofcode",
   "function-runtime": "dotnet6",
   "function-timeout": 30,

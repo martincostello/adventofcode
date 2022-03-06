@@ -15,6 +15,7 @@ env:
   AWS_CLOUDFORMATION_STACK: adventofcode
   AWS_LAMBDA_PACKAGE_PATH: ./artifacts/lambda.zip
   AWS_REGION: eu-west-2
+  AWS_URL_PROD: https://aoc.martincostello.com/
   AZURE_WEBAPP_NAME: aoc
   AZURE_WEBAPP_PACKAGE_PATH: ./artifacts/publish
   DOTNET_CLI_TELEMETRY_OPTOUT: true
@@ -139,6 +140,7 @@ jobs:
     concurrency: aws_environment
     environment:
       name: aws
+      url: ${{ env.AWS_URL_PROD }}
 
     steps:
 
@@ -213,4 +215,4 @@ jobs:
       shell: pwsh
       run: dotnet test ./tests/AdventOfCode.Tests --configuration Release --filter Category=EndToEnd /p:CollectCoverage=false
       env:
-        WEBSITE_URL:  https://iuynnjhie6.execute-api.eu-west-2.amazonaws.com/Prod/
+        WEBSITE_URL: ${{ env.AWS_URL_PROD }}

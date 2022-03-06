@@ -7,15 +7,9 @@ import { Solution } from '../models/Solution';
 
 export class ApiClient {
 
-    private baseUrl: string;
-
-    constructor(baseUrl: string) {
-        this.baseUrl = baseUrl;
-    }
-
     async getPuzzles(): Promise<Puzzle[]> {
 
-        const response = await fetch(this.baseUrl + '/api/puzzles');
+        const response = await fetch('/api/puzzles');
 
         if (!response.ok) {
             throw new Error(response.status.toString(10));
@@ -31,7 +25,7 @@ export class ApiClient {
             body: form
         };
 
-        const response = await fetch(this.baseUrl + url, init);
+        const response = await fetch(url, init);
         const content = await response.json();
 
         if (response.ok) {
