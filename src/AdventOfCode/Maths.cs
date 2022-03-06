@@ -179,7 +179,7 @@ internal static class Maths
         }
 
         return GetPermutations(collection, count - 1)
-            .SelectMany((p) => collection.Where((r) => !p.Contains(r)), (set, value) => set.Append(value));
+            .SelectMany((p) => collection.Except(p), (set, value) => set.Append(value));
     }
 
     /// <summary>
