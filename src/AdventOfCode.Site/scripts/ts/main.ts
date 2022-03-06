@@ -4,9 +4,6 @@
 import { Solver } from './view/Solver';
 
 document.addEventListener('DOMContentLoaded', () => {
-    const baseUrl = document.querySelector('link[rel="api-base"]');
-    if (baseUrl) {
-        const solver = new Solver(baseUrl.getAttribute('href'));
-        solver.initialize();
-    }
+    const solver = new Solver();
+    solver.initialize();
 });

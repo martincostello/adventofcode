@@ -15,9 +15,9 @@ export class Solver {
     private readonly elements: UIElements;
     private readonly puzzlesByYear: Map<string, Puzzle[]>;
 
-    constructor(baseUrl: string) {
+    constructor() {
         this.elements = new UIElements();
-        this.client = new ApiClient(baseUrl);
+        this.client = new ApiClient();
         this.puzzlesByYear = new Map<string, Puzzle[]>();
     }
 
