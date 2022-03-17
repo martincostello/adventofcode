@@ -80,6 +80,9 @@ public sealed class HttpServerFixture : WebApplicationFactory<Site.Program>, ITe
             (p) => p.ConfigureHttpsDefaults(
                 (r) => r.ServerCertificate = new X509Certificate2("localhost-dev.pfx", "Pa55w0rd!")));
 
+        builder.UseEnvironment(Environments.Production)
+               .UseSolutionRelativeContentRoot(Path.Combine("src", "AdventOfCode.Site"));
+
         // Configure the server address for the server to
         // listen on for HTTPS requests on a dynamic port.
         builder.UseUrls("https://127.0.0.1:0");

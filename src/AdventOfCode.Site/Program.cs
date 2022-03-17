@@ -71,6 +71,8 @@ if (!app.Environment.IsDevelopment())
     app.UseExceptionHandler("/error");
 }
 
+app.UseMiddleware<CustomHttpHeadersMiddleware>();
+
 app.UseStatusCodePagesWithReExecute("/error", "?id={0}");
 
 if (!app.Environment.IsDevelopment())
