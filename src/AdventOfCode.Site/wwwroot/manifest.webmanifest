@@ -1,18 +1,20 @@
 {
-  "name": "Advent of Code as a Service",
-  "short_name": "AoCaaS",
-  "description": "Find solutions for the puzzles of Advent of Code",
-  "start_url": "/",
-  "background_color": "#000000",
-  "theme_color": "#ffffff",
-  "display": "minimal-ui",
-  "lang": "en-GB",
-  "dir": "ltr",
-  "icons": [
-    {
-      "src": "https://aoc.azurewebsites.net/favicon.png",
-      "sizes": "64x64",
-      "type": "image/png"
-    }
-  ]
+    "name": "Advent of Code as a Service",
+    "short_name": "AoCaaS",
+    "description": "Find solutions for the puzzles of Advent of Code",
+    "id": "/",
+    "start_url": "/",
+    "background_color": "#000000",
+    "theme_color": "#ffffff",
+    "display": "minimal-ui",
+    "lang": "en-GB",
+    "dir": "ltr",
+    "icons": [
+        {
+            "src": "./favicon.png",
+            "sizes": "64x64",
+            "type": "image/png",
+            "purpose": "any"
+        }
+    ]
 }
