@@ -1,7 +1,7 @@
 @{
     string appName = "Advent of Code as a Service";
     string description = "Find solutions for the puzzles of Advent of Code";
-    string domain = "aoc.azurewebsites.net";
+    string domain = Context.Request.Host.ToString();
     string twitterHandle = "@martin_costello";
 }
 <!DOCTYPE html>
