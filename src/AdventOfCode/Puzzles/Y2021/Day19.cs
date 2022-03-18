@@ -25,11 +25,14 @@ public sealed class Day19 : Puzzle
     /// Finds the beacons from the specified scanner results.
     /// </summary>
     /// <param name="data">The scanner data to use to find the beacons.</param>
+    /// <param name="cancellationToken">The cancellation token to use.</param>
     /// <returns>
     /// The number of beacons found in the specified scanner data and
     /// the largest Manhattan distance between any two scanners.
     /// </returns>
-    public static (int BeaconCount, int LargestScannerDistance) FindBeacons(IList<string> data)
+    public static (int BeaconCount, int LargestScannerDistance) FindBeacons(
+        IList<string> data,
+        CancellationToken cancellationToken = default)
     {
         List<Scanner> unoriented = Parse(data);
 
@@ -40,7 +43,7 @@ public sealed class Day19 : Puzzle
 
         unoriented.Remove(unoriented[0]);
 
-        while (unoriented.Count > 0)
+        while (unoriented.Count > 0 && !cancellationToken.IsCancellationRequested)
         {
             for (int i = 0; i < unoriented.Count; i++)
             {
@@ -49,7 +52,7 @@ public sealed class Day19 : Puzzle
                 for (int j = 0; j < oriented.Count; j++)
                 {
                     Scanner baseline = oriented[j];
-                    Scanner? aligned = TryAlign(baseline, unaligned);
+                    Scanner? aligned = TryAlign(baseline, unaligned, cancellationToken);
 
                     if (aligned is not null)
                     {
@@ -60,6 +63,8 @@ public sealed class Day19 : Puzzle
                 }
             }
         }
+
+        cancellationToken.ThrowIfCancellationRequested();
 
         Scanner final = oriented[0];
 
@@ -117,7 +122,7 @@ public sealed class Day19 : Puzzle
             return scanners;
         }
 
-        static Scanner? TryAlign(Scanner aligned, Scanner unaligned)
+        static Scanner? TryAlign(Scanner aligned, Scanner unaligned, CancellationToken cancellationToken)
         {
             // As we're looking for a commonality of at least 12 items
             // we can use the Pigeonhole Principle (hat-tip to @encse,
@@ -128,8 +133,18 @@ public sealed class Day19 : Puzzle
 
             foreach (Vector3 first in aligned.Skip(CommonBeacons))
             {
+                if (cancellationToken.IsCancellationRequested)
+                {
+                    break;
+                }
+
                 foreach (var transformation in Transforms())
                 {
+                    if (cancellationToken.IsCancellationRequested)
+                    {
+                        break;
+                    }
+
                     var rotated = unaligned.Select(transformation);
 
                     int withinReach = rotated
@@ -206,7 +221,7 @@ public sealed class Day19 : Puzzle
     {
         IList<string> target = await ReadResourceAsLinesAsync();
 
-        (BeaconCount, LargestScannerDistance) = FindBeacons(target);
+        (BeaconCount, LargestScannerDistance) = FindBeacons(target, cancellationToken);
 
         if (Verbose)
         {

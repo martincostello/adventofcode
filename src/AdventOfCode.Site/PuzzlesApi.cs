@@ -104,13 +104,15 @@ internal static partial class PuzzlesApi
 
         var timeout = TimeSpan.FromMinutes(1);
 
+        using var timeoutCts = new CancellationTokenSource(timeout);
+        using var linkedCts = CancellationTokenSource.CreateLinkedTokenSource(timeoutCts.Token, cancellationToken);
         var stopwatch = Stopwatch.StartNew();
 
         PuzzleResult solution;
 
         try
         {
-            solution = await puzzle.SolveAsync(arguments, cancellationToken).WaitAsync(timeout, cancellationToken);
+            solution = await puzzle.SolveAsync(arguments, linkedCts.Token).WaitAsync(timeout, linkedCts.Token);
         }
         catch (OperationCanceledException)
         {
