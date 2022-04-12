@@ -118,6 +118,7 @@ jobs:
     name: test-production
     needs: deploy
     runs-on: ubuntu-latest
+    concurrency: production_environment
 
     steps:
 
