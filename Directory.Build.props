@@ -50,16 +50,4 @@
     <Using Include="Xunit" />
     <Using Include="Xunit.Abstractions" />
   </ItemGroup>
-  <!--
-    HACK Workaround for https://github.com/dotnet/runtime/issues/65018
-  -->
-  <Target Name="RemoveSystemRuntimeFromRefPack"
-          BeforeTargets="_HandlePackageFileConflicts"
-          Condition="'@(Reference -> WithMetadataValue('NugetPackageId', 'System.Runtime.Experimental'))' != ''">
-    <ItemGroup>
-      <Reference Remove="@(Reference)"
-                 Condition="$([System.String]::Copy(%(Reference.Identity)).Contains('System.Runtime.dll')) and
-                            '%(Reference.NuGetPackageId)' == 'Microsoft.NETCore.App.Ref'" />
-    </ItemGroup>
-  </Target>
 </Project>
