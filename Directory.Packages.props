@@ -8,7 +8,7 @@
     <PackageVersion Include="GitHubActionsTestLogger" Version="2.0.1" />
     <PackageVersion Include="MartinCostello.Logging.XUnit" Version="0.3.0" />
     <PackageVersion Include="MartinCostello.Testing.AwsLambdaTestServer" Version="0.6.0" />
-    <PackageVersion Include="Microsoft.AspNetCore.Mvc.Testing" Version="7.0.0-preview.2.22153.2" />
+    <PackageVersion Include="Microsoft.AspNetCore.Mvc.Testing" Version="7.0.0-preview.3.22178.4" />
     <PackageVersion Include="Microsoft.ICU.ICU4C.Runtime" Version="$(MicrosoftICUICU4CRuntimeVersion)" />
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.3.1" />
     <PackageVersion Include="Microsoft.Playwright" Version="1.25.0" />
@@ -18,7 +18,6 @@
     <PackageVersion Include="Shouldly" Version="4.1.0" />
     <PackageVersion Include="StyleCop.Analyzers" Version="1.2.0-beta.435" />
     <PackageVersion Include="Swashbuckle.AspNetCore" Version="6.4.0" />
-    <PackageVersion Include="System.Runtime.Experimental" Version="7.0.0-preview.2.22152.2" />
     <PackageVersion Include="xunit" Version="2.4.2" />
     <PackageVersion Include="xunit.runner.visualstudio" Version="2.4.5" />
     <PackageVersion Include="Xunit.SkippableFact" Version="1.4.13" />
