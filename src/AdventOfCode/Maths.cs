@@ -62,7 +62,7 @@ internal static class Maths
 
         result += collection[collection.Count - 1];
 
-        return T.Create(result);
+        return T.CreateChecked(result);
     }
 
     /// <summary>
@@ -110,7 +110,7 @@ internal static class Maths
                 {
                     if (bits[j])
                     {
-                        combination.Add(TTotal.Create(values[j]));
+                        combination.Add(TTotal.CreateChecked(values[j]));
                     }
                 }
 
