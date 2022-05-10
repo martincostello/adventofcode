@@ -20,7 +20,7 @@ public class ResourceTests : EndToEndTest
     [InlineData("humans.txt", MediaTypeNames.Text.Plain)]
     [InlineData("manifest.webmanifest", "application/manifest+json")]
     [InlineData("robots.txt", MediaTypeNames.Text.Plain)]
-    [InlineData("static/js/main.js", "application/javascript")]
+    [InlineData("static/js/main.js", "text/javascript")]
     [InlineData("static/js/main.js.map", MediaTypeNames.Text.Plain)]
     [InlineData("version", MediaTypeNames.Application.Json)]
     public async Task Can_Load_Resource_As_Get(string requestUri, string contentType)
