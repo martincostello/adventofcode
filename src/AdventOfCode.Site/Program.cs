@@ -40,6 +40,32 @@ builder.Services.Configure<JsonOptions>((p) =>
     p.SerializerOptions.AddContext<ApplicationJsonSerializerContext>();
 });
 
+builder.Services.Configure<StaticFileOptions>((options) =>
+{
+    options.OnPrepareResponse = (context) =>
+    {
+        var maxAge = TimeSpan.FromDays(7);
+
+        if (context.File.Exists)
+        {
+            string? extension = Path.GetExtension(context.File.PhysicalPath);
+
+            // These files are served with a content hash in the URL so can be cached for longer
+            bool isScriptOrStyle =
+                string.Equals(extension, ".css", StringComparison.OrdinalIgnoreCase) ||
+                string.Equals(extension, ".js", StringComparison.OrdinalIgnoreCase);
+
+            if (isScriptOrStyle)
+            {
+                maxAge = TimeSpan.FromDays(365);
+            }
+        }
+
+        var headers = context.Context.Response.GetTypedHeaders();
+        headers.CacheControl = new() { MaxAge = maxAge };
+    };
+});
+
 builder.Services.AddRazorPages();
 
 if (builder.Environment.IsDevelopment())
@@ -51,9 +77,8 @@ if (builder.Environment.IsDevelopment())
     });
 }
 
-builder.Services.Configure<GzipCompressionProviderOptions>((p) => p.Level = CompressionLevel.Fastest);
-
 builder.Services.Configure<BrotliCompressionProviderOptions>((p) => p.Level = CompressionLevel.Fastest);
+builder.Services.Configure<GzipCompressionProviderOptions>((p) => p.Level = CompressionLevel.Fastest);
 
 builder.Services.AddResponseCompression((p) =>
 {
