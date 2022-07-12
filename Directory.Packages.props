@@ -8,7 +8,7 @@
     <PackageVersion Include="GitHubActionsTestLogger" Version="2.0.1" />
     <PackageVersion Include="MartinCostello.Logging.XUnit" Version="0.3.0" />
     <PackageVersion Include="MartinCostello.Testing.AwsLambdaTestServer" Version="0.6.0" />
-    <PackageVersion Include="Microsoft.AspNetCore.Mvc.Testing" Version="7.0.0-preview.5.22303.8" />
+    <PackageVersion Include="Microsoft.AspNetCore.Mvc.Testing" Version="7.0.0-preview.6.22330.3" />
     <PackageVersion Include="Microsoft.ICU.ICU4C.Runtime" Version="$(MicrosoftICUICU4CRuntimeVersion)" />
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.3.1" />
     <PackageVersion Include="Microsoft.Playwright" Version="1.25.0" />
