@@ -8,7 +8,6 @@ import { Solution } from '../models/Solution';
 import { UIElements } from './UIElements';
 
 export class Solver {
-
     private static hideClass: string = 'd-none';
 
     private readonly client: ApiClient;
@@ -22,7 +21,6 @@ export class Solver {
     }
 
     async initialize(): Promise<void> {
-
         this.elements.years.addEventListener('change', () => {
             this.onYearChanged();
         });
@@ -46,7 +44,6 @@ export class Solver {
         let yearWasSelected = false;
 
         puzzles.forEach((puzzle) => {
-
             const year = puzzle.year.toString();
 
             let puzzlesForYear: Puzzle[];
@@ -61,7 +58,6 @@ export class Solver {
             puzzlesForYear.push(puzzle);
 
             if (puzzlesForYear.length === 1) {
-
                 const element = document.createElement('option');
 
                 element.setAttribute('data-year', year);
@@ -89,7 +85,6 @@ export class Solver {
     }
 
     private onDayChanged() {
-
         const option = this.elements.days.selectedOptions[0];
 
         this.elements.arguments.value = '';
@@ -114,7 +109,10 @@ export class Solver {
             this.elements.arguments.removeAttribute('required');
         } else {
             this.show(this.elements.argumentsContainer);
-            this.elements.arguments.setAttribute('placeholder', `Requires ${minimumArguments} argument${minimumArguments === 1 ? '' : 's'}`);
+            this.elements.arguments.setAttribute(
+                'placeholder',
+                `Requires ${minimumArguments} argument${minimumArguments === 1 ? '' : 's'}`
+            );
             this.elements.arguments.setAttribute('rows', minimumArguments.toString(10));
             this.elements.arguments.setAttribute('required', '');
         }
@@ -129,13 +127,11 @@ export class Solver {
     }
 
     private onYearChanged() {
-
         this.elements.days.innerHTML = '';
 
         const puzzlesForYear = this.puzzlesByYear.get(this.elements.years.value);
 
         for (let i = 0; i < puzzlesForYear.length; i++) {
-
             const element = document.createElement('option');
             const puzzle = puzzlesForYear[i];
 
@@ -171,7 +167,6 @@ export class Solver {
     }
 
     private async onSolve(): Promise<void> {
-
         this.elements.solve.disabled = true;
         this.elements.solveText.innerText = 'Solving...';
         this.show(this.elements.spinner);
@@ -188,7 +183,6 @@ export class Solver {
         }
 
         if (this.elements.inputFile.files.length === 1) {
-
             const file = this.elements.inputFile.files[0];
             const reader = new FileReader();
 
@@ -206,7 +200,6 @@ export class Solver {
     }
 
     private async solve(url: string, form: FormData): Promise<void> {
-
         this.hide(this.elements.error);
         this.hide(this.elements.solutionContainer);
 
@@ -225,7 +218,6 @@ export class Solver {
             this.show(this.elements.error);
             this.elements.error.textContent = error.detail;
         } else {
-
             this.hide(this.elements.error);
             this.elements.timeToSolve.textContent = `${solution.timeToSolve.toFixed(2)} milliseconds`;
 
@@ -240,7 +232,6 @@ export class Solver {
             });
 
             solution.visualizations.forEach((value) => {
-
                 const pre = document.createElement('pre');
                 pre.textContent = value;
 
