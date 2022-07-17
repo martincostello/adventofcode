@@ -6,9 +6,7 @@ import { Puzzle } from '../models/Puzzle';
 import { Solution } from '../models/Solution';
 
 export class ApiClient {
-
     async getPuzzles(): Promise<Puzzle[]> {
-
         const response = await fetch('/api/puzzles');
 
         if (!response.ok) {
@@ -19,10 +17,9 @@ export class ApiClient {
     }
 
     async solve(url: string, form: FormData): Promise<Solution | ProblemDetails> {
-
         const init = {
             method: 'POST',
-            body: form
+            body: form,
         };
 
         const response = await fetch(url, init);

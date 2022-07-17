@@ -12,6 +12,7 @@ Backup*/
 BenchmarkDotNet.Artifacts/
 bin
 Bin
+coverage/
 node_modules/
 obj
 packages

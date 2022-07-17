@@ -54,6 +54,12 @@ jobs:
       shell: pwsh
       run: ./build.ps1 -Runtime win10-x64
 
+    - uses: codecov/codecov-action@v3
+      name: Upload coverage to Codecov
+      with:
+        files: ./src/AdventOfCode.Site/coverage/lcov.info
+        flags: ${{ matrix.codecov_os }}
+
     - name: Publish web app
       uses: actions/upload-artifact@v3
       if: ${{ runner.os == 'Windows' }}

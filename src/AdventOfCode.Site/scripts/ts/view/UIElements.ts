@@ -2,7 +2,6 @@
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 export class UIElements {
-
     readonly arguments: HTMLInputElement;
     readonly argumentsContainer: HTMLElement;
     readonly inputFile: HTMLInputElement;
@@ -22,7 +21,6 @@ export class UIElements {
     readonly years: HTMLInputElement;
 
     constructor() {
-
         this.arguments = <HTMLInputElement>document.getElementById('arguments');
         this.argumentsContainer = document.getElementById('arguments-container');
 
