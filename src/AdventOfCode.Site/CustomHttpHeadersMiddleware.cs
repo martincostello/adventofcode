@@ -15,10 +15,10 @@ public sealed class CustomHttpHeadersMiddleware
         new[]
         {
             "default-src 'self'",
-            "script-src 'self' 'nonce-{0}' cdn.jsdelivr.net cdnjs.cloudflare.com",
-            "script-src-elem 'self' 'nonce-{0}' cdn.jsdelivr.net cdnjs.cloudflare.com",
-            "style-src 'self' 'nonce-{0}' cdn.jsdelivr.net cdnjs.cloudflare.com",
-            "style-src-elem 'self' 'nonce-{0}' cdn.jsdelivr.net cdnjs.cloudflare.com",
+            "script-src 'self' 'nonce-{0}' cdnjs.cloudflare.com",
+            "script-src-elem 'self' 'nonce-{0}' cdnjs.cloudflare.com",
+            "style-src 'self' 'nonce-{0}' cdnjs.cloudflare.com",
+            "style-src-elem 'self' 'nonce-{0}' cdnjs.cloudflare.com",
             "img-src 'self'",
             "font-src 'self' cdnjs.cloudflare.com",
             "connect-src 'self'",
@@ -74,7 +74,6 @@ public sealed class CustomHttpHeadersMiddleware
                 context.Response.Headers.Add("Expect-CT", "max-age=1800");
             }
 
-            context.Response.Headers.Add("Feature-Policy", "accelerometer 'none'; camera 'none'; geolocation 'none'; gyroscope 'none'; magnetometer 'none'; microphone 'none'; payment 'none'; usb 'none'");
             context.Response.Headers.Add("Permissions-Policy", "accelerometer=(), camera=(), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), payment=(), usb=()");
             context.Response.Headers.Add("Referrer-Policy", "no-referrer-when-downgrade");
             context.Response.Headers.Add("X-Content-Type-Options", "nosniff");

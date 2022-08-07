@@ -1,9 +1,9 @@
 @page "/"
 @model IndexModel
-<div class="jumbotron">
-    <div class="container">
-        <h1 class="display-4">Advent of Code as a Service</h1>
-        <p class="lead">
+<div class="p-5 mt-2 mb-4 rounded-3 border">
+    <div class="container-fluid py-5">
+        <h1 class="display-5 fw-bold">Advent of Code as a Service</h1>
+        <p class="col-md-8 fs-4">
             Solves <a href="https://adventofcode.com/">Advent of Code</a> puzzles using your personal input.
         </p>
     </div>
@@ -12,8 +12,7 @@
     <form id="form" action="" class="needs-validation" method="get" novalidate>
         <div class="form-group">
             <label for="year">Year</label>
-            <select class="form-control" id="year" required>
-            </select>
+            <select class="form-control" id="year" required></select>
         </div>
         <div class="form-group">
             <label for="day">Day</label>
@@ -25,13 +24,12 @@
             <textarea class="form-control" id="arguments" rows="2"></textarea>
         </div>
         <div class="form-group d-none" id="file-container">
-            <label for="resource">Puzzle input</label>
+            <label class="form-label" for="resource" id="resource-label">Puzzle input file</label>
             <div class="custom-file">
-                <input type="file" class="custom-file-input form-control-file" id="resource">
-                <label class="custom-file-label" for="resource" id="resource-label">Puzzle input file</label>
+                <input type="file" class="form-control" id="resource">
             </div>
         </div>
-        <button type="submit" class="btn btn-secondary btn-lg" id="solve">
+        <button type="submit" class="btn btn-secondary btn-lg mt-2" id="solve">
             <placeholder id="solve-text">Solve!</placeholder>
             <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true" id="spinner"></span>
         </button>
