@@ -12,8 +12,7 @@
     <form id="form" action="" class="needs-validation" method="get" novalidate>
         <div class="form-group">
             <label for="year">Year</label>
-            <select class="form-control" id="year" required>
-            </select>
+            <select class="form-control" id="year" required></select>
         </div>
         <div class="form-group">
             <label for="day">Day</label>
@@ -27,11 +26,11 @@
         <div class="form-group d-none" id="file-container">
             <label for="resource">Puzzle input</label>
             <div class="custom-file">
-                <input type="file" class="custom-file-input form-control-file" id="resource">
-                <label class="custom-file-label" for="resource" id="resource-label">Puzzle input file</label>
+                <input type="file" class="form-control" id="resource">
+                <label class="form-label" for="resource" id="resource-label">Puzzle input file</label>
             </div>
         </div>
-        <button type="submit" class="btn btn-secondary btn-lg" id="solve">
+        <button type="submit" class="btn btn-secondary btn-lg mt-2" id="solve">
             <placeholder id="solve-text">Solve!</placeholder>
             <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true" id="spinner"></span>
         </button>
