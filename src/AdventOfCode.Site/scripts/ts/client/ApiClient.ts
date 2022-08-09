@@ -17,13 +17,9 @@ export class ApiClient {
     }
 
     async solve(url: string, form: FormData): Promise<Solution | ProblemDetails> {
-        // TODO Credentials must be disabled until Minimal APIs
-        // supports anti-forgery/CSRF features as part of .NET 7.
-        // See https://github.com/dotnet/aspnetcore/issues/38630.
         const init = {
             method: 'POST',
             body: form,
-            credentials: 'omit' as RequestCredentials,
         };
 
         const response = await fetch(url, init);

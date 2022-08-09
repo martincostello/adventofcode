@@ -37,7 +37,8 @@ foreach (var puzzle in puzzles)
 builder.Services.ConfigureRouteHandlerJsonOptions((p) =>
 {
     p.SerializerOptions.WriteIndented = true;
-    p.SerializerOptions.AddContext<ApplicationJsonSerializerContext>();
+    //// HACK Remove due to issue serializing ProblemDetails for OpenAPI
+    ////p.SerializerOptions.AddContext<ApplicationJsonSerializerContext>();
 });
 
 builder.Services.Configure<StaticFileOptions>((options) =>

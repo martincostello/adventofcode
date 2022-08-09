@@ -77,7 +77,7 @@ internal static class Maths
     /// </returns>
     internal static IList<ICollection<TTotal>> GetCombinations<TTotal, TValue>(TTotal total, IList<TValue> values)
         where TTotal : INumber<TTotal>
-        where TValue : INumber<TValue>, IComparisonOperators<TValue, TTotal>
+        where TValue : INumber<TValue>, IComparisonOperators<TValue, TTotal, bool>
     {
         int length = values.Count;
         var bits = new BitArray(length);
