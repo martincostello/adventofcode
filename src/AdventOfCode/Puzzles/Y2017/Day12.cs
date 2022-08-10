@@ -36,7 +36,7 @@ public sealed class Day12 : Puzzle
         {
             var members = GetMembersOfGroup(target);
 
-            string groupId = string.Join(',', members.Select((p) => p.Id).OrderBy((p) => p));
+            string groupId = string.Join(',', members.Select((p) => p.Id).Order());
             groups.Add(groupId);
         }
 

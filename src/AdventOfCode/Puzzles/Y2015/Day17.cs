@@ -31,7 +31,7 @@ public sealed class Day17 : Puzzle
     internal static IList<ICollection<int>> GetContainerCombinations(int volume, IList<int> containerVolumes)
     {
         var containers = containerVolumes
-            .OrderByDescending((p) => p)
+            .OrderDescending()
             .ToList();
 
         return Maths.GetCombinations(volume, containers);
