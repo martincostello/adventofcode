@@ -1,19 +1,23 @@
 name: benchmark
 
+env:
+  CRANK_VERSION: '0.2.0-*'
+  DOTNET_CLI_TELEMETRY_OPTOUT: true
+  DOTNET_NOLOGO: true
+  DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
+  DOTNET_SYSTEM_CONSOLE_ALLOW_ANSI_COLOR_REDIRECTION: 1
+  NUGET_XMLDOC_MODE: skip
+  TERM: xterm
+
 on:
   issue_comment:
     types: [ created ]
 
 jobs:
   benchmark:
-    name: ${{ matrix.os }}
-    runs-on: ${{ matrix.os }}
-    if: github.repository == 'martincostello/adventofcode' && github.event.issue.pull_request != '' && contains(github.event.comment.body, '/benchmark')
-
-    strategy:
-      fail-fast: false
-      matrix:
-        os: [ windows-latest ]
+    name: benchmark
+    runs-on: windows-latest
+    if: ${{ github.event.repository.fork == false && github.event.issue.pull_request != '' && contains(github.event.comment.body, '/benchmark') }}
 
     steps:
 
@@ -88,7 +92,7 @@ jobs:
           const benchmark = arguments[1];
           core.info(`Benchmark: ${benchmark}`);
 
-          const start_body = `Started [${benchmark} benchmark](https://github.com/${context.repo.owner}/${context.repo.repo}/actions/runs/${process.env.GITHUB_RUN_ID}).`;
+          const start_body = `Started [${benchmark} benchmark](https://github.com/${context.repo.owner}/${context.repo.repo}/actions/runs/${process.env.GITHUB_RUN_ID}). :hourglass:`;
           await github.rest.issues.createComment({
             issue_number: context.issue.number,
             owner: context.repo.owner,
@@ -107,15 +111,28 @@ jobs:
     - name: Install crank
       shell: pwsh
       run: |
-        dotnet tool install --global Microsoft.Crank.Agent --version "0.2.0-*"
-        dotnet tool install --global Microsoft.Crank.Controller --version "0.2.0-*"
-        dotnet tool install --global Microsoft.Crank.PullRequestBot --version "0.2.0-*"
+        dotnet tool install --global Microsoft.Crank.Agent --version "${{ env.CRANK_VERSION }}"
+        dotnet tool install --global Microsoft.Crank.Controller --version "${{ env.CRANK_VERSION }}"
+        dotnet tool install --global Microsoft.Crank.PullRequestBot --version "${{ env.CRANK_VERSION }}"
 
     - name: Run crank
       shell: pwsh
-      run: ./benchmark-crank.ps1 -Benchmark ${{ steps.benchmark-argument.outputs.result }} -Repository https://github.com/${{ github.repository }} -PullRequestId ${{ github.event.issue.number }} -AccessToken ${{ secrets.GITHUB_TOKEN }}
-      env:
-        DOTNET_CLI_TELEMETRY_OPTOUT: true
-        DOTNET_NOLOGO: true
-        DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
-        NUGET_XMLDOC_MODE: skip
+      run: |
+        ./benchmark-crank.ps1 `
+          -Benchmark "${{ steps.benchmark-argument.outputs.result }}" `
+          -Repository "${{ github.server_url }}/${{ github.repository }}" `
+          -PullRequestId "${{ github.event.issue.number }}" `
+          -AccessToken "${{ secrets.GITHUB_TOKEN }}"
+
+    - name: Report failure
+      uses: actions/github-script@v6
+      if: ${{ failure() }}
+      with:
+        script: |
+          const failure_body = `Benchmark [${{ steps.benchmark-argument.outputs.result }}](${{ github.server_url }}/${context.repo.owner}/${context.repo.repo}/actions/runs/${process.env.GITHUB_RUN_ID}) failed. :x:`;
+          await github.rest.issues.createComment({
+            issue_number: context.issue.number,
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            body: failure_body
+          });
