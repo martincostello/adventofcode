@@ -16,6 +16,7 @@ env:
   AWS_LAMBDA_PACKAGE_PATH: ./artifacts/lambda.zip
   AWS_REGION: eu-west-2
   AWS_URL_PROD: https://aoc.martincostello.com/
+  AZURE_URL_PROD: https://advent--of--code.azurewebsites.net/
   AZURE_WEBAPP_NAME: advent--of--code
   AZURE_WEBAPP_PACKAGE_PATH: ./artifacts/publish
   DOTNET_CLI_TELEMETRY_OPTOUT: true
@@ -26,7 +27,6 @@ env:
   DOTNET_SYSTEM_CONSOLE_ALLOW_ANSI_COLOR_REDIRECTION: 1
   NUGET_XMLDOC_MODE: skip
   TERM: xterm
-  WEBSITE_URL_PROD: https://advent--of--code.azurewebsites.net/
 
 jobs:
   build:
@@ -106,7 +106,7 @@ jobs:
     concurrency: production_environment
     environment:
       name: production
-      url: ${{ env.WEBSITE_URL_PROD }}
+      url: ${{ env.AZURE_URL_PROD }}
 
     steps:
 
@@ -140,7 +140,7 @@ jobs:
       shell: pwsh
       run: dotnet test ./tests/AdventOfCode.Tests --configuration Release --filter Category=EndToEnd /p:CollectCoverage=false
       env:
-        WEBSITE_URL: ${{ env.WEBSITE_URL_PROD }}
+        WEBSITE_URL: ${{ env.AZURE_URL_PROD }}
 
   deploy-aws:
     name: deploy-aws
