@@ -4,10 +4,11 @@
 #Requires -Version 7
 
 param(
-    [Parameter(Mandatory = $true)][string] $Benchmark,
-    [Parameter(Mandatory = $true)][string] $Repository,
     [Parameter(Mandatory = $true)][string] $PullRequestId,
-    [Parameter(Mandatory = $false)][string] $AccessToken
+    [Parameter(Mandatory = $false)][string] $AccessToken,
+    [Parameter(Mandatory = $false)][string] $Benchmark = "root",
+    [Parameter(Mandatory = $false)][string] $Repository = "https://github.com/martincostello/adventofcode",
+    [Parameter(Mandatory = $false)][switch] $PublishResults
 )
 
 $additionalArgs = @()
@@ -15,8 +16,11 @@ $additionalArgs = @()
 if (![string]::IsNullOrEmpty($AccessToken)) {
     $additionalArgs += "--access-token"
     $additionalArgs += $AccessToken
-    $additionalArgs += "--publish-results"
-    $additionalArgs += "true"
+
+    if ($PublishResults) {
+        $additionalArgs += "--publish-results"
+        $additionalArgs += "true"
+    }
 }
 
 if ($IsWindows) {
