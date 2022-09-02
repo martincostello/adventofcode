@@ -122,7 +122,8 @@ jobs:
           -Benchmark "${{ steps.benchmark-argument.outputs.result }}" `
           -Repository "${{ github.server_url }}/${{ github.repository }}" `
           -PullRequestId "${{ github.event.issue.number }}" `
-          -AccessToken "${{ secrets.GITHUB_TOKEN }}"
+          -AccessToken "${{ secrets.GITHUB_TOKEN }}" `
+          -PublishResults
 
     - name: Report failure
       uses: actions/github-script@v6
