@@ -3,6 +3,7 @@
 
 using System.IO.Compression;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using MartinCostello.AdventOfCode;
 using MartinCostello.AdventOfCode.Site;
 using Microsoft.AspNetCore.Http.Json;
@@ -127,7 +128,29 @@ if (app.Environment.IsDevelopment())
        .ExcludeFromDescription();
 }
 
+app.MapGet("/version", () =>
+{
+    var result = new
+    {
+        applicationVersion = GetVersion<ApplicationJsonSerializerContext>(),
+        frameworkDescription = RuntimeInformation.FrameworkDescription,
+        operatingSystem = RuntimeInformation.OSDescription,
+        operatingSystemArchitecture = RuntimeInformation.OSArchitecture.ToString(),
+        processArchitecture = RuntimeInformation.ProcessArchitecture.ToString(),
+        dotnet = new
+        {
+            runtime = GetVersion<object>(),
+            aspNetCore = GetVersion<RequestDelegateFactoryOptions>(),
+        },
+    };
+
+    return Results.Json(result);
+}).AllowAnonymous();
+
 app.Run();
+
+static string GetVersion<T>()
+    => typeof(T).Assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>()!.InformationalVersion;
 
 namespace MartinCostello.AdventOfCode.Site
 {

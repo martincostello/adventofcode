@@ -4,12 +4,12 @@
 using System.Net;
 using System.Net.Mime;
 
-namespace MartinCostello.AdventOfCode.EndToEnd;
+namespace MartinCostello.AdventOfCode.Api;
 
-public class ResourceTests : EndToEndTest
+public class ResourceTests : IntegrationTest
 {
-    public ResourceTests(SiteFixture fixture)
-        : base(fixture)
+    public ResourceTests(HttpServerFixture fixture, ITestOutputHelper outputHelper)
+        : base(fixture, outputHelper)
     {
     }
 
