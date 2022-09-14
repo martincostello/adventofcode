@@ -4,6 +4,7 @@
 using System.IO.Compression;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using System.Text.Json.Serialization.Metadata;
 using MartinCostello.AdventOfCode;
 using MartinCostello.AdventOfCode.Site;
 using Microsoft.AspNetCore.ResponseCompression;
@@ -34,11 +35,12 @@ foreach (var puzzle in puzzles)
     builder.Services.AddSingleton(puzzle!);
 }
 
-builder.Services.ConfigureRouteHandlerJsonOptions((p) =>
+builder.Services.ConfigureHttpJsonOptions((p) =>
 {
     p.SerializerOptions.WriteIndented = true;
-    //// HACK Remove due to issue serializing ProblemDetails for OpenAPI
-    ////p.SerializerOptions.AddContext<ApplicationJsonSerializerContext>();
+    p.SerializerOptions.TypeInfoResolver = JsonTypeInfoResolver.Combine(
+        ApplicationJsonSerializerContext.Default,
+        new DefaultJsonTypeInfoResolver());
 });
 
 builder.Services.Configure<StaticFileOptions>((options) =>

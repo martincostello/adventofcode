@@ -188,6 +188,6 @@ public sealed partial class Day04 : Puzzle
         return true;
     }
 
-    [RegexGenerator("#[0-9a-f]{6}", RegexOptions.IgnoreCase)]
+    [GeneratedRegex("#[0-9a-f]{6}", RegexOptions.IgnoreCase)]
     private static partial Regex HexColor();
 }
