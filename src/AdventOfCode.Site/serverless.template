@@ -18,7 +18,7 @@
         "Description": "The Advent of Code as a Service function.",
         "FunctionName": "adventofcode",
         "Handler": "AdventOfCode.Site",
-        "Runtime": "dotnet6",
+        "Runtime": "provided.al2",
         "Architectures": [ "arm64" ],
         "MemorySize": 384,
         "Timeout": 30,

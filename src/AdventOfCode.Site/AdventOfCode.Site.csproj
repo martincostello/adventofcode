@@ -10,10 +10,17 @@
     <TypeScriptCompileBlocked>true</TypeScriptCompileBlocked>
     <TypeScriptToolsVersion>latest</TypeScriptToolsVersion>
   </PropertyGroup>
+  <PropertyGroup Condition=" '$(RuntimeIdentifier)' == 'linux-arm64' ">
+    <AssemblyName>bootstrap</AssemblyName>
+  </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Amazon.Lambda.AspNetCoreServer.Hosting" />
     <PackageReference Include="Microsoft.TypeScript.MSBuild" PrivateAssets="all" />
     <PackageReference Include="Swashbuckle.AspNetCore" />
+  </ItemGroup>
+  <ItemGroup Condition=" '$(RuntimeIdentifier)' == 'linux-arm64' ">
+    <PackageReference Include="Microsoft.ICU.ICU4C.Runtime" />
+    <RuntimeHostConfigurationOption Include="System.Globalization.AppLocalIcu" Value="$(MicrosoftICUICU4CRuntimeVersion)" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\AdventOfCode\AdventOfCode.csproj" />

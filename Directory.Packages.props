@@ -1,4 +1,7 @@
 <Project>
+  <PropertyGroup>
+    <MicrosoftICUICU4CRuntimeVersion>68.2.0.9</MicrosoftICUICU4CRuntimeVersion>
+  </PropertyGroup>
   <ItemGroup>
     <PackageVersion Include="Amazon.Lambda.AspNetCoreServer.Hosting" Version="1.3.1" />
     <PackageVersion Include="BenchmarkDotNet" Version="0.13.2" />
@@ -6,6 +9,7 @@
     <PackageVersion Include="MartinCostello.Logging.XUnit" Version="0.3.0" />
     <PackageVersion Include="MartinCostello.Testing.AwsLambdaTestServer" Version="0.6.0" />
     <PackageVersion Include="Microsoft.AspNetCore.Mvc.Testing" Version="6.0.9" />
+    <PackageVersion Include="Microsoft.ICU.ICU4C.Runtime" Version="$(MicrosoftICUICU4CRuntimeVersion)" />
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.3.1" />
     <PackageVersion Include="Microsoft.Playwright" Version="1.25.0" />
     <PackageVersion Include="Microsoft.SourceLink.GitHub" Version="1.1.1" />

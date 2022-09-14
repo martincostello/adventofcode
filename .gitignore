@@ -22,6 +22,7 @@ src/AdventOfCode.Site/wwwroot/static/js/
 TestResults
 UpgradeLog*.htm
 UpgradeLog*.XML
+*.binlog
 *.DotSettings
 *.GhostDoc.xml
 *.log
