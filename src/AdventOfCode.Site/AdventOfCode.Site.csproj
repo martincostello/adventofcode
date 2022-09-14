@@ -11,7 +11,7 @@
     <TypeScriptCompileBlocked>true</TypeScriptCompileBlocked>
     <TypeScriptToolsVersion>latest</TypeScriptToolsVersion>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(RuntimeIdentifier)' == 'linux-arm64' ">
+  <PropertyGroup Condition=" '$(RuntimeIdentifier)' == 'linux-x64' ">
     <AssemblyName>bootstrap</AssemblyName>
   </PropertyGroup>
   <ItemGroup>
