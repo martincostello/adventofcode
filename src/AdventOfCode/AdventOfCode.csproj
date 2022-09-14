@@ -5,13 +5,12 @@
     <NoWarn>$(NoWarn);CA2007;CA2225;CA5351</NoWarn>
     <OutputType>Library</OutputType>
     <RootNamespace>MartinCostello.AdventOfCode</RootNamespace>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net7.0</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
     <EmbeddedResource Include="Input\**\input.txt" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.Toolkit.HighPerformance" />
-    <PackageReference Include="System.Runtime.Experimental" />
   </ItemGroup>
 </Project>

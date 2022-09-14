@@ -32,7 +32,7 @@ public sealed class Day22 : Puzzle
     {
         var nodes = output
             .Skip(2)
-            .Select((p) => Node.Parse(p))
+            .Select(Node.Parse)
             .ToList();
 
         int viableCount = 0;

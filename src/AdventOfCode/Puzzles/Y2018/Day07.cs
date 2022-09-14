@@ -70,7 +70,7 @@ public sealed class Day07 : Puzzle
                 used.Add(part);
             }
 
-            foreach (string part in available.OrderBy((p) => p))
+            foreach (string part in available.Order())
             {
                 bool ready =
                     inProgress.Count < workers &&

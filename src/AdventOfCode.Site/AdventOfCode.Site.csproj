@@ -1,16 +1,17 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
   <PropertyGroup>
+    <AssemblyName>bootstrap</AssemblyName>
     <AWSProjectType>Lambda</AWSProjectType>
     <Description>Web app for solving Advent of Code.</Description>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <NoWarn>$(NoWarn);CA2007</NoWarn>
     <OutputType>Exe</OutputType>
     <RootNamespace>MartinCostello.AdventOfCode.Site</RootNamespace>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net7.0</TargetFramework>
     <TypeScriptCompileBlocked>true</TypeScriptCompileBlocked>
     <TypeScriptToolsVersion>latest</TypeScriptToolsVersion>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(RuntimeIdentifier)' == 'linux-arm64' ">
+  <PropertyGroup Condition=" '$(RuntimeIdentifier)' == 'linux-x64' ">
     <AssemblyName>bootstrap</AssemblyName>
   </PropertyGroup>
   <ItemGroup>

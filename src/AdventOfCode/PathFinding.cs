@@ -25,7 +25,7 @@ public static class PathFinding
     public static long AStar<T>(IWeightedGraph<T> graph, T start, T goal, Func<T, T, long>? heuristic = default)
         where T : notnull
     {
-        heuristic ??= (x, y) => graph.Cost(x, y);
+        heuristic ??= graph.Cost;
 
         var frontier = new PriorityQueue<T, long>();
         frontier.Enqueue(start, 0);

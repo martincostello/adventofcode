@@ -528,7 +528,7 @@ public sealed class Day20 : Puzzle
         /// neighbor of this tile; otherwise <see langword="false"/>.
         /// </returns>
         public bool IsNeighbor(Tile other)
-            => this != other && other.EdgeCandidates.Any((p) => EdgeCandidates.Contains(p));
+            => this != other && other.EdgeCandidates.Any(EdgeCandidates.Contains);
 
         /// <summary>
         /// Removes the border from the tile's grid.

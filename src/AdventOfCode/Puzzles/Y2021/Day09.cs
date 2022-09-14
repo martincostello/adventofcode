@@ -101,7 +101,7 @@ public sealed class Day09 : Puzzle
             .Sum();
 
         int areaOfThreeLargestBasins = basinAreas
-            .OrderByDescending((p) => p)
+            .OrderDescending()
             .Take(3)
             .Aggregate((x, y) => x *= y);
 

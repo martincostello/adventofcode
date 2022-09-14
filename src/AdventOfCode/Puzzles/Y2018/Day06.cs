@@ -107,7 +107,7 @@ public sealed class Day06 : Puzzle
             .Where((p) => !infiniteAreas.Contains(p.Value))
             .GroupBy((p) => p.Value)
             .Select((p) => p.Count())
-            .OrderByDescending((p) => p)
+            .OrderDescending()
             .First();
 
         int areaOfRegion = closeRegion.Count;

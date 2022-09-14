@@ -19,7 +19,7 @@
         "FunctionName": "adventofcode",
         "Handler": "AdventOfCode.Site",
         "Runtime": "provided.al2",
-        "Architectures": [ "arm64" ],
+        "Architectures": [ "x86_64" ],
         "MemorySize": 384,
         "Timeout": 30,
         "Policies": [

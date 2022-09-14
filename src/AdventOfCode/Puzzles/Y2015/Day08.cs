@@ -25,7 +25,7 @@ public sealed class Day08 : Puzzle
     /// <param name="collection">The values to get the encoded number of characters from.</param>
     /// <returns>The number of characters in <paramref name="collection"/> when encoded.</returns>
     internal static int GetEncodedCharacterCount(IEnumerable<string> collection)
-        => collection.Sum((p) => GetEncodedCharacterCount(p));
+        => collection.Sum(GetEncodedCharacterCount);
 
     /// <summary>
     /// Returns the number of characters in the specified <see cref="string"/> if literals are encoded.

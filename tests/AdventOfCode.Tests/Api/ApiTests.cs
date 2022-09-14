@@ -275,8 +275,14 @@ public class ApiTests : IntegrationTest
         // Arrange
         using var client = Fixture.CreateClient();
 
+        using var content = new MultipartFormDataContent()
+        {
+#pragma warning disable CA2000
+            { new StringContent(GetPuzzleInput(2015, 1)), "resource", "input.txt" },
+#pragma warning restore CA2000
+        };
+
         // Act
-        using var content = new MultipartFormDataContent();
         using var response = await client.PostAsync("/api/puzzles/2014/1/solve", content);
 
         // Assert
@@ -287,20 +293,19 @@ public class ApiTests : IntegrationTest
     }
 
     [Fact]
-    public async Task Api_Returns_415_If_Puzzle_Content_Incorrect()
+    public async Task Api_Returns_400_If_Puzzle_Content_Incorrect()
     {
         // Arrange
         using var client = Fixture.CreateClient();
+        using var content = new StringContent("{}", Encoding.UTF8, "application/json");
 
         // Act
-        using var content = new StringContent("{}", Encoding.UTF8, "application/json");
         using var response = await client.PostAsync("/api/puzzles/2015/1/solve", content);
 
         // Assert
-        response.StatusCode.ShouldBe(HttpStatusCode.UnsupportedMediaType);
+        response.StatusCode.ShouldBe(HttpStatusCode.BadRequest);
         response.Content.ShouldNotBeNull();
-        response.Content!.Headers.ContentType.ShouldNotBeNull();
-        response.Content.Headers.ContentType.MediaType.ShouldBe("application/problem+json");
+        response.Content!.Headers.ContentLength.ShouldBe(0);
     }
 
     private static string GetPuzzleInput(int year, int day)

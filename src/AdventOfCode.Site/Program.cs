@@ -4,9 +4,9 @@
 using System.IO.Compression;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using System.Text.Json.Serialization.Metadata;
 using MartinCostello.AdventOfCode;
 using MartinCostello.AdventOfCode.Site;
-using Microsoft.AspNetCore.Http.Json;
 using Microsoft.AspNetCore.ResponseCompression;
 using ILogger = MartinCostello.AdventOfCode.ILogger;
 
@@ -35,10 +35,12 @@ foreach (var puzzle in puzzles)
     builder.Services.AddSingleton(puzzle!);
 }
 
-builder.Services.Configure<JsonOptions>((p) =>
+builder.Services.ConfigureHttpJsonOptions((p) =>
 {
     p.SerializerOptions.WriteIndented = true;
-    p.SerializerOptions.AddContext<ApplicationJsonSerializerContext>();
+    p.SerializerOptions.TypeInfoResolver = JsonTypeInfoResolver.Combine(
+        ApplicationJsonSerializerContext.Default,
+        new DefaultJsonTypeInfoResolver());
 });
 
 builder.Services.Configure<StaticFileOptions>((options) =>

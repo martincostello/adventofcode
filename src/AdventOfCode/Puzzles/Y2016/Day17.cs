@@ -50,7 +50,7 @@ public sealed class Day17 : Puzzle
 
         int longestPath = routes
             .Select((p) => p.Length)
-            .OrderByDescending((p) => p)
+            .OrderDescending()
             .FirstOrDefault();
 
         return (shortestPath, longestPath);

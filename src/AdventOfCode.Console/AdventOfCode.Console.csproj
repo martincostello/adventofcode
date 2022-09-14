@@ -4,7 +4,7 @@
     <NoWarn>$(NoWarn);CA2007</NoWarn>
     <OutputType>Exe</OutputType>
     <RootNamespace>MartinCostello.AdventOfCode.Console</RootNamespace>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net7.0</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\AdventOfCode\AdventOfCode.csproj" />

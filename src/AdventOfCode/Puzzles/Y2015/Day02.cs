@@ -32,12 +32,12 @@ public sealed class Day02 : Puzzle
     {
         // Parse the dimensions of the presents
         var presents = dimensions
-            .Select((p) => Present.Parse(p))
+            .Select(Present.Parse)
             .ToList();
 
         // Determine the total area of wrapping paper required and the amount of ribbon
-        int totalArea = presents.Sum((p) => GetWrappingPaperArea(p));
-        int length = presents.Sum((p) => GetRibbonLength(p));
+        int totalArea = presents.Sum(GetWrappingPaperArea);
+        int length = presents.Sum(GetRibbonLength);
 
         return (totalArea, length);
     }
