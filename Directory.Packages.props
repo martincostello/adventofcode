@@ -14,7 +14,7 @@
     <PackageVersion Include="Microsoft.Playwright" Version="1.26.0" />
     <PackageVersion Include="Microsoft.SourceLink.GitHub" Version="1.1.1" />
     <PackageVersion Include="Microsoft.Toolkit.HighPerformance" Version="7.1.2" />
-    <PackageVersion Include="Microsoft.TypeScript.MSBuild" Version="4.8.3" />
+    <PackageVersion Include="Microsoft.TypeScript.MSBuild" Version="4.8.4" />
     <PackageVersion Include="Shouldly" Version="4.1.0" />
     <PackageVersion Include="StyleCop.Analyzers" Version="1.2.0-beta.435" />
     <PackageVersion Include="Swashbuckle.AspNetCore" Version="6.4.0" />
