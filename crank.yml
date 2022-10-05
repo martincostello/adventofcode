@@ -2,6 +2,8 @@ imports:
   - https://raw.githubusercontent.com/dotnet/crank/main/src/Microsoft.Crank.Jobs.Bombardier/bombardier.yml
 
 jobs:
+  bombardier:
+    channel: current
   microbenchmarks:
     source:
       repository: https://github.com/martincostello/adventofcode
@@ -11,6 +13,7 @@ jobs:
       filterArg: "*"
       jobArg: short
     arguments: --job {{jobArg}} --filter {{filterArg}} --memory
+    channel: current
     options:
       benchmarkDotNet: true
   server:
@@ -18,6 +21,7 @@ jobs:
       repository: https://github.com/martincostello/adventofcode
       branchOrCommit: main
       project: src/AdventOfCode.Site/AdventOfCode.Site.csproj
+    channel: current
     readyStateText: Application started.
 
 scenarios:
