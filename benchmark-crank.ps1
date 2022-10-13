@@ -33,6 +33,18 @@ $components = "app"
 $config = Join-Path $repoPath "benchmark.yml"
 $profiles = "local"
 
+$additionalArgs = @()
+
+if (![string]::IsNullOrEmpty($AccessToken)) {
+    $additionalArgs += "--access-token"
+    $additionalArgs += $AccessToken
+
+    if ($PublishResults) {
+        $additionalArgs += "--publish-results"
+        $additionalArgs += "true"
+    }
+}
+
 try {
     & $crankPR `
         --benchmarks $Benchmark `
