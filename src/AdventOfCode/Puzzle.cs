@@ -1,6 +1,7 @@
 ﻿// Copyright (c) Martin Costello, 2015. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
+using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 
 namespace MartinCostello.AdventOfCode;
@@ -126,7 +127,7 @@ public abstract class Puzzle : IPuzzle
     /// <see langword="true"/> if <paramref name="s"/> was parsed
     /// successfully; otherwise <see langword="false"/>.
     /// </returns>
-    protected internal static bool TryParse<T>(ReadOnlySpan<char> s, out T value)
+    protected internal static bool TryParse<T>(ReadOnlySpan<char> s, [MaybeNullWhen(false)] out T? value)
         where T : INumber<T>
         => T.TryParse(s, NumberStyles.Integer, CultureInfo.InvariantCulture, out value);
 
