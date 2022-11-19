@@ -1,11 +1,11 @@
 ### Expected behaviour
 
-_Explain the expected behaviour._
+<!-- Explain the expected behaviour. -->
 
 ### Actual behaviour
 
-_Explain the actual behaviour._
+<!-- Explain the actual behaviour. -->
 
 ### Steps to reproduce
 
-_If applicable, please include a minimum reproducable code sample._
+<!-- If applicable, please include a minimum reproducable code sample. -->
