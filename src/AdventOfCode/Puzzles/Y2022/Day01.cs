@@ -15,6 +15,11 @@ public sealed class Day01 : Puzzle
     public int MaximumCalories { get; private set; }
 
     /// <summary>
+    /// Gets the number of calories carried by the three elves with the most calorific inventories.
+    /// </summary>
+    public int MaximumCaloriesForTop3 { get; private set; }
+
+    /// <summary>
     /// Returns the number of calories carried by each elf in the specified inventories.
     /// </summary>
     /// <param name="inventories">The lines of the inventory.</param>
@@ -60,12 +65,14 @@ public sealed class Day01 : Puzzle
         var calories = GetCalorieInventories(inventories);
 
         MaximumCalories = calories.Max();
+        MaximumCaloriesForTop3 = calories.OrderDescending().Take(3).Sum();
 
         if (Verbose)
         {
             Logger.WriteLine("The elf carrying the largest inventory has {0:N0} Calories.", MaximumCalories);
+            Logger.WriteLine("The elves carrying the largest three inventories have {0:N0} Calories.", MaximumCaloriesForTop3);
         }
 
-        return PuzzleResult.Create(MaximumCalories);
+        return PuzzleResult.Create(MaximumCalories, MaximumCaloriesForTop3);
     }
 }
