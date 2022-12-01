@@ -56,5 +56,6 @@ public sealed class Day01Tests : PuzzleTest
         // Assert
         puzzle.ShouldNotBeNull();
         puzzle.MaximumCalories.ShouldBe(68775);
+        puzzle.MaximumCaloriesForTop3.ShouldBe(202585);
     }
 }
