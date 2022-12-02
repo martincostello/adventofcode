@@ -20,7 +20,7 @@
       }
     },
     {
-      "name": "Run tests",
+      "name": "Run .NET tests",
       "type": "coreclr",
       "request": "launch",
       "preLaunchTask": "build",
@@ -32,6 +32,19 @@
       "console": "internalConsole",
       "stopAtEntry": false,
       "internalConsoleOptions": "openOnSessionStart"
+    },
+    {
+      "name": "Run TypeScript tests",
+      "type": "node",
+      "request": "launch",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": [
+        "run-script",
+        "test"
+      ],
+      "cwd": "${workspaceFolder}/src/AdventOfCode.Site",
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen"
     }
   ]
 }

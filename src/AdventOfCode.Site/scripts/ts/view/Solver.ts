@@ -3,7 +3,7 @@
 
 import { ApiClient } from '../client/ApiClient';
 import { ProblemDetails } from '../models/ProblemDetails';
-import { Puzzle } from '../models/Puzzle';
+import { PuzzleMetadata } from '../models/PuzzleMetadata';
 import { Solution } from '../models/Solution';
 import { UIElements } from './UIElements';
 
@@ -12,12 +12,12 @@ export class Solver {
 
     private readonly client: ApiClient;
     private readonly elements: UIElements;
-    private readonly puzzlesByYear: Map<string, Puzzle[]>;
+    private readonly puzzlesByYear: Map<string, PuzzleMetadata[]>;
 
     constructor() {
         this.elements = new UIElements();
         this.client = new ApiClient();
-        this.puzzlesByYear = new Map<string, Puzzle[]>();
+        this.puzzlesByYear = new Map<string, PuzzleMetadata[]>();
     }
 
     async initialize(): Promise<void> {
@@ -46,7 +46,7 @@ export class Solver {
         puzzles.forEach((puzzle) => {
             const year = puzzle.year.toString();
 
-            let puzzlesForYear: Puzzle[];
+            let puzzlesForYear: PuzzleMetadata[];
 
             if (!this.puzzlesByYear.has(year)) {
                 puzzlesForYear = [];

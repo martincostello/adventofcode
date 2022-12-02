@@ -2,11 +2,11 @@
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 import { ProblemDetails } from '../models/ProblemDetails';
-import { Puzzle } from '../models/Puzzle';
+import { PuzzleMetadata } from '../models/PuzzleMetadata';
 import { Solution } from '../models/Solution';
 
 export class ApiClient {
-    async getPuzzles(): Promise<Puzzle[]> {
+    async getPuzzles(): Promise<PuzzleMetadata[]> {
         const response = await fetch('/api/puzzles');
 
         if (!response.ok) {
