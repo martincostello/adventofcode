@@ -12,13 +12,16 @@ describe('2016', () => {
             ['R2, R2, R2', true, 2],
             ['R5, L5, R5, R3', true, 12],
             ['R8, R4, R4, R8', false, 4],
-        ])('returns correct distance for instructions "%s" with ignoreDuplicates %s', (instructions: string, ignoreDuplicates: boolean, expected: number) => {
-            // Act
-            const actual = Day01.calculateDistance(instructions, ignoreDuplicates);
+        ])(
+            'returns correct distance for instructions "%s" with ignoreDuplicates %s',
+            (instructions: string, ignoreDuplicates: boolean, expected: number) => {
+                // Act
+                const actual = Day01.calculateDistance(instructions, ignoreDuplicates);
 
-            // Assert
-            expect(actual).toEqual(expected);
-        });
+                // Assert
+                expect(actual).toEqual(expected);
+            }
+        );
         test('returns the correct solution', async () => {
             // Act
             const puzzle = await PuzzleSolver.solve(Day01);
