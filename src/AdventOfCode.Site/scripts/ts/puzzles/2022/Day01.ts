@@ -2,22 +2,18 @@
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 import { Solution } from '../../models/Solution';
-import { Puzzle } from '../Puzzle';
+import { Puzzle2022 } from './Puzzle2022';
 
-export class Day01 extends Puzzle {
+export class Day01 extends Puzzle2022 {
     maximumCalories: number;
     maximumCaloriesForTop3: number;
 
-    get name(): string {
+    override get name(): string {
         return 'Calorie Counting';
     }
 
-    get day(): number {
+    override get day(): number {
         return 1;
-    }
-
-    get year(): number {
-        return 2022;
     }
 
     protected override get requiresData(): boolean {

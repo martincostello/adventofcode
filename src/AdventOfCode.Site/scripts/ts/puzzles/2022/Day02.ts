@@ -2,7 +2,7 @@
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 import { Solution } from '../../models/Solution';
-import { Puzzle } from '../Puzzle';
+import { Puzzle2022 } from './Puzzle2022';
 
 enum Move {
     rock = 1,
@@ -16,20 +16,16 @@ enum Outcome {
     win = 6,
 }
 
-export class Day02 extends Puzzle {
+export class Day02 extends Puzzle2022 {
     totalScoreForMoves: number;
     totalScoreForOutcomes: number;
 
-    get name(): string {
+    override get name(): string {
         return 'Rock Paper Scissors';
     }
 
-    get day(): number {
+    override get day(): number {
         return 2;
-    }
-
-    get year(): number {
-        return 2022;
     }
 
     static getTotalScore(moves: string[], containsDesiredOutcome: boolean): number {
