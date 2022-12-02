@@ -29,10 +29,36 @@ export abstract class Puzzle {
             throw new Error('A puzzle input is required.');
         }
 
-        return await this.solveCore(inputs);
+        const startTime = performance.now();
+
+        const result = await this.solveCore(inputs);
+
+        result.timeToSolve = performance.now() - startTime;
+
+        return result;
     }
 
     abstract solveCore(inputs: string[]): Promise<Solution>;
+
+    protected createResult(solutions: any[], visualizations: string[] = []): Promise<Solution> {
+        const solution: Solution = {
+            day: this.day,
+            solutions,
+            timeToSolve: -1,
+            visualizations,
+            year: this.year,
+        };
+
+        return Promise.resolve(solution);
+    }
+
+    protected static parse(value: string): number {
+        return parseInt(value, 10);
+    }
+
+    protected readResourceAsLines(): string[] {
+        return this.resource.split('\n');
+    }
 
     private ensureArguments(inputs: string[]): boolean {
         return inputs && inputs.length >= this.minimumArguments;
