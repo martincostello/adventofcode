@@ -6,7 +6,7 @@ import { Puzzle } from './Puzzle';
 import { PuzzleFactory } from './PuzzleFactory';
 
 export class DefaultPuzzleFactory implements PuzzleFactory {
-    create(year: number, day: number): Puzzle {
+    create(year: number, day: number): Puzzle | null {
         let factory: PuzzleFactory;
 
         switch (year) {
@@ -19,7 +19,7 @@ export class DefaultPuzzleFactory implements PuzzleFactory {
         }
 
         if (!factory) {
-            throw new Error('The year specified is invalid.');
+            return null;
         }
 
         return factory.create(year, day);

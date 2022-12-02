@@ -6,16 +6,16 @@ import { PuzzleFactory } from '../PuzzleFactory';
 import { Day01 } from './Day01';
 
 export class PuzzleFactory2022 implements PuzzleFactory {
-    create(year: number, day: number): Puzzle {
+    create(year: number, day: number): Puzzle | null {
         if (year !== 2022) {
-            throw new Error('The year specified is invalid.');
+            return null;
         }
 
         switch (day) {
             case 1:
                 return new Day01();
             default:
-                throw new Error('The day specified is invalid.');
+                return null;
         }
     }
 }

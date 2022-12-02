@@ -4,5 +4,5 @@
 import { Puzzle } from './Puzzle';
 
 export interface PuzzleFactory {
-    create(year: number, day: number): Puzzle;
+    create(year: number, day: number): Puzzle | null;
 }
