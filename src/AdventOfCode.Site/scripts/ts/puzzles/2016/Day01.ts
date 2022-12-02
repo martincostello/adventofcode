@@ -109,7 +109,7 @@ export class Day01 extends Puzzle2016 {
             case CardinalDirection.south:
                 return direction === Direction.left ? CardinalDirection.east : CardinalDirection.west;
             case CardinalDirection.west:
-                direction === Direction.left ? CardinalDirection.south : CardinalDirection.north;
+                return direction === Direction.left ? CardinalDirection.south : CardinalDirection.north;
             default:
                 throw new Error(`Invalid bearing '${bearing}'.`);
         }
