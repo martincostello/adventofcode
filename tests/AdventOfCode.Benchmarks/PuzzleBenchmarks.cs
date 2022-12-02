@@ -255,10 +255,16 @@ public class PuzzleBenchmarks
 
             if (Puzzle is Puzzle puzzle)
             {
-                puzzle.Cache = InMemoryCache.Instance;
+                if (CacheResource)
+                {
+                    puzzle.Cache = InMemoryCache.Instance;
+                }
+
                 puzzle.Logger = NullLogger.Instance;
             }
         }
+
+        public bool CacheResource { get; set; } = true;
 
         public override IPuzzle Puzzle { get; }
 
