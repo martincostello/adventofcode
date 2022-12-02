@@ -11,16 +11,16 @@ public sealed class Day02 : Puzzle
 {
     private enum Move
     {
-        Rock,
-        Paper,
-        Scissors,
+        Rock = 1,
+        Paper = 2,
+        Scissors = 3,
     }
 
     private enum Outcome
     {
-        Lose,
-        Draw,
-        Win,
+        Lose = 0,
+        Draw = 3,
+        Win = 6,
     }
 
     /// <summary>
@@ -59,7 +59,7 @@ public sealed class Day02 : Puzzle
 
             var outcome = GetOutcome(playerMove, opponentMove);
 
-            total += GetScore(playerMove, outcome);
+            total += (int)playerMove + (int)outcome;
         }
 
         return total;
@@ -80,47 +80,20 @@ public sealed class Day02 : Puzzle
 
         static Outcome GetOutcome(Move player, Move opponent) => (player, opponent) switch
         {
-            (Move.Rock, Move.Rock) => Outcome.Draw,
             (Move.Rock, Move.Paper) => Outcome.Lose,
             (Move.Rock, Move.Scissors) => Outcome.Win,
             (Move.Paper, Move.Rock) => Outcome.Win,
-            (Move.Paper, Move.Paper) => Outcome.Draw,
             (Move.Paper, Move.Scissors) => Outcome.Lose,
             (Move.Scissors, Move.Rock) => Outcome.Lose,
             (Move.Scissors, Move.Paper) => Outcome.Win,
-            (Move.Scissors, Move.Scissors) => Outcome.Draw,
-            _ => throw new InvalidOperationException("Invalid move combination."),
+            _ => player == opponent ? Outcome.Draw : throw new InvalidOperationException("Invalid move combination."),
         };
-
-        static int GetScore(Move player, Outcome outcome)
-        {
-            int scoreForShape = player switch
-            {
-                Move.Rock => 1,
-                Move.Paper => 2,
-                Move.Scissors => 3,
-                _ => throw new ArgumentOutOfRangeException(nameof(player), player, "Invalid move."),
-            };
-
-            int scoreForOutcome = outcome switch
-            {
-                Outcome.Lose => 0,
-                Outcome.Draw => 3,
-                Outcome.Win => 6,
-                _ => throw new ArgumentOutOfRangeException(nameof(outcome), outcome, "Invalid outcome."),
-            };
-
-            return scoreForShape + scoreForOutcome;
-        }
 
         static Move ParseMove(string value) => value switch
         {
-            "A" => Move.Rock,
-            "B" => Move.Paper,
-            "C" => Move.Scissors,
-            "X" => Move.Rock,
-            "Y" => Move.Paper,
-            "Z" => Move.Scissors,
+            "A" or "X" => Move.Rock,
+            "B" or "Y" => Move.Paper,
+            "C" or "Z" => Move.Scissors,
             _ => throw new ArgumentOutOfRangeException(nameof(value), value, "Invalid move."),
         };
 
