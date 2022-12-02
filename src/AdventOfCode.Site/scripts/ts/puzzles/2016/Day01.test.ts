@@ -12,7 +12,7 @@ describe('2016', () => {
             ['R2, R2, R2', true, 2],
             ['R5, L5, R5, R3', true, 12],
             ['R8, R4, R4, R8', false, 4],
-        ])('returns correct distance', (instructions: string, ignoreDuplicates: boolean, expected: number) => {
+        ])('returns correct distance for instructions "%s" with ignoreDuplicates %s', (instructions: string, ignoreDuplicates: boolean, expected: number) => {
             // Act
             const actual = Day01.calculateDistance(instructions, ignoreDuplicates);
 
