@@ -19,7 +19,7 @@ describe('2015', () => {
             [')())())', -3, 1],
             [')', -1, 1],
             ['()())', -1, 5],
-        ])('returns correct instructions', (value: string, expectedFloor: number, expectedInstruction: number) => {
+        ])('returns correct instructions for "%s"', (value: string, expectedFloor: number, expectedInstruction: number) => {
             // Act
             const [actualFloor, actualInstruction] = Day01.getFinalFloorAndFirstInstructionBasementReached(value);
 

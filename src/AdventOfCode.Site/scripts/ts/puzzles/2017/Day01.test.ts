@@ -17,7 +17,7 @@ describe('2017', () => {
             ['123425', true, 4],
             ['123123', true, 12],
             ['12131415', true, 4],
-        ])('returns correct sum', (digits: string, nextDigit: boolean, expected: number) => {
+        ])('returns correct sum for %s with next digit %s', (digits: string, nextDigit: boolean, expected: number) => {
             // Act
             const actual = Day01.calculateSum(digits, nextDigit);
 

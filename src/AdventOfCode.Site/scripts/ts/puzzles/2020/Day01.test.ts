@@ -10,7 +10,7 @@ describe('2020', () => {
         test.each([
             [2, 514579],
             [3, 241861950],
-        ])('returns correct product', (take: number, expected: number) => {
+        ])('returns correct product for take %s', (take: number, expected: number) => {
             // Arrange
             const values = [1721, 979, 366, 299, 675, 1456];
 

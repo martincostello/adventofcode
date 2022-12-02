@@ -10,7 +10,7 @@ describe('2021', () => {
         test.each([
             [false, 7],
             [true, 5],
-        ])('returns correct increases', (useSlidingWindow: boolean, expected: number) => {
+        ])('returns correct increases with useSlidingWindow %s', (useSlidingWindow: boolean, expected: number) => {
             // Arrange
             const depthMeasurements = [199, 200, 208, 210, 200, 207, 240, 269, 260, 263];
 

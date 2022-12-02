@@ -10,7 +10,7 @@ describe('2022', () => {
         test.each([
             [false, 15],
             [true, 12],
-        ])('returns correct total score', (containsDesiredOutcome: boolean, expected: number) => {
+        ])('returns correct total score with containsDesiredOutcome %s', (containsDesiredOutcome: boolean, expected: number) => {
             // Arrange
             const moves = ['A Y', 'B X', 'C Z'];
 

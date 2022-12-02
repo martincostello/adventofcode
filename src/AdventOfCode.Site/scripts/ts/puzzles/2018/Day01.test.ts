@@ -12,7 +12,7 @@ describe('2018', () => {
             [[1, 1, 1], 3],
             [[1, 1, -2], 0],
             [[-1, -2, -3], -6],
-        ])('returns correct frequency', (sequence: number[], expected: number) => {
+        ])('returns correct frequency for %s', (sequence: number[], expected: number) => {
             // Act
             const actual = Day01.calculateFrequency(sequence);
 
@@ -25,7 +25,7 @@ describe('2018', () => {
             [[3, 3, 4, -2, -4], 10],
             [[-6, 3, 8, 5, -6], 5],
             [[7, 7, -2, -7, -4], 14],
-        ])('returns correct frequency with repetition', (sequence: number[], expected: number) => {
+        ])('returns correct frequency with repetition for %s', (sequence: number[], expected: number) => {
             // Act
             const [_, actual] = Day01.calculateFrequencyWithRepetition(sequence);
 
