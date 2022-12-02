@@ -44,6 +44,9 @@ export class Day01 extends Puzzle2019 {
         this.totalFuelRequiredForModules = Day01.getFuelRequirementsForMasses(masses);
         this.totalFuelRequiredForRocket = Day01.getFuelRequirementsForRocket(masses);
 
+        console.info(`${this.totalFuelRequiredForModules} fuel is required for the modules.`);
+        console.info(`${this.totalFuelRequiredForRocket} fuel is required for the fully-fuelled rocket.`);
+
         return this.createResult([this.totalFuelRequiredForModules, this.totalFuelRequiredForRocket]);
     }
 
