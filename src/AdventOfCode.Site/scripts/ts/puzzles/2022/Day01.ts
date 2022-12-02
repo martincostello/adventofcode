@@ -2,6 +2,7 @@
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 import { Solution } from '../../models/Solution';
+import { Puzzle } from '../Puzzle';
 import { Puzzle2022 } from './Puzzle2022';
 
 export class Day01 extends Puzzle2022 {
@@ -29,7 +30,7 @@ export class Day01 extends Puzzle2022 {
                 calories.push(current);
                 current = 0;
             } else {
-                current += parseInt(line, 10);
+                current += Puzzle.parse(line);
             }
         }
 
@@ -41,9 +42,7 @@ export class Day01 extends Puzzle2022 {
     }
 
     override solveCore(_: string[]): Promise<Solution> {
-        const startTime = performance.now();
-
-        const inventories = this.resource.split('\n');
+        const inventories = this.readResourceAsLines();
         const calories = Day01.getCalorieInventories(inventories);
 
         this.maximumCalories = Math.max(...calories);
@@ -52,16 +51,6 @@ export class Day01 extends Puzzle2022 {
             .slice(0, 3)
             .reduce((x, y) => x + y, 0);
 
-        const endTime = performance.now();
-
-        const solution: Solution = {
-            day: this.day,
-            solutions: [this.maximumCalories, this.maximumCaloriesForTop3],
-            timeToSolve: endTime - startTime,
-            visualizations: [],
-            year: this.year,
-        };
-
-        return Promise.resolve(solution);
+        return this.createResult([this.maximumCalories, this.maximumCaloriesForTop3]);
     }
 }

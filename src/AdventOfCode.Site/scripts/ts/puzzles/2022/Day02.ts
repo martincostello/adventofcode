@@ -56,24 +56,12 @@ export class Day02 extends Puzzle2022 {
     }
 
     override solveCore(_: string[]): Promise<Solution> {
-        const startTime = performance.now();
-
-        const moves = this.resource.split('\n');
+        const moves = this.readResourceAsLines();
 
         this.totalScoreForMoves = Day02.getTotalScore(moves, false);
         this.totalScoreForOutcomes = Day02.getTotalScore(moves, true);
 
-        const endTime = performance.now();
-
-        const solution: Solution = {
-            day: this.day,
-            solutions: [this.totalScoreForMoves, this.totalScoreForOutcomes],
-            timeToSolve: endTime - startTime,
-            visualizations: [],
-            year: this.year,
-        };
-
-        return Promise.resolve(solution);
+        return this.createResult([this.totalScoreForMoves, this.totalScoreForOutcomes]);
     }
 
     protected override get requiresData(): boolean {
