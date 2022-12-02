@@ -183,4 +183,36 @@ internal static class StringExtensions
     public static IEnumerable<T> AsNumbers<T>(this string value, char separator = ',', StringSplitOptions options = StringSplitOptions.None)
         where T : INumber<T>
         => value.Split(separator, options).Select(Puzzle.Parse<T>);
+
+    /// <summary>
+    /// Parses the specified string as a pair of strings.
+    /// </summary>
+    /// <param name="value">The string to parse as a pair of strings.</param>
+    /// <param name="separator">The optional separator between the two strings.</param>
+    /// <returns>
+    /// The two strings parsed from the string.
+    /// </returns>
+    public static (string First, string Second) AsPair(this string value, char separator = ',')
+        => value.AsSpan().AsPair(separator);
+
+    /// <summary>
+    /// Parses the specified span as a pair of strings.
+    /// </summary>
+    /// <param name="value">The span to parse as a pair of strings.</param>
+    /// <param name="separator">The optional separator between the two strings.</param>
+    /// <returns>
+    /// The two strings parsed from the span.
+    /// </returns>
+    public static (string First, string Second) AsPair(this ReadOnlySpan<char> value, char separator = ',')
+    {
+        var tokens = value.Tokenize(separator);
+
+        tokens.MoveNext();
+        string first = new(tokens.Current);
+
+        tokens.MoveNext();
+        string second = new(tokens.Current);
+
+        return (first, second);
+    }
 }
