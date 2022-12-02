@@ -9,29 +9,6 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2022;
 [Puzzle(2022, 02, "Rock Paper Scissors", RequiresData = true)]
 public sealed class Day02 : Puzzle
 {
-    private static readonly Dictionary<string, Move> Moves = new(StringComparer.Ordinal)
-    {
-        ["A"] = Move.Rock,
-        ["B"] = Move.Paper,
-        ["C"] = Move.Scissors,
-        ["X"] = Move.Rock,
-        ["Y"] = Move.Paper,
-        ["Z"] = Move.Scissors,
-    };
-
-    private static readonly Dictionary<(Move Player, Move Opponent), Outcome> Outcomes = new()
-    {
-        [(Move.Rock, Move.Rock)] = Outcome.Draw,
-        [(Move.Rock, Move.Paper)] = Outcome.Lose,
-        [(Move.Rock, Move.Scissors)] = Outcome.Win,
-        [(Move.Paper, Move.Rock)] = Outcome.Win,
-        [(Move.Paper, Move.Paper)] = Outcome.Draw,
-        [(Move.Paper, Move.Scissors)] = Outcome.Lose,
-        [(Move.Scissors, Move.Rock)] = Outcome.Lose,
-        [(Move.Scissors, Move.Paper)] = Outcome.Win,
-        [(Move.Scissors, Move.Scissors)] = Outcome.Draw,
-    };
-
     private enum Move
     {
         Rock,
@@ -47,33 +24,73 @@ public sealed class Day02 : Puzzle
     }
 
     /// <summary>
-    /// Gets the total score from following the encrypted strategy guide.
+    /// Gets the total score from following the encrypted strategy guide as a series of moves.
     /// </summary>
-    public int TotalScore { get; private set; }
+    public int TotalScoreForMoves { get; private set; }
+
+    /// <summary>
+    /// Gets the total score from following the encrypted strategy guide as a series of desired outcomes.
+    /// </summary>
+    public int TotalScoreForOutcomes { get; private set; }
 
     /// <summary>
     /// Gets the total score from following the encrypted strategy guide.
     /// </summary>
     /// <param name="moves">The moves to follow.</param>
+    /// <param name="containsDesiredOutcome">Whether the guide contains the desired outcomes rather than the moves to play.</param>
     /// <returns>
     /// The total score from following the encrypted strategy guide.
     /// </returns>
-    public static int GetTotalScore(ICollection<string> moves)
+    public static int GetTotalScore(ICollection<string> moves, bool containsDesiredOutcome)
     {
         int total = 0;
+
+        Func<string, Move, Move> moveSelector =
+            containsDesiredOutcome ?
+            (value, opponent) => GetMove(ParseOutcome(value), opponent) :
+            (value, _) => ParseMove(value);
 
         foreach (string move in moves)
         {
             (string opponent, string player) = move.AsPair(' ');
 
-            var playerMove = Moves[player];
-            var opponentMove = Moves[opponent];
-            var outcome = Outcomes[(playerMove, opponentMove)];
+            Move opponentMove = ParseMove(opponent);
+            Move playerMove = moveSelector(player, opponentMove);
+
+            var outcome = GetOutcome(playerMove, opponentMove);
 
             total += GetScore(playerMove, outcome);
         }
 
         return total;
+
+        static Move GetMove(Outcome outcome, Move opponent) => (outcome, opponent) switch
+        {
+            (Outcome.Win, Move.Rock) => Move.Paper,
+            (Outcome.Win, Move.Paper) => Move.Scissors,
+            (Outcome.Win, Move.Scissors) => Move.Rock,
+            (Outcome.Lose, Move.Rock) => Move.Scissors,
+            (Outcome.Lose, Move.Paper) => Move.Rock,
+            (Outcome.Lose, Move.Scissors) => Move.Paper,
+            (Outcome.Draw, Move.Rock) => Move.Rock,
+            (Outcome.Draw, Move.Paper) => Move.Paper,
+            (Outcome.Draw, Move.Scissors) => Move.Scissors,
+            _ => throw new InvalidOperationException("Invalid outcome and move combination."),
+        };
+
+        static Outcome GetOutcome(Move player, Move opponent) => (player, opponent) switch
+        {
+            (Move.Rock, Move.Rock) => Outcome.Draw,
+            (Move.Rock, Move.Paper) => Outcome.Lose,
+            (Move.Rock, Move.Scissors) => Outcome.Win,
+            (Move.Paper, Move.Rock) => Outcome.Win,
+            (Move.Paper, Move.Paper) => Outcome.Draw,
+            (Move.Paper, Move.Scissors) => Outcome.Lose,
+            (Move.Scissors, Move.Rock) => Outcome.Lose,
+            (Move.Scissors, Move.Paper) => Outcome.Win,
+            (Move.Scissors, Move.Scissors) => Outcome.Draw,
+            _ => throw new InvalidOperationException("Invalid move combination."),
+        };
 
         static int GetScore(Move player, Outcome outcome)
         {
@@ -95,6 +112,25 @@ public sealed class Day02 : Puzzle
 
             return scoreForShape + scoreForOutcome;
         }
+
+        static Move ParseMove(string value) => value switch
+        {
+            "A" => Move.Rock,
+            "B" => Move.Paper,
+            "C" => Move.Scissors,
+            "X" => Move.Rock,
+            "Y" => Move.Paper,
+            "Z" => Move.Scissors,
+            _ => throw new ArgumentOutOfRangeException(nameof(value), value, "Invalid move."),
+        };
+
+        static Outcome ParseOutcome(string value) => value switch
+        {
+            "X" => Outcome.Lose,
+            "Y" => Outcome.Draw,
+            "Z" => Outcome.Win,
+            _ => throw new ArgumentOutOfRangeException(nameof(value), value, "Invalid outcome."),
+        };
     }
 
     /// <inheritdoc />
@@ -104,15 +140,20 @@ public sealed class Day02 : Puzzle
 
         var moves = await ReadResourceAsLinesAsync();
 
-        TotalScore = GetTotalScore(moves);
+        TotalScoreForMoves = GetTotalScore(moves, containsDesiredOutcome: false);
+        TotalScoreForOutcomes = GetTotalScore(moves, containsDesiredOutcome: true);
 
         if (Verbose)
         {
             Logger.WriteLine(
-                "The total score from following the encrypted strategy guide would be {0:N0}.",
-                TotalScore);
+                "The total score from following the encrypted strategy guide of moves would be {0:N0}.",
+                TotalScoreForMoves);
+
+            Logger.WriteLine(
+                "The total score from following the encrypted strategy guide of desired outcomes would be {0:N0}.",
+                TotalScoreForOutcomes);
         }
 
-        return PuzzleResult.Create(TotalScore);
+        return PuzzleResult.Create(TotalScoreForMoves, TotalScoreForOutcomes);
     }
 }
