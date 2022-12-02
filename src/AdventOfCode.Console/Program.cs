@@ -41,7 +41,7 @@ Console.CancelKeyPress += (_, e) =>
 };
 
 var logger = new ConsoleLogger();
-var factory = new PuzzleFactory(logger);
+var factory = new PuzzleFactory(NullCache.Instance, logger);
 
 Puzzle puzzle;
 

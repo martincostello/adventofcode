@@ -22,6 +22,11 @@ public abstract class Puzzle : IPuzzle
     public bool Verbose { get; set; }
 
     /// <summary>
+    /// Gets or sets the resource cache to use.
+    /// </summary>
+    internal ICache Cache { get; set; } = NullCache.Instance;
+
+    /// <summary>
     /// Gets or sets the logger to use.
     /// </summary>
     internal ILogger Logger { get; set; } = default!;
@@ -170,18 +175,21 @@ public abstract class Puzzle : IPuzzle
     /// </returns>
     protected async Task<IList<string>> ReadResourceAsLinesAsync()
     {
-        var lines = new List<string>();
-
-        using var reader = new StreamReader(Resource ?? ReadResource(), leaveOpen: Resource is not null);
-
-        string? value;
-
-        while ((value = await reader.ReadLineAsync()) is not null)
+        return await Cache.GetOrCreateAsync(this, async () =>
         {
-            lines.Add(value);
-        }
+            var lines = new List<string>();
 
-        return lines;
+            using var reader = new StreamReader(Resource ?? ReadResource(), leaveOpen: Resource is not null);
+
+            string? value;
+
+            while ((value = await reader.ReadLineAsync()) is not null)
+            {
+                lines.Add(value);
+            }
+
+            return lines;
+        });
     }
 
     /// <summary>
@@ -197,18 +205,21 @@ public abstract class Puzzle : IPuzzle
     protected async Task<IList<T>> ReadResourceAsNumbersAsync<T>()
         where T : INumber<T>
     {
-        var numbers = new List<T>();
-
-        using var reader = new StreamReader(Resource ?? ReadResource(), leaveOpen: Resource is not null);
-
-        string? value;
-
-        while ((value = await reader.ReadLineAsync()) is not null)
+        return await Cache.GetOrCreateAsync(this, async () =>
         {
-            numbers.Add(T.Parse(value, NumberStyles.Integer, CultureInfo.InvariantCulture));
-        }
+            var numbers = new List<T>();
 
-        return numbers;
+            using var reader = new StreamReader(Resource ?? ReadResource(), leaveOpen: Resource is not null);
+
+            string? value;
+
+            while ((value = await reader.ReadLineAsync()) is not null)
+            {
+                numbers.Add(T.Parse(value, NumberStyles.Integer, CultureInfo.InvariantCulture));
+            }
+
+            return numbers;
+        });
     }
 
     /// <summary>
@@ -222,8 +233,11 @@ public abstract class Puzzle : IPuzzle
     /// </returns>
     protected async Task<string> ReadResourceAsStringAsync()
     {
-        using var reader = new StreamReader(Resource ?? ReadResource(), leaveOpen: Resource is not null);
-        return await reader.ReadToEndAsync();
+        return await Cache.GetOrCreateAsync(this, async () =>
+        {
+            using var reader = new StreamReader(Resource ?? ReadResource(), leaveOpen: Resource is not null);
+            return await reader.ReadToEndAsync();
+        });
     }
 
     /// <summary>

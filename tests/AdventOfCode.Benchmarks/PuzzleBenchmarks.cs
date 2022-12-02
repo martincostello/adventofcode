@@ -3,6 +3,7 @@
 
 using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Diagnosers;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace MartinCostello.AdventOfCode.Benchmarks;
 
@@ -254,14 +255,29 @@ public class PuzzleBenchmarks
 
             if (Puzzle is Puzzle puzzle)
             {
-                puzzle.Logger = new NullLogger();
+                puzzle.Cache = InMemoryCache.Instance;
+                puzzle.Logger = NullLogger.Instance;
             }
         }
 
         public override IPuzzle Puzzle { get; }
 
+        private sealed class InMemoryCache : ICache
+        {
+            internal static readonly InMemoryCache Instance = new();
+            private readonly MemoryCache _cache = new(new MemoryCacheOptions());
+
+            public async Task<TItem> GetOrCreateAsync<TItem>(object key, Func<Task<TItem>> factory)
+            {
+                var result = await _cache.GetOrCreateAsync(key, (_) => factory());
+                return result!;
+            }
+        }
+
         private sealed class NullLogger : ILogger
         {
+            internal static readonly NullLogger Instance = new();
+
             public string WriteGrid(bool[,] array, char falseChar, char trueChar)
                 => string.Empty;
 

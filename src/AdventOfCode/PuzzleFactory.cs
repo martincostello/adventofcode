@@ -9,6 +9,11 @@ namespace MartinCostello.AdventOfCode;
 public class PuzzleFactory
 {
     /// <summary>
+    /// The <see cref="ICache"/> to use. This field is read-only.
+    /// </summary>
+    private readonly ICache _cache;
+
+    /// <summary>
     /// The <see cref="ILogger"/> to use. This field is read-only.
     /// </summary>
     private readonly ILogger _logger;
@@ -16,9 +21,11 @@ public class PuzzleFactory
     /// <summary>
     /// Initializes a new instance of the <see cref="PuzzleFactory"/> class.
     /// </summary>
+    /// <param name="cache">The <see cref="ICache"/> to use.</param>
     /// <param name="logger">The <see cref="ILogger"/> to use.</param>
-    public PuzzleFactory(ILogger logger)
+    public PuzzleFactory(ICache cache, ILogger logger)
     {
+        _cache = cache;
         _logger = logger;
     }
 
@@ -43,6 +50,7 @@ public class PuzzleFactory
             throw new PuzzleException("The year and/or puzzle number specified is invalid.");
         }
 
+        puzzle.Cache = _cache;
         puzzle.Logger = _logger;
         puzzle.Verbose = true;
 

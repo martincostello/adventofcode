@@ -18,6 +18,7 @@ builder.WebHost.CaptureStartupErrors(true);
 
 builder.WebHost.ConfigureKestrel((p) => p.AddServerHeader = false);
 
+builder.Services.AddSingleton<ICache>((_) => NullCache.Instance);
 builder.Services.AddSingleton<ILogger, WebLogger>();
 
 builder.Services.AddSingleton<PuzzleFactory>();
