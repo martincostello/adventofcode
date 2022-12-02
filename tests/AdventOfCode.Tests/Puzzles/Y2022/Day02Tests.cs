@@ -17,8 +17,10 @@ public sealed class Day02Tests : PuzzleTest
     {
     }
 
-    [Fact]
-    public void Y2022_Day02_GetTotalScore_Returns_Correct_Values()
+    [Theory]
+    [InlineData(false, 15)]
+    [InlineData(true, 12)]
+    public void Y2022_Day02_GetTotalScore_Returns_Correct_Values(bool containsDesiredOutcome, int expected)
     {
         // Arrange
         string[] moves = new[]
@@ -29,10 +31,10 @@ public sealed class Day02Tests : PuzzleTest
         };
 
         // Act
-        var actual = Day02.GetTotalScore(moves);
+        int actual = Day02.GetTotalScore(moves, containsDesiredOutcome);
 
         // Assert
-        actual.ShouldBe(15);
+        actual.ShouldBe(expected);
     }
 
     [Fact]
@@ -43,6 +45,7 @@ public sealed class Day02Tests : PuzzleTest
 
         // Assert
         puzzle.ShouldNotBeNull();
-        puzzle.TotalScore.ShouldBe(13675);
+        puzzle.TotalScoreForMoves.ShouldBe(13675);
+        puzzle.TotalScoreForOutcomes.ShouldBe(14184);
     }
 }
