@@ -80,6 +80,10 @@ export class Day02 extends Puzzle {
         return Promise.resolve(solution);
     }
 
+    protected override get requiresData(): boolean {
+        return true;
+    }
+
     private static getMove(outcome: Outcome, opponent: Move): Move {
         switch (outcome) {
             case Outcome.win:

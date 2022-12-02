@@ -5,19 +5,30 @@ import { ApiClient } from '../client/ApiClient';
 import { ProblemDetails } from '../models/ProblemDetails';
 import { PuzzleMetadata } from '../models/PuzzleMetadata';
 import { Solution } from '../models/Solution';
+import { DefaultPuzzleFactory } from '../puzzles/DefaultPuzzleFactory';
+import { Puzzle } from '../puzzles/Puzzle';
+import { ClientSolver } from '../solvers/ClientSolver';
+import { ServerSolver } from '../solvers/ServerSolver';
+import { Solver } from '../solvers/Solver';
 import { UIElements } from './UIElements';
 
-export class Solver {
+interface ClientPuzzleMetadata extends PuzzleMetadata {
+    client: Puzzle | null;
+}
+
+export class App {
     private static hideClass: string = 'd-none';
 
     private readonly client: ApiClient;
     private readonly elements: UIElements;
-    private readonly puzzlesByYear: Map<string, PuzzleMetadata[]>;
+    private readonly puzzleFactory: DefaultPuzzleFactory;
+    private readonly puzzlesByYear: Map<string, ClientPuzzleMetadata[]>;
 
     constructor() {
-        this.elements = new UIElements();
         this.client = new ApiClient();
-        this.puzzlesByYear = new Map<string, PuzzleMetadata[]>();
+        this.elements = new UIElements();
+        this.puzzleFactory = new DefaultPuzzleFactory();
+        this.puzzlesByYear = new Map<string, ClientPuzzleMetadata[]>();
     }
 
     async initialize(): Promise<void> {
@@ -46,7 +57,7 @@ export class Solver {
         puzzles.forEach((puzzle) => {
             const year = puzzle.year.toString();
 
-            let puzzlesForYear: PuzzleMetadata[];
+            let puzzlesForYear: ClientPuzzleMetadata[];
 
             if (!this.puzzlesByYear.has(year)) {
                 puzzlesForYear = [];
@@ -55,7 +66,10 @@ export class Solver {
                 puzzlesForYear = this.puzzlesByYear.get(year);
             }
 
-            puzzlesForYear.push(puzzle);
+            puzzlesForYear.push({
+                ...puzzle,
+                client: this.puzzleFactory.create(puzzle.year, puzzle.day),
+            });
 
             if (puzzlesForYear.length === 1) {
                 const element = document.createElement('option');
@@ -99,6 +113,8 @@ export class Solver {
         this.elements.visualization.innerHTML = '';
 
         this.elements.form.setAttribute('action', option.getAttribute('data-location'));
+        this.elements.form.setAttribute('data-day', option.getAttribute('data-day'));
+        this.elements.form.setAttribute('data-year', option.getAttribute('data-year'));
 
         const minimumArguments = parseInt(option.getAttribute('data-minimum-arguments'), 10);
 
@@ -159,11 +175,11 @@ export class Solver {
     }
 
     private hide(element: Element) {
-        element.classList.add(Solver.hideClass);
+        element.classList.add(App.hideClass);
     }
 
     private show(element: Element) {
-        element.classList.remove(Solver.hideClass);
+        element.classList.remove(App.hideClass);
     }
 
     private async onSolve(): Promise<void> {
@@ -171,35 +187,30 @@ export class Solver {
         this.elements.solveText.innerText = 'Solving...';
         this.show(this.elements.spinner);
 
-        const url = this.elements.form.getAttribute('action');
-        const form = new FormData();
+        const inputs: string[] = [];
 
         if (this.elements.arguments.value) {
             const split = this.elements.arguments.value.split('\n');
-
             split.forEach((value) => {
-                form.append('arguments', value);
+                inputs.push(value);
             });
         }
 
         if (this.elements.inputFile.files.length === 1) {
             const file = this.elements.inputFile.files[0];
-            const reader = new FileReader();
 
+            const reader = new FileReader();
             reader.readAsText(file, 'UTF-8');
 
             reader.onload = (event) => {
-                form.append('resource', event.target.result as string);
-                this.solve(url, form);
+                this.solve(inputs, event.target.result as string);
             };
-
-            form.append('resource', file, 'input.txt');
         } else {
-            await this.solve(url, form);
+            await this.solve(inputs);
         }
     }
 
-    private async solve(url: string, form: FormData): Promise<void> {
+    private async solve(inputs: string[], resource: string | null = null): Promise<void> {
         this.hide(this.elements.error);
         this.hide(this.elements.solutionContainer);
 
@@ -208,7 +219,8 @@ export class Solver {
         this.elements.timeToSolve.textContent = '';
         this.elements.visualization.innerHTML = '';
 
-        const result = await this.client.solve(url, form);
+        const solver = this.getSolver();
+        const result = await solver.solve(inputs, resource);
 
         const error = result as ProblemDetails;
         const solution = result as Solution;
@@ -256,5 +268,14 @@ export class Solver {
         this.hide(this.elements.spinner);
         this.elements.solveText.innerText = 'Solve!';
         this.elements.solve.disabled = false;
+    }
+
+    private getSolver(): Solver {
+        const day = parseInt(this.elements.form.getAttribute('data-day'), 10);
+        const year = this.elements.form.getAttribute('data-year');
+
+        const client = this.puzzlesByYear.get(year).find((p) => p.day === day).client;
+
+        return client !== null ? new ClientSolver(client) : new ServerSolver(this.client, this.elements.form, this.elements.inputFile);
     }
 }

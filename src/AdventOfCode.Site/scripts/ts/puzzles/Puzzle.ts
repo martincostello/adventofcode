@@ -14,9 +14,27 @@ export abstract class Puzzle {
         return 0;
     }
 
+    protected get requiresData(): boolean {
+        return false;
+    }
+
     async solve(inputs: string[]): Promise<Solution> {
+        if (!this.ensureArguments(inputs)) {
+            const singular = this.minimumArguments === 1;
+            const message = `At least ${this.minimumArguments} argument${singular ? '' : 's'} ${singular ? 'is' : 'are'} required.`;
+            throw new Error(message);
+        }
+
+        if (this.requiresData && !this.resource) {
+            throw new Error('A puzzle input is required.');
+        }
+
         return await this.solveCore(inputs);
     }
 
     abstract solveCore(inputs: string[]): Promise<Solution>;
+
+    private ensureArguments(inputs: string[]): boolean {
+        return inputs && inputs.length >= this.minimumArguments;
+    }
 }

@@ -20,6 +20,10 @@ export class Day01 extends Puzzle {
         return 2022;
     }
 
+    protected override get requiresData(): boolean {
+        return true;
+    }
+
     static getCalorieInventories(inventories: string[]): number[] {
         const calories: number[] = [];
         let current = 0;
