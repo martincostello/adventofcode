@@ -66,15 +66,13 @@ public sealed class Day02 : Puzzle
 
         static Move GetMove(Outcome outcome, Move opponent) => (outcome, opponent) switch
         {
+            (Outcome.Draw, _) => opponent,
             (Outcome.Win, Move.Rock) => Move.Paper,
             (Outcome.Win, Move.Paper) => Move.Scissors,
             (Outcome.Win, Move.Scissors) => Move.Rock,
             (Outcome.Lose, Move.Rock) => Move.Scissors,
             (Outcome.Lose, Move.Paper) => Move.Rock,
             (Outcome.Lose, Move.Scissors) => Move.Paper,
-            (Outcome.Draw, Move.Rock) => Move.Rock,
-            (Outcome.Draw, Move.Paper) => Move.Paper,
-            (Outcome.Draw, Move.Scissors) => Move.Scissors,
             _ => throw new InvalidOperationException("Invalid outcome and move combination."),
         };
 
