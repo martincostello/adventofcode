@@ -48,8 +48,8 @@ export class Day01 extends Puzzle2022 {
 
         this.maximumCalories = Math.max(...calories);
         this.maximumCaloriesForTop3 = calories
-            .sort((x, y) => x - y)
-            .slice(-3)
+            .sort((x, y) => y - x)
+            .slice(0, 3)
             .reduce((x, y) => x + y, 0);
 
         const endTime = performance.now();
