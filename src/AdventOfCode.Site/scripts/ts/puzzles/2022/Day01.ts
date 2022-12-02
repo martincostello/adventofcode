@@ -51,6 +51,9 @@ export class Day01 extends Puzzle2022 {
             .slice(0, 3)
             .reduce((x, y) => x + y, 0);
 
+        console.info(`The elf carrying the largest inventory has ${this.maximumCalories} Calories.`);
+        console.info(`The elves carrying the largest three inventories have ${this.maximumCaloriesForTop3} Calories.`);
+
         return this.createResult([this.maximumCalories, this.maximumCaloriesForTop3]);
     }
 }

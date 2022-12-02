@@ -61,6 +61,11 @@ export class Day02 extends Puzzle2022 {
         this.totalScoreForMoves = Day02.getTotalScore(moves, false);
         this.totalScoreForOutcomes = Day02.getTotalScore(moves, true);
 
+        console.info(`The total score from following the encrypted strategy guide of moves would be ${this.totalScoreForMoves}.`);
+        console.info(
+            `The total score from following the encrypted strategy guide of desired outcomes would be ${this.totalScoreForOutcomes}.`
+        );
+
         return this.createResult([this.totalScoreForMoves, this.totalScoreForOutcomes]);
     }
 

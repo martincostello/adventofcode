@@ -60,6 +60,14 @@ export abstract class Puzzle {
         return this.resource.split('\n');
     }
 
+    protected readResourceAsNumbers(): number[] {
+        return this.readResourceAsLines().map((x) => Puzzle.parse(x));
+    }
+
+    protected readResourceAsString(): string {
+        return this.resource;
+    }
+
     private ensureArguments(inputs: string[]): boolean {
         return inputs && inputs.length >= this.minimumArguments;
     }
