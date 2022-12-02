@@ -10,19 +10,18 @@ export class Maths {
             return collection.map((p) => [p]);
         }
 
-        const first = new Set<T>(collection);
+        const permutations = Maths.getPermutationsWithCount(collection, count - 1);
 
-        return Maths.getPermutationsWithCount(collection, count - 1)
-            .map((p) => Maths.except(first, new Set<T>(p)))
-            .reduce((set, value) => set.concat(value), []);
-    }
+        const result: T[][] = [];
 
-    private static except<T>(a: Set<T>, b: Set<T>): Set<T> {
-        // See https://bobbyhadz.com/blog/javascript-get-difference-between-two-sets
-        const difference = (a: Set<T>, b: Set<T>): Set<T> => {
-            return new Set([...a].filter((element) => !b.has(element)));
-        };
+        for (const permutation of permutations) {
+            for (const item of collection) {
+                if (!permutation.includes(item)) {
+                    result.push([...permutation, item]);
+                }
+            }
+        }
 
-        return new Set([...difference(a, b), ...difference(b, a)]);
+        return result;
     }
 }
