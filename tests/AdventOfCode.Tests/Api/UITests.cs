@@ -44,6 +44,7 @@ public class UITests : IntegrationTest, IClassFixture<PlaywrightFixture>
     [Theory]
     [InlineData("2015", "1", new[] { "232", "1783" })]
     [InlineData("2016", "25", new[] { "198" })]
+    [InlineData("2022", "1", new[] { "68775", "202585" })]
     public async Task Can_Solve_Puzzle_With_Input_File(
         string year,
         string day,
