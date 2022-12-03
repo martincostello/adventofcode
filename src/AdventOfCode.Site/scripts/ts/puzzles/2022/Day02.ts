@@ -158,7 +158,7 @@ export class Day02 extends Puzzle2022 {
             case 'Z':
                 return Move.scissors;
             default:
-                throw new Error('Invalid move.');
+                throw new Error(`Invalid move ${value}.`);
         }
     }
 
@@ -171,7 +171,7 @@ export class Day02 extends Puzzle2022 {
             case 'Z':
                 return Outcome.win;
             default:
-                throw new Error('Invalid outcome.');
+                throw new Error(`Invalid outcome ${value}.`);
         }
     }
 }
