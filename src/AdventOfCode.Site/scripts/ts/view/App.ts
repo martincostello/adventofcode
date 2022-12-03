@@ -17,7 +17,7 @@ interface ClientPuzzleMetadata extends PuzzleMetadata {
 }
 
 export class App {
-    private static hideClass: string = 'd-none';
+    private static readonly hideClass: string = 'd-none';
 
     private readonly client: ApiClient;
     private readonly elements: UIElements;

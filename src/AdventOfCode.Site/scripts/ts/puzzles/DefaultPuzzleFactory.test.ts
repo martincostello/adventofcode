@@ -7,8 +7,7 @@ import { join, resolve } from 'path';
 import { DefaultPuzzleFactory } from './DefaultPuzzleFactory';
 
 const factory = new DefaultPuzzleFactory();
-const solve = async(year: number, day: number, inputs: string[] = []): Promise<any[]> => {
-
+const solve = async (year: number, day: number, inputs: string[] = []): Promise<any[]> => {
     const toNumberWithDigits = (value: number, digits: number): string => {
         return value.toLocaleString('en-US', {
             minimumIntegerDigits: digits,
@@ -41,7 +40,7 @@ const solve = async(year: number, day: number, inputs: string[] = []): Promise<a
     expect(puzzle.name).not.toBe('');
 
     return result.solutions;
-}
+};
 
 describe('Puzzles', () => {
     test.each([

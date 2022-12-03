@@ -7,11 +7,7 @@ import { Puzzle } from '../puzzles/Puzzle';
 import { Solver } from './Solver';
 
 export class ClientSolver implements Solver {
-    private puzzle: Puzzle;
-
-    constructor(puzzle: Puzzle) {
-        this.puzzle = puzzle;
-    }
+    constructor(private readonly puzzle: Puzzle) {}
 
     async solve(inputs: string[], resource: string | null): Promise<ProblemDetails | Solution> {
         if (resource) {

@@ -7,15 +7,7 @@ import { Solution } from '../models/Solution';
 import { Solver } from './Solver';
 
 export class ServerSolver implements Solver {
-    private readonly client: ApiClient;
-    private readonly form: HTMLElement;
-    private readonly inputFile: HTMLInputElement;
-
-    constructor(client: ApiClient, form: HTMLElement, inputFile: HTMLInputElement) {
-        this.client = client;
-        this.form = form;
-        this.inputFile = inputFile;
-    }
+    constructor(private readonly client: ApiClient, private readonly form: HTMLElement, private readonly inputFile: HTMLInputElement) {}
 
     async solve(inputs: string[], resource: string | null): Promise<ProblemDetails | Solution> {
         const url = this.form.getAttribute('action');

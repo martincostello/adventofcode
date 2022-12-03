@@ -2,15 +2,9 @@
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 export class Size {
-    static zero = new Size(0, 0);
+    static readonly zero = new Size(0, 0);
 
-    width: number;
-    height: number;
-
-    constructor(width: number, height: number) {
-        this.width = width;
-        this.height = height;
-    }
+    constructor(public readonly width: number, public readonly height: number) {}
 
     equals(other: any) {
         if (other instanceof Size) {
