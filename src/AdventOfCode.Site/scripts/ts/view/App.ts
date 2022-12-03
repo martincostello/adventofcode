@@ -190,7 +190,7 @@ export class App {
         const inputs: string[] = [];
 
         if (this.elements.arguments.value) {
-            const split = this.elements.arguments.value.split('\n');
+            const split = this.elements.arguments.value.split(/\r?\n/);
             split.forEach((value) => {
                 inputs.push(value);
             });
