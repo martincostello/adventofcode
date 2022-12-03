@@ -52,7 +52,9 @@ gulp.task('build', () => {
 gulp.task('test', () => {
     return gulp
         .src('scripts')
-        .pipe(jest());
+        .pipe(jest({
+            collectCoverage: true
+        }));
 });
 
 gulp.task('default', gulp.series('prettier', 'lint', 'build'));
