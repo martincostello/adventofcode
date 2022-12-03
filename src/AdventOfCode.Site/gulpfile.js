@@ -11,14 +11,15 @@ const tsify = require('tsify');
 const uglify = require('gulp-uglify');
 const glob = ['scripts/ts/**/*.ts'];
 
-gulp.task('prettier', function () {
+gulp.task('prettier', () => {
     return gulp.src(glob)
         .pipe(prettier())
         .pipe(gulp.dest(file => file.base));
 });
 
-gulp.task('lint', function () {
-    return gulp.src(glob)
+gulp.task('lint', () => {
+    return gulp
+        .src(glob)
         .pipe(eslint({
             formatter: 'visualstudio'
         }))
@@ -26,7 +27,7 @@ gulp.task('lint', function () {
         .pipe(eslint.failAfterError());
 });
 
-gulp.task('build', function () {
+gulp.task('build', () => {
     return browserify({
         basedir: '.',
         debug: true,
@@ -48,8 +49,9 @@ gulp.task('build', function () {
         .pipe(gulp.dest('wwwroot/static/js'));
 });
 
-gulp.task('test', function () {
-    return gulp.src('scripts')
+gulp.task('test', () => {
+    return gulp
+        .src('scripts')
         .pipe(jest({
             collectCoverage: true
         }));
@@ -57,6 +59,6 @@ gulp.task('test', function () {
 
 gulp.task('default', gulp.series('prettier', 'lint', 'build', 'test'));
 
-gulp.task('watch', function () {
+gulp.task('watch', () => {
     gulp.watch(glob, gulp.series('lint', 'build', 'test'));
 });
