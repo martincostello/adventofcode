@@ -16,6 +16,10 @@ export class Point {
         return Math.abs(x.x - y.x) + Math.abs(x.y - y.y);
     }
 
+    asString(): string {
+        return `${this.x},${this.y}`;
+    }
+
     equals(other: any) {
         if (other instanceof Point) {
             return this.x === other.x && this.y === other.y;
