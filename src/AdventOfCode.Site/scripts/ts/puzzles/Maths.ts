@@ -21,7 +21,7 @@ export class Maths {
         for (const permutation of permutations) {
             for (const item of collection) {
                 if (!permutation.contains(item)) {
-                    result.push(from([...permutation, item]));
+                    result.push(permutation.concatenate(from([item])));
                 }
             }
         }
