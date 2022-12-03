@@ -2,7 +2,7 @@
   "name": "adventofcode",
   "private": true,
   "version": "7.0.0",
-  "description": "Solutions for Advent of Code in C#",
+  "description": "Solutions for Advent of Code in C# and TypeScript",
   "scripts": {
     "build": "gulp default",
     "test": "jest --coverage"
