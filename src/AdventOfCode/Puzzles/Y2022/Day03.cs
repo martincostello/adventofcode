@@ -16,18 +16,38 @@ public sealed class Day03 : Puzzle
     public int SumOfPriorities { get; private set; }
 
     /// <summary>
+    /// Gets the sum of the priorities for the item type
+    /// which appears in all three rucksacks of each group of elves.
+    /// </summary>
+    public int SumOfPrioritiesOfGroups { get; private set; }
+
+    /// <summary>
     /// Gets the sum of the priorities for the item type which appears in both compartments of each rucksack.
     /// </summary>
     /// <param name="inventories">The inventories for each rucksack.</param>
     /// <returns>
     /// The sum of the priorities for the item type which appears in both compartments of each rucksack.
     /// </returns>
-    public static int GetSumOfDuplicateItemPriorities(ICollection<string> inventories)
+    public static (int A, int B) GetSumOfDuplicateItemPriorities(IList<string> inventories)
     {
-        return inventories
+        int sumOfPriorities = inventories
             .Select(GetCommonItemType)
             .Select(GetPriority)
             .Sum();
+
+        int sumOfPrioritiesOfGroups = 0;
+
+        for (int i = 0; i < inventories.Count; i += 3)
+        {
+            var first = new HashSet<char>(inventories[i]);
+            var second = new HashSet<char>(inventories[i + 1]);
+            var third = new HashSet<char>(inventories[i + 2]);
+
+            char common = first.Intersect(second).Intersect(third).Single();
+            sumOfPrioritiesOfGroups += GetPriority(common);
+        }
+
+        return (sumOfPriorities, sumOfPrioritiesOfGroups);
 
         static char GetCommonItemType(string inventory)
         {
@@ -56,15 +76,19 @@ public sealed class Day03 : Puzzle
 
         var inventories = await ReadResourceAsLinesAsync();
 
-        SumOfPriorities = GetSumOfDuplicateItemPriorities(inventories);
+        (SumOfPriorities, SumOfPrioritiesOfGroups) = GetSumOfDuplicateItemPriorities(inventories);
 
         if (Verbose)
         {
             Logger.WriteLine(
                 "The sum of the priorities of the item types which appear in both compartments is {0:N0}.",
                 SumOfPriorities);
+
+            Logger.WriteLine(
+                "The sum of the priorities of the item types which appear in all three rucksacks of each group of elves is {0:N0}.",
+                SumOfPrioritiesOfGroups);
         }
 
-        return PuzzleResult.Create(SumOfPriorities);
+        return PuzzleResult.Create(SumOfPriorities, SumOfPrioritiesOfGroups);
     }
 }

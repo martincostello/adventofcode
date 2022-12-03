@@ -32,10 +32,11 @@ public sealed class Day03Tests : PuzzleTest
         };
 
         // Act
-        int actual = Day03.GetSumOfDuplicateItemPriorities(inventories);
+        (int actualSum, int actualSumOfGroups) = Day03.GetSumOfDuplicateItemPriorities(inventories);
 
         // Assert
-        actual.ShouldBe(157);
+        actualSum.ShouldBe(157);
+        actualSumOfGroups.ShouldBe(70);
     }
 
     [Fact]
@@ -47,5 +48,6 @@ public sealed class Day03Tests : PuzzleTest
         // Assert
         puzzle.ShouldNotBeNull();
         puzzle.SumOfPriorities.ShouldBe(7568);
+        puzzle.SumOfPrioritiesOfGroups.ShouldBe(2780);
     }
 }
