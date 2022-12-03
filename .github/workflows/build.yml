@@ -47,6 +47,11 @@ jobs:
     - name: Setup .NET SDK
       uses: actions/setup-dotnet@v3
 
+    - name: Setup Node
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+
     - name: Install .NET Lambda tool
       shell: pwsh
       run: dotnet tool install --global Amazon.Lambda.Tools
