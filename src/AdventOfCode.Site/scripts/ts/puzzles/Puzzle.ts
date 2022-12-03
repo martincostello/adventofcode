@@ -57,17 +57,15 @@ export abstract class Puzzle {
     }
 
     protected readResourceAsLines(): string[] {
-        return this.resource.split('\n');
+        return this.resource.split('\n').slice(0, -1);
     }
 
     protected readResourceAsNumbers(): number[] {
-        return this.readResourceAsLines()
-            .filter((x) => x.length > 0)
-            .map((x) => Puzzle.parse(x));
+        return this.readResourceAsLines().map((x) => Puzzle.parse(x));
     }
 
     protected readResourceAsString(): string {
-        return this.resource;
+        return this.resource.trimEnd();
     }
 
     private ensureArguments(inputs: string[]): boolean {
