@@ -45,6 +45,7 @@ const solve = async (year: number, day: number, inputs: string[] = []): Promise<
 describe('Puzzles', () => {
     test.each([
         [2015, 1, [], [232, 1783]],
+        [2015, 2, [], [1598415, 3812909]],
         [2016, 1, [], [287, 133]],
         [2017, 1, [], [1034, 1356]],
         [2018, 1, [], [543, 621]],
