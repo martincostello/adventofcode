@@ -2,7 +2,6 @@
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 import { describe, expect, test } from '@jest/globals';
-import { PuzzleSolver } from '../PuzzleSolver';
 import { Day02 } from './Day02';
 
 describe('2022', () => {
@@ -19,14 +18,6 @@ describe('2022', () => {
 
             // Assert
             expect(actual).toBe(expected);
-        });
-        test('returns the correct solution', async () => {
-            // Act
-            const puzzle = await PuzzleSolver.solve(Day02);
-
-            // Assert
-            expect(puzzle.totalScoreForMoves).toBe(13675);
-            expect(puzzle.totalScoreForOutcomes).toBe(14184);
         });
     });
 });
