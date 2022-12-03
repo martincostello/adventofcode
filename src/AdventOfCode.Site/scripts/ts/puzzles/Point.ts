@@ -4,15 +4,9 @@
 import { Size } from './Size';
 
 export class Point {
-    static empty = new Point(0, 0);
+    static readonly empty = new Point(0, 0);
 
-    x: number;
-    y: number;
-
-    constructor(x: number, y: number) {
-        this.x = x;
-        this.y = y;
-    }
+    constructor(public readonly x: number, public readonly y: number) {}
 
     static add(point: Point, size: Size): Point {
         return new Point(point.x + size.width, point.y + size.height);
