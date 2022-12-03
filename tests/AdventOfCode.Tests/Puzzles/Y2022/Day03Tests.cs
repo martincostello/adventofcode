@@ -17,8 +17,10 @@ public sealed class Day03Tests : PuzzleTest
     {
     }
 
-    [Fact]
-    public void Y2022_Day03_GetSumOfDuplicateItemPriorities_Returns_Correct_Values()
+    [Theory]
+    [InlineData(false, 157)]
+    [InlineData(true, 70)]
+    public void Y2022_Day03_GetSumOfCommonItemTypes_Returns_Correct_Values(bool useGroups, int expected)
     {
         // Arrange
         string[] inventories = new[]
@@ -32,11 +34,10 @@ public sealed class Day03Tests : PuzzleTest
         };
 
         // Act
-        (int actualSum, int actualSumOfGroups) = Day03.GetSumOfDuplicateItemPriorities(inventories);
+        int actual = Day03.GetSumOfCommonItemTypes(inventories, useGroups);
 
         // Assert
-        actualSum.ShouldBe(157);
-        actualSumOfGroups.ShouldBe(70);
+        actual.ShouldBe(expected);
     }
 
     [Fact]
