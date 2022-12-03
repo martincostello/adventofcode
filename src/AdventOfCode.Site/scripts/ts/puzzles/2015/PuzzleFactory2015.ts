@@ -5,6 +5,7 @@ import { Puzzle } from '../Puzzle';
 import { PuzzleFactory } from '../PuzzleFactory';
 import { Day01 } from './Day01';
 import { Day02 } from './Day02';
+import { Day03 } from './Day03';
 
 export class PuzzleFactory2015 implements PuzzleFactory {
     create(year: number, day: number): Puzzle | null {
@@ -17,6 +18,8 @@ export class PuzzleFactory2015 implements PuzzleFactory {
                 return new Day01();
             case 2:
                 return new Day02();
+            case 3:
+                return new Day03();
             default:
                 return null;
         }

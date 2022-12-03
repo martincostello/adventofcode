@@ -51,23 +51,23 @@ public class Day03 : Puzzle
 
         var santa = new SantaGps();
         var roboSanta = new SantaGps();
-        var current = santa;
 
-        var coordinates = new HashSet<Point>();
+        var current = santa;
+        var previous = roboSanta;
+
+        var coordinates = new HashSet<Point>()
+        {
+            Point.Empty,
+        };
 
         foreach (var direction in directions)
         {
             current.Move(direction);
-
-            if (current.Location != Point.Empty)
-            {
-                coordinates.Add(current.Location);
-            }
-
-            current = current == santa ? roboSanta : santa;
+            coordinates.Add(current.Location);
+            (current, previous) = (previous, current);
         }
 
-        return coordinates.Count + 1;
+        return coordinates.Count;
     }
 
     /// <inheritdoc />
