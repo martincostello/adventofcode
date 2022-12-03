@@ -55,7 +55,7 @@ gulp.task('test', () => {
         .pipe(jest());
 });
 
-gulp.task('default', gulp.series('prettier', 'lint', 'build', 'test'));
+gulp.task('default', gulp.series('prettier', 'lint', 'build'));
 
 gulp.task('watch', () => {
     gulp.watch(glob, gulp.series('lint', 'build', 'test'));
