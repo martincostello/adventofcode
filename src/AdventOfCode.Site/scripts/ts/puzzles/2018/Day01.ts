@@ -1,6 +1,7 @@
 // Copyright (c) Martin Costello, 2015. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
+import { from } from 'linq-to-typescript';
 import { Solution } from '../../models/Solution';
 import { Puzzle2018 } from './Puzzle2018';
 
@@ -67,9 +68,6 @@ export class Day01 extends Puzzle2018 {
     }
 
     private static tendsToInfinity(sequence: number[]): boolean {
-        const sumOfSigns = sequence.map((x) => Math.sign(x)).reduce((a, b) => a + b, 0);
-        const nonZeroCount = sequence.filter((x) => x !== 0).length;
-
-        return Math.abs(sumOfSigns) === nonZeroCount;
+        return Math.abs(from(sequence).sum((p: number) => Math.sign(p))) === from(sequence).count((p: number) => p !== 0);
     }
 }

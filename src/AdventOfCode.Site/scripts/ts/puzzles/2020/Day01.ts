@@ -1,6 +1,7 @@
 // Copyright (c) Martin Costello, 2015. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
+import { IEnumerable } from 'linq-to-typescript';
 import { Solution } from '../../models/Solution';
 import { Maths } from '../Maths';
 import { Puzzle2020 } from './Puzzle2020';
@@ -23,7 +24,11 @@ export class Day01 extends Puzzle2020 {
 
     static get2020Product(expenses: number[], take: number): number {
         const result = Maths.getPermutationsWithCount(expenses, take);
-        return result.filter((p) => p.reduce((a, b) => a + b, 0) === 2020).map((p) => p.reduce((x, y) => x * y, 1))[0];
+
+        return result
+            .where((p: IEnumerable<number>) => p.sum() === 2020)
+            .select((p: IEnumerable<number>) => p.aggregate((x: number, y: number) => x * y))
+            .first();
     }
 
     override solveCore(_: string[]): Promise<Solution> {

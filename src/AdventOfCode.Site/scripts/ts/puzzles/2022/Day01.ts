@@ -1,6 +1,7 @@
 // Copyright (c) Martin Costello, 2015. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
+import { from, NumberComparer } from 'linq-to-typescript';
 import { Solution } from '../../models/Solution';
 import { Puzzle } from '../Puzzle';
 import { Puzzle2022 } from './Puzzle2022';
@@ -43,13 +44,13 @@ export class Day01 extends Puzzle2022 {
 
     override solveCore(_: string[]): Promise<Solution> {
         const inventories = this.readResourceAsLines();
-        const calories = Day01.getCalorieInventories(inventories);
+        const calories = from(Day01.getCalorieInventories(inventories));
 
-        this.maximumCalories = Math.max(...calories);
+        this.maximumCalories = calories.max();
         this.maximumCaloriesForTop3 = calories
-            .sort((x, y) => y - x)
-            .slice(0, 3)
-            .reduce((x, y) => x + y, 0);
+            .orderByDescending((p: number) => p, NumberComparer)
+            .take(3)
+            .sum();
 
         console.info(`The elf carrying the largest inventory has ${this.maximumCalories} Calories.`);
         console.info(`The elves carrying the largest three inventories have ${this.maximumCaloriesForTop3} Calories.`);
