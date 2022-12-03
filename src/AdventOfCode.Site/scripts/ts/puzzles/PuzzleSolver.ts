@@ -25,6 +25,8 @@ export class PuzzleSolver {
         expect(result).not.toBeNull();
         expect(result.solutions).not.toBeNull();
         expect(result.solutions.length).toBeGreaterThan(0);
+        expect(puzzle.name).not.toBeNull();
+        expect(puzzle.name).not.toBe('');
 
         return puzzle;
     }
