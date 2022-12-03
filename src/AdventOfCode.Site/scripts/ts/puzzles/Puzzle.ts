@@ -57,7 +57,7 @@ export abstract class Puzzle {
     }
 
     protected readResourceAsLines(): string[] {
-        return this.resource.split('\n').slice(0, -1);
+        return this.resource.split(/\r?\n/).slice(0, -1);
     }
 
     protected readResourceAsNumbers(): number[] {
