@@ -23,8 +23,9 @@ export class Day04 extends Puzzle2015 {
 
     static getLowestPositiveNumberWithStartingZeroesAsync(secretKey: string, zeroes: number): number {
         const isSolution = (value: number, secretKey: string, zeroes: number): boolean => {
-            const hash = MD5.hashStr(`${secretKey}${value}`, true);
-            const wholeBytes = zeroes / 2;
+            const hashArray = MD5.hashStr(`${secretKey}${value}`, true);
+            const hash = Buffer.from(hashArray.buffer);
+            const wholeBytes = Math.floor(zeroes / 2);
             const remainder = zeroes % 2;
             const hasHalfByte = remainder === 1;
 
