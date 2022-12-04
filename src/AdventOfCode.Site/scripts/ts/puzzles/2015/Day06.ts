@@ -37,8 +37,8 @@ export class Day06 extends Puzzle2015 {
         const instructions: Instruction[] = [];
         const parser = version === '1' ? InstructionV1.parse : InstructionV2.parse;
 
-        for (let i = 0; i < lines.length; i++) {
-            instructions[i] = parser(lines[i]);
+        for (const line of lines) {
+            instructions.push(parser(line));
         }
 
         console.info(`Processing instructions using set ${version}...`);
