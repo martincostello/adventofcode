@@ -4,7 +4,7 @@
 export class Rectangle {
     constructor(public readonly x: number, public readonly y: number, public readonly width: number, public readonly height: number) {}
 
-    static fromLTRB(left: number, right: number, top: number, bottom: number) {
+    static fromLTRB(left: number, top: number, right: number, bottom: number) {
         return new Rectangle(left, top, right - left, bottom - top);
     }
 
