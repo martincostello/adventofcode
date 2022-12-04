@@ -1,26 +1,25 @@
 // Copyright (c) Martin Costello, 2015. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
-import { Solution } from '../../models/Solution';
 import { Puzzle2017 } from './Puzzle2017';
 
 export class Day01 extends Puzzle2017 {
     captchaSolutionNext: number;
     captchaSolutionOpposite: number;
 
-    override get name(): string {
+    override get name() {
         return 'Inverse Captcha';
     }
 
-    override get day(): number {
+    override get day() {
         return 1;
     }
 
-    protected override get requiresData(): boolean {
+    protected override get requiresData() {
         return true;
     }
 
-    static calculateSum(digits: string, useOppositeDigit: boolean): number {
+    static calculateSum(digits: string, useOppositeDigit: boolean) {
         let sum = 0;
         let offset = useOppositeDigit ? digits.length / 2 : 1;
 
@@ -42,7 +41,7 @@ export class Day01 extends Puzzle2017 {
         return sum;
     }
 
-    override solveCore(_: string[]): Promise<Solution> {
+    override solveCore(_: string[]) {
         const digits = this.readResourceAsString().trimEnd();
 
         this.captchaSolutionNext = Day01.calculateSum(digits, false);

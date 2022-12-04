@@ -4,7 +4,7 @@
 import { Puzzle } from '../Puzzle';
 
 export abstract class Puzzle2015 extends Puzzle {
-    override get year(): number {
+    override get year() {
         return 2015;
     }
 }

@@ -2,27 +2,26 @@
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 import { Md5 as MD5 } from 'ts-md5';
-import { Solution } from '../../models/Solution';
 import { Puzzle } from '../Puzzle';
 import { Puzzle2015 } from './Puzzle2015';
 
 export class Day04 extends Puzzle2015 {
     lowestZeroHash: number;
 
-    override get name(): string {
+    override get name() {
         return 'The Ideal Stocking Stuffer';
     }
 
-    override get day(): number {
+    override get day() {
         return 4;
     }
 
-    protected override get minimumArguments(): number {
+    protected override get minimumArguments() {
         return 2;
     }
 
-    static getLowestPositiveNumberWithStartingZeroesAsync(secretKey: string, zeroes: number): number {
-        const isSolution = (value: number, secretKey: string, zeroes: number): boolean => {
+    static getLowestPositiveNumberWithStartingZeroesAsync(secretKey: string, zeroes: number) {
+        const isSolution = (value: number, secretKey: string, zeroes: number) => {
             const hashArray = MD5.hashStr(`${secretKey}${value}`, true);
             const hash = Buffer.from(hashArray.buffer);
             const wholeBytes = Math.floor(zeroes / 2);
@@ -56,7 +55,7 @@ export class Day04 extends Puzzle2015 {
         return 0;
     }
 
-    override solveCore(inputs: string[]): Promise<Solution> {
+    override solveCore(inputs: string[]) {
         const secretKey = inputs[0];
         const zeroes = Puzzle.parse(inputs[1]);
 

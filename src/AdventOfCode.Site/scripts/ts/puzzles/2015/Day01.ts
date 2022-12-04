@@ -1,22 +1,21 @@
 // Copyright (c) Martin Costello, 2015. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
-import { Solution } from '../../models/Solution';
 import { Puzzle2015 } from './Puzzle2015';
 
 export class Day01 extends Puzzle2015 {
     finalFloor: number;
     firstBasementInstruction: number;
 
-    override get name(): string {
+    override get name() {
         return 'Not Quite Lisp';
     }
 
-    override get day(): number {
+    override get day() {
         return 1;
     }
 
-    protected override get requiresData(): boolean {
+    protected override get requiresData() {
         return true;
     }
 
@@ -51,7 +50,7 @@ export class Day01 extends Puzzle2015 {
         return [floor, instructionThatEntersBasement];
     }
 
-    override solveCore(_: string[]): Promise<Solution> {
+    override solveCore(_: string[]) {
         const value = this.readResourceAsString();
 
         [this.finalFloor, this.firstBasementInstruction] = Day01.getFinalFloorAndFirstInstructionBasementReached(value);

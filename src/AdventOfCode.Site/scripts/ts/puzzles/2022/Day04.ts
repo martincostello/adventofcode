@@ -1,7 +1,6 @@
 // Copyright (c) Martin Costello, 2015. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
-import { Solution } from '../../models/Solution';
 import { Puzzle } from '../Puzzle';
 import { Puzzle2022 } from './Puzzle2022';
 
@@ -9,19 +8,19 @@ export class Day04 extends Puzzle2022 {
     fullyOverlappingAssignments: number;
     partiallyOverlappingAssignments: number;
 
-    override get name(): string {
+    override get name() {
         return 'Camp Cleanup';
     }
 
-    override get day(): number {
+    override get day() {
         return 4;
     }
 
-    protected override get requiresData(): boolean {
+    protected override get requiresData() {
         return true;
     }
 
-    static getOverlappingAssignments(assignments: string[], partial: boolean): number {
+    static getOverlappingAssignments(assignments: string[], partial: boolean) {
         type Range = [start: number, end: number];
 
         const asRange = (value: string): Range => {
@@ -58,7 +57,7 @@ export class Day04 extends Puzzle2022 {
         return count;
     }
 
-    override solveCore(_: string[]): Promise<Solution> {
+    override solveCore(_: string[]) {
         const moves = this.readResourceAsLines();
 
         this.fullyOverlappingAssignments = Day04.getOverlappingAssignments(moves, false);
