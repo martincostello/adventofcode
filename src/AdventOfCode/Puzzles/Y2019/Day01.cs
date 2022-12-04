@@ -20,38 +20,26 @@ public sealed class Day01 : Puzzle
     public int TotalFuelRequiredForRocket { get; private set; }
 
     /// <summary>
-    /// Gets the fuel requirements for the specified mass.
+    /// Gets the fuel requirements for the specified mass, optionally including the fuel itself.
     /// </summary>
     /// <param name="mass">The mass to get the fuel requirements for.</param>
-    /// <returns>
-    /// The fuel requirements for the mass specified by <paramref name="mass"/>.
-    /// </returns>
-    public static int GetFuelRequirementsForMass(int mass)
-    {
-        int requirement = mass / 3;
-
-        requirement -= 2;
-
-        return Math.Max(requirement, 0);
-    }
-
-    /// <summary>
-    /// Gets the fuel requirements for the specified mass, including the fuel itself.
-    /// </summary>
-    /// <param name="mass">The mass to get the fuel requirements for.</param>
+    /// <param name="includeFuel">Whether to include the mass of the fuel itself.</param>
     /// <returns>
     /// The fuel-inclusive fuel requirements for the mass specified by <paramref name="mass"/>.
     /// </returns>
-    public static int GetFuelRequirementsForMassWithFuel(int mass)
+    public static int GetFuelRequirementsForMass(int mass, bool includeFuel)
     {
-        int fuel = GetFuelRequirementsForMass(mass);
+        int fuel = GetRequiredFuel(mass);
 
-        if (fuel > 0)
+        if (includeFuel && fuel > 0)
         {
-            fuel += GetFuelRequirementsForMassWithFuel(fuel);
+            fuel += GetFuelRequirementsForMass(fuel, true);
         }
 
         return fuel;
+
+        static int GetRequiredFuel(int mass)
+            => Math.Max((mass / 3) - 2, 0);
     }
 
     /// <inheritdoc />
@@ -59,8 +47,8 @@ public sealed class Day01 : Puzzle
     {
         IList<int> masses = await ReadResourceAsNumbersAsync<int>();
 
-        TotalFuelRequiredForModules = GetFuelRequirementsForMasses(masses);
-        TotalFuelRequiredForRocket = GetFuelRequirementsForRocket(masses);
+        TotalFuelRequiredForModules = masses.Sum((p) => GetFuelRequirementsForMass(p, includeFuel: false));
+        TotalFuelRequiredForRocket = masses.Sum((p) => GetFuelRequirementsForMass(p, includeFuel: true));
 
         if (Verbose)
         {
@@ -69,43 +57,5 @@ public sealed class Day01 : Puzzle
         }
 
         return PuzzleResult.Create(TotalFuelRequiredForModules, TotalFuelRequiredForRocket);
-    }
-
-    /// <summary>
-    /// Gets the fuel requirements for a fully-fuelled rocket with the specified module masses.
-    /// </summary>
-    /// <param name="masses">The module masses to get the fuel requirements for a fully-fuelled rocket.</param>
-    /// <returns>
-    /// The fuel requirements for the rocket with the modules specified by <paramref name="masses"/>.
-    /// </returns>
-    private static int GetFuelRequirementsForMasses(IEnumerable<int> masses)
-    {
-        int total = 0;
-
-        foreach (int mass in masses)
-        {
-            total += GetFuelRequirementsForMass(mass);
-        }
-
-        return total;
-    }
-
-    /// <summary>
-    /// Gets the fuel requirements for a fully-fuelled rocket with the specified module masses.
-    /// </summary>
-    /// <param name="masses">The module masses to get the fuel requirements for a fully-fuelled rocket.</param>
-    /// <returns>
-    /// The fuel requirements for the rocket with the modules specified by <paramref name="masses"/>.
-    /// </returns>
-    private static int GetFuelRequirementsForRocket(IEnumerable<int> masses)
-    {
-        int total = 0;
-
-        foreach (int mass in masses)
-        {
-            total += GetFuelRequirementsForMassWithFuel(mass);
-        }
-
-        return total;
     }
 }

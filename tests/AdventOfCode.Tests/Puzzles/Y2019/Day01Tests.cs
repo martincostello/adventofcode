@@ -18,27 +18,17 @@ public sealed class Day01Tests : PuzzleTest
     }
 
     [Theory]
-    [InlineData(12, 2)]
-    [InlineData(14, 2)]
-    [InlineData(1969, 654)]
-    [InlineData(100756, 33583)]
-    public static void Y2019_Day01_GetFuelRequirementsForMass(int mass, int expected)
+    [InlineData(12, false, 2)]
+    [InlineData(14, false, 2)]
+    [InlineData(1969, false, 654)]
+    [InlineData(100756, false, 33583)]
+    [InlineData(12, true, 2)]
+    [InlineData(1969, true, 966)]
+    [InlineData(100756, true, 50346)]
+    public static void Y2019_Day01_GetFuelRequirementsForMass_Returns_Correct_Value(int mass, bool includeFuel, int expected)
     {
         // Act
-        int actual = Day01.GetFuelRequirementsForMass(mass);
-
-        // Assert
-        actual.ShouldBe(expected);
-    }
-
-    [Theory]
-    [InlineData(12, 2)]
-    [InlineData(1969, 966)]
-    [InlineData(100756, 50346)]
-    public static void Y2019_Day01_GetFuelRequirementsForMassWithFuel(int mass, int expected)
-    {
-        // Act
-        int actual = Day01.GetFuelRequirementsForMassWithFuel(mass);
+        int actual = Day01.GetFuelRequirementsForMass(mass, includeFuel);
 
         // Assert
         actual.ShouldBe(expected);
