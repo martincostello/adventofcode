@@ -173,7 +173,7 @@ public sealed class Day04 : Puzzle
         if (sum == 0)
         {
             // The current value is a solution if there is an even number
-            // of zeroes of if the low bits of the odd byte are zero.
+            // of zeroes or if the low bits of the odd byte are zero.
             if (!hasHalfByte || hash[wholeBytes] < 0x10)
             {
                 return true;
