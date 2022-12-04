@@ -341,7 +341,7 @@ public sealed class Day06 : Puzzle
         /// <summary>
         /// Gets the number of lights in the grid that have a brightness of at least one.
         /// </summary>
-        internal int Count => _lightBrightnesses.Values.Where((p) => p > 0).Sum();
+        internal int Count => _lightBrightnesses.Values.Where((p) => p > 0).Count();
 
         /// <summary>
         /// Gets the brightness of the light at the specified position.

@@ -201,7 +201,7 @@ class LightGrid {
     get count() {
         return from(this.lightBrightnesses.values())
             .where((p: number) => p > 0)
-            .sum();
+            .count();
     }
 
     get(position: Point) {
@@ -275,7 +275,7 @@ class LightGrid {
         if (value === 0) {
             this.lightBrightnesses.delete(position.asString());
         } else {
-            this.lightBrightnesses.set(position.asString(), value);            
+            this.lightBrightnesses.set(position.asString(), value);
         }
 
         return value;
