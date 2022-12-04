@@ -17,6 +17,10 @@ export class Day04 extends Puzzle2022 {
         return 4;
     }
 
+    protected override get requiresData(): boolean {
+        return true;
+    }
+
     static getOverlappingAssignments(assignments: string[], partial: boolean): number {
         type Range = [start: number, end: number];
 
@@ -66,9 +70,5 @@ export class Day04 extends Puzzle2022 {
         console.info(`There are ${this.partiallyOverlappingAssignments} assignment pairs where one range overlaps with the other.`);
 
         return this.createResult([this.fullyOverlappingAssignments, this.partiallyOverlappingAssignments]);
-    }
-
-    protected override get requiresData(): boolean {
-        return true;
     }
 }

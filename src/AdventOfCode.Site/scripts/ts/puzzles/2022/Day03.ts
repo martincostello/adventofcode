@@ -17,7 +17,30 @@ export class Day03 extends Puzzle2022 {
         return 3;
     }
 
+    protected override get requiresData(): boolean {
+        return true;
+    }
+
     static getSumOfCommonItemTypes(inventories: string[], useGroups: boolean): number {
+        const getPriority = (item: string): number => {
+            if (item.toUpperCase() === item) {
+                return item.charCodeAt(0) - 'A'.charCodeAt(0) + 27;
+            } else {
+                return item.charCodeAt(0) - 'a'.charCodeAt(0) + 1;
+            }
+        };
+
+        const getCommonItemType = (...inventories: string[]): string => {
+            const enumerable = from(inventories);
+            let intersection = from(enumerable.first());
+
+            for (const inventory of enumerable.skip(1)) {
+                intersection = intersection.intersect(from([...inventory]));
+            }
+
+            return intersection.single();
+        };
+
         if (useGroups) {
             let sum = 0;
 
@@ -26,8 +49,8 @@ export class Day03 extends Puzzle2022 {
                 const second = inventories[i + 1];
                 const third = inventories[i + 2];
 
-                const common = Day03.getCommonItemType(first, second, third);
-                sum += Day03.getPriority(common);
+                const common = getCommonItemType(first, second, third);
+                sum += getPriority(common);
             }
 
             return sum;
@@ -36,9 +59,9 @@ export class Day03 extends Puzzle2022 {
                 .select((inventory: string) => {
                     const first = inventory.slice(0, inventory.length / 2);
                     const second = inventory.slice(inventory.length / 2);
-                    return Day03.getCommonItemType(first, second);
+                    return getCommonItemType(first, second);
                 })
-                .select((p: string) => Day03.getPriority(p))
+                .select((p: string) => getPriority(p))
                 .sum();
         }
     }
@@ -55,28 +78,5 @@ export class Day03 extends Puzzle2022 {
         );
 
         return this.createResult([this.sumOfPriorities, this.sumOfPrioritiesOfGroups]);
-    }
-
-    protected override get requiresData(): boolean {
-        return true;
-    }
-
-    private static getCommonItemType(...inventories: string[]): string {
-        const enumerable = from(inventories);
-        let intersection = from(enumerable.first());
-
-        for (const inventory of enumerable.skip(1)) {
-            intersection = intersection.intersect(from([...inventory]));
-        }
-
-        return intersection.single();
-    }
-
-    private static getPriority(item: string): number {
-        if (item.toUpperCase() === item) {
-            return item.charCodeAt(0) - 'A'.charCodeAt(0) + 27;
-        } else {
-            return item.charCodeAt(0) - 'a'.charCodeAt(0) + 1;
-        }
     }
 }

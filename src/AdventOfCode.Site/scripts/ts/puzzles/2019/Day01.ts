@@ -1,6 +1,7 @@
 // Copyright (c) Martin Costello, 2015. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
+import { from } from 'linq-to-typescript';
 import { Solution } from '../../models/Solution';
 import { Puzzle2019 } from './Puzzle2019';
 
@@ -20,29 +21,21 @@ export class Day01 extends Puzzle2019 {
         return true;
     }
 
-    static getFuelRequirementsForMass(mass: number): number {
-        let requirement = mass / 3;
+    static getFuelRequirementsForMass(mass: number, includeFuel: boolean): number {
+        let fuel = Day01.getRequiredFuel(mass);
 
-        requirement -= 2;
-
-        return Math.floor(Math.max(requirement, 0));
-    }
-
-    static getFuelRequirementsForMassWithFuel(mass: number): number {
-        let fuel = Day01.getFuelRequirementsForMass(mass);
-
-        if (fuel > 0) {
-            fuel += Day01.getFuelRequirementsForMassWithFuel(fuel);
+        if (includeFuel && fuel > 0) {
+            fuel += Day01.getFuelRequirementsForMass(fuel, includeFuel);
         }
 
         return Math.floor(fuel);
     }
 
     override solveCore(_: string[]): Promise<Solution> {
-        const masses = this.readResourceAsNumbers();
+        const masses = from(this.readResourceAsNumbers());
 
-        this.totalFuelRequiredForModules = Day01.getFuelRequirementsForMasses(masses);
-        this.totalFuelRequiredForRocket = Day01.getFuelRequirementsForRocket(masses);
+        this.totalFuelRequiredForModules = masses.sum((p: number) => Day01.getFuelRequirementsForMass(p, false));
+        this.totalFuelRequiredForRocket = masses.sum((p: number) => Day01.getFuelRequirementsForMass(p, true));
 
         console.info(`${this.totalFuelRequiredForModules} fuel is required for the modules.`);
         console.info(`${this.totalFuelRequiredForRocket} fuel is required for the fully-fuelled rocket.`);
@@ -50,23 +43,7 @@ export class Day01 extends Puzzle2019 {
         return this.createResult([this.totalFuelRequiredForModules, this.totalFuelRequiredForRocket]);
     }
 
-    private static getFuelRequirementsForMasses(masses: number[]): number {
-        let total = 0;
-
-        for (const mass of masses) {
-            total += Day01.getFuelRequirementsForMass(mass);
-        }
-
-        return total;
-    }
-
-    private static getFuelRequirementsForRocket(masses: number[]): number {
-        let total = 0;
-
-        for (const mass of masses) {
-            total += Day01.getFuelRequirementsForMassWithFuel(mass);
-        }
-
-        return total;
+    private static getRequiredFuel(mass: number): number {
+        return Math.floor(Math.max(mass / 3 - 2, 0));
     }
 }
