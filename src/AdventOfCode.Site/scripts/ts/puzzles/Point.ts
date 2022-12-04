@@ -8,15 +8,15 @@ export class Point {
 
     constructor(public readonly x: number, public readonly y: number) {}
 
-    static add(point: Point, size: Size): Point {
+    static add(point: Point, size: Size) {
         return new Point(point.x + size.width, point.y + size.height);
     }
 
-    static manhattanDistance(x: Point, y: Point): number {
+    static manhattanDistance(x: Point, y: Point) {
         return Math.abs(x.x - y.x) + Math.abs(x.y - y.y);
     }
 
-    asString(): string {
+    asString() {
         return `${this.x},${this.y}`;
     }
 

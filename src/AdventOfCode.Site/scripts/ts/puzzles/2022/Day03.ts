@@ -2,27 +2,26 @@
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 import { from } from 'linq-to-typescript';
-import { Solution } from '../../models/Solution';
 import { Puzzle2022 } from './Puzzle2022';
 
 export class Day03 extends Puzzle2022 {
     sumOfPriorities: number;
     sumOfPrioritiesOfGroups: number;
 
-    override get name(): string {
+    override get name() {
         return 'Rucksack Reorganization';
     }
 
-    override get day(): number {
+    override get day() {
         return 3;
     }
 
-    protected override get requiresData(): boolean {
+    protected override get requiresData() {
         return true;
     }
 
-    static getSumOfCommonItemTypes(inventories: string[], useGroups: boolean): number {
-        const getPriority = (item: string): number => {
+    static getSumOfCommonItemTypes(inventories: string[], useGroups: boolean) {
+        const getPriority = (item: string) => {
             if (item.toUpperCase() === item) {
                 return item.charCodeAt(0) - 'A'.charCodeAt(0) + 27;
             } else {
@@ -30,7 +29,7 @@ export class Day03 extends Puzzle2022 {
             }
         };
 
-        const getCommonItemType = (...inventories: string[]): string => {
+        const getCommonItemType = (...inventories: string[]) => {
             const enumerable = from(inventories);
             let intersection = from(enumerable.first());
 
@@ -66,7 +65,7 @@ export class Day03 extends Puzzle2022 {
         }
     }
 
-    override solveCore(_: string[]): Promise<Solution> {
+    override solveCore(_: string[]) {
         const moves = this.readResourceAsLines();
 
         this.sumOfPriorities = Day03.getSumOfCommonItemTypes(moves, false);

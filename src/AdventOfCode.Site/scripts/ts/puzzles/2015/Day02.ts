@@ -2,22 +2,21 @@
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 import { from } from 'linq-to-typescript';
-import { Solution } from '../../models/Solution';
 import { Puzzle2015 } from './Puzzle2015';
 
 export class Day02 extends Puzzle2015 {
     totalAreaOfPaper: number;
     totalLengthOfRibbon: number;
 
-    override get name(): string {
+    override get name() {
         return 'I Was Told There Would Be No Math';
     }
 
-    override get day(): number {
+    override get day() {
         return 2;
     }
 
-    protected override get requiresData(): boolean {
+    protected override get requiresData() {
         return true;
     }
 
@@ -32,7 +31,7 @@ export class Day02 extends Puzzle2015 {
         return [totalArea, length];
     }
 
-    override solveCore(_: string[]): Promise<Solution> {
+    override solveCore(_: string[]) {
         const dimensions = this.readResourceAsLines();
 
         [this.totalAreaOfPaper, this.totalLengthOfRibbon] = Day02.getTotalWrappingPaperAreaAndRibbonLength(dimensions);
@@ -48,20 +47,20 @@ export class Day02 extends Puzzle2015 {
 class Present {
     constructor(public readonly length: number, public readonly width: number, public readonly height: number) {}
 
-    static parse(value: string): Present {
+    static parse(value: string) {
         const [length, width, height] = value.split('x');
         return new Present(parseInt(length, 10), parseInt(width, 10), parseInt(height, 10));
     }
 
-    get volume(): number {
+    get volume() {
         return this.height * this.length * this.width;
     }
 
-    getRibbonLength(): number {
+    getRibbonLength() {
         return Math.min((this.length + this.width) * 2, (this.width + this.height) * 2, (this.height + this.length) * 2) + this.volume;
     }
 
-    getWrappingPaperArea(): number {
+    getWrappingPaperArea() {
         const surfaceArea = 2 * this.length * this.width + 2 * this.width * this.height + 2 * this.height * this.length;
         const extra = Math.min(this.length * this.width, this.width * this.height, this.height * this.length);
 

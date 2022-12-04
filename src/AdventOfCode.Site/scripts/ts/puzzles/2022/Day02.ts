@@ -1,7 +1,6 @@
 // Copyright (c) Martin Costello, 2015. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
-import { Solution } from '../../models/Solution';
 import { Puzzle2022 } from './Puzzle2022';
 
 enum Move {
@@ -20,24 +19,53 @@ export class Day02 extends Puzzle2022 {
     totalScoreForMoves: number;
     totalScoreForOutcomes: number;
 
-    override get name(): string {
+    override get name() {
         return 'Rock Paper Scissors';
     }
 
-    override get day(): number {
+    override get day() {
         return 2;
     }
 
-    protected override get requiresData(): boolean {
+    protected override get requiresData() {
         return true;
     }
 
-    static getTotalScore(moves: string[], containsDesiredOutcome: boolean): number {
+    static getTotalScore(moves: string[], containsDesiredOutcome: boolean) {
         let total = 0;
 
+        const parseMove = (value: string) => {
+            switch (value) {
+                case 'A':
+                case 'X':
+                    return Move.rock;
+                case 'B':
+                case 'Y':
+                    return Move.paper;
+                case 'C':
+                case 'Z':
+                    return Move.scissors;
+                default:
+                    throw new Error(`Invalid move ${value}.`);
+            }
+        };
+
+        const parseOutcome = (value: string) => {
+            switch (value) {
+                case 'X':
+                    return Outcome.lose;
+                case 'Y':
+                    return Outcome.draw;
+                case 'Z':
+                    return Outcome.win;
+                default:
+                    throw new Error(`Invalid outcome ${value}.`);
+            }
+        };
+
         const moveSelector: (value: string, opponent: Move) => Move = containsDesiredOutcome
-            ? (value, opponent) => Day02.getMove(Day02.parseOutcome(value), opponent)
-            : (value, _) => Day02.parseMove(value);
+            ? (value, opponent) => Day02.getMove(parseOutcome(value), opponent)
+            : (value, _) => parseMove(value);
 
         for (const move of moves) {
             if (move === '') {
@@ -48,7 +76,7 @@ export class Day02 extends Puzzle2022 {
             const opponent = split[0];
             const player = split[1];
 
-            const opponentMove = Day02.parseMove(opponent);
+            const opponentMove = parseMove(opponent);
             const playerMove = moveSelector(player, opponentMove);
 
             const outcome = Day02.getOutcome(playerMove, opponentMove);
@@ -59,7 +87,7 @@ export class Day02 extends Puzzle2022 {
         return total;
     }
 
-    override solveCore(_: string[]): Promise<Solution> {
+    override solveCore(_: string[]) {
         const moves = this.readResourceAsLines();
 
         this.totalScoreForMoves = Day02.getTotalScore(moves, false);
@@ -73,7 +101,7 @@ export class Day02 extends Puzzle2022 {
         return this.createResult([this.totalScoreForMoves, this.totalScoreForOutcomes]);
     }
 
-    private static getMove(outcome: Outcome, opponent: Move): Move {
+    private static getMove(outcome: Outcome, opponent: Move) {
         switch (outcome) {
             case Outcome.win:
                 switch (opponent) {
@@ -106,7 +134,7 @@ export class Day02 extends Puzzle2022 {
         throw new Error('Invalid outcome and move combination.');
     }
 
-    private static getOutcome(player: Move, opponent: Move): Outcome {
+    private static getOutcome(player: Move, opponent: Move) {
         if (player === opponent) {
             return Outcome.draw;
         }
@@ -144,34 +172,5 @@ export class Day02 extends Puzzle2022 {
         }
 
         throw new Error('Invalid move combination.');
-    }
-
-    private static parseMove(value: string): Move {
-        switch (value) {
-            case 'A':
-            case 'X':
-                return Move.rock;
-            case 'B':
-            case 'Y':
-                return Move.paper;
-            case 'C':
-            case 'Z':
-                return Move.scissors;
-            default:
-                throw new Error(`Invalid move ${value}.`);
-        }
-    }
-
-    private static parseOutcome(value: string): Outcome {
-        switch (value) {
-            case 'X':
-                return Outcome.lose;
-            case 'Y':
-                return Outcome.draw;
-            case 'Z':
-                return Outcome.win;
-            default:
-                throw new Error(`Invalid outcome ${value}.`);
-        }
     }
 }

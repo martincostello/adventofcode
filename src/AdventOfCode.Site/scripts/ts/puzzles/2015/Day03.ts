@@ -1,7 +1,6 @@
 // Copyright (c) Martin Costello, 2015. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
-import { Solution } from '../../models/Solution';
 import { CardinalDirection } from '../CardinalDirection';
 import { Point } from '../Point';
 import { Size } from '../Size';
@@ -11,19 +10,19 @@ export class Day03 extends Puzzle2015 {
     housesWithPresentsFromSanta: number;
     housesWithPresentsFromSantaAndRoboSanta: number;
 
-    override get name(): string {
+    override get name() {
         return 'Perfectly Spherical Houses in a Vacuum';
     }
 
-    override get day(): number {
+    override get day() {
         return 3;
     }
 
-    protected override get requiresData(): boolean {
+    protected override get requiresData() {
         return true;
     }
 
-    static getUniqueHousesVisitedBySanta(instructions: string): number {
+    static getUniqueHousesVisitedBySanta(instructions: string) {
         const directions = Day03.getDirections(instructions);
 
         const santa = new SantaGps();
@@ -37,7 +36,7 @@ export class Day03 extends Puzzle2015 {
         return coordinates.size;
     }
 
-    static getUniqueHousesVisitedBySantaAndRoboSanta(instructions: string): number {
+    static getUniqueHousesVisitedBySantaAndRoboSanta(instructions: string) {
         const directions = Day03.getDirections(instructions);
 
         const santa = new SantaGps();
@@ -58,7 +57,7 @@ export class Day03 extends Puzzle2015 {
         return coordinates.size;
     }
 
-    override solveCore(_: string[]): Promise<Solution> {
+    override solveCore(_: string[]) {
         const instructions = this.readResourceAsString();
 
         this.housesWithPresentsFromSanta = Day03.getUniqueHousesVisitedBySanta(instructions);
@@ -70,7 +69,7 @@ export class Day03 extends Puzzle2015 {
         return this.createResult([this.housesWithPresentsFromSanta, this.housesWithPresentsFromSantaAndRoboSanta]);
     }
 
-    private static getDirections(instructions: string): CardinalDirection[] {
+    private static getDirections(instructions: string) {
         const directions: CardinalDirection[] = [];
 
         for (let i = 0; i < instructions.length; i++) {
@@ -103,11 +102,11 @@ export class Day03 extends Puzzle2015 {
 class SantaGps {
     constructor(private current: Point = Point.empty) {}
 
-    get location(): Point {
+    get location() {
         return this.current;
     }
 
-    move(direction: CardinalDirection): void {
+    move(direction: CardinalDirection) {
         let delta: Size;
         switch (direction) {
             case CardinalDirection.east:

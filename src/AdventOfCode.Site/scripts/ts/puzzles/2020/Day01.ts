@@ -2,7 +2,6 @@
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 import { IEnumerable } from 'linq-to-typescript';
-import { Solution } from '../../models/Solution';
 import { Maths } from '../Maths';
 import { Puzzle2020 } from './Puzzle2020';
 
@@ -10,19 +9,19 @@ export class Day01 extends Puzzle2020 {
     productOf2020SumFrom2: number;
     productOf2020SumFrom3: number;
 
-    override get name(): string {
+    override get name() {
         return 'Report Repair';
     }
 
-    override get day(): number {
+    override get day() {
         return 1;
     }
 
-    protected override get requiresData(): boolean {
+    protected override get requiresData() {
         return true;
     }
 
-    static get2020Product(expenses: number[], take: number): number {
+    static get2020Product(expenses: number[], take: number) {
         const result = Maths.getPermutationsWithCount(expenses, take);
 
         return result
@@ -31,7 +30,7 @@ export class Day01 extends Puzzle2020 {
             .first();
     }
 
-    override solveCore(_: string[]): Promise<Solution> {
+    override solveCore(_: string[]) {
         const values = this.readResourceAsNumbers();
 
         this.productOf2020SumFrom2 = Day01.get2020Product(values, 2);

@@ -1,7 +1,6 @@
 // Copyright (c) Martin Costello, 2015. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
-import { Solution } from '../../models/Solution';
 import { CardinalDirection } from '../CardinalDirection';
 import { Point } from '../Point';
 import { Puzzle } from '../Puzzle';
@@ -12,19 +11,19 @@ export class Day01 extends Puzzle2016 {
     blocksToEasterBunnyHQ: number;
     blocksToEasterBunnyHQIgnoringDuplicates: number;
 
-    override get name(): string {
+    override get name() {
         return 'No Time for a Taxicab';
     }
 
-    override get day(): number {
+    override get day() {
         return 1;
     }
 
-    protected override get requiresData(): boolean {
+    protected override get requiresData() {
         return true;
     }
 
-    static calculateDistance(input: string, ignoreDuplicates: boolean): number {
+    static calculateDistance(input: string, ignoreDuplicates: boolean) {
         let bearing = CardinalDirection.north;
         let position = Point.empty;
 
@@ -69,7 +68,7 @@ export class Day01 extends Puzzle2016 {
         return Point.manhattanDistance(position, Point.empty);
     }
 
-    override solveCore(_: string[]): Promise<Solution> {
+    override solveCore(_: string[]) {
         const instructions = this.readResourceAsString();
 
         this.blocksToEasterBunnyHQIgnoringDuplicates = Day01.calculateDistance(instructions, true);
@@ -83,7 +82,7 @@ export class Day01 extends Puzzle2016 {
         return this.createResult([this.blocksToEasterBunnyHQIgnoringDuplicates, this.blocksToEasterBunnyHQ]);
     }
 
-    private static parseDirections(input: string): Instruction[] {
+    private static parseDirections(input: string) {
         const instructions = input.split(/[,\s]+/);
 
         const result: Instruction[] = [];
@@ -100,7 +99,7 @@ export class Day01 extends Puzzle2016 {
         return result;
     }
 
-    private static turn(bearing: CardinalDirection, direction: Direction): CardinalDirection {
+    private static turn(bearing: CardinalDirection, direction: Direction) {
         switch (bearing) {
             case CardinalDirection.east:
                 return direction === Direction.left ? CardinalDirection.north : CardinalDirection.south;

@@ -4,17 +4,17 @@
 import { Solution } from '../models/Solution';
 
 export abstract class Puzzle {
-    resource: string | null;
+    resource: string | null = null;
 
     abstract get name(): string;
     abstract get day(): number;
     abstract get year(): number;
 
-    protected get minimumArguments(): number {
+    protected get minimumArguments() {
         return 0;
     }
 
-    protected get requiresData(): boolean {
+    protected get requiresData() {
         return false;
     }
 
@@ -52,7 +52,7 @@ export abstract class Puzzle {
         return Promise.resolve(solution);
     }
 
-    protected static parse(value: string): number {
+    protected static parse(value: string) {
         return parseInt(value, 10);
     }
 
@@ -68,7 +68,7 @@ export abstract class Puzzle {
         return this.resource.trimEnd();
     }
 
-    private ensureArguments(inputs: string[]): boolean {
+    private ensureArguments(inputs: string[]) {
         return inputs && inputs.length >= this.minimumArguments;
     }
 }

@@ -2,26 +2,25 @@
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 import { from } from 'linq-to-typescript';
-import { Solution } from '../../models/Solution';
 import { Puzzle2018 } from './Puzzle2018';
 
 export class Day01 extends Puzzle2018 {
     frequency: number;
     firstRepeatedFrequency: number;
 
-    override get name(): string {
+    override get name() {
         return 'Chronal Calibration';
     }
 
-    override get day(): number {
+    override get day() {
         return 1;
     }
 
-    protected override get requiresData(): boolean {
+    protected override get requiresData() {
         return true;
     }
 
-    static calculateFrequency(sequence: number[]): number {
+    static calculateFrequency(sequence: number[]) {
         const [frequency] = Day01.calculateFrequencyWithRepetition(sequence);
         return frequency;
     }
@@ -60,7 +59,7 @@ export class Day01 extends Puzzle2018 {
         return [frequency, firstRepeat !== null ? firstRepeat : frequency];
     }
 
-    override solveCore(_: string[]): Promise<Solution> {
+    override solveCore(_: string[]) {
         const sequence = this.readResourceAsNumbers();
 
         [this.frequency, this.firstRepeatedFrequency] = Day01.calculateFrequencyWithRepetition(sequence);

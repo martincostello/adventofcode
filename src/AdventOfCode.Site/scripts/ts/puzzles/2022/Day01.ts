@@ -2,7 +2,6 @@
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 import { from, NumberComparer } from 'linq-to-typescript';
-import { Solution } from '../../models/Solution';
 import { Puzzle } from '../Puzzle';
 import { Puzzle2022 } from './Puzzle2022';
 
@@ -10,19 +9,19 @@ export class Day01 extends Puzzle2022 {
     maximumCalories: number;
     maximumCaloriesForTop3: number;
 
-    override get name(): string {
+    override get name() {
         return 'Calorie Counting';
     }
 
-    override get day(): number {
+    override get day() {
         return 1;
     }
 
-    protected override get requiresData(): boolean {
+    protected override get requiresData() {
         return true;
     }
 
-    static getCalorieInventories(inventories: string[]): number[] {
+    static getCalorieInventories(inventories: string[]) {
         const calories: number[] = [];
         let current = 0;
 
@@ -42,7 +41,7 @@ export class Day01 extends Puzzle2022 {
         return calories;
     }
 
-    override solveCore(_: string[]): Promise<Solution> {
+    override solveCore(_: string[]) {
         const inventories = this.readResourceAsLines();
         const calories = from(Day01.getCalorieInventories(inventories));
 
