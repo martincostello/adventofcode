@@ -2,7 +2,7 @@
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 import { describe, expect, test } from '@jest/globals';
-import { readFileSync } from 'fs';
+import { existsSync, readFileSync } from 'fs';
 import { join, resolve } from 'path';
 import { DefaultPuzzleFactory } from './DefaultPuzzleFactory';
 
@@ -27,7 +27,9 @@ const solve = async (year: number, day: number, inputs: string[] = []): Promise<
     let input = join(__dirname, `../../../../AdventOfCode/Input/Y${yearString}/Day${dayString}/input.txt`);
     input = resolve(input);
 
-    puzzle.resource = readFileSync(input, 'utf-8');
+    if (existsSync(input)) {
+        puzzle.resource = readFileSync(input, 'utf-8');
+    }
 
     // Act
     const result = await puzzle.solve(inputs);
