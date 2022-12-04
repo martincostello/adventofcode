@@ -26,8 +26,8 @@ export class Day02 extends Puzzle2015 {
             .select((p: string) => Present.parse(p))
             .toArray();
 
-        const totalArea = from(presents).sum((p: Present) => Day02.getWrappingPaperArea(p));
-        const length = from(presents).sum((p: Present) => Day02.getRibbonLength(p));
+        const totalArea = from(presents).sum((p: Present) => p.getWrappingPaperArea());
+        const length = from(presents).sum((p: Present) => p.getRibbonLength());
 
         return [totalArea, length];
     }
@@ -43,24 +43,6 @@ export class Day02 extends Puzzle2015 {
 
         return this.createResult([this.totalAreaOfPaper, this.totalLengthOfRibbon]);
     }
-
-    private static getRibbonLength(present: Present): number {
-        let smallestPerimeter = Math.min((present.length + present.width) * 2, (present.width + present.height) * 2);
-        smallestPerimeter = Math.min(smallestPerimeter, (present.height + present.length) * 2);
-
-        const lengthForBow = present.height * present.length * present.width;
-
-        return smallestPerimeter + lengthForBow;
-    }
-
-    private static getWrappingPaperArea(present: Present): number {
-        const surfaceArea = 2 * present.length * present.width + 2 * present.width * present.height + 2 * present.height * present.length;
-
-        let extra = Math.min(present.length * present.width, present.width * present.height);
-        extra = Math.min(extra, present.height * present.length);
-
-        return surfaceArea + extra;
-    }
 }
 
 class Present {
@@ -69,5 +51,20 @@ class Present {
     static parse(value: string): Present {
         const [length, width, height] = value.split('x');
         return new Present(parseInt(length, 10), parseInt(width, 10), parseInt(height, 10));
+    }
+
+    get volume(): number {
+        return this.height * this.length * this.width;
+    }
+
+    getRibbonLength(): number {
+        return Math.min((this.length + this.width) * 2, (this.width + this.height) * 2, (this.height + this.length) * 2) + this.volume;
+    }
+
+    getWrappingPaperArea(): number {
+        const surfaceArea = 2 * this.length * this.width + 2 * this.width * this.height + 2 * this.height * this.length;
+        const extra = Math.min(this.length * this.width, this.width * this.height, this.height * this.length);
+
+        return surfaceArea + extra;
     }
 }

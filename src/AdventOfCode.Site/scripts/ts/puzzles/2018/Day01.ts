@@ -34,7 +34,11 @@ export class Day01 extends Puzzle2018 {
         const history: number[] = [];
         history.push(current);
 
-        const isInfinite = Day01.tendsToInfinity(sequence);
+        const tendsToInfinity = (sequence: number[]): boolean => {
+            return Math.abs(from(sequence).sum((p: number) => Math.sign(p))) === from(sequence).count((p: number) => p !== 0);
+        };
+
+        const isInfinite = tendsToInfinity(sequence);
 
         do {
             for (const shift of sequence) {
@@ -65,9 +69,5 @@ export class Day01 extends Puzzle2018 {
         console.info(`The first repeated frequency is ${this.firstRepeatedFrequency}.`);
 
         return this.createResult([this.frequency, this.firstRepeatedFrequency]);
-    }
-
-    private static tendsToInfinity(sequence: number[]): boolean {
-        return Math.abs(from(sequence).sum((p: number) => Math.sign(p))) === from(sequence).count((p: number) => p !== 0);
     }
 }

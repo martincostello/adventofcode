@@ -28,6 +28,10 @@ export class Day02 extends Puzzle2022 {
         return 2;
     }
 
+    protected override get requiresData(): boolean {
+        return true;
+    }
+
     static getTotalScore(moves: string[], containsDesiredOutcome: boolean): number {
         let total = 0;
 
@@ -67,10 +71,6 @@ export class Day02 extends Puzzle2022 {
         );
 
         return this.createResult([this.totalScoreForMoves, this.totalScoreForOutcomes]);
-    }
-
-    protected override get requiresData(): boolean {
-        return true;
     }
 
     private static getMove(outcome: Outcome, opponent: Move): Move {

@@ -7,24 +7,16 @@ import { Day01 } from './Day01';
 describe('2019', () => {
     describe('Day 01', () => {
         test.each([
-            [12, 2],
-            [14, 2],
-            [1969, 654],
-            [100756, 33583],
-        ])('returns correct requirement for mass %s', (mass: number, expected: number) => {
+            [12, false, 2],
+            [14, false, 2],
+            [1969, false, 654],
+            [100756, false, 33583],
+            [12, true, 2],
+            [1969, true, 966],
+            [100756, true, 50346],
+        ])('returns correct requirement for mass %s with include fuel %s', (mass: number, includeFuel: boolean, expected: number) => {
             // Act
-            const actual = Day01.getFuelRequirementsForMass(mass);
-
-            // Assert
-            expect(actual).toEqual(expected);
-        });
-        test.each([
-            [12, 2],
-            [1969, 966],
-            [100756, 50346],
-        ])('returns correct requirement with mass %s with fuel', (mass: number, expected: number) => {
-            // Act
-            const actual = Day01.getFuelRequirementsForMassWithFuel(mass);
+            const actual = Day01.getFuelRequirementsForMass(mass, includeFuel);
 
             // Assert
             expect(actual).toEqual(expected);
