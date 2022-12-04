@@ -62,6 +62,15 @@ public sealed class Day05 : Puzzle
         }
 
         return IsNice();
+
+        static bool IsVowel(char letter)
+        {
+            return letter switch
+            {
+                'a' or 'e' or 'i' or 'o' or 'u' => true,
+                _ => false,
+            };
+        }
     }
 
     /// <summary>
@@ -74,8 +83,8 @@ public sealed class Day05 : Puzzle
     internal static bool IsNiceV2(string value)
     {
         return
-            HasPairOfLettersWithMoreThanOneOccurence(value) &&
-            HasLetterThatIsTheBreadOfALetterSandwich(value);
+            HasLetterThatIsTheBreadOfALetterSandwich(value) &&
+            HasPairOfLettersWithMoreThanOneOccurence(value);
     }
 
     /// <summary>
@@ -174,25 +183,5 @@ public sealed class Day05 : Puzzle
         }
 
         return PuzzleResult.Create(NiceStringCount);
-    }
-
-    /// <summary>
-    /// Returns whether the specified letter is a vowel.
-    /// </summary>
-    /// <param name="letter">The letter to test for being a vowel.</param>
-    /// <returns>
-    /// <see langword="true"/> if <paramref name="letter"/> is a vowel; otherwise <see langword="false"/>.
-    /// </returns>
-    private static bool IsVowel(char letter)
-    {
-        return letter switch
-        {
-            'a' => true,
-            'e' => true,
-            'i' => true,
-            'o' => true,
-            'u' => true,
-            _ => false,
-        };
     }
 }
