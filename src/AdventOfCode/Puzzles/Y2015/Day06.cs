@@ -486,7 +486,18 @@ public sealed class Day06 : Puzzle
                 current = _lightBrightnesses.GetValueOrDefault(position) + delta;
             }
 
-            return _lightBrightnesses[position] = Math.Max(current, 0);
+            int value = Math.Max(current, 0);
+
+            if (value == 0)
+            {
+                _lightBrightnesses.Remove(position);
+            }
+            else
+            {
+                _lightBrightnesses[position] = value;
+            }
+
+            return value;
         }
     }
 }
