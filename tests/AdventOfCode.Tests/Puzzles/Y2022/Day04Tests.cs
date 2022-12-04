@@ -17,8 +17,10 @@ public sealed class Day04Tests : PuzzleTest
     {
     }
 
-    [Fact]
-    public void Y2022_Day04_GetOverlappingAssignments_Returns_Correct_Values()
+    [Theory]
+    [InlineData(false, 2)]
+    [InlineData(true, 4)]
+    public void Y2022_Day04_GetOverlappingAssignments_Returns_Correct_Values(bool partial, int expected)
     {
         // Arrange
         string[] assignments = new[]
@@ -32,10 +34,10 @@ public sealed class Day04Tests : PuzzleTest
         };
 
         // Act
-        int actual = Day04.GetOverlappingAssignments(assignments);
+        int actual = Day04.GetOverlappingAssignments(assignments, partial);
 
         // Assert
-        actual.ShouldBe(2);
+        actual.ShouldBe(expected);
     }
 
     [Fact]
@@ -47,5 +49,6 @@ public sealed class Day04Tests : PuzzleTest
         // Assert
         puzzle.ShouldNotBeNull();
         puzzle.FullyOverlappingAssignments.ShouldBe(526);
+        puzzle.PartiallyOverlappingAssignments.ShouldBe(886);
     }
 }
