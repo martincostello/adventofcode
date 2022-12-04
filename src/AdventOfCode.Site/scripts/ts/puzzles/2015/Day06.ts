@@ -86,15 +86,15 @@ class InstructionV1 extends Instruction {
     override act(grid: LightGrid) {
         switch (this.action) {
             case 'OFF':
-                grid.turnOffArea(this.bounds);
+                grid.turnOff(this.bounds);
                 break;
 
             case 'ON':
-                grid.turnOnArea(this.bounds);
+                grid.turnOn(this.bounds);
                 break;
 
             case 'TOGGLE':
-                grid.toggleArea(this.bounds);
+                grid.toggle(this.bounds);
                 break;
 
             default:
@@ -146,7 +146,7 @@ class InstructionV2 extends Instruction {
     }
 
     override act(grid: LightGrid) {
-        grid.incrementBrightnessArea(this.bounds, this.delta);
+        grid.incrementBrightness(this.bounds, this.delta);
     }
 
     static parse(value: string): InstructionV2 {
@@ -208,57 +208,57 @@ class LightGrid {
         return this.lightBrightnesses.get(position.asString()) || 0;
     }
 
-    incrementBrightnessArea(bounds: Rectangle, delta: number) {
-        for (let x = 0; x < bounds.width; x++) {
-            for (let y = 0; y < bounds.height; y++) {
-                this.incrementBrightnessPoint(new Point(bounds.x + x, bounds.y + y), delta);
+    incrementBrightness(item: Point | Rectangle, delta: number) {
+        if (item instanceof Point) {
+            this.incrementOrSetBrightness(item, delta, false);
+        } else {
+            for (let x = 0; x < item.width; x++) {
+                for (let y = 0; y < item.height; y++) {
+                    this.incrementBrightness(new Point(item.x + x, item.y + y), delta);
+                }
             }
         }
     }
 
-    incrementBrightnessPoint(position: Point, delta: number) {
-        this.incrementOrSetBrightness(position, delta, false);
-    }
+    toggle(item: Point | Rectangle) {
+        if (item instanceof Point) {
+            const isOff = this.get(item) === 0;
+            const delta = isOff ? 1 : -1;
 
-    toggleArea(bounds: Rectangle) {
-        for (let x = 0; x < bounds.width; x++) {
-            for (let y = 0; y < bounds.height; y++) {
-                this.togglePoint(new Point(bounds.x + x, bounds.y + y));
+            this.incrementBrightness(item, delta);
+
+            return isOff;
+        } else {
+            for (let x = 0; x < item.width; x++) {
+                for (let y = 0; y < item.height; y++) {
+                    this.toggle(new Point(item.x + x, item.y + y));
+                }
             }
         }
     }
 
-    togglePoint(position: Point) {
-        const isOff = this.get(position) === 0;
-        const delta = isOff ? 1 : -1;
-
-        this.incrementBrightnessPoint(position, delta);
-
-        return isOff;
-    }
-
-    turnOffArea(bounds: Rectangle) {
-        for (let x = 0; x < bounds.width; x++) {
-            for (let y = 0; y < bounds.height; y++) {
-                this.turnOffPoint(new Point(bounds.x + x, bounds.y + y));
+    turnOff(item: Point | Rectangle) {
+        if (item instanceof Point) {
+            this.incrementOrSetBrightness(item, 0, true);
+        } else {
+            for (let x = 0; x < item.width; x++) {
+                for (let y = 0; y < item.height; y++) {
+                    this.turnOff(new Point(item.x + x, item.y + y));
+                }
             }
         }
     }
 
-    turnOffPoint(position: Point) {
-        this.incrementOrSetBrightness(position, 0, true);
-    }
-
-    turnOnArea(bounds: Rectangle) {
-        for (let x = 0; x < bounds.width; x++) {
-            for (let y = 0; y < bounds.height; y++) {
-                this.turnOnPoint(new Point(bounds.x + x, bounds.y + y));
+    turnOn(item: Point | Rectangle) {
+        if (item instanceof Point) {
+            this.incrementOrSetBrightness(item, 1, true);
+        } else {
+            for (let x = 0; x < item.width; x++) {
+                for (let y = 0; y < item.height; y++) {
+                    this.turnOn(new Point(item.x + x, item.y + y));
+                }
             }
         }
-    }
-
-    turnOnPoint(position: Point) {
-        this.incrementOrSetBrightness(position, 1, true);
     }
 
     private incrementOrSetBrightness(position: Point, delta: number, set: boolean = false) {
