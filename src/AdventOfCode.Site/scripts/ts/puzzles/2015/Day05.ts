@@ -45,7 +45,7 @@ export class Day05 extends Puzzle2015 {
             }
         }
 
-        console.info(`"${this.niceStringCount} strings are nice using version ${version} of the rules."`);
+        console.info(`${this.niceStringCount} strings are nice using version ${version} of the rules.`);
 
         return this.createResult([this.niceStringCount]);
     }
