@@ -2,7 +2,7 @@
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 import { Md5 as MD5 } from 'ts-md5';
-import { Puzzle } from '../Puzzle';
+import { Puzzle } from '../index';
 import { Puzzle2015 } from './Puzzle2015';
 
 export class Day04 extends Puzzle2015 {

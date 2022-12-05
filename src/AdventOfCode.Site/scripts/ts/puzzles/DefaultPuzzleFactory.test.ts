@@ -4,7 +4,7 @@
 import { describe, expect, test } from '@jest/globals';
 import { existsSync, readFileSync } from 'fs';
 import { join, resolve } from 'path';
-import { DefaultPuzzleFactory } from './DefaultPuzzleFactory';
+import { DefaultPuzzleFactory } from './index';
 
 const factory = new DefaultPuzzleFactory();
 const solve = async (year: number, day: number, inputs: string[] = []): Promise<any[]> => {

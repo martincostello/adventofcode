@@ -1,13 +1,8 @@
 // Copyright (c) Martin Costello, 2015. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
-import { Puzzle } from '../Puzzle';
-import { PuzzleFactory } from '../PuzzleFactory';
-import { Day01 } from './Day01';
-import { Day02 } from './Day02';
-import { Day03 } from './Day03';
-import { Day04 } from './Day04';
-import { Day05 } from './Day05';
+import { Puzzle, PuzzleFactory } from '../index';
+import { Day01, Day02, Day03, Day04, Day05 } from './index';
 
 export class PuzzleFactory2022 implements PuzzleFactory {
     create(year: number, day: number): Puzzle | null {
