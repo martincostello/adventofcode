@@ -10,24 +10,32 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2022;
 public sealed class Day05 : Puzzle
 {
     /// <summary>
-    /// Gets a string containing the IDs of the crates at the top of each stack.
+    /// Gets a string containing the IDs of the crates at
+    /// the top of each stack using a CraneMover 9000.
     /// </summary>
-    public string TopCratesOfStacks { get; private set; } = string.Empty;
+    public string TopCratesOfStacks9000 { get; private set; } = string.Empty;
+
+    /// <summary>
+    /// Gets a string containing the IDs of the crates at
+    /// the top of each stack using a CraneMover 9001.
+    /// </summary>
+    public string TopCratesOfStacks9001 { get; private set; } = string.Empty;
 
     /// <summary>
     /// Rearranges the crates specified by the puzzle input.
     /// </summary>
     /// <param name="instructions">The instructions of how to rearrange the crates.</param>
+    /// <param name="canMoveMultipleCrates">Whether the crane is capable of moving multiple crates at once.</param>
     /// <returns>
     /// A string containing the IDs of the crates at the top of each stack after rearrangement.
     /// </returns>
-    public static string RearrangeCrates(IList<string> instructions)
+    public static string RearrangeCrates(IList<string> instructions, bool canMoveMultipleCrates)
     {
         int count = GetStackCount(instructions);
         var stacks = GetStacks(instructions, count);
         var steps = GetSteps(instructions);
 
-        Rearrange(steps, stacks);
+        Rearrange(steps, stacks, canMoveMultipleCrates);
 
         return GetTopCrates(stacks);
 
@@ -99,13 +107,38 @@ public sealed class Day05 : Puzzle
             return result.ToString();
         }
 
-        static void Rearrange(List<(int Count, int From, int To)> steps, List<Stack<char>> stacks)
+        static void Rearrange(
+            List<(int Count, int From, int To)> steps,
+            List<Stack<char>> stacks,
+            bool canMoveMultipleCrates)
         {
+            Stack<char>? swap = null;
+
             foreach ((int count, int from, int to) in steps)
             {
-                for (int i = 0; i < count; i++)
+                var source = stacks[from - 1];
+                var destination = stacks[to - 1];
+
+                if (canMoveMultipleCrates && count > 1)
                 {
-                    stacks[to - 1].Push(stacks[from - 1].Pop());
+                    swap ??= new Stack<char>(count);
+
+                    for (int i = 0; i < count; i++)
+                    {
+                        swap.Push(source.Pop());
+                    }
+
+                    for (int i = 0; i < count; i++)
+                    {
+                        destination.Push(swap.Pop());
+                    }
+                }
+                else
+                {
+                    for (int i = 0; i < count; i++)
+                    {
+                        destination.Push(source.Pop());
+                    }
                 }
             }
         }
@@ -118,13 +151,15 @@ public sealed class Day05 : Puzzle
 
         var instructions = await ReadResourceAsLinesAsync();
 
-        TopCratesOfStacks = RearrangeCrates(instructions);
+        TopCratesOfStacks9000 = RearrangeCrates(instructions, canMoveMultipleCrates: false);
+        TopCratesOfStacks9001 = RearrangeCrates(instructions, canMoveMultipleCrates: true);
 
         if (Verbose)
         {
-            Logger.WriteLine("The crates on the top of each stack are: {0}.", TopCratesOfStacks);
+            Logger.WriteLine("The crates on the top of each stack with the CraneMover 9000 are: {0}.", TopCratesOfStacks9000);
+            Logger.WriteLine("The crates on the top of each stack with the CraneMover 9001 are: {0}.", TopCratesOfStacks9001);
         }
 
-        return PuzzleResult.Create(TopCratesOfStacks);
+        return PuzzleResult.Create(TopCratesOfStacks9000, TopCratesOfStacks9001);
     }
 }

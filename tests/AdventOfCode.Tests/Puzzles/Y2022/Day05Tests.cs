@@ -17,11 +17,13 @@ public sealed class Day05Tests : PuzzleTest
     {
     }
 
-    [Fact]
-    public void Y2022_Day05_RearrangeCrates_Returns_Correct_Value()
+    [Theory]
+    [InlineData(false, "CMZ")]
+    [InlineData(true, "MCD")]
+    public void Y2022_Day05_RearrangeCrates_Returns_Correct_Value(bool canMoveMultipleCrates, string expected)
     {
         // Arrange
-        string[] assignments = new[]
+        string[] instructions = new[]
         {
             "    [D]     ",
             "[N] [C]     ",
@@ -35,10 +37,10 @@ public sealed class Day05Tests : PuzzleTest
         };
 
         // Act
-        string actual = Day05.RearrangeCrates(assignments);
+        string actual = Day05.RearrangeCrates(instructions, canMoveMultipleCrates);
 
         // Assert
-        actual.ShouldBe("CMZ");
+        actual.ShouldBe(expected);
     }
 
     [Fact]
@@ -49,6 +51,7 @@ public sealed class Day05Tests : PuzzleTest
 
         // Assert
         puzzle.ShouldNotBeNull();
-        puzzle.TopCratesOfStacks.ShouldBe("TGWSMRBPN");
+        puzzle.TopCratesOfStacks9000.ShouldBe("TGWSMRBPN");
+        puzzle.TopCratesOfStacks9001.ShouldBe("TZLTLWRNF");
     }
 }
