@@ -39,13 +39,13 @@ export class Day05 extends Puzzle2022 {
         const getSteps = (instructions: string[]) => {
             const result: Step[] = [];
 
-            const moves = from(instructions)
+            const moves: string[] = from(instructions)
                 .skipWhile((p: string) => p.length > 0)
                 .skip(1)
                 .toArray();
 
             for (const move of moves) {
-                const split = (move as string).split(' ');
+                const split = move.split(' ');
                 result.push([Puzzle.parse(split[1]), Puzzle.parse(split[3]), Puzzle.parse(split[5])]);
             }
 
@@ -59,7 +59,9 @@ export class Day05 extends Puzzle2022 {
                 stacks.push([]);
             }
 
-            for (const line of from(instructions).take(count).reverse()) {
+            const lines: string[] = from(instructions).take(count).reverse().toArray();
+
+            for (const line of lines) {
                 for (let i = 1, j = 0; i < line.length; i += 4, j++) {
                     const container = line[i];
 
