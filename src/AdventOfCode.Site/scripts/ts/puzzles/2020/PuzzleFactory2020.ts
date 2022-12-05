@@ -2,7 +2,7 @@
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 import { Puzzle, PuzzleFactory } from '../index';
-import { Day01 } from './index';
+import * as Y2020 from './index';
 
 export class PuzzleFactory2020 implements PuzzleFactory {
     create(year: number, day: number): Puzzle | null {
@@ -12,7 +12,7 @@ export class PuzzleFactory2020 implements PuzzleFactory {
 
         switch (day) {
             case 1:
-                return new Day01();
+                return new Y2020.Day01();
             default:
                 return null;
         }
