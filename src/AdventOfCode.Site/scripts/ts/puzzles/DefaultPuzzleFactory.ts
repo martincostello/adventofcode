@@ -9,8 +9,7 @@ import { PuzzleFactory2019 } from './2019/PuzzleFactory2019';
 import { PuzzleFactory2020 } from './2020/PuzzleFactory2020';
 import { PuzzleFactory2021 } from './2021/PuzzleFactory2021';
 import { PuzzleFactory2022 } from './2022/PuzzleFactory2022';
-import { Puzzle } from './Puzzle';
-import { PuzzleFactory } from './PuzzleFactory';
+import { Puzzle, PuzzleFactory } from './index';
 
 export class DefaultPuzzleFactory implements PuzzleFactory {
     create(year: number, day: number): Puzzle | null {

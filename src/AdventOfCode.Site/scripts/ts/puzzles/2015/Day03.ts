@@ -1,9 +1,7 @@
 // Copyright (c) Martin Costello, 2015. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
-import { CardinalDirection } from '../CardinalDirection';
-import { Point } from '../Point';
-import { Size } from '../Size';
+import { CardinalDirection, Point, Size } from '../index';
 import { Puzzle2015 } from './Puzzle2015';
 
 export class Day03 extends Puzzle2015 {

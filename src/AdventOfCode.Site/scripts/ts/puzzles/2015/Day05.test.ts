@@ -2,7 +2,7 @@
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 import { describe, expect, test } from '@jest/globals';
-import { Day05 } from './Day05';
+import { Day05 } from './index';
 
 describe('2015', () => {
     describe('Day 05', () => {

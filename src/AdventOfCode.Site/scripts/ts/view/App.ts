@@ -1,15 +1,10 @@
 // Copyright (c) Martin Costello, 2015. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
-import { ApiClient } from '../client/ApiClient';
-import { ProblemDetails } from '../models/ProblemDetails';
-import { PuzzleMetadata } from '../models/PuzzleMetadata';
-import { Solution } from '../models/Solution';
-import { DefaultPuzzleFactory } from '../puzzles/DefaultPuzzleFactory';
-import { Puzzle } from '../puzzles/Puzzle';
-import { ClientSolver } from '../solvers/ClientSolver';
-import { ServerSolver } from '../solvers/ServerSolver';
-import { Solver } from '../solvers/Solver';
+import { ApiClient } from '../client/index';
+import { ProblemDetails, PuzzleMetadata, Solution } from '../models/index';
+import { DefaultPuzzleFactory, Puzzle } from '../puzzles/index';
+import { ClientSolver, ServerSolver, Solver } from '../solvers/index';
 import { UIElements } from './UIElements';
 
 interface ClientPuzzleMetadata extends PuzzleMetadata {

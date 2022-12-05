@@ -2,7 +2,7 @@
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 import { IEnumerable } from 'linq-to-typescript';
-import { Maths } from '../Maths';
+import { Maths } from '../index';
 import { Puzzle2020 } from './Puzzle2020';
 
 export class Day01 extends Puzzle2020 {
