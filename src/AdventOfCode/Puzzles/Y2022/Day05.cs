@@ -43,9 +43,7 @@ public sealed class Day05 : Puzzle
         {
             for (int i = 0; i < instructions.Count; i++)
             {
-                string line = instructions[i];
-
-                if (string.IsNullOrEmpty(line))
+                if (string.IsNullOrEmpty(instructions[i]))
                 {
                     string trimmed = instructions[i - 1].Trim();
                     return Parse<int>(trimmed[trimmed.LastIndexOf(' ')..]);

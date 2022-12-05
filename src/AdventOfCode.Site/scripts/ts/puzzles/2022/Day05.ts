@@ -24,9 +24,7 @@ export class Day05 extends Puzzle2022 {
     static rearrangeCrates(instructions: string[], canMoveMultipleCrates: boolean) {
         const getStackCount = (instructions: string[]) => {
             for (let i = 0; i < instructions.length; i++) {
-                const line = instructions[i];
-
-                if (line.trim().length === 0) {
+                if (instructions[i].length === 0) {
                     const trimmed = instructions[i - 1].trim();
                     return Puzzle.parse(trimmed[trimmed.length - 1]);
                 }
