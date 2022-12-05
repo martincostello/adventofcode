@@ -7,3 +7,4 @@ export { Day03 } from './Day03';
 export { Day04 } from './Day04';
 export { Day05 } from './Day05';
 export { Day06 } from './Day06';
+export { Day07 } from './Day07';
