@@ -8,7 +8,7 @@ export class Day05 extends Puzzle2015 {
     niceStringCount = 0;
 
     override get name() {
-        return 'Doesn\u0027t He Have Intern - Elves For This?';
+        return "Doesn't He Have Intern-Elves For This?";
     }
 
     override get day() {
