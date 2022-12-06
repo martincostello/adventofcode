@@ -18,15 +18,20 @@ public sealed class Day06Tests : PuzzleTest
     }
 
     [Theory]
-    [InlineData("mjqjpqmgbljsphdztnvjfqwrcgsmlb", 7)]
-    [InlineData("bvwbjplbgvbhsrlpgdmjqwftvncz", 5)]
-    [InlineData("nppdvjthqldpwncqszvftbrmjlhg", 6)]
-    [InlineData("nznrnfrfntjfmvfwmzdfjlvtqnbhcprsg", 10)]
-    [InlineData("zcfzfwzzqfrljwzlrfnpqdbhtmscgvjw", 11)]
-    public void Y2022_Day06_FindFirstPacket_Returns_Correct_Value(string datastream, int expected)
+    [InlineData("mjqjpqmgbljsphdztnvjfqwrcgsmlb", 4, 7)]
+    [InlineData("bvwbjplbgvbhsrlpgdmjqwftvncz", 4, 5)]
+    [InlineData("nppdvjthqldpwncqszvftbrmjlhg", 4, 6)]
+    [InlineData("nznrnfrfntjfmvfwmzdfjlvtqnbhcprsg", 4, 10)]
+    [InlineData("zcfzfwzzqfrljwzlrfnpqdbhtmscgvjw", 4, 11)]
+    [InlineData("mjqjpqmgbljsphdztnvjfqwrcgsmlb", 14, 19)]
+    [InlineData("bvwbjplbgvbhsrlpgdmjqwftvncz", 14, 23)]
+    [InlineData("nppdvjthqldpwncqszvftbrmjlhg", 14, 23)]
+    [InlineData("nznrnfrfntjfmvfwmzdfjlvtqnbhcprsg", 14, 29)]
+    [InlineData("zcfzfwzzqfrljwzlrfnpqdbhtmscgvjw", 14, 26)]
+    public void Y2022_Day06_FindFirstPacket_Returns_Correct_Value(string datastream, int distinctCharacters, int expected)
     {
         // Act
-        int actual = Day06.FindFirstPacket(datastream);
+        int actual = Day06.FindFirstPacket(datastream, distinctCharacters);
 
         // Assert
         actual.ShouldBe(expected);
@@ -41,5 +46,6 @@ public sealed class Day06Tests : PuzzleTest
         // Assert
         puzzle.ShouldNotBeNull();
         puzzle.IndexOfFirstStartOfPacketMarker.ShouldBe(1850);
+        puzzle.IndexOfFirstStartOfMessageMarker.ShouldBe(2823);
     }
 }

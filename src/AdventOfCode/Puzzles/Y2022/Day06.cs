@@ -6,7 +6,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2022;
 /// <summary>
 /// A class representing the puzzle for <c>https://adventofcode.com/2022/day/6</c>. This class cannot be inherited.
 /// </summary>
-[Puzzle(2022, 06, "CHANGE_ME", RequiresData = true)]
+[Puzzle(2022, 06, "Tuning Trouble", RequiresData = true)]
 public sealed class Day06 : Puzzle
 {
     /// <summary>
@@ -15,35 +15,42 @@ public sealed class Day06 : Puzzle
     public int IndexOfFirstStartOfPacketMarker { get; private set; }
 
     /// <summary>
+    /// Gets the index of the first start-of-message marker.
+    /// </summary>
+    public int IndexOfFirstStartOfMessageMarker { get; private set; }
+
+    /// <summary>
     /// Finds the index of the first start-of-packet marker in the datastream.
     /// </summary>
     /// <param name="datastream">The datastream to find the index of the first start-of-packet marker.</param>
+    /// <param name="distinctCharacters">The number of distinct characters required to find the marker.</param>
     /// <returns>
     /// The index of the first start-of-packet marker.
     /// </returns>
-    public static int FindFirstPacket(string datastream)
+    public static int FindFirstPacket(string datastream, int distinctCharacters)
     {
-        var queue = new Queue<char>(4);
-        int result = 0;
+        var queue = new Queue<char>(distinctCharacters);
+        int index = 0;
 
         foreach (char item in datastream)
         {
-            if (queue.Count == 4 && queue.Distinct().Count() == 4)
+            if (queue.Count == distinctCharacters &&
+                queue.Distinct().Count() == distinctCharacters)
             {
                 break;
             }
 
-            result++;
+            index++;
 
             queue.Enqueue(item);
 
-            if (queue.Count > 4)
+            if (queue.Count > distinctCharacters)
             {
                 _ = queue.Dequeue();
             }
         }
 
-        return result;
+        return index;
     }
 
     /// <inheritdoc />
@@ -53,15 +60,20 @@ public sealed class Day06 : Puzzle
 
         string datastream = await ReadResourceAsStringAsync();
 
-        IndexOfFirstStartOfPacketMarker = FindFirstPacket(datastream);
+        IndexOfFirstStartOfPacketMarker = FindFirstPacket(datastream, 4);
+        IndexOfFirstStartOfMessageMarker = FindFirstPacket(datastream, 14);
 
         if (Verbose)
         {
             Logger.WriteLine(
                 "{0} characters need to be processed before the first start-of-packet marker is detected",
                 IndexOfFirstStartOfPacketMarker);
+
+            Logger.WriteLine(
+                "{0} characters need to be processed before the first start-of-message marker is detected",
+                IndexOfFirstStartOfMessageMarker);
         }
 
-        return PuzzleResult.Create(IndexOfFirstStartOfPacketMarker);
+        return PuzzleResult.Create(IndexOfFirstStartOfPacketMarker, IndexOfFirstStartOfMessageMarker);
     }
 }
