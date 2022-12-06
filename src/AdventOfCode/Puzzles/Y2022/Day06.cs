@@ -66,11 +66,11 @@ public sealed class Day06 : Puzzle
         if (Verbose)
         {
             Logger.WriteLine(
-                "{0} characters need to be processed before the first start-of-packet marker is detected",
+                "{0} characters need to be processed before the first start-of-packet marker is detected.",
                 IndexOfFirstStartOfPacketMarker);
 
             Logger.WriteLine(
-                "{0} characters need to be processed before the first start-of-message marker is detected",
+                "{0} characters need to be processed before the first start-of-message marker is detected.",
                 IndexOfFirstStartOfMessageMarker);
         }
 
