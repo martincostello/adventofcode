@@ -30,7 +30,7 @@ public sealed class Day07 : Puzzle
     /// The total size of all directories with a total size of at least 100000 and
     /// the total size of the smallest directory to delete that frees enough disk space.
     /// </returns>
-    public static (long TotalSizeOfDirectoriesLargerThanLimit, long SizeOfSmallestDirectoryToDelete) GetTotalSize(
+    public static (long TotalSizeOfDirectoriesLargerThanLimit, long SizeOfSmallestDirectoryToDelete) GetDirectorySizes(
         IList<string> terminalOutput)
     {
         const long DiskSize = 70000000;
@@ -141,7 +141,7 @@ public sealed class Day07 : Puzzle
 
         var terminalOutput = await ReadResourceAsLinesAsync();
 
-        (TotalSizeOfDirectoriesLargerThanLimit, SizeOfSmallestDirectoryToDelete) = GetTotalSize(terminalOutput);
+        (TotalSizeOfDirectoriesLargerThanLimit, SizeOfSmallestDirectoryToDelete) = GetDirectorySizes(terminalOutput);
 
         if (Verbose)
         {

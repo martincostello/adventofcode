@@ -48,7 +48,7 @@ export class Day06 extends Puzzle2022 {
         this.indexOfFirstStartOfMessageMarker = Day06.findFirstPacket(datastream, 14);
 
         console.info(
-            `${this.indexOfFirstStartOfPacketMarker} characters need to be processed before the first start-of-packet marker is detected`
+            `${this.indexOfFirstStartOfPacketMarker} characters need to be processed before the first start-of-packet marker is detected.`
         );
         console.info(
             `${this.indexOfFirstStartOfMessageMarker} characters need to be processed before the first start-of-message marker is detected.`
