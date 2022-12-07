@@ -18,7 +18,7 @@ public sealed class Day07Tests : PuzzleTest
     }
 
     [Fact]
-    public void Y2022_Day07_GetTotalSize_Returns_Correct_Value()
+    public void Y2022_Day07_GetDirectorySizes_Returns_Correct_Value()
     {
         // Arrange
         string[] terminalOutput = new[]
@@ -49,7 +49,7 @@ public sealed class Day07Tests : PuzzleTest
         };
 
         // Act
-        (long actualTotalSizeBelowLimit, long actualFreedSpace) = Day07.GetTotalSize(terminalOutput);
+        (long actualTotalSizeBelowLimit, long actualFreedSpace) = Day07.GetDirectorySizes(terminalOutput);
 
         // Assert
         actualTotalSizeBelowLimit.ShouldBe(95437);

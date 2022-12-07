@@ -60,5 +60,5 @@ gulp.task('test', () => {
 gulp.task('default', gulp.series('prettier', 'lint', 'build'));
 
 gulp.task('watch', () => {
-    gulp.watch(glob, gulp.series('lint', 'build', 'test'));
+    gulp.watch(glob, gulp.series('lint', 'build'));
 });
