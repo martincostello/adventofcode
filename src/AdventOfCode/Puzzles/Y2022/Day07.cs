@@ -1,6 +1,8 @@
 ﻿// Copyright (c) Martin Costello, 2015. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
+using System.Diagnostics;
+
 namespace MartinCostello.AdventOfCode.Puzzles.Y2022;
 
 /// <summary>
@@ -12,23 +14,45 @@ public sealed class Day07 : Puzzle
     /// <summary>
     /// Gets the total size of all directories with a total size of at least 100000.
     /// </summary>
-    public long TotalSizeOfDirectoriesLargerThan100000 { get; private set; }
+    public long TotalSizeOfDirectoriesLargerThanLimit { get; private set; }
 
     /// <summary>
-    /// Finds the total size of the directories with a total size of at least the specified limit.
+    /// Gets the total size of the smallest directory to delete that frees enough disk space.
+    /// </summary>
+    public long SizeOfSmallestDirectoryToDelete { get; private set; }
+
+    /// <summary>
+    /// Finds the total size of the directories with a total size of at least 100000 and
+    /// the total size of the smallest directory to delete that frees enough disk space.
     /// </summary>
     /// <param name="terminalOutput">The terminal output to parse.</param>
-    /// <param name="limit">The size limit to return the sum for.</param>
     /// <returns>
-    /// The total size of all directories with a total size of at least <paramref name="limit"/>.
+    /// The total size of all directories with a total size of at least 100000 and
+    /// the total size of the smallest directory to delete that frees enough disk space.
     /// </returns>
-    public static long GetTotalSize(IList<string> terminalOutput, int limit)
+    public static (long TotalSizeOfDirectoriesLargerThanLimit, long SizeOfSmallestDirectoryToDelete) GetTotalSize(
+        IList<string> terminalOutput)
     {
+        const long DiskSize = 70000000;
+        const long SizeLimit = 100000;
+        const long UpdateSize = 30000000;
+
         var directories = GetDirectories(terminalOutput.ToArray());
 
-        return directories
-            .Where((p) => p.TotalSize <= limit)
+        long totalSizeOfDirectoriesLargerThanLimit = directories
+            .Where((p) => p.TotalSize <= SizeLimit)
             .Sum((p) => p.TotalSize);
+
+        long consumed = directories.Single((p) => p.Container is null).TotalSize;
+        long freeSpace = DiskSize - consumed;
+        long required = UpdateSize - freeSpace;
+
+        long sizeOfSmallestDirectoryToDelete = directories
+            .Where((p) => p.TotalSize >= required)
+            .Select((p) => p.TotalSize)
+            .Min();
+
+        return (totalSizeOfDirectoriesLargerThanLimit, sizeOfSmallestDirectoryToDelete);
 
         static List<Directory> GetDirectories(ReadOnlySpan<string> terminalOutput)
         {
@@ -54,7 +78,7 @@ public sealed class Day07 : Puzzle
                     }
                     else
                     {
-                        string path = name == "/" ? name : current.Path + "/" + name;
+                        string path = name == "/" ? name : current.Path.TrimEnd('/') + "/" + name;
 
                         if (!fileSystem.TryGetValue(path, out var directory))
                         {
@@ -117,16 +141,20 @@ public sealed class Day07 : Puzzle
 
         var terminalOutput = await ReadResourceAsLinesAsync();
 
-        TotalSizeOfDirectoriesLargerThan100000 = GetTotalSize(terminalOutput, 100000);
+        (TotalSizeOfDirectoriesLargerThanLimit, SizeOfSmallestDirectoryToDelete) = GetTotalSize(terminalOutput);
 
         if (Verbose)
         {
             Logger.WriteLine(
                 "The sum of the total sizes of the directories with a total size of at most 100,000 is {0}.",
-                TotalSizeOfDirectoriesLargerThan100000);
+                TotalSizeOfDirectoriesLargerThanLimit);
+
+            Logger.WriteLine(
+                "The sizes of the directory would free up enough space on the filesystem to run the update is {0}.",
+                SizeOfSmallestDirectoryToDelete);
         }
 
-        return PuzzleResult.Create(TotalSizeOfDirectoriesLargerThan100000);
+        return PuzzleResult.Create(TotalSizeOfDirectoriesLargerThanLimit, SizeOfSmallestDirectoryToDelete);
     }
 
     private abstract record FileSystemEntry(string Name, FileSystemEntry? Container)
@@ -150,9 +178,9 @@ public sealed class Day07 : Puzzle
                 {
                     size += child switch
                     {
-                        Directory d => d.TotalSize,
-                        File f => f.Size,
-                        _ => throw new InvalidOperationException(),
+                        Directory directory => directory.TotalSize,
+                        File file => file.Size,
+                        _ => throw new UnreachableException(),
                     };
                 }
 
