@@ -49,10 +49,11 @@ public sealed class Day07Tests : PuzzleTest
         };
 
         // Act
-        long actual = Day07.GetTotalSize(terminalOutput, 100000);
+        (long actualTotalSizeBelowLimit, long actualFreedSpace) = Day07.GetTotalSize(terminalOutput);
 
         // Assert
-        actual.ShouldBe(95437);
+        actualTotalSizeBelowLimit.ShouldBe(95437);
+        actualFreedSpace.ShouldBe(24933642);
     }
 
     [Fact]
@@ -63,6 +64,7 @@ public sealed class Day07Tests : PuzzleTest
 
         // Assert
         puzzle.ShouldNotBeNull();
-        puzzle.TotalSizeOfDirectoriesLargerThan100000.ShouldBe(1642503);
+        puzzle.TotalSizeOfDirectoriesLargerThanLimit.ShouldBe(1642503);
+        puzzle.SizeOfSmallestDirectoryToDelete.ShouldBe(6999588);
     }
 }
