@@ -32,95 +32,47 @@ public sealed class Day08 : Puzzle
         int height = grid.Count;
         int width = grid[0].Length;
 
-        var trees = new List<List<Tree>>(grid.Count);
+        var trees = new Dictionary<Point, Tree>(height * width);
 
-        foreach (string row in grid)
-        {
-            var rowTrees = new List<Tree>(row.Length);
-
-            foreach (char tree in row)
-            {
-                rowTrees.Add(new Tree(tree - '0'));
-            }
-
-            trees.Add(rowTrees);
-        }
-
-        // Left to right
         for (int y = 0; y < height; y++)
         {
-            var previous = trees[y][0];
-            previous.MarkVisible();
-
-            for (int x = 1; x < width; x++)
+            for (int x = 0; x < width; x++)
             {
-                var nextTree = trees[y][x];
-
-                if (nextTree.Height > previous.Height)
-                {
-                    nextTree.MarkVisible();
-                    previous = nextTree;
-                }
+                var location = new Point(x, y);
+                trees[location] = new Tree(location, grid[y][x] - '0');
             }
         }
 
-        // Right to left
-        for (int y = 0; y < height; y++)
+        var up = new Size(0, -1);
+        var down = new Size(0, 1);
+        var left = new Size(-1, 0);
+        var right = new Size(1, 0);
+
+        var topLeft = new Point(0, 0);
+        var topRight = new Point(width - 1, 0);
+        var bottomLeft = new Point(width - 1, height - 1);
+
+        var directions = new (Point Origin, Size Next, Size Forward)[]
         {
-            var previous = trees[y][width - 1];
-            previous.MarkVisible();
+            (topLeft,    down,  right), // Left to right
+            (topRight,   down,  left), // Right to left
+            (topLeft,    right, down), // Top to bottom
+            (bottomLeft, left,  up), // Bottom to top
+        };
 
-            for (int x = width - 2; x > -1; x--)
-            {
-                var nextTree = trees[y][x];
-
-                if (nextTree.Height > previous.Height)
-                {
-                    nextTree.MarkVisible();
-                    previous = nextTree;
-                }
-            }
-        }
-
-        // Top to bottom
-        for (int x = 0; x < width; x++)
+        foreach (var (origin, next, forward) in directions)
         {
-            var previous = trees[0][x];
-            previous.MarkVisible();
+            var front = origin;
 
-            for (int y = 1; y < height; y++)
+            do
             {
-                var nextTree = trees[y][x];
-
-                if (nextTree.Height > previous.Height)
-                {
-                    nextTree.MarkVisible();
-                    previous = nextTree;
-                }
+                Sweep(trees, front, forward);
+                front += next;
             }
+            while (trees.ContainsKey(front));
         }
 
-        // Bottom to top
-        for (int x = 0; x < width; x++)
-        {
-            var previous = trees[height - 1][x];
-            previous.MarkVisible();
-
-            for (int y = height - 2; y > -1; y--)
-            {
-                var nextTree = trees[y][x];
-
-                if (nextTree.Height > previous.Height)
-                {
-                    nextTree.MarkVisible();
-                    previous = nextTree;
-                }
-            }
-        }
-
-        int visibleTrees = trees
-            .SelectMany((p) => p)
-            .Count((p) => p.IsVisible);
+        int visibleTrees = trees.Count((p) => p.Value.IsVisible);
 
         int maximumScenicScore = 0;
 
@@ -128,7 +80,7 @@ public sealed class Day08 : Puzzle
         {
             for (int x = 0; x < width; x++)
             {
-                var tree = trees[y][x];
+                var tree = trees[new(x, y)];
 
                 if (tree.IsVisible)
                 {
@@ -140,7 +92,7 @@ public sealed class Day08 : Puzzle
                     // Up
                     for (int delta = y - 1; delta > -1; delta--)
                     {
-                        var next = trees[delta][x];
+                        var next = trees[new(x, delta)];
 
                         scoreUp++;
 
@@ -153,7 +105,7 @@ public sealed class Day08 : Puzzle
                     // Down
                     for (int delta = y + 1; delta < height; delta++)
                     {
-                        var next = trees[delta][x];
+                        var next = trees[new(x, delta)];
 
                         scoreDown++;
 
@@ -166,7 +118,7 @@ public sealed class Day08 : Puzzle
                     // Left
                     for (int delta = x - 1; delta > -1; delta--)
                     {
-                        var next = trees[y][delta];
+                        var next = trees[new(delta, y)];
 
                         scoreLeft++;
 
@@ -179,7 +131,7 @@ public sealed class Day08 : Puzzle
                     // Right
                     for (int delta = x + 1; delta < width; delta++)
                     {
-                        var next = trees[y][delta];
+                        var next = trees[new(delta, y)];
 
                         scoreRight++;
 
@@ -196,6 +148,22 @@ public sealed class Day08 : Puzzle
         }
 
         return (visibleTrees, maximumScenicScore);
+
+        static void Sweep(Dictionary<Point, Tree> trees, Point origin, Size direction)
+        {
+            var location = origin;
+            var current = trees[location];
+            current.MarkVisible();
+
+            while (trees.TryGetValue(location += direction, out var next))
+            {
+                if (next.Height > current.Height)
+                {
+                    next.MarkVisible();
+                    current = next;
+                }
+            }
+        }
     }
 
     /// <inheritdoc />
@@ -216,7 +184,7 @@ public sealed class Day08 : Puzzle
         return PuzzleResult.Create(VisibleTrees, MaximumScenicScore);
     }
 
-    private sealed record Tree(int Height)
+    private sealed record Tree(Point Location, int Height)
     {
         public bool IsVisible { get; private set; }
 
