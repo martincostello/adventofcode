@@ -6,7 +6,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2022;
 /// <summary>
 /// A class representing the puzzle for <c>https://adventofcode.com/2022/day/8</c>. This class cannot be inherited.
 /// </summary>
-[Puzzle(2022, 07, "Treetop Tree House", RequiresData = true)]
+[Puzzle(2022, 08, "Treetop Tree House", RequiresData = true)]
 public sealed class Day08 : Puzzle
 {
     /// <summary>
@@ -15,13 +15,19 @@ public sealed class Day08 : Puzzle
     public int VisibleTrees { get; private set; }
 
     /// <summary>
+    /// Gets the maximum scenic score that can be achieved for a treehouse in a tree in the grid.
+    /// </summary>
+    public int MaximumScenicScore { get; private set; }
+
+    /// <summary>
     /// Returns how many trees are visible from outside the specified grid.
     /// </summary>
     /// <param name="grid">The grid of trees and heights.</param>
     /// <returns>
-    /// How many trees are visible from outside the grid specified by <paramref name="grid"/>.
+    /// How many trees are visible from outside the grid specified by <paramref name="grid"/>
+    /// and the maximum scenic score that can be achieved for a treehouse in a tree in the grid.
     /// </returns>
-    public static int CountVisibleTrees(IList<string> grid)
+    public static (int VisibleTrees, int MaximumScenicScore) CountVisibleTrees(IList<string> grid)
     {
         int height = grid.Count;
         int width = grid[0].Length;
@@ -112,7 +118,84 @@ public sealed class Day08 : Puzzle
             }
         }
 
-        return trees.SelectMany((p) => p).Count((p) => p.IsVisible);
+        int visibleTrees = trees
+            .SelectMany((p) => p)
+            .Count((p) => p.IsVisible);
+
+        int maximumScenicScore = 0;
+
+        for (int y = 0; y < height; y++)
+        {
+            for (int x = 0; x < width; x++)
+            {
+                var tree = trees[y][x];
+
+                if (tree.IsVisible)
+                {
+                    int scoreUp = 0;
+                    int scoreDown = 0;
+                    int scoreLeft = 0;
+                    int scoreRight = 0;
+
+                    // Up
+                    for (int delta = y - 1; delta > -1; delta--)
+                    {
+                        var next = trees[delta][x];
+
+                        scoreUp++;
+
+                        if (next.Height >= tree.Height)
+                        {
+                            break;
+                        }
+                    }
+
+                    // Down
+                    for (int delta = y + 1; delta < height; delta++)
+                    {
+                        var next = trees[delta][x];
+
+                        scoreDown++;
+
+                        if (next.Height >= tree.Height)
+                        {
+                            break;
+                        }
+                    }
+
+                    // Left
+                    for (int delta = x - 1; delta > -1; delta--)
+                    {
+                        var next = trees[y][delta];
+
+                        scoreLeft++;
+
+                        if (next.Height >= tree.Height)
+                        {
+                            break;
+                        }
+                    }
+
+                    // Right
+                    for (int delta = x + 1; delta < width; delta++)
+                    {
+                        var next = trees[y][delta];
+
+                        scoreRight++;
+
+                        if (next.Height >= tree.Height)
+                        {
+                            break;
+                        }
+                    }
+
+                    int scenicScore = scoreUp * scoreDown * scoreLeft * scoreRight;
+                    maximumScenicScore = Math.Max(scenicScore, maximumScenicScore);
+                }
+            }
+        }
+
+        return (visibleTrees, maximumScenicScore);
     }
 
     /// <inheritdoc />
@@ -122,14 +205,15 @@ public sealed class Day08 : Puzzle
 
         var grid = await ReadResourceAsLinesAsync();
 
-        VisibleTrees = CountVisibleTrees(grid);
+        (VisibleTrees, MaximumScenicScore) = CountVisibleTrees(grid);
 
         if (Verbose)
         {
             Logger.WriteLine("There are {0} trees visible from outside the grid.", VisibleTrees);
+            Logger.WriteLine("The highest scenic score is {0}.", MaximumScenicScore);
         }
 
-        return PuzzleResult.Create(VisibleTrees);
+        return PuzzleResult.Create(VisibleTrees, MaximumScenicScore);
     }
 
     private sealed record Tree(int Height)
