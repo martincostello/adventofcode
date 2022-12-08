@@ -9,6 +9,11 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2022;
 [Puzzle(2022, 08, "Treetop Tree House", RequiresData = true)]
 public sealed class Day08 : Puzzle
 {
+    private static readonly Size Up = new(0, -1);
+    private static readonly Size Down = new(0, 1);
+    private static readonly Size Left = new(-1, 0);
+    private static readonly Size Right = new(1, 0);
+
     /// <summary>
     /// Gets how many trees are visible from outside the grid.
     /// </summary>
@@ -29,127 +34,64 @@ public sealed class Day08 : Puzzle
     /// </returns>
     public static (int VisibleTrees, int MaximumScenicScore) CountVisibleTrees(IList<string> grid)
     {
-        int height = grid.Count;
-        int width = grid[0].Length;
+        var trees = Parse(grid);
+        int count = CountVisibleTrees(trees);
+        int score = GetMaximumScenicScore(trees);
 
-        var trees = new Dictionary<Point, Tree>(height * width);
+        return (count, score);
 
-        for (int y = 0; y < height; y++)
+        static Dictionary<Point, Tree> Parse(IList<string> grid)
         {
-            for (int x = 0; x < width; x++)
+            int height = grid.Count;
+            int width = grid[0].Length;
+
+            var trees = new Dictionary<Point, Tree>(height * width);
+
+            for (int y = 0; y < height; y++)
             {
-                var location = new Point(x, y);
-                trees[location] = new Tree(location, grid[y][x] - '0');
-            }
-        }
-
-        var up = new Size(0, -1);
-        var down = new Size(0, 1);
-        var left = new Size(-1, 0);
-        var right = new Size(1, 0);
-
-        var topLeft = new Point(0, 0);
-        var topRight = new Point(width - 1, 0);
-        var bottomLeft = new Point(width - 1, height - 1);
-
-        var directions = new (Point Origin, Size Next, Size Forward)[]
-        {
-            (topLeft,    down,  right), // Left to right
-            (topRight,   down,  left), // Right to left
-            (topLeft,    right, down), // Top to bottom
-            (bottomLeft, left,  up), // Bottom to top
-        };
-
-        foreach (var (origin, next, forward) in directions)
-        {
-            var front = origin;
-
-            do
-            {
-                Sweep(trees, front, forward);
-                front += next;
-            }
-            while (trees.ContainsKey(front));
-        }
-
-        int visibleTrees = trees.Count((p) => p.Value.IsVisible);
-
-        int maximumScenicScore = 0;
-
-        for (int y = 0; y < height; y++)
-        {
-            for (int x = 0; x < width; x++)
-            {
-                var tree = trees[new(x, y)];
-
-                if (tree.IsVisible)
+                for (int x = 0; x < width; x++)
                 {
-                    int scoreUp = 0;
-                    int scoreDown = 0;
-                    int scoreLeft = 0;
-                    int scoreRight = 0;
-
-                    // Up
-                    for (int delta = y - 1; delta > -1; delta--)
-                    {
-                        var next = trees[new(x, delta)];
-
-                        scoreUp++;
-
-                        if (next.Height >= tree.Height)
-                        {
-                            break;
-                        }
-                    }
-
-                    // Down
-                    for (int delta = y + 1; delta < height; delta++)
-                    {
-                        var next = trees[new(x, delta)];
-
-                        scoreDown++;
-
-                        if (next.Height >= tree.Height)
-                        {
-                            break;
-                        }
-                    }
-
-                    // Left
-                    for (int delta = x - 1; delta > -1; delta--)
-                    {
-                        var next = trees[new(delta, y)];
-
-                        scoreLeft++;
-
-                        if (next.Height >= tree.Height)
-                        {
-                            break;
-                        }
-                    }
-
-                    // Right
-                    for (int delta = x + 1; delta < width; delta++)
-                    {
-                        var next = trees[new(delta, y)];
-
-                        scoreRight++;
-
-                        if (next.Height >= tree.Height)
-                        {
-                            break;
-                        }
-                    }
-
-                    int scenicScore = scoreUp * scoreDown * scoreLeft * scoreRight;
-                    maximumScenicScore = Math.Max(scenicScore, maximumScenicScore);
+                    var location = new Point(x, y);
+                    trees[location] = new Tree(location, grid[y][x] - '0');
                 }
             }
+
+            return trees;
         }
 
-        return (visibleTrees, maximumScenicScore);
+        static int CountVisibleTrees(Dictionary<Point, Tree> trees)
+        {
+            int height = trees.Keys.Max((p) => p.Y) + 1;
+            int width = trees.Keys.Max((p) => p.X) + 1;
 
-        static void Sweep(Dictionary<Point, Tree> trees, Point origin, Size direction)
+            var topLeft = new Point(0, 0);
+            var topRight = new Point(width - 1, 0);
+            var bottomLeft = new Point(width - 1, height - 1);
+
+            var directions = new (Point Origin, Size Next, Size Forward)[]
+            {
+                (topLeft,    Down,  Right), // Left to right
+                (topRight,   Down,  Left), // Right to left
+                (topLeft,    Right, Down), // Top to bottom
+                (bottomLeft, Left,  Up), // Bottom to top
+            };
+
+            foreach (var (first, next, direction) in directions)
+            {
+                var origin = first;
+
+                do
+                {
+                    Sweep(origin, direction, trees);
+                    origin += next;
+                }
+                while (trees.ContainsKey(origin));
+            }
+
+            return trees.Count((p) => p.Value.IsVisible);
+        }
+
+        static void Sweep(Point origin, Size direction, Dictionary<Point, Tree> trees)
         {
             var location = origin;
             var current = trees[location];
@@ -163,6 +105,63 @@ public sealed class Day08 : Puzzle
                     current = next;
                 }
             }
+        }
+
+        static int Score(Tree origin, Size direction, Dictionary<Point, Tree> trees)
+        {
+            var location = origin.Location;
+
+            int score = 0;
+
+            while (trees.TryGetValue(location += direction, out var next))
+            {
+                score++;
+
+                if (next.Height >= origin.Height)
+                {
+                    break;
+                }
+            }
+
+            return score;
+        }
+
+        static int GetMaximumScenicScore(Dictionary<Point, Tree> trees)
+        {
+            int height = trees.Keys.Max((p) => p.Y) + 1;
+            int width = trees.Keys.Max((p) => p.X) + 1;
+
+            var directions = new[]
+            {
+                Up,
+                Down,
+                Left,
+                Right,
+            };
+
+            int maximum = 0;
+
+            for (int y = 0; y < height; y++)
+            {
+                for (int x = 0; x < width; x++)
+                {
+                    var tree = trees[new(x, y)];
+
+                    if (tree.IsVisible)
+                    {
+                        int scenicScore = 1;
+
+                        foreach (var direction in directions)
+                        {
+                            scenicScore *= Score(tree, direction, trees);
+                        }
+
+                        maximum = Math.Max(scenicScore, maximum);
+                    }
+                }
+            }
+
+            return maximum;
         }
     }
 
