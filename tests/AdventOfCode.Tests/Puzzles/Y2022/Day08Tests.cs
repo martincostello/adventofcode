@@ -31,10 +31,11 @@ public sealed class Day08Tests : PuzzleTest
         };
 
         // Act
-        int actual = Day08.CountVisibleTrees(grid);
+        (int actualCount, int actualScore) = Day08.CountVisibleTrees(grid);
 
         // Assert
-        actual.ShouldBe(21);
+        actualCount.ShouldBe(21);
+        actualScore.ShouldBe(8);
     }
 
     [Fact]
@@ -46,5 +47,6 @@ public sealed class Day08Tests : PuzzleTest
         // Assert
         puzzle.ShouldNotBeNull();
         puzzle.VisibleTrees.ShouldBe(1763);
+        puzzle.MaximumScenicScore.ShouldBe(671160);
     }
 }
