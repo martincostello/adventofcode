@@ -19,20 +19,56 @@ public sealed class Day09Tests : PuzzleTest
 
     public static IEnumerable<object[]> TwoKnots()
     {
-        var testCases = new List<(Size Direction, Point[] InitialKnots, Point[] FinalKnots)>()
-        {
-            (new(1, 0), new Point[] { new(1, 0), new(0, 0) }, new Point[] { new(2, 0), new(1, 0) }),
-            (new(0, -1), new Point[] { new(0, -1), new(0, 0) }, new Point[] { new(0, -2), new(0, -1) }),
-            (new(1, 0), new Point[] { new(1, 1), new(0, 0) }, new Point[] { new(2, 1), new(1, 1) }),
-            (new(4, 0), new Point[] { new(0, 0), new(0, 0) }, new Point[] { new(4, 0), new(3, 0) }),
-            (new(0, 4), new Point[] { new(4, 0), new(3, 0) }, new Point[] { new(4, 4), new(4, 3) }),
-            (new(-3, 0), new Point[] { new(4, 4), new(4, 3) }, new Point[] { new(1, 4), new(2, 4) }),
-            (new(0, -1), new Point[] { new(1, 4), new(2, 4) }, new Point[] { new(1, 3), new(2, 4) }),
-            (new(4, 0), new Point[] { new(1, 3), new(2, 4) }, new Point[] { new(5, 3), new(4, 3) }),
-            (new(0, -1), new Point[] { new(5, 3), new(4, 3) }, new Point[] { new(5, 2), new(4, 3) }),
-            (new(-5, 0), new Point[] { new(5, 2), new(4, 3) }, new Point[] { new(0, 2), new(1, 2) }),
-            (new(2, 0), new Point[] { new(0, 2), new(1, 2) }, new Point[] { new(2, 2), new(1, 2) }),
-        };
+        var testCases = new List<(Size Direction, Point[] InitialKnots, Point[] FinalKnots)>();
+
+        // Right 4
+        var move = new Size(4, 0);
+        var initial = new Point[] { new(0, 0), new(0, 0) };
+        var final = new Point[] { new(4, 0), new(3, 0) };
+
+        testCases.Add((move, initial, final));
+
+        // Up 4
+        move = new(0, 4);
+        (initial, final) = (final, new Point[] { new(4, 4), new(4, 3) });
+
+        testCases.Add((move, initial, final));
+
+        // Left 3
+        move = new(-3, 0);
+        (initial, final) = (final, new Point[] { new(1, 4), new(2, 4) });
+
+        testCases.Add((move, initial, final));
+
+        // Down 1
+        move = new(0, -1);
+        (initial, final) = (final, new Point[] { new(1, 3), new(2, 4) });
+
+        testCases.Add((move, initial, final));
+
+        // Right 4
+        move = new(4, 0);
+        (initial, final) = (final, new Point[] { new(5, 3), new(4, 3) });
+
+        testCases.Add((move, initial, final));
+
+        // Down 1
+        move = new(0, -1);
+        (initial, final) = (final, new Point[] { new(5, 2), new(4, 3) });
+
+        testCases.Add((move, initial, final));
+
+        // Left 5
+        move = new(-5, 0);
+        (initial, final) = (final, new Point[] { new(0, 2), new(1, 2) });
+
+        testCases.Add((move, initial, final));
+
+        // Right 2
+        move = new(2, 0);
+        (initial, final) = (final, new Point[] { new(2, 2), new(1, 2) });
+
+        testCases.Add((move, initial, final));
 
         foreach (var (direction, initialKnots, finalKnots) in testCases)
         {
