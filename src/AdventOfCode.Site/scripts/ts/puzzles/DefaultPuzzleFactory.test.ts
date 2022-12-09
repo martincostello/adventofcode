@@ -71,6 +71,7 @@ describe('Puzzles', () => {
         [2022, 6, [], [1850, 2823]],
         [2022, 7, [], [1642503, 6999588]],
         [2022, 8, [], [1763, 671160]],
+        [2022, 9, [], [5683, 2372]],
     ])('%i day %i returns the correct solution for %s', async (year: number, day: number, inputs: string[], expected: any[]) => {
         // Act
         const actual = await solve(year, day, inputs);
