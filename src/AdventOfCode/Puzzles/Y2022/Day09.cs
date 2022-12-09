@@ -52,7 +52,7 @@ public sealed class Day09 : Puzzle
             foreach (string move in moves)
             {
                 char direction = move[0];
-                int distance = Parse<int>(move[1..]);
+                int distance = Parse<int>(move[2..]);
 
                 result.Add(direction switch
                 {

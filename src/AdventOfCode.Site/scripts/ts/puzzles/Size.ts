@@ -6,6 +6,10 @@ export class Size {
 
     constructor(public readonly width: number, public readonly height: number) {}
 
+    divide(value: number) {
+        return new Size(this.width / value, this.height / value);
+    }
+
     equals(other: any) {
         if (other instanceof Size) {
             return this.width === other.width && this.height === other.height;
