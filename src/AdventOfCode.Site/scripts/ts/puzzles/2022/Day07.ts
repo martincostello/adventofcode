@@ -64,10 +64,8 @@ export class Day07 extends Puzzle2022 {
 
                         if (name === '/') {
                             path = name;
-                        } else if (current.path.endsWith('/')) {
-                            path = current.path.slice(0, current.path.length - 1) + '/' + name;
                         } else {
-                            path = current.path + '/' + name;
+                            path = current.path.slice(0, -1) + '/' + name;
                         }
 
                         let directory: Directory;
@@ -145,10 +143,8 @@ abstract class FileSystemEntry {
     constructor(public readonly name: string, public readonly container: FileSystemEntry | null) {
         if (this.container === null) {
             this.path = this.name;
-        } else if (this.container.path.endsWith('/')) {
-            this.path = this.container.path.slice(0, this.container.path.length - 1) + '/' + this.name;
         } else {
-            this.path = this.container.path + '/' + this.name;
+            this.path = this.container.path.slice(0, -1) + '/' + this.name;
         }
     }
 }
