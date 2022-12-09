@@ -78,7 +78,7 @@ public sealed class Day09 : Puzzle
         if (Verbose)
         {
             Logger.WriteLine("The distance of the shortest route is {0:N0}.", ShortestDistance);
-            Logger.WriteLine("The distance of the longest route is {0:N0}.", ShortestDistance);
+            Logger.WriteLine("The distance of the longest route is {0:N0}.", LongestDistance);
         }
 
         return PuzzleResult.Create(ShortestDistance, LongestDistance);
