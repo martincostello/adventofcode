@@ -29,7 +29,7 @@ public sealed class Day09Tests : PuzzleTest
     [InlineData(0, -1, 5, 3, 4, 3, 5, 2, 4, 3)]
     [InlineData(-5, 0, 5, 2, 4, 3, 0, 2, 1, 2)]
     [InlineData(2, 0, 0, 2, 1, 2, 2, 2, 1, 2)]
-    public void Y2022_Day09_Move_Returns_Correct_Values(
+    public void Y2022_Day09_Move_For_Two_Knots_Returns_Correct_Values(
         int moveX,
         int moveY,
         int originHeadX,
@@ -52,8 +52,9 @@ public sealed class Day09Tests : PuzzleTest
         rope.Tail.ShouldBe(new(expectedTailX, expectedTailY), "The tail is incorrectly placed.");
     }
 
-    [Fact]
-    public void Y2022_Day09_Move_Returns_Correct_Value()
+    [Theory]
+    [InlineData(2)]
+    public void Y2022_Day09_Move_Returns_Correct_Value(int knots)
     {
         // Arrange
         string[] instructions = new[]
@@ -69,7 +70,7 @@ public sealed class Day09Tests : PuzzleTest
         };
 
         // Act
-        int actual = Day09.Move(instructions);
+        int actual = Day09.Move(instructions, knots);
 
         // Assert
         actual.ShouldBe(13);
@@ -83,6 +84,6 @@ public sealed class Day09Tests : PuzzleTest
 
         // Assert
         puzzle.ShouldNotBeNull();
-        puzzle.PositionsVisited.ShouldBe(5683);
+        puzzle.PositionsVisited2.ShouldBe(5683);
     }
 }
