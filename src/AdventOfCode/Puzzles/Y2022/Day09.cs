@@ -10,22 +10,23 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2022;
 public sealed class Day09 : Puzzle
 {
     /// <summary>
-    /// Gets the number of positions that the tail of the rope visits at least once.
+    /// Gets the number of positions that the tail of the rope with two knots visits at least once.
     /// </summary>
-    public int PositionsVisited { get; private set; }
+    public int PositionsVisited2 { get; private set; }
 
     /// <summary>
     /// Moves a rope using the specified moves and returns the
     /// number of positions that the tail of the rope visits at least once.
     /// </summary>
     /// <param name="moves">The moves to put the rope through.</param>
+    /// <param name="knots">The number of knots in the rope.</param>
     /// <returns>
     /// The number of positions that the tail of the rope visits at least once.
     /// </returns>
-    public static int Move(IList<string> moves)
+    public static int Move(IList<string> moves, int knots)
     {
         var directions = Parse(moves);
-        var rope = new Rope();
+        var rope = new Rope(Enumerable.Repeat(Point.Empty, knots).ToArray());
 
         var positions = new HashSet<Point>(moves.Count)
         {
@@ -69,31 +70,37 @@ public sealed class Day09 : Puzzle
 
         var moves = await ReadResourceAsLinesAsync();
 
-        PositionsVisited = Move(moves);
+        PositionsVisited2 = Move(moves, 2);
 
         if (Verbose)
         {
-            Logger.WriteLine("The tail of the rope visits {0} positions at least once", PositionsVisited);
+            Logger.WriteLine("The tail of the rope with two knots visits {0} positions at least once.", PositionsVisited2);
         }
 
-        return PuzzleResult.Create(PositionsVisited);
+        return PuzzleResult.Create(PositionsVisited2);
     }
 
     /// <summary>
-    /// A class representing a rope with a length of 2 units.
+    /// A class representing a rope.
     /// </summary>
     public sealed class Rope
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="Rope"/> class.
         /// </summary>
-        /// <param name="head">The optional position of the head of the rope.</param>
-        /// <param name="tail">The optional position of the tail of the rope.</param>
-        public Rope(Point head = default, Point tail = default)
+        /// <param name="knots">The positions of the knots of the rope.</param>
+        public Rope(params Point[] knots)
         {
-            Head = head;
-            Tail = tail;
+            Knots = knots.Length;
+            Head = knots[0];
+            Tail = knots[^1];
+            AllKnots = knots;
         }
+
+        /// <summary>
+        /// Gets the number of knots in the rope.
+        /// </summary>
+        public int Knots { get; }
 
         /// <summary>
         /// Gets the position of the rope's head.
@@ -104,6 +111,11 @@ public sealed class Day09 : Puzzle
         /// Gets the position of the rope's tail.
         /// </summary>
         public Point Tail { get; private set; }
+
+        /// <summary>
+        /// Gets the positions of all the knots in the rope.
+        /// </summary>
+        public IList<Point> AllKnots { get; }
 
         /// <summary>
         /// Moves the rope in the specified direction.
