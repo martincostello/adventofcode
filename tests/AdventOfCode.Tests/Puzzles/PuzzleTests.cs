@@ -28,5 +28,12 @@ public static class PuzzleTests
         var names = allPuzzles.Where((p) => !p.IsHidden).Select((p) => p.Name).ToList();
         names.ShouldBe(names.Distinct(), "Puzzle names are not unique.");
         names.ShouldAllBe((p) => !string.IsNullOrWhiteSpace(p));
+
+        int thisYear = DateTime.UtcNow.Year;
+
+        allPuzzles.ShouldAllBe((p) => p.Year > 2014);
+        allPuzzles.ShouldAllBe((p) => p.Year <= thisYear);
+        allPuzzles.ShouldAllBe((p) => p.Day > 0);
+        allPuzzles.ShouldAllBe((p) => p.Day < 26);
     }
 }

@@ -29,6 +29,38 @@ export class PuzzleFactory2022 implements PuzzleFactory {
                 return new Y2022.Day08();
             case 9:
                 return new Y2022.Day09();
+            case 10:
+                return new Y2022.Day10();
+            case 11:
+                return new Y2022.Day11();
+            case 12:
+                return new Y2022.Day12();
+            case 13:
+                return new Y2022.Day13();
+            case 14:
+                return new Y2022.Day14();
+            case 15:
+                return new Y2022.Day15();
+            case 16:
+                return new Y2022.Day16();
+            case 17:
+                return new Y2022.Day17();
+            case 18:
+                return new Y2022.Day18();
+            case 19:
+                return new Y2022.Day19();
+            case 20:
+                return new Y2022.Day20();
+            case 21:
+                return new Y2022.Day21();
+            case 22:
+                return new Y2022.Day22();
+            case 23:
+                return new Y2022.Day23();
+            case 24:
+                return new Y2022.Day24();
+            case 25:
+                return new Y2022.Day25();
             default:
                 return null;
         }
