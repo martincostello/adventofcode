@@ -25,7 +25,8 @@ public static class PuzzleTests
             days.ShouldBe(days.Distinct(), $"{puzzlesForYear.Key} contains duplicate days.");
         }
 
-        var names = allPuzzles.Select((p) => p.Name).ToList();
+        var names = allPuzzles.Where((p) => !p.IsHidden).Select((p) => p.Name).ToList();
         names.ShouldBe(names.Distinct(), "Puzzle names are not unique.");
+        names.ShouldAllBe((p) => !string.IsNullOrWhiteSpace(p));
     }
 }

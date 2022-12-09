@@ -38,6 +38,11 @@ public sealed class PuzzleAttribute : Attribute
     public bool IsHidden { get; set; }
 
     /// <summary>
+    /// Gets or sets a value indicating whether the puzzle is too slow to be benchmarked.
+    /// </summary>
+    public bool IsSlow { get; set; }
+
+    /// <summary>
     /// Gets or sets the minimum number of arguments required to solve the puzzle.
     /// </summary>
     public int MinimumArguments { get; set; }

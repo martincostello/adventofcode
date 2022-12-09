@@ -186,6 +186,21 @@ public class ApiTests : IntegrationTest
     [PuzzleData(2022, 07, 1642503, 6999588)]
     [PuzzleData(2022, 08, 1763, 671160)]
     [PuzzleData(2022, 09, 5683, 2372)]
+    [PuzzleData(2022, 10, -1, Skip = "Not implemented.")]
+    [PuzzleData(2022, 12, -1, Skip = "Not implemented.")]
+    [PuzzleData(2022, 13, -1, Skip = "Not implemented.")]
+    [PuzzleData(2022, 14, -1, Skip = "Not implemented.")]
+    [PuzzleData(2022, 15, -1, Skip = "Not implemented.")]
+    [PuzzleData(2022, 16, -1, Skip = "Not implemented.")]
+    [PuzzleData(2022, 17, -1, Skip = "Not implemented.")]
+    [PuzzleData(2022, 18, -1, Skip = "Not implemented.")]
+    [PuzzleData(2022, 19, -1, Skip = "Not implemented.")]
+    [PuzzleData(2022, 20, -1, Skip = "Not implemented.")]
+    [PuzzleData(2022, 21, -1, Skip = "Not implemented.")]
+    [PuzzleData(2022, 22, -1, Skip = "Not implemented.")]
+    [PuzzleData(2022, 23, -1, Skip = "Not implemented.")]
+    [PuzzleData(2022, 24, -1, Skip = "Not implemented.")]
+    [PuzzleData(2022, 25, -1, Skip = "Not implemented.")]
     public async Task Can_Solve_Puzzle(int year, int day, PuzzleDataAttribute testCase)
     {
         // Arrange
