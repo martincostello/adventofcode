@@ -10,20 +10,14 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015;
 public sealed class Day09 : Puzzle
 {
     /// <summary>
-    /// Gets the solution.
+    /// Gets the shortest distance.
     /// </summary>
-    internal int Solution { get; private set; }
+    public int ShortestDistance { get; private set; }
 
     /// <summary>
-    /// Gets the shortest distance to visit all of the specified locations
-    /// exactly once and starting and ending at distinct separate points.
+    /// Gets the longest distance.
     /// </summary>
-    /// <param name="collection">A collection of distances.</param>
-    /// <returns>
-    /// The shortest possible distance to visit all the specified locations exactly once.
-    /// </returns>
-    internal static int GetShortestDistanceBetweenPoints(IList<string> collection)
-        => GetDistanceBetweenPoints(collection, findLongest: false);
+    public int LongestDistance { get; private set; }
 
     /// <summary>
     /// Gets the distance to visit all of the specified locations exactly
@@ -34,7 +28,7 @@ public sealed class Day09 : Puzzle
     /// <returns>
     /// The shortest or longest possible distance to visit all the specified locations exactly once.
     /// </returns>
-    internal static int GetDistanceBetweenPoints(IList<string> collection, bool findLongest)
+    public static int GetDistanceBetweenPoints(IList<string> collection, bool findLongest)
     {
         var distances = new Dictionary<string, int>(collection.Count);
         var vectors = new (string Start, string End)[collection.Count];
@@ -76,27 +70,18 @@ public sealed class Day09 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        bool findLongest =
-            args.Length == 1 &&
-            string.Equals(args[0], bool.TrueString, StringComparison.OrdinalIgnoreCase);
-
         var collection = await ReadResourceAsLinesAsync();
 
-        Solution = GetDistanceBetweenPoints(collection, findLongest);
+        ShortestDistance = GetDistanceBetweenPoints(collection, findLongest: false);
+        LongestDistance = GetDistanceBetweenPoints(collection, findLongest: true);
 
         if (Verbose)
         {
-            if (findLongest)
-            {
-                Logger.WriteLine("The distance of the longest route is {0:N0}.", Solution);
-            }
-            else
-            {
-                Logger.WriteLine("The distance of the shortest route is {0:N0}.", Solution);
-            }
+            Logger.WriteLine("The distance of the shortest route is {0:N0}.", ShortestDistance);
+            Logger.WriteLine("The distance of the longest route is {0:N0}.", ShortestDistance);
         }
 
-        return PuzzleResult.Create(Solution);
+        return PuzzleResult.Create(ShortestDistance, LongestDistance);
     }
 
     private static IList<int> GetRouteDistances(Map map, string start)

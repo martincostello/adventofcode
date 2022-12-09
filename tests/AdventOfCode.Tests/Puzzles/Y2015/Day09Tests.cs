@@ -17,49 +17,26 @@ public sealed class Day09Tests : PuzzleTest
     {
     }
 
-    [Fact]
-    public static void Y2015_Day09_Shortest_Distance_To_Visit_All_Points_Once_Is_Correct()
-    {
-        // Arrange
-        string[] distances = new[]
-        {
-            "London to Dublin = 464",
-            "London to Belfast = 518",
-            "Dublin to Belfast = 141",
-        };
-
-        // Act
-        int actual = Day09.GetShortestDistanceBetweenPoints(distances);
-
-        // Assert
-        actual.ShouldBe(605);
-    }
-
-    [Fact]
-    public static void Y2015_Day09_Shortest_Distance_To_Visit_All_Points_Once_Is_Correct_If_Only_One_Point()
-    {
-        // Arrange
-        string[] distances = new[]
-        {
-            "London to Dublin = 464",
-        };
-
-        // Act
-        int actual = Day09.GetShortestDistanceBetweenPoints(distances);
-
-        // Assert
-        actual.ShouldBe(464);
-    }
-
     [Theory]
-    [InlineData(new string[0], 207)]
-    [InlineData(new[] { "true" }, 804)]
-    public async Task Y2015_Day09_Solve_Returns_Correct_Solution(string[] args, int expected)
+    [InlineData(new[] { "London to Dublin = 464" }, 464)]
+    [InlineData(new[] { "London to Dublin = 464", "London to Belfast = 518", "Dublin to Belfast = 141" }, 605)]
+    public static void Y2015_Day09_GetDistanceBetweenPoints_Returns_Correct_Value(string[] distances, int expected)
     {
         // Act
-        var puzzle = await SolvePuzzleAsync<Day09>(args);
+        int actual = Day09.GetDistanceBetweenPoints(distances, findLongest: false);
 
         // Assert
-        puzzle.Solution.ShouldBe(expected);
+        actual.ShouldBe(expected);
+    }
+
+    [Fact]
+    public async Task Y2015_Day09_Solve_Returns_Correct_Solution()
+    {
+        // Act
+        var puzzle = await SolvePuzzleAsync<Day09>();
+
+        // Assert
+        puzzle.ShortestDistance.ShouldBe(207);
+        puzzle.LongestDistance.ShouldBe(804);
     }
 }
