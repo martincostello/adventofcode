@@ -1,6 +1,7 @@
 ﻿// Copyright (c) Martin Costello, 2015. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
+using System.Reflection;
 using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Diagnosers;
 using Microsoft.Extensions.Caching.Memory;
@@ -11,8 +12,6 @@ namespace MartinCostello.AdventOfCode.Benchmarks;
 [MemoryDiagnoser]
 public class PuzzleBenchmarks
 {
-    //// Classes not benchmarked are either too slow or not implemented
-
     public static IEnumerable<object> Puzzles()
     {
         foreach (object puzzle in Puzzles2015())
@@ -58,159 +57,83 @@ public class PuzzleBenchmarks
 
     public static IEnumerable<object> Puzzles2015()
     {
-        yield return new PuzzleInput<Puzzles.Y2015.Day01>();
-        yield return new PuzzleInput<Puzzles.Y2015.Day02>();
-        yield return new PuzzleInput<Puzzles.Y2015.Day03>();
-        yield return new PuzzleInput<Puzzles.Y2015.Day04>("iwrupvqb", "5");
-        yield return new PuzzleInput<Puzzles.Y2015.Day05>("1");
-        yield return new PuzzleInput<Puzzles.Y2015.Day06>("1");
-        yield return new PuzzleInput<Puzzles.Y2015.Day07>();
-        yield return new PuzzleInput<Puzzles.Y2015.Day08>();
-        yield return new PuzzleInput<Puzzles.Y2015.Day09>();
-        yield return new PuzzleInput<Puzzles.Y2015.Day11>("cqjxjnds");
-        yield return new PuzzleInput<Puzzles.Y2015.Day12>();
-        yield return new PuzzleInput<Puzzles.Y2015.Day14>("2503");
-        yield return new PuzzleInput<Puzzles.Y2015.Day16>();
-        yield return new PuzzleInput<Puzzles.Y2015.Day17>("150");
-        yield return new PuzzleInput<Puzzles.Y2015.Day18>("100", "false");
-        yield return new PuzzleInput<Puzzles.Y2015.Day19>("calibrate");
-        yield return new PuzzleInput<Puzzles.Y2015.Day21>();
-        yield return new PuzzleInput<Puzzles.Y2015.Day23>();
-        yield return new PuzzleInput<Puzzles.Y2015.Day25>("2947", "3029");
+        var inputs = new Dictionary<int, string[]>()
+        {
+            [4] = new[] { "iwrupvqb", "5" },
+            [5] = new[] { "1" },
+            [6] = new[] { "1" },
+            [11] = new[] { "cqjxjnds" },
+            [14] = new[] { "2503" },
+            [17] = new[] { "150" },
+            [18] = new[] { "100", "false" },
+            [19] = new[] { "calibrate" },
+            [20] = new[] { "2947", "3029" },
+            [25] = new[] { "2947", "3029" },
+        };
+
+        return GetPuzzles(2015, inputs);
     }
 
     public static IEnumerable<object> Puzzles2016()
     {
-        yield return new PuzzleInput<Puzzles.Y2016.Day01>();
-        yield return new PuzzleInput<Puzzles.Y2016.Day02>();
-        yield return new PuzzleInput<Puzzles.Y2016.Day03>();
-        yield return new PuzzleInput<Puzzles.Y2016.Day04>();
-        yield return new PuzzleInput<Puzzles.Y2016.Day06>();
-        yield return new PuzzleInput<Puzzles.Y2016.Day07>();
-        yield return new PuzzleInput<Puzzles.Y2016.Day08>();
-        yield return new PuzzleInput<Puzzles.Y2016.Day09>();
-        yield return new PuzzleInput<Puzzles.Y2016.Day10>();
-        yield return new PuzzleInput<Puzzles.Y2016.Day13>("1362");
-        yield return new PuzzleInput<Puzzles.Y2016.Day15>();
-        yield return new PuzzleInput<Puzzles.Y2016.Day16>("10010000000110000", "272");
-        yield return new PuzzleInput<Puzzles.Y2016.Day17>("pvhmgsws");
-        yield return new PuzzleInput<Puzzles.Y2016.Day18>("40");
-        yield return new PuzzleInput<Puzzles.Y2016.Day19>("3014387", "1");
-        yield return new PuzzleInput<Puzzles.Y2016.Day19>("3014387", "2");
-        yield return new PuzzleInput<Puzzles.Y2016.Day20>();
-        yield return new PuzzleInput<Puzzles.Y2016.Day21>("abcdefgh");
-        yield return new PuzzleInput<Puzzles.Y2016.Day22>();
-        yield return new PuzzleInput<Puzzles.Y2016.Day23>("7");
-        yield return new PuzzleInput<Puzzles.Y2016.Day24>();
+        var inputs = new Dictionary<int, string[]>()
+        {
+            [5] = new[] { "wtnhxymk" },
+            [13] = new[] { "1362" },
+            [16] = new[] { "10010000000110000", "272" },
+            [17] = new[] { "pvhmgsws" },
+            [18] = new[] { "40" },
+            [19] = new[] { "3014387", "1" },
+            [21] = new[] { "abcdefgh" },
+            [23] = new[] { "7" },
+        };
+
+        return GetPuzzles(2016, inputs);
     }
 
     public static IEnumerable<object> Puzzles2017()
     {
-        yield return new PuzzleInput<Puzzles.Y2017.Day01>();
-        yield return new PuzzleInput<Puzzles.Y2017.Day02>();
-        yield return new PuzzleInput<Puzzles.Y2017.Day03>("312051");
-        yield return new PuzzleInput<Puzzles.Y2017.Day04>();
-        yield return new PuzzleInput<Puzzles.Y2017.Day05>();
-        yield return new PuzzleInput<Puzzles.Y2017.Day06>();
-        yield return new PuzzleInput<Puzzles.Y2017.Day07>();
-        yield return new PuzzleInput<Puzzles.Y2017.Day08>();
-        yield return new PuzzleInput<Puzzles.Y2017.Day09>();
-        yield return new PuzzleInput<Puzzles.Y2017.Day10>();
-        yield return new PuzzleInput<Puzzles.Y2017.Day11>();
-        yield return new PuzzleInput<Puzzles.Y2017.Day12>();
-        yield return new PuzzleInput<Puzzles.Y2017.Day13>();
-        yield return new PuzzleInput<Puzzles.Y2017.Day14>("hwlqcszp");
+        var inputs = new Dictionary<int, string[]>()
+        {
+            [3] = new[] { "312051" },
+            [14] = new[] { "hwlqcszp" },
+        };
+
+        return GetPuzzles(2017, inputs);
     }
 
     public static IEnumerable<object> Puzzles2018()
-    {
-        yield return new PuzzleInput<Puzzles.Y2018.Day02>();
-        yield return new PuzzleInput<Puzzles.Y2018.Day03>("312051");
-        yield return new PuzzleInput<Puzzles.Y2018.Day04>();
-        yield return new PuzzleInput<Puzzles.Y2018.Day06>();
-        yield return new PuzzleInput<Puzzles.Y2018.Day07>();
-        yield return new PuzzleInput<Puzzles.Y2018.Day08>();
-    }
+        => GetPuzzles(2018);
 
     public static IEnumerable<object> Puzzles2019()
     {
-        yield return new PuzzleInput<Puzzles.Y2019.Day01>();
-        yield return new PuzzleInput<Puzzles.Y2019.Day02>();
-        yield return new PuzzleInput<Puzzles.Y2019.Day03>();
-        yield return new PuzzleInput<Puzzles.Y2019.Day04>("138241-674034");
-        yield return new PuzzleInput<Puzzles.Y2019.Day05>("1");
-        yield return new PuzzleInput<Puzzles.Y2019.Day07>();
-        yield return new PuzzleInput<Puzzles.Y2019.Day08>();
-        yield return new PuzzleInput<Puzzles.Y2019.Day09>("1");
+        var inputs = new Dictionary<int, string[]>()
+        {
+            [4] = new[] { "138241-674034" },
+            [5] = new[] { "1" },
+            [9] = new[] { "1" },
+        };
+
+        return GetPuzzles(2019, inputs);
     }
 
     public static IEnumerable<object> Puzzles2020()
     {
-        yield return new PuzzleInput<Puzzles.Y2020.Day01>();
-        yield return new PuzzleInput<Puzzles.Y2020.Day02>();
-        yield return new PuzzleInput<Puzzles.Y2020.Day03>();
-        yield return new PuzzleInput<Puzzles.Y2020.Day04>();
-        yield return new PuzzleInput<Puzzles.Y2020.Day05>();
-        yield return new PuzzleInput<Puzzles.Y2020.Day06>();
-        yield return new PuzzleInput<Puzzles.Y2020.Day07>("shiny gold");
-        yield return new PuzzleInput<Puzzles.Y2020.Day08>();
-        yield return new PuzzleInput<Puzzles.Y2020.Day09>();
-        yield return new PuzzleInput<Puzzles.Y2020.Day10>();
-        yield return new PuzzleInput<Puzzles.Y2020.Day11>();
-        yield return new PuzzleInput<Puzzles.Y2020.Day12>();
-        yield return new PuzzleInput<Puzzles.Y2020.Day13>();
-        yield return new PuzzleInput<Puzzles.Y2020.Day14>();
-        yield return new PuzzleInput<Puzzles.Y2020.Day16>();
-        yield return new PuzzleInput<Puzzles.Y2020.Day18>();
-        yield return new PuzzleInput<Puzzles.Y2020.Day19>();
-        yield return new PuzzleInput<Puzzles.Y2020.Day20>();
-        yield return new PuzzleInput<Puzzles.Y2020.Day21>();
-        yield return new PuzzleInput<Puzzles.Y2020.Day22>();
-        yield return new PuzzleInput<Puzzles.Y2020.Day24>();
-        yield return new PuzzleInput<Puzzles.Y2020.Day25>();
+        var inputs = new Dictionary<int, string[]>()
+        {
+            [7] = new[] { "shiny gold" },
+            [15] = new[] { "0,5,4,1,10,14,7" },
+            [23] = new[] { "583976241" },
+        };
+
+        return GetPuzzles(2020, inputs);
     }
 
     public static IEnumerable<object> Puzzles2021()
-    {
-        yield return new PuzzleInput<Puzzles.Y2021.Day01>();
-        yield return new PuzzleInput<Puzzles.Y2021.Day02>();
-        yield return new PuzzleInput<Puzzles.Y2021.Day03>();
-        yield return new PuzzleInput<Puzzles.Y2021.Day04>();
-        yield return new PuzzleInput<Puzzles.Y2021.Day05>();
-        yield return new PuzzleInput<Puzzles.Y2021.Day06>();
-        yield return new PuzzleInput<Puzzles.Y2021.Day07>();
-        yield return new PuzzleInput<Puzzles.Y2021.Day08>();
-        yield return new PuzzleInput<Puzzles.Y2021.Day09>();
-        yield return new PuzzleInput<Puzzles.Y2021.Day10>();
-        yield return new PuzzleInput<Puzzles.Y2021.Day11>();
-        yield return new PuzzleInput<Puzzles.Y2021.Day12>();
-        yield return new PuzzleInput<Puzzles.Y2021.Day13>();
-        yield return new PuzzleInput<Puzzles.Y2021.Day14>();
-        yield return new PuzzleInput<Puzzles.Y2021.Day15>();
-        yield return new PuzzleInput<Puzzles.Y2021.Day16>();
-        yield return new PuzzleInput<Puzzles.Y2021.Day17>();
-        yield return new PuzzleInput<Puzzles.Y2021.Day18>();
-        yield return new PuzzleInput<Puzzles.Y2021.Day19>();
-        yield return new PuzzleInput<Puzzles.Y2021.Day20>();
-        yield return new PuzzleInput<Puzzles.Y2021.Day21>();
-        yield return new PuzzleInput<Puzzles.Y2021.Day22>();
-        yield return new PuzzleInput<Puzzles.Y2021.Day23>();
-        yield return new PuzzleInput<Puzzles.Y2021.Day24>();
-        yield return new PuzzleInput<Puzzles.Y2021.Day25>();
-    }
+        => GetPuzzles(2021);
 
     public static IEnumerable<object> Puzzles2022()
-    {
-        yield return new PuzzleInput<Puzzles.Y2022.Day01>();
-        yield return new PuzzleInput<Puzzles.Y2022.Day02>();
-        yield return new PuzzleInput<Puzzles.Y2022.Day03>();
-        yield return new PuzzleInput<Puzzles.Y2022.Day04>();
-        yield return new PuzzleInput<Puzzles.Y2022.Day05>();
-        yield return new PuzzleInput<Puzzles.Y2022.Day06>();
-        yield return new PuzzleInput<Puzzles.Y2022.Day07>();
-        yield return new PuzzleInput<Puzzles.Y2022.Day08>();
-        yield return new PuzzleInput<Puzzles.Y2022.Day09>();
-    }
+        => GetPuzzles(2022);
 
     [Benchmark]
     [ArgumentsSource(nameof(Puzzles2015))]
@@ -251,6 +174,39 @@ public class PuzzleBenchmarks
     [ArgumentsSource(nameof(Puzzles2022))]
     public async Task<PuzzleResult> Solve2022(PuzzleInput input)
         => await input.SolveAsync();
+
+    private static IEnumerable<object> GetPuzzles(
+        int year,
+        IDictionary<int, string[]>? inputs = null)
+    {
+        var puzzles = typeof(Puzzle).Assembly
+            .GetTypes()
+            .Where((p) => p.IsAssignableTo(typeof(Puzzle)))
+            .Select((p) => new { Type = p, Metadata = p.GetCustomAttribute<PuzzleAttribute>()! })
+            .Where((p) => p.Metadata is not null)
+            .Where((p) => p.Metadata.Year == year)
+            .Where((p) => !p.Metadata.IsHidden)
+            .Where((p) => !p.Metadata.IsSlow)
+            .OrderBy((p) => p.Metadata.Year)
+            .OrderBy((p) => p.Metadata.Day)
+            .ToList();
+
+        var puzzleInput = typeof(PuzzleInput<>).GetGenericTypeDefinition();
+
+        foreach (var puzzle in puzzles)
+        {
+            string[] input = Array.Empty<string>();
+
+            if (inputs is not null &&
+                inputs.TryGetValue(puzzle.Metadata.Day, out string[]? values))
+            {
+                input = values;
+            }
+
+            var puzzleInputOfT = puzzleInput.MakeGenericType(puzzle.Type);
+            yield return Activator.CreateInstance(puzzleInputOfT, new object[] { input })!;
+        }
+    }
 
     public sealed class PuzzleInput<T> : PuzzleInput
         where T : IPuzzle, new()
