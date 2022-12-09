@@ -27,6 +27,8 @@ export class PuzzleFactory2015 implements PuzzleFactory {
                 return new Y2015.Day07();
             case 8:
                 return new Y2015.Day08();
+            case 9:
+                return new Y2015.Day09();
             default:
                 return null;
         }
