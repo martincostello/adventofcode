@@ -66,7 +66,7 @@ export class Day08 extends Puzzle2015 {
             }
 
             if (removeLastQuote) {
-                value = value.slice(0, value.length - 1);
+                value = value.slice(0, -1);
             }
 
             if (value.length > 0) {
