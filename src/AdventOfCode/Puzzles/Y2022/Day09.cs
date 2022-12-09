@@ -15,6 +15,11 @@ public sealed class Day09 : Puzzle
     public int PositionsVisited2 { get; private set; }
 
     /// <summary>
+    /// Gets the number of positions that the tail of the rope with ten knots visits at least once.
+    /// </summary>
+    public int PositionsVisited10 { get; private set; }
+
+    /// <summary>
     /// Moves a rope using the specified moves and returns the
     /// number of positions that the tail of the rope visits at least once.
     /// </summary>
@@ -35,7 +40,7 @@ public sealed class Day09 : Puzzle
 
         foreach (var direction in directions)
         {
-            rope.Move(direction, (move) => positions.Add(move.Tail));
+            rope.Move(direction, (tail) => positions.Add(tail));
         }
 
         return positions.Count;
@@ -70,14 +75,16 @@ public sealed class Day09 : Puzzle
 
         var moves = await ReadResourceAsLinesAsync();
 
-        PositionsVisited2 = Move(moves, 2);
+        PositionsVisited2 = Move(moves, knots: 2);
+        PositionsVisited10 = Move(moves, knots: 10);
 
         if (Verbose)
         {
             Logger.WriteLine("The tail of the rope with two knots visits {0} positions at least once.", PositionsVisited2);
+            Logger.WriteLine("The tail of the rope with ten knots visits {0} positions at least once.", PositionsVisited10);
         }
 
-        return PuzzleResult.Create(PositionsVisited2);
+        return PuzzleResult.Create(PositionsVisited2, PositionsVisited10);
     }
 
     /// <summary>
@@ -91,22 +98,21 @@ public sealed class Day09 : Puzzle
         /// <param name="knots">The positions of the knots of the rope.</param>
         public Rope(params Point[] knots)
         {
-            Knots = knots.Length;
-            AllKnots = knots;
+            Knots = knots;
         }
 
         /// <summary>
         /// Gets the number of knots in the rope.
         /// </summary>
-        public int Knots { get; }
+        public int Count => Knots.Count;
 
         /// <summary>
         /// Gets the position of the rope's head.
         /// </summary>
         public Point Head
         {
-            get => AllKnots[0];
-            private set => AllKnots[0] = value;
+            get => Knots[0];
+            private set => Knots[0] = value;
         }
 
         /// <summary>
@@ -114,45 +120,49 @@ public sealed class Day09 : Puzzle
         /// </summary>
         public Point Tail
         {
-            get => AllKnots[^1];
-            private set => AllKnots[^1] = value;
+            get => Knots[^1];
+            private set => Knots[^1] = value;
         }
 
         /// <summary>
         /// Gets the positions of all the knots in the rope.
         /// </summary>
-        public IList<Point> AllKnots { get; }
+        public IList<Point> Knots { get; }
 
         /// <summary>
         /// Moves the rope in the specified direction.
         /// </summary>
         /// <param name="direction">The direction to move the rope in.</param>
-        /// <param name="onMove">A delegate to invoke when the rope is moved.</param>
-        public void Move(Size direction, Action<(Point Head, Point Tail)> onMove)
+        /// <param name="onMoveTail">A delegate to invoke when the tail of the rope is moved.</param>
+        public void Move(Size direction, Action<Point> onMoveTail)
         {
             int magnitude = Math.Max(Math.Abs(direction.Width), Math.Abs(direction.Height));
             var unit = direction / magnitude;
 
             for (int i = 0; i < magnitude; i++)
             {
-                var previous = Head;
+                var previousTail = Tail;
                 Head += unit;
 
-                if (previous != Tail && Head != Tail)
+                for (int j = 1; j < Count; j++)
                 {
-                    if (Math.Abs(Head.Y - Tail.Y) > 1 || Math.Abs(Head.X - Tail.X) > 1)
-                    {
-                        if (unit.Height == 0)
-                        {
-                            Tail += new Size(unit.Width, Head.Y - Tail.Y);
-                        }
-                        else
-                        {
-                            Tail += new Size(Head.X - Tail.X, unit.Height);
-                        }
+                    var leader = Knots[j - 1];
+                    var follower = Knots[j];
 
-                        onMove((Head, Tail));
+                    int deltaX = leader.X - follower.X;
+                    int deltaY = leader.Y - follower.Y;
+
+                    if (Math.Abs(deltaX) > 1 || Math.Abs(deltaY) > 1)
+                    {
+                        follower += new Size(Math.Sign(deltaX), Math.Sign(deltaY));
                     }
+
+                    Knots[j] = follower;
+                }
+
+                if (previousTail != Tail)
+                {
+                    onMoveTail(Tail);
                 }
             }
         }
