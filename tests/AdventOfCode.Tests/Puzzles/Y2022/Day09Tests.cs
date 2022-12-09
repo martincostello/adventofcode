@@ -17,39 +17,53 @@ public sealed class Day09Tests : PuzzleTest
     {
     }
 
+    public static IEnumerable<object[]> TwoKnots()
+    {
+        var testCases = new List<(Size Direction, Point[] Knots, Point ExpectedHead, Point ExpectedTail)>()
+        {
+            (new(1, 0), new Point[] { new(1, 0), new(0, 0) }, new(2, 0), new(1, 0)),
+            (new(0, -1), new Point[] { new(0, -1), new(0, 0) }, new(0, -2), new(0, -1)),
+            (new(1, 0), new Point[] { new(1, 1), new(0, 0) }, new(2, 1), new(1, 1)),
+            (new(4, 0), new Point[] { new(0, 0), new(0, 0) }, new(4, 0), new(3, 0)),
+            (new(0, 4), new Point[] { new(4, 0), new(3, 0) }, new(4, 4), new(4, 3)),
+            (new(-3, 0), new Point[] { new(4, 4), new(4, 3) }, new(1, 4), new(2, 4)),
+            (new(0, -1), new Point[] { new(1, 4), new(2, 4) }, new(1, 3), new(2, 4)),
+            (new(4, 0), new Point[] { new(1, 3), new(2, 4) }, new(5, 3), new(4, 3)),
+            (new(0, -1), new Point[] { new(5, 3), new(4, 3) }, new(5, 2), new(4, 3)),
+            (new(-5, 0), new Point[] { new(5, 2), new(4, 3) }, new(0, 2), new(1, 2)),
+            (new(2, 0), new Point[] { new(0, 2), new(1, 2) }, new(2, 2), new(1, 2)),
+        };
+
+        foreach (var (direction, knots, expectedHead, expectedTail) in testCases)
+        {
+            yield return new object[]
+            {
+                direction,
+                knots,
+                expectedHead,
+                expectedTail,
+            };
+        }
+    }
+
     [Theory]
-    [InlineData(1, 0, 1, 0, 0, 0, 2, 0, 1, 0)]
-    [InlineData(0, -1, 0, -1, 0, 0, 0, -2, 0, -1)]
-    [InlineData(1, 0, 1, 1, 0, 0, 2, 1, 1, 1)]
-    [InlineData(4, 0, 0, 0, 0, 0, 4, 0, 3, 0)]
-    [InlineData(0, 4, 4, 0, 3, 0, 4, 4, 4, 3)]
-    [InlineData(-3, 0, 4, 4, 4, 3, 1, 4, 2, 4)]
-    [InlineData(0, -1, 1, 4, 2, 4, 1, 3, 2, 4)]
-    [InlineData(4, 0, 1, 3, 2, 4, 5, 3, 4, 3)]
-    [InlineData(0, -1, 5, 3, 4, 3, 5, 2, 4, 3)]
-    [InlineData(-5, 0, 5, 2, 4, 3, 0, 2, 1, 2)]
-    [InlineData(2, 0, 0, 2, 1, 2, 2, 2, 1, 2)]
-    public void Y2022_Day09_Move_For_Two_Knots_Returns_Correct_Values(
-        int moveX,
-        int moveY,
-        int originHeadX,
-        int originHeadY,
-        int originTailX,
-        int originTailY,
-        int expectedHeadX,
-        int expectedHeadY,
-        int expectedTailX,
-        int expectedTailY)
+    [MemberData(nameof(TwoKnots))]
+    public void Y2022_Day09_Move_Returns_Correct_Values(
+        Size direction,
+        Point[] knots,
+        Point expectedHead,
+        Point expectedTail)
     {
         // Arrange
-        var rope = new Day09.Rope(new(originHeadX, originHeadY), new(originTailX, originTailY));
+        var rope = new Day09.Rope(knots);
 
         // Act
-        rope.Move(new(moveX, moveY), (_) => { });
+        rope.Move(direction, (_) => { });
 
         // Assert
-        rope.Head.ShouldBe(new(expectedHeadX, expectedHeadY), "The head is incorrectly placed.");
-        rope.Tail.ShouldBe(new(expectedTailX, expectedTailY), "The tail is incorrectly placed.");
+        rope.Head.ShouldBe(expectedHead, "The head is incorrectly placed.");
+        rope.Tail.ShouldBe(expectedTail, "The tail is incorrectly placed.");
+        rope.AllKnots.ShouldBe(new[] { expectedHead, expectedTail }, "The knots are incorrectly placed.");
     }
 
     [Theory]

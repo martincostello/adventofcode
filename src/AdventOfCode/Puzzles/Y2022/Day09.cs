@@ -92,8 +92,6 @@ public sealed class Day09 : Puzzle
         public Rope(params Point[] knots)
         {
             Knots = knots.Length;
-            Head = knots[0];
-            Tail = knots[^1];
             AllKnots = knots;
         }
 
@@ -105,12 +103,20 @@ public sealed class Day09 : Puzzle
         /// <summary>
         /// Gets the position of the rope's head.
         /// </summary>
-        public Point Head { get; private set; }
+        public Point Head
+        {
+            get => AllKnots[0];
+            private set => AllKnots[0] = value;
+        }
 
         /// <summary>
         /// Gets the position of the rope's tail.
         /// </summary>
-        public Point Tail { get; private set; }
+        public Point Tail
+        {
+            get => AllKnots[^1];
+            private set => AllKnots[^1] = value;
+        }
 
         /// <summary>
         /// Gets the positions of all the knots in the rope.
