@@ -19,29 +19,28 @@ public sealed class Day09Tests : PuzzleTest
 
     public static IEnumerable<object[]> TwoKnots()
     {
-        var testCases = new List<(Size Direction, Point[] Knots, Point ExpectedHead, Point ExpectedTail)>()
+        var testCases = new List<(Size Direction, Point[] InitialKnots, Point[] FinalKnots)>()
         {
-            (new(1, 0), new Point[] { new(1, 0), new(0, 0) }, new(2, 0), new(1, 0)),
-            (new(0, -1), new Point[] { new(0, -1), new(0, 0) }, new(0, -2), new(0, -1)),
-            (new(1, 0), new Point[] { new(1, 1), new(0, 0) }, new(2, 1), new(1, 1)),
-            (new(4, 0), new Point[] { new(0, 0), new(0, 0) }, new(4, 0), new(3, 0)),
-            (new(0, 4), new Point[] { new(4, 0), new(3, 0) }, new(4, 4), new(4, 3)),
-            (new(-3, 0), new Point[] { new(4, 4), new(4, 3) }, new(1, 4), new(2, 4)),
-            (new(0, -1), new Point[] { new(1, 4), new(2, 4) }, new(1, 3), new(2, 4)),
-            (new(4, 0), new Point[] { new(1, 3), new(2, 4) }, new(5, 3), new(4, 3)),
-            (new(0, -1), new Point[] { new(5, 3), new(4, 3) }, new(5, 2), new(4, 3)),
-            (new(-5, 0), new Point[] { new(5, 2), new(4, 3) }, new(0, 2), new(1, 2)),
-            (new(2, 0), new Point[] { new(0, 2), new(1, 2) }, new(2, 2), new(1, 2)),
+            (new(1, 0), new Point[] { new(1, 0), new(0, 0) }, new Point[] { new(2, 0), new(1, 0) }),
+            (new(0, -1), new Point[] { new(0, -1), new(0, 0) }, new Point[] { new(0, -2), new(0, -1) }),
+            (new(1, 0), new Point[] { new(1, 1), new(0, 0) }, new Point[] { new(2, 1), new(1, 1) }),
+            (new(4, 0), new Point[] { new(0, 0), new(0, 0) }, new Point[] { new(4, 0), new(3, 0) }),
+            (new(0, 4), new Point[] { new(4, 0), new(3, 0) }, new Point[] { new(4, 4), new(4, 3) }),
+            (new(-3, 0), new Point[] { new(4, 4), new(4, 3) }, new Point[] { new(1, 4), new(2, 4) }),
+            (new(0, -1), new Point[] { new(1, 4), new(2, 4) }, new Point[] { new(1, 3), new(2, 4) }),
+            (new(4, 0), new Point[] { new(1, 3), new(2, 4) }, new Point[] { new(5, 3), new(4, 3) }),
+            (new(0, -1), new Point[] { new(5, 3), new(4, 3) }, new Point[] { new(5, 2), new(4, 3) }),
+            (new(-5, 0), new Point[] { new(5, 2), new(4, 3) }, new Point[] { new(0, 2), new(1, 2) }),
+            (new(2, 0), new Point[] { new(0, 2), new(1, 2) }, new Point[] { new(2, 2), new(1, 2) }),
         };
 
-        foreach (var (direction, knots, expectedHead, expectedTail) in testCases)
+        foreach (var (direction, initialKnots, finalKnots) in testCases)
         {
             yield return new object[]
             {
                 direction,
-                knots,
-                expectedHead,
-                expectedTail,
+                initialKnots,
+                finalKnots,
             };
         }
     }
@@ -50,20 +49,19 @@ public sealed class Day09Tests : PuzzleTest
     [MemberData(nameof(TwoKnots))]
     public void Y2022_Day09_Move_Returns_Correct_Values(
         Size direction,
-        Point[] knots,
-        Point expectedHead,
-        Point expectedTail)
+        Point[] initialKnots,
+        Point[] expectedKnots)
     {
         // Arrange
-        var rope = new Day09.Rope(knots);
+        var rope = new Day09.Rope(initialKnots);
 
         // Act
         rope.Move(direction, (_) => { });
 
         // Assert
-        rope.Head.ShouldBe(expectedHead, "The head is incorrectly placed.");
-        rope.Tail.ShouldBe(expectedTail, "The tail is incorrectly placed.");
-        rope.AllKnots.ShouldBe(new[] { expectedHead, expectedTail }, "The knots are incorrectly placed.");
+        rope.Head.ShouldBe(rope.AllKnots[0], "The head is incorrectly placed.");
+        rope.Tail.ShouldBe(rope.AllKnots[^1], "The tail is incorrectly placed.");
+        rope.AllKnots.ShouldBe(expectedKnots, "The knots are incorrectly placed.");
     }
 
     [Theory]
