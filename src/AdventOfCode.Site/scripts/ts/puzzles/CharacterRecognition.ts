@@ -2,7 +2,28 @@
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 export class CharacterRecognition {
-    static readString(array: Array<string>[], ink = '*') {
+    static readString(text: string, ink = '*') {
+        const lines = text.split('\n');
+
+        const width = lines[0].length;
+        const height = lines.length;
+
+        const chars: Array<string>[] = [];
+
+        for (let y = 0; y < height; y++) {
+            const row = new Array<string>(width);
+
+            for (let x = 0; x < width; x++) {
+                row[x] = lines[y][x];
+            }
+
+            chars.push(row);
+        }
+
+        return CharacterRecognition.readCharacters(chars, ink);
+    }
+
+    static readCharacters(array: Array<string>[], ink = '*') {
         const width = array[0].length;
         const height = array.length;
 
@@ -31,14 +52,16 @@ export class CharacterRecognition {
 
         let result = '';
 
-        for (let x = 0; x < width - 1; x += 5) {
-            const letter = new Set<string>();
+        for (let offset = 0; offset < width - 1; offset += 5) {
+            let letter = 0;
+            let bit = 30;
 
-            for (let y = 0; y < height; y++) {
-                for (let z = 0; z < 5; z++) {
-                    if (array[y][x + z]) {
-                        letter.add(`${z},${y}`);
+            for (let x = 0; x < 5; x++) {
+                for (let y = 0; y < height; y++) {
+                    if (array[y][offset + x]) {
+                        letter |= 1 << bit;
                     }
+                    bit--;
                 }
             }
 
@@ -52,69 +75,37 @@ export class CharacterRecognition {
 class Alphabet {
     private static readonly alphabet = Alphabet.createAlphabet();
 
-    public static get(points: Set<string>) {
-        for (const [letter, glyph] of Alphabet.alphabet) {
-            if (Alphabet.setsAreEqual(points, glyph)) {
-                return letter;
-            }
+    public static get(value: number) {
+        if (this.alphabet.has(value)) {
+            return this.alphabet.get(value);
         }
 
         return '?';
     }
 
-    // Based on https://bobbyhadz.com/blog/javascript-check-if-two-sets-are-equal
-    private static setsAreEqual<T>(a: Set<T>, b: Set<T>) {
-        if (a.size !== b.size) {
-            return false;
-        }
+    private static createAlphabet() {
+        const alphabet = new Map<number, string>();
 
-        return Array.from(a).every((element) => {
-            return b.has(element);
-        });
-    }
-
-    private static createAlphabet(): Map<string, Set<string>> {
-        const alphabet = new Map<string, Set<string>>();
-        alphabet.set(
-            'A',
-            new Set<string>(['1,0', '2,0', '0,1', '3,1', '0,2', '3,2', '0,3', '1,3', '2,3', '3,3', '0,4', '3,4', '0,5', '3,5'])
-        );
-
-        alphabet.set(
-            'B',
-            new Set<string>(['0,0', '1,0', '2,0', '0,1', '3,1', '0,2', '1,2', '2,2', '0,3', '3,3', '0,4', '3,4', '0,5', '1,5', '2,5'])
-        );
-
-        alphabet.set('C', new Set<string>(['1,0', '2,0', '0,1', '3,1', '0,2', '0,3', '0,4', '3,4', '1,5', '2,5']));
-
-        alphabet.set(
-            'E',
-            new Set<string>(['0,0', '1,0', '2,0', '3,0', '0,1', '0,2', '1,2', '2,2', '0,3', '0,4', '0,5', '1,5', '2,5', '3,5'])
-        );
-
-        alphabet.set('F', new Set<string>(['0,0', '1,0', '2,0', '3,0', '0,1', '0,2', '1,2', '2,2', '0,3', '0,4', '0,5']));
-        alphabet.set('G', new Set<string>(['1,0', '2,0', '0,1', '3,1', '0,2', '0,3', '2,3', '3,3', '0,4', '3,4', '1,5', '2,5', '3,5']));
-
-        alphabet.set(
-            'H',
-            new Set<string>(['0,0', '3,0', '0,1', '3,1', '0,2', '1,2', '2,2', '3,2', '0,3', '3,3', '0,4', '3,4', '0,5', '3,5'])
-        );
-
-        alphabet.set('I', new Set<string>(['1,0', '2,0', '3,0', '2,1', '2,2', '2,3', '2,4', '1,5', '2,5', '3,5']));
-        alphabet.set('J', new Set<string>(['2,0', '3,0', '3,1', '3,2', '3,3', '0,4', '3,4', '1,5', '2,5']));
-        alphabet.set('K', new Set<string>(['0,0', '3,0', '0,1', '2,1', '0,2', '1,2', '0,3', '2,3', '0,4', '2,4', '0,5', '3,5']));
-        alphabet.set('L', new Set<string>(['0,0', '0,1', '0,2', '0,3', '0,4', '0,5', '1,5', '2,5', '3,5']));
-        alphabet.set('O', new Set<string>(['1,0', '2,0', '0,1', '3,1', '0,2', '3,2', '0,3', '3,3', '0,4', '3,4', '1,5', '2,5']));
-        alphabet.set('P', new Set<string>(['0,0', '1,0', '2,0', '0,1', '3,1', '0,2', '3,2', '0,3', '1,3', '2,3', '0,4', '0,5']));
-
-        alphabet.set(
-            'R',
-            new Set<string>(['0,0', '1,0', '2,0', '0,1', '3,1', '0,2', '3,2', '0,3', '1,3', '2,3', '0,4', '2,4', '0,5', '3,5'])
-        );
-
-        alphabet.set('U', new Set<string>(['0,0', '3,0', '0,1', '3,1', '0,2', '3,2', '0,3', '3,3', '0,4', '3,4', '1,5', '2,5']));
-        alphabet.set('Y', new Set<string>(['0,0', '4,0', '0,1', '4,1', '1,2', '3,2', '2,3', '2,4', '2,5']));
-        alphabet.set('Z', new Set<string>(['0,0', '1,0', '2,0', '3,0', '3,1', '2,2', '1,3', '0,4', '0,5', '1,5', '2,5', '3,5']));
+        // Letters are encoded as a 32-bit number where the top-left pixel
+        // is the 31st bit and the bottom - right pixel is the 2nd bit, then
+        // one zero.The bits are encoded top-to-bottom, left-to-right.
+        alphabet.set(parseInt('00111111001001001000111110000000', 2), 'A');
+        alphabet.set(parseInt('01111111010011010010101100000000', 2), 'B');
+        alphabet.set(parseInt('00111101000011000010100100000000', 2), 'C');
+        alphabet.set(parseInt('01111111010011010011000010000000', 2), 'E');
+        alphabet.set(parseInt('01111111010001010001000000000000', 2), 'F');
+        alphabet.set(parseInt('00111101000011001010101110000000', 2), 'G');
+        alphabet.set(parseInt('01111110010000010001111110000000', 2), 'H');
+        alphabet.set(parseInt('00000001000011111111000010000000', 2), 'I');
+        alphabet.set(parseInt('00000100000011000011111100000000', 2), 'J');
+        alphabet.set(parseInt('01111110010000101101000010000000', 2), 'K');
+        alphabet.set(parseInt('01111110000010000010000010000000', 2), 'L');
+        alphabet.set(parseInt('00111101000011000010111100000000', 2), 'O');
+        alphabet.set(parseInt('01111111001001001000110000000000', 2), 'P');
+        alphabet.set(parseInt('01111111001001001100110010000000', 2), 'R');
+        alphabet.set(parseInt('01111100000010000011111100000000', 2), 'U');
+        alphabet.set(parseInt('01100000010000001110010001100000', 2), 'Y');
+        alphabet.set(parseInt('01000111001011010011100010000000', 2), 'Z');
 
         return alphabet;
     }

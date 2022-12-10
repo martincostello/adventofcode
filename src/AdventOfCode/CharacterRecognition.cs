@@ -159,9 +159,9 @@ internal static class CharacterRecognition
 
         private static Dictionary<uint, char> CreateAlphabet()
         {
-            // Letters are encoded as 32-bit unsigned integer
+            // Letters are encoded as a 32-bit unsigned integer
             // where the top-left pixel is the 32nd bit and the
-            // bottom-right pixel is the 2nd bit, then two zeroes.
+            // bottom-right pixel is the 3rd bit, then two zeroes.
             // The bits are encoded top-to-bottom, left-to-right.
             return new Dictionary<uint, char>(26)
             {
