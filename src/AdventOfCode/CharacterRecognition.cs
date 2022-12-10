@@ -117,37 +117,20 @@ internal static class CharacterRecognition
             return string.Empty;
         }
 
-        var builder = new StringBuilder();
+        var builder = new StringBuilder(width);
 
         for (int x = 0; x < width - 1; x += 5)
         {
-            var letter = new HashSet<Point>();
+            var letter = new HashSet<Point>(15);
 
             for (int y = 0; y < height; y++)
             {
-                if (array[x, y])
+                for (int z = 0; z < 5; z++)
                 {
-                    letter.Add(new(0, y));
-                }
-
-                if (array[x + 1, y])
-                {
-                    letter.Add(new(1, y));
-                }
-
-                if (array[x + 2, y])
-                {
-                    letter.Add(new(2, y));
-                }
-
-                if (array[x + 3, y])
-                {
-                    letter.Add(new(3, y));
-                }
-
-                if (array[x + 4, y])
-                {
-                    letter.Add(new(4, y));
+                    if (array[x + z, y])
+                    {
+                        letter.Add(new(z, y));
+                    }
                 }
             }
 
@@ -176,276 +159,261 @@ internal static class CharacterRecognition
 
         private static Dictionary<char, HashSet<Point>> CreateAlphabet()
         {
-            Dictionary<char, HashSet<Point>> alphabet = new(26);
-
-            alphabet['A'] = new HashSet<Point>()
+            Dictionary<char, HashSet<Point>> alphabet = new(26)
             {
-                new(1, 0),
-                new(2, 0),
-                new(0, 1),
-                new(3, 1),
-                new(0, 2),
-                new(3, 2),
-                new(0, 3),
-                new(1, 3),
-                new(2, 3),
-                new(3, 3),
-                new(0, 4),
-                new(3, 4),
-                new(0, 5),
-                new(3, 5),
-            };
-
-            alphabet['B'] = new HashSet<Point>()
-            {
-                new(0, 0),
-                new(1, 0),
-                new(2, 0),
-                new(0, 1),
-                new(3, 1),
-                new(0, 2),
-                new(1, 2),
-                new(2, 2),
-                new(0, 3),
-                new(3, 3),
-                new(0, 4),
-                new(3, 4),
-                new(0, 5),
-                new(1, 5),
-                new(2, 5),
-            };
-
-            alphabet['C'] = new HashSet<Point>()
-            {
-                new(1, 0),
-                new(2, 0),
-                new(0, 1),
-                new(3, 1),
-                new(0, 2),
-                new(0, 3),
-                new(0, 4),
-                new(3, 4),
-                new(1, 5),
-                new(2, 5),
-            };
-
-            alphabet['E'] = new HashSet<Point>()
-            {
-                new(0, 0),
-                new(1, 0),
-                new(2, 0),
-                new(3, 0),
-                new(0, 1),
-                new(0, 2),
-                new(1, 2),
-                new(2, 2),
-                new(0, 3),
-                new(0, 4),
-                new(0, 5),
-                new(1, 5),
-                new(2, 5),
-                new(3, 5),
-            };
-
-            alphabet['F'] = new HashSet<Point>()
-            {
-                new(0, 0),
-                new(1, 0),
-                new(2, 0),
-                new(3, 0),
-                new(0, 1),
-                new(0, 2),
-                new(1, 2),
-                new(2, 2),
-                new(0, 3),
-                new(0, 4),
-                new(0, 5),
-            };
-
-            alphabet['G'] = new HashSet<Point>()
-            {
-                new(1, 0),
-                new(2, 0),
-                new(0, 1),
-                new(3, 1),
-                new(0, 2),
-                new(0, 3),
-                new(2, 3),
-                new(3, 3),
-                new(0, 4),
-                new(3, 4),
-                new(1, 5),
-                new(2, 5),
-                new(3, 5),
-            };
-
-            alphabet['H'] = new HashSet<Point>()
-            {
-                new(0, 0),
-                new(3, 0),
-                new(0, 1),
-                new(3, 1),
-                new(0, 2),
-                new(1, 2),
-                new(2, 2),
-                new(3, 2),
-                new(0, 3),
-                new(3, 3),
-                new(0, 4),
-                new(3, 4),
-                new(0, 5),
-                new(3, 5),
-            };
-
-            alphabet['I'] = new HashSet<Point>()
-            {
-                new(1, 0),
-                new(2, 0),
-                new(3, 0),
-                new(2, 1),
-                new(2, 2),
-                new(2, 3),
-                new(2, 4),
-                new(1, 5),
-                new(2, 5),
-                new(3, 5),
-            };
-
-            alphabet['J'] = new HashSet<Point>()
-            {
-                new(2, 0),
-                new(3, 0),
-                new(3, 1),
-                new(3, 2),
-                new(3, 3),
-                new(0, 4),
-                new(3, 4),
-                new(1, 5),
-                new(2, 5),
-            };
-
-            alphabet['K'] = new HashSet<Point>()
-            {
-                new(0, 0),
-                new(3, 0),
-                new(0, 1),
-                new(2, 1),
-                new(0, 2),
-                new(1, 2),
-                new(0, 3),
-                new(2, 3),
-                new(0, 4),
-                new(2, 4),
-                new(0, 5),
-                new(3, 5),
-            };
-
-            alphabet['L'] = new HashSet<Point>()
-            {
-                new(0, 0),
-                new(0, 1),
-                new(0, 2),
-                new(0, 3),
-                new(0, 4),
-                new(0, 5),
-                new(1, 5),
-                new(2, 5),
-                new(3, 5),
-            };
-
-            alphabet['O'] = new HashSet<Point>()
-            {
-                new(1, 0),
-                new(2, 0),
-                new(0, 1),
-                new(3, 1),
-                new(0, 2),
-                new(3, 2),
-                new(0, 3),
-                new(3, 3),
-                new(0, 4),
-                new(3, 4),
-                new(1, 5),
-                new(2, 5),
-            };
-
-            alphabet['P'] = new HashSet<Point>()
-            {
-                new(0, 0),
-                new(1, 0),
-                new(2, 0),
-                new(0, 1),
-                new(3, 1),
-                new(0, 2),
-                new(3, 2),
-                new(0, 3),
-                new(1, 3),
-                new(2, 3),
-                new(0, 4),
-                new(0, 5),
-            };
-
-            alphabet['R'] = new HashSet<Point>()
-            {
-                new(0, 0),
-                new(1, 0),
-                new(2, 0),
-                new(0, 1),
-                new(3, 1),
-                new(0, 2),
-                new(3, 2),
-                new(0, 3),
-                new(1, 3),
-                new(2, 3),
-                new(0, 4),
-                new(2, 4),
-                new(0, 5),
-                new(3, 5),
-            };
-
-            alphabet['U'] = new HashSet<Point>()
-            {
-                new(0, 0),
-                new(3, 0),
-                new(0, 1),
-                new(3, 1),
-                new(0, 2),
-                new(3, 2),
-                new(0, 3),
-                new(3, 3),
-                new(0, 4),
-                new(3, 4),
-                new(1, 5),
-                new(2, 5),
-            };
-
-            alphabet['Y'] = new HashSet<Point>()
-            {
-                new(0, 0),
-                new(4, 0),
-                new(0, 1),
-                new(4, 1),
-                new(1, 2),
-                new(3, 2),
-                new(2, 3),
-                new(2, 4),
-                new(2, 5),
-            };
-
-            alphabet['Z'] = new HashSet<Point>()
-            {
-                new(0, 0),
-                new(1, 0),
-                new(2, 0),
-                new(3, 0),
-                new(3, 1),
-                new(2, 2),
-                new(1, 3),
-                new(0, 4),
-                new(0, 5),
-                new(1, 5),
-                new(2, 5),
-                new(3, 5),
+                ['A'] = new(14)
+                {
+                    new(1, 0),
+                    new(2, 0),
+                    new(0, 1),
+                    new(3, 1),
+                    new(0, 2),
+                    new(3, 2),
+                    new(0, 3),
+                    new(1, 3),
+                    new(2, 3),
+                    new(3, 3),
+                    new(0, 4),
+                    new(3, 4),
+                    new(0, 5),
+                    new(3, 5),
+                },
+                ['B'] = new(15)
+                {
+                    new(0, 0),
+                    new(1, 0),
+                    new(2, 0),
+                    new(0, 1),
+                    new(3, 1),
+                    new(0, 2),
+                    new(1, 2),
+                    new(2, 2),
+                    new(0, 3),
+                    new(3, 3),
+                    new(0, 4),
+                    new(3, 4),
+                    new(0, 5),
+                    new(1, 5),
+                    new(2, 5),
+                },
+                ['C'] = new(10)
+                {
+                    new(1, 0),
+                    new(2, 0),
+                    new(0, 1),
+                    new(3, 1),
+                    new(0, 2),
+                    new(0, 3),
+                    new(0, 4),
+                    new(3, 4),
+                    new(1, 5),
+                    new(2, 5),
+                },
+                ['E'] = new(14)
+                {
+                    new(0, 0),
+                    new(1, 0),
+                    new(2, 0),
+                    new(3, 0),
+                    new(0, 1),
+                    new(0, 2),
+                    new(1, 2),
+                    new(2, 2),
+                    new(0, 3),
+                    new(0, 4),
+                    new(0, 5),
+                    new(1, 5),
+                    new(2, 5),
+                    new(3, 5),
+                },
+                ['F'] = new(11)
+                {
+                    new(0, 0),
+                    new(1, 0),
+                    new(2, 0),
+                    new(3, 0),
+                    new(0, 1),
+                    new(0, 2),
+                    new(1, 2),
+                    new(2, 2),
+                    new(0, 3),
+                    new(0, 4),
+                    new(0, 5),
+                },
+                ['G'] = new(13)
+                {
+                    new(1, 0),
+                    new(2, 0),
+                    new(0, 1),
+                    new(3, 1),
+                    new(0, 2),
+                    new(0, 3),
+                    new(2, 3),
+                    new(3, 3),
+                    new(0, 4),
+                    new(3, 4),
+                    new(1, 5),
+                    new(2, 5),
+                    new(3, 5),
+                },
+                ['H'] = new(14)
+                {
+                    new(0, 0),
+                    new(3, 0),
+                    new(0, 1),
+                    new(3, 1),
+                    new(0, 2),
+                    new(1, 2),
+                    new(2, 2),
+                    new(3, 2),
+                    new(0, 3),
+                    new(3, 3),
+                    new(0, 4),
+                    new(3, 4),
+                    new(0, 5),
+                    new(3, 5),
+                },
+                ['I'] = new(10)
+                {
+                    new(1, 0),
+                    new(2, 0),
+                    new(3, 0),
+                    new(2, 1),
+                    new(2, 2),
+                    new(2, 3),
+                    new(2, 4),
+                    new(1, 5),
+                    new(2, 5),
+                    new(3, 5),
+                },
+                ['J'] = new(9)
+                {
+                    new(2, 0),
+                    new(3, 0),
+                    new(3, 1),
+                    new(3, 2),
+                    new(3, 3),
+                    new(0, 4),
+                    new(3, 4),
+                    new(1, 5),
+                    new(2, 5),
+                },
+                ['K'] = new(12)
+                {
+                    new(0, 0),
+                    new(3, 0),
+                    new(0, 1),
+                    new(2, 1),
+                    new(0, 2),
+                    new(1, 2),
+                    new(0, 3),
+                    new(2, 3),
+                    new(0, 4),
+                    new(2, 4),
+                    new(0, 5),
+                    new(3, 5),
+                },
+                ['L'] = new(9)
+                {
+                    new(0, 0),
+                    new(0, 1),
+                    new(0, 2),
+                    new(0, 3),
+                    new(0, 4),
+                    new(0, 5),
+                    new(1, 5),
+                    new(2, 5),
+                    new(3, 5),
+                },
+                ['O'] = new(12)
+                {
+                    new(1, 0),
+                    new(2, 0),
+                    new(0, 1),
+                    new(3, 1),
+                    new(0, 2),
+                    new(3, 2),
+                    new(0, 3),
+                    new(3, 3),
+                    new(0, 4),
+                    new(3, 4),
+                    new(1, 5),
+                    new(2, 5),
+                },
+                ['P'] = new(12)
+                {
+                    new(0, 0),
+                    new(1, 0),
+                    new(2, 0),
+                    new(0, 1),
+                    new(3, 1),
+                    new(0, 2),
+                    new(3, 2),
+                    new(0, 3),
+                    new(1, 3),
+                    new(2, 3),
+                    new(0, 4),
+                    new(0, 5),
+                },
+                ['R'] = new(14)
+                {
+                    new(0, 0),
+                    new(1, 0),
+                    new(2, 0),
+                    new(0, 1),
+                    new(3, 1),
+                    new(0, 2),
+                    new(3, 2),
+                    new(0, 3),
+                    new(1, 3),
+                    new(2, 3),
+                    new(0, 4),
+                    new(2, 4),
+                    new(0, 5),
+                    new(3, 5),
+                },
+                ['U'] = new(12)
+                {
+                    new(0, 0),
+                    new(3, 0),
+                    new(0, 1),
+                    new(3, 1),
+                    new(0, 2),
+                    new(3, 2),
+                    new(0, 3),
+                    new(3, 3),
+                    new(0, 4),
+                    new(3, 4),
+                    new(1, 5),
+                    new(2, 5),
+                },
+                ['Y'] = new(9)
+                {
+                    new(0, 0),
+                    new(4, 0),
+                    new(0, 1),
+                    new(4, 1),
+                    new(1, 2),
+                    new(3, 2),
+                    new(2, 3),
+                    new(2, 4),
+                    new(2, 5),
+                },
+                ['Z'] = new(12)
+                {
+                    new(0, 0),
+                    new(1, 0),
+                    new(2, 0),
+                    new(3, 0),
+                    new(3, 1),
+                    new(2, 2),
+                    new(1, 3),
+                    new(0, 4),
+                    new(0, 5),
+                    new(1, 5),
+                    new(2, 5),
+                    new(3, 5),
+                },
             };
 
             return alphabet;
