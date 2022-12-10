@@ -354,7 +354,7 @@ class Alphabet {
         for (const [letter, glyph] of alphabet) {
             const set = new Set<string>();
             for (const point of glyph) {
-                set.add(point.toString());
+                set.add(point.asString());
             }
             result.set(letter, set);
         }
