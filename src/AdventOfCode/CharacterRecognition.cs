@@ -119,18 +119,21 @@ internal static class CharacterRecognition
 
         var builder = new StringBuilder(width);
 
-        for (int x = 0; x < width - 1; x += 5)
+        for (uint offset = 0; offset < width - 1; offset += 5)
         {
-            var letter = new HashSet<Point>(15);
+            uint letter = 0;
+            int bit = 31;
 
-            for (int y = 0; y < height; y++)
+            for (int x = 0; x < 5; x++)
             {
-                for (int z = 0; z < 5; z++)
+                for (int y = 0; y < height; y++)
                 {
-                    if (array[x + z, y])
+                    if (array[offset + x, y])
                     {
-                        letter.Add(new(z, y));
+                        letter |= 1u << bit;
                     }
+
+                    bit--;
                 }
             }
 
@@ -142,281 +145,44 @@ internal static class CharacterRecognition
 
     private static class Alphabet
     {
-        private static readonly Dictionary<char, HashSet<Point>> _alphabet = CreateAlphabet();
+        private static readonly Dictionary<uint, char> _alphabet = CreateAlphabet();
 
-        public static char Get(HashSet<Point> points)
+        public static char Get(uint value)
         {
-            foreach ((char letter, var glyph) in _alphabet)
+            if (!_alphabet.TryGetValue(value, out char letter))
             {
-                if (points.SequenceEqual(glyph))
-                {
-                    return letter;
-                }
+                letter = '?';
             }
 
-            return '?';
+            return letter;
         }
 
-        private static Dictionary<char, HashSet<Point>> CreateAlphabet()
+        private static Dictionary<uint, char> CreateAlphabet()
         {
-            Dictionary<char, HashSet<Point>> alphabet = new(26)
+            // Letters are encoded as 32-bit unsigned integer
+            // where the top-left pixel is the 32nd bit and the
+            // bottom-right pixel is the 2nd bit, then two zeroes.
+            // The bits are encoded top-to-bottom, left-to-right.
+            return new Dictionary<uint, char>(26)
             {
-                ['A'] = new(14)
-                {
-                    new(1, 0),
-                    new(2, 0),
-                    new(0, 1),
-                    new(3, 1),
-                    new(0, 2),
-                    new(3, 2),
-                    new(0, 3),
-                    new(1, 3),
-                    new(2, 3),
-                    new(3, 3),
-                    new(0, 4),
-                    new(3, 4),
-                    new(0, 5),
-                    new(3, 5),
-                },
-                ['B'] = new(15)
-                {
-                    new(0, 0),
-                    new(1, 0),
-                    new(2, 0),
-                    new(0, 1),
-                    new(3, 1),
-                    new(0, 2),
-                    new(1, 2),
-                    new(2, 2),
-                    new(0, 3),
-                    new(3, 3),
-                    new(0, 4),
-                    new(3, 4),
-                    new(0, 5),
-                    new(1, 5),
-                    new(2, 5),
-                },
-                ['C'] = new(10)
-                {
-                    new(1, 0),
-                    new(2, 0),
-                    new(0, 1),
-                    new(3, 1),
-                    new(0, 2),
-                    new(0, 3),
-                    new(0, 4),
-                    new(3, 4),
-                    new(1, 5),
-                    new(2, 5),
-                },
-                ['E'] = new(14)
-                {
-                    new(0, 0),
-                    new(1, 0),
-                    new(2, 0),
-                    new(3, 0),
-                    new(0, 1),
-                    new(0, 2),
-                    new(1, 2),
-                    new(2, 2),
-                    new(0, 3),
-                    new(0, 4),
-                    new(0, 5),
-                    new(1, 5),
-                    new(2, 5),
-                    new(3, 5),
-                },
-                ['F'] = new(11)
-                {
-                    new(0, 0),
-                    new(1, 0),
-                    new(2, 0),
-                    new(3, 0),
-                    new(0, 1),
-                    new(0, 2),
-                    new(1, 2),
-                    new(2, 2),
-                    new(0, 3),
-                    new(0, 4),
-                    new(0, 5),
-                },
-                ['G'] = new(13)
-                {
-                    new(1, 0),
-                    new(2, 0),
-                    new(0, 1),
-                    new(3, 1),
-                    new(0, 2),
-                    new(0, 3),
-                    new(2, 3),
-                    new(3, 3),
-                    new(0, 4),
-                    new(3, 4),
-                    new(1, 5),
-                    new(2, 5),
-                    new(3, 5),
-                },
-                ['H'] = new(14)
-                {
-                    new(0, 0),
-                    new(3, 0),
-                    new(0, 1),
-                    new(3, 1),
-                    new(0, 2),
-                    new(1, 2),
-                    new(2, 2),
-                    new(3, 2),
-                    new(0, 3),
-                    new(3, 3),
-                    new(0, 4),
-                    new(3, 4),
-                    new(0, 5),
-                    new(3, 5),
-                },
-                ['I'] = new(10)
-                {
-                    new(1, 0),
-                    new(2, 0),
-                    new(3, 0),
-                    new(2, 1),
-                    new(2, 2),
-                    new(2, 3),
-                    new(2, 4),
-                    new(1, 5),
-                    new(2, 5),
-                    new(3, 5),
-                },
-                ['J'] = new(9)
-                {
-                    new(2, 0),
-                    new(3, 0),
-                    new(3, 1),
-                    new(3, 2),
-                    new(3, 3),
-                    new(0, 4),
-                    new(3, 4),
-                    new(1, 5),
-                    new(2, 5),
-                },
-                ['K'] = new(12)
-                {
-                    new(0, 0),
-                    new(3, 0),
-                    new(0, 1),
-                    new(2, 1),
-                    new(0, 2),
-                    new(1, 2),
-                    new(0, 3),
-                    new(2, 3),
-                    new(0, 4),
-                    new(2, 4),
-                    new(0, 5),
-                    new(3, 5),
-                },
-                ['L'] = new(9)
-                {
-                    new(0, 0),
-                    new(0, 1),
-                    new(0, 2),
-                    new(0, 3),
-                    new(0, 4),
-                    new(0, 5),
-                    new(1, 5),
-                    new(2, 5),
-                    new(3, 5),
-                },
-                ['O'] = new(12)
-                {
-                    new(1, 0),
-                    new(2, 0),
-                    new(0, 1),
-                    new(3, 1),
-                    new(0, 2),
-                    new(3, 2),
-                    new(0, 3),
-                    new(3, 3),
-                    new(0, 4),
-                    new(3, 4),
-                    new(1, 5),
-                    new(2, 5),
-                },
-                ['P'] = new(12)
-                {
-                    new(0, 0),
-                    new(1, 0),
-                    new(2, 0),
-                    new(0, 1),
-                    new(3, 1),
-                    new(0, 2),
-                    new(3, 2),
-                    new(0, 3),
-                    new(1, 3),
-                    new(2, 3),
-                    new(0, 4),
-                    new(0, 5),
-                },
-                ['R'] = new(14)
-                {
-                    new(0, 0),
-                    new(1, 0),
-                    new(2, 0),
-                    new(0, 1),
-                    new(3, 1),
-                    new(0, 2),
-                    new(3, 2),
-                    new(0, 3),
-                    new(1, 3),
-                    new(2, 3),
-                    new(0, 4),
-                    new(2, 4),
-                    new(0, 5),
-                    new(3, 5),
-                },
-                ['U'] = new(12)
-                {
-                    new(0, 0),
-                    new(3, 0),
-                    new(0, 1),
-                    new(3, 1),
-                    new(0, 2),
-                    new(3, 2),
-                    new(0, 3),
-                    new(3, 3),
-                    new(0, 4),
-                    new(3, 4),
-                    new(1, 5),
-                    new(2, 5),
-                },
-                ['Y'] = new(9)
-                {
-                    new(0, 0),
-                    new(4, 0),
-                    new(0, 1),
-                    new(4, 1),
-                    new(1, 2),
-                    new(3, 2),
-                    new(2, 3),
-                    new(2, 4),
-                    new(2, 5),
-                },
-                ['Z'] = new(12)
-                {
-                    new(0, 0),
-                    new(1, 0),
-                    new(2, 0),
-                    new(3, 0),
-                    new(3, 1),
-                    new(2, 2),
-                    new(1, 3),
-                    new(0, 4),
-                    new(0, 5),
-                    new(1, 5),
-                    new(2, 5),
-                    new(3, 5),
-                },
+                [0b01111110010010010001111100000000] = 'A',
+                [0b11111110100110100101011000000000] = 'B',
+                [0b01111010000110000101001000000000] = 'C',
+                [0b11111110100110100110000100000000] = 'E',
+                [0b11111110100010100010000000000000] = 'F',
+                [0b01111010000110010101011100000000] = 'G',
+                [0b11111100100000100011111100000000] = 'H',
+                [0b00000010000111111110000100000000] = 'I',
+                [0b00001000000110000111111000000000] = 'J',
+                [0b11111100100001011010000100000000] = 'K',
+                [0b11111100000100000100000100000000] = 'L',
+                [0b01111010000110000101111000000000] = 'O',
+                [0b11111110010010010001100000000000] = 'P',
+                [0b11111110010010011001100100000000] = 'R',
+                [0b11111000000100000111111000000000] = 'U',
+                [0b11000000100000011100100011000000] = 'Y',
+                [0b10001110010110100111000100000000] = 'Z',
             };
-
-            return alphabet;
         }
     }
 }
