@@ -36,7 +36,7 @@ export class Day08 extends Puzzle2022 {
             for (let y = 0; y < height; y++) {
                 for (let x = 0; x < width; x++) {
                     const location = new Point(x, y);
-                    trees.set(location.asString(), new Tree(location, grid[y][x].charCodeAt(0) - '0'.charCodeAt(0)));
+                    trees.set(location.toString(), new Tree(location, grid[y][x].charCodeAt(0) - '0'.charCodeAt(0)));
                 }
             }
 
@@ -45,11 +45,11 @@ export class Day08 extends Puzzle2022 {
 
         const sweep = (origin: Point, direction: Size, trees: Map<string, Tree>) => {
             let location = origin;
-            let current = trees.get(location.asString());
+            let current = trees.get(location.toString());
             current.markVisible();
 
-            while (trees.has((location = Point.add(location, direction)).asString())) {
-                const next = trees.get(location.asString());
+            while (trees.has((location = Point.add(location, direction)).toString())) {
+                const next = trees.get(location.toString());
                 if (next.height > current.height) {
                     next.markVisible();
                     current = next;
@@ -74,7 +74,7 @@ export class Day08 extends Puzzle2022 {
                 do {
                     sweep(origin, direction, trees);
                     origin = Point.add(origin, next);
-                } while (trees.has(origin.asString()));
+                } while (trees.has(origin.toString()));
             }
 
             let count = 0;
@@ -92,8 +92,8 @@ export class Day08 extends Puzzle2022 {
             let location = origin.location;
             let score = 0;
 
-            while (trees.has((location = Point.add(location, direction)).asString())) {
-                const next = trees.get(location.asString());
+            while (trees.has((location = Point.add(location, direction)).toString())) {
+                const next = trees.get(location.toString());
                 score++;
 
                 if (next.height >= origin.height) {
@@ -111,7 +111,7 @@ export class Day08 extends Puzzle2022 {
 
             for (let y = 0; y < height; y++) {
                 for (let x = 0; x < width; x++) {
-                    const tree = trees.get(new Point(x, y).asString());
+                    const tree = trees.get(new Point(x, y).toString());
 
                     if (tree.isVisible) {
                         let scenicScore = 1;

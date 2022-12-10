@@ -204,7 +204,7 @@ class LightGrid {
     }
 
     get(position: Point) {
-        return this.lightBrightnesses.get(position.asString()) || 0;
+        return this.lightBrightnesses.get(position.toString()) || 0;
     }
 
     incrementBrightness(item: Point | Rectangle, delta: number) {
@@ -272,9 +272,9 @@ class LightGrid {
         const value = Math.max(current, 0);
 
         if (value === 0) {
-            this.lightBrightnesses.delete(position.asString());
+            this.lightBrightnesses.delete(position.toString());
         } else {
-            this.lightBrightnesses.set(position.asString(), value);
+            this.lightBrightnesses.set(position.toString(), value);
         }
 
         return value;

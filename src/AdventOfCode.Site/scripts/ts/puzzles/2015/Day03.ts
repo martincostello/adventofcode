@@ -27,7 +27,7 @@ export class Day03 extends Puzzle2015 {
         const coordinates = new Set<string>();
 
         for (const direction of directions) {
-            coordinates.add(santa.location.asString());
+            coordinates.add(santa.location.toString());
             santa.move(direction);
         }
 
@@ -44,11 +44,11 @@ export class Day03 extends Puzzle2015 {
         let previous = roboSanta;
 
         const coordinates = new Set<string>();
-        coordinates.add(Point.empty.asString());
+        coordinates.add(Point.empty.toString());
 
         for (const direction of directions) {
             current.move(direction);
-            coordinates.add(current.location.asString());
+            coordinates.add(current.location.toString());
             [current, previous] = [previous, current];
         }
 
