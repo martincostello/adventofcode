@@ -39,6 +39,10 @@ export abstract class Puzzle {
 
         result.timeToSolve = performance.now() - startTime;
 
+        for (const visualization of result.visualizations) {
+            console.info(visualization);
+        }
+
         return result;
     }
 
