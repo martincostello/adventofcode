@@ -1,10 +1,8 @@
 // Copyright (c) Martin Costello, 2015. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
-import { Point } from './Point';
-
 export class CharacterRecognition {
-    static read(array: Array<string>[], ink = '*') {
+    static readString(array: Array<string>[], ink = '*') {
         const width = array[0].length;
         const height = array.length;
 
@@ -23,7 +21,7 @@ export class CharacterRecognition {
         return CharacterRecognition.readBits(bits);
     }
 
-    private static readBits(array: Array<boolean>[]) {
+    static readBits(array: Array<boolean>[]) {
         const width = array[0].length;
         const height = array.length;
 
@@ -34,27 +32,13 @@ export class CharacterRecognition {
         let result = '';
 
         for (let x = 0; x < width - 1; x += 5) {
-            const letter = new Set<Point>();
+            const letter = new Set<string>();
 
             for (let y = 0; y < height; y++) {
-                if (array[y][x]) {
-                    letter.add(new Point(0, y));
-                }
-
-                if (array[y][x + 1]) {
-                    letter.add(new Point(1, y));
-                }
-
-                if (array[y][x + 2]) {
-                    letter.add(new Point(2, y));
-                }
-
-                if (array[y][x + 3]) {
-                    letter.add(new Point(3, y));
-                }
-
-                if (array[y][x + 4]) {
-                    letter.add(new Point(4, y));
+                for (let z = 0; z < 5; z++) {
+                    if (array[y][x + z]) {
+                        letter.add(`${z},${y}`);
+                    }
                 }
             }
 
@@ -68,14 +52,9 @@ export class CharacterRecognition {
 class Alphabet {
     private static readonly alphabet = Alphabet.createAlphabet();
 
-    public static get(points: Set<Point>) {
-        const set = new Set<string>();
-        for (const point of points) {
-            set.add(point.toString());
-        }
-
+    public static get(points: Set<string>) {
         for (const [letter, glyph] of Alphabet.alphabet) {
-            if (Alphabet.setsAreEqual(set, glyph)) {
+            if (Alphabet.setsAreEqual(points, glyph)) {
                 return letter;
             }
         }
@@ -84,7 +63,7 @@ class Alphabet {
     }
 
     // Based on https://bobbyhadz.com/blog/javascript-check-if-two-sets-are-equal
-    private static setsAreEqual(a: Set<string>, b: Set<string>) {
+    private static setsAreEqual<T>(a: Set<T>, b: Set<T>) {
         if (a.size !== b.size) {
             return false;
         }
@@ -95,270 +74,48 @@ class Alphabet {
     }
 
     private static createAlphabet(): Map<string, Set<string>> {
-        const alphabet = new Map<string, Point[]>();
-        alphabet.set('A', [
-            new Point(1, 0),
-            new Point(2, 0),
-            new Point(0, 1),
-            new Point(3, 1),
-            new Point(0, 2),
-            new Point(3, 2),
-            new Point(0, 3),
-            new Point(1, 3),
-            new Point(2, 3),
-            new Point(3, 3),
-            new Point(0, 4),
-            new Point(3, 4),
-            new Point(0, 5),
-            new Point(3, 5),
-        ]);
+        const alphabet = new Map<string, Set<string>>();
+        alphabet.set(
+            'A',
+            new Set<string>(['1,0', '2,0', '0,1', '3,1', '0,2', '3,2', '0,3', '1,3', '2,3', '3,3', '0,4', '3,4', '0,5', '3,5'])
+        );
 
-        alphabet.set('B', [
-            new Point(0, 0),
-            new Point(1, 0),
-            new Point(2, 0),
-            new Point(0, 1),
-            new Point(3, 1),
-            new Point(0, 2),
-            new Point(1, 2),
-            new Point(2, 2),
-            new Point(0, 3),
-            new Point(3, 3),
-            new Point(0, 4),
-            new Point(3, 4),
-            new Point(0, 5),
-            new Point(1, 5),
-            new Point(2, 5),
-        ]);
+        alphabet.set(
+            'B',
+            new Set<string>(['0,0', '1,0', '2,0', '0,1', '3,1', '0,2', '1,2', '2,2', '0,3', '3,3', '0,4', '3,4', '0,5', '1,5', '2,5'])
+        );
 
-        alphabet.set('C', [
-            new Point(1, 0),
-            new Point(2, 0),
-            new Point(0, 1),
-            new Point(3, 1),
-            new Point(0, 2),
-            new Point(0, 3),
-            new Point(0, 4),
-            new Point(3, 4),
-            new Point(1, 5),
-            new Point(2, 5),
-        ]);
+        alphabet.set('C', new Set<string>(['1,0', '2,0', '0,1', '3,1', '0,2', '0,3', '0,4', '3,4', '1,5', '2,5']));
 
-        alphabet.set('E', [
-            new Point(0, 0),
-            new Point(1, 0),
-            new Point(2, 0),
-            new Point(3, 0),
-            new Point(0, 1),
-            new Point(0, 2),
-            new Point(1, 2),
-            new Point(2, 2),
-            new Point(0, 3),
-            new Point(0, 4),
-            new Point(0, 5),
-            new Point(1, 5),
-            new Point(2, 5),
-            new Point(3, 5),
-        ]);
+        alphabet.set(
+            'E',
+            new Set<string>(['0,0', '1,0', '2,0', '3,0', '0,1', '0,2', '1,2', '2,2', '0,3', '0,4', '0,5', '1,5', '2,5', '3,5'])
+        );
 
-        alphabet.set('F', [
-            new Point(0, 0),
-            new Point(1, 0),
-            new Point(2, 0),
-            new Point(3, 0),
-            new Point(0, 1),
-            new Point(0, 2),
-            new Point(1, 2),
-            new Point(2, 2),
-            new Point(0, 3),
-            new Point(0, 4),
-            new Point(0, 5),
-        ]);
+        alphabet.set('F', new Set<string>(['0,0', '1,0', '2,0', '3,0', '0,1', '0,2', '1,2', '2,2', '0,3', '0,4', '0,5']));
+        alphabet.set('G', new Set<string>(['1,0', '2,0', '0,1', '3,1', '0,2', '0,3', '2,3', '3,3', '0,4', '3,4', '1,5', '2,5', '3,5']));
 
-        alphabet.set('G', [
-            new Point(1, 0),
-            new Point(2, 0),
-            new Point(0, 1),
-            new Point(3, 1),
-            new Point(0, 2),
-            new Point(0, 3),
-            new Point(2, 3),
-            new Point(3, 3),
-            new Point(0, 4),
-            new Point(3, 4),
-            new Point(1, 5),
-            new Point(2, 5),
-            new Point(3, 5),
-        ]);
+        alphabet.set(
+            'H',
+            new Set<string>(['0,0', '3,0', '0,1', '3,1', '0,2', '1,2', '2,2', '3,2', '0,3', '3,3', '0,4', '3,4', '0,5', '3,5'])
+        );
 
-        alphabet.set('H', [
-            new Point(0, 0),
-            new Point(3, 0),
-            new Point(0, 1),
-            new Point(3, 1),
-            new Point(0, 2),
-            new Point(1, 2),
-            new Point(2, 2),
-            new Point(3, 2),
-            new Point(0, 3),
-            new Point(3, 3),
-            new Point(0, 4),
-            new Point(3, 4),
-            new Point(0, 5),
-            new Point(3, 5),
-        ]);
+        alphabet.set('I', new Set<string>(['1,0', '2,0', '3,0', '2,1', '2,2', '2,3', '2,4', '1,5', '2,5', '3,5']));
+        alphabet.set('J', new Set<string>(['2,0', '3,0', '3,1', '3,2', '3,3', '0,4', '3,4', '1,5', '2,5']));
+        alphabet.set('K', new Set<string>(['0,0', '3,0', '0,1', '2,1', '0,2', '1,2', '0,3', '2,3', '0,4', '2,4', '0,5', '3,5']));
+        alphabet.set('L', new Set<string>(['0,0', '0,1', '0,2', '0,3', '0,4', '0,5', '1,5', '2,5', '3,5']));
+        alphabet.set('O', new Set<string>(['1,0', '2,0', '0,1', '3,1', '0,2', '3,2', '0,3', '3,3', '0,4', '3,4', '1,5', '2,5']));
+        alphabet.set('P', new Set<string>(['0,0', '1,0', '2,0', '0,1', '3,1', '0,2', '3,2', '0,3', '1,3', '2,3', '0,4', '0,5']));
 
-        alphabet.set('I', [
-            new Point(1, 0),
-            new Point(2, 0),
-            new Point(3, 0),
-            new Point(2, 1),
-            new Point(2, 2),
-            new Point(2, 3),
-            new Point(2, 4),
-            new Point(1, 5),
-            new Point(2, 5),
-            new Point(3, 5),
-        ]);
+        alphabet.set(
+            'R',
+            new Set<string>(['0,0', '1,0', '2,0', '0,1', '3,1', '0,2', '3,2', '0,3', '1,3', '2,3', '0,4', '2,4', '0,5', '3,5'])
+        );
 
-        alphabet.set('J', [
-            new Point(2, 0),
-            new Point(3, 0),
-            new Point(3, 1),
-            new Point(3, 2),
-            new Point(3, 3),
-            new Point(0, 4),
-            new Point(3, 4),
-            new Point(1, 5),
-            new Point(2, 5),
-        ]);
+        alphabet.set('U', new Set<string>(['0,0', '3,0', '0,1', '3,1', '0,2', '3,2', '0,3', '3,3', '0,4', '3,4', '1,5', '2,5']));
+        alphabet.set('Y', new Set<string>(['0,0', '4,0', '0,1', '4,1', '1,2', '3,2', '2,3', '2,4', '2,5']));
+        alphabet.set('Z', new Set<string>(['0,0', '1,0', '2,0', '3,0', '3,1', '2,2', '1,3', '0,4', '0,5', '1,5', '2,5', '3,5']));
 
-        alphabet.set('K', [
-            new Point(0, 0),
-            new Point(3, 0),
-            new Point(0, 1),
-            new Point(2, 1),
-            new Point(0, 2),
-            new Point(1, 2),
-            new Point(0, 3),
-            new Point(2, 3),
-            new Point(0, 4),
-            new Point(2, 4),
-            new Point(0, 5),
-            new Point(3, 5),
-        ]);
-
-        alphabet.set('L', [
-            new Point(0, 0),
-            new Point(0, 1),
-            new Point(0, 2),
-            new Point(0, 3),
-            new Point(0, 4),
-            new Point(0, 5),
-            new Point(1, 5),
-            new Point(2, 5),
-            new Point(3, 5),
-        ]);
-
-        alphabet.set('O', [
-            new Point(1, 0),
-            new Point(2, 0),
-            new Point(0, 1),
-            new Point(3, 1),
-            new Point(0, 2),
-            new Point(3, 2),
-            new Point(0, 3),
-            new Point(3, 3),
-            new Point(0, 4),
-            new Point(3, 4),
-            new Point(1, 5),
-            new Point(2, 5),
-        ]);
-
-        alphabet.set('P', [
-            new Point(0, 0),
-            new Point(1, 0),
-            new Point(2, 0),
-            new Point(0, 1),
-            new Point(3, 1),
-            new Point(0, 2),
-            new Point(3, 2),
-            new Point(0, 3),
-            new Point(1, 3),
-            new Point(2, 3),
-            new Point(0, 4),
-            new Point(0, 5),
-        ]);
-
-        alphabet.set('R', [
-            new Point(0, 0),
-            new Point(1, 0),
-            new Point(2, 0),
-            new Point(0, 1),
-            new Point(3, 1),
-            new Point(0, 2),
-            new Point(3, 2),
-            new Point(0, 3),
-            new Point(1, 3),
-            new Point(2, 3),
-            new Point(0, 4),
-            new Point(2, 4),
-            new Point(0, 5),
-            new Point(3, 5),
-        ]);
-
-        alphabet.set('U', [
-            new Point(0, 0),
-            new Point(3, 0),
-            new Point(0, 1),
-            new Point(3, 1),
-            new Point(0, 2),
-            new Point(3, 2),
-            new Point(0, 3),
-            new Point(3, 3),
-            new Point(0, 4),
-            new Point(3, 4),
-            new Point(1, 5),
-            new Point(2, 5),
-        ]);
-
-        alphabet.set('Y', [
-            new Point(0, 0),
-            new Point(4, 0),
-            new Point(0, 1),
-            new Point(4, 1),
-            new Point(1, 2),
-            new Point(3, 2),
-            new Point(2, 3),
-            new Point(2, 4),
-            new Point(2, 5),
-        ]);
-
-        alphabet.set('Z', [
-            new Point(0, 0),
-            new Point(1, 0),
-            new Point(2, 0),
-            new Point(3, 0),
-            new Point(3, 1),
-            new Point(2, 2),
-            new Point(1, 3),
-            new Point(0, 4),
-            new Point(0, 5),
-            new Point(1, 5),
-            new Point(2, 5),
-            new Point(3, 5),
-        ]);
-
-        const result = new Map<string, Set<string>>();
-
-        for (const [letter, glyph] of alphabet) {
-            const set = new Set<string>();
-            for (const point of glyph) {
-                set.add(point.toString());
-            }
-            result.set(letter, set);
-        }
-
-        return result;
+        return alphabet;
     }
 }

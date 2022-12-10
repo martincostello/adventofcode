@@ -187,11 +187,7 @@ class InstructionV2 extends Instruction {
 }
 
 class LightGrid {
-    private readonly lightBrightnesses: Map<string, number>;
-
-    constructor() {
-        this.lightBrightnesses = new Map<string, number>();
-    }
+    private readonly lightBrightnesses = new Map<string, number>();
 
     get brightness() {
         return from(this.lightBrightnesses.values()).sum();
@@ -270,11 +266,12 @@ class LightGrid {
         }
 
         const value = Math.max(current, 0);
+        const key = position.toString();
 
         if (value === 0) {
-            this.lightBrightnesses.delete(position.toString());
+            this.lightBrightnesses.delete(key);
         } else {
-            this.lightBrightnesses.set(position.toString(), value);
+            this.lightBrightnesses.set(key, value);
         }
 
         return value;

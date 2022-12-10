@@ -93,7 +93,7 @@ export class Day10 extends Puzzle2022 {
             }
         }
 
-        const message = CharacterRecognition.read(crt, '#');
+        const message = CharacterRecognition.readString(crt, '#');
         const visualization = visualize(crt);
 
         let sum = 0;
