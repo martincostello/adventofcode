@@ -171,18 +171,8 @@ public sealed class Day10Tests : PuzzleTest
             "noop",
         };
 
-        int[] cycles = new[]
-        {
-            20,
-            60,
-            100,
-            140,
-            180,
-            220,
-        };
-
         // Act
-        int actual = Day10.GetSignalStrengths(instructions, cycles);
+        (_, int actual) = Day10.GetMessage(instructions, Logger);
 
         // Assert
         actual.ShouldBe(13140);
@@ -197,5 +187,6 @@ public sealed class Day10Tests : PuzzleTest
         // Assert
         puzzle.ShouldNotBeNull();
         puzzle.SumOfSignalStrengths.ShouldBe(12740);
+        puzzle.Message.ShouldBe("RBPARAGF");
     }
 }

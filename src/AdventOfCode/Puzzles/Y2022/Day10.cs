@@ -16,49 +16,92 @@ public sealed class Day10 : Puzzle
     public int SumOfSignalStrengths { get; private set; }
 
     /// <summary>
+    /// Gets the message output by the CRT display.
+    /// </summary>
+    public string Message { get; private set; } = string.Empty;
+
+    /// <summary>
     /// Gets the sum of the signal strength of executing the specified instructions for the specified cycles.
     /// </summary>
-    /// <param name="instructions">The program instructions to execute.</param>
-    /// <param name="cycles">The values to the cycles to sum the signal strengths for.</param>
+    /// <param name="program">The program instructions to execute.</param>
+    /// <param name="logger">The optional logger to use.</param>
     /// <returns>
-    /// The sum of the signal strengths for the specified cycles from executing the specified program.
+    /// The message output by executing the program specified by <paramref name="program"/>
+    /// and the sum of the signal strengths for the cycles of the 20th, 60th, 100th, 140th, 180th
+    /// and 220th cycles during execution of the program.
     /// </returns>
-    public static int GetSignalStrengths(
-        IList<string> instructions,
-        IList<int> cycles)
+    public static (string Message, int SumOfSignalStrengths) GetMessage(IList<string> program, ILogger? logger = null)
     {
-        int counter = 1;
-        int x = 1;
+        const int DisplayHeight = 6;
+        const int DisplayWidth = 40;
 
-        var values = new Dictionary<int, int>()
-        {
-            [0] = 0,
-            [1] = x,
-        };
+        char[,] display = new char[DisplayWidth, DisplayHeight];
+        var registers = new Dictionary<int, int>(program.Count);
 
-        foreach (string instruction in instructions)
+        int cycle = 0;
+        int register = 1;
+        int sprite = 1;
+
+        foreach (string instruction in program)
         {
             switch (instruction[..4])
             {
                 case "noop":
-                    values[++counter] = x;
+                    Tick();
                     break;
 
                 case "addx":
-                    values[++counter] = x;
-                    values[++counter] = x += Parse<int>(instruction[5..]);
+                    Tick();
+                    Tick(instruction[5..]);
                     break;
             }
         }
 
-        int sum = 0;
-
-        foreach (int cycle in cycles)
+        void Tick(string? operand = null)
         {
-            sum += values[cycle] * cycle;
+            Draw();
+
+            if (operand is { })
+            {
+                register += Parse<int>(operand);
+            }
+
+            registers[++cycle] = register;
+            sprite = cycle % DisplayWidth;
         }
 
-        return sum;
+        void Draw()
+        {
+            (int y, int x) = Math.DivRem(cycle, DisplayWidth);
+
+            char ch;
+
+            if (register == sprite - 1 ||
+                register == sprite ||
+                register == sprite + 1)
+            {
+                ch = '#';
+            }
+            else
+            {
+                ch = '.';
+            }
+
+            display[x, y] = ch;
+        }
+
+        string message = CharacterRecognition.Read(display, '#');
+
+        int sum = 0;
+
+        foreach (int r in new[] { 20, 60, 100, 140, 180, 220 })
+        {
+            sum += registers[r - 1] * r;
+        }
+
+        logger?.WriteGrid(display);
+
+        return (message, sum);
     }
 
     /// <inheritdoc />
@@ -66,15 +109,16 @@ public sealed class Day10 : Puzzle
     {
         ArgumentNullException.ThrowIfNull(args);
 
-        var values = await ReadResourceAsLinesAsync();
+        var program = await ReadResourceAsLinesAsync();
 
-        SumOfSignalStrengths = GetSignalStrengths(values, new[] { 20, 60, 100, 140, 180, 220 });
+        (Message, SumOfSignalStrengths) = GetMessage(program, Logger);
 
         if (Verbose)
         {
-            Logger.WriteLine("The sum of six signal strengths is {0}.", SumOfSignalStrengths);
+            Logger.WriteLine("The sum of the six signal strengths is {0}.", SumOfSignalStrengths);
+            Logger.WriteLine("The message output to the CRT is '{0}'.", Message);
         }
 
-        return PuzzleResult.Create(SumOfSignalStrengths);
+        return PuzzleResult.Create(SumOfSignalStrengths, Message);
     }
 }
