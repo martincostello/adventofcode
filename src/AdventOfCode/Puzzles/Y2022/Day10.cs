@@ -6,17 +6,59 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2022;
 /// <summary>
 /// A class representing the puzzle for <c>https://adventofcode.com/2022/day/10</c>. This class cannot be inherited.
 /// </summary>
-[Puzzle(2022, 10, "", RequiresData = true, IsHidden = true)]
+[Puzzle(2022, 10, "Cathode-Ray Tube", RequiresData = true)]
 public sealed class Day10 : Puzzle
 {
-#pragma warning disable IDE0022
-#pragma warning disable SA1600
+    /// <summary>
+    /// Gets the sum of the signal strengths for the 20th,
+    /// 60th, 100th, 140th, 180th and 220th cycles.
+    /// </summary>
+    public int SumOfSignalStrengths { get; private set; }
 
-    public int Solution { get; private set; }
-
-    public static int Solve(IList<string> values)
+    /// <summary>
+    /// Gets the sum of the signal strength of executing the specified instructions for the specified cycles.
+    /// </summary>
+    /// <param name="instructions">The program instructions to execute.</param>
+    /// <param name="cycles">The values to the cycles to sum the signal strengths for.</param>
+    /// <returns>
+    /// The sum of the signal strengths for the specified cycles from executing the specified program.
+    /// </returns>
+    public static int GetSignalStrengths(
+        IList<string> instructions,
+        IList<int> cycles)
     {
-        return -1;
+        int counter = 1;
+        int x = 1;
+
+        var values = new Dictionary<int, int>()
+        {
+            [0] = 0,
+            [1] = x,
+        };
+
+        foreach (string instruction in instructions)
+        {
+            switch (instruction[..4])
+            {
+                case "noop":
+                    values[++counter] = x;
+                    break;
+
+                case "addx":
+                    values[++counter] = x;
+                    values[++counter] = x += Parse<int>(instruction[5..]);
+                    break;
+            }
+        }
+
+        int sum = 0;
+
+        foreach (int cycle in cycles)
+        {
+            sum += values[cycle] * cycle;
+        }
+
+        return sum;
     }
 
     /// <inheritdoc />
@@ -26,13 +68,13 @@ public sealed class Day10 : Puzzle
 
         var values = await ReadResourceAsLinesAsync();
 
-        Solution = Solve(values);
+        SumOfSignalStrengths = GetSignalStrengths(values, new[] { 20, 60, 100, 140, 180, 220 });
 
         if (Verbose)
         {
-            Logger.WriteLine("{0}", Solution);
+            Logger.WriteLine("The sum of six signal strengths is {0}.", SumOfSignalStrengths);
         }
 
-        return PuzzleResult.Create(Solution);
+        return PuzzleResult.Create(SumOfSignalStrengths);
     }
 }
