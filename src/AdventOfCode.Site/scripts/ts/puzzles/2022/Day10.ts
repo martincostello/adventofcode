@@ -111,8 +111,8 @@ export class Day10 extends Puzzle2022 {
         let visualization = '';
         [this.message, visualization, this.sumOfSignalStrengths] = Day10.getMessage(program);
 
-        console.info(`${this.sumOfSignalStrengths}`);
-        console.info(`${this.message}`);
+        console.info(`The sum of the six signal strengths is ${this.sumOfSignalStrengths}.`);
+        console.info(`The message output to the CRT is '${this.message}'.'`);
 
         return this.createResult([this.sumOfSignalStrengths, this.message], [visualization]);
     }
