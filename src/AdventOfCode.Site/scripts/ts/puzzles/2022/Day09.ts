@@ -60,10 +60,10 @@ export class Day09 extends Puzzle2022 {
         const rope = new Rope(repeat(Point.empty, knots).toArray());
 
         const positions = new Set<string>();
-        positions.add(rope.tail.asString());
+        positions.add(rope.tail.toString());
 
         for (const direction of directions) {
-            rope.move(direction, (tail) => positions.add(tail.asString()));
+            rope.move(direction, (tail) => positions.add(tail.toString()));
         }
 
         return positions.size;

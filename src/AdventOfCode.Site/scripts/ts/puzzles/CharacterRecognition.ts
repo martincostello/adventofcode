@@ -71,7 +71,7 @@ class Alphabet {
     public static get(points: Set<Point>) {
         const set = new Set<string>();
         for (const point of points) {
-            set.add(point.asString());
+            set.add(point.toString());
         }
 
         for (const [letter, glyph] of Alphabet.alphabet) {
@@ -354,7 +354,7 @@ class Alphabet {
         for (const [letter, glyph] of alphabet) {
             const set = new Set<string>();
             for (const point of glyph) {
-                set.add(point.asString());
+                set.add(point.toString());
             }
             result.set(letter, set);
         }

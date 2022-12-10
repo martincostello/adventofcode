@@ -3,10 +3,12 @@
 
 import { Size } from './Size';
 
-export class Point {
+export class Point extends Object {
     static readonly empty = new Point(0, 0);
 
-    constructor(public readonly x: number, public readonly y: number) {}
+    constructor(public readonly x: number, public readonly y: number) {
+        super();
+    }
 
     static add(point: Point, size: Size) {
         return new Point(point.x + size.width, point.y + size.height);
@@ -16,7 +18,7 @@ export class Point {
         return Math.abs(x.x - y.x) + Math.abs(x.y - y.y);
     }
 
-    asString() {
+    override toString() {
         return `${this.x},${this.y}`;
     }
 
