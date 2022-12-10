@@ -2,6 +2,7 @@
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 export { CardinalDirection } from './CardinalDirection';
+export { CharacterRecognition } from './CharacterRecognition';
 export { DefaultPuzzleFactory } from './DefaultPuzzleFactory';
 export { Maths } from './Maths';
 export { Point } from './Point';
