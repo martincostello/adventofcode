@@ -103,7 +103,7 @@ public sealed class Day10 : Puzzle
 
         static string Visualize(char[,] crt)
         {
-            var output = new StringBuilder((DisplayHeight * DisplayWidth) + DisplayHeight - 1);
+            var output = new StringBuilder((DisplayHeight * DisplayWidth) + DisplayHeight);
 
             for (int y = 0; y < DisplayHeight; y++)
             {
