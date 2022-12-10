@@ -21,21 +21,20 @@ public sealed class Day10 : Puzzle
     public string Message { get; private set; } = string.Empty;
 
     /// <summary>
-    /// Gets the sum of the signal strength of executing the specified instructions for the specified cycles.
+    /// Gets displayed message from executing the specified instructions.
     /// </summary>
     /// <param name="program">The program instructions to execute.</param>
-    /// <param name="logger">The optional logger to use.</param>
     /// <returns>
-    /// The message output by executing the program specified by <paramref name="program"/>
-    /// and the sum of the signal strengths for the cycles of the 20th, 60th, 100th, 140th, 180th
-    /// and 220th cycles during execution of the program.
+    /// The message output by executing the program specified by <paramref name="program"/>,
+    /// a visualization of the pixels of the display, and the sum of the signal strengths
+    /// for the cycles of the 20th, 60th, 100th, 140th, 180th and 220th cycles.
     /// </returns>
-    public static (string Message, int SumOfSignalStrengths) GetMessage(IList<string> program, ILogger? logger = null)
+    public static (string Message, string Visualization, int SumOfSignalStrengths) GetMessage(IList<string> program)
     {
         const int DisplayHeight = 6;
         const int DisplayWidth = 40;
 
-        char[,] display = new char[DisplayWidth, DisplayHeight];
+        char[,] crt = new char[DisplayWidth, DisplayHeight];
         var registers = new Dictionary<int, int>(program.Count);
 
         int cycle = 0;
@@ -87,10 +86,11 @@ public sealed class Day10 : Puzzle
                 ch = '.';
             }
 
-            display[x, y] = ch;
+            crt[x, y] = ch;
         }
 
-        string message = CharacterRecognition.Read(display, '#');
+        string message = CharacterRecognition.Read(crt, '#');
+        string visualization = Visualize(crt);
 
         int sum = 0;
 
@@ -99,9 +99,24 @@ public sealed class Day10 : Puzzle
             sum += registers[r - 1] * r;
         }
 
-        logger?.WriteGrid(display);
+        return (message, visualization, sum);
 
-        return (message, sum);
+        static string Visualize(char[,] crt)
+        {
+            var output = new StringBuilder((DisplayHeight * DisplayWidth) + DisplayHeight - 1);
+
+            for (int y = 0; y < DisplayHeight; y++)
+            {
+                for (int x = 0; x < DisplayWidth; x++)
+                {
+                    output.Append(crt[x, y]);
+                }
+
+                output.Append('\n');
+            }
+
+            return output.Remove(output.Length - 1, 1).ToString();
+        }
     }
 
     /// <inheritdoc />
@@ -111,7 +126,7 @@ public sealed class Day10 : Puzzle
 
         var program = await ReadResourceAsLinesAsync();
 
-        (Message, SumOfSignalStrengths) = GetMessage(program, Logger);
+        (Message, string visualization, SumOfSignalStrengths) = GetMessage(program);
 
         if (Verbose)
         {
@@ -119,6 +134,12 @@ public sealed class Day10 : Puzzle
             Logger.WriteLine("The message output to the CRT is '{0}'.", Message);
         }
 
-        return PuzzleResult.Create(SumOfSignalStrengths, Message);
+        var result = new PuzzleResult();
+
+        result.Solutions.Add(SumOfSignalStrengths);
+        result.Solutions.Add(Message);
+        result.Visualizations.Add(visualization);
+
+        return result;
     }
 }

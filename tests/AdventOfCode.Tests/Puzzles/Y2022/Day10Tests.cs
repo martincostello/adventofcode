@@ -172,10 +172,11 @@ public sealed class Day10Tests : PuzzleTest
         };
 
         // Act
-        (_, int actual) = Day10.GetMessage(instructions, Logger);
+        (_, string actualDisplay, int actualStrength) = Day10.GetMessage(instructions);
 
         // Assert
-        actual.ShouldBe(13140);
+        actualStrength.ShouldBe(13140);
+        actualDisplay.ShouldBe("##..##..##..##..##..##..##..##..##..##..\n###...###...###...###...###...###...###.\n####....####....####....####....####....\n#####.....#####.....#####.....#####.....\n######......######......######......####\n#######.......#######.......#######.....");
     }
 
     [Fact]
