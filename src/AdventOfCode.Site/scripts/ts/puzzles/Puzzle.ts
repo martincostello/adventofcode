@@ -10,6 +10,10 @@ export abstract class Puzzle {
     abstract get day(): number;
     abstract get year(): number;
 
+    get solved() {
+        return true;
+    }
+
     protected get minimumArguments() {
         return 0;
     }

@@ -7,6 +7,10 @@ export class Day19 extends Puzzle2022 {
     solution1: number;
     solution2: number;
 
+    override get solved() {
+        return false;
+    }
+
     override get name() {
         return '';
     }

@@ -61,9 +61,11 @@ export class App {
                 puzzlesForYear = this.puzzlesByYear.get(year);
             }
 
+            const client = this.puzzleFactory.create(puzzle.year, puzzle.day);
+
             puzzlesForYear.push({
                 ...puzzle,
-                client: this.puzzleFactory.create(puzzle.year, puzzle.day),
+                client: client !== null && client.solved ? client : null,
             });
 
             if (puzzlesForYear.length === 1) {

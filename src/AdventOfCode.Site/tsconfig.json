@@ -4,6 +4,7 @@
     "inlineSources": true,
     "noEmitOnError": true,
     "noImplicitAny": true,
+    "noImplicitOverride": true,
     "noImplicitThis": true,
     "outDir": "./wwwroot/static/js",
     "removeComments": false,
