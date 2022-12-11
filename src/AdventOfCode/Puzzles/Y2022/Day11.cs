@@ -63,7 +63,7 @@ public sealed class Day11 : Puzzle
 
             for (int i = 0; i < observations.Count; i += 7)
             {
-                string monkeyLine = observations[i][MonkeyPrefix.Length..].TrimEnd(':');
+                string monkeyLine = observations[i][MonkeyPrefix.Length..^1];
                 string testValue = observations[i + 3][TestPrefix.Length..];
 
                 int monkey = Parse<int>(monkeyLine);
@@ -84,7 +84,6 @@ public sealed class Day11 : Puzzle
             for (int i = 0; i < observations.Count; i += 7)
             {
                 string operation = observations[i + 2][OperationPrefix.Length..];
-                string test = observations[i + 3][TestPrefix.Length..];
                 string monkeyForTrue = observations[i + 4][TruePrefix.Length..];
                 string monkeyForFalse = observations[i + 5][FalsePrefix.Length..];
 
