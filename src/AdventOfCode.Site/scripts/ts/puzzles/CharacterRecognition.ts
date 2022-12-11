@@ -88,7 +88,7 @@ class Alphabet {
 
         // Letters are encoded as a 32-bit number where the top-left pixel
         // is the 31st bit and the bottom - right pixel is the 2nd bit, then
-        // one zero.The bits are encoded top-to-bottom, left-to-right.
+        // one zero. The bits are encoded top-to-bottom, left-to-right.
         alphabet.set(parseInt('00111111001001001000111110000000', 2), 'A');
         alphabet.set(parseInt('01111111010011010010101100000000', 2), 'B');
         alphabet.set(parseInt('00111101000011000010100100000000', 2), 'C');
