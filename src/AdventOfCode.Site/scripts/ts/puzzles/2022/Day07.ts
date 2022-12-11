@@ -100,19 +100,19 @@ export class Day07 extends Puzzle2022 {
 
         const directories = getDirectories(terminalOutput);
 
-        const totalSizeOfDirectoriesLargerThanLimit = from(directories)
-            .where((p: Directory) => p.totalSize <= sizeLimit)
-            .select((p: Directory) => p.totalSize)
-            .sum();
+        const totalSizeOfDirectoriesLargerThanLimit = directories
+            .filter((p) => p.totalSize <= sizeLimit)
+            .map((p) => p.totalSize)
+            .reduce((x, y) => x + y, 0);
 
         const consumed = directories.find((p) => p.container === null).totalSize;
         const freeSpace = diskSize - consumed;
         const required = updateSize - freeSpace;
 
-        const sizeOfSmallestDirectoryToDelete = from(directories)
-            .where((p: Directory) => p.totalSize >= required)
-            .select((p: Directory) => p.totalSize)
-            .min();
+        const sizeOfSmallestDirectoryToDelete = directories
+            .filter((p) => p.totalSize >= required)
+            .map((p) => p.totalSize)
+            .sort((x, y) => x - y)[0];
 
         return [totalSizeOfDirectoriesLargerThanLimit, sizeOfSmallestDirectoryToDelete];
     }
@@ -134,9 +134,9 @@ export class Day07 extends Puzzle2022 {
 }
 
 abstract class FileSystemEntry {
-    public readonly path: string;
+    readonly path: string;
 
-    constructor(public readonly name: string, public readonly container: FileSystemEntry | null) {
+    constructor(readonly name: string, readonly container: FileSystemEntry | null) {
         if (this.container === null) {
             this.path = this.name;
         } else {
@@ -146,11 +146,11 @@ abstract class FileSystemEntry {
 }
 
 class Directory extends FileSystemEntry {
-    constructor(name: string, public readonly parent: Directory | null = null, public readonly children: FileSystemEntry[] = []) {
+    constructor(name: string, readonly parent: Directory | null = null, readonly children: FileSystemEntry[] = []) {
         super(name, parent);
     }
 
-    public get totalSize() {
+    get totalSize() {
         let size = 0;
 
         for (const child of this.children) {
@@ -166,7 +166,7 @@ class Directory extends FileSystemEntry {
 }
 
 class File extends FileSystemEntry {
-    constructor(name: string, directory: Directory, public readonly size: number) {
+    constructor(name: string, directory: Directory, readonly size: number) {
         super(name, directory);
     }
 }

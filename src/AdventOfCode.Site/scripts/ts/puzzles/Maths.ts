@@ -46,9 +46,9 @@ export class Maths {
 }
 
 class BasicEnumerable<TSource> implements Iterable<TSource> {
-    public constructor(private readonly iterator: () => IterableIterator<TSource>) {}
+    constructor(private readonly iterator: () => IterableIterator<TSource>) {}
 
-    public [Symbol.iterator](): IterableIterator<TSource> {
+    [Symbol.iterator](): IterableIterator<TSource> {
         return this.iterator();
     }
 }

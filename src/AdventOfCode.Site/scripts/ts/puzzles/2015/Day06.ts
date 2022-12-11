@@ -28,13 +28,10 @@ export class Day06 extends Puzzle2015 {
             throw new Error('The rules version specified is invalid.');
         }
 
-        const lines = this.readResourceAsLines();
-        const instructions: Instruction[] = [];
         const parser = version === '1' ? InstructionV1.parse : InstructionV2.parse;
 
-        for (const line of lines) {
-            instructions.push(parser(line));
-        }
+        const lines = this.readResourceAsLines();
+        const instructions = lines.map((p) => parser(p));
 
         console.info(`Processing instructions using set ${version}...`);
 
@@ -74,7 +71,7 @@ abstract class Instruction {
 }
 
 class InstructionV1 extends Instruction {
-    constructor(public readonly action: string, public readonly bounds: Rectangle) {
+    constructor(readonly action: string, readonly bounds: Rectangle) {
         super();
     }
 
@@ -136,7 +133,7 @@ class InstructionV1 extends Instruction {
 }
 
 class InstructionV2 extends Instruction {
-    constructor(public readonly delta: number, public readonly bounds: Rectangle) {
+    constructor(readonly delta: number, readonly bounds: Rectangle) {
         super();
     }
 

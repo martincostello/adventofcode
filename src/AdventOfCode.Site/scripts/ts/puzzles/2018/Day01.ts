@@ -1,7 +1,6 @@
 // Copyright (c) Martin Costello, 2015. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
-import { from } from 'linq-to-typescript';
 import { Puzzle2018 } from './Puzzle2018';
 
 export class Day01 extends Puzzle2018 {
@@ -30,7 +29,10 @@ export class Day01 extends Puzzle2018 {
         history.push(current);
 
         const tendsToInfinity = (sequence: number[]): boolean => {
-            return Math.abs(from(sequence).sum((p: number) => Math.sign(p))) === from(sequence).count((p: number) => p !== 0);
+            const x = sequence.map((p) => Math.sign(p)).reduce((x, y) => x + y, 0);
+            const y = sequence.filter((p) => p !== 0, 0).length;
+
+            return Math.abs(x) === y;
         };
 
         const isInfinite = tendsToInfinity(sequence);

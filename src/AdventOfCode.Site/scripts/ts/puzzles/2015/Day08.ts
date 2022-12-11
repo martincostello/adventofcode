@@ -1,7 +1,6 @@
 // Copyright (c) Martin Costello, 2015. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
-import { from } from 'linq-to-typescript';
 import { Puzzle2015 } from './Puzzle2015';
 
 export class Day08 extends Puzzle2015 {
@@ -66,11 +65,7 @@ export class Day08 extends Puzzle2015 {
             }
 
             if (value.length > 0) {
-                const characters: Array<string> = [];
-
-                for (let i = 0; i < value.length; i++) {
-                    characters.push(value[i]);
-                }
+                const characters = value.split('');
 
                 while (characters.length > 0) {
                     let current = characters.shift();
@@ -108,7 +103,7 @@ export class Day08 extends Puzzle2015 {
     override solveCore(_: string[]) {
         const input = this.readResourceAsLines();
 
-        const countForCode = from(input).sum((p: string) => p.length);
+        const countForCode = input.reduce((x, y) => x + y.length, 0);
         const countInMemory = Day08.getLiteralCharacterCount(...input);
         const countEncoded = Day08.getEncodedCharacterCount(...input);
 
