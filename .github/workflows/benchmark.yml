@@ -202,12 +202,14 @@ jobs:
             body: failure_body
           });
 
-          await github.rest.repos.createCommitStatus({
-            owner: context.repo.owner,
-            repo: context.repo.repo,
-            sha: '${{ steps.get-pr.outputs.result }}',
-            state: 'failure',
-            target_url: workflowUrl,
-            description: `Benchmark ${benchmark} failed.`,
-            context: `benchmarks / ${benchmark.toLowerCase()}`
-          });
+          if (benchmark) {
+            await github.rest.repos.createCommitStatus({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              sha: '${{ steps.get-pr.outputs.result }}',
+              state: 'failure',
+              target_url: workflowUrl,
+              description: `Benchmark ${benchmark} failed.`,
+              context: `benchmarks / ${benchmark.toLowerCase()}`
+            });
+          }
