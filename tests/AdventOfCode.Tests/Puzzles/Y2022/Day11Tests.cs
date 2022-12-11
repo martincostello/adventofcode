@@ -17,8 +17,13 @@ public sealed class Day11Tests : PuzzleTest
     {
     }
 
-    [Fact]
-    public void Y2022_Day11_GetMonkeyBusiness_Returns_Correct_Value()
+    [Theory]
+    [InlineData(20, false, 10605)]
+    [InlineData(10000, true, 2713310158)]
+    public void Y2022_Day11_GetMonkeyBusiness_Returns_Correct_Value(
+        int rounds,
+        bool highAnxiety,
+        long expected)
     {
         // Arrange
         string[] observations = new[]
@@ -53,10 +58,10 @@ public sealed class Day11Tests : PuzzleTest
         };
 
         // Act
-        long actual = Day11.GetMonkeyBusiness(observations, rounds: 20);
+        long actual = Day11.GetMonkeyBusiness(observations, rounds, highAnxiety);
 
         // Assert
-        actual.ShouldBe(10605);
+        actual.ShouldBe(expected);
     }
 
     [Fact]
@@ -67,6 +72,7 @@ public sealed class Day11Tests : PuzzleTest
 
         // Assert
         puzzle.ShouldNotBeNull();
-        puzzle.MonkeyBusiness.ShouldBe(56120);
+        puzzle.MonkeyBusiness20.ShouldBe(56120);
+        puzzle.MonkeyBusiness10000.ShouldBe(24389045529);
     }
 }
