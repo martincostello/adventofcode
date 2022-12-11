@@ -8,19 +8,19 @@ export class CharacterRecognition {
         const width = lines[0].length;
         const height = lines.length;
 
-        const chars: Array<string>[] = [];
+        const bits: Array<boolean>[] = [];
 
         for (let y = 0; y < height; y++) {
-            const row = new Array<string>(width);
+            const row = new Array<boolean>(width);
 
             for (let x = 0; x < width; x++) {
-                row[x] = lines[y][x];
+                row[x] = lines[y][x] === ink;
             }
 
-            chars.push(row);
+            bits.push(row);
         }
 
-        return CharacterRecognition.readCharacters(chars, ink);
+        return CharacterRecognition.readBits(bits);
     }
 
     static readCharacters(array: Array<string>[], ink = '*') {
@@ -75,7 +75,7 @@ export class CharacterRecognition {
 class Alphabet {
     private static readonly alphabet = Alphabet.createAlphabet();
 
-    public static get(value: number) {
+    static get(value: number) {
         if (this.alphabet.has(value)) {
             return this.alphabet.get(value);
         }

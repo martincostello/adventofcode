@@ -35,11 +35,7 @@ export class Day05 extends Puzzle2015 {
             throw new Error('The rules version specified is invalid.');
         }
 
-        for (const value of this.readResourceAsLines()) {
-            if (Day05.isNice(value, version)) {
-                this.niceStringCount++;
-            }
-        }
+        this.niceStringCount = this.readResourceAsLines().filter((value) => Day05.isNice(value, version)).length;
 
         console.info(`${this.niceStringCount} strings are nice using version ${version} of the rules.`);
 

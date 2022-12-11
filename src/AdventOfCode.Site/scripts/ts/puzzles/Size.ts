@@ -4,7 +4,7 @@
 export class Size {
     static readonly zero = new Size(0, 0);
 
-    constructor(public readonly width: number, public readonly height: number) {}
+    constructor(readonly width: number, readonly height: number) {}
 
     divide(value: number) {
         return new Size(this.width / value, this.height / value);

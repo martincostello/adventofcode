@@ -1,7 +1,6 @@
 // Copyright (c) Martin Costello, 2015. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
-import { from } from 'linq-to-typescript';
 import { Puzzle2015 } from './Puzzle2015';
 
 export class Day02 extends Puzzle2015 {
@@ -17,12 +16,9 @@ export class Day02 extends Puzzle2015 {
     }
 
     static getTotalWrappingPaperAreaAndRibbonLength(dimensions: string[]): [area: number, length: number] {
-        const presents = from(dimensions)
-            .select((p: string) => Present.parse(p))
-            .toArray();
-
-        const totalArea = from(presents).sum((p: Present) => p.getWrappingPaperArea());
-        const length = from(presents).sum((p: Present) => p.getRibbonLength());
+        const presents = dimensions.map((p) => Present.parse(p));
+        const totalArea = presents.reduce((x, y) => x + y.getWrappingPaperArea(), 0);
+        const length = presents.reduce((x, y) => x + y.getRibbonLength(), 0);
 
         return [totalArea, length];
     }
@@ -41,7 +37,7 @@ export class Day02 extends Puzzle2015 {
 }
 
 class Present {
-    constructor(public readonly length: number, public readonly width: number, public readonly height: number) {}
+    constructor(readonly length: number, readonly width: number, readonly height: number) {}
 
     static parse(value: string) {
         const [length, width, height] = value.split('x');
