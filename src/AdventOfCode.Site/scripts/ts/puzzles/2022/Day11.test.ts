@@ -5,7 +5,7 @@ import { describe, expect, test } from '@jest/globals';
 import { Day11 } from './index';
 
 describe('2022', () => {
-    describe.skip('Day 11', () => {
+    describe('Day 11', () => {
         test.each([
             [20, false, 10605],
             [10000, true, 2713310158],

@@ -144,7 +144,7 @@ class Monkey {
     }
 
     inspect() {
-        while (this.inspect.length > 0) {
+        while (this.items.length > 0) {
             let item = this.items.shift();
 
             item = this.inspector(item);
