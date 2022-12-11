@@ -17,10 +17,6 @@ export class Day10 extends Puzzle2022 {
         return 10;
     }
 
-    protected override get requiresData() {
-        return true;
-    }
-
     static getMessage(program: string[]): [message: string, visualization: string, sumOfSignalStrengths: number] {
         const displayHeight = 6;
         const displayWidth = 40;

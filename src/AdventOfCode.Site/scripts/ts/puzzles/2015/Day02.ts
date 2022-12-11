@@ -16,10 +16,6 @@ export class Day02 extends Puzzle2015 {
         return 2;
     }
 
-    protected override get requiresData() {
-        return true;
-    }
-
     static getTotalWrappingPaperAreaAndRibbonLength(dimensions: string[]): [area: number, length: number] {
         const presents = from(dimensions)
             .select((p: string) => Present.parse(p))

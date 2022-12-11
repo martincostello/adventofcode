@@ -15,10 +15,6 @@ export class Day01 extends Puzzle2015 {
         return 1;
     }
 
-    protected override get requiresData() {
-        return true;
-    }
-
     static getFinalFloorAndFirstInstructionBasementReached(value: string): [floor: number, instructionThatEntersBasement: number] {
         let floor = 0;
         let instructionThatEntersBasement = -1;

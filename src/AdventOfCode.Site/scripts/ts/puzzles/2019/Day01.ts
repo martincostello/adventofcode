@@ -16,10 +16,6 @@ export class Day01 extends Puzzle2019 {
         return 1;
     }
 
-    protected override get requiresData() {
-        return true;
-    }
-
     static getFuelRequirementsForMass(mass: number, includeFuel: boolean) {
         let fuel = Day01.getRequiredFuel(mass);
 

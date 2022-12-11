@@ -17,10 +17,6 @@ export class Day09 extends Puzzle2015 {
         return 9;
     }
 
-    protected override get requiresData() {
-        return true;
-    }
-
     static getDistanceBetweenPoints(collection: string[], findLongest: boolean) {
         const getRouteDistancesFromLocation = (map: LocationMap, start: string) => {
             const visited: string[] = [];

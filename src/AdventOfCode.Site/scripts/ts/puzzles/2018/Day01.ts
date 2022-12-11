@@ -16,10 +16,6 @@ export class Day01 extends Puzzle2018 {
         return 1;
     }
 
-    protected override get requiresData() {
-        return true;
-    }
-
     static calculateFrequency(sequence: number[]) {
         const [frequency] = Day01.calculateFrequencyWithRepetition(sequence);
         return frequency;

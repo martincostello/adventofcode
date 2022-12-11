@@ -16,10 +16,6 @@ export class Day01 extends Puzzle2016 {
         return 1;
     }
 
-    protected override get requiresData() {
-        return true;
-    }
-
     static calculateDistance(input: string, ignoreDuplicates: boolean) {
         let bearing = CardinalDirection.north;
         let position = Point.empty;

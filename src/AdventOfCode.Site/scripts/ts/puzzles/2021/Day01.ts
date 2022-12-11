@@ -15,10 +15,6 @@ export class Day01 extends Puzzle2021 {
         return 1;
     }
 
-    protected override get requiresData() {
-        return true;
-    }
-
     static getDepthMeasurementIncreases(depthMeasurements: number[], useSlidingWindow: boolean) {
         if (useSlidingWindow) {
             const aggregated: number[] = [];

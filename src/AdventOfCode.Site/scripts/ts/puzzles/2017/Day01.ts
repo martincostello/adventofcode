@@ -15,10 +15,6 @@ export class Day01 extends Puzzle2017 {
         return 1;
     }
 
-    protected override get requiresData() {
-        return true;
-    }
-
     static calculateSum(digits: string, useOppositeDigit: boolean) {
         let sum = 0;
         let offset = useOppositeDigit ? digits.length / 2 : 1;

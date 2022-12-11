@@ -21,10 +21,6 @@ export class Day06 extends Puzzle2015 {
         return 1;
     }
 
-    protected override get requiresData() {
-        return true;
-    }
-
     override solveCore(inputs: string[]) {
         const version = inputs[0];
 

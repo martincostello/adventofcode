@@ -16,10 +16,6 @@ export class Day03 extends Puzzle2022 {
         return 3;
     }
 
-    protected override get requiresData() {
-        return true;
-    }
-
     static getSumOfCommonItemTypes(inventories: string[], useGroups: boolean) {
         const getPriority = (item: string) => {
             if (item.toUpperCase() === item) {

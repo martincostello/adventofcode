@@ -19,10 +19,6 @@ export class Day05 extends Puzzle2015 {
         return 1;
     }
 
-    protected override get requiresData() {
-        return true;
-    }
-
     static isNice(value: string, version: '1' | '2') {
         switch (version) {
             case '1':
