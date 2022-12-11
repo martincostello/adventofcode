@@ -81,15 +81,14 @@ public sealed class Day05Tests : PuzzleTest
         actual.ShouldBe(expected);
     }
 
-    [Theory]
-    [InlineData(new[] { "1" }, 236)]
-    [InlineData(new[] { "2" }, 51)]
-    public async Task Y2015_Day05_Solve_Returns_Correct_Solution(string[] args, int expected)
+    [Fact]
+    public async Task Y2015_Day05_Solve_Returns_Correct_Solution()
     {
         // Act
-        var puzzle = await SolvePuzzleAsync<Day05>(args);
+        var puzzle = await SolvePuzzleAsync<Day05>();
 
         // Assert
-        puzzle.NiceStringCount.ShouldBe(expected);
+        puzzle.NiceStringCountV1.ShouldBe(236);
+        puzzle.NiceStringCountV2.ShouldBe(51);
     }
 }

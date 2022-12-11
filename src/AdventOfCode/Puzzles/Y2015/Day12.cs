@@ -12,9 +12,14 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015;
 public sealed class Day12 : Puzzle
 {
     /// <summary>
-    /// Gets the sum of the integers in the JSON document.
+    /// Gets the sum of all the integers in the JSON document.
     /// </summary>
-    internal long Sum { get; private set; }
+    public long Sum { get; private set; }
+
+    /// <summary>
+    /// Gets the sum of the integers in the JSON document when the red key is ignored.
+    /// </summary>
+    public long SumIgnoringRed { get; private set; }
 
     /// <summary>
     /// Sums the integer values in the specified JSON element, ignoring any values from
@@ -23,7 +28,7 @@ public sealed class Day12 : Puzzle
     /// <param name="element">The JSON element.</param>
     /// <param name="valueToIgnore">The elements to ignore if they contain this value.</param>
     /// <returns>The sum of the elements in <paramref name="element"/>.</returns>
-    internal static long SumIntegerValues(JsonElement element, string valueToIgnore)
+    public static long SumIntegerValues(JsonElement element, string valueToIgnore)
     {
         long sum = 0;
 
@@ -63,13 +68,14 @@ public sealed class Day12 : Puzzle
         try
         {
             using var document = await JsonDocument.ParseAsync(resource, cancellationToken: cancellationToken);
-            string keyToIgnore = args.Length > 0 ? args[0] : string.Empty;
 
-            Sum = SumIntegerValues(document.RootElement, keyToIgnore);
+            Sum = SumIntegerValues(document.RootElement, string.Empty);
+            SumIgnoringRed = SumIntegerValues(document.RootElement, "red");
 
             if (Verbose)
             {
                 Logger.WriteLine("The sum of the integers in the JSON document is {0:N0}.", Sum);
+                Logger.WriteLine("The sum of the integers in the JSON document ignoring the red key is {0:N0}.", SumIgnoringRed);
             }
         }
         finally
@@ -80,6 +86,6 @@ public sealed class Day12 : Puzzle
             }
         }
 
-        return PuzzleResult.Create(Sum);
+        return PuzzleResult.Create(Sum, SumIgnoringRed);
     }
 }

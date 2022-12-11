@@ -46,15 +46,14 @@ public sealed class Day19Tests : PuzzleTest
         actual.ShouldBe(3);
     }
 
-    [Theory]
-    [InlineData(new[] { "calibrate" }, 576)]
-    [InlineData(new[] { "fabricate" }, 207, Skip = "Too slow.")]
-    public async Task Y2015_Day19_Solve_Returns_Correct_Solution(string[] args, int expected)
+    [Fact(Skip = "Too slow.")]
+    public async Task Y2015_Day19_Solve_Returns_Correct_Solution()
     {
         // Act
-        var puzzle = await SolvePuzzleAsync<Day19>(args);
+        var puzzle = await SolvePuzzleAsync<Day19>();
 
         // Assert
-        puzzle.Solution.ShouldBe(expected);
+        puzzle.CalibrationSolution.ShouldBe(576);
+        puzzle.FabricationSolution.ShouldBe(207);
     }
 }

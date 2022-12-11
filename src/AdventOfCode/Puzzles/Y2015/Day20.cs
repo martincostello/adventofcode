@@ -12,7 +12,13 @@ public sealed class Day20 : Puzzle
     /// <summary>
     /// Gets the lowest house number that gets at least the specified number of presents.
     /// </summary>
-    internal int LowestHouseNumber { get; private set; }
+    public int LowestHouseNumber { get; private set; }
+
+    /// <summary>
+    /// Gets the lowest house number that gets at least the specified number of presents
+    /// with a cap of 50 presents being delivered by each elf.
+    /// </summary>
+    public int LowestHouseNumberWithCap { get; private set; }
 
     /// <summary>
     /// Returns the lowest house number that gets the specified number of presents.
@@ -22,7 +28,7 @@ public sealed class Day20 : Puzzle
     /// <returns>
     /// The lowest house number that receives at least the specified number of presents.
     /// </returns>
-    internal static int GetLowestHouseNumber(int target, int? maximumVisits)
+    public static int GetLowestHouseNumber(int target, int? maximumVisits)
     {
         for (int i = 1; ; i++)
         {
@@ -41,7 +47,7 @@ public sealed class Day20 : Puzzle
     /// <returns>
     /// The number of presents delivered to the specified house.
     /// </returns>
-    internal static int GetPresentsDelivered(int house, int? maximumVisits)
+    public static int GetPresentsDelivered(int house, int? maximumVisits)
     {
         int count = 0;
 
@@ -70,15 +76,10 @@ public sealed class Day20 : Puzzle
     /// <inheritdoc />
     protected override Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        if (args.Length != 1 && args.Length != 2)
-        {
-            throw new PuzzleException("No target value or maximum number of visits specified.");
-        }
-
         int target = Parse<int>(args[0]);
-        int? maximumVisits = args.Length == 2 ? Parse<int>(args[1]) : default(int?);
 
-        LowestHouseNumber = GetLowestHouseNumber(target, maximumVisits);
+        LowestHouseNumber = GetLowestHouseNumber(target, maximumVisits: null);
+        LowestHouseNumberWithCap = GetLowestHouseNumber(target, maximumVisits: 50);
 
         if (Verbose)
         {
@@ -86,8 +87,13 @@ public sealed class Day20 : Puzzle
                 "The first house to receive at least {0:N0} presents is house number {1:N0}.",
                 target,
                 LowestHouseNumber);
+
+            Logger.WriteLine(
+                "The first house to receive at least {0:N0} presents is house number {1:N0} when there is a 50 present cap per elf.",
+                target,
+                LowestHouseNumberWithCap);
         }
 
-        return PuzzleResult.Create(LowestHouseNumber);
+        return PuzzleResult.Create(LowestHouseNumber, LowestHouseNumberWithCap);
     }
 }

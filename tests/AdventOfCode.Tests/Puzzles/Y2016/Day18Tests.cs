@@ -29,18 +29,14 @@ public sealed class Day18Tests : PuzzleTest
         actual.ShouldBe(expected);
     }
 
-    [Theory]
-    [InlineData("40", 1987)]
-    [InlineData("400000", 19984714)]
-    public async Task Y2016_Day18_Solve_Returns_Correct_Solution(string rows, int expected)
+    [Fact]
+    public async Task Y2016_Day18_Solve_Returns_Correct_Solution()
     {
-        // Arrange
-        string[] args = new[] { rows };
-
         // Act
-        var puzzle = await SolvePuzzleAsync<Day18>(args);
+        var puzzle = await SolvePuzzleAsync<Day18>();
 
         // Assert
-        puzzle.SafeTileCount.ShouldBe(expected);
+        puzzle.SafeTileCount40.ShouldBe(1987);
+        puzzle.SafeTileCount400000.ShouldBe(19984714);
     }
 }

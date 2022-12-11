@@ -59,15 +59,12 @@ public class PuzzleBenchmarks
     {
         var inputs = new Dictionary<int, string[]>()
         {
-            [4] = new[] { "iwrupvqb", "5" },
-            [5] = new[] { "1" },
-            [6] = new[] { "1" },
+            [4] = new[] { "iwrupvqb" },
+            [10] = new[] { "1321131112" },
             [11] = new[] { "cqjxjnds" },
             [14] = new[] { "2503" },
             [17] = new[] { "150" },
-            [18] = new[] { "100", "false" },
-            [19] = new[] { "calibrate" },
-            [20] = new[] { "2947", "3029" },
+            [20] = new[] { "34000000" },
             [25] = new[] { "2947", "3029" },
         };
 
@@ -82,8 +79,7 @@ public class PuzzleBenchmarks
             [13] = new[] { "1362" },
             [16] = new[] { "10010000000110000", "272" },
             [17] = new[] { "pvhmgsws" },
-            [18] = new[] { "40" },
-            [19] = new[] { "3014387", "1" },
+            [19] = new[] { "3014387" },
             [21] = new[] { "abcdefgh" },
             [23] = new[] { "7" },
         };
@@ -110,8 +106,6 @@ public class PuzzleBenchmarks
         var inputs = new Dictionary<int, string[]>()
         {
             [4] = new[] { "138241-674034" },
-            [5] = new[] { "1" },
-            [9] = new[] { "1" },
         };
 
         return GetPuzzles(2019, inputs);

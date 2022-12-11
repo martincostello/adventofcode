@@ -6,13 +6,18 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016;
 /// <summary>
 /// A class representing the puzzle for <c>https://adventofcode.com/2016/day/18</c>. This class cannot be inherited.
 /// </summary>
-[Puzzle(2016, 18, "Like a Rogue", MinimumArguments = 1, RequiresData = true)]
+[Puzzle(2016, 18, "Like a Rogue", RequiresData = true, IsSlow = true)]
 public sealed class Day18 : Puzzle
 {
     /// <summary>
-    /// Gets the number of safe tiles in the puzzle input.
+    /// Gets the number of safe tiles in the puzzle input for 40 rows.
     /// </summary>
-    public int SafeTileCount { get; private set; }
+    public int SafeTileCount40 { get; private set; }
+
+    /// <summary>
+    /// Gets the number of safe tiles in the puzzle input for 400,000 rows.
+    /// </summary>
+    public int SafeTileCount400000 { get; private set; }
 
     /// <summary>
     /// Finds the number of safe tiles from the specified map.
@@ -69,26 +74,22 @@ public sealed class Day18 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        int rows = Parse<int>(args[0]);
-        string firstRowTiles = args.Length > 1 ? args[1] : (await ReadResourceAsStringAsync()).TrimEnd();
+        string firstRowTiles = (await ReadResourceAsStringAsync()).TrimEnd();
 
-        (int safeTileCount, string visualization) = FindSafeTileCount(firstRowTiles, rows, Logger);
-
-        SafeTileCount = safeTileCount;
+        (SafeTileCount40, string visualization) = FindSafeTileCount(firstRowTiles, rows: 40, Logger);
+        (SafeTileCount400000, _) = FindSafeTileCount(firstRowTiles, rows: 400000, Logger);
 
         if (Verbose)
         {
-            Logger.WriteLine($"The number of safe tiles is {SafeTileCount:N0}.");
+            Logger.WriteLine($"The number of safe tiles with 40 rows is {SafeTileCount40:N0}.");
+            Logger.WriteLine($"The number of safe tiles with 400,000 rows is {SafeTileCount400000:N0}.");
         }
 
         var result = new PuzzleResult();
 
-        result.Solutions.Add(SafeTileCount);
-
-        if (!string.IsNullOrEmpty(visualization))
-        {
-            result.Visualizations.Add(visualization);
-        }
+        result.Solutions.Add(SafeTileCount40);
+        result.Solutions.Add(SafeTileCount400000);
+        result.Visualizations.Add(visualization);
 
         return result;
     }
