@@ -50,7 +50,7 @@ export class Day11 extends Puzzle2022 {
                 monkeys.set(monkey, [new Monkey(monkey, items), divisor]);
             }
 
-            const reducer = highAnxiety ? (p: number) => p % commonDivisor : (p: number) => p / 3;
+            const reducer = highAnxiety ? (p: number) => p % commonDivisor : (p: number) => Math.floor(p / 3);
 
             for (let i = 0; i < observations.length; i += 7) {
                 const operation = observations[i + 2].slice(operationPrefix.length);
