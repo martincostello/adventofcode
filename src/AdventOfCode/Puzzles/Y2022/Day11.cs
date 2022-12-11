@@ -12,21 +12,29 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2022;
 public sealed class Day11 : Puzzle
 {
     /// <summary>
-    /// Gets the level of monkey business after 20 rounds of stuff-slinging simian shenanigans.
+    /// Gets the level of monkey business after 20 rounds of
+    /// stuff-slinging simian shenanigans with baseline anxiety.
     /// </summary>
-    public long MonkeyBusiness { get; private set; }
+    public long MonkeyBusiness20 { get; private set; }
+
+    /// <summary>
+    /// Gets the level of monkey business after 10,000 rounds of
+    /// stuff-slinging simian shenanigans wth higher anxiety.
+    /// </summary>
+    public long MonkeyBusiness10000 { get; private set; }
 
     /// <summary>
     /// Returns the level of monkey business after a number of rounds of stuff-slinging simian shenanigans.
     /// </summary>
     /// <param name="observations">The observations for the monkey's behavior.</param>
     /// <param name="rounds">.The number of rounds to determine the level of monkey business for.</param>
+    /// <param name="highAnxiety">Whether your anxiety is high.</param>
     /// <returns>
     /// The level of monkey business after the specified number of rounds of stuff-slinging simian shenanigans.
     /// </returns>
-    public static long GetMonkeyBusiness(IList<string> observations, int rounds)
+    public static long GetMonkeyBusiness(IList<string> observations, int rounds, bool highAnxiety)
     {
-        var monkeys = Parse(observations);
+        var monkeys = Parse(observations, highAnxiety);
 
         for (int round = 0; round < rounds; round++)
         {
@@ -41,7 +49,7 @@ public sealed class Day11 : Puzzle
             .Take(2)
             .Aggregate(1L, (x, y) => x * y.Inspections);
 
-        static ICollection<Monkey> Parse(IList<string> observations)
+        static ICollection<Monkey> Parse(IList<string> observations, bool highAnxiety)
         {
             const string MonkeyPrefix = "Monkey ";
             const string ItemsPrefix = "  Starting items: ";
@@ -50,11 +58,14 @@ public sealed class Day11 : Puzzle
             const string TruePrefix = "    If true: throw to monkey ";
             const string FalsePrefix = "    If false: throw to monkey ";
 
-            var monkeys = new Dictionary<int, Monkey>();
+            var monkeys = new Dictionary<int, (Monkey Monkey, long Divisor)>();
+            long commonDivisor = 1;
 
             for (int i = 0; i < observations.Count; i += 7)
             {
                 string monkeyLine = observations[i][MonkeyPrefix.Length..].TrimEnd(':');
+                string testValue = observations[i + 3][TestPrefix.Length..];
+
                 int monkey = Parse<int>(monkeyLine);
 
                 long[] items = observations[i + 1][ItemsPrefix.Length..]
@@ -62,8 +73,13 @@ public sealed class Day11 : Puzzle
                     .Select(Parse<long>)
                     .ToArray();
 
-                monkeys[monkey] = new(monkey, items);
+                long divisor = Parse<long>(testValue);
+                commonDivisor *= divisor;
+
+                monkeys[monkey] = (new(monkey, items), divisor);
             }
+
+            Func<long, long> reducer = highAnxiety ? (p) => p % commonDivisor : (p) => p / 3;
 
             for (int i = 0; i < observations.Count; i += 7)
             {
@@ -72,7 +88,9 @@ public sealed class Day11 : Puzzle
                 string monkeyForTrue = observations[i + 4][TruePrefix.Length..];
                 string monkeyForFalse = observations[i + 5][FalsePrefix.Length..];
 
-                var monkey = monkeys[i / 7];
+                (var monkey, long divisor) = monkeys[i / 7];
+
+                monkey.Reducer = reducer;
 
                 string operationString = operation[2..];
 
@@ -80,24 +98,24 @@ public sealed class Day11 : Puzzle
                 {
                     if (operationString == "old")
                     {
-                        monkey.Operation = (p) => p + p;
+                        monkey.Inspector = (p) => p + p;
                     }
                     else
                     {
                         long operationValue = Parse<long>(operation[2..]);
-                        monkey.Operation = (p) => p + operationValue;
+                        monkey.Inspector = (p) => p + operationValue;
                     }
                 }
                 else if (operation.StartsWith('*'))
                 {
                     if (operationString == "old")
                     {
-                        monkey.Operation = (p) => p * p;
+                        monkey.Inspector = (p) => p * p;
                     }
                     else
                     {
                         long operationValue = Parse<long>(operation[2..]);
-                        monkey.Operation = (p) => p * operationValue;
+                        monkey.Inspector = (p) => p * operationValue;
                     }
                 }
                 else
@@ -105,13 +123,12 @@ public sealed class Day11 : Puzzle
                     throw new PuzzleException($"Invalid operation '{operation[0]}'.");
                 }
 
-                var recipientForTrue = monkeys[Parse<int>(monkeyForTrue)];
-                var recipientForFalse = monkeys[Parse<int>(monkeyForFalse)];
-                long testValue = Parse<long>(test);
+                var recipientForTrue = monkeys[Parse<int>(monkeyForTrue)].Monkey;
+                var recipientForFalse = monkeys[Parse<int>(monkeyForFalse)].Monkey;
 
                 monkey.Next = (p) =>
                 {
-                    if (p % testValue == 0)
+                    if (p % divisor == 0)
                     {
                         return recipientForTrue;
                     }
@@ -122,7 +139,9 @@ public sealed class Day11 : Puzzle
                 };
             }
 
-            return monkeys.Values;
+            return monkeys.Values
+                .Select((p) => p.Monkey)
+                .ToArray();
         }
     }
 
@@ -133,16 +152,21 @@ public sealed class Day11 : Puzzle
 
         var observations = await ReadResourceAsLinesAsync();
 
-        MonkeyBusiness = GetMonkeyBusiness(observations, rounds: 20);
+        MonkeyBusiness20 = GetMonkeyBusiness(observations, rounds: 20, highAnxiety: false);
+        MonkeyBusiness10000 = GetMonkeyBusiness(observations, rounds: 10000, highAnxiety: true);
 
         if (Verbose)
         {
             Logger.WriteLine(
                 "The level of monkey business after 20 rounds of stuff-slinging simian shenanigans is {0}.",
-                MonkeyBusiness);
+                MonkeyBusiness20);
+
+            Logger.WriteLine(
+                "The level of monkey business after 10,000 rounds of stuff-slinging simian shenanigans is {0}.",
+                MonkeyBusiness10000);
         }
 
-        return PuzzleResult.Create(MonkeyBusiness);
+        return PuzzleResult.Create(MonkeyBusiness20, MonkeyBusiness10000);
     }
 
     [DebuggerDisplay("{Number}")]
@@ -154,7 +178,7 @@ public sealed class Day11 : Puzzle
             Items = new(items);
         }
 
-        public long Inspections { get; private set; }
+        public int Inspections { get; private set; }
 
         public Queue<long> Items { get; }
 
@@ -162,14 +186,18 @@ public sealed class Day11 : Puzzle
 
         public int Number { get; }
 
-        public Func<long, long> Operation { get; set; } = default!;
+        public Func<long, long> Inspector { get; set; } = default!;
+
+        public Func<long, long> Reducer { get; set; } = default!;
 
         public void Inspect()
         {
             while (Items.Count > 0)
             {
                 long item = Items.Dequeue();
-                item = Operation(item) / 3;
+
+                item = Inspector(item);
+                item = Reducer(item);
 
                 Inspections++;
 
