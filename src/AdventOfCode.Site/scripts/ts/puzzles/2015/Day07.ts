@@ -15,10 +15,6 @@ export class Day07 extends Puzzle2015 {
         return 7;
     }
 
-    protected override get requiresData() {
-        return true;
-    }
-
     static getWireValues(instructions: string[]) {
         const toUint16 = (value: number) => value & 0xffff;
         const trySolveValueForOperation = (operation: string, firstValue: number, secondValue: number): number | null => {

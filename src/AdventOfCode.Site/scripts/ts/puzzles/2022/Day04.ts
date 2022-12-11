@@ -16,10 +16,6 @@ export class Day04 extends Puzzle2022 {
         return 4;
     }
 
-    protected override get requiresData() {
-        return true;
-    }
-
     static getOverlappingAssignments(assignments: string[], partial: boolean) {
         type Range = [start: number, end: number];
 

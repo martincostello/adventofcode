@@ -17,10 +17,6 @@ export class Day05 extends Puzzle2022 {
         return 5;
     }
 
-    protected override get requiresData() {
-        return true;
-    }
-
     static rearrangeCrates(instructions: string[], canMoveMultipleCrates: boolean) {
         const getStackCount = (instructions: string[]) => {
             for (let i = 0; i < instructions.length; i++) {

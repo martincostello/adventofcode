@@ -17,10 +17,6 @@ export class Day08 extends Puzzle2022 {
         return 8;
     }
 
-    protected override get requiresData() {
-        return true;
-    }
-
     static countVisibleTrees(grid: string[]): [visibleTrees: number, maximumScenicScore: number] {
         const up = new Size(0, -1);
         const down = new Size(0, 1);

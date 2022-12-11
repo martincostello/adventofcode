@@ -20,6 +20,10 @@ export class Day04 extends Puzzle2015 {
         return 2;
     }
 
+    protected override get requiresData() {
+        return false;
+    }
+
     static getLowestPositiveNumberWithStartingZeroesAsync(secretKey: string, zeroes: number) {
         const isSolution = (value: number, secretKey: string, zeroes: number) => {
             const hashArray = MD5.hashStr(`${secretKey}${value}`, true);

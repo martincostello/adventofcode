@@ -16,10 +16,6 @@ export class Day08 extends Puzzle2015 {
         return 8;
     }
 
-    protected override get requiresData() {
-        return true;
-    }
-
     static getEncodedCharacterCount(...collection: string[]) {
         let count = 0;
 

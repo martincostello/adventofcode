@@ -19,10 +19,6 @@ export class Day09 extends Puzzle2022 {
         return 9;
     }
 
-    protected override get requiresData() {
-        return true;
-    }
-
     static move(moves: string[], knots: number): number {
         const parse = (moves: string[]) => {
             const result: Size[] = [];

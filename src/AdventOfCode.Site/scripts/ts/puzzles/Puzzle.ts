@@ -19,7 +19,7 @@ export abstract class Puzzle {
     }
 
     protected get requiresData() {
-        return false;
+        return true;
     }
 
     async solve(inputs: string[]): Promise<Solution> {

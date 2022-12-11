@@ -17,10 +17,6 @@ export class Day07 extends Puzzle2022 {
         return 7;
     }
 
-    protected override get requiresData() {
-        return true;
-    }
-
     static getDirectorySizes(
         terminalOutput: string[]
     ): [totalSizeOfDirectoriesLargerThanLimit: number, sizeOfSmallestDirectoryToDelete: number] {

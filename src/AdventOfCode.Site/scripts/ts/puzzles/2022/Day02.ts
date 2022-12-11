@@ -27,10 +27,6 @@ export class Day02 extends Puzzle2022 {
         return 2;
     }
 
-    protected override get requiresData() {
-        return true;
-    }
-
     static getTotalScore(moves: string[], containsDesiredOutcome: boolean) {
         let total = 0;
 

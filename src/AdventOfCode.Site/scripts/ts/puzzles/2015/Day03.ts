@@ -16,10 +16,6 @@ export class Day03 extends Puzzle2015 {
         return 3;
     }
 
-    protected override get requiresData() {
-        return true;
-    }
-
     static getUniqueHousesVisitedBySanta(instructions: string) {
         const directions = Day03.getDirections(instructions);
 

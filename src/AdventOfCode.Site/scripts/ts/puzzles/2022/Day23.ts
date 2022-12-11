@@ -19,10 +19,6 @@ export class Day23 extends Puzzle2022 {
         return 23;
     }
 
-    protected override get requiresData() {
-        return true;
-    }
-
     static solve(values: string[]): number {
         return -1;
     }

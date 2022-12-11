@@ -16,10 +16,6 @@ export class Day06 extends Puzzle2022 {
         return 6;
     }
 
-    protected override get requiresData() {
-        return true;
-    }
-
     static findFirstPacket(datastream: string, distinctCharacters: number) {
         const queue: string[] = [];
         let index = 0;

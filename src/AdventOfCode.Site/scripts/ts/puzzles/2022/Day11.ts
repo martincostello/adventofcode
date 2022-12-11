@@ -17,10 +17,6 @@ export class Day11 extends Puzzle2022 {
         return 11;
     }
 
-    protected override get requiresData() {
-        return true;
-    }
-
     static getMonkeyBusiness(observations: string[], rounds: number, highAnxiety: boolean): number {
         const parse = (observations: string[], highAnxiety: boolean) => {
             const monkeyPrefix = 'Monkey ';

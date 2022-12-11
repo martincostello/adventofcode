@@ -17,10 +17,6 @@ export class Day01 extends Puzzle2020 {
         return 1;
     }
 
-    protected override get requiresData() {
-        return true;
-    }
-
     static get2020Product(expenses: number[], take: number) {
         const result = Maths.getPermutationsWithCount(expenses, take);
 
