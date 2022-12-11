@@ -6,7 +6,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015;
 /// <summary>
 /// A class representing the puzzle for <c>https://adventofcode.com/2015/day/18</c>. This class cannot be inherited.
 /// </summary>
-[Puzzle(2015, 18, "Like a GIF For Your Yard", MinimumArguments = 1, RequiresData = true)]
+[Puzzle(2015, 18, "Like a GIF For Your Yard", RequiresData = true, IsSlow = true)]
 public sealed class Day18 : Puzzle
 {
     /// <summary>
@@ -20,9 +20,14 @@ public sealed class Day18 : Puzzle
     private const char On = '#';
 
     /// <summary>
-    /// Gets the number of lights that are illuminated.
+    /// Gets the number of lights that are illuminated without the stuck lights.
     /// </summary>
-    internal int LightsIlluminated { get; private set; }
+    public int LightsIlluminated { get; private set; }
+
+    /// <summary>
+    /// Gets the number of lights that are illuminated with the stuck lights.
+    /// </summary>
+    public int LightsIlluminatedWithStuckLights { get; private set; }
 
     /// <summary>
     /// Returns the light configuration for the specified initial state after the specified number of steps.
@@ -67,12 +72,14 @@ public sealed class Day18 : Puzzle
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
         IList<string> initial = await ReadResourceAsLinesAsync();
-        int steps = Parse<int>(args[0]);
-        bool areCornerLightsBroken = args.Length == 2 && string.Equals(args[1], bool.TrueString, StringComparison.OrdinalIgnoreCase);
 
-        string[] final = GetGridConfigurationAfterSteps(initial, steps, areCornerLightsBroken);
+        int steps = 100;
 
-        LightsIlluminated = final.Sum((p) => p.Count(On));
+        string[] finalUnstuck = GetGridConfigurationAfterSteps(initial, steps, areCornerLightsBroken: false);
+        string[] finalStuck = GetGridConfigurationAfterSteps(initial, steps, areCornerLightsBroken: true);
+
+        LightsIlluminated = finalUnstuck.Sum((p) => p.Count(On));
+        LightsIlluminatedWithStuckLights = finalStuck.Sum((p) => p.Count(On));
 
         if (Verbose)
         {
@@ -80,9 +87,14 @@ public sealed class Day18 : Puzzle
                 "There are {0:N0} lights illuminated after {1:N0} steps.",
                 LightsIlluminated,
                 steps);
+
+            Logger.WriteLine(
+                "There are {0:N0} lights illuminated after {1:N0} steps with the corner lights stuck on.",
+                LightsIlluminatedWithStuckLights,
+                steps);
         }
 
-        return PuzzleResult.Create(LightsIlluminated);
+        return PuzzleResult.Create(LightsIlluminated, LightsIlluminatedWithStuckLights);
     }
 
     /// <summary>

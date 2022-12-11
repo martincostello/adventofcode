@@ -71,7 +71,6 @@ public class UITests : IntegrationTest, IClassFixture<PlaywrightFixture>
     }
 
     [Theory]
-    [InlineData("2015", "5", new[] { "1" }, new[] { "236" })]
     [InlineData("2016", "21", new[] { "fbgdceah", "true" }, new[] { "hegbdcfa" })]
     public async Task Can_Solve_Puzzle_With_Input_And_Input_File(
         string year,

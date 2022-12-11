@@ -29,15 +29,17 @@ public sealed class Day04Tests : PuzzleTest
         actual.ShouldBe(expected);
     }
 
-    [Theory]
-    [InlineData(new[] { "iwrupvqb", "5" }, 346386)]
-    [InlineData(new[] { "iwrupvqb", "6" }, 9958218)]
-    public async Task Y2015_Day04_Solve_Returns_Correct_Solution(string[] args, int expected)
+    [Fact]
+    public async Task Y2015_Day04_Solve_Returns_Correct_Solution()
     {
+        // Arrange
+        string secretKey = "iwrupvqb";
+
         // Act
-        var puzzle = await SolvePuzzleAsync<Day04>(args);
+        var puzzle = await SolvePuzzleAsync<Day04>(secretKey);
 
         // Assert
-        puzzle.LowestZeroHash.ShouldBe(expected);
+        puzzle.LowestZeroHash5.ShouldBe(346386);
+        puzzle.LowestZeroHash6.ShouldBe(9958218);
     }
 }

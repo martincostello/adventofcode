@@ -6,7 +6,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015;
 /// <summary>
 /// A class representing the puzzle for <c>https://adventofcode.com/2015/day/5</c>. This class cannot be inherited.
 /// </summary>
-[Puzzle(2015, 05, "Doesn't He Have Intern-Elves For This?", MinimumArguments = 1, RequiresData = true)]
+[Puzzle(2015, 05, "Doesn't He Have Intern-Elves For This?", RequiresData = true)]
 public sealed class Day05 : Puzzle
 {
     /// <summary>
@@ -15,9 +15,14 @@ public sealed class Day05 : Puzzle
     private static readonly string[] NotNiceSequences = { "ab", "cd", "pq", "xy" };
 
     /// <summary>
-    /// Gets the number of 'nice' strings.
+    /// Gets the number of 'nice' strings using version 1 of the rules.
     /// </summary>
-    internal int NiceStringCount { get; private set; }
+    public int NiceStringCountV1 { get; private set; }
+
+    /// <summary>
+    /// Gets the number of 'nice' strings using version 2 of the rules.
+    /// </summary>
+    public int NiceStringCountV2 { get; private set; }
 
     /// <summary>
     /// Returns whether the specified string is 'nice' using the first set of criteria.
@@ -26,7 +31,7 @@ public sealed class Day05 : Puzzle
     /// <returns>
     /// <see langword="true"/> if <paramref name="value"/> is 'nice'; otherwise <see langword="false"/>.
     /// </returns>
-    internal static bool IsNiceV1(string value)
+    public static bool IsNiceV1(string value)
     {
         // The string is not nice if it contain any of the following sequences
         if (NotNiceSequences.Any((p) => value.Contains(p, StringComparison.Ordinal)))
@@ -80,7 +85,7 @@ public sealed class Day05 : Puzzle
     /// <returns>
     /// <see langword="true"/> if <paramref name="value"/> is 'nice'; otherwise <see langword="false"/>.
     /// </returns>
-    internal static bool IsNiceV2(string value)
+    public static bool IsNiceV2(string value)
     {
         return
             HasLetterThatIsTheBreadOfALetterSandwich(value) &&
@@ -143,45 +148,17 @@ public sealed class Day05 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        int version = args[0] switch
-        {
-            "1" => 1,
-            "2" => 2,
-            _ => -1,
-        };
+        var values = await ReadResourceAsLinesAsync();
 
-        if (version == -1)
-        {
-            throw new PuzzleException("The rules version specified is invalid.");
-        }
-
-        int count = 0;
-        Func<string, bool> rule;
-
-        if (version == 1)
-        {
-            rule = IsNiceV1;
-        }
-        else
-        {
-            rule = IsNiceV2;
-        }
-
-        foreach (string value in await ReadResourceAsLinesAsync())
-        {
-            if (rule(value))
-            {
-                count++;
-            }
-        }
-
-        NiceStringCount = count;
+        NiceStringCountV1 = values.Count(IsNiceV1);
+        NiceStringCountV2 = values.Count(IsNiceV2);
 
         if (Verbose)
         {
-            Logger.WriteLine("{0:N0} strings are nice using version {1} of the rules.", NiceStringCount, version);
+            Logger.WriteLine("{0:N0} strings are nice using version 1 of the rules.", NiceStringCountV1);
+            Logger.WriteLine("{0:N0} strings are nice using version 2 of the rules.", NiceStringCountV2);
         }
 
-        return PuzzleResult.Create(NiceStringCount);
+        return PuzzleResult.Create(NiceStringCountV1, NiceStringCountV2);
     }
 }

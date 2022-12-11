@@ -218,16 +218,14 @@ public sealed class Day06Tests : PuzzleTest
         actual.ShouldBe(expected);
     }
 
-    [Theory]
-    [InlineData(new[] { "1" }, 543903, 0)]
-    [InlineData(new[] { "2" }, 0, 14687245)]
-    public async Task Y2015_Day06_Solve_Returns_Correct_Solution(string[] args, int lightsIlluminated, int totalBrightness)
+    [Fact]
+    public async Task Y2015_Day06_Solve_Returns_Correct_Solution()
     {
         // Act
-        var puzzle = await SolvePuzzleAsync<Day06>(args);
+        var puzzle = await SolvePuzzleAsync<Day06>();
 
         // Assert
-        puzzle.LightsIlluminated.ShouldBe(lightsIlluminated);
-        puzzle.TotalBrightness.ShouldBe(totalBrightness);
+        puzzle.LightsIlluminated.ShouldBe(543903);
+        puzzle.TotalBrightness.ShouldBe(14687245);
     }
 }

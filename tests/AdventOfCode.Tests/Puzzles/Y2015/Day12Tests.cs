@@ -44,15 +44,14 @@ public sealed class Day12Tests : PuzzleTest
         actual.ShouldBe(expected);
     }
 
-    [Theory]
-    [InlineData(new string[0], 191164)]
-    [InlineData(new[] { "red" }, 87842)]
-    public async Task Y2015_Day12_Solve_Returns_Correct_Solution(string[] args, int expected)
+    [Fact]
+    public async Task Y2015_Day12_Solve_Returns_Correct_Solution()
     {
         // Act
-        var puzzle = await SolvePuzzleAsync<Day12>(args);
+        var puzzle = await SolvePuzzleAsync<Day12>();
 
         // Assert
-        puzzle.Sum.ShouldBe(expected);
+        puzzle.Sum.ShouldBe(191164);
+        puzzle.SumIgnoringRed.ShouldBe(87842);
     }
 }

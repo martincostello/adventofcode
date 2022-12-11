@@ -14,7 +14,7 @@ public sealed class Day21 : Puzzle
     /// <summary>
     /// Gets the result of scrambling the puzzle input.
     /// </summary>
-    public string? ScrambledResult { get; private set; }
+    public string ScrambledResult { get; private set; } = string.Empty;
 
     /// <summary>
     /// Scrambles the specified text.

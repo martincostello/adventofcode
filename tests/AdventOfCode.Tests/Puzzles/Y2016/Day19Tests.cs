@@ -30,19 +30,18 @@ public sealed class Day19Tests : PuzzleTest
     }
 
     [Theory]
-    [InlineData("5", "1", 3)]
-    [InlineData("5", "2", 2)]
-    [InlineData("3014387", "1", 1834471)]
-    [InlineData("3014387", "2", 1420064)]
-    public async Task Y2016_Day19_Solve_Returns_Correct_Solution(string elves, string version, int expected)
+    [InlineData("5", 3, 2)]
+    [InlineData("3014387", 1834471, 1420064)]
+    public async Task Y2016_Day19_Solve_Returns_Correct_Solution(string elves, int expectedV1, int expectedV2)
     {
         // Arrange
-        string[] args = new[] { elves, version };
+        string[] args = new[] { elves };
 
         // Act
         var puzzle = await SolvePuzzleAsync<Day19>(args);
 
         // Assert
-        puzzle.ElfWithAllPresents.ShouldBe(expected);
+        puzzle.ElfWithAllPresentsV1.ShouldBe(expectedV1);
+        puzzle.ElfWithAllPresentsV2.ShouldBe(expectedV2);
     }
 }

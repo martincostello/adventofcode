@@ -67,7 +67,7 @@ public class LambdaTests : IAsyncLifetime
     }
 
     [Theory(Timeout = 5_000)]
-    [InlineData(2015, 11, new[] { "cqjxjnds" }, new[] { "cqjxxyzz" })]
+    [InlineData(2015, 11, new[] { "cqjxjnds" }, new[] { "cqjxxyzz", "cqkaabcc" })]
     public async Task Can_Solve_Puzzle_With_Input_Arguments(int year, int day, string[] arguments, string[] expected)
     {
         // Arrange

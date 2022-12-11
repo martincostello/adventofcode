@@ -6,13 +6,18 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016;
 /// <summary>
 /// A class representing the puzzle for <c>https://adventofcode.com/2016/day/19</c>. This class cannot be inherited.
 /// </summary>
-[Puzzle(2016, 19, "An Elephant Named Joseph", MinimumArguments = 1)]
+[Puzzle(2016, 19, "An Elephant Named Joseph", MinimumArguments = 1, IsSlow = true)]
 public sealed class Day19 : Puzzle
 {
     /// <summary>
-    /// Gets the number of the elf who receives all the presents.
+    /// Gets the number of the elf who receives all the presents with version 1 of the rules.
     /// </summary>
-    public int ElfWithAllPresents { get; private set; }
+    public int ElfWithAllPresentsV1 { get; private set; }
+
+    /// <summary>
+    /// Gets the number of the elf who receives all the presents with version 2 of the rules.
+    /// </summary>
+    public int ElfWithAllPresentsV2 { get; private set; }
 
     /// <summary>
     /// Finds the elf that receives all of the presents.
@@ -34,16 +39,17 @@ public sealed class Day19 : Puzzle
     protected override Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
         int count = Parse<int>(args[0]);
-        int version = args.Length > 1 ? Parse<int>(args[1]) : 1;
 
-        ElfWithAllPresents = FindElfThatGetsAllPresents(count, version);
+        ElfWithAllPresentsV1 = FindElfThatGetsAllPresents(count, version: 1);
+        ElfWithAllPresentsV2 = FindElfThatGetsAllPresents(count, version: 2);
 
         if (Verbose)
         {
-            Logger.WriteLine($"The elf that gets all the presents using version {version} of the rules is {ElfWithAllPresents:N0}.");
+            Logger.WriteLine($"The elf that gets all the presents using version 1 of the rules is {ElfWithAllPresentsV1:N0}.");
+            Logger.WriteLine($"The elf that gets all the presents using version 2 of the rules is {ElfWithAllPresentsV2:N0}.");
         }
 
-        return PuzzleResult.Create(ElfWithAllPresents);
+        return PuzzleResult.Create(ElfWithAllPresentsV1, ElfWithAllPresentsV2);
     }
 
     /// <summary>

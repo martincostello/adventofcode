@@ -90,15 +90,14 @@ public sealed class Day18Tests : PuzzleTest
             });
     }
 
-    [Theory]
-    [InlineData(new[] { "100", "false" }, 814)]
-    [InlineData(new[] { "100", "true" }, 924)]
-    public async Task Y2015_Day18_Solve_Returns_Correct_Solution(string[] args, int expected)
+    [Fact]
+    public async Task Y2015_Day18_Solve_Returns_Correct_Solution()
     {
         // Act
-        var puzzle = await SolvePuzzleAsync<Day18>(args);
+        var puzzle = await SolvePuzzleAsync<Day18>();
 
         // Assert
-        puzzle.LightsIlluminated.ShouldBe(expected);
+        puzzle.LightsIlluminated.ShouldBe(814);
+        puzzle.LightsIlluminatedWithStuckLights.ShouldBe(924);
     }
 }

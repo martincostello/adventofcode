@@ -9,13 +9,18 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015;
 /// <summary>
 /// A class representing the puzzle for <c>https://adventofcode.com/2015/day/4</c>. This class cannot be inherited.
 /// </summary>
-[Puzzle(2015, 04, "The Ideal Stocking Stuffer", MinimumArguments = 2)]
+[Puzzle(2015, 04, "The Ideal Stocking Stuffer", MinimumArguments = 1, IsSlow = true)]
 public sealed class Day04 : Puzzle
 {
     /// <summary>
-    /// Gets the lowest value that produces a hash that starts with the required number of zeroes.
+    /// Gets the lowest value that produces a hash that starts with 5 zeroes.
     /// </summary>
-    internal int LowestZeroHash { get; private set; }
+    public int LowestZeroHash5 { get; private set; }
+
+    /// <summary>
+    /// Gets the lowest value that produces a hash that starts with 6 zeroes.
+    /// </summary>
+    public int LowestZeroHash6 { get; private set; }
 
     /// <summary>
     /// Gets the lowest positive integer which when combined with a secret key has an MD5 hash whose
@@ -27,13 +32,13 @@ public sealed class Day04 : Puzzle
     /// A <see cref="Task{TResult}"/> that represents the asynchronous operation to find the
     /// lowest positive integer that generates an MD5 hash with the number of zeroes specified.
     /// </returns>
-    internal static async Task<int> GetLowestPositiveNumberWithStartingZeroesAsync(string secretKey, int zeroes)
+    public static async Task<int> GetLowestPositiveNumberWithStartingZeroesAsync(string secretKey, int zeroes)
     {
         var solutions = new ConcurrentBag<int>();
         var searchedRanges = new ConcurrentBag<int>();
 
         int fromInclusive = 1;
-        int rangeSize = 50000;
+        int rangeSize = 10000;
 
         var chunks = Enumerable.Chunk(Enumerable.Range(fromInclusive, int.MaxValue - 1), rangeSize);
         using var cts = new CancellationTokenSource();
@@ -129,19 +134,17 @@ public sealed class Day04 : Puzzle
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
         string secretKey = args[0];
-        int zeroes = Parse<int>(args[1]);
 
-        LowestZeroHash = await GetLowestPositiveNumberWithStartingZeroesAsync(secretKey, zeroes);
+        LowestZeroHash5 = await GetLowestPositiveNumberWithStartingZeroesAsync(secretKey, zeroes: 5);
+        LowestZeroHash6 = await GetLowestPositiveNumberWithStartingZeroesAsync(secretKey, zeroes: 6);
 
         if (Verbose)
         {
-            Logger.WriteLine(
-                "The lowest positive number for a hash starting with {0} zeroes is {1:N0}.",
-                zeroes,
-                LowestZeroHash);
+            Logger.WriteLine("The lowest positive number for a hash starting with 5 zeroes is {0:N0}.", LowestZeroHash5);
+            Logger.WriteLine("The lowest positive number for a hash starting with 6 zeroes is {0:N0}.", LowestZeroHash6);
         }
 
-        return PuzzleResult.Create(LowestZeroHash);
+        return PuzzleResult.Create(LowestZeroHash5, LowestZeroHash6);
     }
 
     /// <summary>

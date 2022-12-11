@@ -45,16 +45,14 @@ public sealed class Day11Tests : PuzzleTest
     [Fact]
     public async Task Y2015_Day11_Solve_Returns_Correct_Solution()
     {
-        // Act
-        var puzzle = await SolvePuzzleAsync<Day11>("cqjxjnds");
-
-        // Assert
-        puzzle.NextPassword.ShouldBe("cqjxxyzz");
+        // Arrange
+        string input = "cqjxjnds";
 
         // Act
-        puzzle = await SolvePuzzleAsync<Day11>(puzzle.NextPassword!);
+        var puzzle = await SolvePuzzleAsync<Day11>(input);
 
         // Assert
-        puzzle.NextPassword.ShouldBe("cqkaabcc");
+        puzzle.FirstPassword.ShouldBe("cqjxxyzz");
+        puzzle.SecondPassword.ShouldBe("cqkaabcc");
     }
 }

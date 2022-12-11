@@ -10,16 +10,21 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015;
 public sealed class Day11 : Puzzle
 {
     /// <summary>
-    /// Gets the next password.
+    /// Gets the first next password.
     /// </summary>
-    internal string? NextPassword { get; private set; }
+    public string FirstPassword { get; private set; } = string.Empty;
+
+    /// <summary>
+    /// Gets the second next password.
+    /// </summary>
+    public string SecondPassword { get; private set; } = string.Empty;
 
     /// <summary>
     /// Generates the next password that should be used based on a current password value.
     /// </summary>
     /// <param name="current">The current password.</param>
     /// <returns>The next password.</returns>
-    internal static string GenerateNextPassword(string current)
+    public static string GenerateNextPassword(string current)
     {
         Span<char> next = current.ToCharArray();
 
@@ -37,7 +42,7 @@ public sealed class Day11 : Puzzle
     /// </summary>
     /// <param name="value">The span to test.</param>
     /// <returns><see langword="true"/> if <paramref name="value"/> meets the rule; otherwise <see langword="false"/>.</returns>
-    internal static bool ContainsTriumvirateOfLetters(ReadOnlySpan<char> value)
+    public static bool ContainsTriumvirateOfLetters(ReadOnlySpan<char> value)
     {
         bool result = false;
 
@@ -54,7 +59,7 @@ public sealed class Day11 : Puzzle
     /// </summary>
     /// <param name="value">The span to test.</param>
     /// <returns><see langword="true"/> if <paramref name="value"/> meets the rule; otherwise <see langword="false"/>.</returns>
-    internal static bool ContainsNoForbiddenCharacters(ReadOnlySpan<char> value)
+    public static bool ContainsNoForbiddenCharacters(ReadOnlySpan<char> value)
         => !value.Contains('i') && !value.Contains('o') && !value.Contains('l');
 
     /// <summary>
@@ -62,7 +67,7 @@ public sealed class Day11 : Puzzle
     /// </summary>
     /// <param name="value">The value to test against the rule.</param>
     /// <returns><see langword="true"/> if <paramref name="value"/> meets the rule; otherwise <see langword="false"/>.</returns>
-    internal static bool HasMoreThanOneDistinctPairOfLetters(ReadOnlySpan<char> value)
+    public static bool HasMoreThanOneDistinctPairOfLetters(ReadOnlySpan<char> value)
     {
         var letterPairs = new Dictionary<string, List<int>>();
 
@@ -93,14 +98,17 @@ public sealed class Day11 : Puzzle
     protected override Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
         string current = args[0];
-        NextPassword = GenerateNextPassword(current);
+
+        FirstPassword = GenerateNextPassword(current);
+        SecondPassword = GenerateNextPassword(FirstPassword);
 
         if (Verbose)
         {
-            Logger.WriteLine("Santa's new password should be '{0}'.", NextPassword);
+            Logger.WriteLine("Santa's first new password should be '{0}'.", FirstPassword);
+            Logger.WriteLine("Santa's second new password should be '{0}'.", SecondPassword);
         }
 
-        return PuzzleResult.Create(NextPassword);
+        return PuzzleResult.Create(FirstPassword, SecondPassword);
     }
 
     /// <summary>

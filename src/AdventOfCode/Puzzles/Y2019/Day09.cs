@@ -8,13 +8,18 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019;
 /// <summary>
 /// A class representing the puzzle for <c>https://adventofcode.com/2019/day/9</c>. This class cannot be inherited.
 /// </summary>
-[Puzzle(2019, 09, "Sensor Boost", MinimumArguments = 1, RequiresData = true)]
+[Puzzle(2019, 09, "Sensor Boost", RequiresData = true)]
 public sealed class Day09 : Puzzle
 {
     /// <summary>
-    /// Gets the key code output by the program.
+    /// Gets the key code output by the program for an input of 1.
     /// </summary>
-    public long Keycode { get; private set; }
+    public long Keycode1 { get; private set; }
+
+    /// <summary>
+    /// Gets the key code output by the program for an input of 2.
+    /// </summary>
+    public long Keycode2 { get; private set; }
 
     /// <summary>
     /// Runs the specified Intcode program.
@@ -57,16 +62,17 @@ public sealed class Day09 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        long input = Parse<long>(args[0]);
         string program = await ReadResourceAsStringAsync();
 
-        Keycode = (await RunProgramAsync(program, input, cancellationToken))[0];
+        Keycode1 = (await RunProgramAsync(program, input: 1, cancellationToken))[0];
+        Keycode2 = (await RunProgramAsync(program, input: 2, cancellationToken))[0];
 
         if (Verbose)
         {
-            Logger.WriteLine("The program produces BOOST keycode {0}.", Keycode);
+            Logger.WriteLine("The program produces BOOST keycode {0} for an input of 1.", Keycode1);
+            Logger.WriteLine("The program produces BOOST keycode {0} for an input of 2.", Keycode2);
         }
 
-        return PuzzleResult.Create(Keycode);
+        return PuzzleResult.Create(Keycode1, Keycode2);
     }
 }

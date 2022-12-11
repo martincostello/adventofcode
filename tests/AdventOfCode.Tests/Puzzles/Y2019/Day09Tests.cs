@@ -32,15 +32,14 @@ public sealed class Day09Tests : PuzzleTest
         actual.ShouldBe(expected);
     }
 
-    [Theory]
-    [InlineData(new[] { "1" }, 2494485073)]
-    [InlineData(new[] { "2" }, 44997)]
-    public async Task Y2019_Day09_Solve_Returns_Correct_Solution(string[] args, long expected)
+    [Fact]
+    public async Task Y2019_Day09_Solve_Returns_Correct_Solution()
     {
         // Act
-        var puzzle = await SolvePuzzleAsync<Day09>(args);
+        var puzzle = await SolvePuzzleAsync<Day09>();
 
         // Assert
-        puzzle.Keycode.ShouldBe(expected);
+        puzzle.Keycode1.ShouldBe(2494485073);
+        puzzle.Keycode2.ShouldBe(44997);
     }
 }

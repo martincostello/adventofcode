@@ -53,18 +53,14 @@ public sealed class Day05Tests : PuzzleTest
         actual.ShouldBe(expected);
     }
 
-    [Theory]
-    [InlineData("1", 6745903)]
-    [InlineData("5", 9168267)]
-    public async Task Y2019_Day05_Solve_Returns_Correct_Solution(string input, int expected)
+    [Fact]
+    public async Task Y2019_Day05_Solve_Returns_Correct_Solution()
     {
-        // Arrange
-        string[] args = { input };
-
         // Act
-        var puzzle = await SolvePuzzleAsync<Day05>(args);
+        var puzzle = await SolvePuzzleAsync<Day05>();
 
         // Assert
-        puzzle.DiagnosticCode.ShouldBe(expected);
+        puzzle.DiagnosticCode1.ShouldBe(6745903);
+        puzzle.DiagnosticCode5.ShouldBe(9168267);
     }
 }

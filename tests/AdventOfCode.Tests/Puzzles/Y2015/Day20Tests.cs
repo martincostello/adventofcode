@@ -64,15 +64,17 @@ public sealed class Day20Tests : PuzzleTest
         actual.ShouldBe(expected);
     }
 
-    [Theory]
-    [InlineData(new[] { "34000000" }, 786240)]
-    [InlineData(new[] { "34000000", "50" }, 831600)]
-    public async Task Y2015_Day20_Solve_Returns_Correct_Solution(string[] args, int expected)
+    [Fact]
+    public async Task Y2015_Day20_Solve_Returns_Correct_Solution()
     {
+        // Arrange
+        string input = "34000000";
+
         // Act
-        var puzzle = await SolvePuzzleAsync<Day20>(args);
+        var puzzle = await SolvePuzzleAsync<Day20>(input);
 
         // Assert
-        puzzle.LowestHouseNumber.ShouldBe(expected);
+        puzzle.LowestHouseNumber.ShouldBe(786240);
+        puzzle.LowestHouseNumberWithCap.ShouldBe(831600);
     }
 }

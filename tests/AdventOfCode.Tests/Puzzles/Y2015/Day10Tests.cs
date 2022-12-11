@@ -32,15 +32,17 @@ public sealed class Day10Tests : PuzzleTest
         actual.ShouldBe(expected);
     }
 
-    [Theory]
-    [InlineData(new[] { "1321131112", "40" }, 492982)]
-    [InlineData(new[] { "1321131112", "50" }, 6989950)]
-    public async Task Y2015_Day10_Solve_Returns_Correct_Solution(string[] args, int expected)
+    [Fact]
+    public async Task Y2015_Day10_Solve_Returns_Correct_Solution()
     {
+        // Arrange
+        string input = "1321131112";
+
         // Act
-        var puzzle = await SolvePuzzleAsync<Day10>(args);
+        var puzzle = await SolvePuzzleAsync<Day10>(input);
 
         // Assert
-        puzzle.Solution.ShouldBe(expected);
+        puzzle.Solution40.ShouldBe(492982);
+        puzzle.Solution50.ShouldBe(6989950);
     }
 }

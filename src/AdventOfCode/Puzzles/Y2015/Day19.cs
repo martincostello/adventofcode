@@ -6,13 +6,18 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015;
 /// <summary>
 /// A class representing the puzzle for <c>https://adventofcode.com/2015/day/19</c>. This class cannot be inherited.
 /// </summary>
-[Puzzle(2015, 19, "Medicine for Rudolph", MinimumArguments = 1, RequiresData = true, IsHidden = true)]
+[Puzzle(2015, 19, "Medicine for Rudolph", RequiresData = true, IsHidden = true)]
 public sealed class Day19 : Puzzle
 {
     /// <summary>
-    /// Gets the solution for fabrication or calibration.
+    /// Gets the solution for calibration.
     /// </summary>
-    internal int Solution { get; private set; }
+    public int CalibrationSolution { get; private set; }
+
+    /// <summary>
+    /// Gets the solution for fabrication.
+    /// </summary>
+    public int FabricationSolution { get; private set; }
 
     /// <summary>
     /// Gets the possible molecules that can be created from single step transformations of a molecule.
@@ -120,13 +125,6 @@ public sealed class Day19 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        bool fabricate = args[0].ToUpperInvariant() switch
-        {
-            "CALIBRATE" => false,
-            "FABRICATE" => true,
-            _ => throw new PuzzleException("The mode specified is invalid."),
-        };
-
         IList<string> lines = await ReadResourceAsLinesAsync();
 
         string molecule = lines[^1];
@@ -136,27 +134,15 @@ public sealed class Day19 : Puzzle
             .Where((p) => !string.IsNullOrEmpty(p))
             .ToList();
 
-        if (fabricate)
+        CalibrationSolution = GetMinimumSteps(molecule, replacements, Logger, cancellationToken);
+        FabricationSolution = GetPossibleMolecules(molecule, replacements, cancellationToken).Count;
+
+        if (Verbose)
         {
-            Solution = GetMinimumSteps(molecule, replacements, Logger, cancellationToken);
-
-            if (Verbose)
-            {
-                Logger.WriteLine($"The target molecule can be made in a minimum of {Solution:N0} steps.");
-            }
-        }
-        else
-        {
-            var molecules = GetPossibleMolecules(molecule, replacements, cancellationToken);
-
-            Solution = molecules.Count;
-
-            if (Verbose)
-            {
-                Logger.WriteLine($"{Solution:N0} distinct molecules can be created from {replacements.Count:N0} possible replacements.");
-            }
+            Logger.WriteLine($"The target molecule can be made in a minimum of {CalibrationSolution:N0} steps.");
+            Logger.WriteLine($"{CalibrationSolution:N0} distinct molecules can be created from {FabricationSolution:N0} possible replacements.");
         }
 
-        return PuzzleResult.Create(Solution);
+        return PuzzleResult.Create(CalibrationSolution, FabricationSolution);
     }
 }
