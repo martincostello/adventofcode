@@ -20,28 +20,33 @@ public sealed class Day10 : Puzzle
     public int Solution50 { get; private set; }
 
     /// <summary>
-    /// Gets the 'look-and-say' representation of a <see cref="string"/>.
+    /// Gets the 'look-and-say' representation of a span of characters.
     /// </summary>
     /// <param name="value">The value to get the 'look-and-say' result for.</param>
     /// <returns>The 'look-and-say' representation of <paramref name="value"/>.</returns>
-    public static string AsLookAndSay(string value)
+    public static string AsLookAndSay(ReadOnlySpan<char> value)
     {
-        var input = new Queue<char>(value);
-        var output = new StringBuilder(input.Count);
+        var output = new StringBuilder(value.Length);
 
-        while (input.Count > 0)
+        while (value.Length > 0)
         {
-            char current = input.Dequeue();
+            char current = value[0];
             int count = 1;
 
-            while (input.Count > 0 && input.Peek() == current)
+            for (int i = 1; i < value.Length; i++)
             {
-                input.Dequeue();
+                if (value[i] != current)
+                {
+                    break;
+                }
+
                 count++;
             }
 
             output.Append(count);
             output.Append(current);
+
+            value = value[count..];
         }
 
         return output.ToString();
