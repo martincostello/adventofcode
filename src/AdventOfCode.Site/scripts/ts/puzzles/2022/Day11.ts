@@ -1,7 +1,7 @@
 // Copyright (c) Martin Costello, 2015. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
-import { from } from 'linq-to-typescript';
+import { from, NumberComparer } from 'linq-to-typescript';
 import { Puzzle } from '../Puzzle';
 import { Puzzle2022 } from './Puzzle2022';
 
@@ -111,7 +111,7 @@ export class Day11 extends Puzzle2022 {
         }
 
         return from(monkeys)
-            .orderByDescending((p: Monkey) => p.inspections)
+            .orderByDescending((p: Monkey) => p.inspections, NumberComparer)
             .take(2)
             .aggregate(1, (x: number, y: Monkey) => x * y.inspections);
     }
