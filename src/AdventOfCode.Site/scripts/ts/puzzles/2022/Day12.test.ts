@@ -5,13 +5,17 @@ import { describe, expect, test } from '@jest/globals';
 import { Day12 } from './index';
 
 describe('2022', () => {
-    describe.skip('Day 12', () => {
-        test.each([[[], -1]])('returns correct value for %s', (inputs: string[], expected: number) => {
+    describe('Day 12', () => {
+        test('returns correct values', () => {
+            // Arrange
+            const heightmap = ['Sabqponm', 'abcryxxl', 'accszExk', 'acctuvwj', 'abdefghi'];
+
             // Act
-            const actual = Day12.solve(inputs);
+            const [actualFromStart, actualFromGround] = Day12.getMinimumSteps(heightmap);
 
             // Assert
-            expect(actual).toBe(expected);
+            expect(actualFromStart).toBe(31);
+            expect(actualFromGround).toBe(29);
         });
     });
 });

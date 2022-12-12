@@ -13,4 +13,5 @@ export { Puzzle } from './Puzzle';
 export { PuzzleFactory } from './PuzzleFactory';
 export { Rectangle } from './Rectangle';
 export { Size } from './Size';
+export { SquareGrid } from './SquareGrid';
 export { WeightedGraph } from './WeightedGraph';
