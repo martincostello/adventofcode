@@ -4,9 +4,13 @@
 export { CardinalDirection } from './CardinalDirection';
 export { CharacterRecognition } from './CharacterRecognition';
 export { DefaultPuzzleFactory } from './DefaultPuzzleFactory';
+export { Graph } from './Graph';
 export { Maths } from './Maths';
+export { NodeGraph } from './NodeGraph';
+export { PathFinding } from './PathFinding';
 export { Point } from './Point';
 export { Puzzle } from './Puzzle';
 export { PuzzleFactory } from './PuzzleFactory';
 export { Rectangle } from './Rectangle';
 export { Size } from './Size';
+export { WeightedGraph } from './WeightedGraph';
