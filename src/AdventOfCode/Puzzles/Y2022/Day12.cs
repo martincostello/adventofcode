@@ -6,17 +6,67 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2022;
 /// <summary>
 /// A class representing the puzzle for <c>https://adventofcode.com/2022/day/12</c>. This class cannot be inherited.
 /// </summary>
-[Puzzle(2022, 12, "", RequiresData = true, IsHidden = true)]
+[Puzzle(2022, 12, "Hill Climbing Algorithm", RequiresData = true)]
 public sealed class Day12 : Puzzle
 {
-#pragma warning disable IDE0022
-#pragma warning disable SA1600
+    /// <summary>
+    /// Gets the fewest steps required to move from your current
+    /// position to the location that should get the best signal.
+    /// </summary>
+    public int MinimumSteps { get; private set; }
 
-    public int Solution { get; private set; }
-
-    public static int Solve(IList<string> values)
+    /// <summary>
+    /// Returns the minimum number of steps required to go from the starting
+    /// position to the highest point in the specified heightmap.
+    /// </summary>
+    /// <param name="heightmap">The height map to traverse.</param>
+    /// <returns>
+    /// The fewest steps required to move from the current position
+    /// to the highest location in the heightmap specified by <paramref name="heightmap"/>.
+    /// </returns>
+    public static int GetMinimumSteps(IList<string> heightmap)
     {
-        return -1;
+        var map = BuildMap(heightmap);
+
+        return (int)PathFinding.AStar(map, map.Start, map.End);
+
+        static Map BuildMap(IList<string> heightmap)
+        {
+            int width = heightmap[0].Length;
+            int height = heightmap.Count;
+
+            var map = new Map(width, height);
+
+            for (int y = 0; y < map.Height; y++)
+            {
+                for (int x = 0; x < map.Width; x++)
+                {
+                    var location = new Point(x, y);
+                    map.Locations.Add(location);
+
+                    char ch = heightmap[y][x];
+
+                    map.Locations.Add(location);
+                    map.Elevations[location] = ch switch
+                    {
+                        'S' => 0,
+                        'E' => 'z' - 'a',
+                        _ => ch - 'a',
+                    };
+
+                    if (ch == 'S')
+                    {
+                        map.Start = location;
+                    }
+                    else if (ch == 'E')
+                    {
+                        map.End = location;
+                    }
+                }
+            }
+
+            return map;
+        }
     }
 
     /// <inheritdoc />
@@ -24,15 +74,50 @@ public sealed class Day12 : Puzzle
     {
         ArgumentNullException.ThrowIfNull(args);
 
-        var values = await ReadResourceAsLinesAsync();
+        var heightMap = await ReadResourceAsLinesAsync();
 
-        Solution = Solve(values);
+        MinimumSteps = GetMinimumSteps(heightMap);
 
         if (Verbose)
         {
-            Logger.WriteLine("{0}", Solution);
+            Logger.WriteLine(
+                "The fewest steps required to move from your current position to the location that should get the best signal is {0}.",
+                MinimumSteps);
         }
 
-        return PuzzleResult.Create(Solution);
+        return PuzzleResult.Create(MinimumSteps);
+    }
+
+    private sealed class Map : SquareGrid
+    {
+        public Map(int width, int height)
+            : base(width, height)
+        {
+            Elevations = new(Width * Height);
+        }
+
+        public Point Start { get; set; }
+
+        public Point End { get; set; }
+
+        public Dictionary<Point, int> Elevations { get; }
+
+        public override long Cost(Point a, Point b) => a.ManhattanDistance(b);
+
+        public override IEnumerable<Point> Neighbors(Point id)
+        {
+            int heightId = Elevations[id];
+
+            foreach (var point in base.Neighbors(id))
+            {
+                int heightPoint = Elevations[point];
+                int delta = heightPoint - heightId;
+
+                if (delta < 2)
+                {
+                    yield return point;
+                }
+            }
+        }
     }
 }

@@ -90,7 +90,7 @@ public sealed class Day09 : Puzzle
 
         var basinAreas = new List<int>(lowPoints.Count);
 
-        foreach ((Point point, int value) in lowPoints)
+        foreach (var point in lowPoints.Keys)
         {
             var basin = PathFinding.BreadthFirst(graph, point);
             basinAreas.Add(basin.Count);
