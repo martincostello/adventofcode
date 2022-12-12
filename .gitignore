@@ -9,7 +9,7 @@ _reports
 _UpgradeReport_Files/
 artifacts/
 Backup*/
-BenchmarkDotNet.Artifacts/
+BenchmarkDotNet.Artifacts*/
 bin
 Bin
 coverage/

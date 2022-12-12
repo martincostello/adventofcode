@@ -75,7 +75,7 @@ public abstract class SquareGrid : IWeightedGraph<Point>
     public abstract long Cost(Point a, Point b);
 
     /// <inheritdoc/>
-    public IEnumerable<Point> Neighbors(Point id)
+    public virtual IEnumerable<Point> Neighbors(Point id)
     {
         foreach (Size vector in Vectors)
         {

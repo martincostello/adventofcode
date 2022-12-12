@@ -17,23 +17,27 @@ public sealed class Day12Tests : PuzzleTest
     {
     }
 
-    [Fact(Skip = "Not implemented.")]
-    public void Y2022_Day12_Solve_Returns_Correct_Value()
+    [Fact]
+    public void Y2022_Day12_GetMinimumSteps_Returns_Correct_Value()
     {
         // Arrange
-        string[] values = new[]
+        string[] heightmap = new[]
         {
-            "_",
+            "Sabqponm",
+            "abcryxxl",
+            "accszExk",
+            "acctuvwj",
+            "abdefghi",
         };
 
         // Act
-        int actual = Day12.Solve(values);
+        int actual = Day12.GetMinimumSteps(heightmap);
 
         // Assert
-        actual.ShouldBe(-1);
+        actual.ShouldBe(31);
     }
 
-    [Fact(Skip = "Not implemented.")]
+    [Fact]
     public async Task Y2022_Day12_Solve_Returns_Correct_Solution()
     {
         // Act
@@ -41,6 +45,6 @@ public sealed class Day12Tests : PuzzleTest
 
         // Assert
         puzzle.ShouldNotBeNull();
-        puzzle.Solution.ShouldBe(-1);
+        puzzle.MinimumSteps.ShouldBe(408);
     }
 }
