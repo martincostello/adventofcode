@@ -13,22 +13,47 @@ public sealed class Day12 : Puzzle
     /// Gets the fewest steps required to move from your current
     /// position to the location that should get the best signal.
     /// </summary>
-    public int MinimumSteps { get; private set; }
+    public int MinimumStepsFromStart { get; private set; }
 
     /// <summary>
-    /// Returns the minimum number of steps required to go from the starting
-    /// position to the highest point in the specified heightmap.
+    /// Gets the fewest steps required to move from any position at
+    /// ground level to the location that should get the best signal.
+    /// </summary>
+    public int MinimumStepsFromGroundLevel { get; private set; }
+
+    /// <summary>
+    /// Returns the minimum number of steps required to go to the
+    /// highest point in the specified heightmap from the starting
+    /// position and from any location at ground level.
     /// </summary>
     /// <param name="heightmap">The height map to traverse.</param>
     /// <returns>
-    /// The fewest steps required to move from the current position
-    /// to the highest location in the heightmap specified by <paramref name="heightmap"/>.
+    /// The fewest steps required to move to get to the highest location
+    /// in the heightmap specified by <paramref name="heightmap"/> from
+    /// the starting position and from any location at ground level.
     /// </returns>
-    public static int GetMinimumSteps(IList<string> heightmap)
+    public static (int MinimumStepsFromStart, int MinimumStepsFromGroundLevel) GetMinimumSteps(IList<string> heightmap)
     {
         var map = BuildMap(heightmap);
 
-        return (int)PathFinding.AStar(map, map.Start, map.End);
+        var locationsAtGroundLevel = map.Locations
+            .Where((p) => map.Elevations[p] == 0)
+            .ToList();
+
+        var distances = new Dictionary<Point, int>(locationsAtGroundLevel.Count);
+
+        foreach (var start in locationsAtGroundLevel)
+        {
+            int distance = (int)PathFinding.AStar(map, start, map.End);
+
+            // Ignore starting locations that cannot reach the end
+            if (distance > 0)
+            {
+                distances[start] = distance;
+            }
+        }
+
+        return (distances[map.Start], distances.Values.Min((p) => p));
 
         static Map BuildMap(IList<string> heightmap)
         {
@@ -76,16 +101,20 @@ public sealed class Day12 : Puzzle
 
         var heightMap = await ReadResourceAsLinesAsync();
 
-        MinimumSteps = GetMinimumSteps(heightMap);
+        (MinimumStepsFromStart, MinimumStepsFromGroundLevel) = GetMinimumSteps(heightMap);
 
         if (Verbose)
         {
             Logger.WriteLine(
                 "The fewest steps required to move from your current position to the location that should get the best signal is {0}.",
-                MinimumSteps);
+                MinimumStepsFromStart);
+
+            Logger.WriteLine(
+                "The fewest steps required to move from any position at ground level to the location that should get the best signal is {0}.",
+                MinimumStepsFromGroundLevel);
         }
 
-        return PuzzleResult.Create(MinimumSteps);
+        return PuzzleResult.Create(MinimumStepsFromStart, MinimumStepsFromGroundLevel);
     }
 
     private sealed class Map : SquareGrid
@@ -106,12 +135,12 @@ public sealed class Day12 : Puzzle
 
         public override IEnumerable<Point> Neighbors(Point id)
         {
-            int heightId = Elevations[id];
+            int thisHeight = Elevations[id];
 
             foreach (var point in base.Neighbors(id))
             {
-                int heightPoint = Elevations[point];
-                int delta = heightPoint - heightId;
+                int nextHeight = Elevations[point];
+                int delta = nextHeight - thisHeight;
 
                 if (delta < 2)
                 {

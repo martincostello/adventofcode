@@ -31,10 +31,11 @@ public sealed class Day12Tests : PuzzleTest
         };
 
         // Act
-        int actual = Day12.GetMinimumSteps(heightmap);
+        (int actualFromStart, int actualFromGround) = Day12.GetMinimumSteps(heightmap);
 
         // Assert
-        actual.ShouldBe(31);
+        actualFromStart.ShouldBe(31);
+        actualFromGround.ShouldBe(29);
     }
 
     [Fact]
@@ -45,6 +46,7 @@ public sealed class Day12Tests : PuzzleTest
 
         // Assert
         puzzle.ShouldNotBeNull();
-        puzzle.MinimumSteps.ShouldBe(408);
+        puzzle.MinimumStepsFromStart.ShouldBe(408);
+        puzzle.MinimumStepsFromGroundLevel.ShouldBe(399);
     }
 }
