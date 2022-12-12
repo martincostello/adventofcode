@@ -71,7 +71,6 @@ public sealed class Day12 : Puzzle
 
                     char ch = heightmap[y][x];
 
-                    map.Locations.Add(location);
                     map.Elevations[location] = ch switch
                     {
                         'S' => 0,
