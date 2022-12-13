@@ -22,13 +22,13 @@ public sealed class Day13 : Puzzle
     /// <summary>
     /// Returns the sum of the indices of the correctly sorted packet pairs.
     /// </summary>
-    /// <param name="values">The packets to analyze.</param>
+    /// <param name="packets">The packets to analyze.</param>
     /// <returns>
     /// The sum of the indices of the correctly sorted pairs and the decoder key.
     /// </returns>
-    public static (int SumOfPresortedIndicies, int DecoderKey) GetSumOfSortedPackets(IList<string> values)
+    public static (int SumOfPresortedIndicies, int DecoderKey) DecodePackets(IList<string> packets)
     {
-        var pairs = Parse(values);
+        var pairs = Parse(packets);
 
         int sum = 0;
 
@@ -129,7 +129,7 @@ public sealed class Day13 : Puzzle
 
         var values = await ReadResourceAsLinesAsync();
 
-        (SumOfPresortedIndicies, DecoderKey) = GetSumOfSortedPackets(values);
+        (SumOfPresortedIndicies, DecoderKey) = DecodePackets(values);
 
         if (Verbose)
         {
