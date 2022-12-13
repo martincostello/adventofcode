@@ -34,7 +34,9 @@ public sealed class Day04 : Puzzle
             .OrderBy((p) => p.Timestamp)
             .ToList();
 
-        var groupedLog = parsedAndSortedLog.GroupBy((p) => p.Timestamp.Date);
+        var groupedLog = parsedAndSortedLog
+            .GroupBy((p) => p.Timestamp.Date)
+            .ToArray();
 
         var guardsAsleepByMinute = groupedLog
             .Select((p) => p.Key)

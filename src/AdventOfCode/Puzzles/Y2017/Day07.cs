@@ -134,7 +134,7 @@ public sealed class Day07 : Puzzle
             return unbalancedSubtree.Key;
         }
 
-        var childWeights = root.Children.GroupBy((p) => p.TotalWeight);
+        var childWeights = root.Children.GroupBy((p) => p.TotalWeight).ToArray();
         ProgramDisc? unbalanced = childWeights.FirstOrDefault((p) => p.ExactCount(1))?.FirstOrDefault();
 
         if (unbalanced is null)
