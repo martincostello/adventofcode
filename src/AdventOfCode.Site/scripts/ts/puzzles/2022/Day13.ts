@@ -1,7 +1,7 @@
 // Copyright (c) Martin Costello, 2015. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
-import { from, NumberComparer } from 'linq-to-typescript';
+import { from } from 'linq-to-typescript';
 import { Puzzle2022 } from './Puzzle2022';
 
 export class Day13 extends Puzzle2022 {
@@ -28,7 +28,9 @@ export class Day13 extends Puzzle2022 {
                         case '[':
                             const child = new Packet([]);
                             i += parseValue(child, value.slice(i + 1));
-                            packet.values.push(child);
+                            if (packet.value instanceof Array) {
+                                packet.value.push(child);
+                            }
                             break;
 
                         case ']':
@@ -46,7 +48,9 @@ export class Day13 extends Puzzle2022 {
                                 i++;
                             }
 
-                            packet.values.push(new Packet(packetValue));
+                            if (packet.value instanceof Array) {
+                                packet.value.push(new Packet(packetValue));
+                            }
                             break;
                     }
                 }
@@ -114,51 +118,44 @@ export class Day13 extends Puzzle2022 {
 }
 
 class Packet extends Object {
-    readonly value: number | null;
-    readonly values: Packet[] | null;
+    readonly value: number | Packet[];
 
     constructor(value: number);
     constructor(values: Packet[]);
-    constructor(value: number | Packet[]) {
+    constructor(value: number | Packet[] = []) {
         super();
-        if (value instanceof Array) {
-            this.value = null;
-            this.values = value;
-        } else {
-            this.value = value;
-            this.values = null;
-        }
+        this.value = value;
     }
 
     compareTo(other: Packet): number {
-        if (this.value !== null && other.value !== null) {
+        if (!(this.value instanceof Array) && !(other.value instanceof Array)) {
             return this.value - other.value;
-        } else if (this.values !== null && other.values !== null) {
-            for (let i = 0; i < this.values.length && i < other.values.length; i++) {
-                const comparison = this.values[i].compareTo(other.values[i]);
+        } else if (this.value instanceof Array && other.value instanceof Array) {
+            for (let i = 0; i < this.value.length && i < other.value.length; i++) {
+                const comparison = this.value[i].compareTo(other.value[i]);
                 if (comparison !== 0) {
                     return comparison;
                 }
             }
-            return this.values.length - other.values.length;
+            return this.value.length - other.value.length;
         } else {
             return Packet.expandToArray(this).compareTo(Packet.expandToArray(other));
         }
     }
 
     override toString() {
-        if (this.value !== null) {
-            return this.value.toString();
+        if (this.value instanceof Array) {
+            return `[${this.value.join(',')}]`;
         } else {
-            return `[${this.values.join(',')}]`;
+            return this.value.toString();
         }
     }
 
     private static expandToArray(packet: Packet): Packet {
-        if (packet.value !== null) {
-            return new Packet([new Packet(packet.value)]);
-        } else {
+        if (packet.value instanceof Array) {
             return packet;
+        } else {
+            return new Packet([new Packet(packet.value)]);
         }
     }
 }
