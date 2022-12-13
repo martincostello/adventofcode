@@ -163,21 +163,10 @@ public sealed class Day13 : Puzzle
 
             if (Value is { } x && other.Value is { } y)
             {
-                // If both values are integers, the lower integer should come first.
-                // If the left integer is lower than the right integer, the inputs are
-                // in the right order.If the left integer is higher than the right
-                // integer, the inputs are not in the right order.Otherwise, the inputs
-                // are the same integer; continue checking the next part of the input.
                 return x.CompareTo(y);
             }
             else if (Value is not { } && other.Value is not { })
             {
-                // If both values are lists, compare the first value of each list, then
-                // the second value, and so on. If the left list runs out of items first,
-                // the inputs are in the right order. If the right list runs out of items
-                // first, the inputs are not in the right order. If the lists are the same
-                // length and no comparison makes a decision about the order, continue
-                // checking the next part of the input.
                 for (int i = 0; i < Values.Count && i < other.Values.Count; i++)
                 {
                     int comparison = Values[i].CompareTo(other.Values[i]);
@@ -192,23 +181,7 @@ public sealed class Day13 : Puzzle
             }
             else
             {
-                // If exactly one value is an integer, convert the integer to a list which
-                // contains that integer as its only value, then retry the comparison.
-                var thisAsList = this;
-                var otherAsList = other;
-
-                if (Value is { } value)
-                {
-                    thisAsList = new Packet();
-                    thisAsList.Values.Add(new(value));
-                }
-                else
-                {
-                    otherAsList = new Packet();
-                    otherAsList.Values.Add(new(other.Value.GetValueOrDefault()));
-                }
-
-                return thisAsList.CompareTo(otherAsList);
+                return ExpandToArray(this).CompareTo(ExpandToArray(other));
             }
         }
 
@@ -221,6 +194,20 @@ public sealed class Day13 : Puzzle
             else
             {
                 return $"[{string.Join(',', Values)}]";
+            }
+        }
+
+        private static Packet ExpandToArray(Packet packet)
+        {
+            if (packet.Value is { } value)
+            {
+                var result = new Packet();
+                result.Values.Add(new(value));
+                return result;
+            }
+            else
+            {
+                return packet;
             }
         }
     }
