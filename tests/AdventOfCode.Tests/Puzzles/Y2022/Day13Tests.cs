@@ -18,10 +18,10 @@ public sealed class Day13Tests : PuzzleTest
     }
 
     [Fact]
-    public void Y2022_Day13_GetSumOfSortedPackets_Returns_Correct_Value()
+    public void Y2022_Day13_DecodePackets_Returns_Correct_Value()
     {
         // Arrange
-        string[] values = new[]
+        string[] packets = new[]
         {
             "[1,1,3,1,1]",
             "[1,1,5,1,1]",
@@ -49,7 +49,7 @@ public sealed class Day13Tests : PuzzleTest
         };
 
         // Act
-        (int actualSum, int actualDecoderKey) = Day13.GetSumOfSortedPackets(values);
+        (int actualSum, int actualDecoderKey) = Day13.DecodePackets(packets);
 
         // Assert
         actualSum.ShouldBe(13);
