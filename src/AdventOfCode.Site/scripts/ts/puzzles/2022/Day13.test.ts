@@ -5,13 +5,41 @@ import { describe, expect, test } from '@jest/globals';
 import { Day13 } from './index';
 
 describe('2022', () => {
-    describe.skip('Day 13', () => {
-        test.each([[[], -1]])('returns correct value for %s', (inputs: string[], expected: number) => {
+    describe('Day 13', () => {
+        test('returns correct values', () => {
+            // Arrange
+            const packets = [
+                '[1,1,3,1,1]',
+                '[1,1,5,1,1]',
+                '',
+                '[[1],[2,3,4]]',
+                '[[1],4]',
+                '',
+                '[9]',
+                '[[8,7,6]]',
+                '',
+                '[[4,4],4,4]',
+                '[[4,4],4,4,4]',
+                '',
+                '[7,7,7,7]',
+                '[7,7,7]',
+                '',
+                '[]',
+                '[3]',
+                '',
+                '[[[]]]',
+                '[[]]',
+                '',
+                '[1,[2,[3,[4,[5,6,7]]]],8,9]',
+                '[1,[2,[3,[4,[5,6,0]]]],8,9]',
+            ];
+
             // Act
-            const actual = Day13.solve(inputs);
+            const [actualSum, actualDecoderKey] = Day13.decodePackets(packets);
 
             // Assert
-            expect(actual).toBe(expected);
+            expect(actualSum).toBe(13);
+            expect(actualDecoderKey).toBe(140);
         });
     });
 });
