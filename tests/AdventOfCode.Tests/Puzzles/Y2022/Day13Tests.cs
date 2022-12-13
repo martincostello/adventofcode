@@ -17,23 +17,45 @@ public sealed class Day13Tests : PuzzleTest
     {
     }
 
-    [Fact(Skip = "Not implemented.")]
-    public void Y2022_Day13_Solve_Returns_Correct_Value()
+    [Fact]
+    public void Y2022_Day13_GetSumOfSortedPackets_Returns_Correct_Value()
     {
         // Arrange
         string[] values = new[]
         {
-            "_",
+            "[1,1,3,1,1]",
+            "[1,1,5,1,1]",
+            string.Empty,
+            "[[1],[2,3,4]]",
+            "[[1],4]",
+            string.Empty,
+            "[9]",
+            "[[8,7,6]]",
+            string.Empty,
+            "[[4,4],4,4]",
+            "[[4,4],4,4,4]",
+            string.Empty,
+            "[7,7,7,7]",
+            "[7,7,7]",
+            string.Empty,
+            "[]",
+            "[3]",
+            string.Empty,
+            "[[[]]]",
+            "[[]]",
+            string.Empty,
+            "[1,[2,[3,[4,[5,6,7]]]],8,9]",
+            "[1,[2,[3,[4,[5,6,0]]]],8,9]",
         };
 
         // Act
-        int actual = Day13.Solve(values);
+        int actual = Day13.GetSumOfSortedPackets(values);
 
         // Assert
-        actual.ShouldBe(-1);
+        actual.ShouldBe(13);
     }
 
-    [Fact(Skip = "Not implemented.")]
+    [Fact]
     public async Task Y2022_Day13_Solve_Returns_Correct_Solution()
     {
         // Act
@@ -41,6 +63,6 @@ public sealed class Day13Tests : PuzzleTest
 
         // Assert
         puzzle.ShouldNotBeNull();
-        puzzle.Solution.ShouldBe(-1);
+        puzzle.Solution.ShouldBe(5252);
     }
 }
