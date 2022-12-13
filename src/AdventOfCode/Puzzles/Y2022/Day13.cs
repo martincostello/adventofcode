@@ -57,8 +57,8 @@ public sealed class Day13 : Puzzle
             .Order()
             .ToList();
 
-        int dividerIndex1 = 1 + sorted.FindIndex(0, sorted.Count, (p) => ReferenceEquals(p, divider1));
-        int dividerIndex2 = 1 + sorted.FindIndex(0, sorted.Count, (p) => ReferenceEquals(p, divider2));
+        int dividerIndex1 = 1 + sorted.IndexOf(divider1);
+        int dividerIndex2 = 1 + sorted.IndexOf(divider2);
 
         int decoderKey = dividerIndex1 * dividerIndex2;
 
