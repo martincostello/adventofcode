@@ -68,7 +68,7 @@ public sealed class Day07 : Puzzle
             {
                 string line = terminalOutput[i];
 
-                if (line.StartsWith("$ cd "))
+                if (line.StartsWith("$ cd ", StringComparison.Ordinal))
                 {
                     string name = line[5..];
 
@@ -89,7 +89,7 @@ public sealed class Day07 : Puzzle
                         current = directory;
                     }
                 }
-                else if (line.StartsWith("$ ls"))
+                else if (line.StartsWith("$ ls", StringComparison.Ordinal))
                 {
                     i += ParseEntries(current, terminalOutput[(i + 1)..]);
 
@@ -119,7 +119,7 @@ public sealed class Day07 : Puzzle
                     count = i;
                     break;
                 }
-                else if (item.StartsWith("dir "))
+                else if (item.StartsWith("dir ", StringComparison.Ordinal))
                 {
                     current.Children.Add(new Directory(item[4..], current, new()));
                 }

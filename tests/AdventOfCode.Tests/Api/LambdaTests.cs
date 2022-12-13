@@ -14,9 +14,10 @@ namespace MartinCostello.AdventOfCode.Api;
 /// A class containing tests for the API when hosted in AWS Lambda.
 /// </summary>
 [Collection(nameof(LambdaTestsCollection))]
-public class LambdaTests : IAsyncLifetime
+public class LambdaTests : IAsyncLifetime, IDisposable
 {
     private readonly HttpLambdaTestServer _server;
+    private bool _disposed;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="LambdaTests"/> class.
@@ -25,6 +26,17 @@ public class LambdaTests : IAsyncLifetime
     public LambdaTests(ITestOutputHelper outputHelper)
     {
         _server = new() { OutputHelper = outputHelper };
+    }
+
+    ~LambdaTests()
+    {
+        Dispose(false);
+    }
+
+    public void Dispose()
+    {
+        Dispose(true);
+        GC.SuppressFinalize(this);
     }
 
     public async Task DisposeAsync()
@@ -149,6 +161,19 @@ public class LambdaTests : IAsyncLifetime
         solution.RootElement.TryGetProperty("solutions", out var solutions).ShouldBeTrue();
         solutions.GetArrayLength().ShouldBe(expected.Length);
         solutions.EnumerateArray().ToArray().Select((p) => p.GetInt32()).ToArray().ShouldBe(expected);
+    }
+
+    protected virtual void Dispose(bool disposing)
+    {
+        if (!_disposed)
+        {
+            if (disposing)
+            {
+                _server?.Dispose();
+            }
+
+            _disposed = true;
+        }
     }
 
     private static async Task<(string Body, string ContentType)> GetFormContentAsync(Action<MultipartFormDataContent> configure)

@@ -225,7 +225,7 @@ public class PuzzleBenchmarks
 
         public override IPuzzle Puzzle { get; }
 
-        private sealed class InMemoryCache : ICache
+        private sealed class InMemoryCache : ICache, IDisposable
         {
             internal static readonly InMemoryCache Instance = new();
             private readonly MemoryCache _cache = new(new MemoryCacheOptions());
@@ -235,6 +235,8 @@ public class PuzzleBenchmarks
                 var result = await _cache.GetOrCreateAsync(key, (_) => factory());
                 return result!;
             }
+
+            public void Dispose() => _cache.Dispose();
         }
 
         private sealed class NullLogger : ILogger

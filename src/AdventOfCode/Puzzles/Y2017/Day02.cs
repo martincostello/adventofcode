@@ -44,7 +44,7 @@ public sealed class Day02 : Puzzle
     /// <returns>
     /// The difference between the minimum and maximum values in the row.
     /// </returns>
-    public static int ComputeDifference(IEnumerable<int> row)
+    public static int ComputeDifference(ICollection<int> row)
     {
         int minimum = row.Min();
         int maximum = row.Max();

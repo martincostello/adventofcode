@@ -31,7 +31,7 @@ public sealed class Day10 : Puzzle
     /// with the values specified by <paramref name="a"/> and <paramref name="b"/> and the product
     /// of the values of the microchips in the output bins with the numbers specified by <paramref name="binsOfInterest"/>.
     /// </returns>
-    internal static (int Bot, int Product) GetBotNumber(IEnumerable<string> instructions, int a, int b, IEnumerable<int> binsOfInterest)
+    internal static (int Bot, int Product) GetBotNumber(ICollection<string> instructions, int a, int b, IEnumerable<int> binsOfInterest)
     {
         int max = Math.Max(a, b);
         int min = Math.Min(a, b);
@@ -51,9 +51,23 @@ public sealed class Day10 : Puzzle
                 }
             });
 
+        var foundBins = new HashSet<int>();
+
         foreach (var bin in processor.Bins)
         {
-            if (binsOfInterest.Contains(bin.Key))
+            bool found = false;
+
+            if (foundBins.Contains(bin.Key))
+            {
+                found = true;
+            }
+            else if (binsOfInterest.Contains(bin.Key))
+            {
+                foundBins.Add(bin.Key);
+                found = true;
+            }
+
+            if (found)
             {
                 productOfBinsOfInterest *= bin.Value.Microchip!.Value;
             }
@@ -240,7 +254,7 @@ public sealed class Day10 : Puzzle
         /// </summary>
         /// <param name="instructions">The instructions to process.</param>
         /// <param name="onCompare">A delegate to a method to invoke when to microchips are compared by a bot.</param>
-        internal void Process(IEnumerable<string> instructions, Action<int, int, int> onCompare)
+        internal void Process(ICollection<string> instructions, Action<int, int, int> onCompare)
         {
             OnCompare = onCompare;
 
