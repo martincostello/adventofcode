@@ -143,14 +143,6 @@ class Packet extends Object {
         }
     }
 
-    override toString() {
-        if (this.value instanceof Array) {
-            return `[${this.value.join(',')}]`;
-        } else {
-            return this.value.toString();
-        }
-    }
-
     private static expandToArray(packet: Packet): Packet {
         if (packet.value instanceof Array) {
             return packet;
