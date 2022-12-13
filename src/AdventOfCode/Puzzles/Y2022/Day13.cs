@@ -10,18 +10,23 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2022;
 public sealed class Day13 : Puzzle
 {
     /// <summary>
-    /// Gets the sum of the indices of the correctly sorted pairs.
+    /// Gets the sum of the indices of the already correctly sorted pairs.
     /// </summary>
-    public int Solution { get; private set; }
+    public int SumOfPresortedIndicies { get; private set; }
+
+    /// <summary>
+    /// Gets the decoder key for the distress signal.
+    /// </summary>
+    public int DecoderKey { get; private set; }
 
     /// <summary>
     /// Returns the sum of the indices of the correctly sorted packet pairs.
     /// </summary>
     /// <param name="values">The packets to analyze.</param>
     /// <returns>
-    /// The sum of the indices of the correctly sorted pairs.
+    /// The sum of the indices of the correctly sorted pairs and the decoder key.
     /// </returns>
-    public static int GetSumOfSortedPackets(IList<string> values)
+    public static (int SumOfPresortedIndicies, int DecoderKey) GetSumOfSortedPackets(IList<string> values)
     {
         var pairs = Parse(values);
 
@@ -39,7 +44,25 @@ public sealed class Day13 : Puzzle
             }
         }
 
-        return sum;
+        var divider1 = new Packet();
+        divider1.Values.Add(new(2));
+
+        var divider2 = new Packet();
+        divider2.Values.Add(new(6));
+
+        var sorted = pairs
+            .SelectMany((p) => new[] { p.Left, p.Right })
+            .Append(divider1)
+            .Append(divider2)
+            .Order()
+            .ToList();
+
+        int dividerIndex1 = 1 + sorted.FindIndex(0, sorted.Count, (p) => ReferenceEquals(p, divider1));
+        int dividerIndex2 = 1 + sorted.FindIndex(0, sorted.Count, (p) => ReferenceEquals(p, divider2));
+
+        int decoderKey = dividerIndex1 * dividerIndex2;
+
+        return (sum, decoderKey);
 
         static List<(Packet Left, Packet Right)> Parse(IList<string> values)
         {
@@ -89,7 +112,7 @@ public sealed class Day13 : Puzzle
                                 i++;
                             }
 
-                            packet.Values.Add(new() { Value = packetValue });
+                            packet.Values.Add(new(packetValue));
                             break;
                     }
                 }
@@ -106,21 +129,33 @@ public sealed class Day13 : Puzzle
 
         var values = await ReadResourceAsLinesAsync();
 
-        Solution = GetSumOfSortedPackets(values);
+        (SumOfPresortedIndicies, DecoderKey) = GetSumOfSortedPackets(values);
 
         if (Verbose)
         {
-            Logger.WriteLine("The sum of the indices of the pairs of packets already in the right order is {0}.", Solution);
+            Logger.WriteLine("The sum of the indices of the pairs of packets already in the right order is {0}.", SumOfPresortedIndicies);
+            Logger.WriteLine("The decoder key for the distress signal is {0}.", DecoderKey);
         }
 
-        return PuzzleResult.Create(Solution);
+        return PuzzleResult.Create(SumOfPresortedIndicies, DecoderKey);
     }
 
     private sealed class Packet : IComparable<Packet>
     {
-        public int? Value { get; set; }
+        public Packet()
+        {
+            Values = new List<Packet>();
+        }
 
-        public List<Packet> Values { get; set; } = new();
+        public Packet(int value)
+        {
+            Value = value;
+            Values = Array.Empty<Packet>();
+        }
+
+        public int? Value { get; }
+
+        public IList<Packet> Values { get; }
 
         public int CompareTo(Packet? other)
         {
@@ -165,12 +200,12 @@ public sealed class Day13 : Puzzle
                 if (Value is { } value)
                 {
                     thisAsList = new Packet();
-                    thisAsList.Values.Add(new() { Value = value });
+                    thisAsList.Values.Add(new(value));
                 }
                 else
                 {
                     otherAsList = new Packet();
-                    otherAsList.Values.Add(new() { Value = other.Value });
+                    otherAsList.Values.Add(new(other.Value.GetValueOrDefault()));
                 }
 
                 return thisAsList.CompareTo(otherAsList);

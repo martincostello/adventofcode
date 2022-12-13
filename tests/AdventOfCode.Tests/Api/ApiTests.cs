@@ -174,7 +174,7 @@ public class ApiTests : IntegrationTest
     [PuzzleData(2022, 10, 12740, "RBPARAGF", ExpectedVisualizations = 1)]
     [PuzzleData(2022, 11, 56120, 24389045529)]
     [PuzzleData(2022, 12, 408, 399)]
-    [PuzzleData(2022, 13, 5252)]
+    [PuzzleData(2022, 13, 5252, 20592)]
     [PuzzleData(2022, 14, -1, Skip = "Not implemented.")]
     [PuzzleData(2022, 15, -1, Skip = "Not implemented.")]
     [PuzzleData(2022, 16, -1, Skip = "Not implemented.")]

@@ -49,10 +49,11 @@ public sealed class Day13Tests : PuzzleTest
         };
 
         // Act
-        int actual = Day13.GetSumOfSortedPackets(values);
+        (int actualSum, int actualDecoderKey) = Day13.GetSumOfSortedPackets(values);
 
         // Assert
-        actual.ShouldBe(13);
+        actualSum.ShouldBe(13);
+        actualDecoderKey.ShouldBe(140);
     }
 
     [Fact]
@@ -63,6 +64,7 @@ public sealed class Day13Tests : PuzzleTest
 
         // Assert
         puzzle.ShouldNotBeNull();
-        puzzle.Solution.ShouldBe(5252);
+        puzzle.SumOfPresortedIndicies.ShouldBe(5252);
+        puzzle.DecoderKey.ShouldBe(20592);
     }
 }
