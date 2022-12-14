@@ -72,8 +72,6 @@ public sealed class Day04 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        ArgumentNullException.ThrowIfNull(args);
-
         var assignments = await ReadResourceAsLinesAsync();
 
         FullyOverlappingAssignments = GetOverlappingAssignments(assignments, false);

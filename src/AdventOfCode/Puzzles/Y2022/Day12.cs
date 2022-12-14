@@ -96,11 +96,9 @@ public sealed class Day12 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        ArgumentNullException.ThrowIfNull(args);
+        var heightmap = await ReadResourceAsLinesAsync();
 
-        var heightMap = await ReadResourceAsLinesAsync();
-
-        (MinimumStepsFromStart, MinimumStepsFromGroundLevel) = GetMinimumSteps(heightMap);
+        (MinimumStepsFromStart, MinimumStepsFromGroundLevel) = GetMinimumSteps(heightmap);
 
         if (Verbose)
         {

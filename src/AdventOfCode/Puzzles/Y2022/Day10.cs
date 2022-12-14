@@ -122,8 +122,6 @@ public sealed class Day10 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        ArgumentNullException.ThrowIfNull(args);
-
         var program = await ReadResourceAsLinesAsync();
 
         (Message, string visualization, SumOfSignalStrengths) = GetMessage(program);

@@ -145,8 +145,6 @@ public sealed class Day05 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        ArgumentNullException.ThrowIfNull(args);
-
         var instructions = await ReadResourceAsLinesAsync();
 
         TopCratesOfStacks9000 = RearrangeCrates(instructions, canMoveMultipleCrates: false);

@@ -125,11 +125,9 @@ public sealed class Day13 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        ArgumentNullException.ThrowIfNull(args);
+        var packets = await ReadResourceAsLinesAsync();
 
-        var values = await ReadResourceAsLinesAsync();
-
-        (SumOfPresortedIndicies, DecoderKey) = DecodePackets(values);
+        (SumOfPresortedIndicies, DecoderKey) = DecodePackets(packets);
 
         if (Verbose)
         {

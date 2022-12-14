@@ -148,7 +148,7 @@ public sealed class Day14 : Puzzle
             {
                 var next = location + Down;
 
-                if (!cave.TryGetValue(next, out var content))
+                if (!cave.ContainsKey(next))
                 {
                     return next;
                 }
@@ -212,8 +212,6 @@ public sealed class Day14 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        ArgumentNullException.ThrowIfNull(args);
-
         var paths = await ReadResourceAsLinesAsync();
 
         (GrainsOfSandWithVoid, string visualization1) = Simulate(paths, hasFloor: false, cancellationToken);

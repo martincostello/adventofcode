@@ -79,8 +79,6 @@ public sealed class Day03 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        ArgumentNullException.ThrowIfNull(args);
-
         var inventories = await ReadResourceAsLinesAsync();
 
         SumOfPriorities = GetSumOfCommonItemTypes(inventories, useGroups: false);
