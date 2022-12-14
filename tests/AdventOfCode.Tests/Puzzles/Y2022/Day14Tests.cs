@@ -45,7 +45,6 @@ public sealed class Day14Tests : PuzzleTest
         // Assert
         puzzle.ShouldNotBeNull();
         puzzle.GrainsOfSandWithVoid.ShouldBe(832);
-        puzzle.GrainsOfSandWithFloor.ShouldBeGreaterThan(1320);
         puzzle.GrainsOfSandWithFloor.ShouldBe(27601);
     }
 }

@@ -168,8 +168,6 @@ public sealed class Day08 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        ArgumentNullException.ThrowIfNull(args);
-
         var grid = await ReadResourceAsLinesAsync();
 
         (VisibleTrees, MaximumScenicScore) = CountVisibleTrees(grid);

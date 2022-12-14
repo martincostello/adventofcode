@@ -71,8 +71,6 @@ public sealed class Day09 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        ArgumentNullException.ThrowIfNull(args);
-
         var moves = await ReadResourceAsLinesAsync();
 
         PositionsVisited2 = Move(moves, knots: 2);

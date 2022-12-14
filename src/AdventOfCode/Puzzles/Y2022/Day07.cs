@@ -137,8 +137,6 @@ public sealed class Day07 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        ArgumentNullException.ThrowIfNull(args);
-
         var terminalOutput = await ReadResourceAsLinesAsync();
 
         (TotalSizeOfDirectoriesLargerThanLimit, SizeOfSmallestDirectoryToDelete) = GetDirectorySizes(terminalOutput);
