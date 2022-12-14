@@ -17,8 +17,10 @@ public sealed class Day14Tests : PuzzleTest
     {
     }
 
-    [Fact]
-    public void Y2022_Day14_Simulate_Returns_Correct_Value()
+    [Theory]
+    [InlineData(false, 24)]
+    [InlineData(true, 93)]
+    public void Y2022_Day14_Simulate_Returns_Correct_Value(bool hasFloor, int expected)
     {
         // Arrange
         string[] paths = new[]
@@ -28,10 +30,10 @@ public sealed class Day14Tests : PuzzleTest
         };
 
         // Act
-        int actual = Day14.Simulate(paths);
+        (int actual, _) = Day14.Simulate(paths, hasFloor);
 
         // Assert
-        actual.ShouldBe(24);
+        actual.ShouldBe(expected);
     }
 
     [Fact]
@@ -42,6 +44,8 @@ public sealed class Day14Tests : PuzzleTest
 
         // Assert
         puzzle.ShouldNotBeNull();
-        puzzle.GrainsOfSand.ShouldBe(832);
+        puzzle.GrainsOfSandWithVoid.ShouldBe(832);
+        puzzle.GrainsOfSandWithFloor.ShouldBeGreaterThan(1320);
+        puzzle.GrainsOfSandWithFloor.ShouldBe(27601);
     }
 }
