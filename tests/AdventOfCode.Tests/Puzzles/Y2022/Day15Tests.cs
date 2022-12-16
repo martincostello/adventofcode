@@ -17,23 +17,36 @@ public sealed class Day15Tests : PuzzleTest
     {
     }
 
-    [Fact(Skip = "Not implemented.")]
-    public void Y2022_Day15_Solve_Returns_Correct_Value()
+    [Fact]
+    public void Y2022_Day15_FindBeacons_Returns_Correct_Value()
     {
         // Arrange
         string[] values = new[]
         {
-            "_",
+            "Sensor at x=2, y=18: closest beacon is at x=-2, y=15",
+            "Sensor at x=9, y=16: closest beacon is at x=10, y=16",
+            "Sensor at x=13, y=2: closest beacon is at x=15, y=3",
+            "Sensor at x=12, y=14: closest beacon is at x=10, y=16",
+            "Sensor at x=10, y=20: closest beacon is at x=10, y=16",
+            "Sensor at x=14, y=17: closest beacon is at x=10, y=16",
+            "Sensor at x=8, y=7: closest beacon is at x=2, y=10",
+            "Sensor at x=2, y=0: closest beacon is at x=2, y=10",
+            "Sensor at x=0, y=11: closest beacon is at x=2, y=10",
+            "Sensor at x=20, y=14: closest beacon is at x=25, y=17",
+            "Sensor at x=17, y=20: closest beacon is at x=21, y=22",
+            "Sensor at x=16, y=7: closest beacon is at x=15, y=3",
+            "Sensor at x=14, y=3: closest beacon is at x=15, y=3",
+            "Sensor at x=20, y=1: closest beacon is at x=15, y=3",
         };
 
         // Act
-        int actual = Day15.Solve(values);
+        int actual = Day15.FindBeacons(values, row: 10);
 
         // Assert
-        actual.ShouldBe(-1);
+        actual.ShouldBe(26);
     }
 
-    [Fact(Skip = "Not implemented.")]
+    [Fact]
     public async Task Y2022_Day15_Solve_Returns_Correct_Solution()
     {
         // Act
@@ -41,6 +54,6 @@ public sealed class Day15Tests : PuzzleTest
 
         // Assert
         puzzle.ShouldNotBeNull();
-        puzzle.Solution.ShouldBe(-1);
+        puzzle.PositionsWithNoBeacons.ShouldBe(-1);
     }
 }
