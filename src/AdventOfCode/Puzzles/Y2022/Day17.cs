@@ -6,17 +6,63 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2022;
 /// <summary>
 /// A class representing the puzzle for <c>https://adventofcode.com/2022/day/17</c>. This class cannot be inherited.
 /// </summary>
-[Puzzle(2022, 17, "", RequiresData = true, IsHidden = true)]
+[Puzzle(2022, 17, "Pyroclastic Flow", RequiresData = true)]
 public sealed class Day17 : Puzzle
 {
-#pragma warning disable IDE0022
-#pragma warning disable SA1600
+    /// <summary>
+    /// Gets how many units tall will the tower of rocks
+    /// will be after 2022 rocks have stopped falling.
+    /// </summary>
+    public int Height { get; private set; }
 
-    public int Solution { get; private set; }
-
-    public static int Solve(IList<string> values)
+    /// <summary>
+    /// Gets the height of the tower of rocks after
+    /// the specified number of rocks have stopped falling.
+    /// </summary>
+    /// <param name="jets">The directions of the jets that move the rocks as they fall.</param>
+    /// <param name="count">The number of rocks to simulate falling.</param>
+    /// <returns>
+    /// Returns how many units tall will the tower of rocks will be after the number
+    /// of rocks specified by <paramref name="count"/> have stopped falling.
+    /// </returns>
+    public static int GetHeightOfTower(string jets, int count)
     {
-        return -1;
+        var tower = new Tower();
+        var shapes = new[] { Rock.Horizontal, Rock.Plus, Rock.Boomerang, Rock.Vertical, Rock.Square };
+        var down = new Size(0, -1);
+
+        for (int i = 0, j = 0; i < count; i++)
+        {
+            var rock = Rock.Spawn(shapes[i % shapes.Length], tower.Height + 3);
+
+            while (true)
+            {
+                var offset = GetOffset(jets[j++ % jets.Length]);
+
+                if (!tower.WillCollide(rock, offset))
+                {
+                    rock.Shift(offset);
+                }
+
+                if (tower.WillCollide(rock, down) || rock.Bottom == 0)
+                {
+                    break;
+                }
+
+                rock.Drop();
+            }
+
+            tower.Consume(rock);
+        }
+
+        return tower.Height;
+
+        static Size GetOffset(char direction) => direction switch
+        {
+            '<' => new(-1, 0),
+            '>' => new(1, 0),
+            _ => throw new PuzzleException($"Invalid direction '{direction}'."),
+        };
     }
 
     /// <inheritdoc />
@@ -24,15 +70,137 @@ public sealed class Day17 : Puzzle
     {
         ArgumentNullException.ThrowIfNull(args);
 
-        var values = await ReadResourceAsLinesAsync();
+        string jets = (await ReadResourceAsStringAsync()).Trim();
 
-        Solution = Solve(values);
+        Height = GetHeightOfTower(jets.Trim(), count: 2022);
 
         if (Verbose)
         {
-            Logger.WriteLine("{0}", Solution);
+            Logger.WriteLine("The tower of rocks is {0} units tall after 2022 rocks have stopped falling.", Height);
         }
 
-        return PuzzleResult.Create(Solution);
+        return PuzzleResult.Create(Height);
+    }
+
+    private sealed class Rock
+    {
+        public static readonly IReadOnlyList<Point> Horizontal = new Point[] { new(0, 0), new(1, 0), new(2, 0), new(3, 0) };
+        public static readonly IReadOnlyList<Point> Plus = new Point[] { new(1, 0), new(0, 1), new(1, 1), new(2, 1), new(1, 2) };
+        public static readonly IReadOnlyList<Point> Boomerang = new Point[] { new(0, 0), new(1, 0), new(2, 0), new(2, 1), new(2, 2) };
+        public static readonly IReadOnlyList<Point> Vertical = new Point[] { new(0, 0), new(0, 1), new(0, 2), new(0, 3) };
+        public static readonly IReadOnlyList<Point> Square = new Point[] { new(0, 0), new(1, 0), new(0, 1), new(1, 1) };
+
+        private Rock(IReadOnlyList<Point> points)
+        {
+            Points = new List<Point>(points);
+        }
+
+        public int Left => Points.Min((p) => p.X);
+
+        public int Right => Points.Max((p) => p.X);
+
+        public int Top => Points.Max((p) => p.Y);
+
+        public int Bottom => Points.Min((p) => p.Y);
+
+        public IList<Point> Points { get; }
+
+        public static Rock Spawn(IReadOnlyList<Point> shape, int y)
+        {
+            var rock = new Rock(shape);
+            var offset = new Size(2, y);
+
+            for (int i = 0; i < rock.Points.Count; i++)
+            {
+                rock.Points[i] += offset;
+            }
+
+            return rock;
+        }
+
+        public void Drop()
+        {
+            for (int i = 0; i < Points.Count; i++)
+            {
+                Points[i] += new Size(0, -1);
+            }
+        }
+
+        public void Raise()
+        {
+            for (int i = 0; i < Points.Count; i++)
+            {
+                Points[i] += new Size(0, 1);
+            }
+        }
+
+        public void Shift(Size delta)
+        {
+            if (Right + delta.Width > 6 || Left + delta.Width < 0)
+            {
+                return;
+            }
+
+            for (int i = 0; i < Points.Count; i++)
+            {
+                Points[i] += delta;
+            }
+        }
+    }
+
+    private sealed class Tower
+    {
+        private readonly HashSet<Point> _rocks = new();
+
+        public int Height => _rocks.Count == 0 ? 0 : _rocks.Max((p) => p.Y) + 1;
+
+        public int HeightAt(int x)
+            => _rocks.Where((p) => p.X == x).Max((p) => p.Y);
+
+        public bool WillCollide(Rock rock, Size offset)
+        {
+            foreach (Point point in rock.Points)
+            {
+                if (_rocks.Contains(point + offset))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        public void Consume(Rock rock)
+            => _rocks.UnionWith(rock.Points);
+
+        public override string ToString()
+            => ToString(null);
+
+        public string ToString(Rock? rock)
+        {
+            var builder = new StringBuilder();
+
+            if (rock is not null || _rocks.Count > 0)
+            {
+                int maxY = Math.Max(rock?.Top ?? 0, _rocks.Count == 0 ? 0 : _rocks.MaxBy((p) => p.Y).Y);
+
+                for (int y = maxY; y > -1; y--)
+                {
+                    builder.Append('|');
+
+                    for (int x = 0; x < 7; x++)
+                    {
+                        builder.Append(rock?.Points.Contains(new(x, y)) == true ? '@' : _rocks.Contains(new(x, y)) ? '#' : '.');
+                    }
+
+                    builder.Append('|');
+                    builder.Append('\n');
+                }
+            }
+
+            builder.Append("+-------+");
+
+            return builder.ToString();
+        }
     }
 }
