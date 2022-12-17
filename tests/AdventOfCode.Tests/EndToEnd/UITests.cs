@@ -73,12 +73,7 @@ public class UITests : EndToEndTest, IClassFixture<PlaywrightFixture>
 
     private static async Task<string> GetPuzzleInputAsync(string year, string day)
     {
-        var type = typeof(Puzzle);
-
-        string name = FormattableString.Invariant(
-            $"MartinCostello.{type.Assembly.GetName().Name}.Input.Y{year}.Day{(day.Length == 1 ? "0" : string.Empty)}{day}.input.txt");
-
-        using var stream = type.Assembly.GetManifestResourceStream(name)!;
+        using var stream = InputProvider.Get(int.Parse(year, CultureInfo.InvariantCulture), int.Parse(day, CultureInfo.InvariantCulture))!;
         using var reader = new StreamReader(stream);
 
         return await reader.ReadToEndAsync();
