@@ -27,17 +27,18 @@ public sealed class Day17 : Puzzle
     /// </summary>
     /// <param name="jets">The directions of the jets that move the rocks as they fall.</param>
     /// <param name="count">The number of rocks to simulate falling.</param>
+    /// <param name="cancellationToken">The optional <see cref="CancellationToken"/> to use.</param>
     /// <returns>
     /// Returns how many units tall will the tower of rocks will be after the number
     /// of rocks specified by <paramref name="count"/> have stopped falling.
     /// </returns>
-    public static int GetHeightOfTower(string jets, long count)
+    public static long GetHeightOfTower(string jets, long count, CancellationToken cancellationToken = default)
     {
         var tower = new Tower();
         var shapes = new[] { Rock.Horizontal, Rock.Plus, Rock.Boomerang, Rock.Vertical, Rock.Square };
         var down = new Size(0, -1);
 
-        for (long i = 0, j = 0; i < count; i++)
+        for (long i = 0, j = 0; i < count && !cancellationToken.IsCancellationRequested; i++)
         {
             var rock = Rock.Spawn(shapes[i % shapes.Length], tower.Height + 3);
 
@@ -61,7 +62,9 @@ public sealed class Day17 : Puzzle
             tower.Consume(rock);
         }
 
-        return tower.Height;
+        cancellationToken.ThrowIfCancellationRequested();
+
+        return tower.RealHeight;
 
         static Size GetOffset(char direction) => direction switch
         {
@@ -76,8 +79,8 @@ public sealed class Day17 : Puzzle
     {
         string jets = (await ReadResourceAsStringAsync()).Trim();
 
-        Height2022 = GetHeightOfTower(jets.Trim(), count: 2022);
-        HeightTrillion = GetHeightOfTower(jets.Trim(), count: 1000000000000);
+        Height2022 = GetHeightOfTower(jets.Trim(), count: 2022, cancellationToken);
+        HeightTrillion = GetHeightOfTower(jets.Trim(), count: 1000000000000, cancellationToken);
 
         if (Verbose)
         {
@@ -156,12 +159,17 @@ public sealed class Day17 : Puzzle
 
     private sealed class Tower
     {
-        private readonly HashSet<Point> _rocks = new();
+        private const int Width = 7;
+
+        private HashSet<Point> _rocks = new();
+        private long _offset;
 
         public int Height => _rocks.Count == 0 ? 0 : _rocks.Max((p) => p.Y) + 1;
 
+        public long RealHeight => _offset + Height;
+
         public int HeightAt(int x)
-            => _rocks.Where((p) => p.X == x).Max((p) => p.Y);
+            => _rocks.Where((p) => p.X == x).Select((p) => p.Y).DefaultIfEmpty(0).Max();
 
         public bool WillCollide(Rock rock, Size offset)
         {
@@ -177,7 +185,10 @@ public sealed class Day17 : Puzzle
         }
 
         public void Consume(Rock rock)
-            => _rocks.UnionWith(rock.Points);
+        {
+            _rocks.UnionWith(rock.Points);
+            TryCompact();
+        }
 
         public override string ToString()
             => ToString(null);
@@ -194,7 +205,7 @@ public sealed class Day17 : Puzzle
                 {
                     builder.Append('|');
 
-                    for (int x = 0; x < 7; x++)
+                    for (int x = 0; x < Width; x++)
                     {
                         builder.Append(rock?.Points.Contains(new(x, y)) == true ? '@' : _rocks.Contains(new(x, y)) ? '#' : '.');
                     }
@@ -207,6 +218,30 @@ public sealed class Day17 : Puzzle
             builder.Append("+-------+");
 
             return builder.ToString();
+        }
+
+        private void TryCompact()
+        {
+            if (Height <= 100)
+            {
+                return;
+            }
+
+            int rowsToDelete = int.MaxValue;
+
+            for (int i = 0; i < Width; i++)
+            {
+                rowsToDelete = Math.Min(HeightAt(i), rowsToDelete);
+            }
+
+            if (rowsToDelete > 0)
+            {
+                _offset += rowsToDelete;
+                _rocks.RemoveWhere((p) => p.Y < rowsToDelete);
+
+                var delta = new Size(0, rowsToDelete);
+                _rocks = _rocks.Select((p) => p - delta).ToHashSet();
+            }
         }
     }
 }
