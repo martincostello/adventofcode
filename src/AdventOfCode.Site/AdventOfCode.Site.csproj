@@ -38,6 +38,6 @@
     <Exec Command="npm ci" Condition=" !Exists('$(MSBuildThisFileDirectory)\node_modules') AND '$(GITHUB_ACTIONS)' != '' " />
     <Exec Command="npm install" Condition=" !Exists('$(MSBuildThisFileDirectory)\node_modules') AND '$(GITHUB_ACTIONS)' == '' " />
     <Exec Command="npm run build" Condition=" !Exists('$(MSBuildThisFileDirectory)\wwwroot\static\js\main.js') " />
-    <Exec Command="npm run test" Condition=" !Exists('$(MSBuildThisFileDirectory)\coverage') AND'$(GITHUB_ACTIONS)' != '' " />
+    <Exec Command="npm run test" Condition=" !Exists('$(MSBuildThisFileDirectory)\coverage') AND'$(GITHUB_ACTIONS)' != '' AND '$(SKIP_NPM_TEST)' != 'true' " />
   </Target>
 </Project>
