@@ -9,6 +9,13 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2022;
 [Puzzle(2022, 17, "Pyroclastic Flow", RequiresData = true, IsHidden = true)]
 public sealed class Day17 : Puzzle
 {
+    private enum Direction
+    {
+        Left,
+        Right,
+        Down,
+    }
+
     /// <summary>
     /// Gets how many units tall will the tower of rocks
     /// will be after 2022 rocks have stopped falling.
@@ -35,41 +42,54 @@ public sealed class Day17 : Puzzle
     public static long GetHeightOfTower(string jets, long count, CancellationToken cancellationToken = default)
     {
         var tower = new Tower();
-        var shapes = new[] { Rock.Horizontal, Rock.Plus, Rock.Boomerang, Rock.Vertical, Rock.Square };
-        var down = new Size(0, -1);
+        uint[][] shapes = new[] { Rock.Horizontal, Rock.Plus, Rock.Boomerang, Rock.Vertical, Rock.Square };
 
         for (long i = 0, j = 0; i < count && !cancellationToken.IsCancellationRequested; i++)
         {
-            var rock = Rock.Spawn(shapes[i % shapes.Length], tower.Height + 3);
+            var rock = new Rock(shapes[i % shapes.Length], 2, tower.Height + 3);
+
+            Dump(rock);
 
             while (true)
             {
-                var offset = GetOffset(jets[(int)(j++ % jets.Length)]);
+                var direction = GetDirection(jets[(int)(j++ % jets.Length)]);
 
-                if (!tower.WillCollide(rock, offset))
+                if (!tower.WillCollide(rock, direction))
                 {
-                    rock.Shift(offset);
+                    rock.Shift(direction);
+                    Dump(rock);
                 }
 
-                if (tower.WillCollide(rock, down) || rock.Bottom == 0)
+                if (tower.WillCollide(rock, Direction.Down) || rock.Bottom == 0)
                 {
                     break;
                 }
 
                 rock.Drop();
+                Dump(rock);
             }
 
+            Dump(rock);
             tower.Consume(rock);
+            Dump();
+
+            void Dump(Rock? rock = null)
+            {
+#if false
+                Debug.WriteLine(string.Empty);
+                Debug.WriteLine(tower.ToString(rock));
+#endif
+            }
         }
 
         cancellationToken.ThrowIfCancellationRequested();
 
         return tower.RealHeight;
 
-        static Size GetOffset(char direction) => direction switch
+        static Direction GetDirection(char direction) => direction switch
         {
-            '<' => new(-1, 0),
-            '>' => new(1, 0),
+            '<' => Direction.Left,
+            '>' => Direction.Right,
             _ => throw new PuzzleException($"Invalid direction '{direction}'."),
         };
     }
@@ -91,69 +111,86 @@ public sealed class Day17 : Puzzle
         return PuzzleResult.Create(Height2022, HeightTrillion);
     }
 
-    private sealed class Rock
+    private struct Rock
     {
-        public static readonly IReadOnlyList<Point> Horizontal = new Point[] { new(0, 0), new(1, 0), new(2, 0), new(3, 0) };
-        public static readonly IReadOnlyList<Point> Plus = new Point[] { new(1, 0), new(0, 1), new(1, 1), new(2, 1), new(1, 2) };
-        public static readonly IReadOnlyList<Point> Boomerang = new Point[] { new(0, 0), new(1, 0), new(2, 0), new(2, 1), new(2, 2) };
-        public static readonly IReadOnlyList<Point> Vertical = new Point[] { new(0, 0), new(0, 1), new(0, 2), new(0, 3) };
-        public static readonly IReadOnlyList<Point> Square = new Point[] { new(0, 0), new(1, 0), new(0, 1), new(1, 1) };
+        public static readonly uint[] Horizontal = { 0b_11110000_00000000_00000000_00000000 };
+        public static readonly uint[] Plus = { 0b_01000000_00000000_00000000_00000000, 0b_11100000_00000000_00000000_00000000, 0b_01000000_00000000_00000000_00000000 };
+        public static readonly uint[] Boomerang = { 0b_11100000_00000000_00000000_00000000, 0b_00100000_00000000_00000000_00000000, 0b_00100000_00000000_00000000_00000000 };
+        public static readonly uint[] Vertical = { 0b_10000000_00000000_00000000_00000000, 0b_10000000_00000000_00000000_00000000, 0b_10000000_00000000_00000000_00000000, 0b_10000000_00000000_00000000_00000000 };
+        public static readonly uint[] Square = { 0b_11000000_00000000_00000000_00000000, 0b_11000000_00000000_00000000_00000000 };
 
-        private Rock(IReadOnlyList<Point> points)
+        private const uint SignificantBits = 7;
+
+        public Rock()
         {
-            Points = new List<Point>(points);
+            Shape = Array.Empty<uint>();
         }
 
-        public int Left => Points.Min((p) => p.X);
-
-        public int Right => Points.Max((p) => p.X);
-
-        public int Top => Points.Max((p) => p.Y);
-
-        public int Bottom => Points.Min((p) => p.Y);
-
-        public IList<Point> Points { get; }
-
-        public static Rock Spawn(IReadOnlyList<Point> shape, int y)
+        public Rock(uint[] shape, int x, int y)
         {
-            var rock = new Rock(shape);
-            var offset = new Size(2, y);
-
-            for (int i = 0; i < rock.Points.Count; i++)
-            {
-                rock.Points[i] += offset;
-            }
-
-            return rock;
+            Y = y;
+            Shape = new uint[shape.Length];
+            Array.Copy(shape, Shape, shape.Length);
+            Shift(Direction.Right, x);
         }
 
-        public void Drop()
-        {
-            for (int i = 0; i < Points.Count; i++)
-            {
-                Points[i] += new Size(0, -1);
-            }
-        }
+        public uint[] Shape { get; set; }
 
-        public void Raise()
-        {
-            for (int i = 0; i < Points.Count; i++)
-            {
-                Points[i] += new Size(0, 1);
-            }
-        }
+        public int Y { get; set; }
 
-        public void Shift(Size delta)
+        public int Left => Shape.Min(BitOperations.LeadingZeroCount);
+
+        public int Right => Left + Width - 1;
+
+        public int Top => Y + Shape.Length - 1;
+
+        public int Bottom => Y;
+
+        public int Width => Shape.Max(BitOperations.PopCount);
+
+        public int Height => Shape.Length;
+
+        public void Drop() => Y--;
+
+        public void Shift(Direction direction, int units = 1)
         {
-            if (Right + delta.Width > 6 || Left + delta.Width < 0)
+            if ((direction == Direction.Right && Right + units > SignificantBits - 1) ||
+                (direction == Direction.Left && Left - units < 0))
             {
                 return;
             }
 
-            for (int i = 0; i < Points.Count; i++)
+            if (direction == Direction.Left)
             {
-                Points[i] += delta;
+                for (int i = 0; i < Shape.Length; i++)
+                {
+                    Shape[i] = BitOperations.RotateLeft(Shape[i], units);
+                }
             }
+            else
+            {
+                for (int i = 0; i < Shape.Length; i++)
+                {
+                    Shape[i] = BitOperations.RotateRight(Shape[i], units);
+                }
+            }
+        }
+
+        public bool Overlaps(int x, int y)
+        {
+            if (y < Bottom || y > Bottom + Height || x < Left || x > Right)
+            {
+                return false;
+            }
+
+            int index = y - Y;
+
+            if (index > Shape.Length - 1)
+            {
+                return false;
+            }
+
+            return (Shape[index] & (1 << (32 - x - 1))) != 0;
         }
     }
 
@@ -161,23 +198,59 @@ public sealed class Day17 : Puzzle
     {
         private const int Width = 7;
 
-        private HashSet<Point> _rocks = new();
+        private readonly List<uint> _rows = new();
         private long _offset;
 
-        public int Height => _rocks.Count == 0 ? 0 : _rocks.Max((p) => p.Y) + 1;
+        public int Height => _rows.Count;
 
         public long RealHeight => _offset + Height;
 
-        public int HeightAt(int x)
-            => _rocks.Where((p) => p.X == x).Select((p) => p.Y).DefaultIfEmpty(0).Max();
+        public void RemoveMe() => _offset = 10;
 
-        public bool WillCollide(Rock rock, Size offset)
+        public bool WillCollide(Rock rock, Direction direction)
         {
-            foreach (Point point in rock.Points)
+            if (direction == Direction.Down)
             {
-                if (_rocks.Contains(point + offset))
+                if (rock.Bottom == 0)
                 {
                     return true;
+                }
+
+                int rowIndex = rock.Bottom - 1;
+                uint rowBelow = _rows.Count - 1 < rowIndex ? 0 : _rows[rowIndex];
+                uint rockNow = rock.Shape[0];
+
+                int rowsInRockBottom = BitOperations.PopCount(rockNow);
+                int rocksInRow = BitOperations.PopCount(rowBelow);
+                int rocksInRowAfter = BitOperations.PopCount(rowBelow | rockNow);
+
+                return rocksInRow + rowsInRockBottom != rocksInRowAfter;
+            }
+            else
+            {
+                if (rock.Bottom > Height - 1)
+                {
+                    return false;
+                }
+
+                for (int y = 0; y < rock.Height; y++)
+                {
+                    int rowIndex = rock.Bottom + y;
+                    uint row = _rows.Count - 1 < rowIndex ? 0 : _rows[rowIndex];
+
+                    uint rockNow = rock.Shape[y];
+                    uint rockAfter =
+                        direction == Direction.Left ?
+                        BitOperations.RotateLeft(rockNow, 1) :
+                        BitOperations.RotateRight(rockNow, 1);
+
+                    int rocksInRow = BitOperations.PopCount(row) + BitOperations.PopCount(rockNow);
+                    int rocksInRowAfter = BitOperations.PopCount(row | rockAfter);
+
+                    if (rocksInRow != rocksInRowAfter)
+                    {
+                        return true;
+                    }
                 }
             }
 
@@ -186,8 +259,16 @@ public sealed class Day17 : Puzzle
 
         public void Consume(Rock rock)
         {
-            _rocks.UnionWith(rock.Points);
-            TryCompact();
+            while (_rows.Count - 1 < rock.Top)
+            {
+                _rows.Add(0);
+            }
+
+            for (int y = 0; y < rock.Height; y++)
+            {
+                int rowY = rock.Bottom + y;
+                _rows[rowY] = _rows[rowY] | rock.Shape[y];
+            }
         }
 
         public override string ToString()
@@ -197,9 +278,9 @@ public sealed class Day17 : Puzzle
         {
             var builder = new StringBuilder();
 
-            if (rock is not null || _rocks.Count > 0)
+            if (rock is not null || _rows.Count > 0)
             {
-                int maxY = Math.Max(rock?.Top ?? 0, _rocks.Count == 0 ? 0 : _rocks.MaxBy((p) => p.Y).Y);
+                int maxY = Math.Max(rock?.Top ?? 0, Height);
 
                 for (int y = maxY; y > -1; y--)
                 {
@@ -207,7 +288,18 @@ public sealed class Day17 : Puzzle
 
                     for (int x = 0; x < Width; x++)
                     {
-                        builder.Append(rock?.Points.Contains(new(x, y)) == true ? '@' : _rocks.Contains(new(x, y)) ? '#' : '.');
+                        char ch;
+
+                        if (rock?.Overlaps(x, y) == true)
+                        {
+                            ch = '@';
+                        }
+                        else
+                        {
+                            ch = _rows.Count - 1 < y || (_rows[y] & (1 << (32 - x - 1))) == 0 ? '.' : '#';
+                        }
+
+                        builder.Append(ch);
                     }
 
                     builder.Append('|');
@@ -218,30 +310,6 @@ public sealed class Day17 : Puzzle
             builder.Append("+-------+");
 
             return builder.ToString();
-        }
-
-        private void TryCompact()
-        {
-            if (Height <= 100)
-            {
-                return;
-            }
-
-            int rowsToDelete = int.MaxValue;
-
-            for (int i = 0; i < Width; i++)
-            {
-                rowsToDelete = Math.Min(HeightAt(i), rowsToDelete);
-            }
-
-            if (rowsToDelete > 0)
-            {
-                _offset += rowsToDelete;
-                _rocks.RemoveWhere((p) => p.Y < rowsToDelete);
-
-                var delta = new Size(0, rowsToDelete);
-                _rocks = _rocks.Select((p) => p - delta).ToHashSet();
-            }
         }
     }
 }
