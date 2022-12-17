@@ -40,7 +40,7 @@
     <VersionSuffix></VersionSuffix>
   </PropertyGroup>
   <ItemGroup>
-    <Using Include="Microsoft.Toolkit.HighPerformance" />
+    <Using Include="Microsoft.Toolkit.HighPerformance" Condition=" '$(AssemblyName)' != 'AdventOfCode.Resources' " />
     <Using Include="System.Drawing" />
     <Using Include="System.Numerics" />
     <Using Include="System.Globalization" />
