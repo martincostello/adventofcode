@@ -51,6 +51,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{
 	ProjectSection(SolutionItems) = preProject
 		.github\workflows\benchmark.yml = .github\workflows\benchmark.yml
 		.github\workflows\build.yml = .github\workflows\build.yml
+		.github\workflows\dependency-review.yml = .github\workflows\dependency-review.yml
+		.github\workflows\lighthouse.yml = .github\workflows\lighthouse.yml
 		.github\workflows\update-dotnet-sdk.yml = .github\workflows\update-dotnet-sdk.yml
 		.github\workflows\update-static-assets.yml = .github\workflows\update-static-assets.yml
 	EndProjectSection
