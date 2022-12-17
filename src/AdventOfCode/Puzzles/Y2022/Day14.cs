@@ -128,7 +128,7 @@ public sealed class Day14 : Puzzle
                     // Extend the bounds to account for the "infinite" floor so sand can still flow
                     if (hasFloor && (current.X == bounds.Left + 1 || current.X == bounds.Right - 1))
                     {
-                        bounds = new Rectangle(bounds.X - 1, bounds.Top, bounds.Width + 2, bounds.Height);
+                        bounds.Inflate(1, 0);
                         cave[new(bounds.Left, bounds.Bottom)] = Content.Floor;
                         cave[new(bounds.Right, bounds.Bottom)] = Content.Floor;
                     }
