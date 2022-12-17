@@ -17,21 +17,22 @@ public sealed class Day17Tests : PuzzleTest
     {
     }
 
-    [Fact]
-    public void Y2022_Day17_GetHeightOfTower_Returns_Correct_Value()
+    [Theory]
+    [InlineData(2022, 3068)]
+    [InlineData(1000000000000, 1514285714288, Skip = "Not implemented.")]
+    public void Y2022_Day17_GetHeightOfTower_Returns_Correct_Value(long count, long expected)
     {
         // Arrange
         string jets = ">>><<><>><<<>><>>><<<>>><<<><<<>><>><<>>";
-        int rocks = 2022;
 
         // Act
-        int actual = Day17.GetHeightOfTower(jets, rocks);
+        long actual = Day17.GetHeightOfTower(jets, count);
 
         // Assert
-        actual.ShouldBe(3068);
+        actual.ShouldBe(expected);
     }
 
-    [Fact]
+    [Fact(Skip = "Not implemented.")]
     public async Task Y2022_Day17_Solve_Returns_Correct_Solution()
     {
         // Act
@@ -39,6 +40,7 @@ public sealed class Day17Tests : PuzzleTest
 
         // Assert
         puzzle.ShouldNotBeNull();
-        puzzle.Height.ShouldBe(3135);
+        puzzle.Height2022.ShouldBe(3135);
+        puzzle.HeightTrillion.ShouldBe(-1);
     }
 }

@@ -6,14 +6,20 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2022;
 /// <summary>
 /// A class representing the puzzle for <c>https://adventofcode.com/2022/day/17</c>. This class cannot be inherited.
 /// </summary>
-[Puzzle(2022, 17, "Pyroclastic Flow", RequiresData = true)]
+[Puzzle(2022, 17, "Pyroclastic Flow", RequiresData = true, IsHidden = true)]
 public sealed class Day17 : Puzzle
 {
     /// <summary>
     /// Gets how many units tall will the tower of rocks
     /// will be after 2022 rocks have stopped falling.
     /// </summary>
-    public int Height { get; private set; }
+    public long Height2022 { get; private set; }
+
+    /// <summary>
+    /// Gets how many units tall will the tower of rocks
+    /// will be after 1,000,000,000,000 rocks have stopped falling.
+    /// </summary>
+    public long HeightTrillion { get; private set; }
 
     /// <summary>
     /// Gets the height of the tower of rocks after
@@ -25,19 +31,19 @@ public sealed class Day17 : Puzzle
     /// Returns how many units tall will the tower of rocks will be after the number
     /// of rocks specified by <paramref name="count"/> have stopped falling.
     /// </returns>
-    public static int GetHeightOfTower(string jets, int count)
+    public static int GetHeightOfTower(string jets, long count)
     {
         var tower = new Tower();
         var shapes = new[] { Rock.Horizontal, Rock.Plus, Rock.Boomerang, Rock.Vertical, Rock.Square };
         var down = new Size(0, -1);
 
-        for (int i = 0, j = 0; i < count; i++)
+        for (long i = 0, j = 0; i < count; i++)
         {
             var rock = Rock.Spawn(shapes[i % shapes.Length], tower.Height + 3);
 
             while (true)
             {
-                var offset = GetOffset(jets[j++ % jets.Length]);
+                var offset = GetOffset(jets[(int)(j++ % jets.Length)]);
 
                 if (!tower.WillCollide(rock, offset))
                 {
@@ -68,18 +74,18 @@ public sealed class Day17 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        ArgumentNullException.ThrowIfNull(args);
-
         string jets = (await ReadResourceAsStringAsync()).Trim();
 
-        Height = GetHeightOfTower(jets.Trim(), count: 2022);
+        Height2022 = GetHeightOfTower(jets.Trim(), count: 2022);
+        HeightTrillion = GetHeightOfTower(jets.Trim(), count: 1000000000000);
 
         if (Verbose)
         {
-            Logger.WriteLine("The tower of rocks is {0} units tall after 2022 rocks have stopped falling.", Height);
+            Logger.WriteLine("The tower of rocks is {0} units tall after 2022 rocks have stopped falling.", Height2022);
+            Logger.WriteLine("The tower of rocks is {0} units tall after 1,000,000,000,000 rocks have stopped falling.", HeightTrillion);
         }
 
-        return PuzzleResult.Create(Height);
+        return PuzzleResult.Create(Height2022, HeightTrillion);
     }
 
     private sealed class Rock
