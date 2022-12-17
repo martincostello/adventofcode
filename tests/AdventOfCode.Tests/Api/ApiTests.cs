@@ -177,7 +177,7 @@ public class ApiTests : IntegrationTest
     [PuzzleData(2022, 13, 5252, 20592)]
     [PuzzleData(2022, 14, 832, 27601, ExpectedVisualizations = 2)]
     [PuzzleData(2022, 15, -1, Skip = "Not implemented.")]
-    [PuzzleData(2022, 16, -1, Skip = "Not implemented.")]
+    [PuzzleData(2022, 16, -1)]
     [PuzzleData(2022, 17, 3135, Skip = "Not implemented.")]
     [PuzzleData(2022, 18, -1, Skip = "Not implemented.")]
     [PuzzleData(2022, 19, -1, Skip = "Not implemented.")]
