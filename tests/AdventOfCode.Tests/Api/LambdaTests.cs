@@ -222,12 +222,7 @@ public class LambdaTests : IAsyncLifetime, IDisposable
 
     private static string GetPuzzleInput(int year, int day)
     {
-        var type = typeof(Puzzle);
-
-        string name = FormattableString.Invariant(
-            $"MartinCostello.{type.Assembly.GetName().Name}.Input.Y{year}.Day{day:00}.input.txt");
-
-        using var stream = type.Assembly.GetManifestResourceStream(name)!;
+        using var stream = InputProvider.Get(year, day)!;
         using var reader = new StreamReader(stream);
 
         return reader.ReadToEnd();
