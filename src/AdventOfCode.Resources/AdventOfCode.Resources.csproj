@@ -1,16 +1,12 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Description>Solutions for Advent of Code.</Description>
+    <Description>Resources for the solutions for Advent of Code.</Description>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <NoWarn>$(NoWarn);CA1034;CA2007;CA2225;CA5351</NoWarn>
     <OutputType>Library</OutputType>
     <RootNamespace>MartinCostello.AdventOfCode</RootNamespace>
     <TargetFramework>net7.0</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.Toolkit.HighPerformance" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\AdventOfCode.Resources\AdventOfCode.Resources.csproj" />
+    <EmbeddedResource Include="Input\**\input.txt" />
   </ItemGroup>
 </Project>

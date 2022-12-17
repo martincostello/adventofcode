@@ -158,12 +158,10 @@ public abstract class Puzzle : IPuzzle
     {
         var thisType = GetType();
 
-        string year = thisType.Namespace!.Split('.')[^1];
+        int year = Parse<int>(thisType.Namespace!.Split('.')[^1][1..]);
+        int day = Parse<int>(thisType.Name[3..]);
 
-        string name = FormattableString.Invariant(
-            $"MartinCostello.{thisType.Assembly.GetName().Name}.Input.{year}.{thisType.Name}.input.txt");
-
-        return thisType.Assembly.GetManifestResourceStream(name)!;
+        return InputProvider.Get(year, day)!;
     }
 
     /// <summary>
