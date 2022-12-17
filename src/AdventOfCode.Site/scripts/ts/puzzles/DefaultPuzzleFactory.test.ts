@@ -24,7 +24,7 @@ const solve = async (year: number, day: number, inputs: string[] = []): Promise<
     const yearString = toNumberWithDigits(puzzle.year, 4);
     const dayString = toNumberWithDigits(puzzle.day, 2);
 
-    let input = join(__dirname, `../../../../AdventOfCode/Input/Y${yearString}/Day${dayString}/input.txt`);
+    let input = join(__dirname, `../../../../AdventOfCode.Resources/Input/Y${yearString}/Day${dayString}/input.txt`);
     input = resolve(input);
 
     if (existsSync(input)) {
