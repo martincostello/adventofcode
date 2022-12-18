@@ -68,10 +68,10 @@ public sealed class Day18 : Puzzle
 
                     if (line.Count > 0)
                     {
-                        int count = 1;
-                        bool lastWasEmpty = false;
+                        int count = 0;
+                        bool lastWasEmpty = true;
 
-                        for (int i = 1; i < length; i++)
+                        for (int i = 0; i < length; i++)
                         {
                             bool found = line.Contains(point + (delta * i));
 

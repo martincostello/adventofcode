@@ -33,7 +33,7 @@ public sealed class Day18Tests : PuzzleTest
         actual.ShouldBe(expected);
     }
 
-    [Fact(Skip = "Not implemented.")]
+    [Fact]
     public async Task Y2022_Day18_Solve_Returns_Correct_Solution()
     {
         // Act
@@ -41,8 +41,6 @@ public sealed class Day18Tests : PuzzleTest
 
         // Assert
         puzzle.ShouldNotBeNull();
-        puzzle.DropletSurfaceArea.ShouldBeGreaterThan(1053);
-        puzzle.DropletSurfaceArea.ShouldBeLessThan(5802);
-        puzzle.DropletSurfaceArea.ShouldBe(-1);
+        puzzle.DropletSurfaceArea.ShouldBe(4340);
     }
 }
