@@ -71,11 +71,11 @@ public sealed class Day18 : Puzzle
                         int count = 1;
                         bool lastWasEmpty = false;
 
-                        for (int i = 1; i < length - 1; i++)
+                        for (int i = 1; i < length; i++)
                         {
                             bool found = line.Contains(point + (delta * i));
 
-                            if (!found && !lastWasEmpty)
+                            if (lastWasEmpty && found)
                             {
                                 count++;
                             }
