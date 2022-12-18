@@ -17,20 +17,20 @@ public sealed class Day18Tests : PuzzleTest
     {
     }
 
-    [Fact(Skip = "Not implemented.")]
-    public void Y2022_Day18_Solve_Returns_Correct_Value()
+    [Theory]
+    [InlineData(new[] { "1,1,1" }, 6)]
+    [InlineData(new[] { "1,1,1", "2,1,1" }, 10)]
+    [InlineData(new[] { "1,1,1", "2,1,1", "1,2,1", "2,2,1", "1,1,2", "2,1,2", "1,2,2", "2,2,2" }, 4 * 6)]
+    [InlineData(new[] { "2,2,2", "1,2,2", "3,2,2", "2,1,2", "2,3,2", "2,2,1", "2,2,3", "2,2,4", "2,2,6", "1,2,5", "3,2,5", "2,1,5", "2,3,5" }, 64)]
+    [InlineData(new[] { "0,0,0", "0,1,0", "0,2,0", "1,0,0", "1,1,0", "1,2,0", "2,0,0", "2,1,0", "2,2,0", "0,0,1", "0,1,1", "0,2,1", "1,0,1", "1,2,1", "2,0,1", "2,1,1", "2,2,1", "0,0,2", "0,1,2", "0,2,2", "1,0,2", "1,1,2", "1,2,2", "2,0,2", "2,1,2", "2,2,2" }, (9 * 6) + 6)]
+    [InlineData(new[] { "0,0,0", "0,1,0", "0,2,0", "1,0,0", "1,1,0", "1,2,0", "2,0,0", "2,1,0", "2,2,0", "0,0,1", "0,1,1", "0,2,1", "1,0,1", "1,1,1", "1,2,1", "2,0,1", "2,1,1", "2,2,1", "0,0,2", "0,1,2", "0,2,2", "1,0,2", "1,1,2", "1,2,2", "2,0,2", "2,1,2", "2,2,2" }, 9 * 6)]
+    public void Y2022_Day18_GetSurfaceArea_Returns_Correct_Value(string[] cubes, int expected)
     {
-        // Arrange
-        string[] values = new[]
-        {
-            "_",
-        };
-
         // Act
-        int actual = Day18.Solve(values);
+        int actual = Day18.GetSurfaceArea(cubes);
 
         // Assert
-        actual.ShouldBe(-1);
+        actual.ShouldBe(expected);
     }
 
     [Fact(Skip = "Not implemented.")]
@@ -41,6 +41,8 @@ public sealed class Day18Tests : PuzzleTest
 
         // Assert
         puzzle.ShouldNotBeNull();
-        puzzle.Solution.ShouldBe(-1);
+        puzzle.DropletSurfaceArea.ShouldBeGreaterThan(1053);
+        puzzle.DropletSurfaceArea.ShouldBeLessThan(5802);
+        puzzle.DropletSurfaceArea.ShouldBe(-1);
     }
 }
