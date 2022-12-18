@@ -10,22 +10,28 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2022;
 public sealed class Day18 : Puzzle
 {
     /// <summary>
-    /// Gets the surface area of the scanned lava droplet.
+    /// Gets the total surface area of the scanned lava droplet.
     /// </summary>
-    public int DropletSurfaceArea { get; private set; }
+    public int TotalDropletSurfaceArea { get; private set; }
+
+    /// <summary>
+    /// Gets the external surface area of the scanned lava droplet.
+    /// </summary>
+    public int ExternalDropletSurfaceArea { get; private set; }
 
     /// <summary>
     /// Gets the total surface area of the lava droplet described by the specified cubes.
     /// </summary>
     /// <param name="cubes">The cubes that make up the lava droplet.</param>
+    /// <param name="excludeInterior">Whether to exclude the internal surface area.</param>
     /// <returns>
     /// The total surface area of the lava droplet described by <paramref name="cubes"/>.
     /// </returns>
-    public static int GetSurfaceArea(IList<string> cubes)
+    public static int GetSurfaceArea(IList<string> cubes, bool excludeInterior)
     {
         var droplet = Parse(cubes);
 
-        return GetTotalSurfaceArea(droplet);
+        return GetTotalSurfaceArea(droplet, excludeInterior);
 
         static Droplet Parse(IList<string> cubes)
         {
@@ -36,7 +42,7 @@ public sealed class Day18 : Puzzle
             return new Droplet(points);
         }
 
-        static int GetTotalSurfaceArea(Droplet droplet)
+        static int GetTotalSurfaceArea(Droplet droplet, bool excludeInterior)
         {
             if (droplet.Count == 1)
             {
@@ -73,14 +79,15 @@ public sealed class Day18 : Puzzle
 
                         for (int i = 0; i < length; i++)
                         {
-                            bool found = line.Contains(point + (delta * i));
+                            var location = point + (delta * i);
+                            bool found = line.Contains(location);
 
                             if (lastWasEmpty && found)
                             {
                                 count++;
                             }
 
-                            lastWasEmpty = !found;
+                            lastWasEmpty = !found && (!excludeInterior || !droplet.IsInternal(location));
                         }
 
                         counts.Add(count);
@@ -99,14 +106,16 @@ public sealed class Day18 : Puzzle
 
         var values = await ReadResourceAsLinesAsync();
 
-        DropletSurfaceArea = GetSurfaceArea(values);
+        TotalDropletSurfaceArea = GetSurfaceArea(values, excludeInterior: false);
+        ExternalDropletSurfaceArea = GetSurfaceArea(values, excludeInterior: true);
 
         if (Verbose)
         {
-            Logger.WriteLine("The surface area of the scanned lava droplet is {0}.", DropletSurfaceArea);
+            Logger.WriteLine("The total surface area of the scanned lava droplet is {0}.", TotalDropletSurfaceArea);
+            Logger.WriteLine("The external surface area of the scanned lava droplet is {0}.", ExternalDropletSurfaceArea);
         }
 
-        return PuzzleResult.Create(DropletSurfaceArea);
+        return PuzzleResult.Create(TotalDropletSurfaceArea, ExternalDropletSurfaceArea);
     }
 
     private sealed class Droplet : HashSet<Vector3>
@@ -155,6 +164,47 @@ public sealed class Day18 : Puzzle
                     }
                 }
             }
+
+            var negative = new HashSet<Vector3>(Bounds);
+            negative.ExceptWith(this);
+
+            if (negative.Count > 0)
+            {
+                var outside = new NegativeSpace(negative);
+                var first = outside.First();
+
+                var reachableFromFirst = new HashSet<Vector3>()
+                {
+                    first,
+                };
+
+                var notReachable = new HashSet<Vector3>();
+
+                foreach (var other in outside)
+                {
+                    if (other == first || reachableFromFirst.Contains(other))
+                    {
+                        continue;
+                    }
+
+                    if (PathFinding.AStar(outside, first, other) != long.MaxValue)
+                    {
+                        reachableFromFirst.Add(other);
+                    }
+                    else
+                    {
+                        notReachable.Add(other);
+                    }
+                }
+
+                int minimum = Math.Min(notReachable.Count, reachableFromFirst.Count);
+                var smallest = minimum == reachableFromFirst.Count || minimum == 0 ? reachableFromFirst : notReachable;
+                Pockets = new(smallest);
+            }
+            else
+            {
+                Pockets = new();
+            }
         }
 
         public IReadOnlyList<Vector3> Corners { get; }
@@ -180,6 +230,8 @@ public sealed class Day18 : Puzzle
         public float LengthZ => Math.Abs(MaxZ - MinZ) + 1;
 
         private HashSet<Vector3> Bounds { get; }
+
+        private HashSet<Vector3> Pockets { get; }
 
         public float Length(Vector3 dimension)
         {
@@ -218,6 +270,64 @@ public sealed class Day18 : Puzzle
             }
 
             return result;
+        }
+
+        public bool IsInternal(Vector3 position)
+            => Pockets.Contains(position);
+    }
+
+    private sealed class NegativeSpace : HashSet<Vector3>, IWeightedGraph<Vector3>
+    {
+        public NegativeSpace(IEnumerable<Vector3> points)
+            : base(points)
+        {
+        }
+
+        public long Cost(Vector3 a, Vector3 b) => (long)a.ManhattanDistance(b);
+
+        public IEnumerable<Vector3> Neighbors(Vector3 id)
+        {
+            var next = id + Vector3.UnitX;
+
+            if (Contains(next))
+            {
+                yield return next;
+            }
+
+            next = id + Vector3.UnitY;
+
+            if (Contains(next))
+            {
+                yield return next;
+            }
+
+            next = id + Vector3.UnitZ;
+
+            if (Contains(next))
+            {
+                yield return next;
+            }
+
+            next = id - Vector3.UnitX;
+
+            if (Contains(next))
+            {
+                yield return next;
+            }
+
+            next = id - Vector3.UnitY;
+
+            if (Contains(next))
+            {
+                yield return next;
+            }
+
+            next = id - Vector3.UnitZ;
+
+            if (Contains(next))
+            {
+                yield return next;
+            }
         }
     }
 }
