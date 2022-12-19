@@ -71,6 +71,19 @@ public static class PathFinding
     /// </returns>
     public static IReadOnlySet<T> BreadthFirst<T>(IGraph<T> graph, T start)
         where T : notnull
+        => BreadthFirst(graph.Neighbors, start);
+
+    /// <summary>
+    /// Performs a breadth-first search of the specified graph.
+    /// </summary>
+    /// <typeparam name="T">The type of the nodes of the graph.</typeparam>
+    /// <param name="neighbors">A delegate to a method that can be used to get the neighbours of a node.</param>
+    /// <param name="start">The starting node.</param>
+    /// <returns>
+    /// An <see cref="IReadOnlySet{T}"/> of the visited nodes.
+    /// </returns>
+    public static IReadOnlySet<T> BreadthFirst<T>(Func<T, IEnumerable<T>> neighbors, T start)
+        where T : notnull
     {
         var frontier = new Queue<T>();
         frontier.Enqueue(start);
@@ -81,7 +94,7 @@ public static class PathFinding
         {
             T current = frontier.Dequeue();
 
-            foreach (T next in graph.Neighbors(current))
+            foreach (T next in neighbors(current))
             {
                 if (!reached.Contains(next))
                 {
