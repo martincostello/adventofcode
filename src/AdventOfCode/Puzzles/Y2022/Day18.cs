@@ -49,53 +49,30 @@ public sealed class Day18 : Puzzle
                 return 6;
             }
 
-            var counts = new List<int>(droplet.Planes.Count);
+            int count = 0;
 
-            foreach ((var plane, var delta) in droplet.Planes)
+            droplet.Scan((point, normal, row, length) =>
             {
-                var slice = new HashSet<Vector3>();
-
-                for (float x = plane.Min((p) => p.X); x <= plane.Max((p) => p.X); x++)
+                if (row.Count > 0)
                 {
-                    for (float y = plane.Min((p) => p.Y); y <= plane.Max((p) => p.Y); y++)
+                    (Vector3 Position, bool IsEmpty, bool IsExternal) previous = (point, true, true);
+
+                    for (int i = 0; i < length; i++)
                     {
-                        for (float z = plane.Min((p) => p.Z); z <= plane.Max((p) => p.Z); z++)
+                        var location = point + (normal * i);
+                        bool found = row.Contains(location);
+
+                        if (previous.IsEmpty && found && (!excludeInterior || previous.IsExternal))
                         {
-                            slice.Add(new(x, y, z));
-                        }
-                    }
-                }
-
-                float length = droplet.Length(delta);
-
-                foreach (var point in slice)
-                {
-                    var line = droplet.Carve(point, delta);
-
-                    if (line.Count > 0)
-                    {
-                        int count = 0;
-                        bool lastWasEmpty = true;
-
-                        for (int i = 0; i < length; i++)
-                        {
-                            var location = point + (delta * i);
-                            bool found = line.Contains(location);
-
-                            if (lastWasEmpty && found)
-                            {
-                                count++;
-                            }
-
-                            lastWasEmpty = !found && (!excludeInterior || !droplet.IsInternal(location));
+                            count++;
                         }
 
-                        counts.Add(count);
+                        previous = (location, !found, droplet.IsExternal(location, -normal));
                     }
                 }
-            }
+            });
 
-            return counts.Sum();
+            return count;
         }
     }
 
@@ -165,46 +142,26 @@ public sealed class Day18 : Puzzle
                 }
             }
 
-            var negative = new HashSet<Vector3>(Bounds);
-            negative.ExceptWith(this);
+            Edges = new();
 
-            if (negative.Count > 0)
+            Scan((_, normal, row, _) =>
             {
-                var outside = new NegativeSpace(negative);
-                var first = outside.First();
-
-                var reachableFromFirst = new HashSet<Vector3>()
+                if (row.Count > 0)
                 {
-                    first,
-                };
+                    var first = row.FirstOrDefault();
+                    Edges.Add((first, normal));
 
-                var notReachable = new HashSet<Vector3>();
-
-                foreach (var other in outside)
-                {
-                    if (other == first || reachableFromFirst.Contains(other))
+                    if (row.Count > 1)
                     {
-                        continue;
-                    }
-
-                    if (PathFinding.AStar(outside, first, other) != long.MaxValue)
-                    {
-                        reachableFromFirst.Add(other);
+                        var last = row.LastOrDefault();
+                        Edges.Add((last, -normal));
                     }
                     else
                     {
-                        notReachable.Add(other);
+                        Edges.Add((first, -normal));
                     }
                 }
-
-                int minimum = Math.Min(notReachable.Count, reachableFromFirst.Count);
-                var smallest = minimum == reachableFromFirst.Count || minimum == 0 ? reachableFromFirst : notReachable;
-                Pockets = new(smallest);
-            }
-            else
-            {
-                Pockets = new();
-            }
+            });
         }
 
         public IReadOnlyList<Vector3> Corners { get; }
@@ -231,7 +188,7 @@ public sealed class Day18 : Puzzle
 
         private HashSet<Vector3> Bounds { get; }
 
-        private HashSet<Vector3> Pockets { get; }
+        private HashSet<(Vector3 Position, Vector3 Face)> Edges { get; }
 
         public float Length(Vector3 dimension)
         {
@@ -272,61 +229,32 @@ public sealed class Day18 : Puzzle
             return result;
         }
 
-        public bool IsInternal(Vector3 position)
-            => Pockets.Contains(position);
-    }
+        public bool IsExternal(Vector3 position, Vector3 face)
+            => Edges.Contains((position, face));
 
-    private sealed class NegativeSpace : HashSet<Vector3>, IWeightedGraph<Vector3>
-    {
-        public NegativeSpace(IEnumerable<Vector3> points)
-            : base(points)
+        public void Scan(Action<Vector3, Vector3, HashSet<Vector3>, float> onRow)
         {
-        }
-
-        public long Cost(Vector3 a, Vector3 b) => (long)a.ManhattanDistance(b);
-
-        public IEnumerable<Vector3> Neighbors(Vector3 id)
-        {
-            var next = id + Vector3.UnitX;
-
-            if (Contains(next))
+            foreach ((var plane, var normal) in Planes)
             {
-                yield return next;
-            }
+                var slice = new HashSet<Vector3>();
 
-            next = id + Vector3.UnitY;
+                for (float x = plane.Min((p) => p.X); x <= plane.Max((p) => p.X); x++)
+                {
+                    for (float y = plane.Min((p) => p.Y); y <= plane.Max((p) => p.Y); y++)
+                    {
+                        for (float z = plane.Min((p) => p.Z); z <= plane.Max((p) => p.Z); z++)
+                        {
+                            slice.Add(new(x, y, z));
+                        }
+                    }
+                }
 
-            if (Contains(next))
-            {
-                yield return next;
-            }
+                float length = Length(normal);
 
-            next = id + Vector3.UnitZ;
-
-            if (Contains(next))
-            {
-                yield return next;
-            }
-
-            next = id - Vector3.UnitX;
-
-            if (Contains(next))
-            {
-                yield return next;
-            }
-
-            next = id - Vector3.UnitY;
-
-            if (Contains(next))
-            {
-                yield return next;
-            }
-
-            next = id - Vector3.UnitZ;
-
-            if (Contains(next))
-            {
-                yield return next;
+                foreach (var point in slice)
+                {
+                    onRow(point, normal, Carve(point, normal), length);
+                }
             }
         }
     }
