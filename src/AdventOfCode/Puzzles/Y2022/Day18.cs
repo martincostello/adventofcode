@@ -98,9 +98,9 @@ public sealed class Day18 : Puzzle
             // Find a point that is definitely not already touching the surface
             var origin = boundsWithFrame.Except(bounds).First();
 
-            // Find all of the points that can be reached from outside the droplet
+            // Find all of the surfaces that can be reached from outside the droplet
             var graph = new SurfaceWalker(boundsWithFrame.Except(this), this, excludeInterior);
-            var reachable = PathFinding.BreadthFirst(graph, origin);
+            _ = PathFinding.BreadthFirst(graph, origin);
 
             SurfaceArea = graph.Surfaces.Count;
         }
