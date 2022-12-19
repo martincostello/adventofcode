@@ -48,7 +48,6 @@ public sealed class Day18Tests : PuzzleTest
         // Assert
         puzzle.ShouldNotBeNull();
         puzzle.TotalDropletSurfaceArea.ShouldBe(4340);
-        puzzle.ExternalDropletSurfaceArea.ShouldBeLessThan(4340);
-        puzzle.ExternalDropletSurfaceArea.ShouldBeGreaterThan(2445);
+        puzzle.ExternalDropletSurfaceArea.ShouldBe(2468);
     }
 }
