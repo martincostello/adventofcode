@@ -29,28 +29,21 @@ public sealed class Day18 : Puzzle
     /// </returns>
     public static int GetSurfaceArea(IList<string> cubes, bool excludeInterior)
     {
-        var droplet = Parse(cubes, excludeInterior);
-        return droplet.TotalSurfaceArea;
+        var points = cubes
+            .Select((p) => p.AsNumberTriple<int>())
+            .Select((p) => new Vector3(p.First, p.Second, p.Third));
 
-        static Droplet Parse(IList<string> cubes, bool excludeInterior)
-        {
-            var points = cubes
-                .Select((p) => p.AsNumberTriple<int>())
-                .Select((p) => new Vector3(p.First, p.Second, p.Third));
-
-            return new Droplet(points, excludeInterior);
-        }
+        var droplet = new Droplet(points, excludeInterior);
+        return droplet.SurfaceArea;
     }
 
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        ArgumentNullException.ThrowIfNull(args);
+        var cubes = await ReadResourceAsLinesAsync();
 
-        var values = await ReadResourceAsLinesAsync();
-
-        TotalDropletSurfaceArea = GetSurfaceArea(values, excludeInterior: false);
-        ExternalDropletSurfaceArea = GetSurfaceArea(values, excludeInterior: true);
+        TotalDropletSurfaceArea = GetSurfaceArea(cubes, excludeInterior: false);
+        ExternalDropletSurfaceArea = GetSurfaceArea(cubes, excludeInterior: true);
 
         if (Verbose)
         {
@@ -109,7 +102,7 @@ public sealed class Day18 : Puzzle
             var graph = new SurfaceWalker(boundsWithFrame.Except(this), this, excludeInterior);
             var reachable = PathFinding.BreadthFirst(graph, origin);
 
-            TotalSurfaceArea = graph.Surfaces.Count;
+            SurfaceArea = graph.Surfaces.Count;
         }
 
         public float MinX { get; }
@@ -124,62 +117,40 @@ public sealed class Day18 : Puzzle
 
         public float MaxZ { get; }
 
-        public int TotalSurfaceArea { get; }
-    }
+        public int SurfaceArea { get; }
 
-    private sealed class SurfaceWalker : IGraph<Vector3>
-    {
-        public SurfaceWalker(
-            IEnumerable<Vector3> outside,
-            HashSet<Vector3> item,
-            bool excludeInterior)
+        private sealed class SurfaceWalker : IGraph<Vector3>
         {
-            Outside = new HashSet<Vector3>(outside);
-            Item = item;
-            ExcludeInterior = excludeInterior;
-        }
-
-        public HashSet<Vector3> Outside { get; }
-
-        public HashSet<Vector3> Item { get; }
-
-        public HashSet<(Vector3 Point, Vector3 Normal)> Surfaces { get; } = new();
-
-        private bool ExcludeInterior { get; }
-
-        public IEnumerable<Vector3> Neighbors(Vector3 id)
-        {
-            foreach (var neighbor in id.Neighbors())
+            public SurfaceWalker(
+                IEnumerable<Vector3> outside,
+                HashSet<Vector3> item,
+                bool excludeInterior)
             {
-                if (ExcludeInterior)
-                {
-                    if (Item.Contains(neighbor))
-                    {
-                        Surfaces.Add((id, neighbor - id));
-                    }
+                Outside = new HashSet<Vector3>(outside);
+                Item = item;
+                ExcludeInterior = excludeInterior;
+            }
 
-                    if (Outside.Contains(neighbor))
-                    {
-                        yield return neighbor;
-                    }
-                }
-                else
-                {
-                    bool isInside = Item.Contains(id);
+            public HashSet<(Vector3 Point, Vector3 Normal)> Surfaces { get; } = new();
 
-                    if (isInside)
-                    {
-                        if (Outside.Contains(neighbor))
-                        {
-                            yield return neighbor;
-                        }
-                    }
-                    else if (Outside.Contains(neighbor) || Item.Contains(neighbor))
+            private HashSet<Vector3> Outside { get; }
+
+            private HashSet<Vector3> Item { get; }
+
+            private bool ExcludeInterior { get; }
+
+            public IEnumerable<Vector3> Neighbors(Vector3 id)
+            {
+                foreach (var neighbor in id.Neighbors())
+                {
+                    bool isNeighborInside = Item.Contains(neighbor);
+
+                    if (Outside.Contains(neighbor) || (!ExcludeInterior && isNeighborInside))
                     {
                         yield return neighbor;
                     }
 
-                    if (!isInside && Item.Contains(neighbor))
+                    if (isNeighborInside && (ExcludeInterior || !Item.Contains(id)))
                     {
                         Surfaces.Add((id, neighbor - id));
                     }
