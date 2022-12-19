@@ -31,10 +31,41 @@ public sealed class Day18 : Puzzle
     {
         var points = cubes
             .Select((p) => p.AsNumberTriple<int>())
-            .Select((p) => new Vector3(p.First, p.Second, p.Third));
+            .Select((p) => new Vector3(p.First, p.Second, p.Third))
+            .ToHashSet();
 
-        var droplet = new Droplet(points, excludeInterior);
-        return droplet.SurfaceArea;
+        float minX = points.Min((p) => p.X);
+        float maxX = points.Max((p) => p.X);
+        float minY = points.Min((p) => p.Y);
+        float maxY = points.Max((p) => p.Y);
+        float minZ = points.Min((p) => p.Z);
+        float maxZ = points.Max((p) => p.Z);
+
+        // Create a regular polygon that contains all of the points of the droplet
+        // which includes a boundary of at least one unit around its surface.
+        var outside = new HashSet<Vector3>((int)(maxX * maxY * maxZ));
+
+        for (float x = minX - 1; x <= maxX + 1; x++)
+        {
+            for (float y = minY - 1; y <= maxY + 1; y++)
+            {
+                for (float z = minZ - 1; z <= maxZ + 1; z++)
+                {
+                    outside.Add(new(x, y, z));
+                }
+            }
+        }
+
+        outside.Not(points);
+
+        // Find a point that is not already touching the surface
+        var origin = new Vector3(minX - 1, minY - 1, minZ - 1);
+
+        // Find all of the surfaces that can be reached from outside the droplet
+        var graph = new SurfaceWalker(outside, points, excludeInterior);
+        _ = PathFinding.BreadthFirst(graph, origin);
+
+        return graph.Surfaces.Count;
     }
 
     /// <inheritdoc />
@@ -54,106 +85,40 @@ public sealed class Day18 : Puzzle
         return PuzzleResult.Create(TotalDropletSurfaceArea, ExternalDropletSurfaceArea);
     }
 
-    private sealed class Droplet : HashSet<Vector3>
+    private sealed class SurfaceWalker : IGraph<Vector3>
     {
-        public Droplet(IEnumerable<Vector3> points, bool excludeInterior)
-            : base(points)
+        public SurfaceWalker(
+            HashSet<Vector3> outside,
+            IEnumerable<Vector3> item,
+            bool excludeInterior)
         {
-            MinX = this.Min((p) => p.X);
-            MaxX = this.Max((p) => p.X);
-            MinY = this.Min((p) => p.Y);
-            MaxY = this.Max((p) => p.Y);
-            MinZ = this.Min((p) => p.Z);
-            MaxZ = this.Max((p) => p.Z);
-
-            // Create a regular polygon that contains all of the points of the droplet
-            var bounds = new HashSet<Vector3>((int)(MaxX * MaxY * MaxZ));
-
-            for (float x = MinX; x <= MaxX; x++)
-            {
-                for (float y = MinY; y <= MaxY; y++)
-                {
-                    for (float z = MinZ; z <= MaxZ; z++)
-                    {
-                        bounds.Add(new(x, y, z));
-                    }
-                }
-            }
-
-            // Create a regular polygon that contains all of the points of the droplet
-            // which includes a boundary of at least one unit around its surface.
-            var boundsWithFrame = new HashSet<Vector3>();
-
-            for (float x = MinX - 1; x <= MaxX + 1; x++)
-            {
-                for (float y = MinY - 1; y <= MaxY + 1; y++)
-                {
-                    for (float z = MinZ - 1; z <= MaxZ + 1; z++)
-                    {
-                        boundsWithFrame.Add(new(x, y, z));
-                    }
-                }
-            }
-
-            // Find a point that is definitely not already touching the surface
-            var origin = boundsWithFrame.Except(bounds).First();
-
-            // Find all of the surfaces that can be reached from outside the droplet
-            var graph = new SurfaceWalker(boundsWithFrame.Except(this), this, excludeInterior);
-            _ = PathFinding.BreadthFirst(graph, origin);
-
-            SurfaceArea = graph.Surfaces.Count;
+            Outside = outside;
+            Item = new(item);
+            ExcludeInterior = excludeInterior;
         }
 
-        public float MinX { get; }
+        public HashSet<(Vector3 Point, Vector3 Normal)> Surfaces { get; } = new();
 
-        public float MaxX { get; }
+        private HashSet<Vector3> Outside { get; }
 
-        public float MinY { get; }
+        private HashSet<Vector3> Item { get; }
 
-        public float MaxY { get; }
+        private bool ExcludeInterior { get; }
 
-        public float MinZ { get; }
-
-        public float MaxZ { get; }
-
-        public int SurfaceArea { get; }
-
-        private sealed class SurfaceWalker : IGraph<Vector3>
+        public IEnumerable<Vector3> Neighbors(Vector3 id)
         {
-            public SurfaceWalker(
-                IEnumerable<Vector3> outside,
-                HashSet<Vector3> item,
-                bool excludeInterior)
+            foreach (var neighbor in id.Neighbors())
             {
-                Outside = new HashSet<Vector3>(outside);
-                Item = item;
-                ExcludeInterior = excludeInterior;
-            }
+                bool isNeighborInside = Item.Contains(neighbor);
 
-            public HashSet<(Vector3 Point, Vector3 Normal)> Surfaces { get; } = new();
-
-            private HashSet<Vector3> Outside { get; }
-
-            private HashSet<Vector3> Item { get; }
-
-            private bool ExcludeInterior { get; }
-
-            public IEnumerable<Vector3> Neighbors(Vector3 id)
-            {
-                foreach (var neighbor in id.Neighbors())
+                if (Outside.Contains(neighbor) || (!ExcludeInterior && isNeighborInside))
                 {
-                    bool isNeighborInside = Item.Contains(neighbor);
+                    yield return neighbor;
+                }
 
-                    if (Outside.Contains(neighbor) || (!ExcludeInterior && isNeighborInside))
-                    {
-                        yield return neighbor;
-                    }
-
-                    if (isNeighborInside && (ExcludeInterior || !Item.Contains(id)))
-                    {
-                        Surfaces.Add((id, neighbor - id));
-                    }
+                if (isNeighborInside && (ExcludeInterior || !Item.Contains(id)))
+                {
+                    Surfaces.Add((id, neighbor - id));
                 }
             }
         }
