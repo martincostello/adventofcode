@@ -24,4 +24,21 @@ internal static class Vector3Extensions
         var delta = Vector3.Abs(value - other);
         return delta.X + delta.Y + delta.Z;
     }
+
+    /// <summary>
+    /// Returns the neighbours of the specified vector.
+    /// </summary>
+    /// <param name="value">The vector to return the neighbors of.</param>
+    /// <returns>
+    /// The neighbors of the specified vector.
+    /// </returns>
+    public static IEnumerable<Vector3> Neighbors(this Vector3 value)
+    {
+        yield return value + Vector3.UnitX;
+        yield return value - Vector3.UnitX;
+        yield return value + Vector3.UnitY;
+        yield return value - Vector3.UnitY;
+        yield return value + Vector3.UnitZ;
+        yield return value - Vector3.UnitZ;
+    }
 }
