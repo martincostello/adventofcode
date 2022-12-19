@@ -29,52 +29,16 @@ public sealed class Day18 : Puzzle
     /// </returns>
     public static int GetSurfaceArea(IList<string> cubes, bool excludeInterior)
     {
-        var droplet = Parse(cubes);
+        var droplet = Parse(cubes, excludeInterior);
+        return droplet.TotalSurfaceArea;
 
-        return GetTotalSurfaceArea(droplet, excludeInterior);
-
-        static Droplet Parse(IList<string> cubes)
+        static Droplet Parse(IList<string> cubes, bool excludeInterior)
         {
             var points = cubes
                 .Select((p) => p.AsNumberTriple<int>())
                 .Select((p) => new Vector3(p.First, p.Second, p.Third));
 
-            return new Droplet(points);
-        }
-
-        static int GetTotalSurfaceArea(Droplet droplet, bool excludeInterior)
-        {
-            int surfaceArea = droplet.TotalSurfaceArea;
-
-            if (!excludeInterior || droplet.Count < 2)
-            {
-                return surfaceArea;
-            }
-
-            int count = 0;
-
-            droplet.Scan((point, normal, row, length) =>
-            {
-                if (row.Count > 0)
-                {
-                    (Vector3 Position, bool IsEmpty, bool IsInternal) previous = (point, true, false);
-
-                    for (int i = 0; i < length; i++)
-                    {
-                        var location = point + (normal * i);
-                        bool found = row.Contains(location);
-
-                        if (previous.IsEmpty && found && (!excludeInterior || !previous.IsInternal))
-                        {
-                            count++;
-                        }
-
-                        previous = (location, !found, !droplet.IsSurface(location, normal));
-                    }
-                }
-            });
-
-            return count;
+            return new Droplet(points, excludeInterior);
         }
     }
 
@@ -99,7 +63,7 @@ public sealed class Day18 : Puzzle
 
     private sealed class Droplet : HashSet<Vector3>
     {
-        public Droplet(IEnumerable<Vector3> points)
+        public Droplet(IEnumerable<Vector3> points, bool excludeInterior)
             : base(points)
         {
             MinX = this.Min((p) => p.X);
@@ -109,30 +73,8 @@ public sealed class Day18 : Puzzle
             MinZ = this.Min((p) => p.Z);
             MaxZ = this.Max((p) => p.Z);
 
-            var corners = new Vector3[]
-            {
-                new(MinX, MinY, MinZ),
-                new(MinX, MinY, MaxZ),
-                new(MinX, MaxY, MinZ),
-                new(MinX, MaxY, MaxZ),
-                new(MaxX, MinY, MinZ),
-                new(MaxX, MinY, MaxZ),
-                new(MaxX, MaxY, MinZ),
-                new(MaxX, MaxY, MaxZ),
-            };
-
-            Planes = new (IReadOnlyList<Vector3> Plane, Vector3 Normal)[]
-            {
-                (new[] { corners[0], corners[1], corners[2], corners[3] }, Vector3.UnitX),
-                (new[] { corners[4], corners[5], corners[6], corners[7] }, -Vector3.UnitX),
-                (new[] { corners[0], corners[1], corners[4], corners[5] }, Vector3.UnitY),
-                (new[] { corners[2], corners[3], corners[6], corners[7] }, -Vector3.UnitY),
-                (new[] { corners[0], corners[2], corners[4], corners[6] }, Vector3.UnitZ),
-                (new[] { corners[1], corners[3], corners[5], corners[7] }, -Vector3.UnitZ),
-            };
-
             // Create a regular polygon that contains all of the points of the droplet
-            Bounds = new((int)(MaxX * MaxY * MaxZ));
+            var bounds = new HashSet<Vector3>((int)(MaxX * MaxY * MaxZ));
 
             for (float x = MinX; x <= MaxX; x++)
             {
@@ -140,7 +82,7 @@ public sealed class Day18 : Puzzle
                 {
                     for (float z = MinZ; z <= MaxZ; z++)
                     {
-                        Bounds.Add(new(x, y, z));
+                        bounds.Add(new(x, y, z));
                     }
                 }
             }
@@ -161,33 +103,13 @@ public sealed class Day18 : Puzzle
             }
 
             // Find a point that is definitely not already touching the surface
-            var origin = boundsWithFrame.Except(Bounds).First();
+            var origin = boundsWithFrame.Except(bounds).First();
 
             // Find all of the points that can be reached from outside the droplet
-            var graph = new SurfaceWalker(boundsWithFrame.Except(this), this);
+            var graph = new SurfaceWalker(boundsWithFrame.Except(this), this, excludeInterior);
             var reachable = PathFinding.BreadthFirst(graph, origin);
 
-            // The surface of the droplet is all the points that can be reached from outside.
-            var surface = new HashSet<Vector3>(this);
-            surface.And(reachable);
-
-            // All reachable points that are not already part
-            // of the droplet must be outside the droplet.
-            var outside = new HashSet<Vector3>(reachable);
-            outside.Not(surface);
-
-            Surfaces = new();
-
-            foreach (var item in surface)
-            {
-                foreach (var neighbor in item.Neighbors())
-                {
-                    if (outside.Contains(neighbor))
-                    {
-                        Surfaces.Add((item, neighbor - item));
-                    }
-                }
-            }
+            TotalSurfaceArea = graph.Surfaces.Count;
         }
 
         public float MinX { get; }
@@ -202,115 +124,65 @@ public sealed class Day18 : Puzzle
 
         public float MaxZ { get; }
 
-        public float LengthX => Math.Abs(MaxX - MinX) + 1;
-
-        public float LengthY => Math.Abs(MaxY - MinY) + 1;
-
-        public float LengthZ => Math.Abs(MaxZ - MinZ) + 1;
-
-        public int TotalSurfaceArea => Surfaces.Count;
-
-        private HashSet<Vector3> Bounds { get; }
-
-        private IReadOnlyList<(IReadOnlyList<Vector3> Plane, Vector3 Normal)> Planes { get; }
-
-        private HashSet<(Vector3 Position, Vector3 Normal)> Surfaces { get; }
-
-        public float Length(Vector3 dimension)
-        {
-            dimension = Vector3.Abs(dimension);
-
-            if (dimension == Vector3.UnitX)
-            {
-                return LengthX;
-            }
-            else if (dimension == Vector3.UnitY)
-            {
-                return LengthY;
-            }
-            else if (dimension == Vector3.UnitZ)
-            {
-                return LengthZ;
-            }
-            else
-            {
-                throw new ArgumentException($"The specified dimension {dimension} is not valid.", nameof(dimension));
-            }
-        }
-
-        public HashSet<Vector3> Carve(Vector3 position, Vector3 direction)
-        {
-            var result = new HashSet<Vector3>((int)Length(direction));
-
-            while (Bounds.Contains(position))
-            {
-                if (Contains(position))
-                {
-                    result.Add(position);
-                }
-
-                position += direction;
-            }
-
-            return result;
-        }
-
-        public bool IsSurface(Vector3 position, Vector3 normal)
-            => Surfaces.Contains((position, normal));
-
-        public void Scan(Action<Vector3, Vector3, HashSet<Vector3>, float> onRow)
-        {
-            foreach ((var plane, var normal) in Planes)
-            {
-                var slice = new HashSet<Vector3>();
-
-                for (float x = plane.Min((p) => p.X); x <= plane.Max((p) => p.X); x++)
-                {
-                    for (float y = plane.Min((p) => p.Y); y <= plane.Max((p) => p.Y); y++)
-                    {
-                        for (float z = plane.Min((p) => p.Z); z <= plane.Max((p) => p.Z); z++)
-                        {
-                            slice.Add(new(x, y, z));
-                        }
-                    }
-                }
-
-                float length = Length(normal);
-
-                foreach (var point in slice)
-                {
-                    onRow(point, normal, Carve(point, normal), length);
-                }
-            }
-        }
+        public int TotalSurfaceArea { get; }
     }
 
-    private sealed class SurfaceWalker : HashSet<Vector3>, IGraph<Vector3>
+    private sealed class SurfaceWalker : IGraph<Vector3>
     {
-        public SurfaceWalker(IEnumerable<Vector3> outside, HashSet<Vector3> item)
-            : base(outside)
+        public SurfaceWalker(
+            IEnumerable<Vector3> outside,
+            HashSet<Vector3> item,
+            bool excludeInterior)
         {
+            Outside = new HashSet<Vector3>(outside);
             Item = item;
+            ExcludeInterior = excludeInterior;
         }
 
+        public HashSet<Vector3> Outside { get; }
+
         public HashSet<Vector3> Item { get; }
+
+        public HashSet<(Vector3 Point, Vector3 Normal)> Surfaces { get; } = new();
+
+        private bool ExcludeInterior { get; }
 
         public IEnumerable<Vector3> Neighbors(Vector3 id)
         {
             foreach (var neighbor in id.Neighbors())
             {
-                bool isInside = Item.Contains(id);
-
-                if (isInside)
+                if (ExcludeInterior)
                 {
-                    if (Contains(neighbor))
+                    if (Item.Contains(neighbor))
+                    {
+                        Surfaces.Add((id, neighbor - id));
+                    }
+
+                    if (Outside.Contains(neighbor))
                     {
                         yield return neighbor;
                     }
                 }
-                else if (Contains(neighbor) || Item.Contains(neighbor))
+                else
                 {
-                    yield return neighbor;
+                    bool isInside = Item.Contains(id);
+
+                    if (isInside)
+                    {
+                        if (Outside.Contains(neighbor))
+                        {
+                            yield return neighbor;
+                        }
+                    }
+                    else if (Outside.Contains(neighbor) || Item.Contains(neighbor))
+                    {
+                        yield return neighbor;
+                    }
+
+                    if (!isInside && Item.Contains(neighbor))
+                    {
+                        Surfaces.Add((id, neighbor - id));
+                    }
                 }
             }
         }
