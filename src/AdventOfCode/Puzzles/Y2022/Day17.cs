@@ -216,15 +216,23 @@ public sealed class Day17 : Puzzle
                     return true;
                 }
 
-                int rowIndex = rock.Bottom - 1;
-                uint rowBelow = _rows.Count - 1 < rowIndex ? 0 : _rows[rowIndex];
-                uint rockNow = rock.Shape[0];
+                for (int i = 0; i < rock.Shape.Length; i++)
+                {
+                    int rowIndex = rock.Bottom + i - 1;
+                    uint rowBelow = _rows.Count - 1 < rowIndex ? 0 : _rows[rowIndex];
+                    uint rockNow = rock.Shape[i];
 
-                int rowsInRockBottom = BitOperations.PopCount(rockNow);
-                int rocksInRow = BitOperations.PopCount(rowBelow);
-                int rocksInRowAfter = BitOperations.PopCount(rowBelow | rockNow);
+                    int rowsInRockBottom = BitOperations.PopCount(rockNow);
+                    int rocksInRow = BitOperations.PopCount(rowBelow);
+                    int rocksInRowAfter = BitOperations.PopCount(rowBelow | rockNow);
 
-                return rocksInRow + rowsInRockBottom != rocksInRowAfter;
+                    if (rocksInRow + rowsInRockBottom != rocksInRowAfter)
+                    {
+                        return true;
+                    }
+                }
+
+                return false;
             }
             else
             {
