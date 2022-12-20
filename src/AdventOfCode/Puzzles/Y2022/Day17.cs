@@ -9,6 +9,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2022;
 [Puzzle(2022, 17, "Pyroclastic Flow", RequiresData = true, IsHidden = true)]
 public sealed class Day17 : Puzzle
 {
+    private const long OneTrillion = 1_000_000_000_000;
+
     private enum Direction
     {
         Left,
@@ -44,6 +46,9 @@ public sealed class Day17 : Puzzle
         var tower = new Tower();
         uint[][] shapes = new[] { Rock.Horizontal, Rock.Plus, Rock.Boomerang, Rock.Vertical, Rock.Square };
 
+        var history = new HashSet<int>();
+        var heights = new Dictionary<long, (long Rock, long Height)>();
+
         for (long i = 0, j = 0; i < count && !cancellationToken.IsCancellationRequested; i++)
         {
             var rock = new Rock(shapes[i % shapes.Length], 2, tower.Height + 3);
@@ -73,6 +78,27 @@ public sealed class Day17 : Puzzle
             tower.Consume(rock);
             Dump();
 
+            int hashCode = tower.GetHashCode();
+            heights[hashCode] = (i, tower.Height);
+
+            if (!history.Add(hashCode))
+            {
+                long cycleEnd = i;
+                long cycleStart = heights[hashCode].Rock;
+                long cycleSize = cycleEnd - cycleStart;
+
+                long heightBeforeCycle = heights[hashCode].Height;
+                long heightAddedByCycle = tower.Height - heightBeforeCycle;
+
+                long rocksLeft = count - i;
+
+                (long numberOfCycles, long leftover) = Math.DivRem(rocksLeft, cycleSize);
+
+                long remainingHeight = heights[leftover].Height - heightBeforeCycle;
+
+                return heightBeforeCycle + (heightAddedByCycle * numberOfCycles) + remainingHeight;
+            }
+
             void Dump(Rock? rock = null)
             {
 #if false
@@ -84,7 +110,7 @@ public sealed class Day17 : Puzzle
 
         cancellationToken.ThrowIfCancellationRequested();
 
-        return tower.RealHeight;
+        return tower.Height;
 
         static Direction GetDirection(char direction) => direction switch
         {
@@ -100,7 +126,7 @@ public sealed class Day17 : Puzzle
         string jets = (await ReadResourceAsStringAsync()).Trim();
 
         Height2022 = GetHeightOfTower(jets.Trim(), count: 2022, cancellationToken);
-        HeightTrillion = GetHeightOfTower(jets.Trim(), count: 1000000000000, cancellationToken);
+        HeightTrillion = GetHeightOfTower(jets.Trim(), count: OneTrillion, cancellationToken);
 
         if (Verbose)
         {
@@ -199,13 +225,8 @@ public sealed class Day17 : Puzzle
         private const int Width = 7;
 
         private readonly List<uint> _rows = new();
-        private long _offset;
 
         public int Height => _rows.Count;
-
-        public long RealHeight => _offset + Height;
-
-        public void RemoveMe() => _offset = 10;
 
         public bool WillCollide(Rock rock, Direction direction)
         {
@@ -277,6 +298,18 @@ public sealed class Day17 : Puzzle
                 int rowY = rock.Bottom + y;
                 _rows[rowY] = _rows[rowY] | rock.Shape[y];
             }
+        }
+
+        public override int GetHashCode()
+        {
+            var hash = new HashCode();
+
+            foreach (uint row in _rows.Take(10_000))
+            {
+                hash.Add(row);
+            }
+
+            return hash.ToHashCode();
         }
 
         public override string ToString()

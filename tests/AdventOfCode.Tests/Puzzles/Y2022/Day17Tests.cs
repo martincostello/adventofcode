@@ -19,7 +19,7 @@ public sealed class Day17Tests : PuzzleTest
 
     [Theory]
     [InlineData(2022, 3068)]
-    [InlineData(1000000000000, 1514285714288, Skip = "Not implemented.")]
+    [InlineData(1_000_000_000_000, 1514285714288)]
     public void Y2022_Day17_GetHeightOfTower_Returns_Correct_Value(long count, long expected)
     {
         // Arrange
@@ -32,7 +32,7 @@ public sealed class Day17Tests : PuzzleTest
         actual.ShouldBe(expected);
     }
 
-    [Fact(Skip = "Not implemented.")]
+    [Fact]
     public async Task Y2022_Day17_Solve_Returns_Correct_Solution()
     {
         // Act
@@ -42,5 +42,7 @@ public sealed class Day17Tests : PuzzleTest
         puzzle.ShouldNotBeNull();
         puzzle.Height2022.ShouldBe(3135);
         puzzle.HeightTrillion.ShouldBe(-1);
+        puzzle.HeightTrillion.ShouldBeGreaterThan(1000000003205);
+        puzzle.HeightTrillion.ShouldNotBe(1566599984445);
     }
 }
