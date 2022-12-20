@@ -32,7 +32,7 @@ public static class LinkedListExtensions
     /// <param name="count">The number of steps left (negative) or right to move the node.</param>
     public static void Move<T>(this LinkedList<T> list, T value, int count)
     {
-        bool shitLeft = count < 0;
+        bool shiftLeft = count < 0;
         count = Math.Abs(count) % list.Count;
 
         if (count == 0)
@@ -44,7 +44,7 @@ public static class LinkedListExtensions
         LinkedListNode<T> destination = source;
 
         Func<LinkedListNode<T>> shift =
-            shitLeft ?
+            shiftLeft ?
             () => destination.Previous ?? list.Last! :
             () => destination.Next ?? list.First!;
 
@@ -53,11 +53,11 @@ public static class LinkedListExtensions
             destination = shift();
         }
 
-        bool shouldWrap = (shitLeft ? destination.Previous : destination.Next) is null;
+        bool shouldWrap = (shiftLeft ? destination.Previous : destination.Next) is null;
 
         list.Remove(source);
 
-        if (shitLeft)
+        if (shiftLeft)
         {
             if (shouldWrap)
             {
