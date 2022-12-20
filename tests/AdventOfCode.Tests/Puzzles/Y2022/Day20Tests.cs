@@ -17,20 +17,26 @@ public sealed class Day20Tests : PuzzleTest
     {
     }
 
-    [Fact(Skip = "Not implemented.")]
-    public void Y2022_Day20_Solve_Returns_Correct_Value()
+    [Fact]
+    public void Y2022_Day20_FindGrove_Returns_Correct_Value()
     {
         // Arrange
         string[] values = new[]
         {
-            "_",
+            "1",
+            "2",
+            "-3",
+            "3",
+            "-2",
+            "0",
+            "4",
         };
 
         // Act
-        int actual = Day20.Solve(values);
+        int actual = Day20.FindGrove(values);
 
         // Assert
-        actual.ShouldBe(-1);
+        actual.ShouldBe(3);
     }
 
     [Fact(Skip = "Not implemented.")]
@@ -41,6 +47,7 @@ public sealed class Day20Tests : PuzzleTest
 
         // Assert
         puzzle.ShouldNotBeNull();
-        puzzle.Solution.ShouldBe(-1);
+        puzzle.SumOfCoordinates.ShouldBeGreaterThan(8077);
+        puzzle.SumOfCoordinates.ShouldBe(-1);
     }
 }
