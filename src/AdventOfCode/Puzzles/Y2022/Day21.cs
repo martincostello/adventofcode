@@ -41,10 +41,10 @@ public sealed class Day21 : Puzzle
 
         human.IsVariable = true;
 
+        Reduce(monkeys, cancellationToken);
+
         if (withEquality)
         {
-            Reduce(monkeys, cancellationToken);
-
             human.Value = null;
             root.Operation = '=';
             root.Value = 1;
@@ -53,8 +53,6 @@ public sealed class Day21 : Puzzle
         }
         else
         {
-            Reduce(monkeys, cancellationToken);
-
             return root.Value!.Value;
         }
 
