@@ -43,22 +43,13 @@ public sealed class Day21 : Puzzle
         if (withEquality)
         {
             monkeys[RootMonkey].Operation = '=';
+            monkeys[Human].Value = 0;
 
-            for (long i = 0; !cancellationToken.IsCancellationRequested; i++)
+            Cycle(monkeys);
+
+            if (monkeys[RootMonkey].Value == 1)
             {
-                monkeys[Human].Value = i;
-
-                Cycle(monkeys);
-
-                if (monkeys[RootMonkey].Value == 1)
-                {
-                    return i;
-                }
-
-                foreach (var monkey in monkeys.Values)
-                {
-                    monkey.Reset();
-                }
+                return 0;
             }
 
             cancellationToken.ThrowIfCancellationRequested();
@@ -76,7 +67,7 @@ public sealed class Day21 : Puzzle
             {
                 foreach (var monkey in monkeys.Values)
                 {
-                    monkey.TryReduce(monkeys);
+                    monkey.TryReduce();
                 }
             }
         }
@@ -105,13 +96,26 @@ public sealed class Day21 : Puzzle
                 {
                     monkey = new(name)
                     {
-                        Monkey1 = values[0],
-                        Monkey2 = values[2],
+                        MonkeyName1 = values[0],
+                        MonkeyName2 = values[2],
                         Operation = values[1][0],
                     };
                 }
 
                 monkeys[name] = monkey;
+            }
+
+            foreach (var monkey in monkeys.Values)
+            {
+                if (monkey.Monkey1 is null && monkey.MonkeyName1 is not null)
+                {
+                    monkey.Monkey1 = monkeys[monkey.MonkeyName1];
+                }
+
+                if (monkey.Monkey2 is null && monkey.MonkeyName2 is not null)
+                {
+                    monkey.Monkey2 = monkeys[monkey.MonkeyName2];
+                }
             }
 
             return monkeys;
@@ -139,9 +143,13 @@ public sealed class Day21 : Puzzle
     {
         public long? Value { get; set; }
 
-        public string? Monkey1 { get; set; }
+        public string? MonkeyName1 { get; set; }
 
-        public string? Monkey2 { get; set; }
+        public string? MonkeyName2 { get; set; }
+
+        public Monkey? Monkey1 { get; set; }
+
+        public Monkey? Monkey2 { get; set; }
 
         public char? Operation { get; set; }
 
@@ -155,13 +163,11 @@ public sealed class Day21 : Puzzle
             }
         }
 
-        public bool TryReduce(Dictionary<string, Monkey> monkeys)
+        public bool TryReduce()
         {
             if (!Value.HasValue &&
-                monkeys.TryGetValue(Monkey1!, out var monkey1) &&
-                monkeys.TryGetValue(Monkey2!, out var monkey2) &&
-                monkey1.Value is { } value1 &&
-                monkey2.Value is { } value2)
+                Monkey1?.Value is { } value1 &&
+                Monkey2?.Value is { } value2)
             {
                 Value = Operation switch
                 {
@@ -173,7 +179,7 @@ public sealed class Day21 : Puzzle
                     _ => throw new PuzzleException($"Unknown operation '{Operation}'."),
                 };
 
-                DependsOnHuman = monkey1.DependsOnHuman || monkey2.DependsOnHuman;
+                DependsOnHuman = Monkey1.DependsOnHuman || Monkey2.DependsOnHuman;
 
                 return true;
             }
