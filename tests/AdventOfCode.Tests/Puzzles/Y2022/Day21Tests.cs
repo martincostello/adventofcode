@@ -58,6 +58,8 @@ public sealed class Day21Tests : PuzzleTest
         // Assert
         puzzle.ShouldNotBeNull();
         puzzle.RootMonkeyNumber.ShouldBe(10037517593724);
+        puzzle.HumanNumber.ShouldBeGreaterThan(20237166);
+        puzzle.HumanNumber.ShouldBeLessThan(3886130271976);
         puzzle.HumanNumber.ShouldBe(-1);
     }
 }

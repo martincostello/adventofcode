@@ -1,8 +1,6 @@
 ﻿// Copyright (c) Martin Costello, 2015. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
-using System.Diagnostics;
-
 namespace MartinCostello.AdventOfCode.Puzzles.Y2022;
 
 /// <summary>
@@ -38,38 +36,64 @@ public sealed class Day21 : Puzzle
 
         var monkeys = Parse(jobs);
 
-        monkeys[Human].DependsOnHuman = true;
+        var human = monkeys[Human];
+        var root = monkeys[RootMonkey];
+
+        human.IsVariable = true;
 
         if (withEquality)
         {
-            monkeys[RootMonkey].Operation = '=';
-            monkeys[Human].Value = 0;
+            root.Operation = '=';
+            root.Value = 1;
 
-            Cycle(monkeys);
+            Reduce(monkeys, cancellationToken);
 
-            if (monkeys[RootMonkey].Value == 1)
-            {
-                return 0;
-            }
-
-            cancellationToken.ThrowIfCancellationRequested();
-            throw new UnreachableException();
+            return Reverse(root, human, cancellationToken);
         }
         else
         {
-            Cycle(monkeys);
-            return monkeys[RootMonkey].Value ?? 0;
+            Reduce(monkeys, cancellationToken);
+
+            return root.Value!.Value;
         }
 
-        static void Cycle(Dictionary<string, Monkey> monkeys)
+        static long Reverse(Monkey monkey, Monkey human, CancellationToken cancellationToken)
         {
-            while (!monkeys.Values.All((p) => p.Value is { }))
+            while (monkey != human && !cancellationToken.IsCancellationRequested)
+            {
+                (var variable, long constant) = monkey.Monkey1!.IsVariable ?
+                    (monkey.Monkey1!, monkey.Monkey2!.Value!.Value) :
+                    (monkey.Monkey2!, monkey.Monkey1!.Value!.Value);
+
+                variable.Value = monkey.Operation switch
+                {
+                    '=' => constant,
+                    '+' => monkey.Value - constant!,
+                    '-' => monkey.Value + constant!,
+                    '*' => monkey.Value / constant!,
+                    '/' => monkey.Value * constant!,
+                    _ => throw new PuzzleException($"Unknown operation '{monkey.Operation}'."),
+                };
+
+                monkey = variable;
+            }
+
+            cancellationToken.ThrowIfCancellationRequested();
+
+            return monkey.Value!.Value!;
+        }
+
+        static void Reduce(Dictionary<string, Monkey> monkeys, CancellationToken cancellationToken)
+        {
+            while (!monkeys.Values.All((p) => p.Value is { }) && !cancellationToken.IsCancellationRequested)
             {
                 foreach (var monkey in monkeys.Values)
                 {
-                    monkey.TryReduce();
+                    monkey.Reduce();
                 }
             }
+
+            cancellationToken.ThrowIfCancellationRequested();
         }
 
         static Dictionary<string, Monkey> Parse(IList<string> jobs)
@@ -153,20 +177,24 @@ public sealed class Day21 : Puzzle
 
         public char? Operation { get; set; }
 
-        public bool DependsOnHuman { get; set; }
+        public bool IsVariable { get; set; }
 
         public void Reset()
         {
-            if (DependsOnHuman)
+            if (IsVariable)
             {
                 Value = null;
             }
         }
 
-        public bool TryReduce()
+        public bool Reduce()
         {
-            if (!Value.HasValue &&
-                Monkey1?.Value is { } value1 &&
+            if (Value is not null)
+            {
+                return true;
+            }
+
+            if (Monkey1?.Value is { } value1 &&
                 Monkey2?.Value is { } value2)
             {
                 Value = Operation switch
@@ -179,7 +207,7 @@ public sealed class Day21 : Puzzle
                     _ => throw new PuzzleException($"Unknown operation '{Operation}'."),
                 };
 
-                DependsOnHuman = Monkey1.DependsOnHuman || Monkey2.DependsOnHuman;
+                IsVariable = Monkey1.IsVariable || Monkey2.IsVariable;
 
                 return true;
             }
