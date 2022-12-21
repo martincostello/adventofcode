@@ -62,17 +62,21 @@ public sealed class Day21 : Puzzle
         {
             while (monkey != human && !cancellationToken.IsCancellationRequested)
             {
-                (var variable, long constant) = monkey.Left!.IsVariable ?
+                bool assignLeft = monkey.Left!.IsVariable;
+
+                (var variable, long constant) = assignLeft ?
                     (monkey.Left!, monkey.Right!.Value!.Value) :
                     (monkey.Right!, monkey.Left!.Value!.Value);
 
-                variable.Value = monkey.Operation switch
+                variable.Value = (monkey.Operation, assignLeft) switch
                 {
-                    '=' => constant,
-                    '+' => monkey.Value - constant!,
-                    '-' => monkey.Value + constant!,
-                    '*' => monkey.Value / constant!,
-                    '/' => monkey.Value * constant!,
+                    ('=', _) => constant,
+                    ('+', _) => monkey.Value - constant,
+                    ('*', _) => monkey.Value / constant,
+                    ('-', false) => constant - monkey.Value,
+                    ('-', true) => monkey.Value + constant,
+                    ('/', false) => constant / monkey.Value,
+                    ('/', true) => monkey.Value * constant,
                     _ => throw new PuzzleException($"Unknown operation '{monkey.Operation}'."),
                 };
 
