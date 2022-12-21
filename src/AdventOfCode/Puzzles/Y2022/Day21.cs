@@ -43,10 +43,11 @@ public sealed class Day21 : Puzzle
 
         if (withEquality)
         {
+            Reduce(monkeys, cancellationToken);
+
+            human.Value = null;
             root.Operation = '=';
             root.Value = 1;
-
-            Reduce(monkeys, cancellationToken);
 
             return Reverse(root, human, cancellationToken);
         }
@@ -61,9 +62,9 @@ public sealed class Day21 : Puzzle
         {
             while (monkey != human && !cancellationToken.IsCancellationRequested)
             {
-                (var variable, long constant) = monkey.Monkey1!.IsVariable ?
-                    (monkey.Monkey1!, monkey.Monkey2!.Value!.Value) :
-                    (monkey.Monkey2!, monkey.Monkey1!.Value!.Value);
+                (var variable, long constant) = monkey.Left!.IsVariable ?
+                    (monkey.Left!, monkey.Right!.Value!.Value) :
+                    (monkey.Right!, monkey.Left!.Value!.Value);
 
                 variable.Value = monkey.Operation switch
                 {
@@ -120,8 +121,8 @@ public sealed class Day21 : Puzzle
                 {
                     monkey = new(name)
                     {
-                        MonkeyName1 = values[0],
-                        MonkeyName2 = values[2],
+                        LeftName = values[0],
+                        RightName = values[2],
                         Operation = values[1][0],
                     };
                 }
@@ -131,14 +132,14 @@ public sealed class Day21 : Puzzle
 
             foreach (var monkey in monkeys.Values)
             {
-                if (monkey.Monkey1 is null && monkey.MonkeyName1 is not null)
+                if (monkey.Left is null && monkey.LeftName is not null)
                 {
-                    monkey.Monkey1 = monkeys[monkey.MonkeyName1];
+                    monkey.Left = monkeys[monkey.LeftName];
                 }
 
-                if (monkey.Monkey2 is null && monkey.MonkeyName2 is not null)
+                if (monkey.Right is null && monkey.RightName is not null)
                 {
-                    monkey.Monkey2 = monkeys[monkey.MonkeyName2];
+                    monkey.Right = monkeys[monkey.RightName];
                 }
             }
 
@@ -167,13 +168,13 @@ public sealed class Day21 : Puzzle
     {
         public long? Value { get; set; }
 
-        public string? MonkeyName1 { get; set; }
+        public string? LeftName { get; set; }
 
-        public string? MonkeyName2 { get; set; }
+        public string? RightName { get; set; }
 
-        public Monkey? Monkey1 { get; set; }
+        public Monkey? Left { get; set; }
 
-        public Monkey? Monkey2 { get; set; }
+        public Monkey? Right { get; set; }
 
         public char? Operation { get; set; }
 
@@ -194,20 +195,20 @@ public sealed class Day21 : Puzzle
                 return true;
             }
 
-            if (Monkey1?.Value is { } value1 &&
-                Monkey2?.Value is { } value2)
+            if (Left?.Value is { } left &&
+                Right?.Value is { } right)
             {
                 Value = Operation switch
                 {
-                    '=' => value1 == value2 ? 1 : 0,
-                    '+' => value1 + value2,
-                    '-' => value1 - value2,
-                    '*' => value1 * value2,
-                    '/' => value1 / value2,
+                    '=' => left == right ? 1 : 0,
+                    '+' => left + right,
+                    '-' => left - right,
+                    '*' => left * right,
+                    '/' => left / right,
                     _ => throw new PuzzleException($"Unknown operation '{Operation}'."),
                 };
 
-                IsVariable = Monkey1.IsVariable || Monkey2.IsVariable;
+                IsVariable = Left.IsVariable || Right.IsVariable;
 
                 return true;
             }
