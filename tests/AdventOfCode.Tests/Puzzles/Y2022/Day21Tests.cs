@@ -17,23 +17,37 @@ public sealed class Day21Tests : PuzzleTest
     {
     }
 
-    [Fact(Skip = "Not implemented.")]
-    public void Y2022_Day21_Solve_Returns_Correct_Value()
+    [Fact]
+    public void Y2022_Day21_GetRootNumber_Returns_Correct_Value()
     {
         // Arrange
         string[] values = new[]
         {
-            "_",
+            "root: pppw + sjmn",
+            "dbpl: 5",
+            "cczh: sllz + lgvd",
+            "zczc: 2",
+            "ptdq: humn - dvpt",
+            "dvpt: 3",
+            "lfqf: 4",
+            "humn: 5",
+            "ljgn: 2",
+            "sjmn: drzm * dbpl",
+            "sllz: 4",
+            "pppw: cczh / lfqf",
+            "lgvd: ljgn * ptdq",
+            "drzm: hmdt - zczc",
+            "hmdt: 32",
         };
 
         // Act
-        int actual = Day21.Solve(values);
+        long actual = Day21.GetRootNumber(values);
 
         // Assert
-        actual.ShouldBe(-1);
+        actual.ShouldBe(152);
     }
 
-    [Fact(Skip = "Not implemented.")]
+    [Fact]
     public async Task Y2022_Day21_Solve_Returns_Correct_Solution()
     {
         // Act
@@ -41,6 +55,6 @@ public sealed class Day21Tests : PuzzleTest
 
         // Assert
         puzzle.ShouldNotBeNull();
-        puzzle.Solution.ShouldBe(-1);
+        puzzle.RootMonkeyNumber.ShouldBe(10037517593724);
     }
 }
