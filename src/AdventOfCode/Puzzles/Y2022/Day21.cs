@@ -38,12 +38,15 @@ public sealed class Day21 : Puzzle
 
         var monkeys = Parse(jobs);
 
+        monkeys[Human].DependsOnHuman = true;
+
         if (withEquality)
         {
+            monkeys[RootMonkey].Operation = '=';
+
             for (long i = 0; !cancellationToken.IsCancellationRequested; i++)
             {
                 monkeys[Human].Value = i;
-                monkeys[RootMonkey].Operation = '=';
 
                 Cycle(monkeys);
 
@@ -52,7 +55,10 @@ public sealed class Day21 : Puzzle
                     return i;
                 }
 
-                monkeys = Parse(jobs);
+                foreach (var monkey in monkeys.Values)
+                {
+                    monkey.Reset();
+                }
             }
 
             cancellationToken.ThrowIfCancellationRequested();
@@ -139,6 +145,16 @@ public sealed class Day21 : Puzzle
 
         public char? Operation { get; set; }
 
+        public bool DependsOnHuman { get; set; }
+
+        public void Reset()
+        {
+            if (DependsOnHuman)
+            {
+                Value = null;
+            }
+        }
+
         public bool TryReduce(Dictionary<string, Monkey> monkeys)
         {
             if (!Value.HasValue &&
@@ -156,6 +172,8 @@ public sealed class Day21 : Puzzle
                     '/' => value1 / value2,
                     _ => throw new PuzzleException($"Unknown operation '{Operation}'."),
                 };
+
+                DependsOnHuman = monkey1.DependsOnHuman || monkey2.DependsOnHuman;
 
                 return true;
             }
