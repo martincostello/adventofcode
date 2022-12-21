@@ -101,21 +101,20 @@ public sealed class Day21 : Puzzle
         {
             if (!Value.HasValue &&
                 monkeys.TryGetValue(Monkey1!, out var monkey1) &&
-                monkeys.TryGetValue(Monkey2!, out var monkey2))
+                monkeys.TryGetValue(Monkey2!, out var monkey2) &&
+                monkey1.Value is { } value1 &&
+                monkey2.Value is { } value2)
             {
-                if (monkey1.Value.HasValue && monkey2.Value.HasValue)
+                Value = Operation switch
                 {
-                    Value = Operation switch
-                    {
-                        '+' => monkey1.Value.Value + monkey2.Value.Value,
-                        '-' => monkey1.Value.Value - monkey2.Value.Value,
-                        '*' => monkey1.Value.Value * monkey2.Value.Value,
-                        '/' => monkey1.Value.Value / monkey2.Value.Value,
-                        _ => throw new PuzzleException($"Unknown operation '{Operation}'."),
-                    };
+                    '+' => value1 + value2,
+                    '-' => value1 - value2,
+                    '*' => value1 * value2,
+                    '/' => value1 / value2,
+                    _ => throw new PuzzleException($"Unknown operation '{Operation}'."),
+                };
 
-                    return true;
-                }
+                return true;
             }
 
             return false;
