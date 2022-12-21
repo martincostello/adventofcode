@@ -6,33 +6,119 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2022;
 /// <summary>
 /// A class representing the puzzle for <c>https://adventofcode.com/2022/day/21</c>. This class cannot be inherited.
 /// </summary>
-[Puzzle(2022, 21, "", RequiresData = true, IsHidden = true)]
+[Puzzle(2022, 21, "Monkey Math", RequiresData = true)]
 public sealed class Day21 : Puzzle
 {
-#pragma warning disable IDE0022
-#pragma warning disable SA1600
+    /// <summary>
+    /// Gets the number that the monkey named <c>root</c> will yell.
+    /// </summary>
+    public long RootMonkeyNumber { get; private set; }
 
-    public int Solution { get; private set; }
-
-    public static int Solve(IList<string> values)
+    /// <summary>
+    /// Gets the number that the monkey named <c>root</c> will yell given the specified monkey jobs.
+    /// </summary>
+    /// <param name="jobs">The jobs of each monkey.</param>
+    /// <returns>
+    /// The number that the monkey named <c>root</c> will yell based on the specified jobs.
+    /// </returns>
+    public static long GetRootNumber(IList<string> jobs)
     {
-        return -1;
+        var monkeys = Parse(jobs);
+
+        while (!monkeys.Values.All((p) => p.Value is { }))
+        {
+            foreach (var monkey in monkeys.Values)
+            {
+                monkey.TryReduce(monkeys);
+            }
+        }
+
+        return monkeys["root"]?.Value ?? 0;
+
+        static Dictionary<string, Monkey> Parse(IList<string> jobs)
+        {
+            var monkeys = new Dictionary<string, Monkey>(jobs.Count);
+
+            foreach (string job in jobs)
+            {
+                string[] split = job.Split(':');
+
+                string name = split[0];
+                string[] values = split[1].TrimStart().Split(' ');
+
+                Monkey monkey;
+
+                if (values.Length == 1)
+                {
+                    monkey = new(name)
+                    {
+                        Value = Parse<long>(values[0]),
+                    };
+                }
+                else
+                {
+                    monkey = new(name)
+                    {
+                        Monkey1 = values[0],
+                        Monkey2 = values[2],
+                        Operation = values[1][0],
+                    };
+                }
+
+                monkeys[name] = monkey;
+            }
+
+            return monkeys;
+        }
     }
 
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        ArgumentNullException.ThrowIfNull(args);
-
         var values = await ReadResourceAsLinesAsync();
 
-        Solution = Solve(values);
+        RootMonkeyNumber = GetRootNumber(values);
 
         if (Verbose)
         {
-            Logger.WriteLine("{0}", Solution);
+            Logger.WriteLine("The monkey named root will yell {0}.", RootMonkeyNumber);
         }
 
-        return PuzzleResult.Create(Solution);
+        return PuzzleResult.Create(RootMonkeyNumber);
+    }
+
+    private sealed record Monkey(string Name)
+    {
+        public long? Value { get; set; }
+
+        public string? Monkey1 { get; set; }
+
+        public string? Monkey2 { get; set; }
+
+        public char? Operation { get; set; }
+
+        public bool TryReduce(Dictionary<string, Monkey> monkeys)
+        {
+            if (!Value.HasValue &&
+                monkeys.TryGetValue(Monkey1!, out var monkey1) &&
+                monkeys.TryGetValue(Monkey2!, out var monkey2))
+            {
+                if (monkey1.Value.HasValue && monkey2.Value.HasValue)
+                {
+                    Value = Operation switch
+                    {
+                        '+' => monkey1.Value.Value + monkey2.Value.Value,
+                        '-' => monkey1.Value.Value - monkey2.Value.Value,
+                        '*' => monkey1.Value.Value * monkey2.Value.Value,
+                        '/' => monkey1.Value.Value / monkey2.Value.Value,
+                        _ => throw new PuzzleException($"Unknown operation '{Operation}'."),
+                    };
+
+                    return true;
+                }
+            }
+
+            return false;
+        }
     }
 }
