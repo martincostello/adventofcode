@@ -4,7 +4,7 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageVersion Include="Amazon.Lambda.AspNetCoreServer.Hosting" Version="1.5.0" />
-    <PackageVersion Include="BenchmarkDotNet" Version="0.13.3" />
+    <PackageVersion Include="BenchmarkDotNet" Version="0.13.4" />
     <PackageVersion Include="GitHubActionsTestLogger" Version="2.0.1" />
     <PackageVersion Include="MartinCostello.Logging.XUnit" Version="0.3.0" />
     <PackageVersion Include="MartinCostello.Testing.AwsLambdaTestServer" Version="0.7.0" />
