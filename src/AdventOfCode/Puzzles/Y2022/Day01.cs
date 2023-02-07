@@ -58,7 +58,7 @@ public sealed class Day01 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        var inventories = await ReadResourceAsLinesAsync();
+        var inventories = await ReadResourceAsLinesAsync(cancellationToken);
 
         var calories = GetCalorieInventories(inventories);
 

@@ -148,7 +148,7 @@ public sealed class Day05 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        var values = await ReadResourceAsLinesAsync();
+        var values = await ReadResourceAsLinesAsync(cancellationToken);
 
         NiceStringCountV1 = values.Count(IsNiceV1);
         NiceStringCountV2 = values.Count(IsNiceV2);

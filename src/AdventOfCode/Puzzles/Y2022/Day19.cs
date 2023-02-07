@@ -24,7 +24,7 @@ public sealed class Day19 : Puzzle
     {
         ArgumentNullException.ThrowIfNull(args);
 
-        var values = await ReadResourceAsLinesAsync();
+        var values = await ReadResourceAsLinesAsync(cancellationToken);
 
         Solution = Solve(values);
 

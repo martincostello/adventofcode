@@ -19,7 +19,7 @@ public sealed class Day23 : Puzzle
     {
         int input = Parse<int>(args[0]);
 
-        IList<string> instructions = await ReadResourceAsLinesAsync();
+        IList<string> instructions = await ReadResourceAsLinesAsync(cancellationToken);
 
         var registers = Day12.Process(instructions, initialValueOfA: input, cancellationToken: cancellationToken);
         SafeValue = registers['a'];

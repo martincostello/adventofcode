@@ -62,7 +62,7 @@ public sealed class Day09 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        string program = await ReadResourceAsStringAsync();
+        string program = await ReadResourceAsStringAsync(cancellationToken);
 
         Keycode1 = (await RunProgramAsync(program, input: 1, cancellationToken))[0];
         Keycode2 = (await RunProgramAsync(program, input: 2, cancellationToken))[0];

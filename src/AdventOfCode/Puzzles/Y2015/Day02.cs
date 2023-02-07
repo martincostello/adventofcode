@@ -45,7 +45,7 @@ public sealed class Day02 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        var dimensions = await ReadResourceAsLinesAsync();
+        var dimensions = await ReadResourceAsLinesAsync(cancellationToken);
 
         (TotalAreaOfPaper, TotalLengthOfRibbon) = GetTotalWrappingPaperAreaAndRibbonLength(dimensions);
 

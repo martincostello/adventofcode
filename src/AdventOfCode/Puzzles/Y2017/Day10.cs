@@ -82,7 +82,7 @@ public sealed class Day10 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        string rawLengths = (await ReadResourceAsStringAsync()).Trim();
+        string rawLengths = (await ReadResourceAsStringAsync(cancellationToken)).Trim();
 
         var lengths = rawLengths
             .AsNumbers<int>()

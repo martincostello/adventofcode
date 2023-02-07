@@ -40,7 +40,7 @@ public sealed class Day17 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        var containerVolumes = await ReadResourceAsNumbersAsync<int>();
+        var containerVolumes = await ReadResourceAsNumbersAsync<int>(cancellationToken);
 
         int volume = Parse<int>(args[0]);
 

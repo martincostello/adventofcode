@@ -71,7 +71,7 @@ public sealed class Day09 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        var moves = await ReadResourceAsLinesAsync();
+        var moves = await ReadResourceAsLinesAsync(cancellationToken);
 
         PositionsVisited2 = Move(moves, knots: 2);
         PositionsVisited10 = Move(moves, knots: 10);

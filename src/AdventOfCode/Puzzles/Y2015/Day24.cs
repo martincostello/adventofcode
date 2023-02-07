@@ -46,7 +46,7 @@ public sealed class Day24 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        IList<int> weights = await ReadResourceAsNumbersAsync<int>();
+        IList<int> weights = await ReadResourceAsNumbersAsync<int>(cancellationToken);
 
         int compartments = args.Length == 1 ? Parse<int>(args[0]) : 3;
 

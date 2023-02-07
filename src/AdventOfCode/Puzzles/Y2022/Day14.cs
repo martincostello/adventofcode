@@ -47,7 +47,7 @@ public sealed class Day14 : Puzzle
         bool hasFloor,
         CancellationToken cancellationToken = default)
     {
-        var cave = Parse(paths);
+        var cave = Parse(paths, cancellationToken);
 
         int maxX = cave.Keys.MaxBy((p) => p.X).X;
         int minX = cave.Keys.MinBy((p) => p.X).X;
@@ -73,12 +73,14 @@ public sealed class Day14 : Puzzle
 
         return (grains, visualization);
 
-        static Dictionary<Point, Content> Parse(IList<string> paths)
+        static Dictionary<Point, Content> Parse(IList<string> paths, CancellationToken cancellationToken)
         {
             var cave = new Dictionary<Point, Content>();
 
             foreach (string path in paths)
             {
+                cancellationToken.ThrowIfCancellationRequested();
+
                 var points = path
                     .Split(" -> ")
                     .Select((p) => p.AsNumberPair<int>())
@@ -143,6 +145,8 @@ public sealed class Day14 : Puzzle
                     return i;
                 }
             }
+
+            cancellationToken.ThrowIfCancellationRequested();
 
             static Point? Next(Point location, Dictionary<Point, Content> cave)
             {
@@ -212,7 +216,7 @@ public sealed class Day14 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        var paths = await ReadResourceAsLinesAsync();
+        var paths = await ReadResourceAsLinesAsync(cancellationToken);
 
         (GrainsOfSandWithVoid, string visualization1) = Simulate(paths, hasFloor: false, cancellationToken);
         (GrainsOfSandWithFloor, string visualization2) = Simulate(paths, hasFloor: true, cancellationToken);

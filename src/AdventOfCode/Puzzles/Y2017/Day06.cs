@@ -40,7 +40,7 @@ public sealed class Day06 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        IList<int> memory = (await ReadResourceAsStringAsync()).Trim()
+        IList<int> memory = (await ReadResourceAsStringAsync(cancellationToken)).Trim()
             .AsNumbers<int>('\t')
             .ToList();
 

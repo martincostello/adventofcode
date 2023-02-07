@@ -53,7 +53,7 @@ public sealed class Day03 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        IList<string> dimensions = await ReadResourceAsLinesAsync();
+        IList<string> dimensions = await ReadResourceAsLinesAsync(cancellationToken);
 
         PossibleTrianglesByRows = GetPossibleTriangleCount(dimensions, readAsColumns: false);
         PossibleTrianglesByColumns = GetPossibleTriangleCount(dimensions, readAsColumns: true);

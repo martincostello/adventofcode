@@ -67,7 +67,7 @@ public sealed class Day01 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        string value = await ReadResourceAsStringAsync();
+        string value = await ReadResourceAsStringAsync(cancellationToken);
 
         (FinalFloor, FirstBasementInstruction) = GetFinalFloorAndFirstInstructionBasementReached(value);
 

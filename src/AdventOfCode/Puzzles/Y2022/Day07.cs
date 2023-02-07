@@ -137,7 +137,7 @@ public sealed class Day07 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        var terminalOutput = await ReadResourceAsLinesAsync();
+        var terminalOutput = await ReadResourceAsLinesAsync(cancellationToken);
 
         (TotalSizeOfDirectoriesLargerThanLimit, SizeOfSmallestDirectoryToDelete) = GetDirectorySizes(terminalOutput);
 

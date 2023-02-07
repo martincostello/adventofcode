@@ -134,7 +134,7 @@ public sealed class Day08 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        IList<string> input = await ReadResourceAsLinesAsync();
+        IList<string> input = await ReadResourceAsLinesAsync(cancellationToken);
 
         int countForCode = input.Sum((p) => p.Length);
         int countInMemory = GetLiteralCharacterCount(input);

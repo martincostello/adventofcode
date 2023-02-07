@@ -122,7 +122,7 @@ public sealed class Day22 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        IList<string> values = await ReadResourceAsLinesAsync();
+        IList<string> values = await ReadResourceAsLinesAsync(cancellationToken);
 
         WinningScore = PlayCombat(values, recursive: false);
         WinningScoreRecursive = PlayCombat(values, recursive: true);

@@ -70,7 +70,7 @@ public sealed class Day09 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        var collection = await ReadResourceAsLinesAsync();
+        var collection = await ReadResourceAsLinesAsync(cancellationToken);
 
         ShortestDistance = GetDistanceBetweenPoints(collection, findLongest: false);
         LongestDistance = GetDistanceBetweenPoints(collection, findLongest: true);

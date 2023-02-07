@@ -33,7 +33,7 @@ public sealed class Day09 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        string data = await ReadResourceAsStringAsync();
+        string data = await ReadResourceAsStringAsync(cancellationToken);
 
         DecompressedLengthVersion1 = GetDecompressedLength(data, version: 1);
         DecompressedLengthVersion2 = GetDecompressedLength(data, version: 2);

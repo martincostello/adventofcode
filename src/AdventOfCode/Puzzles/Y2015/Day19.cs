@@ -125,7 +125,7 @@ public sealed class Day19 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        IList<string> lines = await ReadResourceAsLinesAsync();
+        IList<string> lines = await ReadResourceAsLinesAsync(cancellationToken);
 
         string molecule = lines[^1];
 

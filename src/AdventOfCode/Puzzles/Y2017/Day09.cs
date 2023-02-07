@@ -101,7 +101,7 @@ public sealed class Day09 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        string stream = (await ReadResourceAsStringAsync()).Trim();
+        string stream = (await ReadResourceAsStringAsync(cancellationToken)).Trim();
 
         (TotalScore, GarbageCount) = ParseStream(stream);
 

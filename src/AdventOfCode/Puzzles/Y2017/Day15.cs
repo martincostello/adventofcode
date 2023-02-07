@@ -106,7 +106,7 @@ public sealed class Day15 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        IList<string> input = await ReadResourceAsLinesAsync();
+        IList<string> input = await ReadResourceAsLinesAsync(cancellationToken);
 
         FinalCountV1 = GetMatchingPairs(input, version: 1);
         FinalCountV2 = GetMatchingPairs(input, version: 2);

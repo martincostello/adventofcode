@@ -118,7 +118,7 @@ public sealed class Day08 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        string image = (await ReadResourceAsStringAsync()).TrimEnd('\n');
+        string image = (await ReadResourceAsStringAsync(cancellationToken)).TrimEnd('\n');
 
         (Checksum, Message, string visualization) = GetImageChecksum(image, 6, 25, Logger);
 

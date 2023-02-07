@@ -77,7 +77,7 @@ public sealed class Day17 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        string jets = (await ReadResourceAsStringAsync()).Trim();
+        string jets = (await ReadResourceAsStringAsync(cancellationToken)).Trim();
 
         Height2022 = GetHeightOfTower(jets.Trim(), count: 2022, cancellationToken);
         HeightTrillion = GetHeightOfTower(jets.Trim(), count: 1000000000000, cancellationToken);

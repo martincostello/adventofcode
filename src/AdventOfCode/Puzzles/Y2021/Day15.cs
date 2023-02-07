@@ -24,10 +24,14 @@ public sealed class Day15 : Puzzle
     /// </summary>
     /// <param name="riskMap">The map of the risk in the cave to determine the risk level for.</param>
     /// <param name="largeMap">Whether the map is actually 5 times larger than specified.</param>
+    /// <param name="cancellationToken">The optional <see cref="CancellationToken"/> to use.</param>
     /// <returns>
     /// The path through the cave with the lowest total risk.
     /// </returns>
-    public static int GetRiskLevel(IList<string> riskMap, bool largeMap)
+    public static int GetRiskLevel(
+        IList<string> riskMap,
+        bool largeMap,
+        CancellationToken cancellationToken = default)
     {
         const int LargeMapFactor = 5;
 
@@ -96,16 +100,16 @@ public sealed class Day15 : Puzzle
         var start = Point.Empty;
         var goal = new Point(width - 1, height - 1);
 
-        return (int)PathFinding.AStar(map, start, goal);
+        return (int)PathFinding.AStar(map, start, goal, cancellationToken: cancellationToken);
     }
 
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        IList<string> riskMap = await ReadResourceAsLinesAsync();
+        IList<string> riskMap = await ReadResourceAsLinesAsync(cancellationToken);
 
-        RiskLevelSmall = GetRiskLevel(riskMap, largeMap: false);
-        RiskLevelLarge = GetRiskLevel(riskMap, largeMap: true);
+        RiskLevelSmall = GetRiskLevel(riskMap, largeMap: false, cancellationToken);
+        RiskLevelLarge = GetRiskLevel(riskMap, largeMap: true, cancellationToken);
 
         if (Verbose)
         {

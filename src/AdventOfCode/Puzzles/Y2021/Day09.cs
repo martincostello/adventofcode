@@ -23,11 +23,14 @@ public sealed class Day09 : Puzzle
     /// Determines the level of risk of the low points in the specified heightmap.
     /// </summary>
     /// <param name="heightmap">The heightmap to analyze.</param>
+    /// <param name="cancellationToken">The optional <see cref="CancellationToken"/> to use.</param>
     /// <returns>
     /// The sum of the risk levels of all the low points in the heightmap and
     /// the total area of the three largest basins in the heightmap.
     /// </returns>
-    public static (int SumOfRiskLevels, int AreaOfThreeLargestBasins) AnalyzeRisk(IList<string> heightmap)
+    public static (int SumOfRiskLevels, int AreaOfThreeLargestBasins) AnalyzeRisk(
+        IList<string> heightmap,
+        CancellationToken cancellationToken = default)
     {
         int width = heightmap[0].Length;
         int height = heightmap.Count;
@@ -92,7 +95,7 @@ public sealed class Day09 : Puzzle
 
         foreach (var point in lowPoints.Keys)
         {
-            var basin = PathFinding.BreadthFirst(graph, point);
+            var basin = PathFinding.BreadthFirst(graph, point, cancellationToken);
             basinAreas.Add(basin.Count);
         }
 
@@ -111,9 +114,9 @@ public sealed class Day09 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        IList<string> heightmap = await ReadResourceAsLinesAsync();
+        IList<string> heightmap = await ReadResourceAsLinesAsync(cancellationToken);
 
-        (SumOfRiskLevels, AreaOfThreeLargestBasins) = AnalyzeRisk(heightmap);
+        (SumOfRiskLevels, AreaOfThreeLargestBasins) = AnalyzeRisk(heightmap, cancellationToken);
 
         if (Verbose)
         {

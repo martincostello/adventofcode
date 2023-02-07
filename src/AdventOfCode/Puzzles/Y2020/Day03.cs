@@ -78,7 +78,7 @@ public sealed class Day03 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        IList<string> grid = await ReadResourceAsLinesAsync();
+        IList<string> grid = await ReadResourceAsLinesAsync(cancellationToken);
 
         var slopes = new[]
         {

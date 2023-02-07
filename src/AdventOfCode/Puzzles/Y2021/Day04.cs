@@ -62,7 +62,7 @@ public sealed class Day04 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        IList<string> game = await ReadResourceAsLinesAsync();
+        IList<string> game = await ReadResourceAsLinesAsync(cancellationToken);
 
         (FirstWinningScore, LastWinningScore) = PlayBingo(game);
 

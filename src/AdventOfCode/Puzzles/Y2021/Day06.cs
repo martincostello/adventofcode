@@ -79,7 +79,7 @@ public sealed class Day06 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        IList<int> fish = (await ReadResourceAsStringAsync()).AsNumbers<int>().ToArray();
+        IList<int> fish = (await ReadResourceAsStringAsync(cancellationToken)).AsNumbers<int>().ToArray();
 
         FishCount80 = CountFish(fish, days: 80);
         FishCount256 = CountFish(fish, days: 256);

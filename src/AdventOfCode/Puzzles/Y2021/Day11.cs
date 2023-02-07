@@ -149,7 +149,7 @@ public sealed class Day11 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        IList<string> lines = await ReadResourceAsLinesAsync();
+        IList<string> lines = await ReadResourceAsLinesAsync(cancellationToken);
 
         (Flashes100, _) = Simulate(lines, steps: 100);
         (_, StepOfFirstSynchronizedFlash) = Simulate(lines, steps: int.MaxValue);

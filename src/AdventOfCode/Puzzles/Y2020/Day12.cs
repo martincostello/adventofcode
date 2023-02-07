@@ -153,7 +153,7 @@ public sealed class Day12 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        IList<string> instructions = await ReadResourceAsLinesAsync();
+        IList<string> instructions = await ReadResourceAsLinesAsync(cancellationToken);
 
         ManhattanDistance = GetDistanceTravelled(instructions);
         ManhattanDistanceWithWaypoint = GetDistanceTravelledWithWaypoint(instructions);

@@ -52,7 +52,7 @@ public sealed class Day04 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        ICollection<string> passphrases = await ReadResourceAsLinesAsync();
+        ICollection<string> passphrases = await ReadResourceAsLinesAsync(cancellationToken);
 
         ValidPassphraseCountV1 = passphrases.Count((p) => IsPassphraseValid(p, 1));
         ValidPassphraseCountV2 = passphrases.Count((p) => IsPassphraseValid(p, 2));

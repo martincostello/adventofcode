@@ -48,7 +48,7 @@ public sealed class Day08 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        IList<string> instructions = await ReadResourceAsLinesAsync();
+        IList<string> instructions = await ReadResourceAsLinesAsync(cancellationToken);
 
         HighestRegisterValueAtEnd = FindHighestRegisterValueAtEnd(instructions);
         HighestRegisterValueDuring = FindHighestRegisterValueDuring(instructions);

@@ -105,7 +105,7 @@ public sealed class Day23 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        IList<string> instructions = await ReadResourceAsLinesAsync();
+        IList<string> instructions = await ReadResourceAsLinesAsync(cancellationToken);
         uint initialValue = args.Length == 1 ? Parse<uint>(args[0]) : 0;
 
         (A, B) = ProcessInstructions(instructions, initialValue, Logger);

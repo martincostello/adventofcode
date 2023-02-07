@@ -145,7 +145,7 @@ public sealed class Day05 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        var instructions = await ReadResourceAsLinesAsync();
+        var instructions = await ReadResourceAsLinesAsync(cancellationToken);
 
         TopCratesOfStacks9000 = RearrangeCrates(instructions, canMoveMultipleCrates: false);
         TopCratesOfStacks9001 = RearrangeCrates(instructions, canMoveMultipleCrates: true);
