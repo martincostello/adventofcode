@@ -56,7 +56,7 @@ public sealed class Day06 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        string datastream = await ReadResourceAsStringAsync();
+        string datastream = await ReadResourceAsStringAsync(cancellationToken);
 
         IndexOfFirstStartOfPacketMarker = FindFirstPacket(datastream, 4);
         IndexOfFirstStartOfMessageMarker = FindFirstPacket(datastream, 14);

@@ -27,12 +27,15 @@ public sealed class Day12 : Puzzle
     /// position and from any location at ground level.
     /// </summary>
     /// <param name="heightmap">The height map to traverse.</param>
+    /// <param name="cancellationToken">The optional <see cref="CancellationToken"/> to use.</param>
     /// <returns>
     /// The fewest steps required to move to get to the highest location
     /// in the heightmap specified by <paramref name="heightmap"/> from
     /// the starting position and from any location at ground level.
     /// </returns>
-    public static (int MinimumStepsFromStart, int MinimumStepsFromGroundLevel) GetMinimumSteps(IList<string> heightmap)
+    public static (int MinimumStepsFromStart, int MinimumStepsFromGroundLevel) GetMinimumSteps(
+        IList<string> heightmap,
+        CancellationToken cancellationToken = default)
     {
         var map = BuildMap(heightmap);
 
@@ -44,7 +47,7 @@ public sealed class Day12 : Puzzle
 
         foreach (var start in locationsAtGroundLevel)
         {
-            int distance = (int)PathFinding.AStar(map, start, map.End);
+            int distance = (int)PathFinding.AStar(map, start, map.End, cancellationToken: cancellationToken);
 
             // Ignore starting locations that cannot reach the end
             if (distance > 0)
@@ -96,9 +99,9 @@ public sealed class Day12 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        var heightmap = await ReadResourceAsLinesAsync();
+        var heightmap = await ReadResourceAsLinesAsync(cancellationToken);
 
-        (MinimumStepsFromStart, MinimumStepsFromGroundLevel) = GetMinimumSteps(heightmap);
+        (MinimumStepsFromStart, MinimumStepsFromGroundLevel) = GetMinimumSteps(heightmap, cancellationToken);
 
         if (Verbose)
         {

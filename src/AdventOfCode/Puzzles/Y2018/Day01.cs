@@ -77,7 +77,7 @@ public sealed class Day01 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        IList<int> sequence = await ReadResourceAsNumbersAsync<int>();
+        IList<int> sequence = await ReadResourceAsNumbersAsync<int>(cancellationToken);
 
         (Frequency, FirstRepeatedFrequency) = CalculateFrequencyWithRepetition(sequence);
 

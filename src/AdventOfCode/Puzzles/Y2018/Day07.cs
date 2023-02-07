@@ -100,7 +100,7 @@ public sealed class Day07 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        var instructions = await ReadResourceAsLinesAsync();
+        var instructions = await ReadResourceAsLinesAsync(cancellationToken);
 
         const int OneMinute = 60;
 

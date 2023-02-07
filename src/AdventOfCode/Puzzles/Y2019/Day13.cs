@@ -73,7 +73,7 @@ public sealed class Day13 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        string program = await ReadResourceAsStringAsync();
+        string program = await ReadResourceAsStringAsync(cancellationToken);
 
         (BlockTileCount, Score) = await PlayGameAsync(program, cancellationToken);
 

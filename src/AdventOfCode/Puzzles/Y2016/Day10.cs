@@ -79,7 +79,7 @@ public sealed class Day10 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        IList<string> instructions = await ReadResourceAsLinesAsync();
+        IList<string> instructions = await ReadResourceAsLinesAsync(cancellationToken);
         int[] binsOfInterest = { 0, 1, 2 };
 
         (BotThatCompares61And17Microchips, ProductOfMicrochipsInBins012) = GetBotNumber(instructions, 61, 17, binsOfInterest);

@@ -147,7 +147,7 @@ public sealed class Day11 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        var observations = await ReadResourceAsLinesAsync();
+        var observations = await ReadResourceAsLinesAsync(cancellationToken);
 
         MonkeyBusiness20 = GetMonkeyBusiness(observations, rounds: 20, highAnxiety: false);
         MonkeyBusiness10000 = GetMonkeyBusiness(observations, rounds: 10000, highAnxiety: true);

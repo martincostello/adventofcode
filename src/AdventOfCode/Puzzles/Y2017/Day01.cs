@@ -56,7 +56,7 @@ public sealed class Day01 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        string digits = (await ReadResourceAsStringAsync()).TrimEnd();
+        string digits = (await ReadResourceAsStringAsync(cancellationToken)).TrimEnd();
 
         CaptchaSolutionNext = CalculateSum(digits, useOppositeDigit: false);
         CaptchaSolutionOpposite = CalculateSum(digits, useOppositeDigit: true);

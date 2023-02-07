@@ -129,7 +129,7 @@ public sealed class Day17 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        string target = (await ReadResourceAsStringAsync()).Trim();
+        string target = (await ReadResourceAsStringAsync(cancellationToken)).Trim();
 
         (MaxApogee, Count) = Calculate(target);
 

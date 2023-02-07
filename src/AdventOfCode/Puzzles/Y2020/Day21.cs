@@ -119,7 +119,7 @@ public sealed class Day21 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        IList<string> recipies = await ReadResourceAsLinesAsync();
+        IList<string> recipies = await ReadResourceAsLinesAsync(cancellationToken);
 
         (IngredientsWithNoAllergens, CanonicalAllergens) = GetIngredientsWithNoAllergens(recipies, cancellationToken);
 

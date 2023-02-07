@@ -86,7 +86,7 @@ public sealed class Day11 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        string path = (await ReadResourceAsStringAsync()).Trim();
+        string path = (await ReadResourceAsStringAsync(cancellationToken)).Trim();
 
         (MinimumSteps, MaximumDistance) = FindStepRange(path);
 

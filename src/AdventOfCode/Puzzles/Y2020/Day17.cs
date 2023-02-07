@@ -58,7 +58,7 @@ public sealed class Day17 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        IList<string> layout = await ReadResourceAsLinesAsync();
+        IList<string> layout = await ReadResourceAsLinesAsync(cancellationToken);
 
         int cycles = 6;
 

@@ -63,7 +63,7 @@ public sealed class Day01 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        IList<int> values = await ReadResourceAsNumbersAsync<int>();
+        IList<int> values = await ReadResourceAsNumbersAsync<int>(cancellationToken);
 
         DepthIncreases = GetDepthMeasurementIncreases(values, useSlidingWindow: false);
         DepthIncreasesWithSlidingWindow = GetDepthMeasurementIncreases(values, useSlidingWindow: true);

@@ -26,10 +26,14 @@ public sealed class Day23 : Puzzle
     /// </summary>
     /// <param name="diagram">The diagram of the burrows occupied by the amphipods.</param>
     /// <param name="unfoldDiagram">Whether to unfold the diagram to reveal the missing lines.</param>
+    /// <param name="cancellationToken">The optional <see cref="CancellationToken"/> to use.</param>
     /// <returns>
     /// The least energy required to organize the amphipods.
     /// </returns>
-    public static int Organize(IList<string> diagram, bool unfoldDiagram)
+    public static int Organize(
+        IList<string> diagram,
+        bool unfoldDiagram,
+        CancellationToken cancellationToken = default)
     {
         string amber = $"{diagram[2][3]}{diagram[3][3]}";
         string bronze = $"{diagram[2][5]}{diagram[3][5]}";
@@ -50,16 +54,16 @@ public sealed class Day23 : Puzzle
         var start = new State(emptyHallway, amber, bronze, copper, desert);
         var goal = new State(emptyHallway, new('A', depth), new('B', depth), new('C', depth), new('D', depth));
 
-        return (int)PathFinding.AStar(new Burrow(), start, goal);
+        return (int)PathFinding.AStar(new Burrow(), start, goal, cancellationToken: cancellationToken);
     }
 
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        IList<string> diagram = await ReadResourceAsLinesAsync();
+        IList<string> diagram = await ReadResourceAsLinesAsync(cancellationToken);
 
-        MinimumEnergyFolded = Organize(diagram, unfoldDiagram: false);
-        MinimumEnergyUnfolded = Organize(diagram, unfoldDiagram: true);
+        MinimumEnergyFolded = Organize(diagram, unfoldDiagram: false, cancellationToken);
+        MinimumEnergyUnfolded = Organize(diagram, unfoldDiagram: true, cancellationToken);
 
         if (Verbose)
         {

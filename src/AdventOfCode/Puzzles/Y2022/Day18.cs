@@ -24,10 +24,14 @@ public sealed class Day18 : Puzzle
     /// </summary>
     /// <param name="cubes">The cubes that make up the lava droplet.</param>
     /// <param name="excludeInterior">Whether to exclude the internal surface area.</param>
+    /// <param name="cancellationToken">The optional <see cref="CancellationToken"/> to use.</param>
     /// <returns>
     /// The total surface area of the lava droplet described by <paramref name="cubes"/>.
     /// </returns>
-    public static int GetSurfaceArea(IList<string> cubes, bool excludeInterior)
+    public static int GetSurfaceArea(
+        IList<string> cubes,
+        bool excludeInterior,
+        CancellationToken cancellationToken = default)
     {
         var droplet = cubes
             .Select((p) => p.AsNumberTriple<int>())
@@ -64,7 +68,7 @@ public sealed class Day18 : Puzzle
         HashSet<(Vector3 Point, Vector3 Normal)> surfaces = new();
 
         // Find all of the surfaces that can be reached from outside the droplet
-        _ = PathFinding.BreadthFirst(Neighbors, origin);
+        _ = PathFinding.BreadthFirst(Neighbors, origin, cancellationToken);
 
         return surfaces.Count;
 
@@ -90,10 +94,10 @@ public sealed class Day18 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        var cubes = await ReadResourceAsLinesAsync();
+        var cubes = await ReadResourceAsLinesAsync(cancellationToken);
 
-        TotalDropletSurfaceArea = GetSurfaceArea(cubes, excludeInterior: false);
-        ExternalDropletSurfaceArea = GetSurfaceArea(cubes, excludeInterior: true);
+        TotalDropletSurfaceArea = GetSurfaceArea(cubes, excludeInterior: false, cancellationToken);
+        ExternalDropletSurfaceArea = GetSurfaceArea(cubes, excludeInterior: true, cancellationToken);
 
         if (Verbose)
         {

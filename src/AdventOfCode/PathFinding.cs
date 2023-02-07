@@ -19,10 +19,16 @@ public static class PathFinding
     /// <param name="start">The starting node.</param>
     /// <param name="goal">The goal node to find a path to.</param>
     /// <param name="heuristic">An optional heuristic to determine the cost of moving from one node to another.</param>
+    /// <param name="cancellationToken">The optional <see cref="CancellationToken"/> to use.</param>
     /// <returns>
     /// The minimum cost to traverse the graph from <paramref name="start"/> to <paramref name="goal"/>.
     /// </returns>
-    public static long AStar<T>(IWeightedGraph<T> graph, T start, T goal, Func<T, T, long>? heuristic = default)
+    public static long AStar<T>(
+        IWeightedGraph<T> graph,
+        T start,
+        T goal,
+        Func<T, T, long>? heuristic = default,
+        CancellationToken cancellationToken = default)
         where T : notnull
     {
         heuristic ??= graph.Cost;
@@ -32,7 +38,7 @@ public static class PathFinding
 
         var costSoFar = new Dictionary<T, long>() { [start] = 0 };
 
-        while (frontier.Count > 0)
+        while (frontier.Count > 0 && !cancellationToken.IsCancellationRequested)
         {
             T current = frontier.Dequeue();
 
@@ -57,6 +63,8 @@ public static class PathFinding
             }
         }
 
+        cancellationToken.ThrowIfCancellationRequested();
+
         return costSoFar.GetValueOrDefault(goal, long.MaxValue);
     }
 
@@ -66,12 +74,13 @@ public static class PathFinding
     /// <typeparam name="T">The type of the nodes of the graph.</typeparam>
     /// <param name="graph">The graph to search.</param>
     /// <param name="start">The starting node.</param>
+    /// <param name="cancellationToken">The <see cref="CancellationToken"/> to use.</param>
     /// <returns>
     /// An <see cref="IReadOnlySet{T}"/> of the visited nodes.
     /// </returns>
-    public static IReadOnlySet<T> BreadthFirst<T>(IGraph<T> graph, T start)
+    public static IReadOnlySet<T> BreadthFirst<T>(IGraph<T> graph, T start, CancellationToken cancellationToken)
         where T : notnull
-        => BreadthFirst(graph.Neighbors, start);
+        => BreadthFirst(graph.Neighbors, start, cancellationToken);
 
     /// <summary>
     /// Performs a breadth-first search of the specified graph.
@@ -79,10 +88,11 @@ public static class PathFinding
     /// <typeparam name="T">The type of the nodes of the graph.</typeparam>
     /// <param name="neighbors">A delegate to a method that can be used to get the neighbours of a node.</param>
     /// <param name="start">The starting node.</param>
+    /// <param name="cancellationToken">The <see cref="CancellationToken"/> to use.</param>
     /// <returns>
     /// An <see cref="IReadOnlySet{T}"/> of the visited nodes.
     /// </returns>
-    public static IReadOnlySet<T> BreadthFirst<T>(Func<T, IEnumerable<T>> neighbors, T start)
+    public static IReadOnlySet<T> BreadthFirst<T>(Func<T, IEnumerable<T>> neighbors, T start, CancellationToken cancellationToken)
         where T : notnull
     {
         var frontier = new Queue<T>();
@@ -90,7 +100,7 @@ public static class PathFinding
 
         var reached = new HashSet<T>() { start };
 
-        while (frontier.Count > 0)
+        while (frontier.Count > 0 && !cancellationToken.IsCancellationRequested)
         {
             T current = frontier.Dequeue();
 
@@ -103,6 +113,8 @@ public static class PathFinding
                 }
             }
         }
+
+        cancellationToken.ThrowIfCancellationRequested();
 
         return reached;
     }

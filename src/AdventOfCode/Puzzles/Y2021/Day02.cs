@@ -76,7 +76,7 @@ public sealed class Day02 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        IList<string> course = await ReadResourceAsLinesAsync();
+        IList<string> course = await ReadResourceAsLinesAsync(cancellationToken);
 
         ProductOfFinalPosition = NavigateCourse(course, useAim: false);
         ProductOfFinalPositionWithAim = NavigateCourse(course, useAim: true);

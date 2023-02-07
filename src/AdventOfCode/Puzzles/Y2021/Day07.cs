@@ -72,7 +72,7 @@ public sealed class Day07 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        IList<int> submarines = (await ReadResourceAsStringAsync()).AsNumbers<int>().ToArray();
+        IList<int> submarines = (await ReadResourceAsStringAsync(cancellationToken)).AsNumbers<int>().ToArray();
 
         FuelConsumedWithConstantBurnRate = AlignSubmarines(submarines, withVariableBurnRate: false);
         FuelConsumedWithVariableBurnRate = AlignSubmarines(submarines, withVariableBurnRate: true);

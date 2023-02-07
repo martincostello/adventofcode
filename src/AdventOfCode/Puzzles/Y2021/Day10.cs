@@ -127,7 +127,7 @@ public sealed class Day10 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        IList<string> lines = await ReadResourceAsLinesAsync();
+        IList<string> lines = await ReadResourceAsLinesAsync(cancellationToken);
 
         (SyntaxErrorScore, MiddleAutoCompleteScore) = Compile(lines);
 

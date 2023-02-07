@@ -118,7 +118,7 @@ public sealed class Day06 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        var coordinates = await ReadResourceAsLinesAsync();
+        var coordinates = await ReadResourceAsLinesAsync(cancellationToken);
 
         const int DistanceLimit = 10_000;
 

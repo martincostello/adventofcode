@@ -122,7 +122,7 @@ public sealed class Day24 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        IList<string> instructions = await ReadResourceAsLinesAsync();
+        IList<string> instructions = await ReadResourceAsLinesAsync(cancellationToken);
 
         BlackTilesDay0 = TileFloor(instructions, days: 0);
         BlackTilesDay100 = TileFloor(instructions, days: 100);

@@ -167,11 +167,12 @@ public abstract class Puzzle : IPuzzle
     /// <summary>
     /// Returns the lines associated with the resource for the puzzle as a <see cref="string"/>.
     /// </summary>
+    /// <param name="cancellationToken">The optional <see cref="CancellationToken"/> to use.</param>
     /// <returns>
     /// A <see cref="Task{TResult}"/> that represents the asynchronous operation which returns an
     /// <see cref="IList{T}"/> containing the lines of the resource associated with the puzzle.
     /// </returns>
-    protected async Task<IList<string>> ReadResourceAsLinesAsync()
+    protected async Task<IList<string>> ReadResourceAsLinesAsync(CancellationToken cancellationToken = default)
     {
         return await Cache.GetOrCreateAsync(this, async () =>
         {
@@ -181,7 +182,7 @@ public abstract class Puzzle : IPuzzle
 
             string? value;
 
-            while ((value = await reader.ReadLineAsync()) is not null)
+            while ((value = await reader.ReadLineAsync(cancellationToken)) is not null)
             {
                 lines.Add(value);
             }
@@ -196,11 +197,12 @@ public abstract class Puzzle : IPuzzle
     /// <typeparam name="T">
     /// The type of number to read the resource as a sequence of.
     /// </typeparam>
+    /// <param name="cancellationToken">The optional <see cref="CancellationToken"/> to use.</param>
     /// <returns>
     /// A <see cref="Task{TResult}"/> that represents the asynchronous operation which returns an
     /// <see cref="IList{T}"/> containing the numbers in the resource associated with the puzzle.
     /// </returns>
-    protected async Task<IList<T>> ReadResourceAsNumbersAsync<T>()
+    protected async Task<IList<T>> ReadResourceAsNumbersAsync<T>(CancellationToken cancellationToken = default)
         where T : INumber<T>
     {
         return await Cache.GetOrCreateAsync(this, async () =>
@@ -211,7 +213,7 @@ public abstract class Puzzle : IPuzzle
 
             string? value;
 
-            while ((value = await reader.ReadLineAsync()) is not null)
+            while ((value = await reader.ReadLineAsync(cancellationToken)) is not null)
             {
                 numbers.Add(T.Parse(value, NumberStyles.Integer, CultureInfo.InvariantCulture));
             }
@@ -224,17 +226,18 @@ public abstract class Puzzle : IPuzzle
     /// Returns a <see cref="string"/> containing the content of the
     /// resource associated with the puzzle as an asynchronous operation.
     /// </summary>
+    /// <param name="cancellationToken">The optional <see cref="CancellationToken"/> to use.</param>
     /// <returns>
     /// A <see cref="Task{TResult}"/> that represents the asynchronous operation
     /// to return a <see cref="string"/> containing the content of the resource
     /// associated with the puzzle.
     /// </returns>
-    protected async Task<string> ReadResourceAsStringAsync()
+    protected async Task<string> ReadResourceAsStringAsync(CancellationToken cancellationToken = default)
     {
         return await Cache.GetOrCreateAsync(this, async () =>
         {
             using var reader = new StreamReader(Resource ?? ReadResource(), leaveOpen: Resource is not null);
-            return await reader.ReadToEndAsync();
+            return await reader.ReadToEndAsync(cancellationToken);
         });
     }
 

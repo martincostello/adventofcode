@@ -132,7 +132,7 @@ public sealed class Day02 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        IList<string> ids = await ReadResourceAsLinesAsync();
+        IList<string> ids = await ReadResourceAsLinesAsync(cancellationToken);
 
         Checksum = CalculateChecksum(ids);
         CommonLettersForBoxes = GetCommonLetters(ids);

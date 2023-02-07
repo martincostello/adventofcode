@@ -140,7 +140,7 @@ public sealed class Day22 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        IList<string> instructions = await ReadResourceAsLinesAsync();
+        IList<string> instructions = await ReadResourceAsLinesAsync(cancellationToken);
 
         InitializedCubeCount = Reboot(instructions, initialize: true);
         RebootedCubeCount = Reboot(instructions, initialize: false);

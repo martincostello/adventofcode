@@ -55,7 +55,7 @@ public sealed class Day13 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        IList<string> potentialHappiness = await ReadResourceAsLinesAsync();
+        IList<string> potentialHappiness = await ReadResourceAsLinesAsync(cancellationToken);
 
         MaximumTotalChangeInHappiness = GetMaximumTotalChangeInHappiness(potentialHappiness);
 
@@ -135,9 +135,8 @@ public sealed class Day13 : Puzzle
         {
             Name = split[0],
             AdjacentName = split[^1].TrimEnd('.'),
+            Happiness = Parse<int>(split[3]),
         };
-
-        result.Happiness = Parse<int>(split[3]);
 
         if (split[2] == "lose")
         {

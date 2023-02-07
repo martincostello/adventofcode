@@ -22,7 +22,7 @@ public sealed class Day06 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        var lines = await ReadResourceAsLinesAsync();
+        var lines = await ReadResourceAsLinesAsync(cancellationToken);
 
         var instructionsV1 = lines.Select(InstructionV1.Parse).ToArray();
         var instructionsV2 = lines.Select(InstructionV2.Parse).ToArray();

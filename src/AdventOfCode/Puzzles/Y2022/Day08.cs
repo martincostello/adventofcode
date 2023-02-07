@@ -168,7 +168,7 @@ public sealed class Day08 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        var grid = await ReadResourceAsLinesAsync();
+        var grid = await ReadResourceAsLinesAsync(cancellationToken);
 
         (VisibleTrees, MaximumScenicScore) = CountVisibleTrees(grid);
 

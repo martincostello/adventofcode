@@ -52,7 +52,7 @@ public sealed class Day02 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        string program = await ReadResourceAsStringAsync();
+        string program = await ReadResourceAsStringAsync(cancellationToken);
 
         Output = await RunProgramAsync(program, adjust: true, cancellationToken);
 

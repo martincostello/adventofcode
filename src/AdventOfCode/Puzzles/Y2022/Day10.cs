@@ -122,7 +122,7 @@ public sealed class Day10 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        var program = await ReadResourceAsLinesAsync();
+        var program = await ReadResourceAsLinesAsync(cancellationToken);
 
         (Message, string visualization, SumOfSignalStrengths) = GetMessage(program);
 

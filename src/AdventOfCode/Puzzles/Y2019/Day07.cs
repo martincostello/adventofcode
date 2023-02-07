@@ -106,7 +106,7 @@ public sealed class Day07 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        string program = await ReadResourceAsStringAsync();
+        string program = await ReadResourceAsStringAsync(cancellationToken);
 
         HighestSignal = await RunProgramAsync(program, useFeedback: false, cancellationToken);
         HighestSignalUsingFeedback = await RunProgramAsync(program, useFeedback: true, cancellationToken);

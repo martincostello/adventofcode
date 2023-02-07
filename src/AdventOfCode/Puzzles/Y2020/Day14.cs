@@ -122,7 +122,7 @@ public sealed class Day14 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        IList<string> values = await ReadResourceAsLinesAsync();
+        IList<string> values = await ReadResourceAsLinesAsync(cancellationToken);
 
         SumOfRemainingValuesV1 = RunProgram(values, version: 1);
         SumOfRemainingValuesV2 = RunProgram(values, version: 2);

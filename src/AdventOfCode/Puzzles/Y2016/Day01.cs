@@ -88,7 +88,7 @@ public sealed class Day01 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        string instructions = await ReadResourceAsStringAsync();
+        string instructions = await ReadResourceAsStringAsync(cancellationToken);
 
         BlocksToEasterBunnyHQIgnoringDuplicates = CalculateDistance(instructions, ignoreDuplicates: true);
         BlocksToEasterBunnyHQ = CalculateDistance(instructions, ignoreDuplicates: false);

@@ -62,7 +62,7 @@ public sealed class Day25 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        IList<int> values = await ReadResourceAsNumbersAsync<int>();
+        IList<int> values = await ReadResourceAsNumbersAsync<int>(cancellationToken);
 
         PrivateKey = GetPrivateKey(values[0], values[1]);
 

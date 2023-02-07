@@ -79,7 +79,7 @@ public sealed class Day03 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        var inventories = await ReadResourceAsLinesAsync();
+        var inventories = await ReadResourceAsLinesAsync(cancellationToken);
 
         SumOfPriorities = GetSumOfCommonItemTypes(inventories, useGroups: false);
         SumOfPrioritiesOfGroups = GetSumOfCommonItemTypes(inventories, useGroups: true);

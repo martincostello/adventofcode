@@ -120,7 +120,7 @@ public sealed class Day02 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        var instructions = await ReadResourceAsLinesAsync();
+        var instructions = await ReadResourceAsLinesAsync(cancellationToken);
 
         BathroomCodeDigitKeypad = GetBathroomCode(instructions, DigitGrid);
         BathroomCodeAlphanumericKeypad = GetBathroomCode(instructions, AlphanumericGrid);

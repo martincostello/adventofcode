@@ -192,7 +192,7 @@ public sealed class Day16 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        string transmission = (await ReadResourceAsStringAsync()).Trim();
+        string transmission = (await ReadResourceAsStringAsync(cancellationToken)).Trim();
 
         (VersionNumberSum, Value) = Decode(transmission);
 

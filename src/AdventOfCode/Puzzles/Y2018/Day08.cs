@@ -90,7 +90,7 @@ public sealed class Day08 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        var data = (await ReadResourceAsStringAsync()).AsNumbers<int>(' ');
+        var data = (await ReadResourceAsStringAsync(cancellationToken)).AsNumbers<int>(' ');
 
         (SumOfMetadata, RootNodeValue) = ParseTree(data);
 

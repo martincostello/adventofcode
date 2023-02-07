@@ -144,7 +144,7 @@ public sealed class Day10 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        IList<int> joltages = await ReadResourceAsNumbersAsync<int>();
+        IList<int> joltages = await ReadResourceAsNumbersAsync<int>(cancellationToken);
 
         JoltageProduct = GetJoltageProduct(joltages);
         ValidArrangements = GetValidArrangements(joltages);

@@ -25,6 +25,7 @@ public sealed class Day13 : Puzzle
     /// <param name="favoriteNumber">The office designer's favorite number.</param>
     /// <param name="x">The x-coordinate of the destination.</param>
     /// <param name="y">The y-coordinate of the destination.</param>
+    /// <param name="cancellationToken">The optional <see cref="CancellationToken"/> to use.</param>
     /// <returns>
     /// The minimum number of steps required to reach the coordinate in the maze specified
     /// by <paramref name="x"/> and <paramref name="y"/>.
@@ -32,13 +33,14 @@ public sealed class Day13 : Puzzle
     public static int GetMinimumStepsToReachCoordinate(
         int favoriteNumber,
         int x,
-        int y)
+        int y,
+        CancellationToken cancellationToken = default)
     {
         SquareGrid maze = BuildMaze(x * 2, y * 2, favoriteNumber);
 
         var goal = new Point(x, y);
 
-        return (int)GetMinimumStepsToGoal(maze, goal);
+        return (int)GetMinimumStepsToGoal(maze, goal, cancellationToken);
     }
 
     /// <inheritdoc />
@@ -46,8 +48,8 @@ public sealed class Day13 : Puzzle
     {
         int favoriteNumber = Parse<int>(args[0]);
 
-        FewestStepsToReach31X39Y = GetMinimumStepsToReachCoordinate(favoriteNumber, 31, 39);
-        LocationsWithin50 = CountLocationsWithin50Steps(favoriteNumber);
+        FewestStepsToReach31X39Y = GetMinimumStepsToReachCoordinate(favoriteNumber, 31, 39, cancellationToken);
+        LocationsWithin50 = CountLocationsWithin50Steps(favoriteNumber, cancellationToken);
 
         if (Verbose)
         {
@@ -62,10 +64,11 @@ public sealed class Day13 : Puzzle
     /// Returns the number of locations that are no further than 50 steps away.
     /// </summary>
     /// <param name="favoriteNumber">The office designer's favorite number.</param>
+    /// <param name="cancellationToken">The <see cref="CancellationToken"/> to use.</param>
     /// <returns>
     /// The number of locations within 50 steps of the origin.
     /// </returns>
-    private static int CountLocationsWithin50Steps(int favoriteNumber)
+    private static int CountLocationsWithin50Steps(int favoriteNumber, CancellationToken cancellationToken)
     {
         int count = 0;
         int maximum = 50;
@@ -79,7 +82,7 @@ public sealed class Day13 : Puzzle
             {
                 var goal = new Point(x, y);
 
-                double cost = GetMinimumStepsToGoal(maze, goal);
+                double cost = GetMinimumStepsToGoal(maze, goal, cancellationToken);
 
                 if (cost <= maximum)
                 {
@@ -134,10 +137,11 @@ public sealed class Day13 : Puzzle
     /// </summary>
     /// <param name="maze">The maze to traverse.</param>
     /// <param name="goal">The destination to reach.</param>
+    /// <param name="cancellationToken">The <see cref="CancellationToken"/> to use.</param>
     /// <returns>
     /// The minimum number of steps required to reach <paramref name="goal"/>.
     /// </returns>
-    private static long GetMinimumStepsToGoal(SquareGrid maze, Point goal)
+    private static long GetMinimumStepsToGoal(SquareGrid maze, Point goal, CancellationToken cancellationToken)
     {
         var start = new Point(1, 1);
 
@@ -145,7 +149,8 @@ public sealed class Day13 : Puzzle
             maze,
             start,
             goal,
-            (x, y) => x.ManhattanDistance(y));
+            (x, y) => x.ManhattanDistance(y),
+            cancellationToken);
     }
 
     private sealed class Maze : SquareGrid

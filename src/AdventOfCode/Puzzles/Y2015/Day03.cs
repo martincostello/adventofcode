@@ -73,7 +73,7 @@ public class Day03 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        string instructions = await ReadResourceAsStringAsync();
+        string instructions = await ReadResourceAsStringAsync(cancellationToken);
 
         HousesWithPresentsFromSanta = GetUniqueHousesVisitedBySanta(instructions);
         HousesWithPresentsFromSantaAndRoboSanta = GetUniqueHousesVisitedBySantaAndRoboSanta(instructions);

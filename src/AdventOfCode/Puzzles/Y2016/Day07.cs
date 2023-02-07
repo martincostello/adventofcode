@@ -80,7 +80,7 @@ public sealed class Day07 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        IList<string> addresses = await ReadResourceAsLinesAsync();
+        IList<string> addresses = await ReadResourceAsLinesAsync(cancellationToken);
 
         IPAddressesSupportingTls = addresses.Count(DoesIPAddressSupportTls);
         IPAddressesSupportingSsl = addresses.Count(DoesIPAddressSupportSsl);

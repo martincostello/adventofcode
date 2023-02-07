@@ -82,7 +82,7 @@ public sealed class Day21 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        IList<string> stats = await ReadResourceAsLinesAsync();
+        IList<string> stats = await ReadResourceAsLinesAsync(cancellationToken);
 
         int bossHitPoints = Parse<int>(stats[0].Split(':')[1]);
         int bossDamage = Parse<int>(stats[1].Split(':')[1]);

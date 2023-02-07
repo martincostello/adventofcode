@@ -102,7 +102,7 @@ public sealed class Day13 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        IList<string> depthRanges = await ReadResourceAsLinesAsync();
+        IList<string> depthRanges = await ReadResourceAsLinesAsync(cancellationToken);
 
         Severity = GetSeverityOfTrip(depthRanges);
         ShortestDelay = GetShortestDelayForNeverCaught(depthRanges);

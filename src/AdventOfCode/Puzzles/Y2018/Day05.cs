@@ -74,7 +74,7 @@ public sealed class Day05 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        string polymer = (await ReadResourceAsStringAsync()).Trim('\r', '\n');
+        string polymer = (await ReadResourceAsStringAsync(cancellationToken)).Trim('\r', '\n');
 
         RemainingUnits = Reduce(polymer).Length;
         RemainingUnitsOptimized = ReduceWithOptimization(polymer).Length;

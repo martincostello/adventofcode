@@ -152,7 +152,7 @@ public sealed class Day21 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        var values = await ReadResourceAsLinesAsync();
+        var values = await ReadResourceAsLinesAsync(cancellationToken);
 
         RootMonkeyNumber = GetRootNumber(values, withEquality: false, cancellationToken);
         HumanNumber = GetRootNumber(values, withEquality: true, cancellationToken);

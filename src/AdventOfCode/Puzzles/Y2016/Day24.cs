@@ -24,10 +24,14 @@ public sealed class Day24 : Puzzle
     /// </summary>
     /// <param name="layout">The layout of the maze.</param>
     /// <param name="returnToOrigin">Whether to return to the origin point.</param>
+    /// <param name="cancellationToken">The optional <see cref="CancellationToken"/> to use.</param>
     /// <returns>
     /// The minimum number of steps required to visit all locations.
     /// </returns>
-    public static int GetMinimumStepsToVisitLocations(IList<string> layout, bool returnToOrigin)
+    public static int GetMinimumStepsToVisitLocations(
+        IList<string> layout,
+        bool returnToOrigin,
+        CancellationToken cancellationToken = default)
     {
         (SquareGrid maze, Point origin, List<Point> waypoints) = BuildMaze(layout);
 
@@ -48,7 +52,7 @@ public sealed class Day24 : Puzzle
                     break;
                 }
 
-                costs[(b, a)] = costs[(a, b)] = PathFinding.AStar(maze, a, b);
+                costs[(b, a)] = costs[(a, b)] = PathFinding.AStar(maze, a, b, cancellationToken: cancellationToken);
             }
         }
 
@@ -86,10 +90,10 @@ public sealed class Day24 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        IList<string> layout = await ReadResourceAsLinesAsync();
+        IList<string> layout = await ReadResourceAsLinesAsync(cancellationToken);
 
-        FewestStepsToVisitAllLocations = GetMinimumStepsToVisitLocations(layout, returnToOrigin: false);
-        FewestStepsToVisitAllLocationsAndReturn = GetMinimumStepsToVisitLocations(layout, returnToOrigin: true);
+        FewestStepsToVisitAllLocations = GetMinimumStepsToVisitLocations(layout, returnToOrigin: false, cancellationToken);
+        FewestStepsToVisitAllLocationsAndReturn = GetMinimumStepsToVisitLocations(layout, returnToOrigin: true, cancellationToken);
 
         if (Verbose)
         {
