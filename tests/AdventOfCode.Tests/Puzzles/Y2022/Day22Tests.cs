@@ -17,23 +17,36 @@ public sealed class Day22Tests : PuzzleTest
     {
     }
 
-    [Fact(Skip = "Not implemented.")]
-    public void Y2022_Day22_Solve_Returns_Correct_Value()
+    [Fact]
+    public void Y2022_Day22_GetFinalPassword_Returns_Correct_Value()
     {
         // Arrange
-        string[] values = new[]
+        string[] map = new[]
         {
-            "_",
+            "        ...#",
+            "        .#..",
+            "        #...",
+            "        ....",
+            "...#.......#",
+            "........#...",
+            "..#....#....",
+            "..........#.",
+            "        ...#....",
+            "        .....#..",
+            "        .#......",
+            "        ......#.",
+            string.Empty,
+            "10R5L5R10L4R5L5",
         };
 
         // Act
-        int actual = Day22.Solve(values);
+        int actual = Day22.GetFinalPassword(map);
 
         // Assert
-        actual.ShouldBe(-1);
+        actual.ShouldBe(6032);
     }
 
-    [Fact(Skip = "Not implemented.")]
+    [Fact]
     public async Task Y2022_Day22_Solve_Returns_Correct_Solution()
     {
         // Act
@@ -41,6 +54,6 @@ public sealed class Day22Tests : PuzzleTest
 
         // Assert
         puzzle.ShouldNotBeNull();
-        puzzle.Solution.ShouldBe(-1);
+        puzzle.FinalPassword.ShouldBe(-1);
     }
 }
