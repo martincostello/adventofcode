@@ -17,7 +17,11 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.WebHost.CaptureStartupErrors(true);
 
-builder.WebHost.ConfigureKestrel((p) => p.AddServerHeader = false);
+builder.WebHost.ConfigureKestrel((p) =>
+{
+    p.AddServerHeader = false;
+    p.Limits.MaxRequestBodySize = 10 * 1024; // Maximum upload file size of 10KB
+});
 
 builder.Services.AddSingleton<ICache>((_) => NullCache.Instance);
 builder.Services.AddSingleton<ILogger, WebLogger>();
