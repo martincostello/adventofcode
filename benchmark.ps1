@@ -5,7 +5,7 @@
 
 param(
     [Parameter(Mandatory = $false)][string] $Configuration = "Release",
-    [Parameter(Mandatory = $false)][string] $Framework = "net7.0",
+    [Parameter(Mandatory = $false)][string] $Framework = "net8.0",
     [Parameter(Mandatory = $false)][string] $Filter = "*",
     [Parameter(Mandatory = $false)][string] $Job = "short"
 )
