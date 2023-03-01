@@ -124,9 +124,9 @@ public sealed class Day07 : Puzzle
     /// </summary>
     /// <param name="value">The value to extract ABA values from.</param>
     /// <returns>
-    /// An <see cref="IList{T}"/> containing the extracted ABA values.
+    /// A <see cref="List{T}"/> containing the extracted ABA values.
     /// </returns>
-    private static IList<string> ExtractAbas(ReadOnlySpan<char> value)
+    private static List<string> ExtractAbas(ReadOnlySpan<char> value)
     {
         var result = new List<string>(value.Length);
 

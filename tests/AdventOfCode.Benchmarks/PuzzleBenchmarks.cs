@@ -171,7 +171,7 @@ public class PuzzleBenchmarks
 
     private static IEnumerable<object> GetPuzzles(
         int year,
-        IDictionary<int, string[]>? inputs = null)
+        Dictionary<int, string[]>? inputs = null)
     {
         var puzzles = typeof(Puzzle).Assembly
             .GetTypes()

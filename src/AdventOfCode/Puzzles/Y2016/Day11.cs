@@ -43,7 +43,7 @@ public sealed class Day11 : Puzzle
                     var orphansUpstairs = facility.GetOrphansOnFloor(facility.Elevator.Floor + 1);
                     var orphanGeneratorUpstairs = orphansUpstairs.OfType<Generator>().ToList();
 
-                    if (orphanMicrochipsOnThisFloor.Any() && orphanGeneratorUpstairs.Any())
+                    if (orphanMicrochipsOnThisFloor.Count > 0 && orphanGeneratorUpstairs.Count > 0)
                     {
                     }
                 }
@@ -143,7 +143,7 @@ public sealed class Day11 : Puzzle
         /// <summary>
         /// The contents of the elevator. This field is read-only.
         /// </summary>
-        private readonly IList<Element> _contents = new List<Element>();
+        private readonly List<Element> _contents = new();
 
         /// <summary>
         /// The maximum floor the elevator can move to. This field is read-only.
