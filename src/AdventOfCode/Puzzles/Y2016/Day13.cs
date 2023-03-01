@@ -101,9 +101,9 @@ public sealed class Day13 : Puzzle
     /// <param name="height">The height of the maze.</param>
     /// <param name="seed">The seed to use for wall placement.</param>
     /// <returns>
-    /// A <see cref="SquareGrid"/> representing the maze.
+    /// A <see cref="Maze"/> representing the maze.
     /// </returns>
-    private static SquareGrid BuildMaze(int width, int height, int seed)
+    private static Maze BuildMaze(int width, int height, int seed)
     {
         var maze = new Maze(width, height);
 
