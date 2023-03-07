@@ -139,6 +139,7 @@ if ($SkipPublish -eq $false) {
 
     $packageFile = Join-Path $OutputPath "lambda.zip"
 
+    # Requires that `dotnet tool install --global Amazon.Lambda.Tools` is run first
     dotnet-lambda `
         package `
         --output-package $packageFile `
