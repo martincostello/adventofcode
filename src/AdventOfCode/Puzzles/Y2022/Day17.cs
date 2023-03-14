@@ -112,7 +112,7 @@ public sealed class Day17 : Puzzle
 
         public int Bottom => Points.Min((p) => p.Y);
 
-        public IList<Point> Points { get; }
+        public List<Point> Points { get; }
 
         public static Rock Spawn(IReadOnlyList<Point> shape, int y)
         {
