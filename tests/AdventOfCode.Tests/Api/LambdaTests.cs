@@ -214,7 +214,7 @@ public class LambdaTests : IAsyncLifetime, IDisposable
 
                 if (!cts.IsCancellationRequested)
                 {
-                    cts.Cancel();
+                    await cts.CancelAsync();
                 }
             },
             cts.Token,
