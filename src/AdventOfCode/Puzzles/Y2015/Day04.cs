@@ -48,7 +48,7 @@ public sealed class Day04 : Puzzle
             await Parallel.ForEachAsync(
                 chunks,
                 cts.Token,
-                (range, cancellationToken) =>
+                async (range, cancellationToken) =>
                 {
                     try
                     {
@@ -63,7 +63,7 @@ public sealed class Day04 : Puzzle
 
                                 if (orderedRanges.Count == 0)
                                 {
-                                    return ValueTask.CompletedTask;
+                                    return;
                                 }
 
                                 orderedRanges.Sort();
@@ -86,13 +86,11 @@ public sealed class Day04 : Puzzle
                                         if (thisRange > bestSolution)
                                         {
                                             // We have found the best solution
-                                            cts.Cancel();
+                                            await cts.CancelAsync();
                                         }
                                     }
                                 }
                             }
-
-                            return ValueTask.CompletedTask;
                         }
 
                         foreach (int i in range)
@@ -113,8 +111,6 @@ public sealed class Day04 : Puzzle
                     {
                         searchedRanges.Add(range[0]);
                     }
-
-                    return ValueTask.CompletedTask;
                 });
         }
         catch (TaskCanceledException)
