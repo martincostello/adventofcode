@@ -28,7 +28,7 @@ if ($IsWindows) {
 
 Start-Sleep -Seconds 2
 
-$repoPath = Split-Path $MyInvocation.MyCommand.Definition
+$repoPath = $PSScriptRoot
 $components = "app"
 $config = Join-Path $repoPath "benchmark.yml"
 $profiles = "local"
@@ -58,3 +58,4 @@ try {
 finally {
     Stop-Process -InputObject $agent -Force | Out-Null
 }
+

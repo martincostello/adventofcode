@@ -15,13 +15,13 @@ param(
 $ErrorActionPreference = "Stop"
 $global:ProgressPreference = "SilentlyContinue"
 
-$solutionPath = Split-Path $MyInvocation.MyCommand.Definition
+$solutionPath = $PSScriptRoot
 $sdkFile = Join-Path $solutionPath "global.json"
 
 $dotnetVersion = (Get-Content $sdkFile | Out-String | ConvertFrom-Json).sdk.version
 
 if ($OutputPath -eq "") {
-    $OutputPath = Join-Path "$(Convert-Path "$PSScriptRoot")" "artifacts"
+    $OutputPath = Join-Path $PSScriptRoot "artifacts"
 }
 
 $installDotNetSdk = $false;
@@ -46,7 +46,7 @@ else {
 
 if ($installDotNetSdk -eq $true) {
 
-    $env:DOTNET_INSTALL_DIR = Join-Path "$(Convert-Path "$PSScriptRoot")" ".dotnet"
+    $env:DOTNET_INSTALL_DIR = Join-Path $PSScriptRoot ".dotnet"
     $sdkPath = Join-Path $env:DOTNET_INSTALL_DIR "sdk" $dotnetVersion
 
     if (!(Test-Path $sdkPath)) {
@@ -149,3 +149,4 @@ if ($SkipPublish -eq $false) {
         throw "dotnet-lambda package failed with exit code $LASTEXITCODE"
     }
 }
+
