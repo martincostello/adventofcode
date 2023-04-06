@@ -16,7 +16,7 @@ if (![string]::IsNullOrEmpty($BranchOrCommitOrTag)) {
     $additionalArgs += $BranchOrCommitOrTag
 }
 
-$repoPath = Split-Path $MyInvocation.MyCommand.Definition
+$repoPath = $PSScriptRoot
 $config = Join-Path $repoPath "crank.yml"
 
 if ($IsWindows) {
@@ -33,3 +33,4 @@ try {
 finally {
     Stop-Process -InputObject $agent -Force | Out-Null
 }
+
