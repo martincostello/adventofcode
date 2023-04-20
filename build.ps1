@@ -5,8 +5,6 @@
 
 param(
     [Parameter(Mandatory = $false)][string] $Configuration = "Release",
-    [Parameter(Mandatory = $false)][string] $VersionSuffix = "",
-    [Parameter(Mandatory = $false)][string] $OutputPath = "",
     [Parameter(Mandatory = $false)][switch] $SkipPublish,
     [Parameter(Mandatory = $false)][switch] $SkipTests,
     [Parameter(Mandatory = $false)][string] $Runtime = ""
@@ -19,11 +17,6 @@ $solutionPath = $PSScriptRoot
 $sdkFile = Join-Path $solutionPath "global.json"
 
 $dotnetVersion = (Get-Content $sdkFile | Out-String | ConvertFrom-Json).sdk.version
-
-if ($OutputPath -eq "") {
-    $OutputPath = Join-Path $PSScriptRoot "artifacts"
-}
-
 $installDotNetSdk = $false;
 
 if (($null -eq (Get-Command "dotnet" -ErrorAction SilentlyContinue)) -and ($null -eq (Get-Command "dotnet.exe" -ErrorAction SilentlyContinue))) {
@@ -80,7 +73,7 @@ if ($installDotNetSdk -eq $true) {
 
 Write-Host "Building solution..." -ForegroundColor Green
 
-& $dotnet build ./AdventOfCode.sln --configuration $Configuration
+& $dotnet build ./AdventOfCode.sln
 
 if ($LASTEXITCODE -ne 0) {
     throw "dotnet build failed with exit code $LASTEXITCODE"
@@ -102,7 +95,7 @@ if ($SkipTests -eq $false) {
 
     ForEach ($testProject in $testProjects) {
 
-        & $dotnet test $testProject --output $OutputPath --configuration $Configuration $additionalArgs
+        & $dotnet test $testProject --configuration $Configuration $additionalArgs
 
         if ($LASTEXITCODE -ne 0) {
             throw "dotnet test failed with exit code $LASTEXITCODE"
@@ -116,7 +109,6 @@ if ($SkipPublish -eq $false) {
 
     $projectPath = (Join-Path $solutionPath "src" "AdventOfCode.Site")
     $projectFile = Join-Path $projectPath "AdventOfCode.Site.csproj"
-    $publishPath = (Join-Path $OutputPath "publish")
 
     $additionalArgs = @()
 
@@ -126,18 +118,13 @@ if ($SkipPublish -eq $false) {
         $additionalArgs += $Runtime
     }
 
-    & $dotnet `
-        publish `
-        $projectFile `
-        --configuration $Configuration `
-        --output $publishPath `
-        $additionalArgs
+    & $dotnet publish $projectFile $additionalArgs
 
     if ($LASTEXITCODE -ne 0) {
         throw "dotnet publish failed with exit code $LASTEXITCODE"
     }
 
-    $packageFile = Join-Path $OutputPath "lambda.zip"
+    $packageFile = Join-Path $PSScriptRoot ".artifacts" "publish" "lambda.zip"
 
     # Requires that `dotnet tool install --global Amazon.Lambda.Tools` is run first
     dotnet-lambda `
