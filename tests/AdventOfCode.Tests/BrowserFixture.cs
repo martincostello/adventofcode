@@ -9,6 +9,7 @@ namespace MartinCostello.AdventOfCode;
 public class BrowserFixture
 {
     private const string VideosDirectory = "videos";
+    private const string AssetsDirectory = ".";
 
     public BrowserFixture(ITestOutputHelper outputHelper)
     {
@@ -55,7 +56,7 @@ public class BrowserFixture
             if (IsRunningInGitHubActions)
             {
                 string traceName = GenerateFileName(testName!, browserType, ".zip");
-                string path = Path.Combine("traces", traceName);
+                string path = Path.Combine(AssetsDirectory, "traces", traceName);
 
                 await context.Tracing.StopAsync(new() { Path = path });
 
@@ -133,7 +134,7 @@ public class BrowserFixture
         try
         {
             string fileName = GenerateFileName(testName, browserType, ".png");
-            string path = Path.GetFullPath(Path.Combine("screenshots", fileName));
+            string path = Path.GetFullPath(Path.Combine(AssetsDirectory, "screenshots", fileName));
 
             await page.ScreenshotAsync(new() { Path = path });
 
@@ -168,7 +169,7 @@ public class BrowserFixture
 
             string fileName = GenerateFileName(testName, browserType, extension!);
 
-            string videoDestination = Path.Combine(directory!, fileName);
+            string videoDestination = Path.Combine(AssetsDirectory, directory!, fileName);
 
             File.Move(videoSource, videoDestination);
 
