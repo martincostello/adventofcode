@@ -36,6 +36,7 @@
     <RepositoryUrl>$(PackageProjectUrl).git</RepositoryUrl>
     <SignAssembly>true</SignAssembly>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <UseArtifactsOutput>true</UseArtifactsOutput>
     <VersionPrefix>8.0.0</VersionPrefix>
     <VersionSuffix></VersionSuffix>
   </PropertyGroup>
