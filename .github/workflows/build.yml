@@ -190,7 +190,7 @@ jobs:
 
     - name: Run end-to-end tests
       shell: pwsh
-      run: dotnet test ./tests/AdventOfCode.Tests --configuration Release --filter Category=EndToEnd /p:CollectCoverage=false
+      run: dotnet test ./tests/AdventOfCode.Tests --configuration Release --filter Category=EndToEnd --logger "GitHubActions;report-warnings=false" /p:CollectCoverage=false
       env:
         SKIP_NPM_TEST: true
         WEBSITE_URL: ${{ env.AZURE_URL_PROD }}
@@ -291,7 +291,7 @@ jobs:
 
     - name: Run end-to-end tests
       shell: pwsh
-      run: dotnet test ./tests/AdventOfCode.Tests --configuration Release --filter Category=EndToEnd /p:CollectCoverage=false
+      run: dotnet test ./tests/AdventOfCode.Tests --configuration Release --filter Category=EndToEnd --logger "GitHubActions;report-warnings=false" /p:CollectCoverage=false
       env:
         SKIP_NPM_TEST: true
         WEBSITE_URL: ${{ env.AWS_URL_PROD }}
