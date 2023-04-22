@@ -10,9 +10,6 @@ using MartinCostello.AdventOfCode.Site;
 using Microsoft.AspNetCore.ResponseCompression;
 using ILogger = MartinCostello.AdventOfCode.ILogger;
 
-#pragma warning disable CA1812
-#pragma warning disable CA1852
-
 var builder = WebApplication.CreateBuilder(args);
 
 builder.WebHost.CaptureStartupErrors(true);
