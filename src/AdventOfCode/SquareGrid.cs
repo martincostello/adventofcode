@@ -77,9 +77,9 @@ public abstract class SquareGrid : IWeightedGraph<Point>
     /// <inheritdoc/>
     public virtual IEnumerable<Point> Neighbors(Point id)
     {
-        foreach (Size vector in Vectors)
+        for (int i = 0; i < Vectors.Length; i++)
         {
-            Point next = id + vector;
+            Point next = id + Vectors[i];
 
             if (InBounds(next) && IsPassable(next))
             {
