@@ -20,7 +20,7 @@ public sealed class Day13 : Puzzle
     public long EarliestTimestamp { get; private set; }
 
     /// <summary>
-    /// Gets the product of the earliest busand the number of minutes to wait for it.
+    /// Gets the product of the earliest bus and the number of minutes to wait for it.
     /// </summary>
     /// <param name="notes">The notes for the bus schedules.</param>
     /// <returns>

@@ -60,7 +60,7 @@ public sealed class Day05Tests : PuzzleTest
     public static void Y2015_Day05_HasPairOfLettersWithMoreThanOneOccurence(string value, bool expected)
     {
         // Act
-        bool actual = Day05.HasPairOfLettersWithMoreThanOneOccurence(value);
+        bool actual = Day05.HasPairOfLettersWithMoreThanOneOccurrence(value);
 
         // Assert
         actual.ShouldBe(expected);

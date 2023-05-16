@@ -44,7 +44,7 @@ public sealed class Day15 : Puzzle
         // Get all the permutations which the ingredients could be ordered by
         var ingredientPermutations = Maths.GetPermutations(ingredientProperties.Keys).ToList();
 
-        var recipies = new List<Dictionary<string, int>>(ingredientPermutations.Count * teaspoonPermutations.Count);
+        var recipes = new List<Dictionary<string, int>>(ingredientPermutations.Count * teaspoonPermutations.Count);
 
         // For each permutation of ingredients, create a recipe for each
         // permutation of the number of teaspoons of each one there is.
@@ -61,16 +61,16 @@ public sealed class Day15 : Puzzle
                     recipe[ingredients[i]] = teaspoons[i];
                 }
 
-                recipies.Add(recipe);
+                recipes.Add(recipe);
             }
         }
 
         // Calculate the total score for each possible recipe
         int bestScore = -1;
 
-        for (int i = 0; i < recipies.Count; i++)
+        for (int i = 0; i < recipes.Count; i++)
         {
-            int thisScore = GetRecipeScore(recipies[i], ingredientProperties, calorieCount);
+            int thisScore = GetRecipeScore(recipes[i], ingredientProperties, calorieCount);
 
             if (thisScore > bestScore)
             {

@@ -20,7 +20,7 @@ public sealed class Day24 : Puzzle
     /// the ideal configuration for the specified packages and their weights.
     /// </summary>
     /// <param name="compartments">
-    /// The number of comparments in the sleigh.
+    /// The number of compartments in the sleigh.
     /// </param>
     /// <param name="weights">
     /// The weights of the packages to find the quantum entanglement for.
