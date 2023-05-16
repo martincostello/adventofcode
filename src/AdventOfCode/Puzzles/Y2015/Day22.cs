@@ -47,8 +47,10 @@ public sealed class Day22 : Puzzle
     /// </returns>
     internal static Player Fight(Wizard wizard, Player opponent, string difficulty, Action<string, object[]>? output)
     {
+#pragma warning disable CA1859
         Player attacker = wizard;
         Player defender = opponent;
+#pragma warning restore CA1859
 
         bool isHardDifficulty = string.Equals("HARD", difficulty, StringComparison.OrdinalIgnoreCase);
 
@@ -60,9 +62,7 @@ public sealed class Day22 : Puzzle
 
             if (isHardDifficulty && attacker == wizard)
             {
-                wizard.HitPoints--;
-
-                if (wizard.HitPoints < 1)
+                if (--wizard.HitPoints < 1)
                 {
                     break;
                 }
@@ -75,9 +75,7 @@ public sealed class Day22 : Puzzle
                 attacker.Attack(defender, output);
             }
 
-            Player player = attacker;
-            attacker = defender;
-            defender = player;
+            (attacker, defender) = (defender, attacker);
 
             output?.Invoke(string.Empty, Array.Empty<object>());
         }
