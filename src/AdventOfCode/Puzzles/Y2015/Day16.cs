@@ -13,7 +13,7 @@ public sealed class Day16 : Puzzle
     /// The result of the forensic analysis of the gift from Aunt Sue X
     /// as provided by the My First Crime Scene Analysis Machine (MFCSAM).
     /// </summary>
-    private static readonly Dictionary<string, (int Count, int Operand)> ForensicAnalysis = new(10)
+    private static readonly FrozenDictionary<string, (int Count, int Operand)> ForensicAnalysis = new Dictionary<string, (int Count, int Operand)>(10)
     {
         ["children"] = (3, 0),
         ["cats"] = (7, 1),
@@ -25,7 +25,7 @@ public sealed class Day16 : Puzzle
         ["trees"] = (3, 1),
         ["cars"] = (2, 0),
         ["perfumes"] = (1, 0),
-    };
+    }.ToFrozenDictionary();
 
     /// <summary>
     /// Gets the number of the Aunt Sue that sent the gift.
