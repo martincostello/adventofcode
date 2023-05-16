@@ -85,7 +85,7 @@ public sealed class Day23 : Puzzle
             _ => throw new InvalidOperationException(),
         };
 
-        public string Burrow(char burrow) => burrow switch
+        public readonly string Burrow(char burrow) => burrow switch
         {
             'A' => Amber,
             'B' => Bronze,
@@ -94,16 +94,16 @@ public sealed class Day23 : Puzzle
             _ => throw new InvalidOperationException(),
         };
 
-        public bool HasSpace(char burrow) => Burrow(burrow).Contains(' ', StringComparison.Ordinal);
+        public readonly bool HasSpace(char burrow) => Burrow(burrow).Contains(' ', StringComparison.Ordinal);
 
-        public bool IsEmpty(char burrow) => string.IsNullOrWhiteSpace(Burrow(burrow));
+        public readonly bool IsEmpty(char burrow) => string.IsNullOrWhiteSpace(Burrow(burrow));
 
-        public bool IsOrganized(char burrow) => Burrow(burrow).TrimStart().All((p) => p == burrow);
+        public readonly bool IsOrganized(char burrow) => Burrow(burrow).TrimStart().All((p) => p == burrow);
 
-        public bool IsPathClear(char sourceBurrow, int destinationBurrow, bool fromHallway)
+        public readonly bool IsPathClear(char sourceBurrow, int destinationBurrow, bool fromHallway)
             => IsPathClear(Entrance(sourceBurrow), destinationBurrow, fromHallway);
 
-        public bool IsPathClear(int sourceBurrow, int destinationBurrow, bool fromHallway)
+        public readonly bool IsPathClear(int sourceBurrow, int destinationBurrow, bool fromHallway)
         {
             int startIndex = Math.Min(sourceBurrow, destinationBurrow);
             int endIndex = Math.Max(sourceBurrow, destinationBurrow);

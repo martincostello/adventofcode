@@ -182,7 +182,7 @@ public sealed class Day08 : Puzzle
     /// <summary>
     /// Represents a CPU instruction.
     /// </summary>
-    private record struct Instruction
+    private readonly record struct Instruction
     {
         /// <summary>
         /// Gets the operation to perform.
