@@ -89,7 +89,7 @@ public sealed class Day05 : Puzzle
     {
         return
             HasLetterThatIsTheBreadOfALetterSandwich(value) &&
-            HasPairOfLettersWithMoreThanOneOccurence(value);
+            HasPairOfLettersWithMoreThanOneOccurrence(value);
     }
 
     /// <summary>
@@ -100,7 +100,7 @@ public sealed class Day05 : Puzzle
     /// <returns>
     /// <see langword="true"/> if <paramref name="value"/> meets the rule; otherwise <see langword="false"/>.
     /// </returns>
-    internal static bool HasPairOfLettersWithMoreThanOneOccurence(ReadOnlySpan<char> value)
+    internal static bool HasPairOfLettersWithMoreThanOneOccurrence(ReadOnlySpan<char> value)
     {
         var letterPairs = new Dictionary<string, List<int>>();
 

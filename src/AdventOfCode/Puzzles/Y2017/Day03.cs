@@ -45,7 +45,7 @@ public sealed class Day03 : Puzzle
         while (currentSquare < square)
         {
             int length = LengthOfRing(ring);
-            int perimeter = PerimiterOfRing(ring);
+            int perimeter = PerimeterOfRing(ring);
 
             // Is the target square in the current ring?
             if (currentSquare + perimeter >= square)
@@ -83,7 +83,7 @@ public sealed class Day03 : Puzzle
             }
 
             // Skip to the next ring
-            currentSquare += PerimiterOfRing(ring++);
+            currentSquare += PerimeterOfRing(ring++);
             position += Right;
             position += Down;
         }
@@ -187,7 +187,7 @@ public sealed class Day03 : Puzzle
     /// <returns>
     /// The perimeter of the ring number specified by <paramref name="ring"/>.
     /// </returns>
-    private static int PerimiterOfRing(int ring) => (2 * LengthOfRing(ring)) + (2 * LengthOfRing(ring - 1));
+    private static int PerimeterOfRing(int ring) => (2 * LengthOfRing(ring)) + (2 * LengthOfRing(ring - 1));
 
     /// <summary>
     /// A class representing values in a grid of two-dimensional memory. This class cannot be inherited.
