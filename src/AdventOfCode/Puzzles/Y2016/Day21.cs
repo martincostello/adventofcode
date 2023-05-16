@@ -105,7 +105,7 @@ public sealed class Day21 : Puzzle
         string text = args[0];
         bool reverse = args.Length > 1 && string.Equals(args[1], bool.TrueString, StringComparison.OrdinalIgnoreCase);
 
-        IList<string> instructions = await ReadResourceAsLinesAsync(cancellationToken);
+        var instructions = await ReadResourceAsLinesAsync(cancellationToken);
 
         ScrambledResult = Scramble(text, instructions, reverse);
 

@@ -111,7 +111,7 @@ public sealed class Day18 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        IList<string> numbers = await ReadResourceAsLinesAsync(cancellationToken);
+        var numbers = await ReadResourceAsLinesAsync(cancellationToken);
 
         (MagnitudeOfSum, LargestSumMagnitude) = Sum(numbers);
 

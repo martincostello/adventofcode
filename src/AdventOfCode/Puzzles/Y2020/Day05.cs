@@ -78,7 +78,7 @@ public sealed class Day05 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        IList<string> boardingPasses = await ReadResourceAsLinesAsync(cancellationToken);
+        var boardingPasses = await ReadResourceAsLinesAsync(cancellationToken);
 
         (MySeatId, HighestSeatId) = Process(boardingPasses);
 

@@ -99,7 +99,7 @@ public sealed class Day03 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        IList<string> diagnosticReport = await ReadResourceAsLinesAsync(cancellationToken);
+        var diagnosticReport = await ReadResourceAsLinesAsync(cancellationToken);
 
         PowerConsumption = GetPowerConsumption(diagnosticReport);
         LifeSupportRating = GetLifeSupportRating(diagnosticReport);

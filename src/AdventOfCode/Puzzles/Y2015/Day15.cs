@@ -84,7 +84,7 @@ public sealed class Day15 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        IList<string> ingredients = await ReadResourceAsLinesAsync(cancellationToken);
+        var ingredients = await ReadResourceAsLinesAsync(cancellationToken);
 
         HighestTotalCookieScore = GetHighestTotalCookieScore(ingredients);
         HighestTotalCookieScoreWith500Calories = GetHighestTotalCookieScore(ingredients, 500);

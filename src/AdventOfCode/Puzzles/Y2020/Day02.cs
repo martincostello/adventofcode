@@ -69,7 +69,7 @@ public sealed class Day02 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        IList<string> values = await ReadResourceAsLinesAsync(cancellationToken);
+        var values = await ReadResourceAsLinesAsync(cancellationToken);
 
         ValidPasswordsV1 = GetValidPasswordCount(values, policyVersion: 1);
         ValidPasswordsV2 = GetValidPasswordCount(values, policyVersion: 2);

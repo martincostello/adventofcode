@@ -170,9 +170,9 @@ public abstract class Puzzle : IPuzzle
     /// <param name="cancellationToken">The optional <see cref="CancellationToken"/> to use.</param>
     /// <returns>
     /// A <see cref="Task{TResult}"/> that represents the asynchronous operation which returns an
-    /// <see cref="IList{T}"/> containing the lines of the resource associated with the puzzle.
+    /// <see cref="List{T}"/> containing the lines of the resource associated with the puzzle.
     /// </returns>
-    protected async Task<IList<string>> ReadResourceAsLinesAsync(CancellationToken cancellationToken = default)
+    protected async Task<List<string>> ReadResourceAsLinesAsync(CancellationToken cancellationToken = default)
     {
         return await Cache.GetOrCreateAsync(this, async () =>
         {
@@ -200,9 +200,9 @@ public abstract class Puzzle : IPuzzle
     /// <param name="cancellationToken">The optional <see cref="CancellationToken"/> to use.</param>
     /// <returns>
     /// A <see cref="Task{TResult}"/> that represents the asynchronous operation which returns an
-    /// <see cref="IList{T}"/> containing the numbers in the resource associated with the puzzle.
+    /// <see cref="List{T}"/> containing the numbers in the resource associated with the puzzle.
     /// </returns>
-    protected async Task<IList<T>> ReadResourceAsNumbersAsync<T>(CancellationToken cancellationToken = default)
+    protected async Task<List<T>> ReadResourceAsNumbersAsync<T>(CancellationToken cancellationToken = default)
         where T : INumber<T>
     {
         return await Cache.GetOrCreateAsync(this, async () =>

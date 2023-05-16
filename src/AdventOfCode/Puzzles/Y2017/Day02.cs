@@ -91,7 +91,7 @@ public sealed class Day02 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        IList<string> lines = await ReadResourceAsLinesAsync(cancellationToken);
+        var lines = await ReadResourceAsLinesAsync(cancellationToken);
         var spreadsheet = ParseSpreadsheet(lines);
 
         ChecksumForDifference = CalculateChecksum(spreadsheet, forEvenlyDivisible: false);

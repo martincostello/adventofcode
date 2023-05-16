@@ -145,7 +145,7 @@ public sealed class Day20 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        IList<string> imageData = await ReadResourceAsLinesAsync(cancellationToken);
+        var imageData = await ReadResourceAsLinesAsync(cancellationToken);
 
         (LitPixelCount2, _) = Enhance(imageData, enhancements: 2);
         (LitPixelCount50, _) = Enhance(imageData, enhancements: 50);

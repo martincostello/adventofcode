@@ -60,7 +60,7 @@ public sealed class Day23 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        IList<string> diagram = await ReadResourceAsLinesAsync(cancellationToken);
+        var diagram = await ReadResourceAsLinesAsync(cancellationToken);
 
         MinimumEnergyFolded = Organize(diagram, unfoldDiagram: false, cancellationToken);
         MinimumEnergyUnfolded = Organize(diagram, unfoldDiagram: true, cancellationToken);

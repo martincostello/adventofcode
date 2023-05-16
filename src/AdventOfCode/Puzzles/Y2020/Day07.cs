@@ -134,7 +134,7 @@ public sealed class Day07 : Puzzle
     {
         string color = args[0];
 
-        IList<string> rules = await ReadResourceAsLinesAsync(cancellationToken);
+        var rules = await ReadResourceAsLinesAsync(cancellationToken);
 
         BagColorsThatCanContainColor = GetBagColorsThatCouldContainColor(rules, color);
         BagsInsideBag = GetInsideBagCount(rules, color);

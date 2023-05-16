@@ -46,7 +46,7 @@ public sealed class Day12 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        IList<string> nodes = await ReadResourceAsLinesAsync(cancellationToken);
+        var nodes = await ReadResourceAsLinesAsync(cancellationToken);
 
         Count1 = Navigate(nodes, smallCaveVisitLimit: 1);
         Count2 = Navigate(nodes, smallCaveVisitLimit: 2);

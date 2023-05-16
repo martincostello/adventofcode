@@ -64,7 +64,7 @@ public sealed class Day05 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        IList<string> lineSegments = await ReadResourceAsLinesAsync(cancellationToken);
+        var lineSegments = await ReadResourceAsLinesAsync(cancellationToken);
 
         OverlappingVents = NavigateVents(lineSegments, useDiagonals: false);
         OverlappingVentsWithDiagonals = NavigateVents(lineSegments, useDiagonals: true);

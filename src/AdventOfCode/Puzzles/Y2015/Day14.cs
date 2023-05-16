@@ -84,7 +84,7 @@ public sealed class Day14 : Puzzle
             throw new PuzzleException("The time index specified is invalid.");
         }
 
-        IList<string> flightData = await ReadResourceAsLinesAsync(cancellationToken);
+        var flightData = await ReadResourceAsLinesAsync(cancellationToken);
 
         MaximumReindeerDistance = GetMaximumDistanceOfFastestReindeer(flightData, timeIndex);
 

@@ -92,7 +92,7 @@ public sealed class Day14 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        IList<string> instructions = await ReadResourceAsLinesAsync(cancellationToken);
+        var instructions = await ReadResourceAsLinesAsync(cancellationToken);
 
         Score10 = Expand(instructions, steps: 10);
         Score40 = Expand(instructions, steps: 40);

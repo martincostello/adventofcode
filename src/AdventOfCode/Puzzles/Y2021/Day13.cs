@@ -135,7 +135,7 @@ public sealed class Day13 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        IList<string> instructions = await ReadResourceAsLinesAsync(cancellationToken);
+        var instructions = await ReadResourceAsLinesAsync(cancellationToken);
 
         (DotCountAfterFold1, _, _) = Fold(instructions, folds: 1);
         (_, ActivationCode, string? visualization) = Fold(instructions, folds: null, Logger);

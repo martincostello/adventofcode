@@ -146,7 +146,7 @@ public sealed class Day18 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        IList<string> expressions = await ReadResourceAsLinesAsync(cancellationToken);
+        var expressions = await ReadResourceAsLinesAsync(cancellationToken);
 
         SumV1 = Evaluate(expressions, version: 1);
         SumV2 = Evaluate(expressions, version: 2);

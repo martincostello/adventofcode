@@ -114,7 +114,7 @@ public sealed class Day09 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        IList<string> heightmap = await ReadResourceAsLinesAsync(cancellationToken);
+        var heightmap = await ReadResourceAsLinesAsync(cancellationToken);
 
         (SumOfRiskLevels, AreaOfThreeLargestBasins) = AnalyzeRisk(heightmap, cancellationToken);
 

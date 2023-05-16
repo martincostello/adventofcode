@@ -84,7 +84,7 @@ public sealed partial class Day04 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        IList<string> batch = await ReadResourceAsLinesAsync(cancellationToken);
+        var batch = await ReadResourceAsLinesAsync(cancellationToken);
 
         (ValidPassports, VerifiedPassports) = VerifyPassports(batch);
 

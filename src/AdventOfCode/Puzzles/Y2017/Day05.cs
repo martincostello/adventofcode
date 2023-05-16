@@ -57,7 +57,7 @@ public sealed class Day05 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        IList<int> program = await ReadResourceAsNumbersAsync<int>(cancellationToken);
+        var program = await ReadResourceAsNumbersAsync<int>(cancellationToken);
 
         StepsToExitV1 = Execute(program, 1);
         StepsToExitV2 = Execute(program, 2);

@@ -64,7 +64,7 @@ public sealed class Day12 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        IList<string> pipes = await ReadResourceAsLinesAsync(cancellationToken);
+        var pipes = await ReadResourceAsLinesAsync(cancellationToken);
 
         ProgramsInGroupOfProgram0 = GetProgramsInGroup(0, pipes);
         NumberOfGroups = GetGroupsInNetwork(pipes);

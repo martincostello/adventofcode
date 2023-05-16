@@ -99,7 +99,7 @@ public sealed class Day13 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        IList<string> notes = await ReadResourceAsLinesAsync(cancellationToken);
+        var notes = await ReadResourceAsLinesAsync(cancellationToken);
 
         BusWaitProduct = GetEarliestBusWaitProduct(notes);
         EarliestTimestamp = GetEarliestTimestamp(notes);

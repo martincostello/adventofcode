@@ -158,7 +158,7 @@ public sealed class Day22 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        IList<string> output = await ReadResourceAsLinesAsync(cancellationToken);
+        var output = await ReadResourceAsLinesAsync(cancellationToken);
 
         (ViableNodePairs, MinimumStepsToExtract) = CountViableNodePairs(output, Logger);
 
