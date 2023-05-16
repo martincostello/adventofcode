@@ -130,8 +130,8 @@ public sealed class Day23 : Puzzle
 
     private sealed class Burrow : IWeightedGraph<State>
     {
-        private static readonly char[] Amphipods = { 'D', 'C', 'B', 'A' };
-        private static readonly int[] HallwaySpaces = { 0, 1, 3, 5, 7, 9, 10 };
+        private static readonly ImmutableArray<char> Amphipods = new[] { 'D', 'C', 'B', 'A' }.ToImmutableArray();
+        private static readonly ImmutableArray<int> HallwaySpaces = new[] { 0, 1, 3, 5, 7, 9, 10 }.ToImmutableArray();
 
         public long Cost(State a, State b)
         {

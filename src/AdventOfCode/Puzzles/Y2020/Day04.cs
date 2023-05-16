@@ -15,7 +15,7 @@ public sealed partial class Day04 : Puzzle
     /// <summary>
     /// The required keys for passports. This field is read-only.
     /// </summary>
-    private static readonly string[] RequiredKeys = { "byr", "ecl", "eyr", "hcl", "hgt", "iyr", "pid" };
+    private static readonly ImmutableArray<string> RequiredKeys = new[] { "byr", "ecl", "eyr", "hcl", "hgt", "iyr", "pid" }.ToImmutableArray();
 
     /// <summary>
     /// Gets the number of valid passports.
