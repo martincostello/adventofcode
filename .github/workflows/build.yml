@@ -105,7 +105,7 @@ jobs:
       if: ${{ runner.os == 'Windows' && success() }}
       with:
         name: webapp
-        path: ./.artifacts/publish/AdventOfCode.Site/release_${{ env.PUBLISH_RUNTIME }}
+        path: ./artifacts/publish/AdventOfCode.Site/release_${{ env.PUBLISH_RUNTIME }}
         if-no-files-found: error
 
     - name: Publish lambda
@@ -113,7 +113,7 @@ jobs:
       if: ${{ runner.os == 'Windows' && success() }}
       with:
         name: lambda
-        path: ./.artifacts/publish/lambda.zip
+        path: ./artifacts/publish/lambda.zip
         if-no-files-found: error
 
     - name: Publish screenshots
@@ -121,7 +121,7 @@ jobs:
       if: ${{ always() }}
       with:
         name: screenshots
-        path: ./.artifacts/screenshots/*.png
+        path: ./artifacts/screenshots/*.png
         if-no-files-found: ignore
 
     - name: Publish traces
@@ -129,7 +129,7 @@ jobs:
       if: ${{ always() }}
       with:
         name: traces
-        path: ./.artifacts/traces/*
+        path: ./artifacts/traces/*
         if-no-files-found: ignore
 
     - name: Publish videos
@@ -137,7 +137,7 @@ jobs:
       if: ${{ always() }}
       with:
         name: videos
-        path: ./.artifacts/videos/*
+        path: ./artifacts/videos/*
         if-no-files-found: ignore
 
   deploy:
