@@ -12,13 +12,13 @@ public sealed class Day12 : Puzzle
     /// <summary>
     /// A dictionary of vectors keyed by headings. This field is read-only.
     /// </summary>
-    private static readonly Dictionary<int, Size> Vectors = new()
+    private static readonly FrozenDictionary<int, Size> Vectors = new Dictionary<int, Size>(4)
     {
         [Headings.North] = new(0, 1),
         [Headings.South] = new(0, -1),
         [Headings.East] = new(1, 0),
         [Headings.West] = new(-1, 0),
-    };
+    }.ToFrozenDictionary();
 
     /// <summary>
     /// Gets the Manhattan distance the ship has travelled.
