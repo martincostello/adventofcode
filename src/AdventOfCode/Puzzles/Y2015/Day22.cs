@@ -337,14 +337,14 @@ public sealed class Day22 : Puzzle
         /// <summary>
         /// Information about the spells that can be cast, their cost, and a method to conjure one. This field is read-only.
         /// </summary>
-        internal static readonly Dictionary<string, SpellInfo> Spells = new()
+        internal static readonly FrozenDictionary<string, SpellInfo> Spells = new Dictionary<string, SpellInfo>(5)
         {
             ["MagicMissile"] = new("MagicMissile", 53, () => new MagicMissile()),
             ["Drain"] = new("Drain", 73, () => new Drain()),
             ["Shield"] = new("Shield", 113, () => new Shield()),
             ["Poison"] = new("Poison", 173, () => new Poison()),
             ["Recharge"] = new("Recharge", 229, () => new Recharge()),
-        };
+        }.ToFrozenDictionary();
 
         /// <summary>
         /// A delegate to a method to use to conjure the spell. This field is read-only.

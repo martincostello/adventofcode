@@ -145,7 +145,7 @@ internal static class CharacterRecognition
 
     private static class Alphabet
     {
-        private static readonly Dictionary<uint, char> _alphabet = CreateAlphabet();
+        private static readonly FrozenDictionary<uint, char> _alphabet = CreateAlphabet();
 
         public static char Get(uint value)
         {
@@ -157,7 +157,7 @@ internal static class CharacterRecognition
             return letter;
         }
 
-        private static Dictionary<uint, char> CreateAlphabet()
+        private static FrozenDictionary<uint, char> CreateAlphabet()
         {
             // Letters are encoded as a 32-bit unsigned integer
             // where the top-left pixel is the 32nd bit and the
@@ -182,7 +182,7 @@ internal static class CharacterRecognition
                 [0b11111000000100000111111000000000] = 'U',
                 [0b11000000100000011100100011000000] = 'Y',
                 [0b10001110010110100111000100000000] = 'Z',
-            };
+            }.ToFrozenDictionary();
         }
     }
 }
