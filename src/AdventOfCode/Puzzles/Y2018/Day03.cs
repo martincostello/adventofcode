@@ -91,7 +91,7 @@ public sealed class Day03 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        IList<string> claims = await ReadResourceAsLinesAsync(cancellationToken);
+        var claims = await ReadResourceAsLinesAsync(cancellationToken);
 
         Area = GetAreaWithTwoOrMoreOverlappingClaims(claims);
         IdOfUniqueClaim = GetClaimWithNoOverlappingClaims(claims);

@@ -102,7 +102,7 @@ public sealed class Day07 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        IList<string> instructions = await ReadResourceAsLinesAsync(cancellationToken);
+        var instructions = await ReadResourceAsLinesAsync(cancellationToken);
 
         // Get the wire values for the initial instructions
         Dictionary<string, ushort> values = GetWireValues(instructions);

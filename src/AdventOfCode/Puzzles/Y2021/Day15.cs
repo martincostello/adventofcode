@@ -106,7 +106,7 @@ public sealed class Day15 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        IList<string> riskMap = await ReadResourceAsLinesAsync(cancellationToken);
+        var riskMap = await ReadResourceAsLinesAsync(cancellationToken);
 
         RiskLevelSmall = GetRiskLevel(riskMap, largeMap: false, cancellationToken);
         RiskLevelLarge = GetRiskLevel(riskMap, largeMap: true, cancellationToken);

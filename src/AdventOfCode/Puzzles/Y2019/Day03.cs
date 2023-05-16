@@ -120,7 +120,7 @@ public sealed class Day03 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        IList<string> wires = await ReadResourceAsLinesAsync(cancellationToken);
+        var wires = await ReadResourceAsLinesAsync(cancellationToken);
 
         (ManhattanDistance, MinimumSteps) = GetManhattanDistanceOfClosesIntersection(wires);
 

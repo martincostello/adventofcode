@@ -56,7 +56,7 @@ public sealed class Day11 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        IList<string> initialState = await ReadResourceAsLinesAsync(cancellationToken);
+        var initialState = await ReadResourceAsLinesAsync(cancellationToken);
 
         MinimumStepsForAssembly = GetMinimumStepsForAssembly(initialState);
 

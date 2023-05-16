@@ -122,7 +122,7 @@ public sealed class Day19 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        IList<string> input = await ReadResourceAsLinesAsync(cancellationToken);
+        var input = await ReadResourceAsLinesAsync(cancellationToken);
 
         MatchesRule0 = GetMatchCount(input, applyFix: false);
         MatchesRule0WithFix = GetMatchCount(input, applyFix: true);

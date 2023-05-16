@@ -90,7 +90,7 @@ public sealed class Day08 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        IList<string> program = await ReadResourceAsLinesAsync(cancellationToken);
+        var program = await ReadResourceAsLinesAsync(cancellationToken);
 
         Accumulator = RunProgram(program, fix: false);
         AccumulatorWithFix = RunProgram(program, fix: true);

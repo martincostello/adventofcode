@@ -452,7 +452,7 @@ public sealed class Day20 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        IList<string> tiles = await ReadResourceAsLinesAsync(cancellationToken);
+        var tiles = await ReadResourceAsLinesAsync(cancellationToken);
 
         (long productOfCornerTiles, int waterRoughness, string image) = GetCornerTileIdProduct(tiles, Logger);
 

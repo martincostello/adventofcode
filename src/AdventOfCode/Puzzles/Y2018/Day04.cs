@@ -145,7 +145,7 @@ public sealed class Day04 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        IList<string> log = await ReadResourceAsLinesAsync(cancellationToken);
+        var log = await ReadResourceAsLinesAsync(cancellationToken);
 
         (SleepiestGuardMinute, SleepiestMinuteGuard) = GetSleepiestGuardsMinutes(log);
 

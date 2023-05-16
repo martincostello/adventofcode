@@ -104,7 +104,7 @@ public sealed class Day16 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        IList<string> auntSueMetadata = await ReadResourceAsLinesAsync(cancellationToken);
+        var auntSueMetadata = await ReadResourceAsLinesAsync(cancellationToken);
 
         AuntSueNumber = WhichAuntSueSentTheGift(auntSueMetadata);
         RealAuntSueNumber = WhichAuntSueSentTheGift(auntSueMetadata, compensateForRetroEncabulator: true);

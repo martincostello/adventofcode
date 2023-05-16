@@ -53,7 +53,7 @@ public sealed class Day15 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        IList<string> input = await ReadResourceAsLinesAsync(cancellationToken);
+        var input = await ReadResourceAsLinesAsync(cancellationToken);
 
         string extraDisc = $"Disc #{input.Count + 1} has 11 positions; at time=0, it is at position 0.";
 

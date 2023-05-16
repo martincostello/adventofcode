@@ -170,7 +170,7 @@ public sealed class Day21 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        IList<string> players = await ReadResourceAsLinesAsync(cancellationToken);
+        var players = await ReadResourceAsLinesAsync(cancellationToken);
 
         PracticeOutcome = PlayPractice(players);
         WinningUniverses = Play(players);

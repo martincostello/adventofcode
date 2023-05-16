@@ -52,7 +52,7 @@ public sealed class Day07 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        IList<string> structure = await ReadResourceAsLinesAsync(cancellationToken);
+        var structure = await ReadResourceAsLinesAsync(cancellationToken);
 
         BottomProgramName = FindBottomProgramName(structure);
         DesiredWeightOfUnbalancedDisc = FindDesiredWeightOfUnbalancedDisc(structure);

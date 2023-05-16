@@ -55,7 +55,7 @@ public sealed class Day06 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        IList<string> messages = await ReadResourceAsLinesAsync(cancellationToken);
+        var messages = await ReadResourceAsLinesAsync(cancellationToken);
 
         ErrorCorrectedMessage = DecryptMessage(messages, leastLikely: false);
         ModifiedErrorCorrectedMessage = DecryptMessage(messages, leastLikely: true);

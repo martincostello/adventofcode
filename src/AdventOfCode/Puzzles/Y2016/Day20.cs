@@ -113,7 +113,7 @@ public sealed class Day20 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        IList<string> ranges = await ReadResourceAsLinesAsync(cancellationToken);
+        var ranges = await ReadResourceAsLinesAsync(cancellationToken);
 
         LowestNonblockedIP = GetLowestNonblockedIP(uint.MaxValue, ranges, out uint count);
         AllowedIPCount = count;

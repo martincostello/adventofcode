@@ -86,7 +86,7 @@ public sealed class Day04 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        IList<string> names = await ReadResourceAsLinesAsync(cancellationToken);
+        var names = await ReadResourceAsLinesAsync(cancellationToken);
 
         SumOfSectorIdsOfRealRooms = SumOfRealRoomSectorIds(names);
         SectorIdOfNorthPoleObjectsRoom = GetSectorIdOfNorthPoleObjectsRoom(names);

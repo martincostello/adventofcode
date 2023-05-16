@@ -41,7 +41,7 @@ public sealed class Day01 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        IList<int> values = await ReadResourceAsNumbersAsync<int>(cancellationToken);
+        var values = await ReadResourceAsNumbersAsync<int>(cancellationToken);
 
         ProductOf2020SumFrom2 = Get2020Product(values, 2);
         ProductOf2020SumFrom3 = Get2020Product(values, 3);

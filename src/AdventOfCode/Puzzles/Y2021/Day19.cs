@@ -219,7 +219,7 @@ public sealed class Day19 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        IList<string> target = await ReadResourceAsLinesAsync(cancellationToken);
+        var target = await ReadResourceAsLinesAsync(cancellationToken);
 
         (BeaconCount, LargestScannerDistance) = FindBeacons(target, cancellationToken);
 
