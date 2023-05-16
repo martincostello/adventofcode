@@ -124,7 +124,7 @@ if ($SkipPublish -eq $false) {
         throw "dotnet publish failed with exit code $LASTEXITCODE"
     }
 
-    $packageFile = Join-Path $PSScriptRoot ".artifacts" "publish" "lambda.zip"
+    $packageFile = Join-Path $PSScriptRoot "artifacts" "publish" "lambda.zip"
 
     # Requires that `dotnet tool install --global Amazon.Lambda.Tools` is run first
     dotnet-lambda `
