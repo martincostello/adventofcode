@@ -264,19 +264,19 @@ public sealed class Day21 : Puzzle
         /// <summary>
         /// The armor inventory. This field is read-only.
         /// </summary>
-        internal static readonly Dictionary<string, Item> PotentialArmor = new(5)
+        internal static readonly FrozenDictionary<string, Item> PotentialArmor = new Dictionary<string, Item>(5)
         {
             ["Leather"] = new() { Cost = 13, Armor = 1 },
             ["Chainmail"] = new() { Cost = 31, Armor = 2 },
             ["Splintmail"] = new() { Cost = 53, Armor = 3 },
             ["Bandedmail"] = new() { Cost = 75, Armor = 4 },
             ["Platemail"] = new() { Cost = 102, Armor = 5 },
-        };
+        }.ToFrozenDictionary();
 
         /// <summary>
         /// The ring inventory. This field is read-only.
         /// </summary>
-        internal static readonly Dictionary<string, Item> PotentialRings = new(6)
+        internal static readonly FrozenDictionary<string, Item> PotentialRings = new Dictionary<string, Item>(6)
         {
             ["Damage +1"] = new() { Cost = 25, Damage = 1 },
             ["Damage +2"] = new() { Cost = 50, Damage = 2 },
@@ -284,19 +284,19 @@ public sealed class Day21 : Puzzle
             ["Defense +1"] = new() { Cost = 20, Armor = 1 },
             ["Defense +2"] = new() { Cost = 40, Armor = 2 },
             ["Defense +3"] = new() { Cost = 80, Armor = 3 },
-        };
+        }.ToFrozenDictionary();
 
         /// <summary>
         /// The weapon inventory. This field is read-only.
         /// </summary>
-        internal static readonly Dictionary<string, Item> PotentialWeapons = new(5)
+        internal static readonly FrozenDictionary<string, Item> PotentialWeapons = new Dictionary<string, Item>(5)
         {
             ["Dagger"] = new() { Cost = 8, Damage = 4 },
             ["Shortsword"] = new() { Cost = 10, Damage = 5 },
             ["Warhammer"] = new() { Cost = 25, Damage = 6 },
             ["Longsword"] = new() { Cost = 40, Damage = 7 },
             ["Greataxe"] = new() { Cost = 74, Damage = 8 },
-        };
+        }.ToFrozenDictionary();
 
         /// <summary>
         /// The shop's current armor inventory. This field is read-only.
