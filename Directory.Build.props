@@ -42,6 +42,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Using Include="Microsoft.Toolkit.HighPerformance" Condition=" '$(AssemblyName)' != 'AdventOfCode.Resources' " />
+    <Using Include="System.Collections.Frozen" />
     <Using Include="System.Collections.Immutable" />
     <Using Include="System.Drawing" />
     <Using Include="System.Numerics" />
