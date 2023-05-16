@@ -197,7 +197,7 @@ public sealed class Day03 : Puzzle
         /// <summary>
         /// An array of offsets that may surround an address in the grid.
         /// </summary>
-        private static readonly Size[] Offsets =
+        private static readonly ImmutableArray<Size> Offsets = new Size[]
         {
             new(0, 1),
             new(1, 1),
@@ -207,7 +207,7 @@ public sealed class Day03 : Puzzle
             new(-1, -1),
             new(-1, 0),
             new(-1, 1),
-        };
+        }.ToImmutableArray();
 
         /// <summary>
         /// Writes the value for the specified address to memory.

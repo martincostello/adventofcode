@@ -12,7 +12,7 @@ public sealed class Day05 : Puzzle
     /// <summary>
     /// The sequences of characters that are not considered nice. This field is read-only.
     /// </summary>
-    private static readonly string[] NotNiceSequences = { "ab", "cd", "pq", "xy" };
+    private static readonly ImmutableArray<string> NotNiceSequences = new string[] { "ab", "cd", "pq", "xy" }.ToImmutableArray();
 
     /// <summary>
     /// Gets the number of 'nice' strings using version 1 of the rules.
