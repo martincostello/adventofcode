@@ -6,7 +6,6 @@
 using System.IO.Compression;
 using System.Reflection;
 using System.Runtime.InteropServices;
-using System.Text.Json.Serialization.Metadata;
 using MartinCostello.AdventOfCode;
 using MartinCostello.AdventOfCode.Site;
 using Microsoft.AspNetCore.ResponseCompression;
@@ -43,9 +42,7 @@ foreach (var puzzle in puzzles)
 builder.Services.ConfigureHttpJsonOptions((p) =>
 {
     p.SerializerOptions.WriteIndented = true;
-    p.SerializerOptions.TypeInfoResolver = JsonTypeInfoResolver.Combine(
-        ApplicationJsonSerializerContext.Default,
-        new DefaultJsonTypeInfoResolver());
+    p.SerializerOptions.TypeInfoResolverChain.Add(ApplicationJsonSerializerContext.Default);
 });
 
 builder.Services.Configure<StaticFileOptions>((options) =>
