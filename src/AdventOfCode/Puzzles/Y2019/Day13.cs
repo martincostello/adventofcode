@@ -9,6 +9,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019;
 [Puzzle(2019, 13, "Care Package", RequiresData = true)]
 public sealed class Day13 : Puzzle
 {
+    private static readonly long[] Seed = { 2 };
+
     /// <summary>
     /// Gets the number of block tiles on the screen.
     /// </summary>
@@ -35,7 +37,7 @@ public sealed class Day13 : Puzzle
 
         var vm = new IntcodeVM(instructions, 10_000)
         {
-            Input = await ChannelHelpers.CreateReaderAsync(new[] { 2L }, cancellationToken),
+            Input = await ChannelHelpers.CreateReaderAsync(Seed, cancellationToken),
         };
 
         if (!await vm.RunAsync(cancellationToken))

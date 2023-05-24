@@ -9,6 +9,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019;
 [Puzzle(2019, 02, "1202 Program Alarm", RequiresData = true)]
 public sealed class Day02 : Puzzle
 {
+    private static readonly long[] Seed = { 0 };
+
     /// <summary>
     /// Gets the output of the program.
     /// </summary>
@@ -38,7 +40,7 @@ public sealed class Day02 : Puzzle
 
         var vm = new IntcodeVM(instructions)
         {
-            Input = await ChannelHelpers.CreateReaderAsync(new[] { 0L }, cancellationToken),
+            Input = await ChannelHelpers.CreateReaderAsync(Seed, cancellationToken),
         };
 
         if (!await vm.RunAsync(cancellationToken))
