@@ -5,7 +5,7 @@
   <ItemGroup>
     <PackageVersion Include="Amazon.Lambda.AspNetCoreServer.Hosting" Version="1.6.0" />
     <PackageVersion Include="BenchmarkDotNet" Version="0.13.5" />
-    <PackageVersion Include="GitHubActionsTestLogger" Version="2.3.1" />
+    <PackageVersion Include="GitHubActionsTestLogger" Version="2.3.2" />
     <PackageVersion Include="MartinCostello.Logging.XUnit" Version="0.3.0" />
     <PackageVersion Include="MartinCostello.Testing.AwsLambdaTestServer" Version="0.7.0" />
     <PackageVersion Include="Microsoft.AspNetCore.Mvc.Testing" Version="7.0.5" />
