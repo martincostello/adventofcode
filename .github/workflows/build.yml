@@ -28,6 +28,9 @@ env:
   PUBLISH_RUNTIME: win10-x64
   TERM: xterm
 
+permissions:
+  contents: read
+
 jobs:
   build:
     name: ${{ matrix.os }}
@@ -140,11 +143,22 @@ jobs:
     needs: build
     runs-on: windows-latest
     concurrency: production_environment
+
     environment:
       name: production
       url: ${{ env.AZURE_URL_PROD }}
 
+    permissions:
+      id-token: write
+
     steps:
+
+    - name: Azure log in
+      uses: azure/login@v1
+      with:
+        client-id: ${{ secrets.AZURE_CLIENT_ID }}
+        tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+        subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
     - name: Download artifacts
       uses: actions/download-artifact@v3
@@ -156,7 +170,6 @@ jobs:
       id: deploy_production
       with:
         app-name: ${{ env.AZURE_WEBAPP_NAME }}
-        publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
 
   test:
     name: test-production
@@ -200,9 +213,13 @@ jobs:
     needs: test
     runs-on: ubuntu-latest
     concurrency: aws_environment
+
     environment:
       name: aws
       url: ${{ env.AWS_URL_PROD }}
+
+    permissions:
+      id-token: write
 
     steps:
 
@@ -238,8 +255,8 @@ jobs:
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v2
       with:
-        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
+        role-to-assume: ${{ secrets.AWS_DEPLOYMENT_ROLE }}
+        role-session-name: ${{ github.event.repository.name }}-${{ github.run_id }}-deploy
         aws-region: ${{ env.AWS_REGION }}
 
     - name: Deploy CloudFormation Template
