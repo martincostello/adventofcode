@@ -71,7 +71,10 @@ abstract class Instruction {
 }
 
 class InstructionV1 extends Instruction {
-    constructor(readonly action: string, readonly bounds: Rectangle) {
+    constructor(
+        readonly action: string,
+        readonly bounds: Rectangle
+    ) {
         super();
     }
 
@@ -133,7 +136,10 @@ class InstructionV1 extends Instruction {
 }
 
 class InstructionV2 extends Instruction {
-    constructor(readonly delta: number, readonly bounds: Rectangle) {
+    constructor(
+        readonly delta: number,
+        readonly bounds: Rectangle
+    ) {
         super();
     }
 

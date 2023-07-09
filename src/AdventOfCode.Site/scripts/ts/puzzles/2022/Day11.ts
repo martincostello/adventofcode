@@ -133,7 +133,10 @@ class Monkey {
     reducer: (value: number) => number;
     private inspectionsMade = 0;
 
-    constructor(public readonly name: number, public readonly items: number[]) {}
+    constructor(
+        public readonly name: number,
+        public readonly items: number[]
+    ) {}
 
     get inspections() {
         return this.inspectionsMade;

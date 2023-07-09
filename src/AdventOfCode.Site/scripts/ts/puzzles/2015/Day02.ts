@@ -37,7 +37,11 @@ export class Day02 extends Puzzle2015 {
 }
 
 class Present {
-    constructor(readonly length: number, readonly width: number, readonly height: number) {}
+    constructor(
+        readonly length: number,
+        readonly width: number,
+        readonly height: number
+    ) {}
 
     static parse(value: string) {
         const [length, width, height] = value.split('x');

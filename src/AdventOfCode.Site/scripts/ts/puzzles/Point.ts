@@ -6,7 +6,10 @@ import { Size } from './Size';
 export class Point extends Object {
     static readonly empty = new Point(0, 0);
 
-    constructor(readonly x: number, readonly y: number) {
+    constructor(
+        readonly x: number,
+        readonly y: number
+    ) {
         super();
     }
 

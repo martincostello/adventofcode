@@ -6,7 +6,11 @@ import { ProblemDetails, Solution } from '../models/index';
 import { Solver } from './Solver';
 
 export class ServerSolver implements Solver {
-    constructor(private readonly client: ApiClient, private readonly form: HTMLElement, private readonly inputFile: HTMLInputElement) {}
+    constructor(
+        private readonly client: ApiClient,
+        private readonly form: HTMLElement,
+        private readonly inputFile: HTMLInputElement
+    ) {}
 
     async solve(inputs: string[], resource: string | null): Promise<ProblemDetails | Solution> {
         const url = this.form.getAttribute('action');

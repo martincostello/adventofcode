@@ -136,7 +136,10 @@ export class Day07 extends Puzzle2022 {
 abstract class FileSystemEntry {
     readonly path: string;
 
-    constructor(readonly name: string, readonly container: FileSystemEntry | null) {
+    constructor(
+        readonly name: string,
+        readonly container: FileSystemEntry | null
+    ) {
         if (this.container === null) {
             this.path = this.name;
         } else {
@@ -146,7 +149,11 @@ abstract class FileSystemEntry {
 }
 
 class Directory extends FileSystemEntry {
-    constructor(name: string, readonly parent: Directory | null = null, readonly children: FileSystemEntry[] = []) {
+    constructor(
+        name: string,
+        readonly parent: Directory | null = null,
+        readonly children: FileSystemEntry[] = []
+    ) {
         super(name, parent);
     }
 
@@ -166,7 +173,11 @@ class Directory extends FileSystemEntry {
 }
 
 class File extends FileSystemEntry {
-    constructor(name: string, directory: Directory, readonly size: number) {
+    constructor(
+        name: string,
+        directory: Directory,
+        readonly size: number
+    ) {
         super(name, directory);
     }
 }
