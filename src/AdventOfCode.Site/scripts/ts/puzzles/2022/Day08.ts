@@ -146,7 +146,10 @@ export class Day08 extends Puzzle2022 {
 class Tree {
     private isTreeVisible: boolean;
 
-    constructor(readonly location: Point, readonly height: number) {
+    constructor(
+        readonly location: Point,
+        readonly height: number
+    ) {
         this.isTreeVisible = false;
     }
 
