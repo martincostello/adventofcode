@@ -3,6 +3,7 @@
     <AssemblyName>bootstrap</AssemblyName>
     <AWSProjectType>Lambda</AWSProjectType>
     <Description>Web app for solving Advent of Code.</Description>
+    <EnableRequestDelegateGenerator>true</EnableRequestDelegateGenerator>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <NoWarn>$(NoWarn);CA2007</NoWarn>
     <OutputType>Exe</OutputType>
