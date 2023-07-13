@@ -1,7 +1,6 @@
 ﻿// Copyright (c) Martin Costello, 2015. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
-using System.Diagnostics.CodeAnalysis;
 using System.Security.Cryptography;
 using Microsoft.Net.Http.Headers;
 
@@ -85,6 +84,6 @@ public sealed class CustomHttpHeadersMiddleware(RequestDelegate next)
         return next(context);
     }
 
-    private static string ContentSecurityPolicy([StringSyntax(StringSyntaxAttribute.CompositeFormat)] string nonce)
+    private static string ContentSecurityPolicy(string nonce)
         => string.Format(CultureInfo.InvariantCulture, ContentSecurityPolicyTemplate, nonce);
 }
