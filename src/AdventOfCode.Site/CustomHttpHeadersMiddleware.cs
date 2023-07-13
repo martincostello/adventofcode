@@ -1,6 +1,7 @@
 ﻿// Copyright (c) Martin Costello, 2015. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
+using System.Diagnostics.CodeAnalysis;
 using System.Security.Cryptography;
 using Microsoft.Net.Http.Headers;
 
@@ -12,7 +13,7 @@ namespace MartinCostello.AdventOfCode.Site;
 /// <param name="next">The next request delegate in the pipeline.</param>
 public sealed class CustomHttpHeadersMiddleware(RequestDelegate next)
 {
-    private static readonly string ContentSecurityPolicyTemplate = string.Join(
+    private static readonly CompositeFormat ContentSecurityPolicyTemplate = CompositeFormat.Parse(string.Join(
         ';',
         new[]
         {
@@ -33,7 +34,7 @@ public sealed class CustomHttpHeadersMiddleware(RequestDelegate next)
             "base-uri 'self'",
             "manifest-src 'self'",
             "upgrade-insecure-requests",
-        });
+        }));
 
     /// <summary>
     /// Invokes the specified middleware.
@@ -84,6 +85,6 @@ public sealed class CustomHttpHeadersMiddleware(RequestDelegate next)
         return next(context);
     }
 
-    private static string ContentSecurityPolicy(string nonce)
+    private static string ContentSecurityPolicy([StringSyntax(StringSyntaxAttribute.CompositeFormat)] string nonce)
         => string.Format(CultureInfo.InvariantCulture, ContentSecurityPolicyTemplate, nonce);
 }
