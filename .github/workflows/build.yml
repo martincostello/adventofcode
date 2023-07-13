@@ -92,6 +92,9 @@ jobs:
 
     - name: Build, test and publish
       shell: pwsh
+      env:
+        DOTNET_JitEnablePhysicalPromotion: '0'
+
       run: ./build.ps1 -Runtime "${{ env.PUBLISH_RUNTIME }}"
 
     - name: Upload coverage to Codecov
