@@ -42,6 +42,7 @@ jobs:
       env:
         SKIP_NPM_TEST: true
       run: |
+        ./build.ps1 -SkipTests
         Start-Process nohup 'dotnet run --project ./src/AdventOfCode.Site/AdventOfCode.Site.csproj --configuration Release'
         $StatusCode = 0
         $Attempts = 0
