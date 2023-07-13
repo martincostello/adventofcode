@@ -112,7 +112,7 @@ public sealed class Day18 : Puzzle
 
         bool[,] output = new bool[width, height];
 
-        IList<Point> cornerLights;
+        Point[] cornerLights;
 
         if (areCornerLightsBroken)
         {
