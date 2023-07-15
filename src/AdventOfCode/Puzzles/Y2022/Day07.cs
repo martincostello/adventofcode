@@ -33,9 +33,9 @@ public sealed class Day07 : Puzzle
     public static (long TotalSizeOfDirectoriesLargerThanLimit, long SizeOfSmallestDirectoryToDelete) GetDirectorySizes(
         IList<string> terminalOutput)
     {
-        const long DiskSize = 70000000;
-        const long SizeLimit = 100000;
-        const long UpdateSize = 30000000;
+        const long DiskSize = 70_000_000;
+        const long SizeLimit = 100_000;
+        const long UpdateSize = 30_000_000;
 
         var directories = GetDirectories(terminalOutput.ToArray());
 

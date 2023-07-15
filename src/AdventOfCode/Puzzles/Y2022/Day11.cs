@@ -150,7 +150,7 @@ public sealed class Day11 : Puzzle
         var observations = await ReadResourceAsLinesAsync(cancellationToken);
 
         MonkeyBusiness20 = GetMonkeyBusiness(observations, rounds: 20, highAnxiety: false);
-        MonkeyBusiness10000 = GetMonkeyBusiness(observations, rounds: 10000, highAnxiety: true);
+        MonkeyBusiness10000 = GetMonkeyBusiness(observations, rounds: 10_000, highAnxiety: true);
 
         if (Verbose)
         {

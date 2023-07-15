@@ -77,7 +77,7 @@ public sealed class Day18 : Puzzle
         string firstRowTiles = (await ReadResourceAsStringAsync(cancellationToken)).TrimEnd();
 
         (SafeTileCount40, string visualization) = FindSafeTileCount(firstRowTiles, rows: 40, Logger);
-        (SafeTileCount400000, _) = FindSafeTileCount(firstRowTiles, rows: 400000, Logger);
+        (SafeTileCount400000, _) = FindSafeTileCount(firstRowTiles, rows: 400_000, Logger);
 
         if (Verbose)
         {
