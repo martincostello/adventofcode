@@ -125,16 +125,8 @@ public sealed class Day15 : Puzzle
         return PuzzleResult.Create(RiskLevelSmall, RiskLevelLarge);
     }
 
-    private sealed class RiskMap : SquareGrid
+    private sealed class RiskMap(int width, int height, Dictionary<Point, int> risks) : SquareGrid(width, height)
     {
-        private readonly Dictionary<Point, int> _risks;
-
-        public RiskMap(int width, int height, Dictionary<Point, int> risks)
-            : base(width, height)
-        {
-            _risks = risks;
-        }
-
-        public override long Cost(Point a, Point b) => _risks.GetValueOrDefault(b);
+        public override long Cost(Point a, Point b) => risks.GetValueOrDefault(b);
     }
 }

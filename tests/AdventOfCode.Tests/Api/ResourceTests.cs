@@ -6,13 +6,9 @@ using System.Net.Mime;
 
 namespace MartinCostello.AdventOfCode.Api;
 
-public class ResourceTests : IntegrationTest
+public class ResourceTests(HttpServerFixture fixture, ITestOutputHelper outputHelper)
+    : IntegrationTest(fixture, outputHelper)
 {
-    public ResourceTests(HttpServerFixture fixture, ITestOutputHelper outputHelper)
-        : base(fixture, outputHelper)
-    {
-    }
-
     [SkippableTheory]
     [InlineData("", MediaTypeNames.Text.Html)]
     [InlineData("error.html", MediaTypeNames.Text.Html)]

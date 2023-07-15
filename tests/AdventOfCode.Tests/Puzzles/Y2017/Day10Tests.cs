@@ -3,20 +3,8 @@
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2017;
 
-/// <summary>
-/// A class containing tests for the <see cref="Day10"/> class. This class cannot be inherited.
-/// </summary>
-public sealed class Day10Tests : PuzzleTest
+public sealed class Day10Tests(ITestOutputHelper outputHelper) : PuzzleTest(outputHelper)
 {
-    /// <summary>
-    /// Initializes a new instance of the <see cref="Day10Tests"/> class.
-    /// </summary>
-    /// <param name="outputHelper">The <see cref="ITestOutputHelper"/> to use.</param>
-    public Day10Tests(ITestOutputHelper outputHelper)
-        : base(outputHelper)
-    {
-    }
-
     [Theory]
     [InlineData(5, new[] { 3, 4, 1, 5 }, 12)]
     public static void Y2017_Day10_FindProductOfFirstTwoHashElements_Returns_Correct_Value(

@@ -3,20 +3,8 @@
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2016;
 
-/// <summary>
-/// A class containing tests for the <see cref="Day20"/> class. This class cannot be inherited.
-/// </summary>
-public sealed class Day20Tests : PuzzleTest
+public sealed class Day20Tests(ITestOutputHelper outputHelper) : PuzzleTest(outputHelper)
 {
-    /// <summary>
-    /// Initializes a new instance of the <see cref="Day20Tests"/> class.
-    /// </summary>
-    /// <param name="outputHelper">The <see cref="ITestOutputHelper"/> to use.</param>
-    public Day20Tests(ITestOutputHelper outputHelper)
-        : base(outputHelper)
-    {
-    }
-
     [Theory]
     [InlineData(9, new[] { "5-8", "0-2", "4-7" }, 3, 2)]
     public static void Y2016_Day20_GetLowestNonblockedIP_Returns_Correct_Solution(uint maxValue, string[] denyList, uint expectedIP, uint expectedCount)

@@ -3,20 +3,8 @@
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2020;
 
-/// <summary>
-/// A class containing tests for the <see cref="Day09"/> class. This class cannot be inherited.
-/// </summary>
-public sealed class Day09Tests : PuzzleTest
+public sealed class Day09Tests(ITestOutputHelper outputHelper) : PuzzleTest(outputHelper)
 {
-    /// <summary>
-    /// Initializes a new instance of the <see cref="Day09Tests"/> class.
-    /// </summary>
-    /// <param name="outputHelper">The <see cref="ITestOutputHelper"/> to use.</param>
-    public Day09Tests(ITestOutputHelper outputHelper)
-        : base(outputHelper)
-    {
-    }
-
     [Fact]
     public void Y2020_Day09_GetWeakNumber_Returns_Correct_Value()
     {
