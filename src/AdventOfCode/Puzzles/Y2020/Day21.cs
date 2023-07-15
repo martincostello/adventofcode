@@ -10,7 +10,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020;
 public sealed class Day21 : Puzzle
 {
     /// <summary>
-    /// Gets the canonocal list of ingredients that are allergens.
+    /// Gets the canonical list of ingredients that are allergens.
     /// </summary>
     public string CanonicalAllergens { get; private set; } = string.Empty;
 
@@ -102,7 +102,7 @@ public sealed class Day21 : Puzzle
 
         cancellationToken.ThrowIfCancellationRequested();
 
-        int occurences = occurrences.Keys
+        int count = occurrences.Keys
             .Where((p) => !allergicIngredients.Contains(p))
             .Select((p) => occurrences[p])
             .Sum();
@@ -113,15 +113,15 @@ public sealed class Day21 : Puzzle
 
         string canonicalAllergens = string.Join(',', sortedAllergens);
 
-        return (occurences, canonicalAllergens);
+        return (count, canonicalAllergens);
     }
 
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        var recipies = await ReadResourceAsLinesAsync(cancellationToken);
+        var recipes = await ReadResourceAsLinesAsync(cancellationToken);
 
-        (IngredientsWithNoAllergens, CanonicalAllergens) = GetIngredientsWithNoAllergens(recipies, cancellationToken);
+        (IngredientsWithNoAllergens, CanonicalAllergens) = GetIngredientsWithNoAllergens(recipes, cancellationToken);
 
         if (Verbose)
         {

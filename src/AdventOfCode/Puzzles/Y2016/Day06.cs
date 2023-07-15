@@ -62,7 +62,7 @@ public sealed class Day06 : Puzzle
 
         if (Verbose)
         {
-            Logger.WriteLine($"The error-corrected message using the most likley letters is: {ErrorCorrectedMessage}.");
+            Logger.WriteLine($"The error-corrected message using the most likely letters is: {ErrorCorrectedMessage}.");
             Logger.WriteLine($"The error-corrected message using the least likely letters is: {ModifiedErrorCorrectedMessage}.");
         }
 

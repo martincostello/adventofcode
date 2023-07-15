@@ -106,7 +106,7 @@ public sealed class Day03 : Puzzle
             }
         }
 
-        int manhattanDistance = intersections
+        int distance = intersections
             .Skip(1)
             .Min((p) => p.ManhattanDistance());
 
@@ -114,7 +114,7 @@ public sealed class Day03 : Puzzle
             .Where((p) => p.Key != default && intersections.Contains(p.Key))
             .Min((p) => p.Value.Sum());
 
-        return (manhattanDistance, minimumSteps);
+        return (distance, minimumSteps);
     }
 
     /// <inheritdoc />

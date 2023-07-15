@@ -26,7 +26,7 @@ public sealed class Day07 : Puzzle
     /// </summary>
     /// <param name="program">The Intcode program to run.</param>
     /// <param name="useFeedback">Whether to arrange the amplifiers in a feedback loop.</param>
-    /// <param name="cancellationToken">The optional cancellation to oken to use.</param>
+    /// <param name="cancellationToken">The optional cancellation to token to use.</param>
     /// <returns>
     /// The diagnostic code output by the program.
     /// </returns>

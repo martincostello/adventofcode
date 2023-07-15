@@ -9,7 +9,7 @@ namespace MartinCostello.AdventOfCode;
 internal static class StringExtensions
 {
     /// <summary>
-    /// Birfurcates the specified string.
+    /// Bifurcates the specified string.
     /// </summary>
     /// <param name="value">The string to bifurcate.</param>
     /// <param name="separator">The separator between the two strings.</param>
@@ -20,7 +20,7 @@ internal static class StringExtensions
         => value.AsSpan().Bifurcate(separator);
 
     /// <summary>
-    /// Birfurcates the specified span.
+    /// Bifurcates the specified span.
     /// </summary>
     /// <param name="value">The span to bifurcate.</param>
     /// <param name="separator">The separator between the two spans.</param>

@@ -207,7 +207,7 @@ public sealed class Day22 : Puzzle
         public int Used { get; private set; }
 
         /// <summary>
-        /// Gets the availabe capacity of the node in terabytes.
+        /// Gets the available capacity of the node in terabytes.
         /// </summary>
         public int Available => Size - Used;
 

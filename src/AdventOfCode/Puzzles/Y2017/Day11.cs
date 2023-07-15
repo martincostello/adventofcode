@@ -124,7 +124,7 @@ public sealed class Day11 : Puzzle
     /// <summary>
     /// Returns a vector that represents the specified cardinal direction.
     /// </summary>
-    /// <param name="direction">The direction to get the vector represenation of.</param>
+    /// <param name="direction">The direction to get the vector representation of.</param>
     /// <returns>
     /// The <see cref="Vector2"/> that represents <paramref name="direction"/>.
     /// </returns>
