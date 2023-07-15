@@ -3,20 +3,8 @@
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2020;
 
-/// <summary>
-/// A class containing tests for the <see cref="Day23"/> class. This class cannot be inherited.
-/// </summary>
-public sealed class Day23Tests : PuzzleTest
+public sealed class Day23Tests(ITestOutputHelper outputHelper) : PuzzleTest(outputHelper)
 {
-    /// <summary>
-    /// Initializes a new instance of the <see cref="Day23Tests"/> class.
-    /// </summary>
-    /// <param name="outputHelper">The <see cref="ITestOutputHelper"/> to use.</param>
-    public Day23Tests(ITestOutputHelper outputHelper)
-        : base(outputHelper)
-    {
-    }
-
     [Theory]
     [InlineData(10, new[] { 5, 8, 3, 7, 4, 1, 9, 2, 6 })]
     [InlineData(100, new[] { 2, 9, 1, 6, 7, 3, 8, 4, 5, })]

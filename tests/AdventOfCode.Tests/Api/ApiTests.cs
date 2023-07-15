@@ -11,18 +11,11 @@ namespace MartinCostello.AdventOfCode.Api;
 /// <summary>
 /// A class containing tests for the API.
 /// </summary>
-public class ApiTests : IntegrationTest
+/// <param name="fixture">The fixture to use.</param>
+/// <param name="outputHelper">The test output helper to use.</param>
+public class ApiTests(HttpServerFixture fixture, ITestOutputHelper outputHelper)
+    : IntegrationTest(fixture, outputHelper)
 {
-    /// <summary>
-    /// Initializes a new instance of the <see cref="ApiTests"/> class.
-    /// </summary>
-    /// <param name="fixture">The fixture to use.</param>
-    /// <param name="outputHelper">The test output helper to use.</param>
-    public ApiTests(HttpServerFixture fixture, ITestOutputHelper outputHelper)
-        : base(fixture, outputHelper)
-    {
-    }
-
     [Theory]
     [PuzzleData(2015, 01, 232, 1783)]
     [PuzzleData(2015, 02, 1598415, 3812909)]

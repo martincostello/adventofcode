@@ -140,22 +140,15 @@ public sealed class Day24 : Puzzle
     /// A struct representing a hexagonal tile.
     /// </summary>
     [System.Diagnostics.DebuggerDisplay("({X}, {Y}, {Z})")]
-    private readonly struct Tile : IEquatable<Tile>
+    private readonly struct Tile(int x, int y, int z) : IEquatable<Tile>
     {
         public static readonly Tile Zero = new(0, 0, 0);
 
-        public readonly int X;
+        public readonly int X = x;
 
-        public readonly int Y;
+        public readonly int Y = y;
 
-        public readonly int Z;
-
-        public Tile(int x, int y, int z)
-        {
-            X = x;
-            Y = y;
-            Z = z;
-        }
+        public readonly int Z = z;
 
         public static Tile operator +(Tile point, Tile vector)
         {

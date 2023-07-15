@@ -127,13 +127,8 @@ public sealed class Day09 : Puzzle
         return PuzzleResult.Create(SumOfRiskLevels, AreaOfThreeLargestBasins);
     }
 
-    private sealed class Heightmap : SquareGrid
+    private sealed class Heightmap(int width, int height) : SquareGrid(width, height)
     {
-        public Heightmap(int width, int height)
-            : base(width, height)
-        {
-        }
-
         public override long Cost(Point a, Point b) => 1;
     }
 }

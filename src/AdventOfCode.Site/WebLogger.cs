@@ -8,22 +8,9 @@ namespace MartinCostello.AdventOfCode.Site;
 /// <summary>
 /// A class representing an <see cref="ILogger"/> implementation for the web application. This class cannot be inherited.
 /// </summary>
-public sealed partial class WebLogger : ILogger
+/// <param name="logger">The <see cref="ILogger{T}"/> to use.</param>
+public sealed partial class WebLogger(ILogger<WebLogger> logger) : ILogger
 {
-    /// <summary>
-    /// The <see cref="IMicrosoftLogger"/> to use. This field is read-only.
-    /// </summary>
-    private readonly IMicrosoftLogger _logger;
-
-    /// <summary>
-    /// Initializes a new instance of the <see cref="WebLogger"/> class.
-    /// </summary>
-    /// <param name="logger">The <see cref="ILogger{T}"/> to use.</param>
-    public WebLogger(ILogger<WebLogger> logger)
-    {
-        _logger = logger;
-    }
-
     /// <summary>
     /// Writes a grid to the log.
     /// </summary>
@@ -54,7 +41,7 @@ public sealed partial class WebLogger : ILogger
 
         string result = builder.ToString();
 
-        Log.Result(_logger, result);
+        Log.Result(logger, result);
 
         return result;
     }
@@ -65,7 +52,7 @@ public sealed partial class WebLogger : ILogger
     /// <param name="format">The format string to use to generate the message.</param>
     /// <param name="args">The arguments for the format string.</param>
     public void WriteLine(string format, params object[] args)
-        => Log.WriteLine(_logger, string.Format(CultureInfo.InvariantCulture, format, args));
+        => Log.WriteLine(logger, string.Format(CultureInfo.InvariantCulture, format, args));
 
     private static partial class Log
     {
