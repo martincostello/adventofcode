@@ -3,20 +3,8 @@
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2016;
 
-/// <summary>
-/// A class containing tests for the <see cref="Day03"/> class. This class cannot be inherited.
-/// </summary>
-public sealed class Day03Tests : PuzzleTest
+public sealed class Day03Tests(ITestOutputHelper outputHelper) : PuzzleTest(outputHelper)
 {
-    /// <summary>
-    /// Initializes a new instance of the <see cref="Day03Tests"/> class.
-    /// </summary>
-    /// <param name="outputHelper">The <see cref="ITestOutputHelper"/> to use.</param>
-    public Day03Tests(ITestOutputHelper outputHelper)
-        : base(outputHelper)
-    {
-    }
-
     [Theory]
     [InlineData(5, 10, 25, false)]
     public static void Y2016_Day03_IsTriangleValid_Returns_Correct_Solution(int a, int b, int c, bool expected)

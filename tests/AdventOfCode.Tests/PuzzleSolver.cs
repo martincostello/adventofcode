@@ -5,15 +5,8 @@ using Microsoft.Playwright;
 
 namespace MartinCostello.AdventOfCode;
 
-internal sealed class PuzzleSolver
+internal sealed class PuzzleSolver(IPage page)
 {
-    internal PuzzleSolver(IPage page)
-    {
-        Page = page;
-    }
-
-    private IPage Page { get; }
-
     public async Task InputArgumentsAsync(IReadOnlyList<string> arguments)
     {
         const string Selector = "id=arguments";
@@ -22,19 +15,19 @@ internal sealed class PuzzleSolver
         {
             if (i > 0)
             {
-                await Page.FocusAsync(Selector);
-                await Page.Keyboard.PressAsync("Enter");
+                await page.FocusAsync(Selector);
+                await page.Keyboard.PressAsync("Enter");
             }
 
-            await Page.TypeAsync(Selector, arguments[i]);
+            await page.TypeAsync(Selector, arguments[i]);
         }
     }
 
     public async Task SelectDayAsync(string day)
-        => await Page.SelectOptionAsync("id=day", day);
+        => await page.SelectOptionAsync("id=day", day);
 
     public async Task SelectYearAsync(string year)
-        => await Page.SelectOptionAsync("id=year", year);
+        => await page.SelectOptionAsync("id=year", year);
 
     public async Task SelectInputAsync(string content)
     {
@@ -47,15 +40,15 @@ internal sealed class PuzzleSolver
             MimeType = "text/plain",
         };
 
-        await Page.SetInputFilesAsync("id=resource", files);
+        await page.SetInputFilesAsync("id=resource", files);
     }
 
     public async Task SolveAsync()
-        => await Page.ClickAsync("id=solve");
+        => await page.ClickAsync("id=solve");
 
     public async Task<IList<string>> SolutionsAsync()
     {
-        var container = await Page.QuerySelectorAsync("id=solution");
+        var container = await page.QuerySelectorAsync("id=solution");
         await container!.WaitForElementStateAsync(ElementState.Visible);
 
         var elements = await container.QuerySelectorAllAsync("li");
@@ -72,7 +65,7 @@ internal sealed class PuzzleSolver
 
     public async Task<int> VisualizationsAsync()
     {
-        var container = await Page.QuerySelectorAsync("id=visualization");
+        var container = await page.QuerySelectorAsync("id=visualization");
         await container!.WaitForElementStateAsync(ElementState.Visible);
 
         var visualizations = await container.QuerySelectorAllAsync("pre");

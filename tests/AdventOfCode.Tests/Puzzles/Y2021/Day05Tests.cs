@@ -3,13 +3,8 @@
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2021;
 
-public sealed class Day05Tests : PuzzleTest
+public sealed class Day05Tests(ITestOutputHelper outputHelper) : PuzzleTest(outputHelper)
 {
-    public Day05Tests(ITestOutputHelper outputHelper)
-        : base(outputHelper)
-    {
-    }
-
     [Theory]
     [InlineData(false, 5)]
     [InlineData(true, 12)]
