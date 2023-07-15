@@ -66,7 +66,7 @@ public sealed class Day14 : Puzzle
                 value = salt + j.ToString(CultureInfo.InvariantCulture);
                 key = GenerateKey(value, useKeyStretching, cache);
 
-                if (HasFiveRepeatitionsOfCharacter(key, triple))
+                if (HasFiveRepetitionsOfCharacter(key, triple))
                 {
                     found5InARow = true;
                     break;
@@ -150,7 +150,7 @@ public sealed class Day14 : Puzzle
     /// <see langword="true"/> if <paramref name="value"/> contains that character
     /// specified by <paramref name="ch"/> five times consecutively.
     /// </returns>
-    private static bool HasFiveRepeatitionsOfCharacter(string value, char ch)
+    private static bool HasFiveRepetitionsOfCharacter(string value, char ch)
     {
         int start = value.IndexOf(ch, StringComparison.Ordinal);
 

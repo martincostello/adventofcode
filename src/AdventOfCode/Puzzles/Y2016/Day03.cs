@@ -34,7 +34,7 @@ public sealed class Day03 : Puzzle
     }
 
     /// <summary>
-    /// Retuns whether the dimensions of the specified triangle are valid.
+    /// Returns whether the dimensions of the specified triangle are valid.
     /// </summary>
     /// <param name="a">The length of the first side.</param>
     /// <param name="b">The length of the second side.</param>

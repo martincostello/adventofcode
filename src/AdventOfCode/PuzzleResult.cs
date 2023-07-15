@@ -14,7 +14,7 @@ public sealed class PuzzleResult
     public IList<object> Solutions { get; private set; } = new List<object>();
 
     /// <summary>
-    /// Gets the sisualization(s) associated with the puzzle, if any.
+    /// Gets the visualization(s) associated with the puzzle, if any.
     /// </summary>
     public IList<string> Visualizations { get; private set; } = new List<string>();
 

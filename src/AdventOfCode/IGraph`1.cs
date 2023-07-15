@@ -18,7 +18,7 @@ public interface IGraph<T>
     /// </summary>
     /// <param name="id">The Id of the node.</param>
     /// <returns>
-    /// The neigbors of the specified node.
+    /// The neighbors of the specified node.
     /// </returns>
     IEnumerable<T> Neighbors(T id);
 }
