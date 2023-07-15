@@ -153,17 +153,11 @@ public sealed class Day22 : Puzzle
     }
 
     [System.Diagnostics.DebuggerDisplay("({Origin.X}, {Origin.Y}, {Origin.Z}), ({Length.X}, {Length.Y}, {Length.Z})")]
-    private readonly struct Cuboid
+    private readonly struct Cuboid(Vector3 origin, Vector3 length)
     {
-        public readonly Vector3 Origin;
+        public readonly Vector3 Origin = origin;
 
-        public readonly Vector3 Length;
-
-        public Cuboid(Vector3 origin, Vector3 length)
-        {
-            Origin = origin;
-            Length = length;
-        }
+        public readonly Vector3 Length = length;
 
         public override readonly int GetHashCode()
             => HashCode.Combine(Origin.GetHashCode(), Length.GetHashCode());
