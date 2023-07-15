@@ -184,7 +184,7 @@ public sealed class Day14 : Puzzle
             int maxY = cave.Keys.MaxBy((p) => p.Y).Y;
             int minY = 0;
 
-            var builder = new StringBuilder();
+            var builder = new StringBuilder((maxY - minY) * (maxX - minX + 1));
 
             for (int y = minY; y <= maxY; y++)
             {

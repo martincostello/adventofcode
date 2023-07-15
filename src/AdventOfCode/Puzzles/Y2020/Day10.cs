@@ -51,7 +51,7 @@ public sealed class Day10 : Puzzle
             chain.Pop();
         }
 
-        var deltas = new Dictionary<int, int>()
+        var deltas = new Dictionary<int, int>(3)
         {
             [1] = 0,
             [2] = 0,

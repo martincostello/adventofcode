@@ -227,7 +227,7 @@ public sealed class Day20 : Puzzle
 
             var result = new Tile[width, width];
 
-            var edgeRows = new List<IList<Tile>>();
+            var edgeRows = new List<List<Tile>>(corners.Count);
 
             // Iterate through the corners and find the tiles that adjoin it to the right:
             // [Corner] -> [Edge] -> [Edge] -> [Edge]
@@ -277,10 +277,10 @@ public sealed class Day20 : Puzzle
             }
 
             // By convention, the first row is considered the top
-            IList<Tile> topRow = edgeRows[0];
-            IList<Tile> rightRow = edgeRows.Single((p) => p[0] == topRow[^1]);
-            IList<Tile> bottomRow = edgeRows.Single((p) => p[0] == rightRow[^1]);
-            IList<Tile> leftRow = edgeRows.Single((p) => p[0] == bottomRow[^1]);
+            var topRow = edgeRows[0];
+            var rightRow = edgeRows.Single((p) => p[0] == topRow[^1]);
+            var bottomRow = edgeRows.Single((p) => p[0] == rightRow[^1]);
+            var leftRow = edgeRows.Single((p) => p[0] == bottomRow[^1]);
 
             // Place the edges onto the grid clockwise
             for (int i = 0; i < topRow.Count; i++)

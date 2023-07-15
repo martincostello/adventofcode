@@ -29,7 +29,7 @@ public sealed class Day06 : Puzzle
     /// </returns>
     public static long CountFish(IEnumerable<int> fish, int days)
     {
-        var states = new Dictionary<int, long>()
+        var states = new Dictionary<int, long>(9)
         {
             [0] = 0,
             [1] = 0,
