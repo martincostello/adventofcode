@@ -20,9 +20,7 @@ public static class InputProvider
     /// <returns>
     /// A <see cref="Stream"/> containing the resource associated with the specified puzzle, if found.
     /// </returns>
-    public static Stream? Get(int year, int day)
-    {
-        string name = FormattableString.Invariant($"MartinCostello.AdventOfCode.Input.Y{year:0000}.Day{day:00}.input.txt");
-        return ThisAssembly.GetManifestResourceStream(name);
-    }
+    public static Stream? Get(int year, int day) =>
+        ThisAssembly.GetManifestResourceStream(
+            FormattableString.Invariant($"MartinCostello.AdventOfCode.Input.Y{year:0000}.Day{day:00}.input.txt"));
 }

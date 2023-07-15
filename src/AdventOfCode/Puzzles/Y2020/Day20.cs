@@ -480,7 +480,7 @@ public sealed class Day20 : Puzzle
     /// A class representing an image tile. This class cannot be inherited.
     /// </summary>
     [System.Diagnostics.DebuggerDisplay("Id = {Id}")]
-    private sealed class Tile
+    private sealed class Tile(string[] grid, long id)
     {
         /// <summary>
         /// The number of times the tile has been flipped or rotated.
@@ -488,20 +488,9 @@ public sealed class Day20 : Puzzle
         private uint _iterations;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Tile"/> class.
-        /// </summary>
-        /// <param name="grid">The tile's grid.</param>
-        /// <param name="id">The tile's Id.</param>
-        public Tile(string[] grid, long id)
-        {
-            Grid = grid;
-            Id = id;
-        }
-
-        /// <summary>
         /// Gets the Id of the tile.
         /// </summary>
-        public long Id { get; }
+        public long Id { get; } = id;
 
         /// <summary>
         /// Gets the candidates for the edges of the tile.
@@ -511,7 +500,7 @@ public sealed class Day20 : Puzzle
         /// <summary>
         /// Gets the original grid of the image.
         /// </summary>
-        public string[] Grid { get; private set; }
+        public string[] Grid { get; private set; } = grid;
 
         /// <summary>
         /// Flips the tile's grid around the Y axis.

@@ -6,21 +6,13 @@ namespace MartinCostello.AdventOfCode;
 /// <summary>
 /// A class containing tests for the <see cref="Puzzle"/> class. This class cannot be inherited.
 /// </summary>
-public sealed class PuzzleTests
+/// <param name="outputHelper">The <see cref="ITestOutputHelper"/> to use.</param>
+public sealed class PuzzleTests(ITestOutputHelper outputHelper)
 {
-    /// <summary>
-    /// Initializes a new instance of the <see cref="PuzzleTests"/> class.
-    /// </summary>
-    /// <param name="outputHelper">The <see cref="ITestOutputHelper"/> to use.</param>
-    public PuzzleTests(ITestOutputHelper outputHelper)
-    {
-        Logger = new TestLogger(outputHelper);
-    }
-
     /// <summary>
     /// Gets the <see cref="ILogger"/> to use.
     /// </summary>
-    private ILogger Logger { get; }
+    private ILogger Logger { get; } = new TestLogger(outputHelper);
 
     [Fact]
     public async Task Puzzle_Solve_Returns_Correct_Value_Based_On_Args_Length()

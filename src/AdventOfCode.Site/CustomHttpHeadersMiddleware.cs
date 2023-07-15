@@ -9,7 +9,8 @@ namespace MartinCostello.AdventOfCode.Site;
 /// <summary>
 /// A class representing a middleware for writing custom HTTP headers.
 /// </summary>
-public sealed class CustomHttpHeadersMiddleware
+/// <param name="next">The next request delegate in the pipeline.</param>
+public sealed class CustomHttpHeadersMiddleware(RequestDelegate next)
 {
     private static readonly string ContentSecurityPolicyTemplate = string.Join(
         ';',
@@ -33,17 +34,6 @@ public sealed class CustomHttpHeadersMiddleware
             "manifest-src 'self'",
             "upgrade-insecure-requests",
         });
-
-    private readonly RequestDelegate _next;
-
-    /// <summary>
-    /// Initializes a new instance of the <see cref="CustomHttpHeadersMiddleware"/> class.
-    /// </summary>
-    /// <param name="next">The next request delegate in the pipeline.</param>
-    public CustomHttpHeadersMiddleware(RequestDelegate next)
-    {
-        _next = next;
-    }
 
     /// <summary>
     /// Invokes the specified middleware.
@@ -91,7 +81,7 @@ public sealed class CustomHttpHeadersMiddleware
             return Task.CompletedTask;
         });
 
-        return _next(context);
+        return next(context);
     }
 
     private static string ContentSecurityPolicy(string nonce)

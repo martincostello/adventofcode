@@ -3,20 +3,8 @@
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2016;
 
-/// <summary>
-/// A class containing tests for the <see cref="Day12"/> class. This class cannot be inherited.
-/// </summary>
-public sealed class Day12Tests : PuzzleTest
+public sealed class Day12Tests(ITestOutputHelper outputHelper) : PuzzleTest(outputHelper)
 {
-    /// <summary>
-    /// Initializes a new instance of the <see cref="Day12Tests"/> class.
-    /// </summary>
-    /// <param name="outputHelper">The <see cref="ITestOutputHelper"/> to use.</param>
-    public Day12Tests(ITestOutputHelper outputHelper)
-        : base(outputHelper)
-    {
-    }
-
     [Fact]
     public static void Y2016_Day12_Process_Returns_Correct_Solution()
     {
