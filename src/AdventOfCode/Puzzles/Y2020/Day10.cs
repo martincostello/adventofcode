@@ -87,9 +87,7 @@ public sealed class Day10 : Puzzle
                 return path.Count == sorted.Count + 1;
             }
 
-            IEnumerable<int> candidates = JoltageCandidates(path);
-
-            foreach (int candidate in candidates)
+            foreach (int candidate in JoltageCandidates(path))
             {
                 path.Push(candidate);
 
