@@ -93,9 +93,9 @@ public sealed class Day21 : Puzzle
         string[] potentialWeapons = Shop.PotentialWeapons.Keys.ToArray();
         string?[] potentialArmor = Shop.PotentialArmor.Keys.Append(null!).ToArray();
 
-        ICollection<string> keys = Shop.PotentialRings.Keys.ToArray();
+        string[] keys = Shop.PotentialRings.Keys.ToArray();
 
-        var potentialRings = new List<IList<string>>((keys.Count * 2) + 1)
+        var potentialRings = new List<IList<string>>((keys.Length * 2) + 1)
         {
             Array.Empty<string>(),
         };
