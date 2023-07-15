@@ -6,13 +6,8 @@ using System.Net.Mime;
 
 namespace MartinCostello.AdventOfCode.EndToEnd;
 
-public class ResourceTests : EndToEndTest
+public class ResourceTests(SiteFixture fixture) : EndToEndTest(fixture)
 {
-    public ResourceTests(SiteFixture fixture)
-        : base(fixture)
-    {
-    }
-
     [SkippableTheory]
     [InlineData("", MediaTypeNames.Text.Html)]
     [InlineData("error.html", MediaTypeNames.Text.Html)]

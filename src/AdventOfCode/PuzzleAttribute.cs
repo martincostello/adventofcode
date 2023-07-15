@@ -7,30 +7,17 @@ namespace MartinCostello.AdventOfCode;
 /// Represents metadata about a puzzle.
 /// </summary>
 [AttributeUsage(AttributeTargets.Class, AllowMultiple = false, Inherited = false)]
-public sealed class PuzzleAttribute : Attribute
+public sealed class PuzzleAttribute(int year, int day, string name) : Attribute
 {
-    /// <summary>
-    /// Initializes a new instance of the <see cref="PuzzleAttribute"/> class.
-    /// </summary>
-    /// <param name="year">The year associated with the puzzle.</param>
-    /// <param name="day">The day associated with the puzzle.</param>
-    /// <param name="name">The name of the puzzle.</param>
-    public PuzzleAttribute(int year, int day, string name)
-    {
-        Name = name;
-        Year = year;
-        Day = day;
-    }
-
     /// <summary>
     /// Gets the name associated with the puzzle.
     /// </summary>
-    public string Name { get; }
+    public string Name { get; } = name;
 
     /// <summary>
     /// Gets the day associated with the puzzle.
     /// </summary>
-    public int Day { get; }
+    public int Day { get; } = day;
 
     /// <summary>
     /// Gets or sets a value indicating whether the puzzle is hidden.
@@ -55,5 +42,5 @@ public sealed class PuzzleAttribute : Attribute
     /// <summary>
     /// Gets the year associated with the puzzle.
     /// </summary>
-    public int Year { get; }
+    public int Year { get; } = year;
 }

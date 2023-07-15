@@ -96,22 +96,12 @@ public sealed class Day10 : Puzzle
     /// <summary>
     /// A class representing a chip output bin. This class cannot be inherited.
     /// </summary>
-    private sealed class Bin : ChipDestination
+    private sealed class Bin(int number) : ChipDestination
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Bin"/> class.
-        /// </summary>
-        /// <param name="number">The bin's number.</param>
-        internal Bin(int number)
-            : base()
-        {
-            Number = number;
-        }
-
         /// <summary>
         /// Gets the number of the bin.
         /// </summary>
-        public int Number { get; }
+        public int Number { get; } = number;
 
         /// <summary>
         /// Accepts a microchip.
@@ -186,21 +176,13 @@ public sealed class Day10 : Puzzle
     /// <summary>
     /// A class representing a microchip. This class cannot be inherited.
     /// </summary>
-    private sealed class Chip
+    /// <param name="value">The value of the microchip.</param>
+    private sealed class Chip(int value)
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Chip"/> class.
-        /// </summary>
-        /// <param name="value">The value of the microchip.</param>
-        internal Chip(int value)
-        {
-            Value = value;
-        }
-
         /// <summary>
         /// Gets the value of the microchip.
         /// </summary>
-        public int Value { get; }
+        public int Value { get; } = value;
     }
 
     /// <summary>
