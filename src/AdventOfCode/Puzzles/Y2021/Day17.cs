@@ -42,11 +42,9 @@ public sealed class Day17 : Puzzle
         {
             for (int x = 0; x <= maxX; x++)
             {
-                int? apogee = GetApogee(x, y, targetArea);
-
-                if (apogee is not null)
+                if (GetApogee(x, y, targetArea) is { } value)
                 {
-                    apogees.Add(apogee.Value);
+                    apogees.Add(value);
                 }
             }
         }
@@ -70,7 +68,7 @@ public sealed class Day17 : Puzzle
             int minY = Parse<int>(valuesY[0]);
             int maxY = Parse<int>(valuesY[1]);
 
-            return new Rectangle(
+            return new(
                 minX,
                 minY,
                 maxX - minX + 1,

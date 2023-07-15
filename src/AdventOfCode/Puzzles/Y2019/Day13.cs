@@ -67,7 +67,7 @@ public sealed class Day13 : Puzzle
             }
         }
 
-        int initialBlockCount = grid.Values.Count((p) => p == 2);
+        int initialBlockCount = grid.Values.Count((p) => p is 2);
 
         return (initialBlockCount, score);
     }

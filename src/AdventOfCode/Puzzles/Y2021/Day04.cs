@@ -46,11 +46,7 @@ public sealed class Day04 : Puzzle
                 {
                     int score = card.Score();
 
-                    if (firstWinningScore is null)
-                    {
-                        firstWinningScore = score;
-                    }
-
+                    firstWinningScore ??= score;
                     lastWinningScore = score;
                 }
             }

@@ -51,7 +51,7 @@ public sealed class Day14 : Puzzle
 
             char triple = GetTripleCharacter(key);
 
-            if (triple == default(char))
+            if (triple == default)
             {
                 continue;
             }

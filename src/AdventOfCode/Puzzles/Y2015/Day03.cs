@@ -103,7 +103,7 @@ public class Day03 : Puzzle
 
         for (int i = 0; i < instructions.Length; i++)
         {
-            CardinalDirection direction = instructions[i] switch
+            var direction = instructions[i] switch
             {
                 '^' => CardinalDirection.North,
                 'v' => CardinalDirection.South,

@@ -48,7 +48,7 @@ public sealed class Day08 : Puzzle
         {
             int value = Decode(signals, numbers);
 
-            count += Maths.Digits(value).Count((p) => p == 1 || p == 4 || p == 7 || p == 8);
+            count += Maths.Digits(value).Count(static (p) => p is 1 or 4 or 7 or 8);
             sum += value;
         }
 

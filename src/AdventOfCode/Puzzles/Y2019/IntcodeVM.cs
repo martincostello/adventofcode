@@ -257,15 +257,8 @@ internal sealed class IntcodeVM
             int opcode = digits[^1] - '0';
             int parameters = opcode switch
             {
-                1 => 3,
-                2 => 3,
-                3 => 1,
-                4 => 1,
-                5 => 3,
-                6 => 3,
-                7 => 3,
-                8 => 3,
-                9 => 1,
+                1 or 2 or 5 or 6 or 7 or 8 => 3,
+                3 or 4 or 9 => 1,
                 _ => throw new PuzzleException($"{opcode} is not a supported opcode."),
             };
 
@@ -279,8 +272,7 @@ internal sealed class IntcodeVM
 
             int length = opcode switch
             {
-                5 => 0,
-                6 => 0,
+                5 or 6 => 0,
                 _ => parameters + 1,
             };
 

@@ -100,11 +100,7 @@ public sealed class Day17 : Puzzle
         {
             return value switch
             {
-                'b' => true,
-                'c' => true,
-                'd' => true,
-                'e' => true,
-                'f' => true,
+                'b' or 'c' or 'd' or 'e' or 'f' => true,
                 _ => false,
             };
         }

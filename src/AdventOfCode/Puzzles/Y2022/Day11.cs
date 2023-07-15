@@ -79,7 +79,7 @@ public sealed class Day11 : Puzzle
                 monkeys[monkey] = (new(monkey, items), divisor);
             }
 
-            Func<long, long> reducer = highAnxiety ? (p) => p % commonDivisor : (p) => p / 3;
+            Func<long, long> reducer = highAnxiety ? (p) => p % commonDivisor : static (p) => p / 3;
 
             for (int i = 0; i < observations.Count; i += 7)
             {
@@ -97,7 +97,7 @@ public sealed class Day11 : Puzzle
                 {
                     if (operationString == "old")
                     {
-                        monkey.Inspector = (p) => p + p;
+                        monkey.Inspector = static (p) => p + p;
                     }
                     else
                     {
