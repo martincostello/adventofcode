@@ -259,7 +259,7 @@ public sealed class Day20 : Puzzle
                 edgeRows.Add(edgeRow);
             }
 
-            foreach (IList<Tile> row in edgeRows)
+            foreach (var row in edgeRows)
             {
                 Tile first = row[0];
                 Tile last = row[^1];
@@ -577,8 +577,7 @@ public sealed class Day20 : Puzzle
         /// <returns>
         /// The top edge of the tile.
         /// </returns>
-        public string Top()
-            => Grid[0];
+        public string Top() => Grid[0];
 
         /// <summary>
         /// Returns the bottom edge.
@@ -586,8 +585,7 @@ public sealed class Day20 : Puzzle
         /// <returns>
         /// The bottom edge of the tile.
         /// </returns>
-        public string Bottom()
-            => Grid[^1].Mirror();
+        public string Bottom() => Grid[^1].Mirror();
 
         /// <summary>
         /// Returns the left edge.
@@ -609,8 +607,7 @@ public sealed class Day20 : Puzzle
         /// <returns>
         /// The right edge of the tile.
         /// </returns>
-        public string Right()
-            => new(Grid.Select((p) => p[^1]).ToArray());
+        public string Right() => new(Grid.Select((p) => p[^1]).ToArray());
 
         /// <summary>
         /// Tries to align the other tile to this tile's edge.

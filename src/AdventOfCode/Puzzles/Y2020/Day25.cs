@@ -53,10 +53,7 @@ public sealed class Day25 : Puzzle
         }
 
         static long Transform(long value, int subjectNumber)
-        {
-            value *= subjectNumber;
-            return value % 20201227;
-        }
+            => (value *= subjectNumber) % 2020_12_27;
     }
 
     /// <inheritdoc />

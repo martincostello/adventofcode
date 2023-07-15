@@ -226,23 +226,14 @@ public sealed class Day10 : Puzzle
     private sealed class InstructionProcessor
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="InstructionProcessor"/> class.
-        /// </summary>
-        internal InstructionProcessor()
-        {
-            Bins = new Dictionary<int, Bin>();
-            Bots = new Dictionary<int, Bot>();
-        }
-
-        /// <summary>
         /// Gets the output bins, keyed by their number.
         /// </summary>
-        internal Dictionary<int, Bin> Bins { get; }
+        internal Dictionary<int, Bin> Bins { get; } = new();
 
         /// <summary>
         /// Gets the bots, keyed by their number.
         /// </summary>
-        internal Dictionary<int, Bot> Bots { get; }
+        internal Dictionary<int, Bot> Bots { get; } = new();
 
         /// <summary>
         /// Gets or sets a delegate to a method to invoke when to microchips are compared by a bot.

@@ -106,20 +106,17 @@ public sealed partial class Day04 : Puzzle
     /// </returns>
     private static bool IsPasswordVerified(NameValueCollection passport)
     {
-        static bool IsValidEyeColor(string? value)
+        static bool IsValidEyeColor(string? value) => value switch
         {
-            return value switch
-            {
-                "amb" => true,
-                "blu" => true,
-                "brn" => true,
-                "grn" => true,
-                "gry" => true,
-                "hzl" => true,
-                "oth" => true,
-                _ => false,
-            };
-        }
+            "amb" => true,
+            "blu" => true,
+            "brn" => true,
+            "grn" => true,
+            "gry" => true,
+            "hzl" => true,
+            "oth" => true,
+            _ => false,
+        };
 
         static bool IsValidHairColor(string? value)
         {

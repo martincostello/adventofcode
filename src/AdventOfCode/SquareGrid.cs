@@ -46,12 +46,12 @@ public abstract class SquareGrid : IWeightedGraph<Point>
     /// <summary>
     /// Gets the locations within the grid.
     /// </summary>
-    public HashSet<Point> Locations { get; } = new HashSet<Point>();
+    public HashSet<Point> Locations { get; } = new();
 
     /// <summary>
     /// Gets the borders within the grid.
     /// </summary>
-    public HashSet<Point> Borders { get; } = new HashSet<Point>();
+    public HashSet<Point> Borders { get; } = new();
 
     /// <summary>
     /// Returns whether the specified point is in the bounds of the grid.
