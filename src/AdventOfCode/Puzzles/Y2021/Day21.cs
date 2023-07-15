@@ -208,16 +208,10 @@ public sealed class Day21 : Puzzle
         return (new(position1), new(position2));
     }
 
-    private readonly struct Player
+    private readonly struct Player(int position, int score = 0)
     {
-        public readonly int Position;
-        public readonly int Score;
-
-        public Player(int position, int score = 0)
-        {
-            Position = position;
-            Score = score;
-        }
+        public readonly int Position = position;
+        public readonly int Score = score;
 
         public readonly void Deconstruct(out int position, out int score)
         {

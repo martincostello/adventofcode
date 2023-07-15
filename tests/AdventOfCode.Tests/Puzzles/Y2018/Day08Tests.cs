@@ -3,13 +3,8 @@
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2018;
 
-public sealed class Day08Tests : PuzzleTest
+public sealed class Day08Tests(ITestOutputHelper outputHelper) : PuzzleTest(outputHelper)
 {
-    public Day08Tests(ITestOutputHelper outputHelper)
-        : base(outputHelper)
-    {
-    }
-
     [Fact]
     public static void Y2018_Day08_ParseTree_Returns_Correct_Solution()
     {

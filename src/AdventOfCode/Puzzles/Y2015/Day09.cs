@@ -128,15 +128,8 @@ public sealed class Day09 : Puzzle
         }
     }
 
-    private sealed class Map : Graph<string>
+    private sealed class Map(Dictionary<string, int> distances) : Graph<string>
     {
-        private readonly Dictionary<string, int> _distances;
-
-        public Map(Dictionary<string, int> distances)
-        {
-            _distances = distances;
-        }
-
-        public int Cost(string a, string b) => _distances[$"{b} to {a}"];
+        public int Cost(string a, string b) => distances[$"{b} to {a}"];
     }
 }

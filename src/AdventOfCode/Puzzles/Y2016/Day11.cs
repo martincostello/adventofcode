@@ -281,30 +281,14 @@ public sealed class Day11 : Puzzle
     /// <summary>
     /// A class representing a Radioisotope Thermoelectric Generator. This class cannot be inherited.
     /// </summary>
-    private sealed class Generator : Element
+    private sealed class Generator(string name) : Element(name)
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Generator"/> class.
-        /// </summary>
-        /// <param name="name">The name of the element.</param>
-        internal Generator(string name)
-            : base(name)
-        {
-        }
     }
 
     /// <summary>
     /// A class representing a microchip for a Radioisotope Thermoelectric Generator. This class cannot be inherited.
     /// </summary>
-    private sealed class Microchip : Element
+    private sealed class Microchip(string name) : Element(name)
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Microchip"/> class.
-        /// </summary>
-        /// <param name="name">The name of the element.</param>
-        internal Microchip(string name)
-            : base(name)
-        {
-        }
     }
 }
