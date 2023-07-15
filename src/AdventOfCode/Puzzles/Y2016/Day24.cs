@@ -146,13 +146,8 @@ public sealed class Day24 : Puzzle
         return (maze, origin, waypoints);
     }
 
-    private sealed class Maze : SquareGrid
+    private sealed class Maze(int width, int height) : SquareGrid(width, height)
     {
-        public Maze(int width, int height)
-            : base(width, height)
-        {
-        }
-
         public override long Cost(Point a, Point b)
             => a.ManhattanDistance(b);
     }
