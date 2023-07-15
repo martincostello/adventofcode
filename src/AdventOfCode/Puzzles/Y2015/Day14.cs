@@ -69,9 +69,7 @@ public sealed class Day14 : Puzzle
             }
         }
 
-        return scoreboard
-            .Select((p) => p.Value)
-            .Max();
+        return scoreboard.Max((p) => p.Value);
     }
 
     /// <inheritdoc />

@@ -133,10 +133,7 @@ public sealed class Day18 : Puzzle
                     }
                 }
 
-                foreach (long i in products)
-                {
-                    result *= i;
-                }
+                return products.Aggregate(result, static (x, y) => x * y);
             }
 
             return result;

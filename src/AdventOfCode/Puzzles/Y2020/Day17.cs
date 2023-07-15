@@ -1,8 +1,6 @@
 ﻿// Copyright (c) Martin Costello, 2015. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
-using System.Numerics;
-
 namespace MartinCostello.AdventOfCode.Puzzles.Y2020;
 
 /// <summary>
@@ -114,9 +112,7 @@ public sealed class Day17 : Puzzle
                 visualization = WriteState(currentState, logger);
             }
 
-            int activeCubes = currentState.Values
-                .Where((p) => p == Active)
-                .Count();
+            int activeCubes = currentState.Values.Count((p) => p == Active);
 
             return (activeCubes, visualization);
 
@@ -162,19 +158,7 @@ public sealed class Day17 : Puzzle
             return updated;
 
             static int CountActiveCubes(Vector3 point, Dictionary<Vector3, char> states)
-            {
-                int count = 0;
-
-                foreach (Vector3 adjacent in AdjacentCubes(point))
-                {
-                    if (IsAdjacentCubeActive(adjacent, states))
-                    {
-                        count++;
-                    }
-                }
-
-                return count;
-            }
+                => AdjacentCubes(point).Count((p) => IsAdjacentCubeActive(p, states));
 
             static bool IsAdjacentCubeActive(Vector3 position, Dictionary<Vector3, char> states)
                 => states.GetValueOrDefault(position) == Active;

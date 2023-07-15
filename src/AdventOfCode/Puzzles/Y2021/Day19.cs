@@ -1,8 +1,6 @@
 ﻿// Copyright (c) Martin Costello, 2015. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
-using System.Numerics;
-
 namespace MartinCostello.AdventOfCode.Puzzles.Y2021;
 
 /// <summary>
@@ -147,9 +145,15 @@ public sealed class Day19 : Puzzle
 
                     var rotated = unaligned.Select(transformation);
 
-                    int withinReach = rotated
-                        .Where((p) => aligned.Location.ManhattanDistance(first - p) <= MaximumRange)
-                        .Count();
+                    int withinReach = 0;
+
+                    foreach (var item in rotated.Where((p) => aligned.Location.ManhattanDistance(first - p) <= MaximumRange))
+                    {
+                        if (++withinReach >= CommonBeacons)
+                        {
+                            break;
+                        }
+                    }
 
                     if (withinReach < CommonBeacons)
                     {
