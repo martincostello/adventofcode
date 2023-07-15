@@ -163,13 +163,12 @@ public sealed class Day04 : Puzzle
         encryptedName = name[..indexOfLastDash];
         string encryptedNameLetters = encryptedName.Replace("-", string.Empty, StringComparison.Ordinal);
 
-        char[] top5Letters = encryptedNameLetters
+        var top5Letters = encryptedNameLetters
             .GroupBy((p) => p)
             .OrderByDescending((p) => p.Count())
             .ThenBy((p) => p.Key)
             .Take(5)
-            .Select((p) => p.Key)
-            .ToArray();
+            .Select((p) => p.Key);
 
         string computedChecksum = string.Join(string.Empty, top5Letters);
 
