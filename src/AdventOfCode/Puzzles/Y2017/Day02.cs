@@ -46,8 +46,14 @@ public sealed class Day02 : Puzzle
     /// </returns>
     public static int ComputeDifference(ICollection<int> row)
     {
-        int minimum = row.Min();
-        int maximum = row.Max();
+        int minimum = int.MaxValue;
+        int maximum = int.MinValue;
+
+        foreach (int value in row)
+        {
+            minimum = Math.Min(minimum, value);
+            maximum = Math.Max(maximum, value);
+        }
 
         return maximum - minimum;
     }

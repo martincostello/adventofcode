@@ -33,7 +33,22 @@ public sealed class Day01 : Puzzle
         var result = Maths.GetPermutations(expenses, take);
 
         return result
-            .Where((p) => p.Sum() == 2020)
+            .Where((p) =>
+            {
+                int sum = 0;
+
+                foreach (int value in p)
+                {
+                    sum += value;
+
+                    if (sum > 2020)
+                    {
+                        break;
+                    }
+                }
+
+                return sum is 2020;
+            })
             .Select((p) => p.Aggregate((x, y) => x * y))
             .First();
     }

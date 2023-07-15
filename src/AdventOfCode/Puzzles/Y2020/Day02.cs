@@ -60,11 +60,7 @@ public sealed class Day02 : Puzzle
     /// The number of valid passwords in the specified set.
     /// </returns>
     public static int GetValidPasswordCount(IEnumerable<string> values, int policyVersion)
-    {
-        return values
-            .Where((p) => IsPasswordValid(p, policyVersion))
-            .Count();
-    }
+        => values.Count((p) => IsPasswordValid(p, policyVersion));
 
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
