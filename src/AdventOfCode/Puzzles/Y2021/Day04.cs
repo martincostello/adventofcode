@@ -73,7 +73,7 @@ public sealed class Day04 : Puzzle
 
     private static List<BingoCard> ParseCards(IEnumerable<string> game)
     {
-        var lines = new List<string>();
+        var lines = new List<string>(5);
         var cards = new List<BingoCard>();
 
         foreach (string line in game.Skip(2))

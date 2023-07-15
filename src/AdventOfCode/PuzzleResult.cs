@@ -11,12 +11,12 @@ public sealed class PuzzleResult
     /// <summary>
     /// Gets the solution(s) to the puzzle.
     /// </summary>
-    public IList<object> Solutions { get; private set; } = new List<object>();
+    public IList<object> Solutions { get; private set; } = new List<object>(2);
 
     /// <summary>
     /// Gets the visualization(s) associated with the puzzle, if any.
     /// </summary>
-    public IList<string> Visualizations { get; private set; } = new List<string>();
+    public IList<string> Visualizations { get; private set; } = new List<string>(2);
 
     /// <summary>
     /// Converts a puzzle result to a <see cref="Task{PuzzleResult}"/>.
