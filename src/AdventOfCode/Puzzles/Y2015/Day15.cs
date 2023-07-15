@@ -233,62 +233,43 @@ public sealed class Day15 : Puzzle
     /// <summary>
     /// A structure representing an ingredient.
     /// </summary>
-    private readonly struct Ingredient
+    /// <param name="name">The name.</param>
+    /// <param name="calories">The calories.</param>
+    /// <param name="capacity">The capacity.</param>
+    /// <param name="durability">The durability.</param>
+    /// <param name="flavor">The flavor.</param>
+    /// <param name="texture">The texture.</param>
+    private readonly struct Ingredient(string name, int calories, int capacity, int durability, int flavor, int texture)
     {
         /// <summary>
         /// Gets or sets the name of the ingredient.
         /// </summary>
-        internal readonly string Name;
+        internal readonly string Name = name;
 
         /// <summary>
         /// Gets the calories.
         /// </summary>
-        internal readonly int Calories;
+        internal readonly int Calories = calories;
 
         /// <summary>
         /// Gets the capacity.
         /// </summary>
-        internal readonly int Capacity;
+        internal readonly int Capacity = capacity;
 
         /// <summary>
         /// Gets the durability.
         /// </summary>
-        internal readonly int Durability;
+        internal readonly int Durability = durability;
 
         /// <summary>
         /// Gets the flavor.
         /// </summary>
-        internal readonly int Flavor;
+        internal readonly int Flavor = flavor;
 
         /// <summary>
         /// Gets the texture.
         /// </summary>
-        internal readonly int Texture;
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Ingredient"/> struct.
-        /// </summary>
-        /// <param name="name">The name.</param>
-        /// <param name="calories">The calories.</param>
-        /// <param name="capacity">The capacity.</param>
-        /// <param name="durability">The durability.</param>
-        /// <param name="flavor">The flavor.</param>
-        /// <param name="texture">The texture.</param>
-        private Ingredient(
-            string name,
-            int calories,
-            int capacity,
-            int durability,
-            int flavor,
-            int texture)
-        {
-            Name = name;
-            Calories = calories;
-            Capacity = capacity;
-            Durability = durability;
-            Flavor = flavor;
-            Texture = texture;
-        }
+        internal readonly int Texture = texture;
 
         /// <summary>
         /// Parses the specified <see cref="string"/> to an instance of <see cref="Ingredient"/>.

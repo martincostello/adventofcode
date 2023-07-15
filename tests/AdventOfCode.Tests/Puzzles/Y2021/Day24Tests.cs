@@ -3,13 +3,8 @@
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2021;
 
-public sealed class Day24Tests : PuzzleTest
+public sealed class Day24Tests(ITestOutputHelper outputHelper) : PuzzleTest(outputHelper)
 {
-    public Day24Tests(ITestOutputHelper outputHelper)
-        : base(outputHelper)
-    {
-    }
-
     [Fact]
     public async Task Y2021_Day24_Solve_Returns_Correct_Solution()
     {
