@@ -3,20 +3,8 @@
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2016;
 
-/// <summary>
-/// A class containing tests for the <see cref="Day21"/> class. This class cannot be inherited.
-/// </summary>
-public sealed class Day21Tests : PuzzleTest
+public sealed class Day21Tests(ITestOutputHelper outputHelper) : PuzzleTest(outputHelper)
 {
-    /// <summary>
-    /// Initializes a new instance of the <see cref="Day21Tests"/> class.
-    /// </summary>
-    /// <param name="outputHelper">The <see cref="ITestOutputHelper"/> to use.</param>
-    public Day21Tests(ITestOutputHelper outputHelper)
-        : base(outputHelper)
-    {
-    }
-
     [Theory]
     [InlineData(new[] { 'a', 'b', 'c', 'd', 'f', 'e', 'g', 'h' }, 2, 5, new[] { 'a', 'b', 'e', 'f', 'd', 'c', 'g', 'h' })]
     public static void Y2016_Day21_Reverse_Returns_Correct_Solution(char[] values, int start, int end, IEnumerable<char> expected)

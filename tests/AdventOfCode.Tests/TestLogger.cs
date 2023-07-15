@@ -7,22 +7,9 @@ namespace MartinCostello.AdventOfCode;
 /// A class representing an implementation of <see cref="ILogger"/> that
 /// logs to the XUnit output. This class cannot be inherited.
 /// </summary>
-internal sealed class TestLogger : ILogger
+/// <param name="outputHelper">The <see cref="ITestOutputHelper"/> to use.</param>
+internal sealed class TestLogger(ITestOutputHelper outputHelper) : ILogger
 {
-    /// <summary>
-    /// Initializes a new instance of the <see cref="TestLogger"/> class.
-    /// </summary>
-    /// <param name="outputHelper">The <see cref="ITestOutputHelper"/> to use.</param>
-    internal TestLogger(ITestOutputHelper outputHelper)
-    {
-        OutputHelper = outputHelper;
-    }
-
-    /// <summary>
-    /// Gets the <see cref="ITestOutputHelper"/> to use.
-    /// </summary>
-    private ITestOutputHelper OutputHelper { get; }
-
     /// <inheritdoc />
     public string WriteGrid(bool[,] array, char falseChar, char trueChar)
     {
@@ -46,12 +33,12 @@ internal sealed class TestLogger : ILogger
 
         string result = builder.ToString();
 
-        OutputHelper.WriteLine(result);
+        outputHelper.WriteLine(result);
 
         return result;
     }
 
     /// <inheritdoc />
     public void WriteLine(string format, params object[] args)
-        => OutputHelper.WriteLine(format, args);
+        => outputHelper.WriteLine(format, args);
 }
