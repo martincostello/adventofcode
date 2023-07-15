@@ -1,4 +1,3 @@
-
 root = true
 
 [*]
@@ -7,6 +6,8 @@ end_of_line = crlf
 indent_size = 4
 indent_style = space
 insert_final_newline = true
+spelling_exclusion_path = .\exclusion.dic
+spelling_languages = en-us
 trim_trailing_whitespace = true
 
 [*.{config,csproj,json,props,ruleset,targets,vsconfig,yml}]
