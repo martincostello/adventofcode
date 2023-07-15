@@ -28,7 +28,7 @@ public sealed class Day25 : Puzzle
         row--;
         column--;
 
-        ulong result = 20151125;
+        ulong result = 2015_11_25;
 
         var current = new Point(0, 0);
         var target = new Point(column, row);
@@ -58,8 +58,8 @@ public sealed class Day25 : Puzzle
     /// </returns>
     internal static ulong GenerateCode(ulong value)
     {
-        ulong result = value * 252533;
-        return result % 33554393;
+        ulong result = value * 252_533;
+        return result % 33_554_393;
     }
 
     /// <inheritdoc />

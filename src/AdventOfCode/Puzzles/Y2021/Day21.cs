@@ -40,7 +40,7 @@ public sealed class Day21 : Puzzle
         var deterministicDie = Roll3D100();
         using var die = deterministicDie.GetEnumerator();
 
-        const long WinningScore = 1000;
+        const long WinningScore = 1_000;
 
         while (player1.Score < WinningScore && player2.Score < WinningScore && die.MoveNext())
         {

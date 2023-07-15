@@ -90,7 +90,7 @@ public sealed class Day22 : Puzzle
         string difficulty = args.Length == 1 ? args[0] : "easy";
 
         // Play the game 100,000 times with random choices of spells
-        const int Iterations = 100000;
+        const int Iterations = 100_000;
 
         var solutions = new List<(bool DidWizardWin, int ManaSpent)>(Iterations);
 

@@ -15,7 +15,7 @@ public sealed class Day15 : Puzzle
     public int Number2020 { get; private set; }
 
     /// <summary>
-    /// Gets the 30000000th number spoken.
+    /// Gets the 30,000,000th number spoken.
     /// </summary>
     public int Number30000000 { get; private set; }
 

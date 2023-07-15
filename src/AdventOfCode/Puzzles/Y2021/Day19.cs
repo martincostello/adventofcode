@@ -129,7 +129,7 @@ public sealed class Day19 : Puzzle
             // see https://en.wikipedia.org/wiki/Pigeonhole_principle)
             // to reduce the space of coordinates we need to search.
             const int CommonBeacons = 12;
-            const float MaximumRange = 3000;
+            const float MaximumRange = 3_000;
 
             foreach (Vector3 first in aligned.Skip(CommonBeacons))
             {

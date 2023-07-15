@@ -80,7 +80,7 @@ public sealed class Day17 : Puzzle
         string jets = (await ReadResourceAsStringAsync(cancellationToken)).Trim();
 
         Height2022 = GetHeightOfTower(jets.Trim(), count: 2022, cancellationToken);
-        HeightTrillion = GetHeightOfTower(jets.Trim(), count: 1000000000000, cancellationToken);
+        HeightTrillion = GetHeightOfTower(jets.Trim(), count: 1_000_000_000_000, cancellationToken);
 
         if (Verbose)
         {
