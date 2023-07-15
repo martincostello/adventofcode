@@ -98,7 +98,6 @@ public sealed class Day08 : Puzzle
             {
                 for (y = 0; y < height; y++)
                 {
-                    int background = finalLayer[x, y];
                     int foreground = layer[x, y];
 
                     if (foreground != 2)
