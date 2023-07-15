@@ -153,13 +153,8 @@ public sealed class Day13 : Puzzle
             cancellationToken);
     }
 
-    private sealed class Maze : SquareGrid
+    private sealed class Maze(int width, int height) : SquareGrid(width, height)
     {
-        public Maze(int width, int height)
-            : base(width, height)
-        {
-        }
-
         public override long Cost(Point a, Point b)
             => Locations.Contains(b) ? 5 : 1;
     }

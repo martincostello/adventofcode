@@ -88,17 +88,9 @@ public sealed class Day09 : Puzzle
     /// <summary>
     /// A class representing a rope.
     /// </summary>
-    public sealed class Rope
+    /// <param name="knots">The positions of the knots of the rope.</param>
+    public sealed class Rope(params Point[] knots)
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Rope"/> class.
-        /// </summary>
-        /// <param name="knots">The positions of the knots of the rope.</param>
-        public Rope(params Point[] knots)
-        {
-            Knots = knots;
-        }
-
         /// <summary>
         /// Gets the number of knots in the rope.
         /// </summary>
@@ -125,7 +117,7 @@ public sealed class Day09 : Puzzle
         /// <summary>
         /// Gets the positions of all the knots in the rope.
         /// </summary>
-        public IList<Point> Knots { get; }
+        public IList<Point> Knots { get; } = knots;
 
         /// <summary>
         /// Moves the rope in the specified direction.

@@ -103,23 +103,15 @@ public sealed class Day08 : Puzzle
         return PuzzleResult.Create(SumOfMetadata, RootNodeValue);
     }
 
-    private sealed class Node
+    private sealed class Node(int childCount, int metadataCount)
     {
-        public Node(int childCount, int metadataCount)
-        {
-            ChildCount = childCount;
-            MetadataCount = metadataCount;
-            Children = new(childCount);
-            Metadata = new(metadataCount);
-        }
+        public int ChildCount { get; init; } = childCount;
 
-        public int ChildCount { get; init; }
+        public int MetadataCount { get; init; } = metadataCount;
 
-        public int MetadataCount { get; init; }
+        public List<Node> Children { get; } = new(childCount);
 
-        public List<Node> Children { get; }
-
-        public List<int> Metadata { get; }
+        public List<int> Metadata { get; } = new(metadataCount);
 
         public long MetadataSum { get; set; }
 
