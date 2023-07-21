@@ -13,7 +13,8 @@ jobs:
     uses: martincostello/update-dotnet-sdk/.github/workflows/update-dotnet-sdk.yml@dotnet-nightly
     with:
       labels: "dependencies,.NET"
-      use-daily-builds: true
+      channel: '8.0.1xx-preview7'
+      quality: 'daily'
       user-email: ${{ vars.GIT_COMMIT_USER_EMAIL }}
       user-name: ${{ vars.GIT_COMMIT_USER_NAME }}
     secrets:
