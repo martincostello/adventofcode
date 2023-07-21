@@ -92,8 +92,6 @@ jobs:
 
     - name: Build, test and publish
       shell: pwsh
-      env:
-        DOTNET_JitEnablePhysicalPromotion: '0' # HACK Workaround for https://github.com/dotnet/runtime/issues/88842
 
       run: ./build.ps1 -Runtime "${{ env.PUBLISH_RUNTIME }}"
 
