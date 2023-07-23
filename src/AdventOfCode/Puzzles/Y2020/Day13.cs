@@ -32,7 +32,7 @@ public sealed class Day13 : Puzzle
 
         int[] buses = notes[1]
             .Split(',')
-            .Where((p) => !string.Equals(p, "x", StringComparison.Ordinal))
+            .Where((p) => p is not "x")
             .Select(Parse<int>)
             .ToArray();
 
@@ -70,7 +70,7 @@ public sealed class Day13 : Puzzle
         var buses = notes[1]
             .Split(',')
             .Select((id, offset) => (id, offset))
-            .Where((p) => !string.Equals(p.id, "x", StringComparison.Ordinal))
+            .Where((p) => p.id is not "x")
             .Select((p) => (id: Parse<long>(p.id), p.offset))
             .OrderByDescending((p) => p.id)
             .ToList();

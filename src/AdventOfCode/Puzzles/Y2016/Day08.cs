@@ -194,7 +194,7 @@ public sealed class Day08 : Puzzle
 
             case "rotate":
                 result.IsRotation = true;
-                result.IsColumn = string.Equals(split[1], "column", StringComparison.Ordinal);
+                result.IsColumn = split[1] is "column";
                 result.A = Parse<int>(split[2].Split('=')[1]);
                 result.B = Parse<int>(split[4]);
                 break;

@@ -163,7 +163,7 @@ public sealed class Day07 : Puzzle
         {
             const string Delimiter = " bags contain ";
 
-            int index = rule.IndexOf(Delimiter, StringComparison.Ordinal);
+            int index = rule.AsSpan().IndexOf(Delimiter);
 
             string thisColor = rule[0..index];
             string contents = rule[(index + Delimiter.Length)..^1];
@@ -174,7 +174,7 @@ public sealed class Day07 : Puzzle
 
             foreach (string bag in split)
             {
-                if (string.Equals(bag, "no other bags", StringComparison.Ordinal))
+                if (bag is "no other bags")
                 {
                     break;
                 }

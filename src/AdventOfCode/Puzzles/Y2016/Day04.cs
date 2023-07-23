@@ -52,7 +52,7 @@ public sealed class Day04 : Puzzle
         {
             string decryptedName = DecryptRoomName(name, out string sectorIdString);
 
-            if (string.Equals("northpole object storage", decryptedName, StringComparison.Ordinal))
+            if (decryptedName is "northpole object storage")
             {
                 return Parse<int>(sectorIdString);
             }
@@ -152,18 +152,19 @@ public sealed class Day04 : Puzzle
     /// </returns>
     private static bool IsRoomReal(string name, out string encryptedName, out string sectorId)
     {
-        int indexOfChecksum = name.IndexOf('[', StringComparison.Ordinal);
+        var nameSpan = name.AsSpan();
+        int indexOfChecksum = nameSpan.IndexOf('[');
 
         string checksum = name.Substring(indexOfChecksum + 1, 5);
 
-        int indexOfLastDash = name.LastIndexOf('-');
+        int indexOfLastDash = nameSpan.LastIndexOf('-');
 
         sectorId = name.Substring(indexOfLastDash + 1, indexOfChecksum - indexOfLastDash - 1);
 
         encryptedName = name[..indexOfLastDash];
-        string encryptedNameLetters = encryptedName.Replace("-", string.Empty, StringComparison.Ordinal);
 
-        var top5Letters = encryptedNameLetters
+        var top5Letters = encryptedName
+            .Where((p) => p is not '-')
             .GroupBy((p) => p)
             .OrderByDescending((p) => p.Count())
             .ThenBy((p) => p.Key)

@@ -68,11 +68,11 @@ public sealed class Day07 : Puzzle
             {
                 string line = terminalOutput[i];
 
-                if (line.StartsWith("$ cd ", StringComparison.Ordinal))
+                if (line.AsSpan().StartsWith("$ cd "))
                 {
                     string name = line[5..];
 
-                    if (name == "..")
+                    if (name is "..")
                     {
                         current = current.Parent!;
                     }
@@ -89,7 +89,7 @@ public sealed class Day07 : Puzzle
                         current = directory;
                     }
                 }
-                else if (line.StartsWith("$ ls", StringComparison.Ordinal))
+                else if (line.AsSpan().StartsWith("$ ls"))
                 {
                     i += ParseEntries(current, terminalOutput[(i + 1)..]);
 
@@ -119,14 +119,14 @@ public sealed class Day07 : Puzzle
                     count = i;
                     break;
                 }
-                else if (item.StartsWith("dir ", StringComparison.Ordinal))
+                else if (item.AsSpan().StartsWith("dir "))
                 {
                     current.Children.Add(new Directory(item[4..], current, new()));
                 }
                 else
                 {
-                    string[] split = item.Split(' ');
-                    current.Children.Add(new File(split[1], current, Parse<long>(split[0])));
+                    (string first, string second) = item.AsPair(' ');
+                    current.Children.Add(new File(second, current, Parse<long>(first)));
                 }
             }
 

@@ -198,11 +198,11 @@ public sealed class Day04 : Puzzle
             int? id = null;
             bool? wakefulness = null;
 
-            if (string.Equals(firstWord, "wakes", StringComparison.Ordinal))
+            if (firstWord is "wakes")
             {
                 wakefulness = true;
             }
-            else if (string.Equals(firstWord, "falls", StringComparison.Ordinal))
+            else if (firstWord is "falls")
             {
                 wakefulness = false;
             }

@@ -94,11 +94,11 @@ public sealed class Day11 : Puzzle
             {
                 string value = split[j].TrimEnd(',');
 
-                if (string.Equals(value, "generator", StringComparison.Ordinal))
+                if (value is "generator")
                 {
                     items.Add(new Generator(split[j - 1]));
                 }
-                else if (string.Equals(value, "microchip", StringComparison.Ordinal))
+                else if (value is "microchip")
                 {
                     items.Add(new Microchip(split[j - 1].Replace("-compatible", string.Empty, StringComparison.Ordinal)));
                 }

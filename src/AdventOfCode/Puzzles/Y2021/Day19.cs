@@ -98,13 +98,15 @@ public sealed class Day19 : Puzzle
 
             foreach (string value in data.Skip(1))
             {
-                if (string.IsNullOrEmpty(value))
+                var valueSpan = value.AsSpan();
+
+                if (valueSpan.IsEmpty)
                 {
                     scanners.Add(current);
                     continue;
                 }
 
-                if (value.StartsWith("---", StringComparison.Ordinal))
+                if (valueSpan.StartsWith("---"))
                 {
                     current = new() { Id = current.Id + 1 };
                     continue;

@@ -411,14 +411,16 @@ public sealed class Day20 : Puzzle
 
             foreach (string line in tiles)
             {
-                if (string.IsNullOrEmpty(line))
+                var lineSpan = line.AsSpan();
+
+                if (lineSpan.IsEmpty)
                 {
                     image[id] = new Tile(grid.ToArray(), id);
                     grid.Clear();
                 }
-                else if (line.StartsWith("Tile ", StringComparison.Ordinal))
+                else if (lineSpan.StartsWith("Tile ", StringComparison.Ordinal))
                 {
-                    id = Parse<long>(line[5..^1].AsSpan());
+                    id = Parse<long>(lineSpan[5..^1]);
                 }
                 else
                 {

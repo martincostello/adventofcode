@@ -131,7 +131,7 @@ public sealed class Day22 : Puzzle
             int lengthZ = maxZ - minZ + 1;
 
             var cuboid = new Cuboid(new(minX, minY, minZ), new(lengthX, lengthY, lengthZ));
-            bool turnOn = string.Equals(state, "on", StringComparison.Ordinal);
+            bool turnOn = state is "on";
 
             return (cuboid, turnOn);
         }

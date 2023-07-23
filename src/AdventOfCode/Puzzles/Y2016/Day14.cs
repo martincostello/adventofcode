@@ -150,9 +150,9 @@ public sealed class Day14 : Puzzle
     /// <see langword="true"/> if <paramref name="value"/> contains that character
     /// specified by <paramref name="ch"/> five times consecutively.
     /// </returns>
-    private static bool HasFiveRepetitionsOfCharacter(string value, char ch)
+    private static bool HasFiveRepetitionsOfCharacter(ReadOnlySpan<char> value, char ch)
     {
-        int start = value.IndexOf(ch, StringComparison.Ordinal);
+        int start = value.IndexOf(ch);
 
         if (start > -1)
         {
