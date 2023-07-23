@@ -59,26 +59,20 @@ public sealed class Day14 : Puzzle
             int next = i + 1;
             int last = next + 1000;
 
-            bool found5InARow = false;
+            string quintuple = new(triple, 5);
 
             for (int j = next; j <= last; j++)
             {
                 value = salt + j.ToString(CultureInfo.InvariantCulture);
                 key = GenerateKey(value, useKeyStretching, cache);
 
-                if (HasFiveRepetitionsOfCharacter(key, triple))
+                if (key.Contains(quintuple, StringComparison.Ordinal))
                 {
-                    found5InARow = true;
-                    break;
-                }
-            }
+                    if (++current != ordinal)
+                    {
+                        break;
+                    }
 
-            if (found5InARow)
-            {
-                current++;
-
-                if (current == ordinal)
-                {
                     return i;
                 }
             }
@@ -138,38 +132,6 @@ public sealed class Day14 : Puzzle
         }
 
         return result;
-    }
-
-    /// <summary>
-    /// Returns whether the specified <see cref="string"/> contains five consecutive
-    /// occurrences of the specified character.
-    /// </summary>
-    /// <param name="value">The value to search for five consecutive characters in.</param>
-    /// <param name="ch">The character to search for five consecutive occurrences of.</param>
-    /// <returns>
-    /// <see langword="true"/> if <paramref name="value"/> contains that character
-    /// specified by <paramref name="ch"/> five times consecutively.
-    /// </returns>
-    private static bool HasFiveRepetitionsOfCharacter(ReadOnlySpan<char> value, char ch)
-    {
-        int start = value.IndexOf(ch);
-
-        if (start > -1)
-        {
-            for (int i = start; i < value.Length - 4; i++)
-            {
-                if (value[i] == ch &&
-                    value[i + 1] == ch &&
-                    value[i + 2] == ch &&
-                    value[i + 3] == ch &&
-                    value[i + 4] == ch)
-                {
-                    return true;
-                }
-            }
-        }
-
-        return false;
     }
 
     /// <summary>
