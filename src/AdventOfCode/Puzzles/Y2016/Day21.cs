@@ -139,20 +139,20 @@ public sealed class Day21 : Puzzle
 
             case "rotate":
 
-                if (string.Equals(split[1], "based", StringComparison.Ordinal))
+                if (split[1] is "based")
                 {
                     RotatePosition(values, split[6], reverse);
                 }
                 else
                 {
-                    RotateDirection(values, string.Equals(split[1], "right", StringComparison.Ordinal), Parse<int>(split[2]), reverse);
+                    RotateDirection(values, split[1] is "right", Parse<int>(split[2]), reverse);
                 }
 
                 break;
 
             case "swap":
 
-                if (string.Equals(split[1], "position", StringComparison.Ordinal))
+                if (split[1] is "position")
                 {
                     SwapPosition(values, Parse<int>(split[2]), Parse<int>(split[5]));
                 }

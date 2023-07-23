@@ -282,12 +282,12 @@ public sealed class Day23 : Puzzle
             return result.Insert(index, char.ToString(moved));
         }
 
-        private static bool TryVacate(string burrow, out char moved, [NotNullWhen(true)] out string? vacated)
+        private static bool TryVacate(ReadOnlySpan<char> burrow, out char moved, [NotNullWhen(true)] out string? vacated)
         {
             moved = default;
             vacated = default;
 
-            if (string.IsNullOrWhiteSpace(burrow))
+            if (burrow.IsEmpty)
             {
                 return false;
             }
@@ -295,7 +295,7 @@ public sealed class Day23 : Puzzle
             int toMove = burrow.LastIndexOf(' ') + 1;
 
             moved = burrow[toMove];
-            vacated = string.Concat(new string(' ', toMove + 1), burrow.AsSpan(toMove + 1));
+            vacated = string.Concat(new string(' ', toMove + 1), burrow[(toMove + 1)..]);
 
             return true;
         }

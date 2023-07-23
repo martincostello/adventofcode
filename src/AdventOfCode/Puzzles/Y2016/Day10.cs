@@ -250,13 +250,13 @@ public sealed class Day10 : Puzzle
             OnCompare = onCompare;
 
             // Process instructions that set up the connections
-            foreach (string instruction in instructions.Where((p) => p.StartsWith("bot", StringComparison.Ordinal)))
+            foreach (string instruction in instructions.Where((p) => p.AsSpan().StartsWith("bot")))
             {
                 Process(instruction);
             }
 
             // Process instructions that assign the microchips
-            foreach (string instruction in instructions.Where((p) => p.StartsWith("value", StringComparison.Ordinal)))
+            foreach (string instruction in instructions.Where((p) => p.AsSpan().StartsWith("value")))
             {
                 Process(instruction);
             }
@@ -268,9 +268,9 @@ public sealed class Day10 : Puzzle
         /// <param name="instruction">The instruction to process.</param>
         private void Process(string instruction)
         {
-            string[] split = instruction.Split(' ');
+            var split = instruction.Split(' ').AsSpan();
 
-            if (string.Equals(split[0], "value", StringComparison.Ordinal))
+            if (split[0] is "value")
             {
                 int chipValue = Parse<int>(split[1]);
                 int botNumber = Parse<int>(split[5]);
@@ -279,10 +279,10 @@ public sealed class Day10 : Puzzle
             }
             else
             {
-                bool isHighBot = string.Equals("bot", split[10], StringComparison.Ordinal);
+                bool isHighBot = split[10] is "bot";
                 int highValue = Parse<int>(split[11]);
 
-                bool isLowBot = string.Equals("bot", split[5], StringComparison.Ordinal);
+                bool isLowBot = split[5] is "bot";
                 int lowValue = Parse<int>(split[6]);
 
                 int botNumber = Parse<int>(split[1]);

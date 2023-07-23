@@ -93,10 +93,10 @@ public sealed class Day23 : Puzzle
 
         var circle = Play(arrangement, moves: 100);
 
-        string final = string.Join(string.Empty, circle);
-        int index = final.IndexOf('1', StringComparison.Ordinal);
+        var final = string.Join(string.Empty, circle).AsSpan();
+        int index = final.IndexOf('1');
 
-        LabelsAfterCup1 = final[(index + 1)..] + final[..index];
+        LabelsAfterCup1 = string.Concat(final[(index + 1)..], final[..index]);
 
         arrangement = arrangement.Concat(Enumerable.Range(10, 999_991));
 

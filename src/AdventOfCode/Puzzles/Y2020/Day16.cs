@@ -181,7 +181,7 @@ public sealed class Day16 : Puzzle
         ScanningErrorRate = scanningErrorRate;
 
         DepartureProduct = ticket
-            .Where((p) => p.Key.StartsWith("departure", StringComparison.Ordinal))
+            .Where((p) => p.Key.AsSpan().StartsWith("departure"))
             .Select((p) => (long)p.Value)
             .Aggregate((x, y) => x * y);
 

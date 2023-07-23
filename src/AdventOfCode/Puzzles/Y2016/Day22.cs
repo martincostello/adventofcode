@@ -228,11 +228,12 @@ public sealed class Day22 : Puzzle
         {
             string[] split = value.Split(' ', StringSplitOptions.RemoveEmptyEntries);
 
-            int indexX = split[0].IndexOf('x', StringComparison.Ordinal);
-            int indexY = split[0].IndexOf('y', StringComparison.Ordinal);
+            var first = split[0].AsSpan();
+            int indexX = first.IndexOf('x');
+            int indexY = first.IndexOf('y');
 
-            int x = Parse<int>(split[0].AsSpan().Slice(indexX + 1, indexY - indexX - 2));
-            int y = Parse<int>(split[0].AsSpan()[(indexY + 1)..]);
+            int x = Parse<int>(first.Slice(indexX + 1, indexY - indexX - 2));
+            int y = Parse<int>(first[(indexY + 1)..]);
 
             return new Node(
                 split[0],

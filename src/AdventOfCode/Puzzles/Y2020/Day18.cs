@@ -104,11 +104,11 @@ public sealed class Day18 : Puzzle
                 {
                     string token = tokens[i];
 
-                    if (string.Equals("+", token, StringComparison.Ordinal))
+                    if (token is "+")
                     {
                         result += Parse<long>(tokens[i + 1]);
                     }
-                    else if (string.Equals("*", token, StringComparison.Ordinal))
+                    else if (token is "*")
                     {
                         result *= Parse<long>(tokens[i + 1]);
                     }
@@ -122,11 +122,11 @@ public sealed class Day18 : Puzzle
                 {
                     string token = tokens[i];
 
-                    if (string.Equals("+", token, StringComparison.Ordinal))
+                    if (token is "+")
                     {
                         result += Parse<long>(tokens[i + 1]);
                     }
-                    else if (string.Equals("*", token, StringComparison.Ordinal))
+                    else if (token is "*")
                     {
                         products.Add(result);
                         result = Parse<long>(tokens[i + 1]);

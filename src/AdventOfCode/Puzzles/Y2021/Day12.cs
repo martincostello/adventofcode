@@ -91,7 +91,7 @@ public sealed class Day12 : Puzzle
             foreach (string next in graph.Neighbors(current))
             {
                 // Never return to the first cave
-                if (string.Equals(next, "start", StringComparison.Ordinal))
+                if (next is "start")
                 {
                     continue;
                 }
