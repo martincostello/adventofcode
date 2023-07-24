@@ -1,6 +1,6 @@
 <Project>
   <PropertyGroup>
-    <MicrosoftICUICU4CRuntimeVersion>68.2.0.9</MicrosoftICUICU4CRuntimeVersion>
+    <MicrosoftICUICU4CRuntimeVersion>72.1.0.1</MicrosoftICUICU4CRuntimeVersion>
   </PropertyGroup>
   <ItemGroup>
     <PackageVersion Include="Amazon.Lambda.AspNetCoreServer.Hosting" Version="1.6.0" />
