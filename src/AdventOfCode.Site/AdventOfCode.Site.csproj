@@ -42,7 +42,7 @@
   <ItemGroup Condition=" '$(RuntimeIdentifier)' == 'linux-arm64' ">
     <PackageReference Include="Microsoft.ICU.ICU4C.Runtime" />
   </ItemGroup>
-  <Target Name="SetAppLocalIcuVersion" BeforeTargets="Compile">
+  <Target Name="SetAppLocalIcuVersion" BeforeTargets="Compile" Condition=" '$(RuntimeIdentifier)' == 'linux-arm64' ">
     <ItemGroup>
       <RuntimeHostConfigurationOption Condition=" '%(PackageVersion.Identity)' == 'Microsoft.ICU.ICU4C.Runtime' " Include="System.Globalization.AppLocalIcu" Value="%(PackageVersion.Version)" />
     </ItemGroup>
