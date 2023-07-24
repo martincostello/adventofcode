@@ -19,10 +19,6 @@
     <PackageReference Include="Microsoft.TypeScript.MSBuild" PrivateAssets="all" />
     <PackageReference Include="Swashbuckle.AspNetCore" />
   </ItemGroup>
-  <ItemGroup Condition=" '$(RuntimeIdentifier)' == 'linux-arm64' ">
-    <PackageReference Include="Microsoft.ICU.ICU4C.Runtime" />
-    <RuntimeHostConfigurationOption Include="System.Globalization.AppLocalIcu" Value="$(MicrosoftICUICU4CRuntimeVersion)" />
-  </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\AdventOfCode\AdventOfCode.csproj" />
   </ItemGroup>
@@ -39,5 +35,16 @@
     <Exec Command="npm install" Condition=" !Exists('$(MSBuildThisFileDirectory)\node_modules') AND '$(GITHUB_ACTIONS)' == '' " />
     <Exec Command="npm run build" Condition=" !Exists('$(MSBuildThisFileDirectory)\wwwroot\static\js\main.js') " />
     <Exec Command="npm run test" Condition=" !Exists('$(MSBuildThisFileDirectory)\coverage') AND'$(GITHUB_ACTIONS)' != '' AND '$(SKIP_NPM_TEST)' != 'true' " />
+  </Target>
+  <!--
+    HACK Workaround for https://github.com/aws/aws-lambda-dotnet/issues/920
+  -->
+  <ItemGroup Condition=" '$(RuntimeIdentifier)' == 'linux-arm64' ">
+    <PackageReference Include="Microsoft.ICU.ICU4C.Runtime" />
+  </ItemGroup>
+  <Target Name="SetAppLocalIcuVersion" BeforeTargets="Compile">
+    <ItemGroup>
+      <RuntimeHostConfigurationOption Condition=" '%(PackageVersion.Identity)' == 'Microsoft.ICU.ICU4C.Runtime' " Include="System.Globalization.AppLocalIcu" Value="%(PackageVersion.Version)" />
+    </ItemGroup>
   </Target>
 </Project>
