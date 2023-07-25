@@ -124,7 +124,8 @@ app.MapRazorPages();
 
 app.MapGet("/api/puzzles", PuzzlesApi.GetPuzzlesAsync);
 
-app.MapPost("/api/puzzles/{year:int}/{day:int}/solve", PuzzlesApi.SolvePuzzleAsync);
+app.MapPost("/api/puzzles/{year:int}/{day:int}/solve", PuzzlesApi.SolvePuzzleAsync)
+   .DisableAntiforgery();
 
 if (app.Environment.IsDevelopment())
 {
