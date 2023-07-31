@@ -73,8 +73,7 @@ public sealed class HttpServerFixture : WebApplicationFactory<Site.Program>, ITe
     /// <inheritdoc />
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
-        builder.ConfigureLogging((loggingBuilder) => loggingBuilder.ClearProviders().AddXUnit(this))
-               .UseSolutionRelativeContentRoot(Path.Combine("src", "AdventOfCode"));
+        builder.ConfigureLogging((loggingBuilder) => loggingBuilder.ClearProviders().AddXUnit(this));
 
         builder.ConfigureKestrel(
             (p) => p.ConfigureHttpsDefaults(
