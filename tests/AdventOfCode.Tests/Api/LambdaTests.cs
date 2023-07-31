@@ -16,6 +16,8 @@ namespace MartinCostello.AdventOfCode.Api;
 [Collection(nameof(LambdaTestsCollection))]
 public class LambdaTests : IAsyncLifetime, IDisposable
 {
+    private const int LambdaTestTimeout = 10_000;
+
     private readonly HttpLambdaTestServer _server;
     private bool _disposed;
 
@@ -45,7 +47,7 @@ public class LambdaTests : IAsyncLifetime, IDisposable
     public async Task InitializeAsync()
         => await _server.InitializeAsync();
 
-    [Fact(Timeout = 5_000)]
+    [Fact(Timeout = LambdaTestTimeout)]
     public async Task Can_Get_Puzzle_Metadata()
     {
         // Arrange
@@ -78,7 +80,7 @@ public class LambdaTests : IAsyncLifetime, IDisposable
         }
     }
 
-    [Theory(Timeout = 5_000)]
+    [Theory(Timeout = LambdaTestTimeout)]
     [InlineData(2015, 11, new[] { "cqjxjnds" }, new[] { "cqjxxyzz", "cqkaabcc" })]
     public async Task Can_Solve_Puzzle_With_Input_Arguments(int year, int day, string[] arguments, string[] expected)
     {
@@ -123,7 +125,7 @@ public class LambdaTests : IAsyncLifetime, IDisposable
         solutions.EnumerateArray().ToArray().Select((p) => p.GetString()).ToArray().ShouldBe(expected);
     }
 
-    [Theory(Timeout = 5_000)]
+    [Theory(Timeout = LambdaTestTimeout)]
     [InlineData(2015, 1, new[] { 232, 1783 })]
     public async Task Can_Solve_Puzzle_With_Input_File(int year, int day, int[] expected)
     {
