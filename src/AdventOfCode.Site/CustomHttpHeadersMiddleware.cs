@@ -12,7 +12,7 @@ namespace MartinCostello.AdventOfCode.Site;
 /// <param name="next">The next request delegate in the pipeline.</param>
 public sealed class CustomHttpHeadersMiddleware(RequestDelegate next)
 {
-    private static readonly string ContentSecurityPolicyTemplate = string.Join(
+    private static readonly CompositeFormat ContentSecurityPolicyTemplate = CompositeFormat.Parse(string.Join(
         ';',
         new[]
         {
@@ -33,7 +33,7 @@ public sealed class CustomHttpHeadersMiddleware(RequestDelegate next)
             "base-uri 'self'",
             "manifest-src 'self'",
             "upgrade-insecure-requests",
-        });
+        }));
 
     /// <summary>
     /// Invokes the specified middleware.
