@@ -218,8 +218,9 @@ jobs:
         WEBSITE_URL: ${{ env.AZURE_URL_PROD }}
 
   deploy-aws:
+    if: ${{ github.event.repository.fork == false && github.ref_name == github.event.repository.default_branch }}
     name: deploy-aws
-    needs: test
+    needs: build
     runs-on: ubuntu-latest
     concurrency: aws_environment
 
