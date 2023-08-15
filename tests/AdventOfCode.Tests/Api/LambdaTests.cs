@@ -18,6 +18,8 @@ public class LambdaTests : IAsyncLifetime, IDisposable
 {
     private const int LambdaTestTimeout = 10_000;
 
+    private static readonly JsonSerializerOptions SerializerOptions = new(JsonSerializerDefaults.Web);
+
     private readonly HttpLambdaTestServer _server;
     private bool _disposed;
 
@@ -246,8 +248,7 @@ public class LambdaTests : IAsyncLifetime, IDisposable
         APIGatewayProxyRequest request)
     {
         // Arrange
-        var options = new JsonSerializerOptions(JsonSerializerDefaults.Web);
-        string json = JsonSerializer.Serialize(request, options);
+        string json = JsonSerializer.Serialize(request, SerializerOptions);
 
         LambdaTestContext context = await _server.EnqueueAsync(json);
 
@@ -279,7 +280,7 @@ public class LambdaTests : IAsyncLifetime, IDisposable
         response.Content.ShouldNotBeEmpty();
 
         // Assert
-        var actual = JsonSerializer.Deserialize<APIGatewayProxyResponse>(response.Content, options);
+        var actual = JsonSerializer.Deserialize<APIGatewayProxyResponse>(response.Content, SerializerOptions);
 
         actual.ShouldNotBeNull();
 
