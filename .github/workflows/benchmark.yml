@@ -15,7 +15,6 @@ on:
 
 permissions:
   contents: read
-  issues: write
   pull-requests: write
   statuses: write
 
@@ -23,30 +22,19 @@ jobs:
   benchmark:
     name: benchmark
     runs-on: ubuntu-latest
-    if: ${{ github.event.repository.fork == false && github.event.issue.pull_request != '' && contains(github.event.comment.body, '/benchmark') }}
+    if: |
+      github.event.repository.fork == false &&
+      github.event.issue.pull_request != '' &&
+      contains(github.event.comment.body, '/benchmark')
 
     steps:
 
-    - name: Get pull request commit
+    - name: Parse comment
       uses: actions/github-script@v6
-      id: get-pr
+      id: parse-comment
       with:
         result-encoding: string
         script: |
-          const result = await github.rest.pulls.get({
-            owner: context.repo.owner,
-            repo: context.repo.repo,
-            pull_number: context.issue.number
-          });
-          return result.data.head.sha;
-
-    - name: Extract benchmark argument
-      uses: actions/github-script@v6
-      id: benchmark-argument
-      with:
-        result-encoding: string
-        script: |
-          // Documents all available commands
           const availableBenchmarks = {
             "microbenchmarks-2015": "Runs the 2015 microbenchmarks",
             "microbenchmarks-2016": "Runs the 2016 microbenchmarks",
@@ -55,83 +43,85 @@ jobs:
             "microbenchmarks-2019": "Runs the 2019 microbenchmarks",
             "microbenchmarks-2020": "Runs the 2020 microbenchmarks",
             "microbenchmarks-2021": "Runs the 2021 microbenchmarks",
-            "root": "Runs the root benchmark"
+            "root": "Runs the root benchmark",
           };
 
-          // Verify the user is a collaborator
-          const repoOwner = context.payload.repository.owner.login;
-          const repoName = context.payload.repository.name;
-          const commentUser = context.payload.comment.user.login;
+          const owner = context.payload.repository.owner.login;
+          const repo = context.payload.repository.name;
+          const username = context.payload.comment.user.login;
+          const issue_number = context.issue.number;
 
           try {
-            var membership = await github.rest.repos.checkCollaborator({
-              owner: repoOwner,
-              repo: repoName,
-              username: commentUser
+            await github.rest.repos.checkCollaborator({
+              owner,
+              repo,
+              username,
             });
           } catch (error) {
-            var message = `Error: @${commentUser} is not a repo collaborator, benchmarking is not allowed.`;
+            const message = `@${username} You are not a repository collaborator; benchmarking is not allowed.`;
             await github.rest.issues.createComment({
-              issue_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              body: message
+              owner,
+              repo,
+              issue_number,
+              body: message,
             });
-            throw message;
+            throw new Error(message);
           }
 
-          core.info(`Verified ${commentUser} is a repo collaborator.`);
+          core.info(`Verified ${username} is a repository collaborator.`);
 
-          if (context.eventName !== "issue_comment") {
-            throw "Error: This action only works on issue_comment events.";
-          }
-
-          // Extract the benchmark arguments from the trigger phrase containing these characters: a-z, A-Z, digits, forward slash, dot, hyphen, underscore
+          // Extract the benchmark arguments from the comment
           const regex = /\/benchmark ([a-zA-Z\d\/\.\-\_]+)/;
           const arguments = regex.exec(context.payload.comment.body);
 
           // Generate help text with all available commands
           if (arguments == null || arguments.length < 2 || !availableBenchmarks.hasOwnProperty(arguments[1])) {
-
-              var body = 'The `/benchmark` command accepts these benchmarks:\n';
-              for (var key in availableBenchmarks) {
+              let body = 'The `/benchmark` command accepts these values:\n';
+              for (const key in availableBenchmarks) {
                 body += `- \`/benchmark ${key}\`: ${availableBenchmarks[key]}\n`;
               }
 
               await github.rest.issues.createComment({
-                issue_number: context.issue.number,
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                body: body
+                issue_number,
+                owner,
+                repo,
+                body,
               });
 
-              throw "Error: Invalid arguments, workflow stopped.";
+              throw new Error('Error: Invalid arguments, workflow stopped.');
           }
 
           const benchmark = arguments[1];
-          const workflowUrl = `${{ github.server_url }}/${context.repo.owner}/${context.repo.repo}/actions/runs/${process.env.GITHUB_RUN_ID}`;
+          const workflowUrl = `${process.env.GITHUB_SERVER_URL}/${owner}/${repo}/actions/runs/${process.env.GITHUB_RUN_ID}`;
 
           core.info(`Benchmark: ${benchmark}`);
 
-          const start_body = `Started [${benchmark} benchmark](${workflowUrl}). :hourglass:`;
           await github.rest.issues.createComment({
-            issue_number: context.issue.number,
-            owner: context.repo.owner,
-            repo: context.repo.repo,
-            body: start_body
+            owner,
+            repo,
+            issue_number,
+            body: `Started [${benchmark} benchmark](${workflowUrl}). :hourglass:`,
           });
 
+          const { data: pull } = await github.rest.pulls.get({
+            owner,
+            repo,
+            pull_number: issue_number,
+          });
+          const sha = pull.head.sha;
+
           await github.rest.repos.createCommitStatus({
-            owner: context.repo.owner,
-            repo: context.repo.repo,
-            sha: '${{ steps.get-pr.outputs.result }}',
+            owner,
+            repo,
+            sha,
             state: 'pending',
             target_url: workflowUrl,
             description: `Benchmark ${benchmark} started...`,
-            context: `benchmarks / ${benchmark.toLowerCase()}`
+            context: `benchmarks / ${benchmark.toLowerCase()}`,
           });
 
-          return benchmark;
+          core.setOutput('benchmark', benchmark);
+          core.setOutput('commit-sha', sha);
 
     - name: Checkout code
       uses: actions/checkout@v3
@@ -147,69 +137,57 @@ jobs:
     - name: Install crank
       shell: pwsh
       run: |
-        dotnet tool install --global Microsoft.Crank.Agent --version "${{ env.CRANK_VERSION }}"
-        dotnet tool install --global Microsoft.Crank.Controller --version "${{ env.CRANK_VERSION }}"
-        dotnet tool install --global Microsoft.Crank.PullRequestBot --version "${{ env.CRANK_VERSION }}"
+        dotnet tool install --global Microsoft.Crank.Agent --version ${env:CRANK_VERSION}
+        dotnet tool install --global Microsoft.Crank.Controller --version ${env:CRANK_VERSION}
+        dotnet tool install --global Microsoft.Crank.PullRequestBot --version ${env:CRANK_VERSION}
 
     - name: Run crank
       shell: pwsh
+      env:
+        ACCESS_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        BENCHMARK_NAME: ${{ steps.parse-comment.outputs.benchmark }}
+        PULL_REQUEST_ID: ${{ github.event.issue.number }}
       run: |
         ./benchmark-crank.ps1 `
-          -Benchmark "${{ steps.benchmark-argument.outputs.result }}" `
-          -Repository "${{ github.server_url }}/${{ github.repository }}" `
-          -PullRequestId "${{ github.event.issue.number }}" `
-          -AccessToken "${{ secrets.GITHUB_TOKEN }}" `
+          -Benchmark ${env:BENCHMARK_NAME} `
+          -Repository "$(${env:GITHUB_SERVER_URL})/$(${env:GITHUB_REPOSITORY})" `
+          -PullRequestId ${env:PULL_REQUEST_ID} `
+          -AccessToken ${env:ACCESS_TOKEN} `
           -PublishResults
 
-    - name: Report success
+    - name: Post result comment
       uses: actions/github-script@v6
+      if: ${{ !cancelled() }}
+      env:
+        BENCHMARK_NAME: ${{ steps.parse-comment.outputs.benchmark }}
+        COMMIT_SHA: ${{ steps.parse-comment.outputs.commit-sha }}
       with:
         script: |
-          const benchmark = '${{ steps.benchmark-argument.outputs.result }}';
-          const workflowUrl = `${{ github.server_url }}/${context.repo.owner}/${context.repo.repo}/actions/runs/${process.env.GITHUB_RUN_ID}`;
+          const owner = context.repo.owner;
+          const repo = context.repo.repo;
+          const issue_number = context.issue.number;
 
-          const success_body = `Benchmark [${benchmark}](${workflowUrl}) succeeded. :white_check_mark:`;
+          const benchmark = process.env.BENCHMARK_NAME;
+          const workflowUrl = `${process.env.GITHUB_SERVER_URL}/${owner}/${repo}/actions/runs/${process.env.GITHUB_RUN_ID}`;
+
+          const succeeded = process.env.OUTCOME === 'success';
+          const outcome = succeeded ? 'succeeded' : 'failed';
+          const emoji = succeeded ? ':white_check_mark:' : ':x:';
+          const state = succeeded ? 'success' : 'failure';
+
           await github.rest.issues.createComment({
-            issue_number: context.issue.number,
-            owner: context.repo.owner,
-            repo: context.repo.repo,
-            body: success_body
+            owner,
+            repo,
+            issue_number,
+            body: `Benchmark [${benchmark}](${workflowUrl}) ${outcome} ${emoji}`,
           });
 
           await github.rest.repos.createCommitStatus({
-            owner: context.repo.owner,
-            repo: context.repo.repo,
-            sha: '${{ steps.get-pr.outputs.result }}',
-            state: 'success',
+            owner,
+            repo,
+            sha: process.env.COMMIT_SHA,
+            state,
             target_url: workflowUrl,
-            description: `Benchmark ${benchmark} succeeded.`,
+            description: `Benchmark ${benchmark} ${outcome}.`,
             context: `benchmarks / ${benchmark.toLowerCase()}`
           });
-
-    - name: Report failure
-      uses: actions/github-script@v6
-      if: ${{ failure() }}
-      with:
-        script: |
-          const benchmark = '${{ steps.benchmark-argument.outputs.result }}';
-          const workflowUrl = `${{ github.server_url }}/${context.repo.owner}/${context.repo.repo}/actions/runs/${process.env.GITHUB_RUN_ID}`;
-
-          const failure_body = `Benchmark [${benchmark}](${workflowUrl}) failed. :x:`;
-          await github.rest.issues.createComment({
-            issue_number: context.issue.number,
-            owner: context.repo.owner,
-            repo: context.repo.repo,
-            body: failure_body
-          });
-
-          if (benchmark) {
-            await github.rest.repos.createCommitStatus({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              sha: '${{ steps.get-pr.outputs.result }}',
-              state: 'failure',
-              target_url: workflowUrl,
-              description: `Benchmark ${benchmark} failed.`,
-              context: `benchmarks / ${benchmark.toLowerCase()}`
-            });
-          }

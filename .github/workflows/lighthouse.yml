@@ -79,15 +79,15 @@ jobs:
       uses: foo-software/lighthouse-check-status-action@v2.0.1
       with:
         lighthouseCheckResults: ${{ steps.lighthouse.outputs.lighthouseCheckResults }}
-        minAccessibilityScore: "95"
-        minBestPracticesScore: "92"
-        minPerformanceScore: "78"
-        minProgressiveWebAppScore: "50"
-        minSeoScore: "85"
+        minAccessibilityScore: ${{ vars.LIGHTHOUSE_MIN_ACCESSIBILITY_SCORE }}
+        minBestPracticesScore: ${{ vars.LIGHTHOUSE_MIN_BEST_PRACTICES_SCORE }}
+        minPerformanceScore: ${{ vars.LIGHTHOUSE_MIN_PERFORMANCE_SCORE }}
+        minProgressiveWebAppScore: ${{ vars.LIGHTHOUSE_MIN_PROGRESSIVE_WEB_APP_SCORE }}
+        minSeoScore: ${{ vars.LIGHTHOUSE_MIN_SEO_SCORE }}
 
     - name: Publish artifacts
       uses: actions/upload-artifact@v3
-      if: ${{ always() }}
+      if: ${{ !cancelled() }}
       with:
         name: lighthouse
         path: ${{ github.workspace }}/artifacts

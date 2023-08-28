@@ -98,7 +98,7 @@ jobs:
 
     - name: Build, test and publish
       shell: pwsh
-      run: ./build.ps1 -Runtime "${{ env.PUBLISH_RUNTIME }}"
+      run: ./build.ps1 -Runtime "${env:PUBLISH_RUNTIME}"
 
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v3
@@ -108,7 +108,7 @@ jobs:
 
     - name: Publish web app
       uses: actions/upload-artifact@v3
-      if: ${{ runner.os == 'Windows' && success() }}
+      if: runner.os == 'Windows' && success()
       with:
         name: webapp
         path: ./artifacts/publish
@@ -116,7 +116,7 @@ jobs:
 
     - name: Publish lambda
       uses: actions/upload-artifact@v3
-      if: ${{ runner.os == 'Windows' && success() }}
+      if: runner.os == 'Windows' && success()
       with:
         name: lambda
         path: ./artifacts/lambda.zip
@@ -124,7 +124,7 @@ jobs:
 
     - name: Publish screenshots
       uses: actions/upload-artifact@v3
-      if: ${{ always() }}
+      if: ${{ !cancelled() }}
       with:
         name: screenshots
         path: ./artifacts/screenshots/*.png
@@ -132,7 +132,7 @@ jobs:
 
     - name: Publish traces
       uses: actions/upload-artifact@v3
-      if: ${{ always() }}
+      if: ${{ !cancelled() }}
       with:
         name: traces
         path: ./artifacts/traces/*
@@ -140,14 +140,14 @@ jobs:
 
     - name: Publish videos
       uses: actions/upload-artifact@v3
-      if: ${{ always() }}
+      if: ${{ !cancelled() }}
       with:
         name: videos
         path: ./artifacts/videos/*
         if-no-files-found: ignore
 
   deploy:
-    if: ${{ github.event.repository.fork == false && github.ref_name == github.event.repository.default_branch }}
+    if: github.event.repository.fork == false && github.ref_name == github.event.repository.default_branch
     name: deploy-production
     needs: build
     runs-on: windows-latest
@@ -212,13 +212,13 @@ jobs:
 
     - name: Run end-to-end tests
       shell: pwsh
-      run: dotnet test ./tests/AdventOfCode.Tests --configuration Release --filter Category=EndToEnd --logger "GitHubActions;report-warnings=false" /p:CollectCoverage=false
       env:
         SKIP_NPM_TEST: true
         WEBSITE_URL: ${{ env.AZURE_URL_PROD }}
+      run: dotnet test ./tests/AdventOfCode.Tests --configuration Release --filter Category=EndToEnd --logger "GitHubActions;report-warnings=false" /p:CollectCoverage=false
 
   deploy-aws:
-    if: ${{ github.event.repository.fork == false && github.ref_name == github.event.repository.default_branch }}
+    if: github.event.repository.fork == false && github.ref_name == github.event.repository.default_branch
     name: deploy-aws
     needs: build
     runs-on: ubuntu-latest
@@ -271,19 +271,21 @@ jobs:
 
     - name: Deploy CloudFormation Template
       shell: pwsh
+      env:
+        AWS_CLOUDFORMATION_ROLE: ${{ secrets.AWS_CLOUDFORMATION_ROLE }}
       run: |
-        $description = "Deploy build ${{ github.run_number }} to AWS via GitHub Actions"
+        $description = "Deploy build $(${env:GITHUB_RUN_NUMBER}) to AWS via GitHub Actions"
         $configPath = Join-Path $pwd "aws-lambda-tools-defaults.json"
         $packagePath = Join-Path $pwd "lambda.zip"
         dotnet-lambda `
             deploy-serverless `
-            ${{ env.AWS_CLOUDFORMATION_STACK }} `
-            --cloudformation-role "${{ secrets.AWS_CLOUDFORMATION_ROLE }}" `
+            ${env:AWS_CLOUDFORMATION_STACK} `
+            --cloudformation-role ${env:AWS_CLOUDFORMATION_ROLE} `
             --config-file $configPath `
             --disable-interactive true `
             --package $packagePath `
             --stack-wait true `
-            --tags "GITHUB_ACTIONS_RUN=${{ github.run_number }}" `
+            --tags "GITHUB_ACTIONS_RUN=$(${env:GITHUB_RUN_NUMBER})" `
             --template-substitutions "Description=$description"
 
   test-aws:
@@ -318,7 +320,7 @@ jobs:
 
     - name: Run end-to-end tests
       shell: pwsh
-      run: dotnet test ./tests/AdventOfCode.Tests --configuration Release --filter Category=EndToEnd --logger "GitHubActions;report-warnings=false" /p:CollectCoverage=false
       env:
         SKIP_NPM_TEST: true
         WEBSITE_URL: ${{ env.AWS_URL_PROD }}
+      run: dotnet test ./tests/AdventOfCode.Tests --configuration Release --filter Category=EndToEnd --logger "GitHubActions;report-warnings=false" /p:CollectCoverage=false
