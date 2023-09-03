@@ -4,13 +4,14 @@
   "version": "7.0.0",
   "description": "Solutions for Advent of Code in C# and TypeScript",
   "scripts": {
-    "build": "npm run compile && npm run format && npm run lint && npm test",
-    "compile": "webpack",
+    "build": "webpack",
     "format": "prettier --write scripts/**/*.ts",
     "format-check": "prettier --check scripts/**/*.ts",
     "lint": "eslint --ext .ts scripts",
-    "test": "jest --coverage",
-    "watch": "webpack --watch"
+    "test": "jest",
+    "watch": "webpack --watch",
+    "publish": "npm run build && npm run format && npm run lint",
+    "all": "npm run publish && npm test"
   },
   "repository": {
     "type": "git",
@@ -27,6 +28,7 @@
     "eslint": "^8.48.0",
     "eslint-config-prettier": "^9.0.0",
     "eslint-plugin-jest": "^27.2.3",
+    "eslint-plugin-prettier": "^5.0.0",
     "jest": "^29.6.4",
     "linq-to-typescript": "^10.0.0",
     "prettier": "^3.0.3",
@@ -37,5 +39,105 @@
     "typescript": "5.2.2",
     "webpack": "^5.88.2",
     "webpack-cli": "^5.1.4"
+  },
+  "eslintConfig": {
+    "env": {
+      "browser": true,
+      "es6": true,
+      "jest/globals": true,
+      "node": true
+    },
+    "extends": [
+      "prettier"
+    ],
+    "parser": "@typescript-eslint/parser",
+    "parserOptions": {
+      "project": "./tsconfig.json",
+      "sourceType": "module"
+    },
+    "plugins": [
+      "@typescript-eslint",
+      "jest"
+    ],
+    "rules": {
+      "@typescript-eslint/indent": "error",
+      "@typescript-eslint/member-delimiter-style": "error",
+      "@typescript-eslint/naming-convention": "error",
+      "@typescript-eslint/prefer-namespace-keyword": "error",
+      "@typescript-eslint/quotes": [
+        "error",
+        "single",
+        {
+          "avoidEscape": true
+        }
+      ],
+      "@typescript-eslint/semi": [
+        "error",
+        "always"
+      ],
+      "@typescript-eslint/type-annotation-spacing": "error",
+      "brace-style": [
+        "error",
+        "1tbs"
+      ],
+      "eqeqeq": [
+        "error",
+        "smart"
+      ],
+      "id-blacklist": [
+        "error",
+        "any",
+        "Number",
+        "number",
+        "String",
+        "string",
+        "Boolean",
+        "boolean",
+        "Undefined",
+        "undefined"
+      ],
+      "id-match": "error",
+      "no-eval": "error",
+      "no-redeclare": "error",
+      "no-trailing-spaces": "error",
+      "no-underscore-dangle": "error",
+      "no-var": "error",
+      "spaced-comment": [
+        "error",
+        "always",
+        {
+          "markers": [
+            "/"
+          ]
+        }
+      ]
+    }
+  },
+  "jest": {
+    "clearMocks": true,
+    "collectCoverage": true,
+    "collectCoverageFrom": [
+      "scripts/**/*.ts"
+    ],
+    "reporters": [
+      "default",
+      "github-actions"
+    ],
+    "transform": {
+      "^.+\\.ts$": "ts-jest"
+    },
+    "verbose": true
+  },
+  "prettier": {
+    "arrowParens": "always",
+    "bracketSpacing": true,
+    "endOfLine": "auto",
+    "printWidth": 140,
+    "quoteProps": "consistent",
+    "semi": true,
+    "singleQuote": true,
+    "tabWidth": 4,
+    "trailingComma": "es5",
+    "useTabs": false
   }
 }
