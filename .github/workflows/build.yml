@@ -44,11 +44,8 @@ jobs:
       matrix:
         include:
           - os: macos-latest
-            codecov_os: macos
           - os: ubuntu-latest
-            codecov_os: linux
           - os: windows-latest
-            codecov_os: windows
 
     steps:
 
@@ -100,12 +97,6 @@ jobs:
       shell: pwsh
       run: ./build.ps1 -Runtime "${env:PUBLISH_RUNTIME}"
 
-    - name: Upload coverage to Codecov
-      uses: codecov/codecov-action@v3
-      with:
-        files: ./src/AdventOfCode.Site/coverage/lcov.info
-        flags: ${{ matrix.codecov_os }}
-
     - name: Publish web app
       uses: actions/upload-artifact@v3
       if: runner.os == 'Windows' && success()
@@ -145,6 +136,44 @@ jobs:
         name: videos
         path: ./artifacts/videos/*
         if-no-files-found: ignore
+
+  typescript:
+    runs-on: ubuntu-latest
+
+    steps:
+
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Setup Node
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+
+    - name: Get npm cache directory
+      id: npm-cache-dir
+      shell: pwsh
+      run: echo "dir=$(npm config get cache)" >> ${env:GITHUB_OUTPUT}
+
+    - name: Setup npm cache
+      uses: actions/cache@v3
+      id: npm-cache
+      with:
+        path: ${{ steps.npm-cache-dir.outputs.dir }}
+        key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: ${{ runner.os }}-node-
+
+    - name: Build and test and publish
+      shell: pwsh
+      working-directory: ./src/AdventOfCode.Site
+      run: |
+        npm ci
+        npm run all
+
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v3
+      with:
+        files: ./src/AdventOfCode.Site/coverage/lcov.info
 
   deploy:
     if: github.event.repository.fork == false && github.ref_name == github.event.repository.default_branch
@@ -213,7 +242,6 @@ jobs:
     - name: Run end-to-end tests
       shell: pwsh
       env:
-        SKIP_NPM_TEST: true
         WEBSITE_URL: ${{ env.AZURE_URL_PROD }}
       run: dotnet test ./tests/AdventOfCode.Tests --configuration Release --filter Category=EndToEnd --logger "GitHubActions;report-warnings=false" /p:CollectCoverage=false
 
@@ -321,6 +349,5 @@ jobs:
     - name: Run end-to-end tests
       shell: pwsh
       env:
-        SKIP_NPM_TEST: true
         WEBSITE_URL: ${{ env.AWS_URL_PROD }}
       run: dotnet test ./tests/AdventOfCode.Tests --configuration Release --filter Category=EndToEnd --logger "GitHubActions;report-warnings=false" /p:CollectCoverage=false

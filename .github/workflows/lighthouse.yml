@@ -39,8 +39,6 @@ jobs:
 
     - name: Start website
       shell: pwsh
-      env:
-        SKIP_NPM_TEST: true
       run: |
         dotnet build ./src/AdventOfCode.Site/AdventOfCode.Site.csproj --configuration Release
         Start-Process nohup 'dotnet run --project ./src/AdventOfCode.Site/AdventOfCode.Site.csproj --configuration Release'
