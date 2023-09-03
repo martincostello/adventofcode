@@ -178,7 +178,7 @@ jobs:
   deploy:
     if: github.event.repository.fork == false && github.ref_name == github.event.repository.default_branch
     name: deploy-production
-    needs: build
+    needs: [ build, typescript ]
     runs-on: windows-latest
     concurrency: production_environment
 
@@ -248,7 +248,7 @@ jobs:
   deploy-aws:
     if: github.event.repository.fork == false && github.ref_name == github.event.repository.default_branch
     name: deploy-aws
-    needs: build
+    needs: [ build, typescript ]
     runs-on: ubuntu-latest
     concurrency: aws_environment
 
