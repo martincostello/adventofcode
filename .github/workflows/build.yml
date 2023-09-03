@@ -163,7 +163,7 @@ jobs:
         key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
         restore-keys: ${{ runner.os }}-node-
 
-    - name: Build and test and publish
+    - name: Build and test
       shell: pwsh
       working-directory: ./src/AdventOfCode.Site
       run: |
