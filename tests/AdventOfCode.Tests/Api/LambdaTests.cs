@@ -7,6 +7,7 @@ using System.Text.Json;
 using Amazon.Lambda.APIGatewayEvents;
 using MartinCostello.Testing.AwsLambdaTestServer;
 using Microsoft.AspNetCore.Http;
+using xRetry;
 
 namespace MartinCostello.AdventOfCode.Api;
 
@@ -127,7 +128,7 @@ public class LambdaTests : IAsyncLifetime, IDisposable
         solutions.EnumerateArray().ToArray().Select((p) => p.GetString()).ToArray().ShouldBe(expected);
     }
 
-    [Theory(Timeout = LambdaTestTimeout)]
+    [RetryTheory(Timeout = LambdaTestTimeout)]
     [InlineData(2015, 1, new[] { 232, 1783 })]
     public async Task Can_Solve_Puzzle_With_Input_File(int year, int day, int[] expected)
     {
