@@ -137,9 +137,9 @@ jobs:
     - name: Install crank
       shell: pwsh
       run: |
-        dotnet tool install --global Microsoft.Crank.Agent --version ${env:CRANK_VERSION}
-        dotnet tool install --global Microsoft.Crank.Controller --version ${env:CRANK_VERSION}
-        dotnet tool install --global Microsoft.Crank.PullRequestBot --version ${env:CRANK_VERSION}
+        dotnet tool install --global Microsoft.Crank.Agent --version "${env:CRANK_VERSION}"
+        dotnet tool install --global Microsoft.Crank.Controller --version "${env:CRANK_VERSION}"
+        dotnet tool install --global Microsoft.Crank.PullRequestBot --version "${env:CRANK_VERSION}"
 
     - name: Run crank
       shell: pwsh
@@ -150,7 +150,7 @@ jobs:
       run: |
         ./benchmark-crank.ps1 `
           -Benchmark ${env:BENCHMARK_NAME} `
-          -Repository "$(${env:GITHUB_SERVER_URL})/$(${env:GITHUB_REPOSITORY})" `
+          -Repository "${env:GITHUB_SERVER_URL}/${env:GITHUB_REPOSITORY}" `
           -PullRequestId ${env:PULL_REQUEST_ID} `
           -AccessToken ${env:ACCESS_TOKEN} `
           -PublishResults

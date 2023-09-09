@@ -83,11 +83,11 @@ jobs:
     - name: Setup Playwright cache
       uses: actions/cache@v3
       with:
+        key: ${{ runner.os }}-playwright-${{ hashFiles('Directory.Packages.props') }}
         path: |
           ~/AppData/Local/ms-playwright
           ~/.cache/ms-playwright
           ~/Library/Caches/ms-playwright
-        key: ${{ runner.os }}-playwright-${{ hashFiles('Directory.Packages.props') }}
 
     - name: Install .NET Lambda tool
       shell: pwsh
@@ -233,11 +233,11 @@ jobs:
     - name: Setup Playwright cache
       uses: actions/cache@v3
       with:
+        key: ${{ runner.os }}-playwright-${{ hashFiles('Directory.Packages.props') }}
         path: |
           ~/AppData/Local/ms-playwright
           ~/.cache/ms-playwright
           ~/Library/Caches/ms-playwright
-        key: ${{ runner.os }}-playwright-${{ hashFiles('Directory.Packages.props') }}
 
     - name: Run end-to-end tests
       shell: pwsh
@@ -302,7 +302,7 @@ jobs:
       env:
         AWS_CLOUDFORMATION_ROLE: ${{ secrets.AWS_CLOUDFORMATION_ROLE }}
       run: |
-        $description = "Deploy build $(${env:GITHUB_RUN_NUMBER}) to AWS via GitHub Actions"
+        $description = "Deploy build ${env:GITHUB_RUN_NUMBER} to AWS via GitHub Actions"
         $configPath = Join-Path $pwd "aws-lambda-tools-defaults.json"
         $packagePath = Join-Path $pwd "lambda.zip"
         dotnet-lambda `
@@ -313,7 +313,7 @@ jobs:
             --disable-interactive true `
             --package $packagePath `
             --stack-wait true `
-            --tags "GITHUB_ACTIONS_RUN=$(${env:GITHUB_RUN_NUMBER})" `
+            --tags "GITHUB_ACTIONS_RUN=${env:GITHUB_RUN_NUMBER}" `
             --template-substitutions "Description=$description"
 
   test-aws:
@@ -340,11 +340,11 @@ jobs:
     - name: Setup Playwright cache
       uses: actions/cache@v3
       with:
+        key: ${{ runner.os }}-playwright-${{ hashFiles('Directory.Packages.props') }}
         path: |
           ~/AppData/Local/ms-playwright
           ~/.cache/ms-playwright
           ~/Library/Caches/ms-playwright
-        key: ${{ runner.os }}-playwright-${{ hashFiles('Directory.Packages.props') }}
 
     - name: Run end-to-end tests
       shell: pwsh
