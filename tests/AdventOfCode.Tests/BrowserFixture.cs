@@ -6,19 +6,12 @@ using Microsoft.Playwright;
 
 namespace MartinCostello.AdventOfCode;
 
-public class BrowserFixture
+public class BrowserFixture(ITestOutputHelper outputHelper)
 {
     private const string VideosDirectory = "videos";
-    private const string AssetsDirectory = ".";
-
-    public BrowserFixture(ITestOutputHelper outputHelper)
-    {
-        OutputHelper = outputHelper;
-    }
+    private static readonly string AssetsDirectory = Path.Combine("..", "..", "..");
 
     private static bool IsRunningInGitHubActions { get; } = !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("GITHUB_ACTIONS"));
-
-    private ITestOutputHelper OutputHelper { get; }
 
     public async Task WithPageAsync(
         Func<IPage, Task> action,
@@ -44,8 +37,8 @@ public class BrowserFixture
 
         var page = await context.NewPageAsync();
 
-        page.Console += (_, e) => OutputHelper.WriteLine(e.Text);
-        page.PageError += (_, e) => OutputHelper.WriteLine(e);
+        page.Console += (_, e) => outputHelper.WriteLine(e.Text);
+        page.PageError += (_, e) => outputHelper.WriteLine(e);
 
         try
         {
@@ -60,7 +53,7 @@ public class BrowserFixture
 
                 await context.Tracing.StopAsync(new() { Path = path });
 
-                OutputHelper.WriteLine($"Trace saved to {path}.");
+                outputHelper.WriteLine($"Trace saved to {path}.");
             }
 
             await TryCaptureScreenshotAsync(page, testName!, browserType);
@@ -138,13 +131,13 @@ public class BrowserFixture
 
             await page.ScreenshotAsync(new() { Path = path });
 
-            OutputHelper.WriteLine($"Screenshot saved to {path}.");
+            outputHelper.WriteLine($"Screenshot saved to {path}.");
         }
 #pragma warning disable CA1031
         catch (Exception ex)
 #pragma warning restore CA1031
         {
-            OutputHelper.WriteLine("Failed to capture screenshot: " + ex);
+            outputHelper.WriteLine("Failed to capture screenshot: " + ex);
         }
     }
 
@@ -173,13 +166,13 @@ public class BrowserFixture
 
             File.Move(videoSource, videoDestination);
 
-            OutputHelper.WriteLine($"Video saved to {videoDestination}.");
+            outputHelper.WriteLine($"Video saved to {videoDestination}.");
         }
 #pragma warning disable CA1031
         catch (Exception ex)
 #pragma warning restore CA1031
         {
-            OutputHelper.WriteLine("Failed to capture video: " + ex);
+            outputHelper.WriteLine("Failed to capture video: " + ex);
         }
     }
 }

@@ -3,20 +3,8 @@
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2018;
 
-/// <summary>
-/// A class containing tests for the <see cref="Day03"/> class. This class cannot be inherited.
-/// </summary>
-public sealed class Day03Tests : PuzzleTest
+public sealed class Day03Tests(ITestOutputHelper outputHelper) : PuzzleTest(outputHelper)
 {
-    /// <summary>
-    /// Initializes a new instance of the <see cref="Day03Tests"/> class.
-    /// </summary>
-    /// <param name="outputHelper">The <see cref="ITestOutputHelper"/> to use.</param>
-    public Day03Tests(ITestOutputHelper outputHelper)
-        : base(outputHelper)
-    {
-    }
-
     [Theory]
     [InlineData(new[] { "#1 @ 1,3: 4x4", "#2 @ 3,1: 4x4", "#3 @ 5,5: 2x2" }, 4)]
     public static void Y2018_Day03_GetAreaWithTwoOrMoreOverlappingClaims_Returns_Correct_Solution(
