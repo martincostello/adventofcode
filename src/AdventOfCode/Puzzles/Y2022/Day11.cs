@@ -167,21 +167,15 @@ public sealed class Day11 : Puzzle
     }
 
     [DebuggerDisplay("{Number}")]
-    private sealed class Monkey
+    private sealed class Monkey(int number, IEnumerable<long> items)
     {
-        public Monkey(int number, IEnumerable<long> items)
-        {
-            Number = number;
-            Items = new(items);
-        }
-
         public int Inspections { get; private set; }
 
-        public Queue<long> Items { get; }
+        public Queue<long> Items { get; } = new(items);
 
         public Func<long, Monkey> Next { get; set; } = default!;
 
-        public int Number { get; }
+        public int Number { get; } = number;
 
         public Func<long, long> Inspector { get; set; } = default!;
 
