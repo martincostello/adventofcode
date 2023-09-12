@@ -3,11 +3,13 @@
     <AssemblyName>bootstrap</AssemblyName>
     <AWSProjectType>Lambda</AWSProjectType>
     <Description>Web app for solving Advent of Code.</Description>
+    <EnableConfigurationBindingGenerator>true</EnableConfigurationBindingGenerator>
+    <EnableRequestDelegateGenerator>true</EnableRequestDelegateGenerator>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <NoWarn>$(NoWarn);CA2007</NoWarn>
     <OutputType>Exe</OutputType>
     <RootNamespace>MartinCostello.AdventOfCode.Site</RootNamespace>
-    <TargetFramework>net7.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <TypeScriptCompileBlocked>true</TypeScriptCompileBlocked>
     <TypeScriptToolsVersion>latest</TypeScriptToolsVersion>
   </PropertyGroup>

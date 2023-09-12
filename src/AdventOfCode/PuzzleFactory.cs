@@ -6,29 +6,13 @@ namespace MartinCostello.AdventOfCode;
 /// <summary>
 /// A class that creates instances of <see cref="IPuzzle"/>.
 /// </summary>
-public class PuzzleFactory
+/// <remarks>
+/// Initializes a new instance of the <see cref="PuzzleFactory"/> class.
+/// </remarks>
+/// <param name="cache">The <see cref="ICache"/> to use.</param>
+/// <param name="logger">The <see cref="ILogger"/> to use.</param>
+public class PuzzleFactory(ICache cache, ILogger logger)
 {
-    /// <summary>
-    /// The <see cref="ICache"/> to use. This field is read-only.
-    /// </summary>
-    private readonly ICache _cache;
-
-    /// <summary>
-    /// The <see cref="ILogger"/> to use. This field is read-only.
-    /// </summary>
-    private readonly ILogger _logger;
-
-    /// <summary>
-    /// Initializes a new instance of the <see cref="PuzzleFactory"/> class.
-    /// </summary>
-    /// <param name="cache">The <see cref="ICache"/> to use.</param>
-    /// <param name="logger">The <see cref="ILogger"/> to use.</param>
-    public PuzzleFactory(ICache cache, ILogger logger)
-    {
-        _cache = cache;
-        _logger = logger;
-    }
-
     /// <summary>
     /// Creates the puzzle for the specified year and day.
     /// </summary>
@@ -50,8 +34,8 @@ public class PuzzleFactory
             throw new PuzzleException("The year and/or puzzle number specified is invalid.");
         }
 
-        puzzle.Cache = _cache;
-        puzzle.Logger = _logger;
+        puzzle.Cache = cache;
+        puzzle.Logger = logger;
         puzzle.Verbose = true;
 
         return puzzle;

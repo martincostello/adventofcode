@@ -72,35 +72,25 @@ public sealed class Day15 : Puzzle
     /// <summary>
     /// A class representing a disc in the sculpture. This class cannot be inherited.
     /// </summary>
-    private sealed class Disc
+    /// <param name="positions">The number of positions of the disc.</param>
+    /// <param name="initialPosition">The initial position of the disc.</param>
+    /// <param name="offset">The offset of the disc from the top of the sculpture.</param>
+    private sealed class Disc(int positions, int initialPosition, int offset)
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Disc"/> class.
-        /// </summary>
-        /// <param name="positions">The number of positions of the disc.</param>
-        /// <param name="initialPosition">The initial position of the disc.</param>
-        /// <param name="offset">The offset of the disc from the top of the sculpture.</param>
-        public Disc(int positions, int initialPosition, int offset)
-        {
-            Current = initialPosition;
-            Positions = positions;
-            Offset = offset;
-        }
-
         /// <summary>
         /// Gets the current position of the disc.
         /// </summary>
-        public int Current { get; private set; }
+        public int Current { get; private set; } = initialPosition;
 
         /// <summary>
         /// Gets the number of positions the disc has.
         /// </summary>
-        public int Positions { get; }
+        public int Positions { get; } = positions;
 
         /// <summary>
         /// Gets the offset of the disc from the top of the sculpture.
         /// </summary>
-        public int Offset { get; }
+        public int Offset { get; } = offset;
 
         /// <summary>
         /// Parses information about a disc from the specified <see cref="string"/>.
