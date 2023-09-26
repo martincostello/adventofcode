@@ -19,7 +19,7 @@ internal sealed class PuzzleSolver(IPage page)
                 await page.Keyboard.PressAsync("Enter");
             }
 
-            await page.TypeAsync(Selector, arguments[i]);
+            await page.FillAsync(Selector, arguments[i]);
         }
     }
 
