@@ -104,8 +104,6 @@ public sealed class HttpServerFixture : WebApplicationFactory<Site.Program>, ITe
             .Select((p) => new Uri(p))
             .Last();
 
-        testHost.Start();
-
         return testHost;
     }
 
