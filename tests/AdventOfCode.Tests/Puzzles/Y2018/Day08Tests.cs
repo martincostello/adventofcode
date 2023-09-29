@@ -3,13 +3,15 @@
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2018;
 
+#pragma warning disable SA1010
+
 public sealed class Day08Tests(ITestOutputHelper outputHelper) : PuzzleTest(outputHelper)
 {
     [Fact]
     public static void Y2018_Day08_ParseTree_Returns_Correct_Solution()
     {
         // Arrange
-        int[] tree = { 2, 3, 0, 3, 10, 11, 12, 1, 1, 0, 1, 99, 2, 1, 1, 2 };
+        int[] tree = [2, 3, 0, 3, 10, 11, 12, 1, 1, 0, 1, 99, 2, 1, 1, 2];
 
         // Act
         (long metadataSum, long rootValue) = Day08.ParseTree(tree);

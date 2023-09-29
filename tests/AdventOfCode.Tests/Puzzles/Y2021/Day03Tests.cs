@@ -10,7 +10,7 @@ public sealed class Day03Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
     {
         // Arrange
         string[] diagnosticReport =
-        {
+        [
             "00100",
             "11110",
             "10110",
@@ -23,7 +23,7 @@ public sealed class Day03Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
             "11001",
             "00010",
             "01010",
-        };
+        ];
 
         // Act
         int actual = Day03.GetPowerConsumption(diagnosticReport);
@@ -37,7 +37,7 @@ public sealed class Day03Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
     {
         // Arrange
         string[] diagnosticReport =
-        {
+        [
             "00100",
             "11110",
             "10110",
@@ -50,7 +50,7 @@ public sealed class Day03Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
             "11001",
             "00010",
             "01010",
-        };
+        ];
 
         // Act
         int actual = Day03.GetLifeSupportRating(diagnosticReport);

@@ -166,8 +166,10 @@ public sealed class Day07 : Puzzle
     /// <param name="hypernets">When the method returns, contains the hypernets.</param>
     private static void ParseIPAddress(string address, out List<string> supernets, out List<string> hypernets)
     {
-        supernets = new List<string>();
-        hypernets = new List<string>();
+#pragma warning disable SA1010
+        supernets = [];
+        hypernets = [];
+#pragma warning restore SA1010
 
         var builder = new StringBuilder();
 

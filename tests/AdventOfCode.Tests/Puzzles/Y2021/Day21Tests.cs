@@ -10,10 +10,10 @@ public sealed class Day21Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
     {
         // Arrange
         string[] players =
-        {
+        [
             "Player 1 starting position: 4",
             "Player 2 starting position: 8",
-        };
+        ];
 
         // Act
         int actual = Day21.PlayPractice(players);
@@ -27,10 +27,10 @@ public sealed class Day21Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
     {
         // Arrange
         string[] players =
-        {
+        [
             "Player 1 starting position: 4",
             "Player 2 starting position: 8",
-        };
+        ];
 
         // Act
         long actual = Day21.Play(players);

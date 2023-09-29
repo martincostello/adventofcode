@@ -12,7 +12,7 @@ public sealed class Day12Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
     {
         // Arrange
         string[] nodes =
-        {
+        [
             "start-A",
             "start-b",
             "A-c",
@@ -20,7 +20,7 @@ public sealed class Day12Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
             "b-d",
             "A-end",
             "b-end",
-        };
+        ];
 
         // Act
         int actual = Day12.Navigate(nodes, smallCaveVisitLimit);
@@ -36,7 +36,7 @@ public sealed class Day12Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
     {
         // Arrange
         string[] nodes =
-        {
+        [
             "dc-end",
             "HN-start",
             "start-kj",
@@ -47,7 +47,7 @@ public sealed class Day12Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
             "kj-sa",
             "kj-HN",
             "kj-dc",
-        };
+        ];
 
         // Act
         int actual = Day12.Navigate(nodes, smallCaveVisitLimit);
@@ -63,7 +63,7 @@ public sealed class Day12Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
     {
         // Arrange
         string[] nodes =
-        {
+        [
             "fs-end",
             "he-DX",
             "fs-he",
@@ -82,7 +82,7 @@ public sealed class Day12Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
             "zg-he",
             "pj-fs",
             "start-RW",
-        };
+        ];
 
         // Act
         int actual = Day12.Navigate(nodes, smallCaveVisitLimit);

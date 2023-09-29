@@ -14,13 +14,13 @@ public abstract class SquareGrid : IWeightedGraph<Point>
     /// <summary>
     /// The valid vectors of movement around the grid.
     /// </summary>
-    private static readonly ImmutableArray<Size> Vectors = new Size[]
-    {
+    private static readonly ImmutableArray<Size> Vectors =
+    [
         new(0, 1),
         new(1, 0),
         new(0, -1),
         new(-1, 0),
-    }.ToImmutableArray();
+    ];
 
     /// <summary>
     /// Initializes a new instance of the <see cref="SquareGrid"/> class.

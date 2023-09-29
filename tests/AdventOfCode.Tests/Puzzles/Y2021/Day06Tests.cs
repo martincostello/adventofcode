@@ -3,6 +3,8 @@
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2021;
 
+#pragma warning disable SA1010
+
 public sealed class Day06Tests(ITestOutputHelper outputHelper) : PuzzleTest(outputHelper)
 {
     [Theory]
@@ -11,7 +13,7 @@ public sealed class Day06Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
     public void Y2021_Day06_CountFish_Returns_Correct_Value(int days, long expected)
     {
         // Arrange
-        int[] fish = { 3, 4, 3, 1, 2 };
+        int[] fish = [3, 4, 3, 1, 2];
 
         // Act
         long actual = Day06.CountFish(fish, days);

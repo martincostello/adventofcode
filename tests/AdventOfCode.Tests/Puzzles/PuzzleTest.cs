@@ -37,7 +37,7 @@ public abstract class PuzzleTest
     /// </returns>
     protected async Task<T> SolvePuzzleAsync<T>()
         where T : Puzzle, new()
-        => await SolvePuzzleAsync<T>(Array.Empty<string>());
+        => await SolvePuzzleAsync<T>([]);
 
     /// <summary>
     /// Solves the specified puzzle type with the specified arguments asynchronously.

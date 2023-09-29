@@ -116,17 +116,19 @@ public sealed class Day18 : Puzzle
 
         if (areCornerLightsBroken)
         {
-            cornerLights = new Point[]
-            {
+            cornerLights =
+            [
                 new(0, 0),
                 new(width - 1, 0),
                 new(0, height - 1),
                 new(width - 1, height - 1),
-            };
+            ];
         }
         else
         {
-            cornerLights = Array.Empty<Point>();
+#pragma warning disable SA1010
+            cornerLights = [];
+#pragma warning restore SA1010
         }
 
         for (int x = 0; x < width; x++)
@@ -142,7 +144,7 @@ public sealed class Day18 : Puzzle
                 else
                 {
                     Point[] neighbors =
-                    {
+                    [
                         new(x - 1, y - 1),
                         new(x, y - 1),
                         new(x + 1, y - 1),
@@ -151,7 +153,7 @@ public sealed class Day18 : Puzzle
                         new(x + 1, y + 1),
                         new(x, y + 1),
                         new(x - 1, y + 1),
-                    };
+                    ];
 
                     int neighborsOn = 0;
 

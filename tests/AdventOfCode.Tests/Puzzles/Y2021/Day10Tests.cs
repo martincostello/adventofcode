@@ -10,7 +10,7 @@ public sealed class Day10Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
     {
         // Arrange
         string[] lines =
-        {
+        [
             "[({(<(())[]>[[{[]{<()<>>",
             "[(()[<>])]({[<{<<[]>>(",
             "{([(<{}[<>[]}>{[]{[(<()>",
@@ -21,7 +21,7 @@ public sealed class Day10Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
             "[<(<(<(<{}))><([]([]()",
             "<{([([[(<>()){}]>(<<{{",
             "<{([{{}}[<[[[<>{}]]]>[]]",
-        };
+        ];
 
         // Act
         (int syntaxErrorScore, long middleAutoCompleteScore) = Day10.Compile(lines);

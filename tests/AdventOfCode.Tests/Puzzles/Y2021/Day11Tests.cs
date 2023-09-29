@@ -10,13 +10,13 @@ public sealed class Day11Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
     {
         // Arrange
         string[] grid =
-        {
+        [
             "11111",
             "19991",
             "19191",
             "19991",
             "11111",
-        };
+        ];
 
         // Act
         (int actual, _) = Day11.Simulate(grid, steps: 2);
@@ -30,7 +30,7 @@ public sealed class Day11Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
     {
         // Arrange
         string[] grid =
-        {
+        [
             "5483143223",
             "2745854711",
             "5264556173",
@@ -41,7 +41,7 @@ public sealed class Day11Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
             "6882881134",
             "4846848554",
             "5283751526",
-        };
+        ];
 
         // Act
         (int actual, _) = Day11.Simulate(grid, steps: 100);
@@ -55,7 +55,7 @@ public sealed class Day11Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
     {
         // Arrange
         string[] grid =
-        {
+        [
             "5483143223",
             "2745854711",
             "5264556173",
@@ -66,7 +66,7 @@ public sealed class Day11Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
             "6882881134",
             "4846848554",
             "5283751526",
-        };
+        ];
 
         // Act
         (_, int actual) = Day11.Simulate(grid, steps: int.MaxValue);

@@ -65,7 +65,9 @@ public sealed class Day18 : Puzzle
         // Find a point that is definitely not already touching the surface
         var origin = new Vector3(minX - 1, minY - 1, minZ - 1);
 
-        HashSet<(Vector3 Point, Vector3 Normal)> surfaces = new();
+#pragma warning disable SA1010
+        HashSet<(Vector3 Point, Vector3 Normal)> surfaces = [];
+#pragma warning restore SA1010
 
         // Find all of the surfaces that can be reached from outside the droplet
         _ = PathFinding.BreadthFirst(Neighbors, origin, cancellationToken);

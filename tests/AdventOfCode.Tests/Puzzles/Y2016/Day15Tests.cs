@@ -9,11 +9,11 @@ public sealed class Day15Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
     public static void Y2016_Day15_FindTimeForCapsuleRelease_Returns_Correct_Solution()
     {
         // Arrange
-        string[] input = new[]
-        {
+        string[] input =
+        [
             "Disc #1 has 5 positions; at time=0, it is at position 4.",
             "Disc #2 has 2 positions; at time=0, it is at position 1.",
-        };
+        ];
 
         // Act
         int actual = Day15.FindTimeForCapsuleRelease(input);

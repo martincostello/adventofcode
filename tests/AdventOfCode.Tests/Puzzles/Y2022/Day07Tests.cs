@@ -9,8 +9,8 @@ public sealed class Day07Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
     public void Y2022_Day07_GetDirectorySizes_Returns_Correct_Value()
     {
         // Arrange
-        string[] terminalOutput = new[]
-        {
+        string[] terminalOutput =
+        [
             "$ cd /",
             "$ ls",
             "dir a",
@@ -34,7 +34,7 @@ public sealed class Day07Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
             "8033020 d.log",
             "5626152 d.ext",
             "7214296 k",
-        };
+        ];
 
         // Act
         (long actualTotalSizeBelowLimit, long actualFreedSpace) = Day07.GetDirectorySizes(terminalOutput);

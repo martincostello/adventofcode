@@ -11,8 +11,8 @@ public sealed class Day11Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
     public void Y2020_Day11_GetOccupiedSeats_Returns_Correct_Value(int version, int expected)
     {
         // Arrange
-        string[] layout = new[]
-        {
+        string[] layout =
+        [
             "L.LL.LL.LL",
             "LLLLLLL.LL",
             "L.L.L..L..",
@@ -23,7 +23,7 @@ public sealed class Day11Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
             "LLLLLLLLLL",
             "L.LLLLLL.L",
             "L.LLLLL.LL",
-        };
+        ];
 
         // Act
         (int actual, _) = Day11.GetOccupiedSeats(layout, version, Logger);

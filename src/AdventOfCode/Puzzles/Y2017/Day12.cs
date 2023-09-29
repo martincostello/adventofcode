@@ -111,7 +111,9 @@ public sealed class Day12 : Puzzle
     /// </returns>
     private static List<Node> GetMembersOfGroup(Node target)
     {
-        List<Node> members = new() { target };
+#pragma warning disable SA1010
+        List<Node> members = [target];
+#pragma warning restore SA1010
 
         foreach (Node edge in target.Edges)
         {

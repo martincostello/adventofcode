@@ -11,12 +11,12 @@ public sealed class Day02Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
     public void Y2022_Day02_GetTotalScore_Returns_Correct_Values(bool containsDesiredOutcome, int expected)
     {
         // Arrange
-        string[] moves = new[]
-        {
+        string[] moves =
+        [
             "A Y",
             "B X",
             "C Z",
-        };
+        ];
 
         // Act
         int actual = Day02.GetTotalScore(moves, containsDesiredOutcome);

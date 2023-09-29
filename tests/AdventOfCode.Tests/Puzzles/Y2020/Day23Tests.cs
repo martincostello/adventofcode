@@ -3,6 +3,8 @@
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2020;
 
+#pragma warning disable SA1010
+
 public sealed class Day23Tests(ITestOutputHelper outputHelper) : PuzzleTest(outputHelper)
 {
     [Theory]
@@ -11,7 +13,7 @@ public sealed class Day23Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
     public void Y2020_Day23_Play_Returns_Correct_Value_Part_1(int moves, int[] expected)
     {
         // Arrange
-        int[] arrangement = { 3, 8, 9, 1, 2, 5, 4, 6, 7 };
+        int[] arrangement = [3, 8, 9, 1, 2, 5, 4, 6, 7];
 
         // Act
         LinkedList<int> actual = Day23.Play(arrangement, moves);

@@ -3,6 +3,8 @@
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2015;
 
+#pragma warning disable SA1010
+
 public sealed class Day19Tests(ITestOutputHelper outputHelper) : PuzzleTest(outputHelper)
 {
     [Fact]
@@ -10,7 +12,7 @@ public sealed class Day19Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
     {
         // Arrange
         string molecule = "HOH";
-        List<string> replacements = new() { "H => HO", "H => OH", "O => HH" };
+        List<string> replacements = ["H => HO", "H => OH", "O => HH"];
 
         // Act
         var actual = Day19.GetPossibleMolecules(molecule, replacements, CancellationToken.None);
@@ -25,7 +27,7 @@ public sealed class Day19Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
     {
         // Arrange
         string molecule = "HOH";
-        List<string> replacements = new() { "e => H", "e => O", "H => HO", "H => OH", "O => HH" };
+        List<string> replacements = ["e => H", "e => O", "H => HO", "H => OH", "O => HH"];
 
         // Act
         int actual = Day19.GetMinimumSteps(molecule, replacements, Logger, CancellationToken.None);

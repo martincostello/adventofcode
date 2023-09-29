@@ -16,7 +16,7 @@ public sealed class Day07Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
     {
         // Arrange
         string[] instructions =
-        {
+        [
             "Step C must be finished before step A can begin.",
             "Step C must be finished before step F can begin.",
             "Step A must be finished before step B can begin.",
@@ -24,7 +24,7 @@ public sealed class Day07Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
             "Step B must be finished before step E can begin.",
             "Step D must be finished before step E can begin.",
             "Step F must be finished before step E can begin.",
-        };
+        ];
 
         // Act
         (string actualOrder, int actualTime) = Day07.Assemble(instructions, partDuration, workers);

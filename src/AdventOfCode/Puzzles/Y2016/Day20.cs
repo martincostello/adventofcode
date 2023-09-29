@@ -41,10 +41,11 @@ public sealed class Day20 : Puzzle
             ranges.Add(range.AsNumberPair<uint>('-'));
         }
 
-        ranges = ranges
-            .OrderBy((p) => p.Start)
-            .ThenBy((p) => p.End)
-            .ToList();
+        ranges =
+        [
+            .. ranges.OrderBy((p) => p.Start)
+                     .ThenBy((p) => p.End),
+        ];
 
         for (int i = 0; i < ranges.Count - 1; i++)
         {
@@ -68,10 +69,11 @@ public sealed class Day20 : Puzzle
                     ranges.RemoveAt(i);
                     ranges.Insert(i, composite);
 
-                    ranges = ranges
-                        .OrderBy((p) => p.Start)
-                        .ThenBy((p) => p.End)
-                        .ToList();
+                    ranges =
+                    [
+                        .. ranges.OrderBy((p) => p.Start)
+                                 .ThenBy((p) => p.End),
+                    ];
                 }
 
                 // Compare from the new range onwards

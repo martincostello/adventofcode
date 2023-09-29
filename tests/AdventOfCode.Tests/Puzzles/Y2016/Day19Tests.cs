@@ -3,6 +3,8 @@
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2016;
 
+#pragma warning disable SA1010
+
 public sealed class Day19Tests(ITestOutputHelper outputHelper) : PuzzleTest(outputHelper)
 {
     [Theory]
@@ -17,13 +19,15 @@ public sealed class Day19Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         actual.ShouldBe(expected);
     }
 
+#pragma warning disable xUnit1026
     [Theory]
     [InlineData("5", 3, 2)]
     [InlineData("3014387", 1834471, 1420064)]
     public async Task Y2016_Day19_Solve_Returns_Correct_Solution(string elves, int expectedV1, int expectedV2)
+#pragma warning restore xUnit1026
     {
         // Arrange
-        string[] args = new[] { elves };
+        string[] args = [elves];
 
         // Act
         var puzzle = await SolvePuzzleAsync<Day19>(args);

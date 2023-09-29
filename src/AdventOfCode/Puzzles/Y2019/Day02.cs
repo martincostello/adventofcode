@@ -9,7 +9,9 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019;
 [Puzzle(2019, 02, "1202 Program Alarm", RequiresData = true)]
 public sealed class Day02 : Puzzle
 {
-    private static readonly long[] Seed = { 0 };
+#pragma warning disable SA1010
+    private static readonly long[] Seed = [0];
+#pragma warning restore SA1010
 
     /// <summary>
     /// Gets the output of the program.

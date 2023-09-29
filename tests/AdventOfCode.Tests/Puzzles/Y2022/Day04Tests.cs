@@ -11,15 +11,15 @@ public sealed class Day04Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
     public void Y2022_Day04_GetOverlappingAssignments_Returns_Correct_Values(bool partial, int expected)
     {
         // Arrange
-        string[] assignments = new[]
-        {
+        string[] assignments =
+        [
             "2-4,6-8",
             "2-3,4-5",
             "5-7,7-9",
             "2-8,3-7",
             "6-6,4-6",
             "2-6,4-8",
-        };
+        ];
 
         // Act
         int actual = Day04.GetOverlappingAssignments(assignments, partial);

@@ -9,8 +9,8 @@ public sealed class Day01Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
     public void Y2022_Day01_GetCalorieInventories_Returns_Correct_Values()
     {
         // Arrange
-        string[] inventory = new[]
-        {
+        string[] inventory =
+        [
             "1000",
             "2000",
             "3000",
@@ -25,7 +25,7 @@ public sealed class Day01Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
             "9000",
             string.Empty,
             "10000",
-        };
+        ];
 
         // Act
         var actual = Day01.GetCalorieInventories(inventory);

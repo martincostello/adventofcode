@@ -11,8 +11,8 @@ public sealed class Day22Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
     public void Y2020_Day22_PlayCombat_Returns_Correct_Value(bool recursive, int expected)
     {
         // Arrange
-        string[] values = new[]
-        {
+        string[] values =
+        [
             "Player 1:",
             "9",
             "2",
@@ -26,7 +26,7 @@ public sealed class Day22Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
             "4",
             "7",
             "10",
-        };
+        ];
 
         // Act
         int actual = Day22.PlayCombat(values, recursive);

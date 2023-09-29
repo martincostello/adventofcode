@@ -11,15 +11,15 @@ public sealed class Day03Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
     public void Y2022_Day03_GetSumOfCommonItemTypes_Returns_Correct_Values(bool useGroups, int expected)
     {
         // Arrange
-        string[] inventories = new[]
-        {
+        string[] inventories =
+        [
             "vJrwpWtwJgWrhcsFMMfFFhFp",
             "jqHRNqRjqzjGDLGLrsFMfFZSrLrFZsSL",
             "PmmdzqPrVvPwwTWBwg",
             "wMqvLMZHhHMvwLHjbvcjnnSBnvTQFn",
             "ttgJtRGJQctTZtZT",
             "CrZsJsPPZsGzwwsLwLmpwMDw",
-        };
+        ];
 
         // Act
         int actual = Day03.GetSumOfCommonItemTypes(inventories, useGroups);

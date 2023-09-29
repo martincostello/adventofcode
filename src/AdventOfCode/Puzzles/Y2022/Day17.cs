@@ -93,11 +93,13 @@ public sealed class Day17 : Puzzle
 
     private sealed class Rock
     {
-        public static readonly ImmutableArray<Point> Horizontal = new Point[] { new(0, 0), new(1, 0), new(2, 0), new(3, 0) }.ToImmutableArray();
-        public static readonly ImmutableArray<Point> Plus = new Point[] { new(1, 0), new(0, 1), new(1, 1), new(2, 1), new(1, 2) }.ToImmutableArray();
-        public static readonly ImmutableArray<Point> Boomerang = new Point[] { new(0, 0), new(1, 0), new(2, 0), new(2, 1), new(2, 2) }.ToImmutableArray();
-        public static readonly ImmutableArray<Point> Vertical = new Point[] { new(0, 0), new(0, 1), new(0, 2), new(0, 3) }.ToImmutableArray();
-        public static readonly ImmutableArray<Point> Square = new Point[] { new(0, 0), new(1, 0), new(0, 1), new(1, 1) }.ToImmutableArray();
+#pragma warning disable SA1010
+        public static readonly ImmutableArray<Point> Horizontal = [new(0, 0), new(1, 0), new(2, 0), new(3, 0)];
+        public static readonly ImmutableArray<Point> Plus = [new(1, 0), new(0, 1), new(1, 1), new(2, 1), new(1, 2)];
+        public static readonly ImmutableArray<Point> Boomerang = [new(0, 0), new(1, 0), new(2, 0), new(2, 1), new(2, 2)];
+        public static readonly ImmutableArray<Point> Vertical = [new(0, 0), new(0, 1), new(0, 2), new(0, 3)];
+        public static readonly ImmutableArray<Point> Square = [new(0, 0), new(1, 0), new(0, 1), new(1, 1)];
+#pragma warning restore SA1010
 
         private Rock(IReadOnlyList<Point> points)
         {

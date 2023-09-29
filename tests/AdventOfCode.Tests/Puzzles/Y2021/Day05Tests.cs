@@ -12,7 +12,7 @@ public sealed class Day05Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
     {
         // Arrange
         string[] game =
-        {
+        [
             "0,9 -> 5,9",
             "8,0 -> 0,8",
             "9,4 -> 3,4",
@@ -23,7 +23,7 @@ public sealed class Day05Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
             "3,4 -> 1,4",
             "0,0 -> 8,8",
             "5,5 -> 8,2",
-        };
+        ];
 
         // Act
         int actual = Day05.NavigateVents(game, useDiagonals);

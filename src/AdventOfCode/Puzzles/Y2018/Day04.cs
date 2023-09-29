@@ -38,12 +38,10 @@ public sealed class Day04 : Puzzle
             .GroupBy((p) => p.Timestamp.Date)
             .ToArray();
 
-#pragma warning disable CA1861
         var guardsAsleepByMinute = groupedLog
             .Select((p) => p.Key)
             .Distinct()
             .ToDictionary((k) => k, (v) => new int[60]);
-#pragma warning restore CA1861
 
         var first = parsedAndSortedLog[0];
         int lastGuard = first.Id!.Value;

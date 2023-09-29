@@ -10,6 +10,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2022;
 public sealed class Day24 : Puzzle
 {
 #pragma warning disable IDE0022
+#pragma warning disable IDE0060
 #pragma warning disable SA1600
 
     public int Solution { get; private set; }

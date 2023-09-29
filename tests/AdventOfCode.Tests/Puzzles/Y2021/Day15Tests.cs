@@ -12,7 +12,7 @@ public sealed class Day15Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
     {
         // Arrange
         string[] riskMap =
-        {
+        [
             "1163751742",
             "1381373672",
             "2136511328",
@@ -23,7 +23,7 @@ public sealed class Day15Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
             "3125421639",
             "1293138521",
             "2311944581",
-        };
+        ];
 
         // Act
         int actual = Day15.GetRiskLevel(riskMap, largeMap);

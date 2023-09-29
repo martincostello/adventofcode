@@ -9,14 +9,14 @@ public sealed class Day24Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
     public static void Y2016_Day24_GetMinimumStepsToVisitLocations_Returns_Correct_Solution()
     {
         // Arrange
-        string[] layout = new[]
-        {
+        string[] layout =
+        [
             "###########",
             "#0.1.....2#",
             "#.#######.#",
             "#4.......3#",
             "###########",
-        };
+        ];
 
         // Act
         int actual = Day24.GetMinimumStepsToVisitLocations(layout, returnToOrigin: false);

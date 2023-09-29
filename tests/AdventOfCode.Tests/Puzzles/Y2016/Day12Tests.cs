@@ -3,23 +3,25 @@
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2016;
 
+#pragma warning disable SA1010
+
 public sealed class Day12Tests(ITestOutputHelper outputHelper) : PuzzleTest(outputHelper)
 {
     [Fact]
     public static void Y2016_Day12_Process_Returns_Correct_Solution()
     {
         // Arrange
-        string[] instructions = new[]
-        {
+        string[] instructions =
+        [
             "cpy 41 a",
             "inc a",
             "inc a",
             "dec a",
             "jnz a 2",
             "dec a",
-        };
+        ];
 
-        int[] binsOfInterest = new[] { 0, 1, 2 };
+        int[] binsOfInterest = [0, 1, 2];
 
         // Act
         var actual = Day12.Process(instructions, initialValueOfC: 0);
@@ -37,8 +39,8 @@ public sealed class Day12Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
     public static void Y2016_Day12_Process_With_Toggle_Returns_Correct_Solution()
     {
         // Arrange
-        string[] instructions = new[]
-        {
+        string[] instructions =
+        [
             "cpy 2 a",
             "tgl a",
             "tgl a",
@@ -46,9 +48,9 @@ public sealed class Day12Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
             "cpy 1 a",
             "dec a",
             "dec a",
-        };
+        ];
 
-        int[] binsOfInterest = new[] { 0, 1, 2 };
+        int[] binsOfInterest = [0, 1, 2];
 
         // Act
         var actual = Day12.Process(instructions, initialValueOfC: 0);

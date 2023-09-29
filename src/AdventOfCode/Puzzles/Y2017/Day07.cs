@@ -170,7 +170,7 @@ public sealed class Day07 : Puzzle
             ProgramsHeld =
                 split.Length > 2 ?
                 split.Skip(3).Select((p) => p.Trim(',')).ToArray() :
-                Array.Empty<string>();
+                [];
         }
 
         /// <summary>

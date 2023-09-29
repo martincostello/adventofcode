@@ -11,8 +11,8 @@ public sealed class Day12Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         // Arrange
         int programId = 0;
 
-        string[] pipes = new[]
-        {
+        string[] pipes =
+        [
             "0 <-> 2",
             "1 <-> 1",
             "2 <-> 0, 3, 4",
@@ -20,7 +20,7 @@ public sealed class Day12Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
             "4 <-> 2, 3, 6",
             "5 <-> 6",
             "6 <-> 4, 5",
-        };
+        ];
 
         // Act
         int actual = Day12.GetProgramsInGroup(programId, pipes);
@@ -33,8 +33,8 @@ public sealed class Day12Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
     public static void Y2017_Day12_GetGroupsInNetwork_Returns_Correct_Value()
     {
         // Arrange
-        string[] pipes = new[]
-        {
+        string[] pipes =
+        [
             "0 <-> 2",
             "1 <-> 1",
             "2 <-> 0, 3, 4",
@@ -42,7 +42,7 @@ public sealed class Day12Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
             "4 <-> 2, 3, 6",
             "5 <-> 6",
             "6 <-> 4, 5",
-        };
+        ];
 
         // Act
         int actual = Day12.GetGroupsInNetwork(pipes);

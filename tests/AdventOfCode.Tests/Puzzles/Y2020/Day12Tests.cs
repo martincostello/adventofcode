@@ -3,13 +3,15 @@
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2020;
 
+#pragma warning disable SA1010
+
 public sealed class Day12Tests(ITestOutputHelper outputHelper) : PuzzleTest(outputHelper)
 {
     [Fact]
     public void Y2020_Day12_GetDistanceTravelled_Returns_Correct_Value()
     {
         // Arrange
-        string[] values = { "F10", "N3", "F7", "R90", "F11" };
+        string[] values = ["F10", "N3", "F7", "R90", "F11"];
 
         // Act
         int actual = Day12.GetDistanceTravelled(values);
@@ -22,7 +24,7 @@ public sealed class Day12Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
     public void Y2020_Day12_GetDistanceTravelledWithWaypoint_Returns_Correct_Value()
     {
         // Arrange
-        string[] values = { "F10", "N3", "F7", "R90", "F11" };
+        string[] values = ["F10", "N3", "F7", "R90", "F11"];
 
         // Act
         int actual = Day12.GetDistanceTravelledWithWaypoint(values);

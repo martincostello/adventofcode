@@ -3,6 +3,8 @@
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2015;
 
+#pragma warning disable SA1010
+
 public sealed class Day24Tests(ITestOutputHelper outputHelper) : PuzzleTest(outputHelper)
 {
     [Fact]
@@ -10,7 +12,7 @@ public sealed class Day24Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
     {
         // Arrange
         int compartments = 3;
-        int[] weights = new[] { 1, 2, 3, 4, 5, 7, 8, 9, 10, 11 };
+        int[] weights = [1, 2, 3, 4, 5, 7, 8, 9, 10, 11];
 
         // Act
         long actual = Day24.GetQuantumEntanglementOfIdealConfiguration(compartments, weights);

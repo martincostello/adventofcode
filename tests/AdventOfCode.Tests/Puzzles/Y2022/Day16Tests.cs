@@ -9,10 +9,10 @@ public sealed class Day16Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
     public void Y2022_Day16_Solve_Returns_Correct_Value()
     {
         // Arrange
-        string[] values = new[]
-        {
+        string[] values =
+        [
             "_",
-        };
+        ];
 
         // Act
         int actual = Day16.Solve(values);

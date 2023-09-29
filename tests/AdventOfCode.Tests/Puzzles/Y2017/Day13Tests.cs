@@ -9,13 +9,13 @@ public sealed class Day13Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
     public static void Y2017_Day13_GetSeverityOfTrip_Returns_Correct_Value()
     {
         // Arrange
-        string[] depthRanges = new[]
-        {
+        string[] depthRanges =
+        [
             "0: 3",
             "1: 2",
             "4: 4",
             "6: 4",
-        };
+        ];
 
         // Act
         int actual = Day13.GetSeverityOfTrip(depthRanges);
@@ -28,13 +28,13 @@ public sealed class Day13Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
     public static void Y2017_Day13_GetShortestDelayForNeverCaught_Returns_Correct_Value()
     {
         // Arrange
-        string[] depthRanges = new[]
-        {
+        string[] depthRanges =
+        [
             "0: 3",
             "1: 2",
             "4: 4",
             "6: 4",
-        };
+        ];
 
         // Act
         int actual = Day13.GetShortestDelayForNeverCaught(depthRanges);

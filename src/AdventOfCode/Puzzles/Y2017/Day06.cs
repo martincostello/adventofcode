@@ -29,7 +29,9 @@ public sealed class Day06 : Puzzle
     /// </returns>
     public static (int CycleCount, int LoopSize) Debug(IList<int> memory)
     {
-        int[] copy = memory.ToArray();
+#pragma warning disable SA1010
+        int[] copy = [.. memory];
+#pragma warning restore SA1010
 
         int cycles = GetRepeatCount(copy);
         int loopSize = GetRepeatCount(copy);

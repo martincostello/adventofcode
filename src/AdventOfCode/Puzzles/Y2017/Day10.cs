@@ -17,7 +17,9 @@ public sealed class Day10 : Puzzle
     /// <summary>
     /// The suffix for all hash operations.
     /// </summary>
-    private static readonly ImmutableArray<int> Suffix = new[] { 17, 31, 73, 47, 23 }.ToImmutableArray();
+#pragma warning disable SA1010
+    private static readonly ImmutableArray<int> Suffix = [17, 31, 73, 47, 23];
+#pragma warning restore SA1010
 
     /// <summary>
     /// Gets the product of multiplying the first two elements after the hash is applied to the input.

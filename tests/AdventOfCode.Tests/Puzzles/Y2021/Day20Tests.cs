@@ -14,7 +14,7 @@ public sealed class Day20Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
     {
         // Arrange
         string[] algorithm =
-        {
+        [
             "..#.#..#####.#.#.#.###.##.....###.##.#..###.####..#####..#....#..#..##..##",
             "#..######.###...####..#..#####..##..#.#####...##.#.#..#.##..#.#......#.###",
             ".######.###.####...#.##.##..#..#..#####.....#.#....###..#.##......#.....#.",
@@ -22,10 +22,10 @@ public sealed class Day20Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
             ".#..#...##.#.##..#...##.#.##..###.#......#.#.......#.#.#.####.###.##...#..",
             "...####.#..#..#.##.#....##..#.####....##...##..#...#......#.#.......#.....",
             "..##..####..#...#.#.#...##..#.#..###..#####........#..####......#..#",
-        };
+        ];
 
         string[] imageData =
-        {
+        [
             string.Join(string.Empty, algorithm),
             string.Empty,
             "#..#.",
@@ -33,7 +33,7 @@ public sealed class Day20Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
             "##..#",
             "..#..",
             "..###",
-        };
+        ];
 
         // Act
         (int actual, _) = Day20.Enhance(imageData, enhancements, Logger);

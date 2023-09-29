@@ -9,8 +9,8 @@ public sealed class Day10Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
     public void Y2022_Day10_GetSignalStrengths_Returns_Correct_Value()
     {
         // Arrange
-        string[] instructions = new[]
-        {
+        string[] instructions =
+        [
             "addx 15",
             "addx -11",
             "addx 6",
@@ -157,7 +157,7 @@ public sealed class Day10Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
             "noop",
             "noop",
             "noop",
-        };
+        ];
 
         // Act
         (_, string actualDisplay, int actualStrength) = Day10.GetMessage(instructions);

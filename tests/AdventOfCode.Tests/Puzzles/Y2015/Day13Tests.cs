@@ -9,8 +9,8 @@ public sealed class Day13Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
     public static void Y2015_Day13_GetMaximumTotalChangeInHappiness()
     {
         // Arrange
-        string[] potentialHappiness = new[]
-        {
+        string[] potentialHappiness =
+        [
             "Alice would gain 54 happiness units by sitting next to Bob.",
             "Alice would lose 79 happiness units by sitting next to Carol.",
             "Alice would lose 2 happiness units by sitting next to David.",
@@ -23,7 +23,7 @@ public sealed class Day13Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
             "David would gain 46 happiness units by sitting next to Alice.",
             "David would lose 7 happiness units by sitting next to Bob.",
             "David would gain 41 happiness units by sitting next to Carol.",
-        };
+        ];
 
         // Act
         int actual = Day13.GetMaximumTotalChangeInHappiness(potentialHappiness);

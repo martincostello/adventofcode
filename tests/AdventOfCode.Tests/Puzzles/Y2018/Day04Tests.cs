@@ -9,8 +9,8 @@ public sealed class Day04Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
     public static void Y2018_Day04_GetSleepiestGuardsMinutes_Returns_Correct_Solution()
     {
         // Arrange
-        string[] log = new[]
-        {
+        string[] log =
+        [
             "[1518-11-01 00:00] Guard #10 begins shift",
             "[1518-11-01 00:05] falls asleep",
             "[1518-11-01 00:25] wakes up",
@@ -28,7 +28,7 @@ public sealed class Day04Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
             "[1518-11-05 00:03] Guard #99 begins shift",
             "[1518-11-05 00:45] falls asleep",
             "[1518-11-05 00:55] wakes up",
-        };
+        ];
 
         // Act
         (int actual1, int actual2) = Day04.GetSleepiestGuardsMinutes(log);

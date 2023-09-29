@@ -251,8 +251,8 @@ public sealed class Day22 : Puzzle
         private readonly Vector3[] Verticies()
         {
             var limit = Origin + Length;
-            return new[]
-            {
+            return
+            [
                 Origin,
                 new Vector3(limit.X,  0,       0),
                 new Vector3(0,        limit.Y, 0),
@@ -261,7 +261,7 @@ public sealed class Day22 : Puzzle
                 new Vector3(Length.X, 0,       limit.Z),
                 new Vector3(limit.X,  limit.Y, 0),
                 limit,
-            };
+            ];
         }
     }
 }

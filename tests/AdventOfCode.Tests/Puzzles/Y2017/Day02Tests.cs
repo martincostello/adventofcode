@@ -35,12 +35,12 @@ public sealed class Day02Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
     public static void Y2017_Day02_CalculateChecksum_Returns_Correct_Solution_Using_Difference()
     {
         // Arrange
-        int[][] spreadsheet = new[]
-        {
-            new[] { 5, 1, 9, 5 },
-            new[] { 7, 5, 3 },
-            new[] { 2, 4, 6, 8 },
-        };
+        int[][] spreadsheet =
+        [
+            [5, 1, 9, 5],
+            [7, 5, 3],
+            [2, 4, 6, 8],
+        ];
 
         // Act
         int actual = Day02.CalculateChecksum(spreadsheet, forEvenlyDivisible: false);
@@ -53,12 +53,12 @@ public sealed class Day02Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
     public static void Y2017_Day02_CalculateChecksum_Returns_Correct_Solution_Using_Evenly_Divisible()
     {
         // Arrange
-        int[][] spreadsheet = new[]
-        {
-            new[] { 5, 9, 2, 8 },
-            new[] { 9, 4, 7, 3 },
-            new[] { 3, 8, 6, 5 },
-        };
+        int[][] spreadsheet =
+        [
+            [5, 9, 2, 8],
+            [9, 4, 7, 3],
+            [3, 8, 6, 5],
+        ];
 
         // Act
         int actual = Day02.CalculateChecksum(spreadsheet, forEvenlyDivisible: true);

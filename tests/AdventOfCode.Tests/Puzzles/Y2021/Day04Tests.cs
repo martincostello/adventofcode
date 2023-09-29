@@ -10,7 +10,7 @@ public sealed class Day04Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
     {
         // Arrange
         string[] game =
-        {
+        [
             "7,4,9,5,11,17,23,2,0,14,21,24,10,16,13,6,15,25,12,22,18,20,8,19,3,26,1",
             string.Empty,
             "22 13 17 11  0",
@@ -30,7 +30,7 @@ public sealed class Day04Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
             "18  8 23 26 20",
             "22 11 13  6  5",
             " 2  0 12  3  7",
-        };
+        ];
 
         // Act
         (int firstWinningScore, int lastWinningScore) = Day04.PlayBingo(game);
