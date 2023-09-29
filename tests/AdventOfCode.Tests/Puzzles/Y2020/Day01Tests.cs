@@ -11,15 +11,15 @@ public sealed class Day01Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
     public void Y2020_Day01_Get2020Product_Returns_Correct_Value(int take, int expected)
     {
         // Arrange
-        int[] values = new[]
-        {
+        int[] values =
+        [
             1721,
             979,
             366,
             299,
             675,
             1456,
-        };
+        ];
 
         // Act
         int actual = Day01.Get2020Product(values, take);

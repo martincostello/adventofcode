@@ -9,8 +9,8 @@ public sealed class Day09Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
     public void Y2020_Day09_GetWeakNumber_Returns_Correct_Value()
     {
         // Arrange
-        long[] values = new long[]
-        {
+        long[] values =
+        [
             35,
             20,
             15,
@@ -31,7 +31,7 @@ public sealed class Day09Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
             277,
             309,
             576,
-        };
+        ];
 
         // Act
         long actual = Day09.GetWeakNumber(values, preambleLength: 5);
@@ -44,8 +44,8 @@ public sealed class Day09Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
     public void Y2020_Day09_GetWeakness_Returns_Correct_Value()
     {
         // Arrange
-        long[] values = new long[]
-        {
+        long[] values =
+        [
             35,
             20,
             15,
@@ -66,7 +66,7 @@ public sealed class Day09Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
             277,
             309,
             576,
-        };
+        ];
 
         // Act
         long actual = Day09.GetWeakness(values, weakNumber: 127);

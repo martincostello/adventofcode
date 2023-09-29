@@ -57,8 +57,10 @@ public sealed class Day17 : Puzzle
 
         void GetPathsToVault(Point current, Stack<char> path, List<string> routes)
         {
-            char[] reversed = path.ToArray();
+#pragma warning disable SA1010
+            char[] reversed = [.. path];
             Array.Reverse(reversed);
+#pragma warning restore SA1010
 
             string pathSoFar = new(reversed);
 

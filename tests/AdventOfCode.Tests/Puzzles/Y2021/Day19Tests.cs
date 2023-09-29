@@ -10,7 +10,7 @@ public sealed class Day19Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
     {
         // Arrange
         string[] data =
-        {
+        [
             "--- scanner 0 ---",
             "404,-588,-901",
             "528,-643,409",
@@ -147,7 +147,7 @@ public sealed class Day19Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
             "891,-625,532",
             "-652,-548,-490",
             "30,-46,-14",
-        };
+        ];
 
         // Act
         (int actualCount, int actualLargestDistance) = Day19.FindBeacons(data);

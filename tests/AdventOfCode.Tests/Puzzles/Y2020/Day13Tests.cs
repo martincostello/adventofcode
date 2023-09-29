@@ -3,13 +3,15 @@
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2020;
 
+#pragma warning disable SA1010
+
 public sealed class Day13Tests(ITestOutputHelper outputHelper) : PuzzleTest(outputHelper)
 {
     [Fact]
     public void Y2020_Day13_GetEarliestBusWaitProduct_Returns_Correct_Value()
     {
         // Arrange
-        string[] notes = { "939", "7,13,x,x,59,x,31,19" };
+        string[] notes = ["939", "7,13,x,x,59,x,31,19"];
 
         // Act
         int actual = Day13.GetEarliestBusWaitProduct(notes);

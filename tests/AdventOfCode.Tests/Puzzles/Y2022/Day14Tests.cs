@@ -11,11 +11,11 @@ public sealed class Day14Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
     public void Y2022_Day14_Simulate_Returns_Correct_Value(bool hasFloor, int expected)
     {
         // Arrange
-        string[] paths = new[]
-        {
+        string[] paths =
+        [
             "498,4 -> 498,6 -> 496,6",
             "503,4 -> 502,4 -> 502,9 -> 494,9",
-        };
+        ];
 
         // Act
         (int actual, _) = Day14.Simulate(paths, hasFloor);

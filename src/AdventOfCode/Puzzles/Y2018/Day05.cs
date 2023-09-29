@@ -56,11 +56,12 @@ public sealed class Day05 : Puzzle
     /// </returns>
     public static string ReduceWithOptimization(string polymer)
     {
-        string[] units = polymer
-            .Select((p) => char.ToLowerInvariant(p).ToString(CultureInfo.InvariantCulture))
-            .Distinct()
-            .Order()
-            .ToArray();
+        string[] units =
+        [
+            .. polymer.Select((p) => char.ToLowerInvariant(p).ToString(CultureInfo.InvariantCulture))
+                      .Distinct()
+                      .Order(),
+        ];
 
         string optimized = units
             .Select((p) => polymer.Replace(p, string.Empty, StringComparison.OrdinalIgnoreCase))

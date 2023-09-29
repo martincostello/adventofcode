@@ -25,13 +25,13 @@ public sealed class Day08Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
     public static void Y2015_Day08_GetLiteralCharacterCountForCollection()
     {
         // Arrange
-        string[] collection = new[]
-        {
+        string[] collection =
+        [
             "\"\"",
             "\"abc\"",
             "\"aaa\\\"aaa\"",
             "\"\\x27\"",
-        };
+        ];
 
         // Act
         int actual = Day08.GetLiteralCharacterCount(collection);
@@ -58,13 +58,13 @@ public sealed class Day08Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
     public static void Y2015_Day08_GetEncodedCharacterCountForCollection()
     {
         // Arrange
-        string[] collection = new[]
-        {
+        string[] collection =
+        [
             "\"\"",
             "\"abc\"",
             "\"aaa\\\"aaa\"",
             "\"\\x27\"",
-        };
+        ];
 
         // Act
         int actual = Day08.GetEncodedCharacterCount(collection);

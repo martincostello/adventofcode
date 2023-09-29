@@ -9,8 +9,8 @@ public sealed class Day19Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
     public void Y2020_Day19_GetMatchCount_Returns_Correct_Value_Part_1()
     {
         // Arrange
-        string[] input = new[]
-        {
+        string[] input =
+        [
             "0: 4 1 5",
             "1: 2 3 | 3 2",
             "2: 4 4 | 5 5",
@@ -23,7 +23,7 @@ public sealed class Day19Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
             "abbbab",
             "aaabbb",
             "aaaabbb",
-        };
+        ];
 
         // Act
         int actual = Day19.GetMatchCount(input, applyFix: false);
@@ -38,8 +38,8 @@ public sealed class Day19Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
     public void Y2020_Day19_GetMatchCount_Returns_Correct_Value_Part_2(bool applyFix, int expected)
     {
         // Arrange
-        string[] input = new[]
-        {
+        string[] input =
+        [
             "42: 9 14 | 10 1",
             "9: 14 27 | 1 26",
             "10: 23 14 | 28 1",
@@ -87,7 +87,7 @@ public sealed class Day19Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
             "aaaabbaabbaaaaaaabbbabbbaaabbaabaaa",
             "babaaabbbaaabaababbaabababaaab",
             "aabbbbbaabbbaaaaaabbbbbababaaaaabbaaabba",
-        };
+        ];
 
         // Act
         int actual = Day19.GetMatchCount(input, applyFix);

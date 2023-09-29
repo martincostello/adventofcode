@@ -3,6 +3,8 @@
 
 namespace MartinCostello.AdventOfCode;
 
+#pragma warning disable SA1010
+
 /// <summary>
 /// A class containing tests for the <see cref="Puzzle"/> class. This class cannot be inherited.
 /// </summary>
@@ -18,7 +20,7 @@ public sealed class PuzzleTests(ITestOutputHelper outputHelper)
     public async Task Puzzle_Solve_Returns_Correct_Value_Based_On_Args_Length()
     {
         // Arrange
-        string[] args = new[] { "1" };
+        string[] args = ["1"];
         var cancellationToken = CancellationToken.None;
 
         var target = new MyPuzzle(2)
@@ -30,7 +32,7 @@ public sealed class PuzzleTests(ITestOutputHelper outputHelper)
         await Assert.ThrowsAsync<PuzzleException>(() => target.SolveAsync(args, cancellationToken));
 
         // Arrange
-        args = Array.Empty<string>();
+        args = [];
         target = new MyPuzzle(1);
 
         // Act and Assert

@@ -11,8 +11,8 @@ public sealed class Day05Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
     public void Y2022_Day05_RearrangeCrates_Returns_Correct_Value(bool canMoveMultipleCrates, string expected)
     {
         // Arrange
-        string[] instructions = new[]
-        {
+        string[] instructions =
+        [
             "    [D]     ",
             "[N] [C]     ",
             "[Z] [M] [P] ",
@@ -22,7 +22,7 @@ public sealed class Day05Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
             "move 3 from 1 to 3",
             "move 2 from 2 to 1",
             "move 1 from 1 to 2",
-        };
+        ];
 
         // Act
         string actual = Day05.RearrangeCrates(instructions, canMoveMultipleCrates);

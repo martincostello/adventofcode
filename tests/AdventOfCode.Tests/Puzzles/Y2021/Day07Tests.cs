@@ -3,6 +3,8 @@
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2021;
 
+#pragma warning disable SA1010
+
 public sealed class Day07Tests(ITestOutputHelper outputHelper) : PuzzleTest(outputHelper)
 {
     [Theory]
@@ -11,7 +13,7 @@ public sealed class Day07Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
     public void Y2021_Day07_AlignSubmarines_Returns_Correct_Value(bool withVariableBurnRate, long expected)
     {
         // Arrange
-        int[] submarines = { 16, 1, 2, 0, 4, 2, 7, 1, 2, 14 };
+        int[] submarines = [16, 1, 2, 0, 4, 2, 7, 1, 2, 14];
 
         // Act
         long actual = Day07.AlignSubmarines(submarines, withVariableBurnRate);

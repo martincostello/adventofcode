@@ -18,12 +18,12 @@ public sealed class Day17Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         int expected)
     {
         // Arrange
-        string[] layout = new[]
-        {
+        string[] layout =
+        [
             ".#.",
             "..#",
             "###",
-        };
+        ];
 
         // Act
         (int actual, _) = Day17.GetActiveCubes(layout, cycles, dimensions, Logger);

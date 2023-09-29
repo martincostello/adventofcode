@@ -91,7 +91,9 @@ public sealed class Day09 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        long[] values = (await ReadResourceAsNumbersAsync<long>(cancellationToken)).ToArray();
+#pragma warning disable SA1010
+        long[] values = [.. await ReadResourceAsNumbersAsync<long>(cancellationToken)];
+#pragma warning restore SA1010
 
         WeakNumber = GetWeakNumber(values, 25);
         Weakness = GetWeakness(values, WeakNumber);

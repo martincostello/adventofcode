@@ -37,7 +37,9 @@ public sealed class Day07 : Puzzle
     {
         long[] instructions = IntcodeVM.ParseProgram(program);
 
-        int[] seed = useFeedback ? new[] { 5, 6, 7, 8, 9 } : new[] { 0, 1, 2, 3, 4 };
+#pragma warning disable SA1010
+        int[] seed = useFeedback ? [5, 6, 7, 8, 9] : [0, 1, 2, 3, 4];
+#pragma warning restore SA1010
 
         var signals = new List<long>();
 
@@ -50,7 +52,9 @@ public sealed class Day07 : Puzzle
             {
                 for (int i = 0; i < phases.Length; i++)
                 {
-                    signal = (await IntcodeVM.RunAsync(instructions, new[] { phases[i], signal }, cancellationToken))[0];
+#pragma warning disable SA1010
+                    signal = (await IntcodeVM.RunAsync(instructions, [phases[i], signal], cancellationToken))[0];
+#pragma warning restore SA1010
                 }
             }
             else

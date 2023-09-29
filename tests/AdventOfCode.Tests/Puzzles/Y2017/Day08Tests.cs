@@ -9,13 +9,13 @@ public sealed class Day08Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
     public static void Y2017_Day08_FindHighestRegisterValueAtEnd_Returns_Correct_Value()
     {
         // Arrange
-        string[] instructions = new[]
-        {
+        string[] instructions =
+        [
             "b inc 5 if a > 1",
             "a inc 1 if b < 5",
             "c dec -10 if a >= 1",
             "c inc -20 if c == 10",
-        };
+        ];
 
         // Act
         int actual = Day08.FindHighestRegisterValueAtEnd(instructions);
@@ -28,13 +28,13 @@ public sealed class Day08Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
     public static void Y2017_Day08_FindHighestRegisterValueDuring_Returns_Correct_Value()
     {
         // Arrange
-        string[] instructions = new[]
-        {
+        string[] instructions =
+        [
             "b inc 5 if a > 1",
             "a inc 1 if b < 5",
             "c dec -10 if a >= 1",
             "c inc -20 if c == 10",
-        };
+        ];
 
         // Act
         int actual = Day08.FindHighestRegisterValueDuring(instructions);

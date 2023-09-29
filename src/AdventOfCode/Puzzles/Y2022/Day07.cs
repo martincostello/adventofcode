@@ -103,7 +103,9 @@ public sealed class Day07 : Puzzle
                 }
             }
 
-            return fileSystem.Values.ToList();
+#pragma warning disable SA1010
+            return [.. fileSystem.Values];
+#pragma warning restore SA1010
         }
 
         static int ParseEntries(Directory current, ReadOnlySpan<string> terminalOutput)

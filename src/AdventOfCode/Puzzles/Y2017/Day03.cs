@@ -17,7 +17,9 @@ public sealed class Day03 : Puzzle
 
     private static readonly Size Down = new(width: 0, height: -1);
 
-    private static readonly Size[] Bounds = { Left, Down, Right };
+#pragma warning disable SA1010
+    private static readonly Size[] Bounds = [Left, Down, Right];
+#pragma warning restore SA1010
 
     /// <summary>
     /// Gets the number steps that are required to carry the data from the input value to the access port.
@@ -197,8 +199,8 @@ public sealed class Day03 : Puzzle
         /// <summary>
         /// An array of offsets that may surround an address in the grid.
         /// </summary>
-        private static readonly ImmutableArray<Size> Offsets = new Size[]
-        {
+        private static readonly ImmutableArray<Size> Offsets =
+        [
             new(0, 1),
             new(1, 1),
             new(1, 0),
@@ -207,7 +209,7 @@ public sealed class Day03 : Puzzle
             new(-1, -1),
             new(-1, 0),
             new(-1, 1),
-        }.ToImmutableArray();
+        ];
 
         /// <summary>
         /// Writes the value for the specified address to memory.

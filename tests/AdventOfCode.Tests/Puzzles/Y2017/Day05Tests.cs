@@ -3,6 +3,8 @@
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2017;
 
+#pragma warning disable SA1010
+
 public sealed class Day05Tests(ITestOutputHelper outputHelper) : PuzzleTest(outputHelper)
 {
     [Theory]
@@ -11,7 +13,7 @@ public sealed class Day05Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
     public static void Y2017_Day05_Execute_Returns_Correct_Value(int version, int expected)
     {
         // Arrange
-        int[] program = new[] { 0, 3, 0, 1, -3 };
+        int[] program = [0, 3, 0, 1, -3];
 
         // Act
         int actual = Day05.Execute(program, version);

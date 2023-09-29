@@ -30,7 +30,7 @@ public sealed class Day24Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
     {
         // Arrange
         string[] instructions =
-        {
+        [
             "sesenwnenenewseeswwswswwnenewsewsw",
             "neeenesenwnwwswnenewnwwsewnenwseswesw",
             "seswneswswsenwwnwse",
@@ -51,7 +51,7 @@ public sealed class Day24Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
             "eneswnwswnwsenenwnwnwwseeswneewsenese",
             "neswnwewnwnwseenwseesewsenwsweewe",
             "wseweeenwnesenwwwswnew",
-        };
+        ];
 
         // Act
         int actual = Day24.TileFloor(instructions, days);

@@ -14,8 +14,8 @@ public sealed class Day11Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         long expected)
     {
         // Arrange
-        string[] observations = new[]
-        {
+        string[] observations =
+        [
             "Monkey 0:",
             "  Starting items: 79, 98",
             "  Operation: new = old * 19",
@@ -43,7 +43,7 @@ public sealed class Day11Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
             "  Test: divisible by 17",
             "    If true: throw to monkey 0",
             "    If false: throw to monkey 1",
-        };
+        ];
 
         // Act
         long actual = Day11.GetMonkeyBusiness(observations, rounds, highAnxiety);

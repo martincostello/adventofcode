@@ -3,23 +3,25 @@
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2016;
 
+#pragma warning disable SA1010
+
 public sealed class Day10Tests(ITestOutputHelper outputHelper) : PuzzleTest(outputHelper)
 {
     [Fact]
     public static void Y2016_Day10_GetBotNumber_Returns_Correct_Solution()
     {
         // Arrange
-        string[] instructions = new[]
-        {
+        string[] instructions =
+        [
             "value 5 goes to bot 2",
             "bot 2 gives low to bot 1 and high to bot 0",
             "value 3 goes to bot 1",
             "bot 1 gives low to output 1 and high to bot 0",
             "bot 0 gives low to output 2 and high to output 0",
             "value 2 goes to bot 2",
-        };
+        ];
 
-        int[] binsOfInterest = new[] { 0, 1, 2 };
+        int[] binsOfInterest = [0, 1, 2];
 
         // Act
         (int bot, int product) = Day10.GetBotNumber(instructions, 5, 2, binsOfInterest);

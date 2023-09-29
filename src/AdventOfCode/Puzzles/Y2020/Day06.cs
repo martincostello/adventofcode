@@ -40,7 +40,9 @@ public sealed class Day06 : Puzzle
             if (string.IsNullOrEmpty(line))
             {
                 responses.Add(current);
-                current = new HashSet<char>();
+#pragma warning disable SA1010
+                current = [];
+#pragma warning restore SA1010
                 membersOfGroup = 0;
                 continue;
             }

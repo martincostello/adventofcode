@@ -9,10 +9,12 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016;
 [Puzzle(2016, 15, "Timing is Everything", RequiresData = true, IsSlow = true)]
 public sealed class Day15 : Puzzle
 {
+#pragma warning disable SA1010
     /// <summary>
     /// The delimiters used when parsing the input. This field is read-only.
     /// </summary>
-    private static readonly char[] Separators = { ' ', ',', '.' };
+    private static readonly char[] Separators = [' ', ',', '.'];
+#pragma warning restore SA1010
 
     /// <summary>
     /// Gets the value of T where the button can first be pressed to get a capsule.

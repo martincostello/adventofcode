@@ -9,8 +9,8 @@ public sealed class Day20Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
     public void Y2020_Day20_GetCornerTileIdProduct_Returns_Correct_Value()
     {
         // Arrange
-        string[] input = new[]
-        {
+        string[] input =
+        [
             "Tile 2311:",
             "..##.#..#.",
             "##..#.....",
@@ -119,7 +119,7 @@ public sealed class Day20Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
             "..#.......",
             "..#.###...",
             string.Empty,
-        };
+        ];
 
         // Act
         (long actualCornerIdProduct, int actualRoughness, _) = Day20.GetCornerTileIdProduct(input, Logger);

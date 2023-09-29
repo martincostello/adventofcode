@@ -8,6 +8,8 @@ using Microsoft.Extensions.Caching.Memory;
 
 namespace MartinCostello.AdventOfCode.Benchmarks;
 
+#pragma warning disable SA1010
+
 ////[EventPipeProfiler(EventPipeProfile.CpuSampling)] // Appears to hang when run via crank
 [MemoryDiagnoser]
 public class PuzzleBenchmarks
@@ -59,13 +61,13 @@ public class PuzzleBenchmarks
     {
         var inputs = new Dictionary<int, string[]>()
         {
-            [4] = new[] { "iwrupvqb" },
-            [10] = new[] { "1321131112" },
-            [11] = new[] { "cqjxjnds" },
-            [14] = new[] { "2503" },
-            [17] = new[] { "150" },
-            [20] = new[] { "34000000" },
-            [25] = new[] { "2947", "3029" },
+            [4] = ["iwrupvqb"],
+            [10] = ["1321131112"],
+            [11] = ["cqjxjnds"],
+            [14] = ["2503"],
+            [17] = ["150"],
+            [20] = ["34000000"],
+            [25] = ["2947", "3029"],
         };
 
         return GetPuzzles(2015, inputs);
@@ -75,13 +77,13 @@ public class PuzzleBenchmarks
     {
         var inputs = new Dictionary<int, string[]>()
         {
-            [5] = new[] { "wtnhxymk" },
-            [13] = new[] { "1362" },
-            [16] = new[] { "10010000000110000", "272" },
-            [17] = new[] { "pvhmgsws" },
-            [19] = new[] { "3014387" },
-            [21] = new[] { "abcdefgh" },
-            [23] = new[] { "7" },
+            [5] = ["wtnhxymk"],
+            [13] = ["1362"],
+            [16] = ["10010000000110000", "272"],
+            [17] = ["pvhmgsws"],
+            [19] = ["3014387"],
+            [21] = ["abcdefgh"],
+            [23] = ["7"],
         };
 
         return GetPuzzles(2016, inputs);
@@ -91,8 +93,8 @@ public class PuzzleBenchmarks
     {
         var inputs = new Dictionary<int, string[]>()
         {
-            [3] = new[] { "312051" },
-            [14] = new[] { "hwlqcszp" },
+            [3] = ["312051"],
+            [14] = ["hwlqcszp"],
         };
 
         return GetPuzzles(2017, inputs);
@@ -105,7 +107,7 @@ public class PuzzleBenchmarks
     {
         var inputs = new Dictionary<int, string[]>()
         {
-            [4] = new[] { "138241-674034" },
+            [4] = ["138241-674034"],
         };
 
         return GetPuzzles(2019, inputs);
@@ -115,9 +117,9 @@ public class PuzzleBenchmarks
     {
         var inputs = new Dictionary<int, string[]>()
         {
-            [7] = new[] { "shiny gold" },
-            [15] = new[] { "0,5,4,1,10,14,7" },
-            [23] = new[] { "583976241" },
+            [7] = ["shiny gold"],
+            [15] = ["0,5,4,1,10,14,7"],
+            [23] = ["583976241"],
         };
 
         return GetPuzzles(2020, inputs);
@@ -189,7 +191,7 @@ public class PuzzleBenchmarks
 
         foreach (var puzzle in puzzles)
         {
-            string[] input = Array.Empty<string>();
+            string[] input = [];
 
             if (inputs is not null &&
                 inputs.TryGetValue(puzzle.Metadata.Day, out string[]? values))

@@ -9,14 +9,14 @@ public sealed class Day08Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
     public void Y2022_Day08_CountVisibleTrees_Returns_Correct_Value()
     {
         // Arrange
-        string[] grid = new[]
-        {
+        string[] grid =
+        [
             "30373",
             "25512",
             "65332",
             "33549",
             "35390",
-        };
+        ];
 
         // Act
         (int actualCount, int actualScore) = Day08.CountVisibleTrees(grid);

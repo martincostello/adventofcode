@@ -12,7 +12,7 @@ public sealed class Day14Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
     {
         // Arrange
         string[] instructions =
-        {
+        [
             "NNCB",
             string.Empty,
             "CH -> B",
@@ -31,7 +31,7 @@ public sealed class Day14Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
             "BC -> B",
             "CC -> N",
             "CN -> C",
-        };
+        ];
 
         // Act
         long actual = Day14.Expand(instructions, steps);

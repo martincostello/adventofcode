@@ -3,6 +3,8 @@
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2015;
 
+#pragma warning disable SA1010
+
 public sealed class Day17Tests(ITestOutputHelper outputHelper) : PuzzleTest(outputHelper)
 {
     [Fact]
@@ -10,7 +12,7 @@ public sealed class Day17Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
     {
         // Arrange
         int volume = 25;
-        int[] containerVolumes = new[] { 20, 15, 10, 5, 5 };
+        int[] containerVolumes = [20, 15, 10, 5, 5];
 
         // Act
         var result = Day17.GetContainerCombinations(volume, containerVolumes);

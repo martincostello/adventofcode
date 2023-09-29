@@ -10,13 +10,13 @@ public sealed class Day09Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
     {
         // Arrange
         string[] heightmap =
-        {
+        [
             "2199943210",
             "3987894921",
             "9856789892",
             "8767896789",
             "9899965678",
-        };
+        ];
 
         // Act
         (int sumOfRiskLevels, int areaOfThreeLargestBasins) = Day09.AnalyzeRisk(heightmap);

@@ -9,13 +9,13 @@ public sealed class Day11Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
     public static void Y2016_Day11_GetMinimumStepsForAssembly_Returns_Correct_Solution()
     {
         // Arrange
-        string[] initialState = new[]
-        {
+        string[] initialState =
+        [
             "The first floor contains a hydrogen-compatible microchip and a lithium-compatible microchip.",
             "The second floor contains a hydrogen generator.",
             "The third floor contains a lithium generator.",
             "The fourth floor contains nothing relevant.",
-        };
+        ];
 
         // Act
         int actual = Day11.GetMinimumStepsForAssembly(initialState);

@@ -12,13 +12,13 @@ public sealed class Day23Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
     {
         // Arrange
         string[] diagram =
-        {
+        [
             "#############",
             "#...........#",
             "###B#C#B#D###",
             "  #A#D#C#A#",
             "  #########",
-        };
+        ];
 
         // Act
         int actual = Day23.Organize(diagram, unfoldDiagram);

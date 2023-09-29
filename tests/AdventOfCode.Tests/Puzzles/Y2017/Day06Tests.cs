@@ -3,13 +3,15 @@
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2017;
 
+#pragma warning disable SA1010
+
 public sealed class Day06Tests(ITestOutputHelper outputHelper) : PuzzleTest(outputHelper)
 {
     [Fact]
     public static void Y2017_Day06_Debug_Returns_Correct_Value()
     {
         // Arrange
-        int[] memory = new[] { 0, 2, 7, 0 };
+        int[] memory = [0, 2, 7, 0];
 
         // Act
         (int cycleCount, int loopSize) = Day06.Debug(memory);

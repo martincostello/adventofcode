@@ -13,7 +13,7 @@ public sealed class Day13Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
     {
         // Arrange
         string[] instructions =
-        {
+        [
             "6,10",
             "0,14",
             "9,10",
@@ -35,7 +35,7 @@ public sealed class Day13Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
             string.Empty,
             "fold along y=7",
             "fold along x=5",
-        };
+        ];
 
         // Act
         (int actual, _, _) = Day13.Fold(instructions, folds, Logger);

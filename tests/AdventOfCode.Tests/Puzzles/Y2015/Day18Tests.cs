@@ -9,15 +9,15 @@ public sealed class Day18Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
     public static void Y2015_Day18_GetGridConfigurationAfterSteps()
     {
         // Arrange
-        string[] initialState = new string[]
-        {
+        string[] initialState =
+        [
             ".#.#.#",
             "...##.",
             "#....#",
             "..#...",
             "#.#..#",
             "####..",
-        };
+        ];
 
         int steps = 0;
         bool areCornerLightsBroken = false;

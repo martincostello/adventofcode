@@ -9,8 +9,8 @@ public sealed class Day03Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
     public void Y2020_Day03_Returns_Correct_Solution_For_Path()
     {
         // Arrange
-        string[] grid = new[]
-        {
+        string[] grid =
+        [
             "..##.......",
             "#...#...#..",
             ".#....#..#.",
@@ -22,7 +22,7 @@ public sealed class Day03Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
             "#.##...#...",
             "#...##....#",
             ".#..#...#.#",
-        };
+        ];
 
         // Act
         int actual = Day03.GetTreeCollisionCount(grid, 3, 1);

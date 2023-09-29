@@ -9,7 +9,9 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016;
 [Puzzle(2016, 01, "No Time for a Taxicab", RequiresData = true)]
 public sealed class Day01 : Puzzle
 {
-    private static readonly char[] Separators = { ',', ' ' };
+#pragma warning disable SA1010
+    private static readonly char[] Separators = [',', ' '];
+#pragma warning restore SA1010
 
     /// <summary>
     /// An enumeration of directions.

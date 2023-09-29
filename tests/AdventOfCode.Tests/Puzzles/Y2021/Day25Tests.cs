@@ -10,7 +10,7 @@ public sealed class Day25Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
     {
         // Arrange
         string[] map =
-        {
+        [
             "v...>>.vv>",
             ".vv>>.vv..",
             ">>.>v>...v",
@@ -20,7 +20,7 @@ public sealed class Day25Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
             ".vv..>.>v.",
             "v.v..>>v.v",
             "....v..v.>",
-        };
+        ];
 
         // Act
         int actual = Day25.ClearSeaFloor(map);

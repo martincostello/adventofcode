@@ -8,6 +8,8 @@ using Xunit.Sdk;
 
 namespace MartinCostello.AdventOfCode.Api;
 
+#pragma warning disable SA1010
+
 /// <summary>
 /// A class containing tests for the API.
 /// </summary>
@@ -16,6 +18,7 @@ namespace MartinCostello.AdventOfCode.Api;
 public class ApiTests(HttpServerFixture fixture, ITestOutputHelper outputHelper)
     : IntegrationTest(fixture, outputHelper)
 {
+#pragma warning disable IDE0300
     [Theory]
     [PuzzleData(2015, 01, 232, 1783)]
     [PuzzleData(2015, 02, 1598415, 3812909)]
@@ -180,6 +183,7 @@ public class ApiTests(HttpServerFixture fixture, ITestOutputHelper outputHelper)
     [PuzzleData(2022, 23, -1, Skip = "Not implemented.")]
     [PuzzleData(2022, 24, -1, Skip = "Not implemented.")]
     [PuzzleData(2022, 25, -1, Skip = "Not implemented.")]
+#pragma warning restore IDE0300
     public async Task Can_Solve_Puzzle(int year, int day, PuzzleDataAttribute testCase)
     {
         // Arrange
@@ -353,7 +357,7 @@ public class ApiTests(HttpServerFixture fixture, ITestOutputHelper outputHelper)
         internal object[] ExpectedSolutions { get; }
 
         public override IEnumerable<object[]> GetData(MethodInfo testMethod)
-            => new object[1][] { new object[] { Year, Day, this } };
+            => new object[1][] { [Year, Day, this] };
 
         public override string ToString() => string.Join(", ", ExpectedSolutions);
     }

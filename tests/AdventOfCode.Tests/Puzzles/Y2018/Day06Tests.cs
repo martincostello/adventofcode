@@ -10,14 +10,14 @@ public sealed class Day06Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
     {
         // Arrange
         string[] coordinates =
-        {
+        [
             "1, 1",
             "1, 6",
             "8, 3",
             "3, 4",
             "5, 5",
             "8, 9",
-        };
+        ];
 
         // Act
         (int largestArea, int areaOfRegion) = Day06.GetLargestArea(coordinates, distanceLimit: 32);

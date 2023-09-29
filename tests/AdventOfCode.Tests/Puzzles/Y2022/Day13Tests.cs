@@ -9,8 +9,8 @@ public sealed class Day13Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
     public void Y2022_Day13_DecodePackets_Returns_Correct_Value()
     {
         // Arrange
-        string[] packets = new[]
-        {
+        string[] packets =
+        [
             "[1,1,3,1,1]",
             "[1,1,5,1,1]",
             string.Empty,
@@ -34,7 +34,7 @@ public sealed class Day13Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
             string.Empty,
             "[1,[2,[3,[4,[5,6,7]]]],8,9]",
             "[1,[2,[3,[4,[5,6,0]]]],8,9]",
-        };
+        ];
 
         // Act
         (int actualSum, int actualDecoderKey) = Day13.DecodePackets(packets);

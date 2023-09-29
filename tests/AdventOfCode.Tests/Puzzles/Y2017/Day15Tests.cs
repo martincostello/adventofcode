@@ -3,6 +3,8 @@
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2017;
 
+#pragma warning disable SA1010
+
 public sealed class Day15Tests(ITestOutputHelper outputHelper) : PuzzleTest(outputHelper)
 {
     [Theory]
@@ -11,7 +13,7 @@ public sealed class Day15Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
     public static void Y2017_Day15_GetMatchingPairs_Returns_Correct_Solution(int version, int expected)
     {
         // Arrange
-        string[] seeds = { "Generator A starts with 65", "Generator B starts with 8921" };
+        string[] seeds = ["Generator A starts with 65", "Generator B starts with 8921"];
 
         // Act
         int actual = Day15.GetMatchingPairs(seeds, version);

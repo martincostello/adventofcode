@@ -11,8 +11,8 @@ public sealed class Day08Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
     public void Y2020_Day08_RunProgram_Returns_Correct_Value(bool fix, int expected)
     {
         // Arrange
-        string[] values = new[]
-        {
+        string[] values =
+        [
             "nop +0",
             "acc +1",
             "jmp +4",
@@ -22,7 +22,7 @@ public sealed class Day08Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
             "acc +1",
             "jmp -4",
             "acc +6",
-        };
+        ];
 
         // Act
         int actual = Day08.RunProgram(values, fix);

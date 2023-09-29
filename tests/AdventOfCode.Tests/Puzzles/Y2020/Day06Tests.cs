@@ -13,8 +13,8 @@ public sealed class Day06Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         int expected)
     {
         // Arrange
-        string[] values = new[]
-        {
+        string[] values =
+        [
             "abc",
             string.Empty,
             "a",
@@ -30,7 +30,7 @@ public sealed class Day06Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
             "a",
             string.Empty,
             "b",
-        };
+        ];
 
         // Act
         int actual = Day06.GetSumOfQuestionsWithYesAnswers(values, byEveryone);

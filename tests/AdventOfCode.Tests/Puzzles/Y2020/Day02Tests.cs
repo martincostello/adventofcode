@@ -27,12 +27,12 @@ public sealed class Day02Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
     public void Y2020_Day02_GetValidPasswordCount_Returns_Correct_Value(int policyVersion, int expected)
     {
         // Arrange
-        string[] values = new[]
-        {
+        string[] values =
+        [
             "1-3 a: abcde",
             "1-3 b: cdefg",
             "2-9 c: ccccccccc",
-        };
+        ];
 
         // Act
         int actual = Day02.GetValidPasswordCount(values, policyVersion);

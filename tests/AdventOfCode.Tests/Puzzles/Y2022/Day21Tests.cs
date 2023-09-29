@@ -11,8 +11,8 @@ public sealed class Day21Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
     public void Y2022_Day21_GetRootNumber_Returns_Correct_Value(bool withEquality, long expected)
     {
         // Arrange
-        string[] jobs = new[]
-        {
+        string[] jobs =
+        [
             "root: pppw + sjmn",
             "dbpl: 5",
             "cczh: sllz + lgvd",
@@ -28,7 +28,7 @@ public sealed class Day21Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
             "lgvd: ljgn * ptdq",
             "drzm: hmdt - zczc",
             "hmdt: 32",
-        };
+        ];
 
         // Act
         long actual = Day21.GetRootNumber(jobs, withEquality);

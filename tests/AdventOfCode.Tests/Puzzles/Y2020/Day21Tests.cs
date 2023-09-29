@@ -9,13 +9,13 @@ public sealed class Day21Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
     public void Y2020_Day21_GetIngredientsWithNoAllergens_Returns_Correct_Value()
     {
         // Arrange
-        string[] foods = new[]
-        {
+        string[] foods =
+        [
             "mxmxvkd kfcds sqjhc nhms (contains dairy, fish)",
             "trh fvjkl sbzzf mxmxvkd (contains dairy)",
             "sqjhc fvjkl (contains soy)",
             "sqjhc mxmxvkd sbzzf (contains fish)",
-        };
+        ];
 
         // Act
         (int actualOccurrences, string actualAllergens) = Day21.GetIngredientsWithNoAllergens(foods);

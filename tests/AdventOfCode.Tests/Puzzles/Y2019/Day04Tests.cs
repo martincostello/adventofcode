@@ -3,6 +3,8 @@
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2019;
 
+#pragma warning disable SA1010
+
 public sealed class Day04Tests(ITestOutputHelper outputHelper) : PuzzleTest(outputHelper)
 {
     [Theory]
@@ -28,7 +30,7 @@ public sealed class Day04Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
     public async Task Y2019_Day04_Solve_Returns_Correct_Solution()
     {
         // Arrange
-        string[] args = new[] { "138241-674034" };
+        string[] args = ["138241-674034"];
 
         // Act
         var puzzle = await SolvePuzzleAsync<Day04>(args);

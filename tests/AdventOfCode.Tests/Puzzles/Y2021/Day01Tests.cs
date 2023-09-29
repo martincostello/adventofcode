@@ -3,6 +3,8 @@
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2021;
 
+#pragma warning disable SA1010
+
 public sealed class Day01Tests(ITestOutputHelper outputHelper) : PuzzleTest(outputHelper)
 {
     [Theory]
@@ -13,7 +15,7 @@ public sealed class Day01Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         int expected)
     {
         // Arrange
-        int[] depthMeasurements = { 199, 200, 208, 210, 200, 207, 240, 269, 260, 263 };
+        int[] depthMeasurements = [199, 200, 208, 210, 200, 207, 240, 269, 260, 263];
 
         // Act
         int actual = Day01.GetDepthMeasurementIncreases(depthMeasurements, useSlidingWindow);

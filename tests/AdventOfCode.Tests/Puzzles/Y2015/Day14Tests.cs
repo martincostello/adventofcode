@@ -35,11 +35,11 @@ public sealed class Day14Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
     public static void Y2015_Day14_GetMaximumDistanceOfFastestReindeer()
     {
         // Arrange
-        string[] flightData = new[]
-        {
+        string[] flightData =
+        [
             "Comet can fly 14 km/s for 10 seconds, but then must rest for 127 seconds.",
             "Dancer can fly 16 km/s for 11 seconds, but then must rest for 162 seconds.",
-        };
+        ];
 
         int timeIndex = 1000;
 
@@ -54,11 +54,11 @@ public sealed class Day14Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
     public static void Y2015_Day14_GetMaximumPointsOfFastestReindeer()
     {
         // Arrange
-        string[] flightData = new[]
-        {
+        string[] flightData =
+        [
             "Comet can fly 14 km/s for 10 seconds, but then must rest for 127 seconds.",
             "Dancer can fly 16 km/s for 11 seconds, but then must rest for 162 seconds.",
-        };
+        ];
 
         int timeIndex = 1000;
 

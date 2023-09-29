@@ -9,8 +9,8 @@ public sealed class Day07Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
     public static void Y2017_Day07_FindBottomProgramName_Returns_Correct_Value()
     {
         // Arrange
-        string[] structure = new[]
-        {
+        string[] structure =
+        [
             "pbga (66)",
             "xhth (57)",
             "ebii (61)",
@@ -24,7 +24,7 @@ public sealed class Day07Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
             "ugml (68) -> gyxo, ebii, jptl",
             "gyxo (61)",
             "cntj (57)",
-        };
+        ];
 
         // Act
         string actual = Day07.FindBottomProgramName(structure);
@@ -37,8 +37,8 @@ public sealed class Day07Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
     public static void Y2017_Day07_FindDesiredWeightOfUnbalancedDisc_Returns_Correct_Value()
     {
         // Arrange
-        string[] structure = new[]
-        {
+        string[] structure =
+        [
             "pbga (66)",
             "xhth (57)",
             "ebii (61)",
@@ -52,7 +52,7 @@ public sealed class Day07Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
             "ugml (68) -> gyxo, ebii, jptl",
             "gyxo (61)",
             "cntj (57)",
-        };
+        ];
 
         // Act
         int actual = Day07.FindDesiredWeightOfUnbalancedDisc(structure);

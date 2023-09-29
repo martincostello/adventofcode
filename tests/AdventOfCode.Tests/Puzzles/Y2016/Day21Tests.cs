@@ -40,8 +40,8 @@ public sealed class Day21Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
     public static void Y2016_Day21_Scramble_Returns_Correct_Solution(string text, bool reverse, string expected)
     {
         // Arrange
-        string[] instructions = new[]
-        {
+        string[] instructions =
+        [
             "swap position 4 with position 0",
             "swap letter d with letter b",
             "reverse positions 0 through 4",
@@ -50,7 +50,7 @@ public sealed class Day21Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
             "move position 3 to position 0",
             "rotate based on position of letter b",
             "rotate based on position of letter d",
-        };
+        ];
 
         // Act
         string actual = Day21.Scramble(text, instructions, reverse);

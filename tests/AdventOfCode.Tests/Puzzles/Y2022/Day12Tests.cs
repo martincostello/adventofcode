@@ -9,14 +9,14 @@ public sealed class Day12Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
     public void Y2022_Day12_GetMinimumSteps_Returns_Correct_Value()
     {
         // Arrange
-        string[] heightmap = new[]
-        {
+        string[] heightmap =
+        [
             "Sabqponm",
             "abcryxxl",
             "accszExk",
             "acctuvwj",
             "abdefghi",
-        };
+        ];
 
         // Act
         (int actualFromStart, int actualFromGround) = Day12.GetMinimumSteps(heightmap);

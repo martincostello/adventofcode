@@ -9,11 +9,11 @@ public sealed class Day15Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
     public static void Y2015_Day15_GetHighestTotalCookieScore()
     {
         // Arrange
-        string[] collection = new[]
-        {
+        string[] collection =
+        [
             "Butterscotch: capacity -1, durability -2, flavor 6, texture 3, calories 8",
             "Cinnamon: capacity 2, durability 3, flavor -2, texture -1, calories 3",
-        };
+        ];
 
         // Act
         int actual = Day15.GetHighestTotalCookieScore(collection);

@@ -9,8 +9,8 @@ public sealed class Day07Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
     public static void Y2015_Day07_InstructionsAreInterpretedCorrectly()
     {
         // Arrange
-        string[] instructions = new string[]
-        {
+        string[] instructions =
+        [
             "j -> k",
             "123 -> x",
             "456 -> y",
@@ -21,7 +21,7 @@ public sealed class Day07Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
             "NOT x -> h",
             "NOT y -> i",
             "i -> j",
-        };
+        ];
 
         // Act
         IDictionary<string, ushort> actual = Day07.GetWireValues(instructions);

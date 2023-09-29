@@ -10,8 +10,8 @@ public sealed class Day07Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
     {
         // Arrange
         string color = "shiny gold";
-        string[] values = new[]
-        {
+        string[] values =
+        [
             "light red bags contain 1 bright white bag, 2 muted yellow bags.",
             "dark orange bags contain 3 bright white bags, 4 muted yellow bags.",
             "bright white bags contain 1 shiny gold bag.",
@@ -21,7 +21,7 @@ public sealed class Day07Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
             "vibrant plum bags contain 5 faded blue bags, 6 dotted black bags.",
             "faded blue bags contain no other bags.",
             "dotted black bags contain no other bags.",
-        };
+        ];
 
         // Act
         int actual = Day07.GetBagColorsThatCouldContainColor(values, color);
@@ -35,8 +35,8 @@ public sealed class Day07Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
     {
         // Arrange
         string color = "shiny gold";
-        string[] values = new[]
-        {
+        string[] values =
+        [
             "light red bags contain 1 bright white bag, 2 muted yellow bags.",
             "dark orange bags contain 3 bright white bags, 4 muted yellow bags.",
             "bright white bags contain 1 shiny gold bag.",
@@ -46,7 +46,7 @@ public sealed class Day07Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
             "vibrant plum bags contain 5 faded blue bags, 6 dotted black bags.",
             "faded blue bags contain no other bags.",
             "dotted black bags contain no other bags.",
-        };
+        ];
 
         // Act
         int actual = Day07.GetInsideBagCount(values, color);
