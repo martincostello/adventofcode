@@ -9,17 +9,17 @@ internal sealed class PuzzleSolver(IPage page)
 {
     public async Task InputArgumentsAsync(IReadOnlyList<string> arguments)
     {
-        const string Selector = "id=arguments";
+        var locator = page.Locator("id=arguments");
 
         for (int i = 0; i < arguments.Count; i++)
         {
             if (i > 0)
             {
-                await page.FocusAsync(Selector);
-                await page.Keyboard.PressAsync("Enter");
+                await locator.FocusAsync();
+                await locator.PressAsync("Enter");
             }
 
-            await page.FillAsync(Selector, arguments[i]);
+            await locator.PressSequentiallyAsync(arguments[i]);
         }
     }
 
