@@ -90,12 +90,10 @@ public sealed class Day21 : Puzzle
 
         var bossStats = (bossHitPoints, bossDamage, bossArmor);
 
-#pragma warning disable SA1010
         string[] potentialWeapons = [.. Shop.PotentialWeapons.Keys];
         string?[] potentialArmor = [.. Shop.PotentialArmor.Keys, null!];
 
         string[] keys = [.. Shop.PotentialRings.Keys];
-#pragma warning restore SA1010
 
         var potentialRings = new List<IList<string>>((keys.Length * 2) + 1)
         {

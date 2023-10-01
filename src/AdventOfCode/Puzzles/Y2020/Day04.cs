@@ -15,9 +15,7 @@ public sealed partial class Day04 : Puzzle
     /// <summary>
     /// The required keys for passports. This field is read-only.
     /// </summary>
-#pragma warning disable SA1010
     private static readonly ImmutableArray<string> RequiredKeys = ["byr", "ecl", "eyr", "hcl", "hgt", "iyr", "pid"];
-#pragma warning restore SA1010
 
     /// <summary>
     /// Gets the number of valid passports.
@@ -46,9 +44,7 @@ public sealed partial class Day04 : Puzzle
             if (string.IsNullOrEmpty(line))
             {
                 passports.Add(current);
-#pragma warning disable SA1010
                 current = [];
-#pragma warning restore SA1010
                 continue;
             }
 

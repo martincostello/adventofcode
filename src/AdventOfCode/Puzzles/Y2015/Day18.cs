@@ -126,9 +126,7 @@ public sealed class Day18 : Puzzle
         }
         else
         {
-#pragma warning disable SA1010
             cornerLights = [];
-#pragma warning restore SA1010
         }
 
         for (int x = 0; x < width; x++)

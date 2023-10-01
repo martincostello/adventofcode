@@ -66,9 +66,7 @@ public sealed class Day03 : Puzzle
 
             if (!stepsToIntersection.TryGetValue(point, out int[]? stepsForWires))
             {
-#pragma warning disable SA1010
                 stepsForWires = stepsToIntersection[point] = [int.MaxValue, int.MaxValue];
-#pragma warning restore SA1010
             }
 
             int index = (int)wire - 1;

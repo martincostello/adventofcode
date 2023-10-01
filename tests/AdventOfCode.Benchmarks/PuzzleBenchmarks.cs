@@ -8,8 +8,6 @@ using Microsoft.Extensions.Caching.Memory;
 
 namespace MartinCostello.AdventOfCode.Benchmarks;
 
-#pragma warning disable SA1010
-
 ////[EventPipeProfiler(EventPipeProfile.CpuSampling)] // Appears to hang when run via crank
 [MemoryDiagnoser]
 public class PuzzleBenchmarks
