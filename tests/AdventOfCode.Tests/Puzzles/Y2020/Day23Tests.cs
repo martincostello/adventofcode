@@ -3,8 +3,6 @@
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2020;
 
-#pragma warning disable SA1010
-
 public sealed class Day23Tests(ITestOutputHelper outputHelper) : PuzzleTest(outputHelper)
 {
     [Theory]

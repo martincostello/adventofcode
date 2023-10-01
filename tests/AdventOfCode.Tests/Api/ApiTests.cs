@@ -8,8 +8,6 @@ using Xunit.Sdk;
 
 namespace MartinCostello.AdventOfCode.Api;
 
-#pragma warning disable SA1010
-
 /// <summary>
 /// A class containing tests for the API.
 /// </summary>

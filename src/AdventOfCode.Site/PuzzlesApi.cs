@@ -85,9 +85,7 @@ internal static partial class PuzzlesApi
             return Results.Problem("This puzzle cannot be solved.", statusCode: StatusCodes.Status403Forbidden);
         }
 
-#pragma warning disable SA1010
         arguments ??= [];
-#pragma warning restore SA1010
 
         if (metadata.RequiresData || metadata.MinimumArguments > 0)
         {

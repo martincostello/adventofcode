@@ -79,10 +79,8 @@ public sealed class Day10 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-#pragma warning disable SA1010
         var instructions = await ReadResourceAsLinesAsync(cancellationToken);
         int[] binsOfInterest = [0, 1, 2];
-#pragma warning restore SA1010
 
         (BotThatCompares61And17Microchips, ProductOfMicrochipsInBins012) = GetBotNumber(instructions, 61, 17, binsOfInterest);
 

@@ -130,10 +130,8 @@ public sealed class Day23 : Puzzle
 
     private sealed class Burrow : IWeightedGraph<State>
     {
-#pragma warning disable SA1010
         private static readonly ImmutableArray<char> Amphipods = ['D', 'C', 'B', 'A'];
         private static readonly ImmutableArray<int> HallwaySpaces = [0, 1, 3, 5, 7, 9, 10];
-#pragma warning restore SA1010
 
         public long Cost(State a, State b)
         {

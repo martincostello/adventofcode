@@ -9,12 +9,10 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015;
 [Puzzle(2015, 05, "Doesn't He Have Intern-Elves For This?", RequiresData = true)]
 public sealed class Day05 : Puzzle
 {
-#pragma warning disable SA1010
     /// <summary>
     /// The sequences of characters that are not considered nice. This field is read-only.
     /// </summary>
     private static readonly ImmutableArray<string> NotNiceSequences = ["ab", "cd", "pq", "xy"];
-#pragma warning restore SA1010
 
     /// <summary>
     /// Gets the number of 'nice' strings using version 1 of the rules.

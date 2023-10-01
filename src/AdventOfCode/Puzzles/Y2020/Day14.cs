@@ -31,10 +31,8 @@ public sealed class Day14 : Puzzle
     {
         const string MaskPrefix = "mask = ";
 
-#pragma warning disable SA1010
         char[] splitChars = ['[', ']', '='];
         StringSplitOptions splitOptions = StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries;
-#pragma warning restore SA1010
 
         int floatingBits = 0;
         string mask = string.Empty;

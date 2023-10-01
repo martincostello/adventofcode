@@ -6,8 +6,6 @@ using System.Security.Cryptography;
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2015;
 
-#pragma warning disable SA1010
-
 /// <summary>
 /// A class representing the puzzle for <c>https://adventofcode.com/2015/day/22</c>. This class cannot be inherited.
 /// </summary>

@@ -17,9 +17,7 @@ public sealed class Day03 : Puzzle
 
     private static readonly Size Down = new(width: 0, height: -1);
 
-#pragma warning disable SA1010
     private static readonly Size[] Bounds = [Left, Down, Right];
-#pragma warning restore SA1010
 
     /// <summary>
     /// Gets the number steps that are required to carry the data from the input value to the access port.

@@ -9,9 +9,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019;
 [Puzzle(2019, 13, "Care Package", RequiresData = true)]
 public sealed class Day13 : Puzzle
 {
-#pragma warning disable SA1010
     private static readonly long[] Seed = [2];
-#pragma warning restore SA1010
 
     /// <summary>
     /// Gets the number of block tiles on the screen.
