@@ -126,7 +126,7 @@ public sealed class Day13 : Puzzle
 
             z += seed;
 
-            string binary = Convert.ToString(z, toBase: 2);
+            string binary = z.ToString("b", CultureInfo.InvariantCulture);
 
             return binary.Count('1') % 2 != 0;
         }
