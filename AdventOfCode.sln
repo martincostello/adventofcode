@@ -15,7 +15,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		benchmark.yml = benchmark.yml
 		build.ps1 = build.ps1
 		CODE_OF_CONDUCT.md = CODE_OF_CONDUCT.md
-		CommonAssemblyInfo.cs = CommonAssemblyInfo.cs
 		crank.ps1 = crank.ps1
 		crank.yml = crank.yml
 		Directory.Build.props = Directory.Build.props

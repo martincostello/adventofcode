@@ -39,7 +39,7 @@ public sealed class Day02 : Puzzle
             int minimumCount = firstNumber;
             int maximumCount = secondNumber;
 
-            int count = password.Count(requiredCharacter);
+            int count = System.MemoryExtensions.Count(password.AsSpan(), requiredCharacter);
             return count >= minimumCount && count <= maximumCount;
         }
         else

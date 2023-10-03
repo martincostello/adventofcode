@@ -187,11 +187,11 @@ public sealed class Day23 : Puzzle
                 }
             }
 
-            string before = a.Burrow(burrowChanged);
-            string after = b.Burrow(burrowChanged);
+            ReadOnlySpan<char> before = a.Burrow(burrowChanged);
+            ReadOnlySpan<char> after = b.Burrow(burrowChanged);
 
             int steps = Math.Abs(State.Entrance(burrowChanged) - index);
-            steps += Math.Max(before.Count(' '), after.Count(' '));
+            steps += Math.Max(System.MemoryExtensions.Count(before, ' '), System.MemoryExtensions.Count(after, ' '));
 
             int multiplier = (int)Math.Pow(10, amphipod - 'A');
 

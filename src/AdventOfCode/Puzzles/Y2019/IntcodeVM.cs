@@ -65,9 +65,9 @@ internal sealed class IntcodeVM
     /// <returns>
     /// The instructions of the program to run.
     /// </returns>
-    internal static long[] ParseProgram(string program)
+    internal static long[] ParseProgram(ReadOnlySpan<char> program)
     {
-        long[] instructions = new long[program.Count(',') + 1];
+        long[] instructions = new long[System.MemoryExtensions.Count(program, ',') + 1];
 
         int i = 0;
 

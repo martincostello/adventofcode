@@ -79,7 +79,7 @@ public sealed class Day18 : Puzzle
         string[] finalStuck = GetGridConfigurationAfterSteps(initial, steps, areCornerLightsBroken: true);
 
         LightsIlluminated = finalUnstuck.Sum((p) => p.Count(On));
-        LightsIlluminatedWithStuckLights = finalStuck.Sum((p) => p.Count(On));
+        LightsIlluminatedWithStuckLights = finalStuck.Sum((p) => System.MemoryExtensions.Count(p.AsSpan(), On));
 
         if (Verbose)
         {

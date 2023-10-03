@@ -128,7 +128,7 @@ public sealed class Day13 : Puzzle
 
             string binary = z.ToString("b", CultureInfo.InvariantCulture);
 
-            return binary.Count('1') % 2 != 0;
+            return System.MemoryExtensions.Count(binary.AsSpan(), '1') % 2 != 0;
         }
     }
 
