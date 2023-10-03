@@ -35,7 +35,7 @@ public sealed class Day14 : Puzzle
         StringSplitOptions splitOptions = StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries;
 
         int floatingBits = 0;
-        string mask = string.Empty;
+        ReadOnlySpan<char> mask = string.Empty;
 
         var memory = new Dictionary<long, long>(program.Count);
 
@@ -46,7 +46,7 @@ public sealed class Day14 : Puzzle
                 // Flip the mask to match the endianness of BitArray
                 string maskValue = instruction[MaskPrefix.Length..];
                 mask = maskValue.Mirror();
-                floatingBits = mask.Count('X');
+                floatingBits = System.MemoryExtensions.Count(mask, 'X');
             }
             else
             {

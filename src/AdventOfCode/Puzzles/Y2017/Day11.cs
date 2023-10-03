@@ -147,9 +147,9 @@ public sealed class Day11 : Puzzle
     /// <returns>
     /// An array of <see cref="CardinalDirection"/> containing the parsed directions from the path.
     /// </returns>
-    private static CardinalDirection[] ParsePath(string path)
+    private static CardinalDirection[] ParsePath(ReadOnlySpan<char> path)
     {
-        var result = new CardinalDirection[path.Count(',') + 1];
+        var result = new CardinalDirection[System.MemoryExtensions.Count(path, ',') + 1];
 
         int i = 0;
 
