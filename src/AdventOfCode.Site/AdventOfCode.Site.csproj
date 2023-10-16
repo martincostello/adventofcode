@@ -18,10 +18,7 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Amazon.Lambda.AspNetCoreServer.Hosting" />
-    <!--
-    HACK See https://github.com/aws/aws-lambda-dotnet/issues/1594
     <PackageReference Include="Amazon.Lambda.RuntimeSupport" />
-    -->
     <PackageReference Include="Microsoft.TypeScript.MSBuild" PrivateAssets="all" />
     <PackageReference Include="Swashbuckle.AspNetCore" />
   </ItemGroup>
