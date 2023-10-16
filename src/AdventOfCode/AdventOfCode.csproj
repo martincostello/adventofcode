@@ -13,4 +13,8 @@
   <ItemGroup>
     <ProjectReference Include="..\AdventOfCode.Resources\AdventOfCode.Resources.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <InternalsVisibleTo Include="AdventOfCode.Benchmarks" Key="$(StrongNamePublicKey)" />
+    <InternalsVisibleTo Include="AdventOfCode.Tests" Key="$(StrongNamePublicKey)" />
+  </ItemGroup>
 </Project>
