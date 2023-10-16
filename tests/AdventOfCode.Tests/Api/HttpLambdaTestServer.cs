@@ -17,7 +17,7 @@ internal sealed class HttpLambdaTestServer : LambdaTestServer, IAsyncLifetime, I
     private IWebHost? _webHost;
 
     public HttpLambdaTestServer()
-        : base(new LambdaTestServerOptions() { FunctionMemorySize = 384 })
+        : base(new LambdaTestServerOptions() { FunctionMemorySize = 512 })
     {
     }
 
