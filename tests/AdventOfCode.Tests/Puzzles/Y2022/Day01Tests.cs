@@ -32,7 +32,7 @@ public sealed class Day01Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
 
         // Assert
         actual.ShouldNotBeNull();
-        actual.ShouldBe(new[] { 6000, 4000, 11000, 24000, 10000 });
+        actual.ShouldBe([6000, 4000, 11000, 24000, 10000]);
     }
 
     [Fact]

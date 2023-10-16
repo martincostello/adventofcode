@@ -24,7 +24,7 @@ public sealed class Day23Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
     public void Y2020_Day23_Play_Returns_Correct_Value_Part_2()
     {
         // Arrange
-        IEnumerable<int> arrangement = new[] { 3, 8, 9, 1, 2, 5, 4, 6, 7 }.Concat(Enumerable.Range(10, 999_991));
+        IEnumerable<int> arrangement = [3, 8, 9, 1, 2, 5, 4, 6, 7, ..Enumerable.Range(10, 999_991)];
 
         // Act
         LinkedList<int> actual = Day23.Play(arrangement, moves: 10_000_000);

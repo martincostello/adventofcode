@@ -37,7 +37,7 @@ public sealed class Day05 : Puzzle
 
         var vm = new IntcodeVM(instructions)
         {
-            Input = await ChannelHelpers.CreateReaderAsync(new[] { input }, cancellationToken),
+            Input = await ChannelHelpers.CreateReaderAsync([input], cancellationToken),
         };
 
         if (!await vm.RunAsync(cancellationToken))
