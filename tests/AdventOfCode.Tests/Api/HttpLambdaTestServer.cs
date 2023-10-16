@@ -11,7 +11,7 @@ using Microsoft.Extensions.Logging;
 namespace MartinCostello.AdventOfCode.Api;
 
 internal sealed class HttpLambdaTestServer()
-    : LambdaTestServer(new LambdaTestServerOptions() { FunctionMemorySize = 8192 }), IAsyncLifetime, ITestOutputHelperAccessor
+    : LambdaTestServer(new LambdaTestServerOptions() { FunctionMemorySize = int.MaxValue }), IAsyncLifetime, ITestOutputHelperAccessor
 {
     private readonly CancellationTokenSource _cts = new();
     private bool _disposed;
