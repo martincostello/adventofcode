@@ -21,7 +21,7 @@ public sealed class Day22Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
     public void Y2015_Day22_Fight_Win_Scenario_1()
     {
         // Arrange
-        IList<string> spellsToConjure = new[] { "Poison", "MagicMissile" };
+        IList<string> spellsToConjure = ["Poison", "MagicMissile"];
         int index = 0;
 
         string SpellSelector(Day22.Wizard w, ICollection<string> s) => spellsToConjure[index++];
@@ -43,7 +43,7 @@ public sealed class Day22Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         wizard.Damage.ShouldBe(0);
         wizard.HitPoints.ShouldBe(2);
         wizard.Mana.ShouldBe(24);
-        wizard.ActiveSpells.ShouldBe(new[] { "Poison" });
+        wizard.ActiveSpells.ShouldBe(["Poison"]);
         wizard.ManaSpent.ShouldBe(173 + 53);
         wizard.SpellsCast.ShouldBe(spellsToConjure);
     }
@@ -52,7 +52,7 @@ public sealed class Day22Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
     public void Y2015_Day22_Fight_Win_Scenario_2()
     {
         // Arrange
-        IList<string> spellsToConjure = new[] { "Recharge", "Shield", "Drain", "Poison", "MagicMissile" };
+        IList<string> spellsToConjure = ["Recharge", "Shield", "Drain", "Poison", "MagicMissile"];
         int index = 0;
 
         string SpellSelector(Day22.Wizard w, ICollection<string> s) => spellsToConjure[index++];
@@ -73,7 +73,7 @@ public sealed class Day22Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         wizard.Damage.ShouldBe(0);
         wizard.HitPoints.ShouldBe(1);
         wizard.Mana.ShouldBe(114);
-        wizard.ActiveSpells.ShouldBe(new[] { "Poison" });
+        wizard.ActiveSpells.ShouldBe(["Poison"]);
         wizard.ManaSpent.ShouldBe(229 + 113 + 73 + 173 + 53);
         wizard.SpellsCast.ShouldBe(spellsToConjure);
     }

@@ -122,7 +122,7 @@ public class UITests : IntegrationTest, IClassFixture<PlaywrightFixture>
             await solver.SolveAsync();
 
             // Assert
-            await solver.SolutionsAsync().ShouldBe(new[] { "121", "RURUCEOEIL" });
+            await solver.SolutionsAsync().ShouldBe(["121", "RURUCEOEIL"]);
             await solver.VisualizationsAsync().ShouldBe(1);
         });
     }

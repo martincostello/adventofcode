@@ -22,7 +22,7 @@ internal static class Maths
     {
         if (value == 0)
         {
-            return new[] { 0 };
+            return [0];
         }
 
         value = Math.Abs(value);

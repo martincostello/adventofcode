@@ -33,7 +33,7 @@ public sealed class Day18Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         long expected)
     {
         // Act
-        long actual = Day18.Evaluate(new[] { expression }, version);
+        long actual = Day18.Evaluate([expression], version);
 
         // Assert
         actual.ShouldBe(expected);

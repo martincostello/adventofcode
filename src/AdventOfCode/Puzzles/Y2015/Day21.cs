@@ -102,7 +102,7 @@ public sealed class Day21 : Puzzle
 
         foreach (string ring in keys)
         {
-            potentialRings.Add(new[] { ring });
+            potentialRings.Add([ring]);
         }
 
         var permutations = Maths.GetPermutations(keys, 2);

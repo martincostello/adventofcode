@@ -17,7 +17,7 @@ public sealed class Day19Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
 
         // Assert
         actual.ShouldNotBeNull();
-        actual.ShouldBe(new[] { "HHHH", "HOHO", "HOOH", "OHOH" });
+        actual.ShouldBe(["HHHH", "HOHO", "HOOH", "OHOH"]);
     }
 
     [Fact]

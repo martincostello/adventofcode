@@ -66,7 +66,7 @@ public class LambdaTests : IAsyncLifetime, IDisposable
         actual.ShouldNotBeNull();
         actual.StatusCode.ShouldBe(StatusCodes.Status200OK);
         actual.MultiValueHeaders.ShouldContainKey("Content-Type");
-        actual.MultiValueHeaders["Content-Type"].ShouldBe(new[] { "application/json; charset=utf-8" });
+        actual.MultiValueHeaders["Content-Type"].ShouldBe(["application/json; charset=utf-8"]);
 
         using var puzzles = JsonDocument.Parse(actual.Body);
 
@@ -114,7 +114,7 @@ public class LambdaTests : IAsyncLifetime, IDisposable
         actual.ShouldNotBeNull();
         actual.StatusCode.ShouldBe(StatusCodes.Status200OK);
         actual.MultiValueHeaders.ShouldContainKey("Content-Type");
-        actual.MultiValueHeaders["Content-Type"].ShouldBe(new[] { "application/json; charset=utf-8" });
+        actual.MultiValueHeaders["Content-Type"].ShouldBe(["application/json; charset=utf-8"]);
 
         using var solution = JsonDocument.Parse(actual.Body);
 
@@ -154,7 +154,7 @@ public class LambdaTests : IAsyncLifetime, IDisposable
         actual.ShouldNotBeNull();
         actual.StatusCode.ShouldBe(StatusCodes.Status200OK);
         actual.MultiValueHeaders.ShouldContainKey("Content-Type");
-        actual.MultiValueHeaders["Content-Type"].ShouldBe(new[] { "application/json; charset=utf-8" });
+        actual.MultiValueHeaders["Content-Type"].ShouldBe(["application/json; charset=utf-8"]);
 
         using var solution = JsonDocument.Parse(actual.Body);
 
