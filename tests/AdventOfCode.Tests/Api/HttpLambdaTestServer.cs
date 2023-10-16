@@ -10,7 +10,8 @@ using Microsoft.Extensions.Logging;
 
 namespace MartinCostello.AdventOfCode.Api;
 
-internal sealed class HttpLambdaTestServer : LambdaTestServer, IAsyncLifetime, ITestOutputHelperAccessor
+internal sealed class HttpLambdaTestServer()
+    : LambdaTestServer(new LambdaTestServerOptions() { FunctionMemorySize = 2048 }), IAsyncLifetime, ITestOutputHelperAccessor
 {
     private readonly CancellationTokenSource _cts = new();
     private bool _disposed;
