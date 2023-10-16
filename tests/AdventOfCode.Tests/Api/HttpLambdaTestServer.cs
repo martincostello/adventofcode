@@ -5,7 +5,6 @@ using MartinCostello.Logging.XUnit;
 using MartinCostello.Testing.AwsLambdaTestServer;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Hosting.Server;
-using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
@@ -42,7 +41,6 @@ internal sealed class HttpLambdaTestServer : LambdaTestServer, IAsyncLifetime, I
         _webHost = builder
             .UseKestrel()
             .ConfigureServices((services) => services.AddLogging((builder) => builder.AddXUnit(this)))
-            .UseSolutionRelativeContentRoot(Path.Combine("src", "AdventOfCode.Site"))
             .UseUrls("http://127.0.0.1:0")
             .Build();
 

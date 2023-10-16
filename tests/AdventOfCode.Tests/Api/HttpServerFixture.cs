@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Hosting.Server;
 using Microsoft.AspNetCore.Hosting.Server.Features;
 using Microsoft.AspNetCore.Mvc.Testing;
-using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -79,8 +78,7 @@ public sealed class HttpServerFixture : WebApplicationFactory<Site.Program>, ITe
             (p) => p.ConfigureHttpsDefaults(
                 (r) => r.ServerCertificate = new X509Certificate2("localhost-dev.pfx", "Pa55w0rd!")));
 
-        builder.UseEnvironment(Environments.Production)
-               .UseSolutionRelativeContentRoot(Path.Combine("src", "AdventOfCode.Site"));
+        builder.UseEnvironment(Environments.Production);
 
         // Configure the server address for the server to
         // listen on for HTTPS requests on a dynamic port.
