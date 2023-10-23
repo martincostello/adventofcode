@@ -11,9 +11,8 @@ using Microsoft.Extensions.Logging;
 namespace MartinCostello.AdventOfCode.Api;
 
 internal sealed class HttpLambdaTestServer()
-    : LambdaTestServer(new LambdaTestServerOptions() { FunctionMemorySize = FunctionMemorySize }), IAsyncLifetime, ITestOutputHelperAccessor
+    : LambdaTestServer(new LambdaTestServerOptions() { /*DisableMemoryLimitCheck = true*/ }), IAsyncLifetime, ITestOutputHelperAccessor
 {
-    private static readonly int FunctionMemorySize = GetFunctionMemorySize();
     private readonly CancellationTokenSource _cts = new();
     private bool _disposed;
     private IWebHost? _webHost;
@@ -62,16 +61,5 @@ internal sealed class HttpLambdaTestServer()
         }
 
         base.Dispose(disposing);
-    }
-
-    private static int GetFunctionMemorySize()
-    {
-        // See https://github.com/aws/aws-lambda-dotnet/issues/1594 and
-        // https://docs.github.com/en/actions/using-github-hosted-runners/about-github-hosted-runners/about-github-hosted-runners#supported-runners-and-hardware-resources.
-        return Environment.GetEnvironmentVariable("GITHUB_ACTIONS") switch
-        {
-            "true" => (OperatingSystem.IsMacOS() ? 13 : 6) * 1024, // 1GB less than the runner
-            _ => int.MaxValue,
-        };
     }
 }
