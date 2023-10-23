@@ -30,6 +30,8 @@ env:
   NUGET_XMLDOC_MODE: skip
   PUBLISH_RUNTIME: win-x64
   TERM: xterm
+  # HACK Workaround until changes from martincostello/lambda-test-server#403 can be used
+  AWS_LAMBDA_DOTNET_DISABLE_MEMORY_LIMIT_CHECK: true
 
 permissions:
   contents: read
