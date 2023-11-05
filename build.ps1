@@ -72,7 +72,7 @@ if ($installDotNetSdk -eq $true) {
 
 Write-Host "Building solution..." -ForegroundColor Green
 
-& $dotnet build ./AdventOfCode.sln
+& $dotnet build ./AdventOfCode.sln --tl
 
 if ($LASTEXITCODE -ne 0) {
     throw "dotnet build failed with exit code $LASTEXITCODE"
@@ -109,7 +109,7 @@ if ($SkipPublish -eq $false) {
     $projectPath = (Join-Path $solutionPath "src" "AdventOfCode.Site")
     $projectFile = Join-Path $projectPath "AdventOfCode.Site.csproj"
 
-    $additionalArgs = @()
+    $additionalArgs = @("--tl")
 
     if (![string]::IsNullOrEmpty($Runtime)) {
         $additionalArgs += "--self-contained"
