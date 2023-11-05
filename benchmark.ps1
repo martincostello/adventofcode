@@ -91,6 +91,7 @@ if (![string]::IsNullOrEmpty($Job)) {
     --project $benchmarks `
     --configuration $Configuration `
     --framework $Framework `
+    --tl `
     -- `
     $additionalArgs
 
