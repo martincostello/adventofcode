@@ -30,7 +30,7 @@ jobs:
     steps:
 
     - name: Parse comment
-      uses: actions/github-script@v6
+      uses: actions/github-script@v7
       id: parse-comment
       with:
         result-encoding: string
@@ -156,7 +156,7 @@ jobs:
           -PublishResults
 
     - name: Post result comment
-      uses: actions/github-script@v6
+      uses: actions/github-script@v7
       if: ${{ !cancelled() }}
       env:
         BENCHMARK_NAME: ${{ steps.parse-comment.outputs.benchmark }}
