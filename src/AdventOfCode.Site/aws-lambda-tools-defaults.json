@@ -8,7 +8,7 @@
   "function-handler": "AdventOfCode.Site",
   "function-memory-size": 384,
   "function-name": "adventofcode",
-  "function-runtime": "provided.al2",
+  "function-runtime": "provided.al2023",
   "function-timeout": 30,
   "msbuild-parameters": "--runtime linux-arm64 --self-contained true /p:PublishReadyToRun=true /p:TieredCompilation=false",
   "package-type": "Zip",

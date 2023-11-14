@@ -38,9 +38,6 @@
     <Exec Command="npm install" Condition=" !Exists('$(MSBuildThisFileDirectory)\node_modules') AND '$(GITHUB_ACTIONS)' == '' " />
     <Exec Command="npm run publish" Condition=" !Exists('$(MSBuildThisFileDirectory)\wwwroot\static\js\main.js') " />
   </Target>
-  <!--
-    HACK Workaround for https://github.com/aws/aws-lambda-dotnet/issues/920
-  -->
   <ItemGroup Condition=" '$(RuntimeIdentifier)' == 'linux-arm64' ">
     <PackageReference Include="Microsoft.ICU.ICU4C.Runtime" />
   </ItemGroup>
