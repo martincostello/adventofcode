@@ -28,7 +28,7 @@ public sealed class Day12 : Puzzle
     /// <param name="element">The JSON element.</param>
     /// <param name="valueToIgnore">The elements to ignore if they contain this value.</param>
     /// <returns>The sum of the elements in <paramref name="element"/>.</returns>
-    public static long SumIntegerValues(JsonElement element, string valueToIgnore)
+    public static long SumIntegerValues(JsonElement element, string? valueToIgnore)
     {
         long sum = 0;
 
