@@ -20,7 +20,7 @@ public sealed class Day12Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
     [InlineData(@"[1,{""c"":""red"",""b"":2},3]", "red", 4)]
     [InlineData(@"{""d"":""red"",""e"":[1,2,3,4],""f"":5}", "red", 0)]
     [InlineData(@"[1,""red"",5]", "red", 6)]
-    public static void Y2015_Day12_SumIntegerValues(string json, string keyToIgnore, long expected)
+    public static void Y2015_Day12_SumIntegerValues(string json, string? keyToIgnore, long expected)
     {
         // Arrange
         using var document = JsonDocument.Parse(json);
