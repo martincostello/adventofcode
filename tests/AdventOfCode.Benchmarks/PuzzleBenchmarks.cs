@@ -3,13 +3,11 @@
 
 using System.Reflection;
 using BenchmarkDotNet.Attributes;
-using BenchmarkDotNet.Diagnosers;
 using Microsoft.Extensions.Caching.Memory;
 
 namespace MartinCostello.AdventOfCode.Benchmarks;
 
-////[EventPipeProfiler(EventPipeProfile.CpuSampling)] // Appears to hang when run via crank
-[MemoryDiagnoser]
+[Config(typeof(CustomBenchmarkConfig))]
 public class PuzzleBenchmarks
 {
     public static IEnumerable<object> Puzzles()
