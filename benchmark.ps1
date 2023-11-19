@@ -4,8 +4,6 @@
 #Requires -Version 7
 
 param(
-    [Parameter(Mandatory = $false)][string] $Configuration = "Release",
-    [Parameter(Mandatory = $false)][string] $Framework = "net8.0",
     [Parameter(Mandatory = $false)][string] $Filter = "*",
     [Parameter(Mandatory = $false)][string] $Job = "short"
 )
@@ -89,9 +87,6 @@ if (![string]::IsNullOrEmpty($Job)) {
 
 & $dotnet run `
     --project $benchmarks `
-    --configuration $Configuration `
-    --framework $Framework `
-    --tl `
+    --configuration "Release" `
     -- `
     $additionalArgs
-
