@@ -40,7 +40,7 @@ foreach (var puzzle in puzzles)
 builder.Services.ConfigureHttpJsonOptions((p) =>
 {
     p.SerializerOptions.WriteIndented = true;
-    p.SerializerOptions.TypeInfoResolverChain.Add(ApplicationJsonSerializerContext.Default);
+    p.SerializerOptions.TypeInfoResolverChain.Insert(0, ApplicationJsonSerializerContext.Default);
 });
 
 builder.Services.Configure<StaticFileOptions>((options) =>
@@ -133,21 +133,18 @@ if (app.Environment.IsDevelopment())
 
 app.MapGet("/version", () =>
 {
-    var result = new
+    var result = new ApplicationInfo()
     {
-        applicationVersion = GetVersion<ApplicationJsonSerializerContext>(),
-        frameworkDescription = RuntimeInformation.FrameworkDescription,
-        operatingSystem = RuntimeInformation.OSDescription,
-        operatingSystemArchitecture = RuntimeInformation.OSArchitecture.ToString(),
-        processArchitecture = RuntimeInformation.ProcessArchitecture.ToString(),
-        dotnet = new
-        {
-            runtime = GetVersion<object>(),
-            aspNetCore = GetVersion<RequestDelegateFactoryOptions>(),
-        },
+        ApplicationVersion = GetVersion<ApplicationJsonSerializerContext>(),
+        FrameworkDescription = RuntimeInformation.FrameworkDescription,
+        OperatingSystem = RuntimeInformation.OSDescription,
+        OperatingSystemArchitecture = RuntimeInformation.OSArchitecture.ToString(),
+        ProcessArchitecture = RuntimeInformation.ProcessArchitecture.ToString(),
+        DotNetRuntimeVersion = GetVersion<object>(),
+        AspNetCoreVersion = GetVersion<RequestDelegateFactoryOptions>(),
     };
 
-    return Results.Json(result);
+    return Results.Json(result, ApplicationJsonSerializerContext.Default.ApplicationInfo);
 }).AllowAnonymous();
 
 app.Run();

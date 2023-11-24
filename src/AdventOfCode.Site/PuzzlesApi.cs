@@ -35,7 +35,7 @@ internal static partial class PuzzlesApi
             })
             .ToList();
 
-        return Results.Json(puzzles);
+        return Results.Json(puzzles, ApplicationJsonSerializerContext.Default.ListPuzzleMetadata);
     }
 
     /// <summary>
@@ -139,7 +139,7 @@ internal static partial class PuzzlesApi
             TimeToSolve = stopwatch.Elapsed.TotalMilliseconds,
         };
 
-        return Results.Json(result);
+        return Results.Json(result, ApplicationJsonSerializerContext.Default.PuzzleSolution);
     }
 
     /// <summary>
