@@ -36,6 +36,9 @@ benchmarks:
   microbenchmarks-2022:
     description: Microbenchmarks for 2022
     arguments: --config ./crank.yml --scenario microbenchmarks --variable filterArg=*2022*
+  microbenchmarks-2023:
+    description: Microbenchmarks for 2023
+    arguments: --config ./crank.yml --scenario microbenchmarks --variable filterArg=*2023*
   root:
     description: Root
     arguments: --config ./crank.yml --scenario root
