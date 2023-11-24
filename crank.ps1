@@ -9,6 +9,11 @@ param(
     [Parameter(Mandatory = $false)][string] $BranchOrCommitOrTag = ""
 )
 
+$ErrorActionPreference = "Stop"
+$global:ProgressPreference = "SilentlyContinue"
+
+$env:MSBUILDTERMINALLOGGER = "auto"
+
 $additionalArgs = @()
 
 if (![string]::IsNullOrEmpty($BranchOrCommitOrTag)) {

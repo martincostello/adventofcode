@@ -12,6 +12,8 @@ param(
 $ErrorActionPreference = "Stop"
 $global:ProgressPreference = "SilentlyContinue"
 
+$env:MSBUILDTERMINALLOGGER = "auto"
+
 $solutionPath = $PSScriptRoot
 $sdkFile = Join-Path $solutionPath "global.json"
 
@@ -72,7 +74,7 @@ if ($installDotNetSdk -eq $true) {
 
 Write-Host "Building solution..." -ForegroundColor Green
 
-& $dotnet build ./AdventOfCode.sln --tl
+& $dotnet build ./AdventOfCode.sln
 
 if ($LASTEXITCODE -ne 0) {
     throw "dotnet build failed with exit code $LASTEXITCODE"
@@ -109,7 +111,7 @@ if ($SkipPublish -eq $false) {
     $projectPath = (Join-Path $solutionPath "src" "AdventOfCode.Site")
     $projectFile = Join-Path $projectPath "AdventOfCode.Site.csproj"
 
-    $additionalArgs = @("--tl")
+    $additionalArgs = @()
 
     if (![string]::IsNullOrEmpty($Runtime)) {
         $additionalArgs += "--self-contained"
