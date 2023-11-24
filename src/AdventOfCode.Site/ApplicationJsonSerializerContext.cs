@@ -15,6 +15,7 @@ namespace MartinCostello.AdventOfCode.Site;
 [JsonSerializable(typeof(List<PuzzlesApi.PuzzleMetadata>))]
 [JsonSerializable(typeof(PuzzlesApi.PuzzleSolution))]
 [JsonSerializable(typeof(ApplicationInfo))]
+[JsonSourceGenerationOptions(PropertyNamingPolicy = JsonKnownNamingPolicy.CamelCase)]
 internal sealed partial class ApplicationJsonSerializerContext : JsonSerializerContext
 {
 }
