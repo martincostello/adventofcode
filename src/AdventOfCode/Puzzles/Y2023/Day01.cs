@@ -11,7 +11,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2023;
 [Puzzle(2023, 01, "Trebuchet?!", RequiresData = true)]
 public sealed class Day01 : Puzzle
 {
-    private static readonly SearchValues<char> Digits = SearchValues.Create(['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']);
+    private static readonly SearchValues<char> Digits = SearchValues.Create("123456789");
 
     /// <summary>
     /// Gets the sum of all of the calibration values using only digits.
