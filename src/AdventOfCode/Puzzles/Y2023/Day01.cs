@@ -6,18 +6,47 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2023;
 /// <summary>
 /// A class representing the puzzle for <c>https://adventofcode.com/2023/day/01</c>. This class cannot be inherited.
 /// </summary>
-[Puzzle(2023, 01, "", RequiresData = true, IsHidden = true)]
+[Puzzle(2023, 01, "Trebuchet?!", RequiresData = true)]
 public sealed class Day01 : Puzzle
 {
-#pragma warning disable IDE0022
-#pragma warning disable IDE0060
-#pragma warning disable SA1600
+    /// <summary>
+    /// Gets the sum of all of the calibration values.
+    /// </summary>
+    public int SumOfCalibrations { get; private set; }
 
-    public int Solution { get; private set; }
-
-    public static int Solve(IList<string> values)
+    /// <summary>
+    /// Gets the sum of all of the specified calibration values.
+    /// </summary>
+    /// <param name="values">The calibration values to sum.</param>
+    /// <returns>
+    /// The sum of all of the calibration values.
+    /// </returns>
+    public static int SumCalibrations(IList<string> values)
     {
-        return -1;
+        int result = 0;
+
+        foreach (string value in values)
+        {
+            for (int i = 0; i < value.Length; i++)
+            {
+                if (char.IsAsciiDigit(value[i]))
+                {
+                    result += (value[i] - '0') * 10;
+                    break;
+                }
+            }
+
+            for (int i = value.Length - 1; i > -1; i--)
+            {
+                if (char.IsAsciiDigit(value[i]))
+                {
+                    result += value[i] - '0';
+                    break;
+                }
+            }
+        }
+
+        return result;
     }
 
     /// <inheritdoc />
@@ -27,13 +56,13 @@ public sealed class Day01 : Puzzle
 
         var values = await ReadResourceAsLinesAsync(cancellationToken);
 
-        Solution = Solve(values);
+        SumOfCalibrations = SumCalibrations(values);
 
         if (Verbose)
         {
-            Logger.WriteLine("{0}", Solution);
+            Logger.WriteLine("The sum of all of the calibration values is {0}.", SumOfCalibrations);
         }
 
-        return PuzzleResult.Create(Solution);
+        return PuzzleResult.Create(SumOfCalibrations);
     }
 }
