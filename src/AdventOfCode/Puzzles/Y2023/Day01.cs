@@ -55,49 +55,40 @@ public sealed class Day01 : Puzzle
             firstIndexes.Clear();
             lastIndexes.Clear();
 
-            int first;
-            int last;
-
-            if (useWords)
-            {
-                for (int i = 0; i < Numbers.Length; i++)
-                {
-                    string number = Numbers[i];
-                    first = value.IndexOf(number, StringComparison.Ordinal);
-                    last = value.LastIndexOf(number, StringComparison.Ordinal);
-
-                    if (first > -1)
-                    {
-                        firstIndexes[i + 1] = first;
-                    }
-
-                    if (last > -1)
-                    {
-                        lastIndexes[i + 1] = last;
-                    }
-                }
-            }
-
-            first = System.MemoryExtensions.IndexOfAny(value, Digits);
-            last = System.MemoryExtensions.LastIndexOfAny(value, Digits);
+            int first = System.MemoryExtensions.IndexOfAny(value, Digits);
+            int last = System.MemoryExtensions.LastIndexOfAny(value, Digits);
 
             if (first > -1)
             {
                 int digit = value[first] - '0';
-
-                if (!firstIndexes.TryGetValue(digit, out int other) || first < other)
-                {
-                    firstIndexes[digit] = first;
-                }
+                firstIndexes[digit] = first;
             }
 
             if (last > -1)
             {
                 int digit = value[last] - '0';
+                lastIndexes[digit] = last;
+            }
 
-                if (!lastIndexes.TryGetValue(digit, out int other) || last > other)
+            if (useWords)
+            {
+                for (int i = 0; i < Numbers.Length; i++)
                 {
-                    lastIndexes[digit] = last;
+                    string word = Numbers[i];
+                    int digit = i + 1;
+
+                    first = value.IndexOf(word, StringComparison.Ordinal);
+                    last = value.LastIndexOf(word, StringComparison.Ordinal);
+
+                    if (first > -1 && (!firstIndexes.TryGetValue(digit, out int other) || first < other))
+                    {
+                        firstIndexes[digit] = first;
+                    }
+
+                    if (last > -1 && (!lastIndexes.TryGetValue(digit, out other) || last > other))
+                    {
+                        lastIndexes[digit] = last;
+                    }
                 }
             }
 
