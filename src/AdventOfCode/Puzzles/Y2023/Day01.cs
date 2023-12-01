@@ -1,6 +1,8 @@
 ﻿// Copyright (c) Martin Costello, 2015. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
+using System.Buffers;
+
 namespace MartinCostello.AdventOfCode.Puzzles.Y2023;
 
 /// <summary>
@@ -9,41 +11,96 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2023;
 [Puzzle(2023, 01, "Trebuchet?!", RequiresData = true)]
 public sealed class Day01 : Puzzle
 {
+    private static readonly SearchValues<char> Digits = SearchValues.Create(['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']);
+
     /// <summary>
-    /// Gets the sum of all of the calibration values.
+    /// Gets the sum of all of the calibration values using only digits.
     /// </summary>
-    public int SumOfCalibrations { get; private set; }
+    public int SumOfCalibrationsDigits { get; private set; }
+
+    /// <summary>
+    /// Gets the sum of all of the calibration values using words and digits.
+    /// </summary>
+    public int SumOfCalibrationsWordsAndDigits { get; private set; }
+
+    private static ReadOnlySpan<string> Numbers => new[]
+    {
+        "one",
+        "two",
+        "three",
+        "four",
+        "five",
+        "six",
+        "seven",
+        "eight",
+        "nine",
+    };
 
     /// <summary>
     /// Gets the sum of all of the specified calibration values.
     /// </summary>
     /// <param name="values">The calibration values to sum.</param>
+    /// <param name="useWords">Whether to search for words of numbers.</param>
     /// <returns>
     /// The sum of all of the calibration values.
     /// </returns>
-    public static int SumCalibrations(IList<string> values)
+    public static int SumCalibrations(IList<string> values, bool useWords)
     {
         int result = 0;
+        var firstIndexes = new Dictionary<int, int>(Numbers.Length);
+        var lastIndexes = new Dictionary<int, int>(Numbers.Length);
 
         foreach (string value in values)
         {
-            for (int i = 0; i < value.Length; i++)
+            firstIndexes.Clear();
+            lastIndexes.Clear();
+
+            if (useWords)
             {
-                if (char.IsAsciiDigit(value[i]))
+                for (int i = 0; i < Numbers.Length; i++)
                 {
-                    result += (value[i] - '0') * 10;
-                    break;
+                    int first = value.IndexOf(Numbers[i], StringComparison.Ordinal);
+                    int last = value.LastIndexOf(Numbers[i], StringComparison.Ordinal);
+
+                    if (first > -1)
+                    {
+                        firstIndexes[i + 1] = first;
+                    }
+
+                    if (last > -1)
+                    {
+                        lastIndexes[i + 1] = last;
+                    }
                 }
             }
 
-            for (int i = value.Length - 1; i > -1; i--)
+            int firstDigit = System.MemoryExtensions.IndexOfAny(value, Digits);
+            int lastDigit = System.MemoryExtensions.LastIndexOfAny(value, Digits);
+
+            if (firstDigit > -1)
             {
-                if (char.IsAsciiDigit(value[i]))
+                int digit = value[firstDigit] - '0';
+
+                if (!firstIndexes.TryGetValue(digit, out int other) || firstDigit < other)
                 {
-                    result += value[i] - '0';
-                    break;
+                    firstIndexes[digit] = firstDigit;
                 }
             }
+
+            if (lastDigit > -1)
+            {
+                int digit = value[lastDigit] - '0';
+
+                if (!lastIndexes.TryGetValue(digit, out int other) || lastDigit > other)
+                {
+                    lastIndexes[digit] = lastDigit;
+                }
+            }
+
+            var digitOne = firstIndexes.MinBy((p) => p.Value);
+            var digitTwo = lastIndexes.MaxBy((p) => p.Value);
+
+            result += (digitOne.Key * 10) + digitTwo.Key;
         }
 
         return result;
@@ -56,13 +113,15 @@ public sealed class Day01 : Puzzle
 
         var values = await ReadResourceAsLinesAsync(cancellationToken);
 
-        SumOfCalibrations = SumCalibrations(values);
+        SumOfCalibrationsDigits = SumCalibrations(values, useWords: false);
+        SumOfCalibrationsWordsAndDigits = SumCalibrations(values, useWords: true);
 
         if (Verbose)
         {
-            Logger.WriteLine("The sum of all of the calibration values is {0}.", SumOfCalibrations);
+            Logger.WriteLine("The sum of all of the calibration values is {0} using only digits.", SumOfCalibrationsDigits);
+            Logger.WriteLine("The sum of all of the calibration values is {0} using words and digits.", SumOfCalibrationsWordsAndDigits);
         }
 
-        return PuzzleResult.Create(SumOfCalibrations);
+        return PuzzleResult.Create(SumOfCalibrationsDigits, SumOfCalibrationsWordsAndDigits);
     }
 }

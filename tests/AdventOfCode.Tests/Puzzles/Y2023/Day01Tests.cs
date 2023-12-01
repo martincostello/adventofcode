@@ -6,7 +6,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2023;
 public sealed class Day01Tests(ITestOutputHelper outputHelper) : PuzzleTest(outputHelper)
 {
     [Fact]
-    public void Y2023_Day01_SumCalibrations_Returns_Correct_Value()
+    public void Y2023_Day01_SumCalibrations_Only_Digits_Returns_Correct_Value()
     {
         // Arrange
         string[] values =
@@ -18,10 +18,32 @@ public sealed class Day01Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         ];
 
         // Act
-        int actual = Day01.SumCalibrations(values);
+        int actual = Day01.SumCalibrations(values, useWords: false);
 
         // Assert
         actual.ShouldBe(142);
+    }
+
+    [Fact]
+    public void Y2023_Day01_SumCalibrations_With_Words_Returns_Correct_Value()
+    {
+        // Arrange
+        string[] values =
+        [
+            "two1nine",
+            "eightwothree",
+            "abcone2threexyz",
+            "xtwone3four",
+            "4nineeightseven2",
+            "zoneight234",
+            "7pqrstsixteen",
+        ];
+
+        // Act
+        int actual = Day01.SumCalibrations(values, useWords: true);
+
+        // Assert
+        actual.ShouldBe(281);
     }
 
     [Fact]
@@ -32,6 +54,7 @@ public sealed class Day01Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
 
         // Assert
         puzzle.ShouldNotBeNull();
-        puzzle.SumOfCalibrations.ShouldBe(54697);
+        puzzle.SumOfCalibrationsDigits.ShouldBe(54697);
+        puzzle.SumOfCalibrationsWordsAndDigits.ShouldBe(54885);
     }
 }
