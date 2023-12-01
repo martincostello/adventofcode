@@ -1,12 +1,17 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <Description>Console app for solving Advent of Code.</Description>
     <NoWarn>$(NoWarn);CA2007</NoWarn>
+    <OptimizationPreference>Speed</OptimizationPreference>
     <OutputType>Exe</OutputType>
+    <PublishAot>true</PublishAot>
     <RootNamespace>MartinCostello.AdventOfCode.Console</RootNamespace>
     <TargetFramework>net8.0</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\AdventOfCode\AdventOfCode.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <TrimmerRootAssembly Include="AdventOfCode" />
   </ItemGroup>
 </Project>
