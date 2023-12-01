@@ -55,12 +55,16 @@ public sealed class Day01 : Puzzle
             firstIndexes.Clear();
             lastIndexes.Clear();
 
+            int first;
+            int last;
+
             if (useWords)
             {
                 for (int i = 0; i < Numbers.Length; i++)
                 {
-                    int first = value.IndexOf(Numbers[i], StringComparison.Ordinal);
-                    int last = value.LastIndexOf(Numbers[i], StringComparison.Ordinal);
+                    string number = Numbers[i];
+                    first = value.IndexOf(number, StringComparison.Ordinal);
+                    last = value.LastIndexOf(number, StringComparison.Ordinal);
 
                     if (first > -1)
                     {
@@ -74,26 +78,26 @@ public sealed class Day01 : Puzzle
                 }
             }
 
-            int firstDigit = System.MemoryExtensions.IndexOfAny(value, Digits);
-            int lastDigit = System.MemoryExtensions.LastIndexOfAny(value, Digits);
+            first = System.MemoryExtensions.IndexOfAny(value, Digits);
+            last = System.MemoryExtensions.LastIndexOfAny(value, Digits);
 
-            if (firstDigit > -1)
+            if (first > -1)
             {
-                int digit = value[firstDigit] - '0';
+                int digit = value[first] - '0';
 
-                if (!firstIndexes.TryGetValue(digit, out int other) || firstDigit < other)
+                if (!firstIndexes.TryGetValue(digit, out int other) || first < other)
                 {
-                    firstIndexes[digit] = firstDigit;
+                    firstIndexes[digit] = first;
                 }
             }
 
-            if (lastDigit > -1)
+            if (last > -1)
             {
-                int digit = value[lastDigit] - '0';
+                int digit = value[last] - '0';
 
-                if (!lastIndexes.TryGetValue(digit, out int other) || lastDigit > other)
+                if (!lastIndexes.TryGetValue(digit, out int other) || last > other)
                 {
-                    lastIndexes[digit] = lastDigit;
+                    lastIndexes[digit] = last;
                 }
             }
 
