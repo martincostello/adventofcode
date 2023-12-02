@@ -95,7 +95,7 @@ public sealed class Day02 : Puzzle
         if (Verbose)
         {
             Logger.WriteLine("The sum of the IDs of the possible games is {0}.", SumOfPossibleSolutions);
-            Logger.WriteLine("The sum of the pwoers of the cubes in the games is {0}.", SumOfPowers);
+            Logger.WriteLine("The sum of the powers of the cubes in the games is {0}.", SumOfPowers);
         }
 
         return PuzzleResult.Create(SumOfPossibleSolutions, SumOfPowers);
