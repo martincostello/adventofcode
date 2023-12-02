@@ -8,19 +8,19 @@ import { ClientSolver, ServerSolver, Solver } from '../solvers/index';
 import { UIElements } from './UIElements';
 
 interface ClientPuzzleMetadata extends PuzzleMetadata {
-    client: Puzzle | null;
+    puzzle: Puzzle | null;
 }
 
 export class App {
     private static readonly hideClass: string = 'd-none';
 
-    private readonly client: ApiClient;
+    private readonly server: ApiClient;
     private readonly elements: UIElements;
     private readonly puzzleFactory: DefaultPuzzleFactory;
     private readonly puzzlesByYear: Map<string, ClientPuzzleMetadata[]>;
 
     constructor() {
-        this.client = new ApiClient();
+        this.server = new ApiClient();
         this.elements = new UIElements();
         this.puzzleFactory = new DefaultPuzzleFactory();
         this.puzzlesByYear = new Map<string, ClientPuzzleMetadata[]>();
@@ -44,7 +44,7 @@ export class App {
             return false;
         });
 
-        const puzzles = await this.client.getPuzzles();
+        const puzzles = await this.server.getPuzzles();
 
         const thisYear = new Date().getFullYear();
         let yearWasSelected = false;
@@ -61,11 +61,11 @@ export class App {
                 puzzlesForYear = this.puzzlesByYear.get(year);
             }
 
-            const client = this.puzzleFactory.create(puzzle.year, puzzle.day);
+            const clientPuzzle = this.puzzleFactory.create(puzzle.year, puzzle.day);
 
             puzzlesForYear.push({
                 ...puzzle,
-                client: client !== null && client.solved ? client : null,
+                puzzle: clientPuzzle !== null && clientPuzzle.solved ? clientPuzzle : null,
             });
 
             if (puzzlesForYear.length === 1) {
@@ -271,8 +271,8 @@ export class App {
         const day = parseInt(this.elements.form.getAttribute('data-day'), 10);
         const year = this.elements.form.getAttribute('data-year');
 
-        const client = this.puzzlesByYear.get(year).find((p) => p.day === day).client;
+        const puzzle = this.puzzlesByYear.get(year).find((p) => p.day === day).puzzle;
 
-        return client !== null ? new ClientSolver(client) : new ServerSolver(this.client, this.elements.form, this.elements.inputFile);
+        return puzzle !== null ? new ClientSolver(puzzle) : new ServerSolver(this.server, this.elements.form, this.elements.inputFile);
     }
 }
