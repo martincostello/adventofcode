@@ -15,15 +15,24 @@ public sealed class Day02 : Puzzle
     public int SumOfPossibleSolutions { get; private set; }
 
     /// <summary>
-    /// Determines the sum of the IDs of the specified games that are possible.
+    /// Gets the sum of the power of the set of cubes in each game.
+    /// </summary>
+    public int SumOfPowers { get; private set; }
+
+    /// <summary>
+    /// Plays the specified games of Cube Conundrum and returns
+    /// the sum of the IDs of the games that are possible and
+    /// the sum of the power of the set of cubes in each game.
     /// </summary>
     /// <param name="values">The games of Cube Conundrum to play.</param>
     /// <returns>
-    /// The sum of the IDs of the games that are possible.
+    /// The sum of the IDs of the games that are possible and the
+    /// sum of the power of the set of cubes in each game.
     /// </returns>
-    public static int Solve(IList<string> values)
+    public static (int SumOfPossibleSolutions, int SumOfPowers) Play(IList<string> values)
     {
-        var possible = new List<int>();
+        int sumOfIds = 0;
+        int sumOfPowers = 0;
 
         foreach (string game in values)
         {
@@ -63,14 +72,15 @@ public sealed class Day02 : Puzzle
                 }
             }
 
+            sumOfPowers += blue * green * red;
+
             if (blue <= 14 && green <= 13 && red <= 12)
             {
-                int id = Parse<int>(split[0]["Game ".Length..]);
-                possible.Add(id);
+                sumOfIds += Parse<int>(split[0]["Game ".Length..]);
             }
         }
 
-        return possible.Sum();
+        return (sumOfIds, sumOfPowers);
     }
 
     /// <inheritdoc />
@@ -80,13 +90,14 @@ public sealed class Day02 : Puzzle
 
         var values = await ReadResourceAsLinesAsync(cancellationToken);
 
-        SumOfPossibleSolutions = Solve(values);
+        (SumOfPossibleSolutions, SumOfPowers) = Play(values);
 
         if (Verbose)
         {
             Logger.WriteLine("The sum of the IDs of the possible games is {0}.", SumOfPossibleSolutions);
+            Logger.WriteLine("The sum of the pwoers of the cubes in the games is {0}.", SumOfPowers);
         }
 
-        return PuzzleResult.Create(SumOfPossibleSolutions);
+        return PuzzleResult.Create(SumOfPossibleSolutions, SumOfPowers);
     }
 }
