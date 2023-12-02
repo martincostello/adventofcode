@@ -6,7 +6,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2023;
 public sealed class Day02Tests(ITestOutputHelper outputHelper) : PuzzleTest(outputHelper)
 {
     [Fact]
-    public void Y2023_Day02_Solve_Returns_Correct_Value()
+    public void Y2023_Day02_Play_Returns_Correct_Value()
     {
         // Arrange
         string[] values =
@@ -19,10 +19,11 @@ public sealed class Day02Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         ];
 
         // Act
-        int actual = Day02.Solve(values);
+        (int actualIdsSum, int actualPowersSum) = Day02.Play(values);
 
         // Assert
-        actual.ShouldBe(8);
+        actualIdsSum.ShouldBe(8);
+        actualPowersSum.ShouldBe(2286);
     }
 
     [Fact]
@@ -34,5 +35,6 @@ public sealed class Day02Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         // Assert
         puzzle.ShouldNotBeNull();
         puzzle.SumOfPossibleSolutions.ShouldBe(2156);
+        puzzle.SumOfPowers.ShouldBe(66909);
     }
 }
