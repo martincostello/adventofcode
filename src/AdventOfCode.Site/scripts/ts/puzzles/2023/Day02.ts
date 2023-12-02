@@ -73,7 +73,7 @@ export class Day02 extends Puzzle2023 {
         [this.sumOfPossibleSolutions, this.sumOfPowers] = Day02.play(values);
 
         console.info(`The sum of the IDs of the possible games is ${this.sumOfPossibleSolutions}.`);
-        console.info(`The sum of the pwoers of the cubes in the games is ${this.sumOfPowers}.`);
+        console.info(`The sum of the powers of the cubes in the games is ${this.sumOfPowers}.`);
 
         return this.createResult([this.sumOfPossibleSolutions, this.sumOfPowers]);
     }
