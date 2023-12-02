@@ -5,23 +5,27 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2023;
 
 public sealed class Day02Tests(ITestOutputHelper outputHelper) : PuzzleTest(outputHelper)
 {
-    [Fact(Skip = "Not implemented.")]
+    [Fact]
     public void Y2023_Day02_Solve_Returns_Correct_Value()
     {
         // Arrange
         string[] values =
         [
-            "_",
+            "Game 1: 3 blue, 4 red; 1 red, 2 green, 6 blue; 2 green",
+            "Game 2: 1 blue, 2 green; 3 green, 4 blue, 1 red; 1 green, 1 blue",
+            "Game 3: 8 green, 6 blue, 20 red; 5 blue, 4 red, 13 green; 5 green, 1 red",
+            "Game 4: 1 green, 3 red, 6 blue; 3 green, 6 red; 3 green, 15 blue, 14 red",
+            "Game 5: 6 red, 1 blue, 3 green; 2 blue, 1 red, 2 green",
         ];
 
         // Act
         int actual = Day02.Solve(values);
 
         // Assert
-        actual.ShouldBe(-1);
+        actual.ShouldBe(8);
     }
 
-    [Fact(Skip = "Not implemented.")]
+    [Fact]
     public async Task Y2023_Day02_Solve_Returns_Correct_Solution()
     {
         // Act
@@ -29,6 +33,6 @@ public sealed class Day02Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
 
         // Assert
         puzzle.ShouldNotBeNull();
-        puzzle.Solution.ShouldBe(-1);
+        puzzle.SumOfPossibleSolutions.ShouldBe(2156);
     }
 }
