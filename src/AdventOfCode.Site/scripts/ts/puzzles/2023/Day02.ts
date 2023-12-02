@@ -4,11 +4,11 @@
 import { Puzzle2023 } from './Puzzle2023';
 
 export class Day02 extends Puzzle2023 {
-    solution1: number;
-    solution2: number;
+    sumOfPossibleSolutions: number;
+    sumOfPowers: number;
 
     override get solved() {
-        return false;
+        return true;
     }
 
     override get name() {
@@ -19,19 +19,62 @@ export class Day02 extends Puzzle2023 {
         return 2;
     }
 
-    static solve(values: string[]): number {
-        return -1;
+    static play(values: string[]): [number, number] {
+        let sumOfIds = 0;
+        let sumOfPowers = 0;
+
+        for (let game of values) {
+            const split = game.split(':');
+            const rounds = split[1].split(';');
+
+            let blue = 0;
+            let green = 0;
+            let red = 0;
+
+            for (let round of rounds) {
+                const cubes = round.split(',');
+
+                for (let cube of cubes) {
+                    const [howMany, color] = cube.trimStart().split(' ');
+                    const count = parseInt(howMany, 10);
+
+                    switch (color) {
+                        case 'blue':
+                            blue = Math.max(count, blue);
+                            break;
+
+                        case 'green':
+                            green = Math.max(count, green);
+                            break;
+
+                        case 'red':
+                            red = Math.max(count, red);
+                            break;
+
+                        default:
+                            throw new Error(`Unknown color '${color}'.`);
+                    }
+                }
+            }
+
+            sumOfPowers += blue * green * red;
+
+            if (blue <= 14 && green <= 13 && red <= 12) {
+                sumOfIds += parseInt(split[0].slice('Game '.length), 10);
+            }
+        }
+
+        return [sumOfIds, sumOfPowers];
     }
 
     override solveCore(_: string[]) {
         const values = this.readResourceAsLines();
 
-        this.solution1 = Day02.solve(values);
-        this.solution2 = Day02.solve(values);
+        [this.sumOfPossibleSolutions, this.sumOfPowers] = Day02.play(values);
 
-        console.info(`${this.solution1}`);
-        console.info(`${this.solution2}`);
+        console.info(`The sum of the IDs of the possible games is ${this.sumOfPossibleSolutions}.`);
+        console.info(`The sum of the pwoers of the cubes in the games is ${this.sumOfPowers}.`);
 
-        return this.createResult([this.solution1, this.solution2]);
+        return this.createResult([this.sumOfPossibleSolutions, this.sumOfPowers]);
     }
 }
