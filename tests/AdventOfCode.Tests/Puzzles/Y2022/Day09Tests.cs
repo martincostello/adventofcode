@@ -60,7 +60,7 @@ public sealed class Day09Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
 
         foreach (var (direction, initialKnots, finalKnots) in testCases)
         {
-            yield return new object[] { direction, initialKnots, finalKnots };
+            yield return [direction, initialKnots, finalKnots];
         }
     }
 
@@ -119,7 +119,7 @@ public sealed class Day09Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
 
         foreach (var (direction, initialKnots, finalKnots) in testCases)
         {
-            yield return new object[] { direction, initialKnots, finalKnots };
+            yield return [direction, initialKnots, finalKnots];
         }
 
         static Point[] EmptyPoints(int count) => Enumerable.Repeat(Point.Empty, count).ToArray();

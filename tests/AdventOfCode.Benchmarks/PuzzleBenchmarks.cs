@@ -182,7 +182,8 @@ public class PuzzleBenchmarks
 
     private static IEnumerable<object> GetPuzzles(
         int year,
-        Dictionary<int, string[]>? inputs = null)
+        Dictionary<int, string[]>? inputs = null,
+        int? day = null)
     {
         var puzzles = typeof(Puzzle).Assembly
             .GetTypes()
@@ -192,6 +193,7 @@ public class PuzzleBenchmarks
             .Where((p) => p.Metadata.Year == year)
             .Where((p) => !p.Metadata.IsHidden)
             .Where((p) => !p.Metadata.IsSlow)
+            .Where((p) => day is null || day.GetValueOrDefault() == p.Metadata.Day)
             .OrderBy((p) => p.Metadata.Year)
             .OrderBy((p) => p.Metadata.Day)
             .ToList();
@@ -209,7 +211,7 @@ public class PuzzleBenchmarks
             }
 
             var puzzleInputOfT = puzzleInput.MakeGenericType(puzzle.Type);
-            yield return Activator.CreateInstance(puzzleInputOfT, new object[] { input })!;
+            yield return Activator.CreateInstance(puzzleInputOfT, [input])!;
         }
     }
 
