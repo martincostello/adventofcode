@@ -12,7 +12,7 @@ export class Day03 extends Puzzle2023 {
     }
 
     override get name() {
-        return '';
+        return 'Gear Ratios';
     }
 
     override get day() {

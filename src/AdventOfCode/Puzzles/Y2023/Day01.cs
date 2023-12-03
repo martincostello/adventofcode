@@ -55,18 +55,19 @@ public sealed class Day01 : Puzzle
             firstIndexes.Clear();
             lastIndexes.Clear();
 
-            int first = System.MemoryExtensions.IndexOfAny(value, Digits);
-            int last = System.MemoryExtensions.LastIndexOfAny(value, Digits);
+            var window = value.AsSpan();
+            int first = window.IndexOfAny(Digits);
+            int last = window.LastIndexOfAny(Digits);
 
             if (first > -1)
             {
-                int digit = value[first] - '0';
+                int digit = window[first] - '0';
                 firstIndexes[digit] = first;
             }
 
             if (last > -1)
             {
-                int digit = value[last] - '0';
+                int digit = window[last] - '0';
                 lastIndexes[digit] = last;
             }
 
@@ -77,8 +78,8 @@ public sealed class Day01 : Puzzle
                     string word = Numbers[i];
                     int digit = i + 1;
 
-                    first = value.IndexOf(word, StringComparison.Ordinal);
-                    last = value.LastIndexOf(word, StringComparison.Ordinal);
+                    first = window.IndexOf(word, StringComparison.Ordinal);
+                    last = window.LastIndexOf(word, StringComparison.Ordinal);
 
                     if (first > -1 && (!firstIndexes.TryGetValue(digit, out int other) || first < other))
                     {
