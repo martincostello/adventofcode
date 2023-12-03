@@ -37,7 +37,7 @@ public sealed class Day03 : Puzzle
         int gearRatiosSum = 0;
         int totalWidth = schematic[0].Length;
 
-        var parts = new List<(int PartNumber, HashSet<Point> Locations)>();
+        var partsByRow = new Dictionary<int, List<(int PartNumber, HashSet<Point> Locations)>>();
 
         for (int y = 0; y < schematic.Count; y++)
         {
@@ -72,7 +72,13 @@ public sealed class Day03 : Puzzle
                         locations.Add(new(x + i, y));
                     }
 
-                    parts.Add((partNumber, locations));
+                    if (!partsByRow.TryGetValue(y, out var rowParts))
+                    {
+                        rowParts = [];
+                        partsByRow[y] = rowParts;
+                    }
+
+                    rowParts.Add((partNumber, locations));
                 }
 
                 row = row[number.Length..];
@@ -96,7 +102,12 @@ public sealed class Day03 : Puzzle
 
                 foreach (var point in location.Neighbors())
                 {
-                    foreach (var (partNumber, locations) in parts)
+                    if (!partsByRow.TryGetValue(point.Y, out var items))
+                    {
+                        continue;
+                    }
+
+                    foreach (var (partNumber, locations) in items)
                     {
                         if (locations.Contains(point))
                         {
