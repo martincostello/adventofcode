@@ -38,20 +38,27 @@ internal static class PointExtensions
     /// </returns>
     public static IEnumerable<Point> Neighbors(this Point value, bool includeSelf = false)
     {
-        yield return new(value.X - 1, value.Y - 1);
-        yield return new(value.X, value.Y - 1);
-        yield return new(value.X + 1, value.Y - 1);
-        yield return new(value.X - 1, value.Y);
+        int y;
+        int x1;
+        int x2 = value.X;
+        int x3;
+
+        yield return new(x1 = x2 - 1, y = value.Y - 1);
+        yield return new(x2 = value.X, y);
+        yield return new(x3 = x2 + 1, y++);
+
+        yield return new(x1, y);
 
         if (includeSelf)
         {
             yield return value;
         }
 
-        yield return new(value.X + 1, value.Y);
-        yield return new(value.X - 1, value.Y + 1);
-        yield return new(value.X, value.Y + 1);
-        yield return new(value.X + 1, value.Y + 1);
+        yield return new(x3, y++);
+
+        yield return new(x1, y);
+        yield return new(x2, y);
+        yield return new(x3, y);
     }
 
     /// <summary>
