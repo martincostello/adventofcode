@@ -24,10 +24,11 @@ public sealed class Day03Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         ];
 
         // Act
-        int actual = Day03.Solve(values);
+        (int actualSumParts, int actualSumGears) = Day03.Solve(values);
 
         // Assert
-        actual.ShouldBe(4361);
+        actualSumParts.ShouldBe(4361);
+        actualSumGears.ShouldBe(467835);
     }
 
     [Fact]
@@ -39,5 +40,6 @@ public sealed class Day03Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         // Assert
         puzzle.ShouldNotBeNull();
         puzzle.SumOfPartNumbers.ShouldBe(535351);
+        puzzle.SumOfGearRatios.ShouldBe(87287096);
     }
 }

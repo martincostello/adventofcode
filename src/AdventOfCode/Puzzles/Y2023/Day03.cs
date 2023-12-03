@@ -20,16 +20,24 @@ public sealed class Day03 : Puzzle
     public int SumOfPartNumbers { get; private set; }
 
     /// <summary>
-    /// Gets the sum of all of the part numbers in the engine schematic.
+    /// Gets the sum of all of the gear ratios in the engine schematic.
+    /// </summary>
+    public int SumOfGearRatios { get; private set; }
+
+    /// <summary>
+    /// Gets the sum of all of the part numbers and gear ratios in the engine schematic.
     /// </summary>
     /// <param name="schematic">The lines of the engine schematic.</param>
     /// <returns>
-    /// The sum of all of the part numbers in the engine schematic.
+    /// The sum of all of the part numbers and the gear ratios in the engine schematic.
     /// </returns>
-    public static int Solve(IList<string> schematic)
+    public static (int SumOfPartNumbers, int SumOfGearRatios) Solve(IList<string> schematic)
     {
-        int sum = 0;
+        int partNumbersSum = 0;
+        int gearRatiosSum = 0;
         int totalWidth = schematic[0].Length;
+
+        var parts = new List<(int PartNumber, HashSet<Point> Locations)>();
 
         for (int y = 0; y < schematic.Count; y++)
         {
@@ -54,7 +62,17 @@ public sealed class Day03 : Puzzle
 
                 if (IsAdjacentToPart(schematic, x, y, number.Length, totalWidth))
                 {
-                    sum += Parse<int>(number);
+                    int partNumber = Parse<int>(number);
+                    partNumbersSum += partNumber;
+
+                    var locations = new HashSet<Point>(number.Length);
+
+                    for (int i = 0; i < number.Length; i++)
+                    {
+                        locations.Add(new(x + i, y));
+                    }
+
+                    parts.Add((partNumber, locations));
                 }
 
                 row = row[number.Length..];
@@ -63,7 +81,47 @@ public sealed class Day03 : Puzzle
             }
         }
 
-        return sum;
+        for (int y = 0; y < schematic.Count; y++)
+        {
+            var row = schematic[y].AsSpan();
+            int index = row.IndexOf('*');
+            int x = index;
+
+            while (index != -1)
+            {
+                row = row[index..];
+
+                var adjacentParts = new HashSet<int>(6);
+                var location = new Point(x, y);
+
+                foreach (var point in location.Neighbors())
+                {
+                    foreach (var (partNumber, locations) in parts)
+                    {
+                        if (locations.Contains(point))
+                        {
+                            adjacentParts.Add(partNumber);
+                        }
+                    }
+                }
+
+                if (adjacentParts.Count == 2)
+                {
+                    gearRatiosSum += adjacentParts.Aggregate(1, (a, b) => a * b);
+                }
+
+                if (row.Length == 1)
+                {
+                    break;
+                }
+
+                row = row[1..];
+                index = row.IndexOf('*');
+                x += index + 1;
+            }
+        }
+
+        return (partNumbersSum, gearRatiosSum);
 
         static bool IsAdjacentToPart(IList<string> schematic, int x, int y, int length, int totalWidth)
         {
@@ -114,13 +172,14 @@ public sealed class Day03 : Puzzle
 
         var values = await ReadResourceAsLinesAsync(cancellationToken);
 
-        SumOfPartNumbers = Solve(values);
+        (SumOfPartNumbers, SumOfGearRatios) = Solve(values);
 
         if (Verbose)
         {
             Logger.WriteLine("The sum of all of the part numbers in the engine schematic is {0}.", SumOfPartNumbers);
+            Logger.WriteLine("The sum of all of the gear ratios in the engine schematic is {0}.", SumOfGearRatios);
         }
 
-        return PuzzleResult.Create(SumOfPartNumbers);
+        return PuzzleResult.Create(SumOfPartNumbers, SumOfGearRatios);
     }
 }
