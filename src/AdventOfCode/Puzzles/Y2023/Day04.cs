@@ -72,7 +72,14 @@ public sealed class Day04 : Puzzle
 
         var scratchcards = await ReadResourceAsLinesAsync(cancellationToken);
 
+        var tp = TimeProvider.System;
+        long t1 = tp.GetTimestamp();
+
         (TotalPoints, TotalScratchcards) = Score(scratchcards);
+
+        long t2 = tp.GetTimestamp();
+
+        Console.WriteLine($"{tp.GetElapsedTime(t1, t2).TotalMicroseconds}μs");
 
         if (Verbose)
         {
