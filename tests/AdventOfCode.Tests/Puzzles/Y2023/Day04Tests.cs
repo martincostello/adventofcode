@@ -20,10 +20,11 @@ public sealed class Day04Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         ];
 
         // Act
-        int actual = Day04.Score(values);
+        (int actualPoints, int actualCount) = Day04.Score(values);
 
         // Assert
-        actual.ShouldBe(13);
+        actualPoints.ShouldBe(13);
+        actualCount.ShouldBe(30);
     }
 
     [Fact]
@@ -35,5 +36,6 @@ public sealed class Day04Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         // Assert
         puzzle.ShouldNotBeNull();
         puzzle.TotalPoints.ShouldBe(21138);
+        puzzle.TotalScratchcards.ShouldBe(7185540);
     }
 }
