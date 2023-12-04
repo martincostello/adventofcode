@@ -170,7 +170,7 @@ public sealed class Day07 : Puzzle
 
             string[] split = contents.Split(", ");
 
-            var bagColors = colors[thisColor] = new Dictionary<string, int>();
+            var bagColors = colors[thisColor] = [];
 
             foreach (string bag in split)
             {

@@ -74,8 +74,7 @@ public sealed class Day03 : Puzzle
 
                     if (!partsByRow.TryGetValue(y, out var rowParts))
                     {
-                        rowParts = [];
-                        partsByRow[y] = rowParts;
+                        partsByRow[y] = rowParts = [];
                     }
 
                     rowParts.Add((partNumber, locations));
