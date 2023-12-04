@@ -6,18 +6,39 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2023;
 /// <summary>
 /// A class representing the puzzle for <c>https://adventofcode.com/2023/day/04</c>. This class cannot be inherited.
 /// </summary>
-[Puzzle(2023, 04, "", RequiresData = true, IsHidden = true)]
+[Puzzle(2023, 04, "Scratchcards", RequiresData = true)]
 public sealed class Day04 : Puzzle
 {
-#pragma warning disable IDE0022
-#pragma warning disable IDE0060
-#pragma warning disable SA1600
+    /// <summary>
+    /// Gets the total number of points the scratchcards are worth.
+    /// </summary>
+    public int TotalPoints { get; private set; }
 
-    public int Solution { get; private set; }
-
-    public static int Solve(IList<string> values)
+    /// <summary>
+    /// Gets the total number of points the specified scratchcards are worth.
+    /// </summary>
+    /// <param name="scratchcards">The scratchcards to add up the points for.</param>
+    /// <returns>
+    /// The total number of points the scratchcards are worth.
+    /// </returns>
+    public static int Score(IList<string> scratchcards)
     {
-        return -1;
+        int total = 0;
+
+        foreach (string scratchcard in scratchcards)
+        {
+            int index = scratchcard.IndexOf(':', StringComparison.Ordinal);
+            (string winningNumbers, string numbersHave) = scratchcard[(index + 1)..].Bifurcate('|');
+
+            var winning = winningNumbers.Split(' ', StringSplitOptions.RemoveEmptyEntries).Select(Parse<int>).ToHashSet();
+            var have = numbersHave.Split(' ', StringSplitOptions.RemoveEmptyEntries).Select(Parse<int>).ToHashSet();
+
+            have.IntersectWith(winning);
+
+            total += (int)Math.Pow(2, have.Count - 1);
+        }
+
+        return total;
     }
 
     /// <inheritdoc />
@@ -25,15 +46,15 @@ public sealed class Day04 : Puzzle
     {
         ArgumentNullException.ThrowIfNull(args);
 
-        var values = await ReadResourceAsLinesAsync(cancellationToken);
+        var scratchcards = await ReadResourceAsLinesAsync(cancellationToken);
 
-        Solution = Solve(values);
+        TotalPoints = Score(scratchcards);
 
         if (Verbose)
         {
-            Logger.WriteLine("{0}", Solution);
+            Logger.WriteLine("The scratchcards are worth {0} points in total.", TotalPoints);
         }
 
-        return PuzzleResult.Create(Solution);
+        return PuzzleResult.Create(TotalPoints);
     }
 }
