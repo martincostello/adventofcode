@@ -1,7 +1,6 @@
 ﻿// Copyright (c) Martin Costello, 2015. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
-using System.Diagnostics;
 using MartinCostello.AdventOfCode;
 
 var style = NumberStyles.Integer & ~NumberStyles.AllowLeadingSign;
@@ -56,7 +55,7 @@ logger.WriteLine();
 logger.WriteLine($"Advent of Code {year} - Day {day}");
 logger.WriteLine();
 
-var stopwatch = Stopwatch.StartNew();
+long started = TimeProvider.System.GetTimestamp();
 
 try
 {
@@ -73,17 +72,26 @@ catch (PuzzleException ex)
     return -1;
 }
 
-stopwatch.Stop();
+long solved = TimeProvider.System.GetTimestamp();
+var duration = TimeProvider.System.GetElapsedTime(started, solved);
 
 logger.WriteLine();
 
-if (stopwatch.Elapsed.TotalSeconds < 0.01f)
+if (duration.TotalNanoseconds < 1_000)
 {
-    logger.WriteLine("Took <0.01 seconds.");
+    logger.WriteLine($"Took {duration.Nanoseconds:N2}ns.");
+}
+else if (duration.TotalMicroseconds < 1_000)
+{
+    logger.WriteLine($"Took {duration.TotalMicroseconds:N2}μs.");
+}
+else if (duration.TotalMilliseconds < 1_000)
+{
+    logger.WriteLine($"Took {duration.TotalMilliseconds:N2}ms.");
 }
 else
 {
-    logger.WriteLine($"Took {stopwatch.Elapsed.TotalSeconds:N2} seconds.");
+    logger.WriteLine($"Took {duration.TotalSeconds:N2}s.");
 }
 
 logger.WriteLine();
