@@ -34,10 +34,11 @@ public sealed class Day04 : Puzzle
 
         int totalPoints = 0;
 
-        foreach (string scratchcard in scratchcards)
+        foreach (string value in scratchcards)
         {
-            int index = scratchcard.IndexOf(':', StringComparison.Ordinal);
-            int card = Parse<int>(scratchcard.AsSpan(5, index - 5), NumberStyles.AllowLeadingWhite);
+            var scratchcard = value.AsSpan();
+            int index = scratchcard.IndexOf(':');
+            int card = Parse<int>(scratchcard[5..index], NumberStyles.AllowLeadingWhite);
 
             (string winningNumbers, string numbersHave) = scratchcard[(index + 1)..].Bifurcate('|');
 
