@@ -29,7 +29,9 @@ public sealed class Day04 : Puzzle
     /// </returns>
     public static (int TotalPoints, int TotalScratchcards) Score(IList<string> scratchcards)
     {
-        var counts = scratchcards.Select((_, i) => i + 1).ToDictionary((p) => p, (_) => 1);
+        int[] counts = new int[scratchcards.Count];
+        Array.Fill(counts, 1);
+
         int totalPoints = 0;
 
         foreach (string scratchcard in scratchcards)
@@ -39,18 +41,18 @@ public sealed class Day04 : Puzzle
 
             (string winningNumbers, string numbersHave) = scratchcard[(index + 1)..].Bifurcate('|');
 
-            var winning = winningNumbers.Split(' ', StringSplitOptions.RemoveEmptyEntries).Select(Parse<int>).ToHashSet();
-            var have = numbersHave.Split(' ', StringSplitOptions.RemoveEmptyEntries).Select(Parse<int>).ToHashSet();
+            HashSet<int> winning = new(winningNumbers.Split(' ', StringSplitOptions.RemoveEmptyEntries).Select(Parse<int>));
+            HashSet<int> have = new(numbersHave.Split(' ', StringSplitOptions.RemoveEmptyEntries).Select(Parse<int>));
 
             have.IntersectWith(winning);
 
             if (have.Count > 0)
             {
-                totalPoints += (int)Math.Pow(2, have.Count - 1);
+                totalPoints += 1 << (have.Count - 1);
 
-                int next = card + 1;
-                int last = Math.Min(card + have.Count, scratchcards.Count) + 1;
-                int copies = counts[card];
+                int next = card;
+                int last = Math.Min(card + have.Count, scratchcards.Count);
+                int copies = counts[card - 1];
 
                 for (int i = next; i < last; i++)
                 {
@@ -59,7 +61,7 @@ public sealed class Day04 : Puzzle
             }
         }
 
-        return (totalPoints, counts.Values.Sum());
+        return (totalPoints, counts.Sum());
     }
 
     /// <inheritdoc />
