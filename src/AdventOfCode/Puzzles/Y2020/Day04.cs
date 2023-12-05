@@ -50,8 +50,8 @@ public sealed partial class Day04 : Puzzle
 
             foreach (var pair in line.Tokenize(' '))
             {
-                (string name, string value) = pair.Bifurcate(':');
-                current[name] = value;
+                pair.Bifurcate(':', out var name, out var value);
+                current[new string(name)] = new(value);
             }
         }
 

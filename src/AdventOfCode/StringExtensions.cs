@@ -17,27 +17,31 @@ internal static class StringExtensions
     /// The two strings separated by the specified character.
     /// </returns>
     public static (string First, string Second) Bifurcate(this string value, char separator)
-        => value.AsSpan().Bifurcate(separator);
+    {
+        value.AsSpan().Bifurcate(separator, out var first, out var second);
+        return (new(first), new(second));
+    }
 
     /// <summary>
     /// Bifurcates the specified span.
     /// </summary>
     /// <param name="value">The span to bifurcate.</param>
     /// <param name="separator">The separator between the two spans.</param>
-    /// <returns>
-    /// The two strings separated by the specified character.
-    /// </returns>
-    public static (string First, string Second) Bifurcate(this ReadOnlySpan<char> value, char separator)
+    /// <param name="first">The first value.</param>
+    /// <param name="second">The second value.</param>
+    public static void Bifurcate(
+        this ReadOnlySpan<char> value,
+        char separator,
+        out ReadOnlySpan<char> first,
+        out ReadOnlySpan<char> second)
     {
         var tokens = value.Tokenize(separator);
 
         tokens.MoveNext();
-        var first = tokens.Current;
+        first = tokens.Current;
 
         tokens.MoveNext();
-        var second = tokens.Current;
-
-        return (new(first), new(second));
+        second = tokens.Current;
     }
 
     /// <summary>
@@ -49,30 +53,36 @@ internal static class StringExtensions
     /// The three strings separated by the specified character.
     /// </returns>
     public static (string First, string Second, string Third) Trifurcate(this string value, char separator)
-        => value.AsSpan().Trifurcate(separator);
+    {
+        value.AsSpan().Trifurcate(separator, out var first, out var second, out var third);
+        return (new(first), new(second), new(third));
+    }
 
     /// <summary>
     /// Trifurcates the specified span.
     /// </summary>
     /// <param name="value">The span to trifurcate.</param>
     /// <param name="separator">The separator between the three spans.</param>
-    /// <returns>
-    /// The three strings separated by the specified character.
-    /// </returns>
-    public static (string First, string Second, string Third) Trifurcate(this ReadOnlySpan<char> value, char separator)
+    /// <param name="first">The first value.</param>
+    /// <param name="second">The second value.</param>
+    /// <param name="third">The third value.</param>
+    public static void Trifurcate(
+        this ReadOnlySpan<char> value,
+        char separator,
+        out ReadOnlySpan<char> first,
+        out ReadOnlySpan<char> second,
+        out ReadOnlySpan<char> third)
     {
         var tokens = value.Tokenize(separator);
 
         tokens.MoveNext();
-        var first = tokens.Current;
+        first = tokens.Current;
 
         tokens.MoveNext();
-        var second = tokens.Current;
+        second = tokens.Current;
 
         tokens.MoveNext();
-        var third = tokens.Current;
-
-        return (new(first), new(second), new(third));
+        third = tokens.Current;
     }
 
     /// <summary>

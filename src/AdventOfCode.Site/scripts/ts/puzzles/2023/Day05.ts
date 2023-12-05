@@ -12,7 +12,7 @@ export class Day05 extends Puzzle2023 {
     }
 
     override get name() {
-        return '';
+        return 'If You Give A Seed A Fertilizer';
     }
 
     override get day() {
