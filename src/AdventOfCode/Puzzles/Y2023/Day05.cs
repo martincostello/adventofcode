@@ -1,7 +1,7 @@
 ﻿// Copyright (c) Martin Costello, 2015. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
-using LocationMap = System.Collections.Generic.Dictionary<string, (string Destination, System.Collections.Generic.List<(long Destination, long Source, int Length)> Values)>;
+using LocationMap = System.Collections.Generic.Dictionary<string, (string Destination, System.Collections.Generic.List<(long Destination, long Source, long Length)> Values)>;
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2023;
 
@@ -33,30 +33,27 @@ public sealed class Day05 : Puzzle
     /// </returns>
     public static long Parse(IList<string> almanac, bool useRanges, CancellationToken cancellationToken = default)
     {
-        var values = almanac[0]["seeds: ".Length..].Split(' ').Select(Parse<long>).ToList();
-        var seeds = values;
+        var seeds = almanac[0]["seeds: ".Length..].Split(' ').Select((p) => (Parse<long>(p), 1L)).ToList();
 
         if (useRanges)
         {
-            seeds = [];
+            var lengths = new List<long>(seeds.Count / 2);
 
-            for (int i = 0; i < values.Count; i += 2)
+            for (int i = 0; i < seeds.Count; i++)
             {
-                long start = values[i];
-                long length = values[i + 1];
-                long end = start + length;
-
-                for (long j = start; j < end; j++)
-                {
-                    seeds.Add(j);
-                }
+                long seed = seeds[i].Item1;
+                long length = seeds[i + 1].Item1;
+                seeds.RemoveAt(i + 1);
+                seeds[i] = (seed, length);
             }
+
+            seeds.TrimExcess();
         }
 
         var seedLocations = new Dictionary<long, long>();
 
         LocationMap map = [];
-        (string Destination, List<(long Destination, long Source, int Length)> Values) ranges = default;
+        (string Destination, List<(long Destination, long Source, long Length)> Values) ranges = default;
 
         foreach (string value in almanac.Skip(2))
         {
@@ -79,20 +76,20 @@ public sealed class Day05 : Puzzle
             else
             {
                 line.Trifurcate(' ', out var destination, out var source, out var length);
-                ranges.Values!.Add((Parse<long>(destination), Parse<long>(source), Parse<int>(length)));
+                ranges.Values!.Add((Parse<long>(destination), Parse<long>(source), Parse<long>(length)));
             }
         }
 
-        foreach (long seed in seeds)
+        foreach ((long offset, long length) in seeds)
         {
-            seedLocations[seed] = FindValue("seed", seed, "location", map, cancellationToken);
+            seedLocations[offset] = FindValue("seed", (offset, length), "location", map, cancellationToken);
         }
 
         return seedLocations.Values.Min();
 
         static long FindValue(
             string key,
-            long value,
+            (long Offset, long Length) value,
             string destinationKey,
             LocationMap map,
             CancellationToken cancellationToken)
@@ -101,17 +98,39 @@ public sealed class Day05 : Puzzle
 
             (string nextKey, var ranges) = map[key];
 
-            var (destinationIndex, sourceIndex, length) = ranges.Find((p) => value >= p.Source && value <= p.Source + p.Length);
+            HashSet<long> seedsOfInterest = [value.Offset];
 
-            long offset = value - sourceIndex;
-            long destinationValue = destinationIndex + offset;
-
-            if (nextKey == destinationKey)
+            if (value.Length > 1)
             {
-                return destinationValue;
+                long maximum = value.Offset + value.Length - 1;
+
+                foreach (var (destination, source, length) in ranges)
+                {
+                    if (source >= value.Offset && source + length <= maximum)
+                    {
+                        seedsOfInterest.Add(source);
+                    }
+                }
             }
 
-            return FindValue(nextKey, destinationValue, destinationKey, map, cancellationToken);
+            var values = new HashSet<long>();
+
+            foreach (long seed in seedsOfInterest)
+            {
+                var (destinationIndex, sourceIndex, length) = ranges.Find((p) => seed >= p.Source && seed <= p.Source + p.Length);
+
+                long offset = seed - sourceIndex;
+                long minimum = destinationIndex + offset;
+
+                if (nextKey != destinationKey)
+                {
+                    minimum = FindValue(nextKey, (minimum, length), destinationKey, map, cancellationToken);
+                }
+
+                values.Add(minimum);
+            }
+
+            return values.Min();
         }
     }
 
