@@ -89,7 +89,7 @@ public sealed class Day05 : Puzzle
 
         static long FindValue(
             string key,
-            (long Offset, long Length) value,
+            (long Offset, long Length) range,
             string destinationKey,
             LocationMap map,
             CancellationToken cancellationToken)
@@ -98,28 +98,28 @@ public sealed class Day05 : Puzzle
 
             (string nextKey, var ranges) = map[key];
 
-            HashSet<long> seedsOfInterest = [value.Offset];
+            HashSet<long> valuesOfInterest = [range.Offset];
 
-            if (value.Length > 1)
+            if (range.Length > 1)
             {
-                long maximum = value.Offset + value.Length - 1;
+                long maximum = range.Offset + range.Length - 1;
 
                 foreach (var (destination, source, length) in ranges)
                 {
-                    if (source >= value.Offset && source + length <= maximum)
+                    if (source >= range.Offset && source + length <= maximum)
                     {
-                        seedsOfInterest.Add(source);
+                        valuesOfInterest.Add(source);
                     }
                 }
             }
 
             var values = new HashSet<long>();
 
-            foreach (long seed in seedsOfInterest)
+            foreach (long value in valuesOfInterest)
             {
-                var (destinationIndex, sourceIndex, length) = ranges.Find((p) => seed >= p.Source && seed <= p.Source + p.Length);
+                var (destinationIndex, sourceIndex, length) = ranges.Find((p) => value >= p.Source && value <= p.Source + p.Length);
 
-                long offset = seed - sourceIndex;
+                long offset = value - sourceIndex;
                 long minimum = destinationIndex + offset;
 
                 if (nextKey != destinationKey)
