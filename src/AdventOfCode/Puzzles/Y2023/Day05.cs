@@ -82,7 +82,7 @@ public sealed class Day05 : Puzzle
 
         foreach ((long offset, long length) in seeds)
         {
-            seedLocations[offset] = FindValue("seed", (offset, length), "location", map, cancellationToken);
+            seedLocations[offset] = FindValue("seed", (offset, length), "location", map, useRanges, cancellationToken);
         }
 
         return seedLocations.Values.Min();
@@ -92,6 +92,7 @@ public sealed class Day05 : Puzzle
             (long Offset, long Length) range,
             string destinationKey,
             LocationMap map,
+            bool useRanges,
             CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
@@ -100,7 +101,7 @@ public sealed class Day05 : Puzzle
 
             HashSet<long> valuesOfInterest = [range.Offset];
 
-            if (range.Length > 1)
+            if (useRanges && range.Length > 1)
             {
                 long maximum = range.Offset + range.Length - 1;
 
@@ -124,7 +125,7 @@ public sealed class Day05 : Puzzle
 
                 if (nextKey != destinationKey)
                 {
-                    minimum = FindValue(nextKey, (minimum, length), destinationKey, map, cancellationToken);
+                    minimum = FindValue(nextKey, (minimum, useRanges ? length : 1), destinationKey, map, useRanges, cancellationToken);
                 }
 
                 values.Add(minimum);
