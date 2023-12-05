@@ -5,8 +5,10 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2023;
 
 public sealed class Day05Tests(ITestOutputHelper outputHelper) : PuzzleTest(outputHelper)
 {
-    [Fact]
-    public void Y2023_Day05_Parse_Returns_Correct_Value()
+    [Theory]
+    [InlineData(false, 35)]
+    [InlineData(true, 46)]
+    public void Y2023_Day05_Parse_Returns_Correct_Value(bool useRanges, int expected)
     {
         // Arrange
         string[] almanac =
@@ -47,10 +49,10 @@ public sealed class Day05Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         ];
 
         // Act
-        long actual = Day05.Parse(almanac);
+        long actual = Day05.Parse(almanac, useRanges);
 
         // Assert
-        actual.ShouldBe(35);
+        actual.ShouldBe(expected);
     }
 
     [Fact]
@@ -62,5 +64,6 @@ public sealed class Day05Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         // Assert
         puzzle.ShouldNotBeNull();
         puzzle.LocationMinimum.ShouldBe(535088217);
+        puzzle.LocationMinimumWithRanges.ShouldBe(-1);
     }
 }

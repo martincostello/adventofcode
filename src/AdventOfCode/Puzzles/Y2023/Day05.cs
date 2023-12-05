@@ -17,16 +17,42 @@ public sealed class Day05 : Puzzle
     public long LocationMinimum { get; private set; }
 
     /// <summary>
+    /// Gets the lowest location number that corresponds to any of the initial seed numbers when using ranges.
+    /// </summary>
+    public long LocationMinimumWithRanges { get; private set; }
+
+    /// <summary>
     /// Parses the specified almanac and returns the lowest location number
     /// that corresponds to any of the initial seed numbers.
     /// </summary>
     /// <param name="almanac">The almanac to parse.</param>
+    /// <param name="useRanges">Whether to parse the seeds as pairs of ranges rather than individual seed numbers.</param>
+    /// <param name="cancellationToken">The optional cancellation token to use.</param>
     /// <returns>
     /// The lowest location number that corresponds to any of the initial seed numbers.
     /// </returns>
-    public static long Parse(IList<string> almanac)
+    public static long Parse(IList<string> almanac, bool useRanges, CancellationToken cancellationToken = default)
     {
-        var seeds = almanac[0]["seeds: ".Length..].Split(' ').Select(Parse<long>).ToList();
+        var values = almanac[0]["seeds: ".Length..].Split(' ').Select(Parse<long>).ToList();
+        var seeds = values;
+
+        if (useRanges)
+        {
+            seeds = [];
+
+            for (int i = 0; i < values.Count; i += 2)
+            {
+                long start = values[i];
+                long length = values[i + 1];
+                long end = start + length;
+
+                for (long j = start; j < end; j++)
+                {
+                    seeds.Add(j);
+                }
+            }
+        }
+
         var seedLocations = new Dictionary<long, long>();
 
         LocationMap map = [];
@@ -59,13 +85,20 @@ public sealed class Day05 : Puzzle
 
         foreach (long seed in seeds)
         {
-            seedLocations[seed] = FindValue("seed", seed, "location", map);
+            seedLocations[seed] = FindValue("seed", seed, "location", map, cancellationToken);
         }
 
         return seedLocations.Values.Min();
 
-        static long FindValue(string key, long value, string destinationKey, LocationMap map)
+        static long FindValue(
+            string key,
+            long value,
+            string destinationKey,
+            LocationMap map,
+            CancellationToken cancellationToken)
         {
+            cancellationToken.ThrowIfCancellationRequested();
+
             (string nextKey, var ranges) = map[key];
 
             var (destinationIndex, sourceIndex, length) = ranges.Find((p) => value >= p.Source && value <= p.Source + p.Length);
@@ -78,7 +111,7 @@ public sealed class Day05 : Puzzle
                 return destinationValue;
             }
 
-            return FindValue(nextKey, destinationValue, destinationKey, map);
+            return FindValue(nextKey, destinationValue, destinationKey, map, cancellationToken);
         }
     }
 
@@ -89,13 +122,15 @@ public sealed class Day05 : Puzzle
 
         var almanac = await ReadResourceAsLinesAsync(cancellationToken);
 
-        LocationMinimum = Parse(almanac);
+        LocationMinimum = Parse(almanac, useRanges: false, cancellationToken);
+        LocationMinimumWithRanges = Parse(almanac, useRanges: true, cancellationToken);
 
         if (Verbose)
         {
             Logger.WriteLine("The lowest location number that corresponds to any of the initial seed numbers is {0}.", LocationMinimum);
+            Logger.WriteLine("The lowest location number that corresponds to any of the initial seed numbers as pairs is {0}.", LocationMinimumWithRanges);
         }
 
-        return PuzzleResult.Create(LocationMinimum);
+        return PuzzleResult.Create(LocationMinimum, LocationMinimumWithRanges);
     }
 }
