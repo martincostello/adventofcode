@@ -64,6 +64,6 @@ public sealed class Day05Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         // Assert
         puzzle.ShouldNotBeNull();
         puzzle.LocationMinimum.ShouldBe(535088217);
-        puzzle.LocationMinimumWithRanges.ShouldBe(-1);
+        puzzle.LocationMinimumWithRanges.ShouldBe(51399228);
     }
 }
