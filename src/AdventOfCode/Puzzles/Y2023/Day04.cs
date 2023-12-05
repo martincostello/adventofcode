@@ -40,10 +40,10 @@ public sealed class Day04 : Puzzle
             int index = scratchcard.IndexOf(':');
             int card = Parse<int>(scratchcard[5..index], NumberStyles.AllowLeadingWhite);
 
-            (string winningNumbers, string numbersHave) = scratchcard[(index + 1)..].Bifurcate('|');
+            scratchcard[(index + 1)..].Bifurcate('|', out var winningNumbers, out var numbersHave);
 
-            HashSet<int> winning = new(winningNumbers.Split(' ', StringSplitOptions.RemoveEmptyEntries).Select(Parse<int>));
-            HashSet<int> have = new(numbersHave.Split(' ', StringSplitOptions.RemoveEmptyEntries).Select(Parse<int>));
+            HashSet<int> winning = new(new string(winningNumbers).Split(' ', StringSplitOptions.RemoveEmptyEntries).Select(Parse<int>));
+            HashSet<int> have = new(new string(numbersHave).Split(' ', StringSplitOptions.RemoveEmptyEntries).Select(Parse<int>));
 
             have.IntersectWith(winning);
 

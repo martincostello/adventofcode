@@ -133,7 +133,7 @@ public sealed class Day16 : Puzzle
         /// <summary>
         /// Gets the metadata about this Aunt Sue.
         /// </summary>
-        internal Dictionary<string, int> Metadata { get; } = new();
+        internal Dictionary<string, int> Metadata { get; } = [];
 
         /// <summary>
         /// Parses an instance of <see cref="AuntSue"/> from the specified <see cref="string"/>.
@@ -152,8 +152,8 @@ public sealed class Day16 : Puzzle
 
             foreach (var item in string.Join(' ', split, 2, split.Length - 2).Tokenize(','))
             {
-                (string first, string second) = item.Bifurcate(':');
-                result.Metadata[first.Trim()] = Parse<int>(second.Trim());
+                item.Bifurcate(':', out var first, out var second);
+                result.Metadata[new(first.Trim())] = Parse<int>(second.Trim());
             }
 
             return result;

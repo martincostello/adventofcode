@@ -5,23 +5,55 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2023;
 
 public sealed class Day05Tests(ITestOutputHelper outputHelper) : PuzzleTest(outputHelper)
 {
-    [Fact(Skip = "Not implemented.")]
-    public void Y2023_Day05_Solve_Returns_Correct_Value()
+    [Fact]
+    public void Y2023_Day05_Parse_Returns_Correct_Value()
     {
         // Arrange
-        string[] values =
+        string[] almanac =
         [
-            "_",
+            "seeds: 79 14 55 13",
+            string.Empty,
+            "seed-to-soil map:",
+            "50 98 2",
+            "52 50 48",
+            string.Empty,
+            "soil-to-fertilizer map:",
+            "0 15 37",
+            "37 52 2",
+            "39 0 15",
+            string.Empty,
+            "fertilizer-to-water map:",
+            "49 53 8",
+            "0 11 42",
+            "42 0 7",
+            "57 7 4",
+            string.Empty,
+            "water-to-light map:",
+            "88 18 7",
+            "18 25 70",
+            string.Empty,
+            "light-to-temperature map:",
+            "45 77 23",
+            "81 45 19",
+            "68 64 13",
+            string.Empty,
+            "temperature-to-humidity map:",
+            "0 69 1",
+            "1 0 69",
+            string.Empty,
+            "humidity-to-location map:",
+            "60 56 37",
+            "56 93 4",
         ];
 
         // Act
-        int actual = Day05.Solve(values);
+        long actual = Day05.Parse(almanac);
 
         // Assert
-        actual.ShouldBe(-1);
+        actual.ShouldBe(35);
     }
 
-    [Fact(Skip = "Not implemented.")]
+    [Fact]
     public async Task Y2023_Day05_Solve_Returns_Correct_Solution()
     {
         // Act
@@ -29,6 +61,6 @@ public sealed class Day05Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
 
         // Assert
         puzzle.ShouldNotBeNull();
-        puzzle.Solution.ShouldBe(-1);
+        puzzle.LocationMinimum.ShouldBe(535088217);
     }
 }
