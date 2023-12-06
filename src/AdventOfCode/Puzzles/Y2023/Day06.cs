@@ -38,7 +38,8 @@ public sealed class Day06 : Puzzle
             int minimumTime = 1;
             int maximumTime = duration - 1;
 
-            int combinations = 0;
+            int minimumSpeed = -1;
+            int maximumSpeed = -1;
 
             for (int speed = minimumTime; speed < maximumTime; speed++)
             {
@@ -47,9 +48,24 @@ public sealed class Day06 : Puzzle
 
                 if (distance >= target)
                 {
-                    combinations++;
+                    minimumSpeed = speed;
+                    break;
                 }
             }
+
+            for (int speed = maximumTime; speed > minimumSpeed; speed--)
+            {
+                int time = duration - speed;
+                int distance = time * speed;
+
+                if (distance >= target)
+                {
+                    maximumSpeed = speed;
+                    break;
+                }
+            }
+
+            int combinations = maximumSpeed - minimumSpeed + 1;
 
             if (combinations > 0)
             {
