@@ -12,39 +12,59 @@ public sealed class Day06 : Puzzle
     /// <summary>
     /// Gets the product of the number of combinations of ways to beat the record.
     /// </summary>
-    public int CombinationsProduct { get; private set; }
+    public long CombinationsProduct { get; private set; }
+
+    /// <summary>
+    /// Gets the product of the number of combinations of ways to beat the record with the kerning fixed.
+    /// </summary>
+    public long CombinationsProductWithFix { get; private set; }
 
     /// <summary>
     /// Races the specified boats.
     /// </summary>
     /// <param name="values">The time and distance records.</param>
+    /// <param name="fixKerning">Whether to fix the kerning in the values.</param>
     /// <returns>
     /// The product of the number of combinations of ways to beat the record.
     /// </returns>
-    public static int Race(IList<string> values)
+    public static long Race(IList<string> values, bool fixKerning)
     {
-        var times = values[0].Split(':')[1].Split(' ', StringSplitOptions.RemoveEmptyEntries).Select(Parse<int>).ToList();
-        var distances = values[1].Split(':')[1].Split(' ', StringSplitOptions.RemoveEmptyEntries).Select(Parse<int>).ToList();
+        string timeValues = values[0].Split(':')[1];
+        string distanceValues = values[1].Split(':')[1];
 
-        List<(int Time, int Distance)> timesAndDistances = times
+        List<long> times;
+        List<long> distances;
+
+        if (fixKerning)
+        {
+            times = [Parse<long>(timeValues.Replace(" ", string.Empty, StringComparison.Ordinal))];
+            distances = [Parse<long>(distanceValues.Replace(" ", string.Empty, StringComparison.Ordinal))];
+        }
+        else
+        {
+            times = timeValues.Split(' ', StringSplitOptions.RemoveEmptyEntries).Select(Parse<long>).ToList();
+            distances = distanceValues.Split(' ', StringSplitOptions.RemoveEmptyEntries).Select(Parse<long>).ToList();
+        }
+
+        List<(long Time, long Distance)> timesAndDistances = times
             .Zip(distances, (t, d) => (t, d))
             .ToList();
 
-        var ways = new List<int>();
+        var ways = new List<long>();
 
-        foreach ((int duration, int distanceRecord) in timesAndDistances)
+        foreach ((long duration, long distanceRecord) in timesAndDistances)
         {
-            int target = distanceRecord + 1;
-            int minimumTime = 1;
-            int maximumTime = duration - 1;
+            long target = distanceRecord + 1;
+            long minimumTime = 1;
+            long maximumTime = duration - 1;
 
-            int minimumSpeed = -1;
-            int maximumSpeed = -1;
+            long minimumSpeed = -1;
+            long maximumSpeed = -1;
 
-            for (int speed = minimumTime; speed < maximumTime; speed++)
+            for (long speed = minimumTime; speed < maximumTime; speed++)
             {
-                int time = duration - speed;
-                int distance = time * speed;
+                long time = duration - speed;
+                long distance = time * speed;
 
                 if (distance >= target)
                 {
@@ -53,10 +73,10 @@ public sealed class Day06 : Puzzle
                 }
             }
 
-            for (int speed = maximumTime; speed > minimumSpeed; speed--)
+            for (long speed = maximumTime; speed > minimumSpeed; speed--)
             {
-                int time = duration - speed;
-                int distance = time * speed;
+                long time = duration - speed;
+                long distance = time * speed;
 
                 if (distance >= target)
                 {
@@ -65,7 +85,7 @@ public sealed class Day06 : Puzzle
                 }
             }
 
-            int combinations = maximumSpeed - minimumSpeed + 1;
+            long combinations = maximumSpeed - minimumSpeed + 1;
 
             if (combinations > 0)
             {
@@ -73,7 +93,7 @@ public sealed class Day06 : Puzzle
             }
         }
 
-        return ways.Aggregate(1, (x, y) => x * y);
+        return ways.Aggregate(1L, (x, y) => x * y);
     }
 
     /// <inheritdoc />
@@ -83,13 +103,15 @@ public sealed class Day06 : Puzzle
 
         var values = await ReadResourceAsLinesAsync(cancellationToken);
 
-        CombinationsProduct = Race(values);
+        CombinationsProduct = Race(values, fixKerning: false);
+        CombinationsProductWithFix = Race(values, fixKerning: true);
 
         if (Verbose)
         {
             Logger.WriteLine("The product of the number of ways to beat the record is {0}.", CombinationsProduct);
+            Logger.WriteLine("The product of the number of ways to beat the record with the kerning fixed is {0}.", CombinationsProductWithFix);
         }
 
-        return PuzzleResult.Create(CombinationsProduct);
+        return PuzzleResult.Create(CombinationsProduct, CombinationsProductWithFix);
     }
 }
