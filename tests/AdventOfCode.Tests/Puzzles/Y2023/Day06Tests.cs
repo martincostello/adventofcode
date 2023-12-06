@@ -5,23 +5,24 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2023;
 
 public sealed class Day06Tests(ITestOutputHelper outputHelper) : PuzzleTest(outputHelper)
 {
-    [Fact(Skip = "Not implemented.")]
-    public void Y2023_Day06_Solve_Returns_Correct_Value()
+    [Fact]
+    public void Y2023_Day06_Race_Returns_Correct_Value()
     {
         // Arrange
         string[] values =
         [
-            "_",
+            "Time:      7  15   30",
+            "Distance:  9  40  200",
         ];
 
         // Act
-        int actual = Day06.Solve(values);
+        int actual = Day06.Race(values);
 
         // Assert
-        actual.ShouldBe(-1);
+        actual.ShouldBe(288);
     }
 
-    [Fact(Skip = "Not implemented.")]
+    [Fact]
     public async Task Y2023_Day06_Solve_Returns_Correct_Solution()
     {
         // Act
@@ -29,6 +30,6 @@ public sealed class Day06Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
 
         // Assert
         puzzle.ShouldNotBeNull();
-        puzzle.Solution.ShouldBe(-1);
+        puzzle.CombinationsProduct.ShouldBe(741000);
     }
 }

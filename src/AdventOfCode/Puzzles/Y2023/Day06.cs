@@ -6,18 +6,58 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2023;
 /// <summary>
 /// A class representing the puzzle for <c>https://adventofcode.com/2023/day/06</c>. This class cannot be inherited.
 /// </summary>
-[Puzzle(2023, 06, "", RequiresData = true, IsHidden = true)]
+[Puzzle(2023, 06, "Wait For It", RequiresData = true)]
 public sealed class Day06 : Puzzle
 {
-#pragma warning disable IDE0022
-#pragma warning disable IDE0060
-#pragma warning disable SA1600
+    /// <summary>
+    /// Gets the product of the number of combinations of ways to beat the record.
+    /// </summary>
+    public int CombinationsProduct { get; private set; }
 
-    public int Solution { get; private set; }
-
-    public static int Solve(IList<string> values)
+    /// <summary>
+    /// Races the specified boats.
+    /// </summary>
+    /// <param name="values">The time and distance records.</param>
+    /// <returns>
+    /// The product of the number of combinations of ways to beat the record.
+    /// </returns>
+    public static int Race(IList<string> values)
     {
-        return -1;
+        var times = values[0].Split(':')[1].Split(' ', StringSplitOptions.RemoveEmptyEntries).Select(Parse<int>).ToList();
+        var distances = values[1].Split(':')[1].Split(' ', StringSplitOptions.RemoveEmptyEntries).Select(Parse<int>).ToList();
+
+        List<(int Time, int Distance)> timesAndDistances = times
+            .Zip(distances, (t, d) => (t, d))
+            .ToList();
+
+        var ways = new List<int>();
+
+        foreach ((int duration, int distanceRecord) in timesAndDistances)
+        {
+            int target = distanceRecord + 1;
+            int minimumTime = 1;
+            int maximumTime = duration - 1;
+
+            int combinations = 0;
+
+            for (int speed = minimumTime; speed < maximumTime; speed++)
+            {
+                int time = duration - speed;
+                int distance = time * speed;
+
+                if (distance >= target)
+                {
+                    combinations++;
+                }
+            }
+
+            if (combinations > 0)
+            {
+                ways.Add(combinations);
+            }
+        }
+
+        return ways.Aggregate(1, (x, y) => x * y);
     }
 
     /// <inheritdoc />
@@ -27,13 +67,13 @@ public sealed class Day06 : Puzzle
 
         var values = await ReadResourceAsLinesAsync(cancellationToken);
 
-        Solution = Solve(values);
+        CombinationsProduct = Race(values);
 
         if (Verbose)
         {
-            Logger.WriteLine("{0}", Solution);
+            Logger.WriteLine("The product of the number of ways to beat the record is {0}.", CombinationsProduct);
         }
 
-        return PuzzleResult.Create(Solution);
+        return PuzzleResult.Create(CombinationsProduct);
     }
 }
