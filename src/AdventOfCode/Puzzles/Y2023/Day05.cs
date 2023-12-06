@@ -33,7 +33,10 @@ public sealed class Day05 : Puzzle
     /// </returns>
     public static long Parse(IList<string> almanac, bool useRanges, CancellationToken cancellationToken = default)
     {
-        var seeds = almanac[0]["seeds: ".Length..].Split(' ').Select((p) => (Parse<long>(p), 1L)).ToList();
+        var seeds = almanac[0]["seeds: ".Length..]
+            .Split(' ')
+            .Select((p) => (Parse<long>(p), 1L))
+            .ToList();
 
         if (useRanges)
         {
