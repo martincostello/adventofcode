@@ -55,13 +55,12 @@ public sealed class Day06 : Puzzle
         foreach ((long duration, long distanceRecord) in timesAndDistances)
         {
             long target = distanceRecord + 1;
-            long minimumTime = 1;
+
+            long speed = 1;
+            long minimumSpeed = -1;
             long maximumTime = duration - 1;
 
-            long minimumSpeed = -1;
-            long maximumSpeed = -1;
-
-            for (long speed = minimumTime; speed < maximumTime; speed++)
+            do
             {
                 long time = duration - speed;
                 long distance = time * speed;
@@ -72,8 +71,12 @@ public sealed class Day06 : Puzzle
                     break;
                 }
             }
+            while (++speed < maximumTime);
 
-            for (long speed = maximumTime; speed > minimumSpeed; speed--)
+            speed = maximumTime;
+            long maximumSpeed = -1;
+
+            do
             {
                 long time = duration - speed;
                 long distance = time * speed;
@@ -84,6 +87,7 @@ public sealed class Day06 : Puzzle
                     break;
                 }
             }
+            while (--speed > minimumSpeed);
 
             long combinations = maximumSpeed - minimumSpeed + 1;
 
