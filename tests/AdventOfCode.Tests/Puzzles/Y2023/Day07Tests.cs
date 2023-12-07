@@ -36,9 +36,6 @@ public sealed class Day07Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         // Assert
         puzzle.ShouldNotBeNull();
         puzzle.TotalWinnings.ShouldBe(249726565);
-        puzzle.TotalWinningsWithJokers.ShouldBeGreaterThan(250096106);
-        puzzle.TotalWinningsWithJokers.ShouldBeLessThan(255202570);
-        puzzle.TotalWinningsWithJokers.ShouldNotBeOneOf([251844931, 252032536, 251323565, 251376959, 251378963]);
-        puzzle.TotalWinningsWithJokers.ShouldBe(-1);
+        puzzle.TotalWinningsWithJokers.ShouldBe(251135960);
     }
 }
