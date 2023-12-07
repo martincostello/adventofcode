@@ -5,23 +5,27 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2023;
 
 public sealed class Day07Tests(ITestOutputHelper outputHelper) : PuzzleTest(outputHelper)
 {
-    [Fact(Skip = "Not implemented.")]
-    public void Y2023_Day07_Solve_Returns_Correct_Value()
+    [Fact]
+    public void Y2023_Day07_Play_Returns_Correct_Value()
     {
         // Arrange
-        string[] values =
+        string[] hands =
         [
-            "_",
+            "32T3K 765",
+            "T55J5 684",
+            "KK677 28",
+            "KTJJT 220",
+            "QQQJA 483",
         ];
 
         // Act
-        int actual = Day07.Solve(values);
+        int actual = Day07.Play(hands);
 
         // Assert
-        actual.ShouldBe(-1);
+        actual.ShouldBe(6440);
     }
 
-    [Fact(Skip = "Not implemented.")]
+    [Fact]
     public async Task Y2023_Day07_Solve_Returns_Correct_Solution()
     {
         // Act
@@ -29,6 +33,6 @@ public sealed class Day07Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
 
         // Assert
         puzzle.ShouldNotBeNull();
-        puzzle.Solution.ShouldBe(-1);
+        puzzle.TotalWinnings.ShouldBe(249726565);
     }
 }
