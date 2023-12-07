@@ -1,7 +1,7 @@
 ﻿// Copyright (c) Martin Costello, 2015. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
-using MartinCostello.AdventOfCode;
+using MartinCostello.AdventOfCode.Console;
 
 var style = NumberStyles.Integer & ~NumberStyles.AllowLeadingSign;
 var provider = CultureInfo.InvariantCulture;
@@ -22,6 +22,12 @@ if (args.Length > 1)
 
     args = args[2..];
 }
+else if (day >= 2015)
+{
+    year = day;
+    day = 0;
+    args = [];
+}
 else
 {
     year = DateTime.UtcNow.Year;
@@ -36,64 +42,15 @@ Console.CancelKeyPress += (_, e) =>
     cts.Cancel();
 };
 
-var logger = new ConsoleLogger();
-var factory = new PuzzleFactory(NullCache.Instance, logger);
+PuzzleSolver solver;
 
-Puzzle puzzle;
-
-try
+if (day == 0)
 {
-    puzzle = factory.Create(year, day);
-}
-catch (PuzzleException ex)
-{
-    logger.WriteLine(ex.Message);
-    return -1;
-}
-
-logger.WriteLine();
-logger.WriteLine($"Advent of Code {year} - Day {day}");
-logger.WriteLine();
-
-long started = TimeProvider.System.GetTimestamp();
-
-try
-{
-    _ = await puzzle.SolveAsync(args, cts.Token);
-}
-catch (OperationCanceledException)
-{
-    logger.WriteLine("Solution canceled.");
-    return -1;
-}
-catch (PuzzleException ex)
-{
-    logger.WriteLine(ex.Message);
-    return -1;
-}
-
-long solved = TimeProvider.System.GetTimestamp();
-var duration = TimeProvider.System.GetElapsedTime(started, solved);
-
-logger.WriteLine();
-
-if (duration.TotalNanoseconds < 1_000)
-{
-    logger.WriteLine($"Took {duration.Nanoseconds:N2}ns.");
-}
-else if (duration.TotalMicroseconds < 1_000)
-{
-    logger.WriteLine($"Took {duration.TotalMicroseconds:N2}μs.");
-}
-else if (duration.TotalMilliseconds < 1_000)
-{
-    logger.WriteLine($"Took {duration.TotalMilliseconds:N2}ms.");
+    solver = new(year);
 }
 else
 {
-    logger.WriteLine($"Took {duration.TotalSeconds:N2}s.");
+    solver = new(year, day, args);
 }
 
-logger.WriteLine();
-
-return 0;
+return await solver.SolveAsync(cts.Token);

@@ -1,6 +1,8 @@
 ﻿// Copyright (c) Martin Costello, 2015. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
+using Terminal = System.Console;
+
 namespace MartinCostello.AdventOfCode;
 
 /// <summary>
@@ -21,21 +23,21 @@ internal sealed class ConsoleLogger : ILogger
     {
         int lengthY;
 
-        if (!Console.IsOutputRedirected && (lengthY = array.GetLength(1)) <= Console.WindowHeight)
+        if (!Terminal.IsOutputRedirected && (lengthY = array.GetLength(1)) <= Terminal.WindowHeight)
         {
-            Console.WriteLine();
+            Terminal.WriteLine();
 
             for (int y = 0; y < lengthY; y++)
             {
                 foreach (bool value in array.GetColumn(y))
                 {
-                    Console.Write(value ? trueChar : falseChar);
+                    Terminal.Write(value ? trueChar : falseChar);
                 }
 
-                Console.WriteLine();
+                Terminal.WriteLine();
             }
 
-            Console.WriteLine();
+            Terminal.WriteLine();
         }
 
         return string.Empty;
@@ -47,5 +49,5 @@ internal sealed class ConsoleLogger : ILogger
     /// <param name="format">The format string to use to generate the message.</param>
     /// <param name="args">The arguments for the format string.</param>
     public void WriteLine(string format, params object[] args)
-        => Console.WriteLine(format, args);
+        => Terminal.WriteLine(format, args);
 }
