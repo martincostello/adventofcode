@@ -43,21 +43,36 @@ public sealed class Day07 : Puzzle
     public int TotalWinnings { get; private set; }
 
     /// <summary>
+    /// Gets the total winnings using Jokers.
+    /// </summary>
+    public int TotalWinningsWithJokers { get; private set; }
+
+    /// <summary>
     /// Plays the specified hands of Camel Cards.
     /// </summary>
     /// <param name="handsAndBids">The hands to play.</param>
+    /// <param name="useJokers">Whether to use Jokers.</param>
     /// <returns>
     /// The total winnings for the game.
     /// </returns>
-    public static int Play(IList<string> handsAndBids)
+    public static int Play(IList<string> handsAndBids, bool useJokers)
     {
+        const int Joker = 1;
+
+        var scoreMap = new Dictionary<char, int>(ScoreMap);
+
+        if (useJokers)
+        {
+            scoreMap['J'] = Joker;
+        }
+
         var hands = new List<(HandType Type, int[] Cards, int Bid)>(handsAndBids.Count);
 
         foreach (string value in handsAndBids)
         {
             (string hand, string bid) = value.Bifurcate(' ');
 
-            int[] cards = hand.Select((p) => ScoreMap[p]).ToArray();
+            int[] cards = hand.Select((p) => scoreMap[p]).ToArray();
 
             var counts = cards
                 .GroupBy((p) => p)
@@ -65,13 +80,29 @@ public sealed class Day07 : Puzzle
                 .OrderByDescending((p) => p.Count)
                 .ToArray();
 
-            HandType type = counts[0].Count switch
+            // Treat the Joker(s) with whatever card(s) will give the best type of hand
+            int jokers = useJokers ? counts.Where((p) => p.Card == Joker).Sum((p) => p.Count) : 0;
+
+            HandType type = jokers switch
             {
-                5 => HandType.FiveOfAKind,
-                4 => HandType.FourOfAKind,
-                3 => counts.Length == 2 ? HandType.FullHouse : HandType.ThreeOfAKind,
-                2 => counts.Length == 3 ? HandType.TwoPair : HandType.OnePair,
-                _ => HandType.HighCard,
+                4 or 5 => HandType.FiveOfAKind,
+                3 => counts.Length == 2 ? HandType.FiveOfAKind : HandType.FourOfAKind,
+                2 => counts.Length == 3 ? HandType.FourOfAKind : HandType.ThreeOfAKind,
+                1 => counts.Length switch
+                {
+                    1 or 2 => HandType.FiveOfAKind,
+                    3 => counts[0].Count == 3 ? HandType.FourOfAKind : HandType.FullHouse,
+                    4 => HandType.ThreeOfAKind,
+                    5 or _ => HandType.OnePair,
+                },
+                _ => counts[0].Count switch
+                {
+                    5 => HandType.FiveOfAKind,
+                    4 => HandType.FourOfAKind,
+                    3 => counts.Length == 2 ? HandType.FullHouse : HandType.ThreeOfAKind,
+                    2 => counts.Length == 3 ? HandType.TwoPair : HandType.OnePair,
+                    _ => HandType.HighCard,
+                },
             };
 
             hands.Add((type, cards, Parse<int>(bid)));
@@ -109,13 +140,15 @@ public sealed class Day07 : Puzzle
 
         var hands = await ReadResourceAsLinesAsync(cancellationToken);
 
-        TotalWinnings = Play(hands);
+        TotalWinnings = Play(hands, useJokers: false);
+        TotalWinningsWithJokers = Play(hands, useJokers: true);
 
         if (Verbose)
         {
             Logger.WriteLine("The total winnings are {0}.", TotalWinnings);
+            Logger.WriteLine("The total winnings are {0} with Jokers.", TotalWinningsWithJokers);
         }
 
-        return PuzzleResult.Create(TotalWinnings);
+        return PuzzleResult.Create(TotalWinnings, TotalWinningsWithJokers);
     }
 }
