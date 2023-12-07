@@ -87,7 +87,12 @@ public sealed class Day07 : Puzzle
             {
                 4 or 5 => HandType.FiveOfAKind,
                 3 => counts.Length == 2 ? HandType.FiveOfAKind : HandType.FourOfAKind,
-                2 => counts.Length == 3 ? HandType.FourOfAKind : HandType.ThreeOfAKind,
+                2 => counts.Length switch
+                {
+                    2 => HandType.FiveOfAKind,
+                    3 => HandType.FourOfAKind,
+                    4 or _ => HandType.ThreeOfAKind,
+                },
                 1 => counts.Length switch
                 {
                     1 or 2 => HandType.FiveOfAKind,
@@ -95,7 +100,7 @@ public sealed class Day07 : Puzzle
                     4 => HandType.ThreeOfAKind,
                     5 or _ => HandType.OnePair,
                 },
-                _ => counts[0].Count switch
+                0 or _ => counts[0].Count switch
                 {
                     5 => HandType.FiveOfAKind,
                     4 => HandType.FourOfAKind,
