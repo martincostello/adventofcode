@@ -27,7 +27,8 @@ public sealed class Day08 : Puzzle
     /// <param name="asGhost">Whether to walk the network as a ghost.</param>
     /// <param name="cancellationToken">The cancellation token to use.</param>
     /// <returns>
-    /// The number of steps required to reach ZZZ.
+    /// The number of steps required to reach ZZZ, or all nodes to end with Z
+    /// if <paramref name="asGhost"/> is <see langword="true"/>.
     /// </returns>
     public static int WalkNetwork(IList<string> nodes, bool asGhost, CancellationToken cancellationToken)
     {
