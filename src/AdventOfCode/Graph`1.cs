@@ -16,7 +16,7 @@ public class Graph<T> : IGraph<T>
     /// <summary>
     /// Gets the edges of the graph.
     /// </summary>
-    public Dictionary<T, List<T>> Edges { get; } = new Dictionary<T, List<T>>();
+    public Dictionary<T, List<T>> Edges { get; } = [];
 
     /// <summary>
     /// Returns the neighbors of the specified node.

@@ -196,7 +196,7 @@ public sealed class Day07 : Puzzle
         /// <summary>
         /// Gets the child programs of the program.
         /// </summary>
-        public List<ProgramDisc> Children { get; } = new();
+        public List<ProgramDisc> Children { get; } = [];
 
         /// <summary>
         /// Gets the total weight of this program and all its children.

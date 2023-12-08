@@ -497,7 +497,7 @@ public sealed class Day20 : Puzzle
         /// <summary>
         /// Gets the candidates for the edges of the tile.
         /// </summary>
-        public HashSet<string> EdgeCandidates { get; } = new();
+        public HashSet<string> EdgeCandidates { get; } = [];
 
         /// <summary>
         /// Gets the original grid of the image.

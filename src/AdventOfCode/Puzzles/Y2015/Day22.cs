@@ -172,7 +172,7 @@ public sealed class Day22 : Puzzle
         /// <summary>
         /// The spells the wizard currently has equipped, including any that have lost their power.
         /// </summary>
-        private readonly List<Spell> _spells = new();
+        private readonly List<Spell> _spells = [];
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Wizard"/> class.

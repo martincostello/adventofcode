@@ -143,7 +143,7 @@ public sealed class Day11 : Puzzle
         /// <summary>
         /// The contents of the elevator. This field is read-only.
         /// </summary>
-        private readonly List<Element> _contents = new();
+        private readonly List<Element> _contents = [];
 
         /// <summary>
         /// The maximum floor the elevator can move to. This field is read-only.
