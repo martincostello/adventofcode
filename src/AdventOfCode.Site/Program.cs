@@ -23,6 +23,7 @@ builder.Services.AddSingleton<ICache>((_) => NullCache.Instance);
 builder.Services.AddSingleton<ILogger, WebLogger>();
 
 builder.Services.AddSingleton<PuzzleFactory>();
+builder.Services.AddSingleton(TimeProvider.System);
 
 var puzzles = typeof(Puzzle).Assembly
     .GetTypes()
