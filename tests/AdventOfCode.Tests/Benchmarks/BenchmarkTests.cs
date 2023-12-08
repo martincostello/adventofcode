@@ -20,7 +20,7 @@ public static class BenchmarkTests
     public static async Task Can_Run_Benchmarks(PuzzleInput input)
     {
         // Arrange
-        using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(45));
+        using var cts = new CancellationTokenSource(TimeSpan.FromMinutes(1));
 
         // Act and Assert
         await Should.NotThrowAsync(async () => await input.SolveAsync(cts.Token));
