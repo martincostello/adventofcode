@@ -56,7 +56,7 @@ public sealed class Day07 : Puzzle
 
         static List<Directory> GetDirectories(ReadOnlySpan<string> terminalOutput)
         {
-            var root = new Directory("/", null, new());
+            var root = new Directory("/", null, []);
             var current = root;
 
             var fileSystem = new Dictionary<string, Directory>()
@@ -82,7 +82,7 @@ public sealed class Day07 : Puzzle
 
                         if (!fileSystem.TryGetValue(path, out var directory))
                         {
-                            directory = new Directory(name, current, new());
+                            directory = new Directory(name, current, []);
                             fileSystem[directory.Path] = directory;
                         }
 
@@ -121,7 +121,7 @@ public sealed class Day07 : Puzzle
                 }
                 else if (item.AsSpan().StartsWith("dir "))
                 {
-                    current.Children.Add(new Directory(item[4..], current, new()));
+                    current.Children.Add(new Directory(item[4..], current, []));
                 }
                 else
                 {

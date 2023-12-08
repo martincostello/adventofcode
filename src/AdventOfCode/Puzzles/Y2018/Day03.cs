@@ -212,6 +212,6 @@ public sealed class Day03 : Puzzle
         /// <summary>
         /// Gets the Ids of the claims associated with the square.
         /// </summary>
-        internal List<string> Claims { get; } = new();
+        internal List<string> Claims { get; } = [];
     }
 }

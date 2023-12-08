@@ -210,12 +210,12 @@ public sealed class Day10 : Puzzle
         /// <summary>
         /// Gets the output bins, keyed by their number.
         /// </summary>
-        internal Dictionary<int, Bin> Bins { get; } = new();
+        internal Dictionary<int, Bin> Bins { get; } = [];
 
         /// <summary>
         /// Gets the bots, keyed by their number.
         /// </summary>
-        internal Dictionary<int, Bot> Bots { get; } = new();
+        internal Dictionary<int, Bot> Bots { get; } = [];
 
         /// <summary>
         /// Gets or sets a delegate to a method to invoke when to microchips are compared by a bot.

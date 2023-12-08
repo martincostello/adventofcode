@@ -176,6 +176,6 @@ public sealed class Day12 : Puzzle
         /// <summary>
         /// Gets the edges of the node.
         /// </summary>
-        public List<Node> Edges { get; } = new();
+        public List<Node> Edges { get; } = [];
     }
 }

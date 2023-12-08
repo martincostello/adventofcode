@@ -161,7 +161,7 @@ public sealed class Day17 : Puzzle
     {
         private const int Width = 7;
 
-        private HashSet<Point> _rocks = new();
+        private HashSet<Point> _rocks = [];
         private long _offset;
 
         public int Height => _rocks.Count == 0 ? 0 : _rocks.Max((p) => p.Y) + 1;
