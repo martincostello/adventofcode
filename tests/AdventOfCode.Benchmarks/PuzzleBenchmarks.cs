@@ -277,8 +277,8 @@ public class PuzzleBenchmarks
 
         public abstract IPuzzle Puzzle { get; }
 
-        public async Task<PuzzleResult> SolveAsync()
-            => await Puzzle.SolveAsync(Args, CancellationToken.None);
+        public async Task<PuzzleResult> SolveAsync(CancellationToken cancellationToken = default)
+            => await Puzzle.SolveAsync(Args, cancellationToken);
 
         public override string ToString()
         {

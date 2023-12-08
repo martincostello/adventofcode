@@ -18,5 +18,11 @@ public static class BenchmarkTests
     [Theory]
     [MemberData(nameof(Benchmarks))]
     public static async Task Can_Run_Benchmarks(PuzzleInput input)
-        => await input.SolveAsync(); // Act (no Assert)
+    {
+        // Arrange
+        using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(15));
+
+        // Act and Assert
+        await Should.NotThrowAsync(async () => await input.SolveAsync(cts.Token));
+    }
 }
