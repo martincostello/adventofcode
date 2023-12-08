@@ -66,8 +66,11 @@ public sealed class Day08Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
     [MemberData(nameof(TestCases))]
     public void Y2023_Day08_WalkNetwork_Returns_Correct_Value(string[] network, bool asGhost, int expected)
     {
+        // Arrange
+        using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(15));
+
         // Act
-        int actual = Day08.WalkNetwork(network, asGhost, CancellationToken.None);
+        int actual = Day08.WalkNetwork(network, asGhost, cts.Token);
 
         // Assert
         actual.ShouldBe(expected);
