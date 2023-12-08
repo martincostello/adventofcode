@@ -12,13 +12,13 @@ public sealed class Day08 : Puzzle
     /// <summary>
     /// Gets the number of steps required to reach ZZZ.
     /// </summary>
-    public int Steps { get; private set; }
+    public long Steps { get; private set; }
 
     /// <summary>
     /// Gets the number of steps required to simultaneously
     /// reach nodes all ending with Z.
     /// </summary>
-    public int StepsAsGhost { get; private set; }
+    public long StepsAsGhost { get; private set; }
 
     /// <summary>
     /// Walks the network of nodes and returns the number of steps required to reach ZZZ.
@@ -30,83 +30,154 @@ public sealed class Day08 : Puzzle
     /// The number of steps required to reach ZZZ, or all nodes to end with Z
     /// if <paramref name="asGhost"/> is <see langword="true"/>.
     /// </returns>
-    public static int WalkNetwork(IList<string> nodes, bool asGhost, CancellationToken cancellationToken)
+    public static long WalkNetwork(IList<string> nodes, bool asGhost, CancellationToken cancellationToken)
     {
-        (string path, var graph) = BuildGraph(nodes);
+        (string path, var network) = BuildNetwork(nodes);
 
-        int steps = 0;
+        long steps = 0;
 
         if (asGhost)
         {
-            var locations = graph.Edges.Keys.Where((p) => p.EndsWith('A')).ToList();
+            var locations = network.Edges.Keys.Where((p) => p.EndsWith('A')).ToList();
 
-            while (!locations.All(Destination))
+            var allCosts = new Dictionary<(string Origin, int Index), (string Destination, long Cost)>();
+            var costs = new Dictionary<(string Origin, int Index), (string Destination, long Cost)>();
+
+            int index = 0;
+
+            while (!cancellationToken.IsCancellationRequested)
             {
-                cancellationToken.ThrowIfCancellationRequested();
+                costs.Clear();
 
-                foreach (char direction in path)
+                var directions = Directions(path, index);
+
+                foreach (string origin in locations)
                 {
-                    int index = direction == 'L' ? 0 : 1;
+                    var key = (origin, index);
 
-                    for (int i = 0; i < locations.Count; i++)
+                    if (!allCosts.TryGetValue(key, out var destination))
                     {
-                        locations[i] = graph.Edges[locations[i]][index];
+                        allCosts[key] = destination = Walk(origin, directions, network, Destination, cancellationToken);
                     }
 
-                    steps++;
-
-                    if (locations.All(Destination))
-                    {
-                        break;
-                    }
+                    costs[key] = destination;
                 }
+
+                (var maximum, var end) = costs.MaxBy((p) => p.Value);
+
+                steps += end.Cost;
+
+                for (int i = 0; i < locations.Count; i++)
+                {
+                    string location = locations[i];
+
+                    if (location == maximum.Origin)
+                    {
+                        location = end.Destination;
+                    }
+                    else
+                    {
+                        (long quotient, long remainder) = Math.DivRem(end.Cost, costs[(location, index)].Cost);
+
+                        long length = Math.Max(quotient, remainder);
+                        using var subpath = directions.GetEnumerator();
+
+                        for (int j = 0; j < length; j++)
+                        {
+                            subpath.MoveNext();
+                            location = network.Edges[location][subpath.Current];
+                        }
+                    }
+
+                    locations[i] = location;
+                }
+
+                if (locations.All(Destination))
+                {
+                    break;
+                }
+
+                index = (int)((index + end.Cost) % path.Length);
             }
+
+            cancellationToken.ThrowIfCancellationRequested();
 
             static bool Destination(string location) => location.EndsWith('Z');
         }
         else
         {
-            string location = "AAA";
-            string destination = "ZZZ";
+            (_, steps) = Walk("AAA", Directions(path, 0), network, static (p) => p is "ZZZ", cancellationToken);
+        }
 
-            while (location != destination)
+        return steps;
+
+        static (string Path, Graph<string> Network) BuildNetwork(IList<string> nodes)
+        {
+            string path = nodes[0];
+            var network = new Graph<string>();
+
+            foreach (string node in nodes.Skip(2))
+            {
+                string location = node[..3];
+                string left = node.Substring(7, 3);
+                string right = node.Substring(12, 3);
+
+                var edge = network.Edges.GetOrAdd(location);
+                edge.Add(left);
+                edge.Add(right);
+            }
+
+            return (path, network);
+        }
+
+        static (string Destination, long Steps) Walk(
+            string origin,
+            IEnumerable<int> directions,
+            Graph<string> network,
+            Func<string, bool> destination,
+            CancellationToken cancellationToken)
+        {
+            int steps = 0;
+
+            bool reached = false;
+
+            while (!reached)
             {
                 cancellationToken.ThrowIfCancellationRequested();
 
-                foreach (char direction in path)
+                foreach (int index in directions)
                 {
-                    int index = direction == 'L' ? 0 : 1;
-                    location = graph.Edges[location][index];
+                    origin = network.Edges[origin][index];
 
                     steps++;
 
-                    if (location == destination)
+                    reached = destination(origin);
+
+                    if (reached)
                     {
                         break;
                     }
                 }
             }
+
+            return (origin, steps);
         }
 
-        return steps;
-
-        static (string Path, Graph<string> Graph) BuildGraph(IList<string> nodes)
+        static IEnumerable<int> Directions(string path, int index)
         {
-            string path = nodes[0];
-            var graph = new Graph<string>();
-
-            foreach (string node in nodes.Skip(2))
+            if (path.Length > 0)
             {
-                string id = node[..3];
-                string left = node.Substring(7, 3);
-                string right = node.Substring(12, 3);
+                while (true)
+                {
+                    char direction = path[index++];
+                    yield return direction is 'L' ? 0 : 1;
 
-                var edge = graph.Edges.GetOrAdd(id);
-                edge.Add(left);
-                edge.Add(right);
+                    if (index == path.Length)
+                    {
+                        index = 0;
+                    }
+                }
             }
-
-            return (path, graph);
         }
     }
 
