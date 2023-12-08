@@ -1,7 +1,6 @@
 ﻿// Copyright (c) Martin Costello, 2015. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
-using System.Diagnostics;
 using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -47,6 +46,7 @@ internal static partial class PuzzlesApi
     /// <param name="arguments">The optional arguments to use to solve the puzzle with.</param>
     /// <param name="resource">The optional resource to use to solve the puzzle.</param>
     /// <param name="factory">The <see cref="PuzzleFactory"/> to use.</param>
+    /// <param name="timeProvider">The <see cref="TimeProvider"/> to use.</param>
     /// <param name="logger">The <see cref="ILogger"/> to use.</param>
     /// <param name="cancellationToken">The <see cref="CancellationToken"/> to use.</param>
     /// <returns>
@@ -59,6 +59,7 @@ internal static partial class PuzzlesApi
         [FromForm] string[]? arguments,
         IFormFile? resource,
         PuzzleFactory factory,
+        TimeProvider timeProvider,
         ILogger<Puzzle> logger,
         CancellationToken cancellationToken)
     {
@@ -104,7 +105,8 @@ internal static partial class PuzzlesApi
 
         using var timeoutCts = new CancellationTokenSource(timeout);
         using var linkedCts = CancellationTokenSource.CreateLinkedTokenSource(timeoutCts.Token, cancellationToken);
-        var stopwatch = Stopwatch.StartNew();
+
+        long started = timeProvider.GetTimestamp();
 
         PuzzleResult solution;
 
@@ -128,7 +130,8 @@ internal static partial class PuzzlesApi
             return Results.Problem("Failed to solve puzzle.", statusCode: StatusCodes.Status500InternalServerError);
         }
 
-        stopwatch.Stop();
+        long stopped = timeProvider.GetTimestamp();
+        var timeToSolve = timeProvider.GetElapsedTime(started, stopped);
 
         var result = new PuzzleSolution
         {
@@ -136,7 +139,7 @@ internal static partial class PuzzlesApi
             Day = day,
             Solutions = solution.Solutions,
             Visualizations = solution.Visualizations,
-            TimeToSolve = stopwatch.Elapsed.TotalMilliseconds,
+            TimeToSolve = timeToSolve.TotalMilliseconds,
         };
 
         return Results.Json(result, ApplicationJsonSerializerContext.Default.PuzzleSolution);
