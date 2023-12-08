@@ -45,9 +45,10 @@ public sealed class Day08 : Puzzle
 
                 foreach (char direction in path)
                 {
+                    int index = direction == 'L' ? 0 : 1;
+
                     for (int i = 0; i < locations.Count; i++)
                     {
-                        int index = direction == 'L' ? 0 : 1;
                         locations[i] = graph.Edges[locations[i]][index];
                     }
 
