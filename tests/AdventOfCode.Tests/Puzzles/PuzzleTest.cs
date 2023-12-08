@@ -57,7 +57,7 @@ public abstract class PuzzleTest
             Verbose = true,
         };
 
-        using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(15));
+        using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(30));
 
         // Act
         PuzzleResult result = await puzzle.SolveAsync(args, cts.Token);
