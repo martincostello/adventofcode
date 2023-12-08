@@ -23,6 +23,7 @@ public sealed class Day08Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
                     "GGG = (GGG, GGG)",
                     "ZZZ = (ZZZ, ZZZ)",
                 },
+                false,
                 2,
             };
 
@@ -36,6 +37,26 @@ public sealed class Day08Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
                     "BBB = (AAA, ZZZ)",
                     "ZZZ = (ZZZ, ZZZ)",
                 },
+                false,
+                6,
+            };
+
+            yield return new object[]
+            {
+                new[]
+                {
+                    "LR",
+                    string.Empty,
+                    "11A = (11B, XXX)",
+                    "11B = (XXX, 11Z)",
+                    "11Z = (11B, XXX)",
+                    "22A = (22B, XXX)",
+                    "22B = (22C, 22C)",
+                    "22C = (22Z, 22Z)",
+                    "22Z = (22B, 22B)",
+                    "XXX = (XXX, XXX)",
+                },
+                true,
                 6,
             };
         }
@@ -43,10 +64,10 @@ public sealed class Day08Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
 
     [Theory]
     [MemberData(nameof(WalkNetworkCases))]
-    public void Y2023_Day08_WalkNetwork_Returns_Correct_Value(string[] network, int expected)
+    public void Y2023_Day08_WalkNetwork_Returns_Correct_Value(string[] network, bool asGhost, int expected)
     {
         // Act
-        int actual = Day08.WalkNetwork(network, CancellationToken.None);
+        int actual = Day08.WalkNetwork(network, asGhost, CancellationToken.None);
 
         // Assert
         actual.ShouldBe(expected);
@@ -61,5 +82,6 @@ public sealed class Day08Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         // Assert
         puzzle.ShouldNotBeNull();
         puzzle.Steps.ShouldBe(17621);
+        puzzle.StepsAsGhost.ShouldBe(-1);
     }
 }
