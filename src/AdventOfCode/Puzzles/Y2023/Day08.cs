@@ -118,14 +118,14 @@ public sealed class Day08 : Puzzle
         var values = await ReadResourceAsLinesAsync(cancellationToken);
 
         Steps = WalkNetwork(values, asGhost: false, cancellationToken);
-        Steps = WalkNetwork(values, asGhost: true, cancellationToken);
+        StepsAsGhost = WalkNetwork(values, asGhost: true, cancellationToken);
 
         if (Verbose)
         {
             Logger.WriteLine("{0} steps are required to reach ZZZ.", Steps);
-            Logger.WriteLine("{0} steps are required to simultaneously reach nodes all ending with Z.", Steps);
+            Logger.WriteLine("{0} steps are required to simultaneously reach nodes all ending with Z.", StepsAsGhost);
         }
 
-        return PuzzleResult.Create(Steps);
+        return PuzzleResult.Create(Steps, StepsAsGhost);
     }
 }
