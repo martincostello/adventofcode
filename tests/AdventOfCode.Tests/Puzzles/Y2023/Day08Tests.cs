@@ -5,23 +5,54 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2023;
 
 public sealed class Day08Tests(ITestOutputHelper outputHelper) : PuzzleTest(outputHelper)
 {
-    [Fact(Skip = "Not implemented.")]
-    public void Y2023_Day08_Solve_Returns_Correct_Value()
+    public static IEnumerable<object[]> WalkNetworkCases
     {
-        // Arrange
-        string[] values =
-        [
-            "_",
-        ];
+        get
+        {
+            yield return new object[]
+            {
+                new[]
+                {
+                    "RL",
+                    string.Empty,
+                    "AAA = (BBB, CCC)",
+                    "BBB = (DDD, EEE)",
+                    "CCC = (ZZZ, GGG)",
+                    "DDD = (DDD, DDD)",
+                    "EEE = (EEE, EEE)",
+                    "GGG = (GGG, GGG)",
+                    "ZZZ = (ZZZ, ZZZ)",
+                },
+                2,
+            };
 
-        // Act
-        int actual = Day08.Solve(values);
-
-        // Assert
-        actual.ShouldBe(-1);
+            yield return new object[]
+            {
+                new[]
+                {
+                    "LLR",
+                    string.Empty,
+                    "AAA = (BBB, BBB)",
+                    "BBB = (AAA, ZZZ)",
+                    "ZZZ = (ZZZ, ZZZ)",
+                },
+                6,
+            };
+        }
     }
 
-    [Fact(Skip = "Not implemented.")]
+    [Theory]
+    [MemberData(nameof(WalkNetworkCases))]
+    public void Y2023_Day08_WalkNetwork_Returns_Correct_Value(string[] network, int expected)
+    {
+        // Act
+        int actual = Day08.WalkNetwork(network, CancellationToken.None);
+
+        // Assert
+        actual.ShouldBe(expected);
+    }
+
+    [Fact]
     public async Task Y2023_Day08_Solve_Returns_Correct_Solution()
     {
         // Act
@@ -29,6 +60,6 @@ public sealed class Day08Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
 
         // Assert
         puzzle.ShouldNotBeNull();
-        puzzle.Solution.ShouldBe(-1);
+        puzzle.Steps.ShouldBe(17621);
     }
 }
