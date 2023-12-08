@@ -209,7 +209,7 @@ public class ApiTests(HttpServerFixture fixture, ITestOutputHelper outputHelper)
     {
         // Arrange
         using var client = Fixture.CreateClient();
-        client.Timeout = TimeSpan.FromMinutes(1.5);
+        client.Timeout = TimeSpan.FromSeconds(15);
 
         using var content = new MultipartFormDataContent();
 
