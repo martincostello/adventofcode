@@ -5,7 +5,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2023;
 
 public sealed class Day08Tests(ITestOutputHelper outputHelper) : PuzzleTest(outputHelper)
 {
-    public static IEnumerable<object[]> WalkNetworkCases
+    public static IEnumerable<object[]> TestCases
     {
         get
         {
@@ -63,7 +63,7 @@ public sealed class Day08Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
     }
 
     [Theory]
-    [MemberData(nameof(WalkNetworkCases))]
+    [MemberData(nameof(TestCases))]
     public void Y2023_Day08_WalkNetwork_Returns_Correct_Value(string[] network, bool asGhost, int expected)
     {
         // Act
