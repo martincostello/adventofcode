@@ -101,7 +101,7 @@ internal static partial class PuzzlesApi
             }
         }
 
-        var timeout = TimeSpan.FromMinutes(1);
+        var timeout = TimeSpan.FromSeconds(30);
 
         using var timeoutCts = new CancellationTokenSource(timeout);
         using var linkedCts = CancellationTokenSource.CreateLinkedTokenSource(timeoutCts.Token, cancellationToken);
