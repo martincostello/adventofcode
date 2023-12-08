@@ -66,11 +66,8 @@ public sealed class Day08Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
     [MemberData(nameof(TestCases))]
     public void Y2023_Day08_WalkNetwork_Returns_Correct_Value(string[] network, bool asGhost, long expected)
     {
-        // Arrange
-        using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(15));
-
         // Act
-        long actual = Day08.WalkNetwork(network, asGhost, cts.Token);
+        long actual = Day08.WalkNetwork(network, asGhost, CancellationToken.None);
 
         // Assert
         actual.ShouldBe(expected);
@@ -85,6 +82,6 @@ public sealed class Day08Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         // Assert
         puzzle.ShouldNotBeNull();
         puzzle.Steps.ShouldBe(17621);
-        puzzle.StepsAsGhost.ShouldBe(-1);
+        puzzle.StepsAsGhost.ShouldBe(20685524831999);
     }
 }

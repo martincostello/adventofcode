@@ -34,82 +34,29 @@ public sealed class Day08 : Puzzle
     {
         (string path, var network) = BuildNetwork(nodes);
 
-        long steps = 0;
+        Func<string, bool> destination;
+        List<string> locations;
 
         if (asGhost)
         {
-            var locations = network.Edges.Keys.Where((p) => p.EndsWith('A')).ToList();
-
-            var allCosts = new Dictionary<(string Origin, int Index), (string Destination, long Cost)>();
-            var costs = new Dictionary<(string Origin, int Index), (string Destination, long Cost)>();
-
-            int index = 0;
-
-            while (!cancellationToken.IsCancellationRequested)
-            {
-                costs.Clear();
-
-                var directions = Directions(path, index);
-
-                foreach (string origin in locations)
-                {
-                    var key = (origin, index);
-
-                    if (!allCosts.TryGetValue(key, out var destination))
-                    {
-                        allCosts[key] = destination = Walk(origin, directions, network, Destination, cancellationToken);
-                    }
-
-                    costs[key] = destination;
-                }
-
-                (var maximum, var end) = costs.MaxBy((p) => p.Value);
-
-                steps += end.Cost;
-
-                for (int i = 0; i < locations.Count; i++)
-                {
-                    string location = locations[i];
-
-                    if (location == maximum.Origin)
-                    {
-                        location = end.Destination;
-                    }
-                    else
-                    {
-                        (long quotient, long remainder) = Math.DivRem(end.Cost, costs[(location, index)].Cost);
-
-                        long length = Math.Max(quotient, remainder);
-                        using var subpath = directions.GetEnumerator();
-
-                        for (int j = 0; j < length; j++)
-                        {
-                            subpath.MoveNext();
-                            location = network.Edges[location][subpath.Current];
-                        }
-                    }
-
-                    locations[i] = location;
-                }
-
-                if (locations.All(Destination))
-                {
-                    break;
-                }
-
-                index = (int)((index + end.Cost) % path.Length);
-            }
-
-            cancellationToken.ThrowIfCancellationRequested();
-
-            static bool Destination(string location) => location.EndsWith('Z');
+            destination = (p) => p.EndsWith('Z');
+            locations = network.Edges.Keys.Where((p) => p.EndsWith('A')).ToList();
         }
         else
         {
-            (_, steps) = Walk("AAA", Directions(path, 0), network, static (p) => p is "ZZZ", cancellationToken);
+            destination = (p) => p is "ZZZ";
+            locations = ["AAA"];
         }
 
-        return steps;
+        var costs = new List<long>(locations.Count);
+
+        foreach (string location in locations)
+        {
+            long cost = Walk(location, path, network, destination, cancellationToken);
+            costs.Add(cost);
+        }
+
+        return costs.Aggregate(Maths.LowestCommonMultiple);
 
         static (string Path, Graph<string> Network) BuildNetwork(IList<string> nodes)
         {
@@ -130,9 +77,9 @@ public sealed class Day08 : Puzzle
             return (path, network);
         }
 
-        static (string Destination, long Steps) Walk(
+        static long Walk(
             string origin,
-            IEnumerable<int> directions,
+            string path,
             Graph<string> network,
             Func<string, bool> destination,
             CancellationToken cancellationToken)
@@ -145,7 +92,7 @@ public sealed class Day08 : Puzzle
             {
                 cancellationToken.ThrowIfCancellationRequested();
 
-                foreach (int index in directions)
+                foreach (int index in Directions(path))
                 {
                     origin = network.Edges[origin][index];
 
@@ -160,21 +107,23 @@ public sealed class Day08 : Puzzle
                 }
             }
 
-            return (origin, steps);
+            return steps;
         }
 
-        static IEnumerable<int> Directions(string path, int index)
+        static IEnumerable<int> Directions(string path)
         {
             if (path.Length > 0)
             {
+                int i = 0;
+
                 while (true)
                 {
-                    char direction = path[index++];
+                    char direction = path[i++];
                     yield return direction is 'L' ? 0 : 1;
 
-                    if (index == path.Length)
+                    if (i == path.Length)
                     {
-                        index = 0;
+                        i = 0;
                     }
                 }
             }
