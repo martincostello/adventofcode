@@ -5,6 +5,7 @@ using Microsoft.Playwright;
 
 namespace MartinCostello.AdventOfCode.Api;
 
+[Collection(HttpServerCollection.Name)]
 public class UITests : IntegrationTest, IClassFixture<PlaywrightFixture>
 {
     public UITests(HttpServerFixture httpFixture, PlaywrightFixture playwrightFixture, ITestOutputHelper outputHelper)
