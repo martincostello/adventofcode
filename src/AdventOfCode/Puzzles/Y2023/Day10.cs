@@ -46,9 +46,9 @@ public sealed class Day10 : Puzzle
 
             for (int x = 0; x < row.Length; x++)
             {
-                char thisPipe = row[x];
+                char pipe = row[x];
 
-                if (thisPipe is '.')
+                if (pipe is '.')
                 {
                     continue;
                 }
@@ -56,9 +56,9 @@ public sealed class Day10 : Puzzle
                 var location = new Point(x, y);
                 var connections = maze.Edges[location] = [];
 
-                if (thisPipe is 'S')
+                if (pipe is 'S')
                 {
-                    thisPipe = startPipe;
+                    pipe = startPipe;
                 }
 
                 foreach (var offset in Directions)
@@ -70,14 +70,14 @@ public sealed class Day10 : Puzzle
                         continue;
                     }
 
-                    char otherPipe = sketch[neighbor.Y][neighbor.X];
+                    char other = sketch[neighbor.Y][neighbor.X];
 
-                    if (otherPipe is 'S')
+                    if (other is 'S')
                     {
-                        otherPipe = startPipe;
+                        other = startPipe;
                     }
 
-                    if (CanConnect((location, thisPipe), (neighbor, otherPipe)))
+                    if (CanConnect((location, pipe), (neighbor, other)))
                     {
                         connections.Add(neighbor);
                     }
@@ -129,9 +129,9 @@ public sealed class Day10 : Puzzle
                         continue;
                     }
 
-                    char otherPipe = sketch[neighbor.Y][neighbor.X];
+                    char other = sketch[neighbor.Y][neighbor.X];
 
-                    if (CanConnect((start, candidate), (neighbor, otherPipe)))
+                    if (CanConnect((start, candidate), (neighbor, other)))
                     {
                         connections++;
                     }
