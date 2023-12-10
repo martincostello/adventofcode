@@ -201,7 +201,7 @@ public sealed class Day10 : Puzzle
                     '7' => other.Location.IsLeftOf(origin.Location),
                     _ => false,
                 },
-                'S' or '.' or _ => false,
+                _ => false,
             };
         }
     }
