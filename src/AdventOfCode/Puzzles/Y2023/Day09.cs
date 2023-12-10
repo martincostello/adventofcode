@@ -6,18 +6,52 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2023;
 /// <summary>
 /// A class representing the puzzle for <c>https://adventofcode.com/2023/day/09</c>. This class cannot be inherited.
 /// </summary>
-[Puzzle(2023, 09, "", RequiresData = true, IsHidden = true)]
+[Puzzle(2023, 09, "Mirage Maintenance", RequiresData = true)]
 public sealed class Day09 : Puzzle
 {
-#pragma warning disable IDE0022
-#pragma warning disable IDE0060
-#pragma warning disable SA1600
+    /// <summary>
+    /// Gets the sum of these extrapolated values.
+    /// </summary>
+    public int Sum { get; private set; }
 
-    public int Solution { get; private set; }
-
-    public static int Solve(IList<string> values)
+    /// <summary>
+    /// Analyze the OASIS report and extrapolate the next value for each history.
+    /// </summary>
+    /// <param name="histories">The histories to analyze.</param>
+    /// <returns>
+    /// The sum of these extrapolated values.
+    /// </returns>
+    public static int Analyze(IList<string> histories)
     {
-        return -1;
+        var extrapolated = new List<int>();
+
+        foreach (string history in histories)
+        {
+            var sequence = history.Split(' ').Select(Parse<int>).ToList();
+            var sequences = new List<List<int>>() { sequence };
+
+            while (!sequence.All((p) => p is 0))
+            {
+                sequence = sequence.Pairwise((x, y) => y - x).ToList();
+                sequences.Add(sequence);
+            }
+
+            sequence.Add(0);
+
+            for (int i = sequences.Count - 2; i > -1; i--)
+            {
+                var current = sequences[i];
+                var previous = sequences[i + 1];
+
+                int next = previous[^1] + current[^1];
+
+                current.Add(next);
+            }
+
+            extrapolated.Add(sequences[0][^1]);
+        }
+
+        return extrapolated.Sum();
     }
 
     /// <inheritdoc />
@@ -27,13 +61,13 @@ public sealed class Day09 : Puzzle
 
         var values = await ReadResourceAsLinesAsync(cancellationToken);
 
-        Solution = Solve(values);
+        Sum = Analyze(values);
 
         if (Verbose)
         {
-            Logger.WriteLine("{0}", Solution);
+            Logger.WriteLine("The sum of these extrapolated values is {0}.", Sum);
         }
 
-        return PuzzleResult.Create(Solution);
+        return PuzzleResult.Create(Sum);
     }
 }

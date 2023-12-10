@@ -37,4 +37,33 @@ internal static class EnumerableExtensions
 
         return count == value;
     }
+
+    /// <summary>
+    /// Enumerates the specified source and returns the items from it in pairs.
+    /// </summary>
+    /// <typeparam name="TSource">The type of the source elements.</typeparam>
+    /// <typeparam name="TResult">The type of the result pairs.</typeparam>
+    /// <param name="source">The source to enumerate for pairs.</param>
+    /// <param name="selector">A delegate that selects a value from two pairs.</param>
+    /// <returns>
+    /// The results enumerated from the pairs in the source.
+    /// </returns>
+    public static IEnumerable<TResult> Pairwise<TSource, TResult>(
+        this IEnumerable<TSource> source,
+        Func<TSource, TSource, TResult> selector)
+    {
+        using var enumerator = source.GetEnumerator();
+
+        if (!enumerator.MoveNext())
+        {
+            yield break;
+        }
+
+        var previous = enumerator.Current;
+        while (enumerator.MoveNext())
+        {
+            yield return selector(previous, enumerator.Current);
+            previous = enumerator.Current;
+        }
+    }
 }
