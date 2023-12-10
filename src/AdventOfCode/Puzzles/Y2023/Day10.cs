@@ -25,20 +25,28 @@ public sealed class Day10 : Puzzle
     public int Steps { get; private set; }
 
     /// <summary>
+    /// Gets the number of tiles enclosed by the loop of pipe containing the animal.
+    /// </summary>
+    public int Tiles { get; private set; }
+
+    /// <summary>
     /// Walks the pipe maze and returns the number of steps to
     /// the furthest position from the starting location.
     /// </summary>
     /// <param name="sketch">The sketch of the pipe maze.</param>
     /// <param name="cancellationToken">The cancellation token to use.</param>
     /// <returns>
-    /// The number of steps to the furthest position in the pipe from the starting location.
+    /// The number of steps to the furthest position in the pipe
+    /// from the starting location and the number of tiles enclosed
+    /// by the loop of pipe containing the animal.
     /// </returns>
-    public static int Walk(IList<string> sketch, CancellationToken cancellationToken)
+    public static (int Steps, int Tiles) Walk(IList<string> sketch, CancellationToken cancellationToken)
     {
         (Point start, Rectangle bounds) = FindStart(sketch);
         char startPipe = GetStartShape(start, bounds, sketch);
 
         var maze = new Graph<Point>();
+        var tiles = new HashSet<Point>();
 
         for (int y = 0; y < sketch.Count; y++)
         {
@@ -48,17 +56,16 @@ public sealed class Day10 : Puzzle
             {
                 char pipe = row[x];
 
-                if (pipe is '.')
-                {
-                    continue;
-                }
-
                 var location = new Point(x, y);
                 var connections = maze.Edges[location] = [];
 
                 if (pipe is 'S')
                 {
                     pipe = startPipe;
+                }
+                else if (pipe is '.')
+                {
+                    tiles.Add(location);
                 }
 
                 foreach (var offset in Directions)
@@ -85,20 +92,29 @@ public sealed class Day10 : Puzzle
             }
         }
 
-        List<Point> circuit = [start];
-        var current = maze.Edges[start][0];
-        var previous = start;
+        var mainLoop = PathFinding.BreadthFirst(maze, start, cancellationToken);
+        int steps = mainLoop.Count / 2;
 
-        while (current != start)
+        List<Point> maybeEnclosed = [];
+
+        foreach (var location in tiles)
         {
-            circuit.Add(current);
-            var edges = maze.Edges[current];
-            var next = edges.Find((p) => p != previous);
-            previous = current;
-            current = next;
+            var space = PathFinding.BreadthFirst(maze, location, cancellationToken);
+
+            if (space.All((p) => p.Neighbors().All((r) => mainLoop.Contains(r) || tiles.Contains(r))))
+            {
+                maybeEnclosed.Add(location);
+            }
         }
 
-        return circuit.Count / 2;
+        // 7F    J-L
+        // ||    7-F
+        // JL
+        foreach (var location in maybeEnclosed)
+        {
+        }
+
+        return (steps, maybeEnclosed.Count);
 
         static (Point Location, Rectangle Bounds) FindStart(IList<string> sketch)
         {
@@ -159,6 +175,11 @@ public sealed class Day10 : Puzzle
         {
             return origin.Pipe switch
             {
+                '.' => other.Pipe switch
+                {
+                    '.' => true,
+                    _ => false,
+                },
                 '|' => other.Pipe switch
                 {
                     '|' => other.Location.IsAbove(origin.Location) || other.Location.IsBelow(origin.Location),
@@ -225,13 +246,14 @@ public sealed class Day10 : Puzzle
 
         var values = await ReadResourceAsLinesAsync(cancellationToken);
 
-        Steps = Walk(values, cancellationToken);
+        (Steps, Tiles) = Walk(values, cancellationToken);
 
         if (Verbose)
         {
             Logger.WriteLine("It takes {0} steps to get to the point furthest from the starting position.", Steps);
+            Logger.WriteLine("{0} tiles are enclosed by the loop.", Tiles);
         }
 
-        return PuzzleResult.Create(Steps);
+        return PuzzleResult.Create(Steps, Tiles);
     }
 }
