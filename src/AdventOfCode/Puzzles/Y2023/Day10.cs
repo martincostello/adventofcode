@@ -35,7 +35,7 @@ public sealed class Day10 : Puzzle
     /// </returns>
     public static int Walk(IList<string> sketch, CancellationToken cancellationToken)
     {
-        (Point start, Size bounds) = FindStart(sketch);
+        (Point start, Rectangle bounds) = FindStart(sketch);
         char startPipe = GetStartShape(start, bounds, sketch);
 
         var maze = new Graph<Point>();
@@ -88,7 +88,7 @@ public sealed class Day10 : Puzzle
         var reachable = PathFinding.BreadthFirst(maze, start, cancellationToken);
         return reachable.Count / 2;
 
-        static (Point Location, Size Bounds) FindStart(IList<string> sketch)
+        static (Point Location, Rectangle Bounds) FindStart(IList<string> sketch)
         {
             var start = Point.Empty;
 
@@ -109,14 +109,14 @@ public sealed class Day10 : Puzzle
             int height = sketch.Count;
             int width = sketch[0].Length;
 
-            return (start, new(width, height));
+            return (start, new(0, 0, width, height));
         }
 
-        static char GetStartShape(Point start, Size bounds, IList<string> sketch)
+        static char GetStartShape(Point start, Rectangle bounds, IList<string> sketch)
         {
-            char[] possibility = ['|', '-', 'L', 'J', '7', 'F'];
+            char[] candidates = ['|', '-', 'L', 'J', '7', 'F'];
 
-            foreach (char candidate in possibility)
+            foreach (char candidate in candidates)
             {
                 int connections = 0;
 
@@ -124,7 +124,7 @@ public sealed class Day10 : Puzzle
                 {
                     var neighbor = start + offset;
 
-                    if (neighbor.X < 0 || neighbor.X >= bounds.Width || neighbor.Y < 0 || neighbor.Y >= bounds.Height)
+                    if (!bounds.Contains(neighbor))
                     {
                         continue;
                     }
