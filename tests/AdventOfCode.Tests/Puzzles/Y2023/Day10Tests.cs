@@ -31,11 +31,11 @@ public sealed class Day10Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         // Arrange
         string[] sketch =
         [
-            "..F7.",
-            ".FJ|.",
-            "SJ.L7",
+            "7-F7-",
+            ".FJ|7",
+            "SJLL7",
             "|F--J",
-            "LJ...",
+            "LJ.LJ",
         ];
 
         // Act
