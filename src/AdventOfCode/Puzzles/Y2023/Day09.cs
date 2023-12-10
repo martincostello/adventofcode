@@ -10,20 +10,27 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2023;
 public sealed class Day09 : Puzzle
 {
     /// <summary>
-    /// Gets the sum of these extrapolated values.
+    /// Gets the sum of the extrapolated next values.
     /// </summary>
-    public int Sum { get; private set; }
+    public int SumNext { get; private set; }
+
+    /// <summary>
+    /// Gets the sum of these extrapolated previous values.
+    /// </summary>
+    public int SumPrevious { get; private set; }
 
     /// <summary>
     /// Analyze the OASIS report and extrapolate the next value for each history.
     /// </summary>
     /// <param name="histories">The histories to analyze.</param>
+    /// <param name="reverse">Whether to extrapolate the previous value rather than the next.</param>
     /// <returns>
     /// The sum of these extrapolated values.
     /// </returns>
-    public static int Analyze(IList<string> histories)
+    public static int Analyze(IList<string> histories, bool reverse)
     {
-        var extrapolated = new List<int>();
+        var direction = reverse ? 0 : ^1;
+        var extrapolated = new List<int>(histories.Count);
 
         foreach (string history in histories)
         {
@@ -36,19 +43,31 @@ public sealed class Day09 : Puzzle
                 sequences.Add(sequence);
             }
 
-            sequence.Add(0);
+            if (reverse)
+            {
+                sequence.Insert(0, 0);
+            }
+            else
+            {
+                sequence.Add(0);
+            }
 
             for (int i = sequences.Count - 2; i > -1; i--)
             {
                 var current = sequences[i];
                 var previous = sequences[i + 1];
 
-                int next = previous[^1] + current[^1];
-
-                current.Add(next);
+                if (reverse)
+                {
+                    current.Insert(0, current[direction] - previous[direction]);
+                }
+                else
+                {
+                    current.Add(previous[direction] + current[direction]);
+                }
             }
 
-            extrapolated.Add(sequences[0][^1]);
+            extrapolated.Add(sequences[0][direction]);
         }
 
         return extrapolated.Sum();
@@ -61,13 +80,15 @@ public sealed class Day09 : Puzzle
 
         var values = await ReadResourceAsLinesAsync(cancellationToken);
 
-        Sum = Analyze(values);
+        SumNext = Analyze(values, reverse: false);
+        SumPrevious = Analyze(values, reverse: true);
 
         if (Verbose)
         {
-            Logger.WriteLine("The sum of these extrapolated values is {0}.", Sum);
+            Logger.WriteLine("The sum of the extrapolated next values is {0}.", SumNext);
+            Logger.WriteLine("The sum of the extrapolated previous values is {0}.", SumPrevious);
         }
 
-        return PuzzleResult.Create(Sum);
+        return PuzzleResult.Create(SumNext, SumPrevious);
     }
 }
