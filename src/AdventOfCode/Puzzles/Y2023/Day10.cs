@@ -91,8 +91,9 @@ public sealed class Day10 : Puzzle
         static (Point Location, Rectangle Bounds) FindStart(IList<string> sketch)
         {
             var start = Point.Empty;
+            var bounds = new Rectangle(0, 0, sketch[0].Length, sketch.Count);
 
-            for (int y = 0; y < sketch.Count && start == Point.Empty; y++)
+            for (int y = 0; y < sketch.Count; y++)
             {
                 string row = sketch[y];
 
@@ -100,16 +101,12 @@ public sealed class Day10 : Puzzle
                 {
                     if (row[x] is 'S')
                     {
-                        start = new(x, y);
-                        break;
+                        return (new(x, y), bounds);
                     }
                 }
             }
 
-            int height = sketch.Count;
-            int width = sketch[0].Length;
-
-            return (start, new(0, 0, width, height));
+            throw new UnreachableException("Failed to find the starting location.");
         }
 
         static char GetStartShape(Point start, Rectangle bounds, IList<string> sketch)
