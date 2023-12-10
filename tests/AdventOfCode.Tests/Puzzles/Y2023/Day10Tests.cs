@@ -53,7 +53,6 @@ public sealed class Day10Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
 
         // Assert
         puzzle.ShouldNotBeNull();
-        puzzle.Steps.ShouldBeGreaterThan(1842);
-        puzzle.Steps.ShouldBe(-1);
+        puzzle.Steps.ShouldBe(6870);
     }
 }

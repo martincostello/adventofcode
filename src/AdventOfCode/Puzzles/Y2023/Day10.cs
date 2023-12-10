@@ -85,8 +85,20 @@ public sealed class Day10 : Puzzle
             }
         }
 
-        var reachable = PathFinding.BreadthFirst(maze, start, cancellationToken);
-        return reachable.Count / 2;
+        List<Point> circuit = [start];
+        var current = maze.Edges[start][0];
+        var previous = start;
+
+        while (current != start)
+        {
+            circuit.Add(current);
+            var edges = maze.Edges[current];
+            var next = edges.Find((p) => p != previous);
+            previous = current;
+            current = next;
+        }
+
+        return circuit.Count / 2;
 
         static (Point Location, Rectangle Bounds) FindStart(IList<string> sketch)
         {
@@ -198,7 +210,7 @@ public sealed class Day10 : Puzzle
                     '-' => other.Location.IsRightOf(origin.Location),
                     'L' => other.Location.IsBelow(origin.Location),
                     'J' => other.Location.IsBelow(origin.Location) || other.Location.IsRightOf(origin.Location),
-                    '7' => other.Location.IsLeftOf(origin.Location),
+                    '7' => other.Location.IsRightOf(origin.Location),
                     _ => false,
                 },
                 _ => false,
