@@ -65,7 +65,7 @@ public sealed class Day10 : Puzzle
                 {
                     var neighbor = location + offset;
 
-                    if (neighbor.X < 0 || neighbor.X >= bounds.Width || neighbor.Y < 0 || neighbor.Y >= bounds.Height)
+                    if (!bounds.Contains(neighbor))
                     {
                         continue;
                     }
