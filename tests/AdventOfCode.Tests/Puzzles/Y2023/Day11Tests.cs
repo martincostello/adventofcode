@@ -7,8 +7,8 @@ public sealed class Day11Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
 {
     [Theory]
     [InlineData(1, 374)]
-    [InlineData(10, 1030)]
-    [InlineData(100, 8410)]
+    [InlineData(9, 1030)]
+    [InlineData(99, 8410)]
     public void Y2023_Day11_Analyze_Returns_Correct_Value(int expansion, long expected)
     {
         // Arrange
@@ -42,6 +42,6 @@ public sealed class Day11Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         // Assert
         puzzle.ShouldNotBeNull();
         puzzle.SumOfLengthsSmall.ShouldBe(9605127);
-        puzzle.SumOfLengthsLarge.ShouldBe(-1);
+        puzzle.SumOfLengthsLarge.ShouldBe(458191688761L);
     }
 }

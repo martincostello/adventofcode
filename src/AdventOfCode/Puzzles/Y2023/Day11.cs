@@ -144,7 +144,7 @@ public sealed class Day11 : Puzzle
         var image = await ReadResourceAsLinesAsync(cancellationToken);
 
         SumOfLengthsSmall = Analyze(image, expansion: 1);
-        SumOfLengthsLarge = Analyze(image, expansion: 1_000_000);
+        SumOfLengthsLarge = Analyze(image, expansion: 999_999);
 
         if (Verbose)
         {
