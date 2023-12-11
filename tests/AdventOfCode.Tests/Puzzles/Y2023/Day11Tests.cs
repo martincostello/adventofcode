@@ -12,8 +12,6 @@ public sealed class Day11Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
     public void Y2023_Day11_Analyze_Returns_Correct_Value(int expansion, long expected)
     {
         // Arrange
-        using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(15));
-
         string[] image =
         [
             "...#......",
@@ -29,7 +27,7 @@ public sealed class Day11Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         ];
 
         // Act
-        long actual = Day11.Analyze(image, expansion, cts.Token);
+        long actual = Day11.Analyze(image, expansion);
 
         // Assert
         actual.ShouldBe(expected);
