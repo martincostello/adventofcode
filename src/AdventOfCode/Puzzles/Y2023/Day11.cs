@@ -28,65 +28,55 @@ public sealed class Day11 : Puzzle
     /// </summary>
     /// <param name="image">The image of galaxies to analyze.</param>
     /// <param name="expansion">The rate of expansion to use.</param>
-    /// <param name="cancellationToken">The cancellation token to use.</param>
     /// <returns>
     /// The sum of the lengths of the shortest path between each galaxy in the image.
     /// </returns>
-    public static long Analyze(IList<string> image, int expansion, CancellationToken cancellationToken)
+    public static long Analyze(IList<string> image, int expansion)
     {
-        var expanded = Expand(image, expansion);
-        var galaxies = FindGalaxies(expanded);
-
-        var pairs = Maths.GetPermutations(galaxies, 2).ToList();
-
-        Dictionary<(Point, Point), long> distances = [];
-
-        var space = new SquareGrid(expanded[0].Length, expanded.Count);
-        space.Locations.IntersectWith(galaxies);
-
+        var galaxies = Expand(image, expansion);
         long sum = 0;
 
-        foreach (var pair in pairs)
+        for (int i = 0; i < galaxies.Count; i++)
         {
-            cancellationToken.ThrowIfCancellationRequested();
+            var origin = galaxies[i];
 
-            var first = pair.MinBy((p) => p.ToString());
-            var second = pair.MaxBy((p) => p.ToString());
-
-            var key = (first, second);
-
-            if (!distances.ContainsKey(key))
+            for (int j = 0; j < galaxies.Count; j++)
             {
-                long distance = PathFinding.AStar(space, first, second, cancellationToken: cancellationToken);
-                distances[key] = distance;
-                sum += distance;
+                sum += origin.ManhattanDistance(galaxies[j]);
             }
         }
 
-        return sum;
+        // TODO Optimise by not calculating the same distances twice
+        return sum / 2;
 
-        static List<string> Expand(IList<string> image, int expansion)
+        static List<Point> Expand(IList<string> image, int expansion)
         {
             int height = image.Count;
             int width = image[0].Length;
 
-            var result = new List<StringBuilder>();
+            List<Point> galaxies = [];
+            List<int> columnsToExpand = [];
+            List<int> rowsToExpand = [];
 
             for (int y = 0; y < height; y++)
             {
                 string row = image[y];
-                var builder = new StringBuilder(row);
+                bool allEmpty = true;
 
-                result.Add(builder);
-
-                if (row.All((p) => p is Empty))
+                for (int x = 0; x < width; x++)
                 {
-                    result.Add(builder);
+                    if (row[x] is Galaxy)
+                    {
+                        galaxies.Add(new(x, y));
+                        allEmpty = false;
+                    }
+                }
+
+                if (allEmpty)
+                {
+                    rowsToExpand.Add(y);
                 }
             }
-
-            var rows = result.Distinct().ToList();
-            int emptyColumns = 0;
 
             for (int x = 0; x < width; x++)
             {
@@ -99,31 +89,46 @@ public sealed class Day11 : Puzzle
 
                 if (allEmpty)
                 {
-                    foreach (var row in rows)
-                    {
-                        row.Insert(x + emptyColumns, Empty);
-                    }
-
-                    emptyColumns++;
+                    columnsToExpand.Add(x);
                 }
             }
 
-            return result.Select((p) => p.ToString()).ToList();
-        }
-
-        static List<Point> FindGalaxies(IList<string> image)
-        {
-            var galaxies = new List<Point>();
-
-            for (int y = 0; y < image.Count; y++)
+            if (rowsToExpand.Count > 0)
             {
-                string row = image[y];
+                var delta = new Size(0, expansion);
 
-                for (int x = 0; x < row.Length; x++)
+                for (int i = 0; i < rowsToExpand.Count; i++)
                 {
-                    if (row[x] is Galaxy)
+                    int y = rowsToExpand[i] + (expansion * i);
+
+                    for (int j = 0; j < galaxies.Count; j++)
                     {
-                        galaxies.Add(new(x, y));
+                        var galaxy = galaxies[j];
+
+                        if (galaxy.Y > y)
+                        {
+                            galaxies[j] += delta;
+                        }
+                    }
+                }
+            }
+
+            if (columnsToExpand.Count > 0)
+            {
+                var delta = new Size(expansion, 0);
+
+                for (int i = 0; i < columnsToExpand.Count; i++)
+                {
+                    int x = columnsToExpand[i] + (expansion * i);
+
+                    for (int j = 0; j < galaxies.Count; j++)
+                    {
+                        var galaxy = galaxies[j];
+
+                        if (galaxy.X > x)
+                        {
+                            galaxies[j] += delta;
+                        }
                     }
                 }
             }
@@ -139,8 +144,8 @@ public sealed class Day11 : Puzzle
 
         var image = await ReadResourceAsLinesAsync(cancellationToken);
 
-        SumOfLengthsSmall = Analyze(image, expansion: 1, cancellationToken);
-        SumOfLengthsLarge = Analyze(image, expansion: 1_000_000, cancellationToken);
+        SumOfLengthsSmall = Analyze(image, expansion: 1);
+        SumOfLengthsLarge = Analyze(image, expansion: 1_000_000);
 
         if (Verbose)
         {
