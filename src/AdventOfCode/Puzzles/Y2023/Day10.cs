@@ -11,6 +11,9 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2023;
 [Puzzle(2023, 10, "Pipe Maze", RequiresData = true)]
 public sealed class Day10 : Puzzle
 {
+    private const char Empty = '.';
+    private const char Start = 'S';
+
     private static readonly Size[] Directions =
     [
         new(-1, 0),
@@ -59,11 +62,11 @@ public sealed class Day10 : Puzzle
                 var location = new Point(x, y);
                 var connections = maze.Edges[location] = [];
 
-                if (pipe is 'S')
+                if (pipe is Start)
                 {
                     pipe = startPipe;
                 }
-                else if (pipe is '.')
+                else if (pipe is Empty)
                 {
                     tiles.Add(location);
                 }
@@ -79,7 +82,7 @@ public sealed class Day10 : Puzzle
 
                     char other = sketch[neighbor.Y][neighbor.X];
 
-                    if (other is 'S')
+                    if (other is Start)
                     {
                         other = startPipe;
                     }
@@ -92,29 +95,25 @@ public sealed class Day10 : Puzzle
             }
         }
 
-        var mainLoop = PathFinding.BreadthFirst(maze, start, cancellationToken);
-        int steps = mainLoop.Count / 2;
+        var loop = PathFinding.BreadthFirst(maze, start, cancellationToken);
 
-        List<Point> maybeEnclosed = [];
-
-        foreach (var location in tiles)
-        {
-            var space = PathFinding.BreadthFirst(maze, location, cancellationToken);
-
-            if (space.All((p) => p.Neighbors().All((r) => mainLoop.Contains(r) || tiles.Contains(r))))
-            {
-                maybeEnclosed.Add(location);
-            }
-        }
+        var grid = new SquareGrid(bounds.Width, bounds.Height);
+        grid.Borders.Or(loop);
 
         // 7F    L-J
         // ||    F-7
         // JL
-        foreach (var location in maybeEnclosed)
+        HashSet<Point> outside = [];
+
+        foreach (var edge in bounds.Border().Except(loop))
         {
+            outside.Or(PathFinding.BreadthFirst(grid, edge, cancellationToken));
         }
 
-        return (steps, maybeEnclosed.Count);
+        int steps = loop.Count / 2;
+        int enclosed = bounds.Area() - outside.Count - loop.Count;
+
+        return (steps, enclosed);
 
         static (Point Location, Rectangle Bounds) FindStart(IList<string> sketch)
         {
@@ -127,7 +126,7 @@ public sealed class Day10 : Puzzle
 
                 for (int x = 0; x < row.Length; x++)
                 {
-                    if (row[x] is 'S')
+                    if (row[x] is Start)
                     {
                         return (new(x, y), bounds);
                     }
@@ -175,11 +174,7 @@ public sealed class Day10 : Puzzle
         {
             return origin.Pipe switch
             {
-                '.' => other.Pipe switch
-                {
-                    '.' => true,
-                    _ => false,
-                },
+                Empty => other.Pipe is Empty,
                 '|' => other.Pipe switch
                 {
                     '|' => other.Location.IsAbove(origin.Location) || other.Location.IsBelow(origin.Location),
