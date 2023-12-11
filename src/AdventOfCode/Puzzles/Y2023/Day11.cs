@@ -50,6 +50,8 @@ public sealed class Day11 : Puzzle
 
         static List<Point> Expand(IList<string> image, int expansion)
         {
+            expansion = Math.Max(1, expansion - 1);
+
             int height = image.Count;
             int width = image[0].Length;
 
@@ -144,7 +146,7 @@ public sealed class Day11 : Puzzle
         var image = await ReadResourceAsLinesAsync(cancellationToken);
 
         SumOfLengthsSmall = Analyze(image, expansion: 1);
-        SumOfLengthsLarge = Analyze(image, expansion: 999_999);
+        SumOfLengthsLarge = Analyze(image, expansion: 1_000_000);
 
         if (Verbose)
         {
