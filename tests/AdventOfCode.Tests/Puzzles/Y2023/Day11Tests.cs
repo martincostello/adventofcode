@@ -7,8 +7,8 @@ public sealed class Day11Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
 {
     [Theory]
     [InlineData(1, 374)]
-    [InlineData(9, 1030)]
-    [InlineData(99, 8410)]
+    [InlineData(10, 1030)]
+    [InlineData(100, 8410)]
     public void Y2023_Day11_Analyze_Returns_Correct_Value(int expansion, long expected)
     {
         // Arrange
