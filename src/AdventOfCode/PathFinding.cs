@@ -18,7 +18,6 @@ public static class PathFinding
     /// <param name="graph">A graph of nodes.</param>
     /// <param name="start">The starting node.</param>
     /// <param name="goal">The goal node to find a path to.</param>
-    /// <param name="heuristic">An optional heuristic to determine the cost of moving from one node to another.</param>
     /// <param name="cancellationToken">The optional <see cref="CancellationToken"/> to use.</param>
     /// <returns>
     /// The minimum cost to traverse the graph from <paramref name="start"/> to <paramref name="goal"/>.
@@ -27,12 +26,30 @@ public static class PathFinding
         IWeightedGraph<T> graph,
         T start,
         T goal,
-        Func<T, T, long>? heuristic = default,
+        CancellationToken cancellationToken = default)
+        where T : notnull
+        => AStar(graph, start, goal, graph.Cost, cancellationToken);
+
+    /// <summary>
+    /// Finds the cheapest path between two nodes of the specified graph.
+    /// </summary>
+    /// <typeparam name="T">The type of the graph's nodes.</typeparam>
+    /// <param name="graph">A graph of nodes.</param>
+    /// <param name="start">The starting node.</param>
+    /// <param name="goal">The goal node to find a path to.</param>
+    /// <param name="heuristic">A heuristic to determine the cost of moving from one node to another.</param>
+    /// <param name="cancellationToken">The optional <see cref="CancellationToken"/> to use.</param>
+    /// <returns>
+    /// The minimum cost to traverse the graph from <paramref name="start"/> to <paramref name="goal"/>.
+    /// </returns>
+    public static long AStar<T>(
+        IGraph<T> graph,
+        T start,
+        T goal,
+        Func<T, T, long> heuristic,
         CancellationToken cancellationToken = default)
         where T : notnull
     {
-        heuristic ??= graph.Cost;
-
         var frontier = new PriorityQueue<T, long>();
         frontier.Enqueue(start, 0);
 

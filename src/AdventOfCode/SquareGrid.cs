@@ -9,7 +9,7 @@ namespace MartinCostello.AdventOfCode;
 /// <remarks>
 /// Based on <c>https://www.redblobgames.com/pathfinding/a-star/implementation.html</c>.
 /// </remarks>
-public abstract class SquareGrid : IWeightedGraph<Point>
+public class SquareGrid(int width, int height) : IWeightedGraph<Point>
 {
     /// <summary>
     /// The valid vectors of movement around the grid.
@@ -23,25 +23,14 @@ public abstract class SquareGrid : IWeightedGraph<Point>
     ];
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="SquareGrid"/> class.
-    /// </summary>
-    /// <param name="width">The width of the grid.</param>
-    /// <param name="height">The height of the grid.</param>
-    protected SquareGrid(int width, int height)
-    {
-        Width = width;
-        Height = height;
-    }
-
-    /// <summary>
     /// Gets the height of the grid.
     /// </summary>
-    public int Height { get; private set; }
+    public int Height => height;
 
     /// <summary>
     /// Gets the width of the grid.
     /// </summary>
-    public int Width { get; private set; }
+    public int Width => width;
 
     /// <summary>
     /// Gets the locations within the grid.
@@ -72,7 +61,7 @@ public abstract class SquareGrid : IWeightedGraph<Point>
     public bool IsPassable(Point id) => !Borders.Contains(id);
 
     /// <inheritdoc/>
-    public abstract long Cost(Point a, Point b);
+    public virtual long Cost(Point a, Point b) => 1;
 
     /// <inheritdoc/>
     public virtual IEnumerable<Point> Neighbors(Point id)
