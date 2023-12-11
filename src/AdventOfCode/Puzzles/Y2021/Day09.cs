@@ -47,7 +47,7 @@ public sealed class Day09 : Puzzle
             }
         }
 
-        var basins = new Heightmap(width, height);
+        var basins = new SquareGrid(width, height);
 
         foreach ((var point, int value) in heights)
         {
@@ -125,10 +125,5 @@ public sealed class Day09 : Puzzle
         }
 
         return PuzzleResult.Create(SumOfRiskLevels, AreaOfThreeLargestBasins);
-    }
-
-    private sealed class Heightmap(int width, int height) : SquareGrid(width, height)
-    {
-        public override long Cost(Point a, Point b) => 1;
     }
 }
