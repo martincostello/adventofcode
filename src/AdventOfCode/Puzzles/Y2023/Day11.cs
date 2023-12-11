@@ -40,14 +40,13 @@ public sealed class Day11 : Puzzle
         {
             var origin = galaxies[i];
 
-            for (int j = 0; j < galaxies.Count; j++)
+            for (int j = i + 1; j < galaxies.Count; j++)
             {
                 sum += origin.ManhattanDistance(galaxies[j]);
             }
         }
 
-        // TODO Optimise by not calculating the same distances twice
-        return sum / 2;
+        return sum;
 
         static List<Point> Expand(IList<string> image, int expansion)
         {
