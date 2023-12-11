@@ -1,6 +1,8 @@
 ﻿// Copyright (c) Martin Costello, 2015. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
+using System.Runtime.CompilerServices;
+
 namespace System.Drawing;
 
 /// <summary>
@@ -15,6 +17,7 @@ internal static class PointExtensions
     /// <returns>
     /// The Manhattan Distance of <paramref name="value"/>.
     /// </returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static int ManhattanDistance(this Point value) => value.ManhattanDistance(Point.Empty);
 
     /// <summary>
@@ -25,6 +28,7 @@ internal static class PointExtensions
     /// <returns>
     /// The Manhattan Distance between <paramref name="value"/> and <paramref name="other"/>.
     /// </returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static int ManhattanDistance(this Point value, Point other)
         => Math.Abs(value.X - other.X) + Math.Abs(value.Y - other.Y);
 
@@ -85,4 +89,52 @@ internal static class PointExtensions
             yield return current;
         }
     }
+
+    /// <summary>
+    /// Returns whether the specified point is above another point.
+    /// </summary>
+    /// <param name="value">The point.</param>
+    /// <param name="other">The other point.</param>
+    /// <returns>
+    /// <see langword="true"/> if <paramref name="value"/> is above
+    /// <paramref name="other"/>; otherwise <see langword="false"/>.
+    /// </returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static bool IsAbove(this Point value, Point other) => value.Y < other.Y;
+
+    /// <summary>
+    /// Returns whether the specified point is below another point.
+    /// </summary>
+    /// <param name="value">The point.</param>
+    /// <param name="other">The other point.</param>
+    /// <returns>
+    /// <see langword="true"/> if <paramref name="value"/> is below
+    /// <paramref name="other"/>; otherwise <see langword="false"/>.
+    /// </returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static bool IsBelow(this Point value, Point other) => value.Y > other.Y;
+
+    /// <summary>
+    /// Returns whether the specified point is to the left of another point.
+    /// </summary>
+    /// <param name="value">The point.</param>
+    /// <param name="other">The other point.</param>
+    /// <returns>
+    /// <see langword="true"/> if <paramref name="value"/> is to the left of
+    /// <paramref name="other"/>; otherwise <see langword="false"/>.
+    /// </returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static bool IsLeftOf(this Point value, Point other) => value.X < other.X;
+
+    /// <summary>
+    /// Returns whether the specified point is to the right of another point.
+    /// </summary>
+    /// <param name="value">The point.</param>
+    /// <param name="other">The other point.</param>
+    /// <returns>
+    /// <see langword="true"/> if <paramref name="value"/> is to the right of
+    /// <paramref name="other"/>; otherwise <see langword="false"/>.
+    /// </returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static bool IsRightOf(this Point value, Point other) => value.X > other.X;
 }
