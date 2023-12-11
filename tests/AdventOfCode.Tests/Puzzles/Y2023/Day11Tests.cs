@@ -5,10 +5,15 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2023;
 
 public sealed class Day11Tests(ITestOutputHelper outputHelper) : PuzzleTest(outputHelper)
 {
-    [Fact]
-    public void Y2023_Day11_Analyze_Returns_Correct_Value()
+    [Theory]
+    [InlineData(1, 374)]
+    [InlineData(10, 1030)]
+    [InlineData(100, 8410)]
+    public void Y2023_Day11_Analyze_Returns_Correct_Value(int expansion, long expected)
     {
         // Arrange
+        using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(15));
+
         string[] image =
         [
             "...#......",
@@ -24,10 +29,10 @@ public sealed class Day11Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         ];
 
         // Act
-        int actual = Day11.Analyze(image);
+        long actual = Day11.Analyze(image, expansion, cts.Token);
 
         // Assert
-        actual.ShouldBe(374);
+        actual.ShouldBe(expected);
     }
 
     [Fact]
@@ -38,6 +43,7 @@ public sealed class Day11Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
 
         // Assert
         puzzle.ShouldNotBeNull();
-        puzzle.SumOfLengths.ShouldBe(9605127);
+        puzzle.SumOfLengthsSmall.ShouldBe(9605127);
+        puzzle.SumOfLengthsLarge.ShouldBe(-1);
     }
 }

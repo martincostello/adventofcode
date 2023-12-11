@@ -15,19 +15,26 @@ public sealed class Day11 : Puzzle
     /// <summary>
     /// Gets the sum of the lengths of shortest path between each galaxy.
     /// </summary>
-    public int SumOfLengths { get; private set; }
+    public long SumOfLengthsSmall { get; private set; }
+
+    /// <summary>
+    /// Gets the sum of the lengths of shortest path between each galaxy.
+    /// </summary>
+    public long SumOfLengthsLarge { get; private set; }
 
     /// <summary>
     /// Analyzes the specified image of galaxies and returns the
     /// sum of the lengths of the shortest path between each galaxy.
     /// </summary>
     /// <param name="image">The image of galaxies to analyze.</param>
+    /// <param name="expansion">The rate of expansion to use.</param>
+    /// <param name="cancellationToken">The cancellation token to use.</param>
     /// <returns>
     /// The sum of the lengths of the shortest path between each galaxy in the image.
     /// </returns>
-    public static int Analyze(IList<string> image)
+    public static long Analyze(IList<string> image, int expansion, CancellationToken cancellationToken)
     {
-        var expanded = Expand(image);
+        var expanded = Expand(image, expansion);
         var galaxies = FindGalaxies(expanded);
 
         var pairs = Maths.GetPermutations(galaxies, 2).ToList();
@@ -37,10 +44,12 @@ public sealed class Day11 : Puzzle
         var space = new SquareGrid(expanded[0].Length, expanded.Count);
         space.Locations.IntersectWith(galaxies);
 
-        int sum = 0;
+        long sum = 0;
 
         foreach (var pair in pairs)
         {
+            cancellationToken.ThrowIfCancellationRequested();
+
             var first = pair.MinBy((p) => p.ToString());
             var second = pair.MaxBy((p) => p.ToString());
 
@@ -48,15 +57,15 @@ public sealed class Day11 : Puzzle
 
             if (!distances.ContainsKey(key))
             {
-                long distance = PathFinding.AStar(space, first, second);
+                long distance = PathFinding.AStar(space, first, second, cancellationToken: cancellationToken);
                 distances[key] = distance;
-                sum += (int)distance;
+                sum += distance;
             }
         }
 
         return sum;
 
-        static List<string> Expand(IList<string> image)
+        static List<string> Expand(IList<string> image, int expansion)
         {
             int height = image.Count;
             int width = image[0].Length;
@@ -130,13 +139,15 @@ public sealed class Day11 : Puzzle
 
         var image = await ReadResourceAsLinesAsync(cancellationToken);
 
-        SumOfLengths = Analyze(image);
+        SumOfLengthsSmall = Analyze(image, expansion: 1, cancellationToken);
+        SumOfLengthsLarge = Analyze(image, expansion: 1_000_000, cancellationToken);
 
         if (Verbose)
         {
-            Logger.WriteLine("The sum of the shortest path between each galaxy is {0}.", SumOfLengths);
+            Logger.WriteLine("The sum of the shortest path between each galaxy with an expansion of 1 is {0}.", SumOfLengthsSmall);
+            Logger.WriteLine("The sum of the shortest path between each galaxy with an expansion of 1,000,000 is {0}.", SumOfLengthsLarge);
         }
 
-        return PuzzleResult.Create(SumOfLengths);
+        return PuzzleResult.Create(SumOfLengthsSmall, SumOfLengthsLarge);
     }
 }
