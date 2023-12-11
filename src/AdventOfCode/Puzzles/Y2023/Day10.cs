@@ -107,8 +107,8 @@ public sealed class Day10 : Puzzle
             }
         }
 
-        // 7F    J-L
-        // ||    7-F
+        // 7F    L-J
+        // ||    F-7
         // JL
         foreach (var location in maybeEnclosed)
         {
