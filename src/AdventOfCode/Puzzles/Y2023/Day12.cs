@@ -148,19 +148,35 @@ public sealed class Day12 : Puzzle
 
             string springs = id.Values;
 
-            for (int i = springs.IndexOf(Unknown, StringComparison.Ordinal); i > -1;)
+            if (springs.Count(Unknown) == id.Desired - id.Actual - 1)
             {
-                string next = string.Create(springs.Length, (id.Values, i), (span, state) =>
+                string next = string.Create(springs.Length, springs, (span, state) =>
                 {
-                    for (int j = 0; j < span.Length; j++)
+                    for (int i = 0; i < span.Length; i++)
                     {
-                        span[j] = j == state.i ? Damaged : state.Values[j];
+                        char value = springs[i];
+                        span[i] = value == Unknown ? Damaged : value;
                     }
                 });
 
                 yield return new State(next, id.Counts, id.Actual + 1, id.Desired);
+            }
+            else
+            {
+                for (int i = springs.IndexOf(Unknown, StringComparison.Ordinal); i > -1;)
+                {
+                    string next = string.Create(springs.Length, (id.Values, i), (span, state) =>
+                    {
+                        for (int j = 0; j < span.Length; j++)
+                        {
+                            span[j] = j == state.i ? Damaged : state.Values[j];
+                        }
+                    });
 
-                i = springs.IndexOf(Unknown, i + 1);
+                    yield return new State(next, id.Counts, id.Actual + 1, id.Desired);
+
+                    i = springs.IndexOf(Unknown, i + 1);
+                }
             }
         }
     }
