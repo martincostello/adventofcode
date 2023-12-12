@@ -6,25 +6,38 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2023;
 public sealed class Day12Tests(ITestOutputHelper outputHelper) : PuzzleTest(outputHelper)
 {
     [Theory]
-    [InlineData("???.### 1,1,3", 1)]
-    [InlineData(".??..??...?##. 1,1,3", 4)]
-    [InlineData("?#?#?#?#?#?#?#? 1,3,1,6", 1)]
-    [InlineData("????.#...#... 4,1,1", 1)]
-    [InlineData("????.######..#####. 1,6,5", 4)]
-    [InlineData("?###???????? 3,2,1", 10)]
-    public void Y2023_Day12_Analyze_Returns_Correct_Value(string record, int expected)
+    [InlineData("???.### 1,1,3", false, 1)]
+    [InlineData(".??..??...?##. 1,1,3", false, 4)]
+    [InlineData("?#?#?#?#?#?#?#? 1,3,1,6", false, 1)]
+    [InlineData("????.#...#... 4,1,1", false, 1)]
+    [InlineData("????.######..#####. 1,6,5", false, 4)]
+    [InlineData("?###???????? 3,2,1", false, 10)]
+    [InlineData("???.### 1,1,3", true, 1)]
+    [InlineData(".??..??...?##. 1,1,3", true, 16384)]
+    [InlineData("?#?#?#?#?#?#?#? 1,3,1,6", true, 1)]
+    [InlineData("????.#...#... 4,1,1", true, 16)]
+    [InlineData("????.######..#####. 1,6,5", true, 2500)]
+    [InlineData("?###???????? 3,2,1", true, 506250)]
+    public void Y2023_Day12_Analyze_Returns_Correct_Value(string record, bool unfold, int expected)
     {
+        // Arrange
+        using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(5));
+
         // Act
-        int actual = Day12.Analyze(record, CancellationToken.None);
+        int actual = Day12.Analyze(record, unfold, cts.Token);
 
         // Assert
         actual.ShouldBe(expected);
     }
 
-    [Fact]
-    public void Y2023_Day12_Analyze_Returns_Correct_Value_For_Records()
+    [Theory]
+    [InlineData(false, 21)]
+    [InlineData(true, 525152)]
+    public void Y2023_Day12_Analyze_Returns_Correct_Value_For_Records(bool unfold, int expected)
     {
         // Arrange
+        using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(5));
+
         string[] records =
         [
             "???.### 1,1,3",
@@ -36,10 +49,10 @@ public sealed class Day12Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         ];
 
         // Act
-        int actual = Day12.Analyze(records, CancellationToken.None);
+        int actual = Day12.Analyze(records, unfold, cts.Token);
 
         // Assert
-        actual.ShouldBe(21);
+        actual.ShouldBe(expected);
     }
 
     [Fact]
@@ -50,6 +63,7 @@ public sealed class Day12Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
 
         // Assert
         puzzle.ShouldNotBeNull();
-        puzzle.SumOfCounts.ShouldBe(7047);
+        puzzle.SumOfCountsFolded.ShouldBe(7047);
+        puzzle.SumOfCountsUnfolded.ShouldBe(-1);
     }
 }

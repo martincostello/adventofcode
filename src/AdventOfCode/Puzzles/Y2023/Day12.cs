@@ -13,21 +13,33 @@ public sealed class Day12 : Puzzle
     private const char Unknown = '?';
 
     /// <summary>
-    /// Gets the sum of the counts of the possible spring arrangements.
+    /// Gets the sum of the counts of the possible spring arrangements when folded.
     /// </summary>
-    public int SumOfCounts { get; private set; }
+    public int SumOfCountsFolded { get; private set; }
+
+    /// <summary>
+    /// Gets the sum of the counts of the possible spring arrangements when unfolded.
+    /// </summary>
+    public int SumOfCountsUnfolded { get; private set; }
 
     /// <summary>
     /// Analyzes the specified spring arrangement.
     /// </summary>
     /// <param name="record">The spring arrangement to analyze.</param>
+    /// <param name="unfold">Whether to unfold the arrangement.</param>
     /// <param name="cancellationToken">The cancellation token to use.</param>
     /// <returns>
     /// The counts of possible spring arrangements.
     /// </returns>
-    public static int Analyze(string record, CancellationToken cancellationToken)
+    public static int Analyze(string record, bool unfold, CancellationToken cancellationToken)
     {
         (string values, string countList) = record.Bifurcate(' ');
+
+        if (unfold)
+        {
+            values = string.Join(Unknown, Enumerable.Repeat(values, 5));
+            countList = string.Join(',', Enumerable.Repeat(countList, 5));
+        }
 
         int[] counts = countList.Split(',').Select(Parse<int>).ToArray();
         int actual = values.Count(Damaged);
@@ -43,12 +55,13 @@ public sealed class Day12 : Puzzle
     /// Analyzes the specified spring arrangements.
     /// </summary>
     /// <param name="records">The spring arrangements to analyze.</param>
+    /// <param name="unfold">Whether to unfold the arrangement.</param>
     /// <param name="cancellationToken">The cancellation token to use.</param>
     /// <returns>
     /// The sum of the counts of the possible spring arrangements.
     /// </returns>
-    public static int Analyze(IList<string> records, CancellationToken cancellationToken)
-        => records.Select((p) => Analyze(p, cancellationToken)).Sum();
+    public static int Analyze(IList<string> records, bool unfold, CancellationToken cancellationToken)
+        => records.Select((p) => Analyze(p, unfold, cancellationToken)).Sum();
 
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
@@ -57,14 +70,16 @@ public sealed class Day12 : Puzzle
 
         var records = await ReadResourceAsLinesAsync(cancellationToken);
 
-        SumOfCounts = Analyze(records, cancellationToken);
+        SumOfCountsFolded = Analyze(records, unfold: false, cancellationToken);
+        SumOfCountsUnfolded = Analyze(records, unfold: true, cancellationToken);
 
         if (Verbose)
         {
-            Logger.WriteLine("The sum of the counts of spring arrangements is {0}.", SumOfCounts);
+            Logger.WriteLine("The sum of the counts of spring arrangements is {0}.", SumOfCountsFolded);
+            Logger.WriteLine("The sum of the counts of spring arrangements when unfolded is {0}.", SumOfCountsUnfolded);
         }
 
-        return PuzzleResult.Create(SumOfCounts);
+        return PuzzleResult.Create(SumOfCountsFolded, SumOfCountsUnfolded);
     }
 
     private record struct State(string Values, int[] Counts, int Actual, int Desired)
