@@ -50,6 +50,6 @@ public sealed class Day12Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
 
         // Assert
         puzzle.ShouldNotBeNull();
-        puzzle.SumOfCounts.ShouldBe(-1);
+        puzzle.SumOfCounts.ShouldBe(7047);
     }
 }
