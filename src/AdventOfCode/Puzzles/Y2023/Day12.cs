@@ -9,6 +9,9 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2023;
 [Puzzle(2023, 12, "Hot Springs", RequiresData = true)]
 public sealed class Day12 : Puzzle
 {
+    private const char Damaged = '#';
+    private const char Unknown = '?';
+
     /// <summary>
     /// Gets the sum of the counts of the possible spring arrangements.
     /// </summary>
@@ -27,16 +30,13 @@ public sealed class Day12 : Puzzle
         (string values, string countList) = record.Bifurcate(' ');
 
         int[] counts = countList.Split(',').Select(Parse<int>).ToArray();
-        int actual = values.Count('#');
+        int actual = values.Count(Damaged);
         int desired = counts.Sum();
 
         var spring = new PartialSpringRecord();
         var steps = PathFinding.BreadthFirst(spring, new State(values, counts, actual, desired), cancellationToken);
 
-        return steps
-            .Where((p) => p.IsValid())
-            .DistinctBy((p) => p.Values)
-            .Count();
+        return steps.Count((p) => p.IsValid());
     }
 
     /// <summary>
@@ -55,9 +55,9 @@ public sealed class Day12 : Puzzle
     {
         ArgumentNullException.ThrowIfNull(args);
 
-        var values = await ReadResourceAsLinesAsync(cancellationToken);
+        var records = await ReadResourceAsLinesAsync(cancellationToken);
 
-        SumOfCounts = Analyze(values, cancellationToken);
+        SumOfCounts = Analyze(records, cancellationToken);
 
         if (Verbose)
         {
@@ -77,13 +77,7 @@ public sealed class Day12 : Puzzle
             }
 
             var window = Values.AsSpan();
-
-            if (window.Contains('?'))
-            {
-                return false;
-            }
-
-            int index = window.IndexOf('#');
+            int index = window.IndexOf(Damaged);
 
             if (index < 0)
             {
@@ -92,26 +86,27 @@ public sealed class Day12 : Puzzle
 
             window = window[index..];
 
-            int validChunks = 0;
+            int groups = 0;
 
-            foreach (int expected in Counts)
+            for (int i = 0; i < Counts.Length; i++)
             {
+                int desired = Counts[i];
                 int count = 0;
 
-                while (!window.IsEmpty && window[0] == '#')
+                while (!window.IsEmpty && window[0] is Damaged)
                 {
                     count++;
                     window = window[1..];
                 }
 
-                if (count != expected)
+                if (count != desired)
                 {
                     break;
                 }
 
-                validChunks++;
+                groups++;
 
-                while (!window.IsEmpty && window[0] == '.')
+                while (!window.IsEmpty && window[0] is not Damaged)
                 {
                     window = window[1..];
                 }
@@ -122,12 +117,7 @@ public sealed class Day12 : Puzzle
                 }
             }
 
-            if (window.Contains('#'))
-            {
-                return false;
-            }
-
-            return validChunks == Counts.Length;
+            return groups == Counts.Length;
         }
     }
 
@@ -135,31 +125,27 @@ public sealed class Day12 : Puzzle
     {
         public IEnumerable<State> Neighbors(State id)
         {
+            if (id.Actual == id.Desired)
+            {
+                // No more springs to find
+                yield break;
+            }
+
             string springs = id.Values;
 
-            for (int i = springs.IndexOf('?', StringComparison.Ordinal); i > -1;)
+            for (int i = springs.IndexOf(Unknown, StringComparison.Ordinal); i > -1;)
             {
                 string next = string.Create(springs.Length, (id.Values, i), (span, state) =>
                 {
                     for (int j = 0; j < span.Length; j++)
                     {
-                        span[j] = j == state.i ? '#' : state.Values[j];
+                        span[j] = j == state.i ? Damaged : state.Values[j];
                     }
                 });
 
                 yield return new State(next, id.Counts, id.Actual + 1, id.Desired);
 
-                next = string.Create(springs.Length, (id.Values, i), (span, state) =>
-                {
-                    for (int j = 0; j < span.Length; j++)
-                    {
-                        span[j] = j == state.i ? '.' : state.Values[j];
-                    }
-                });
-
-                yield return new State(next, id.Counts, id.Actual, id.Desired);
-
-                i = springs.IndexOf('?', i + 1);
+                i = springs.IndexOf(Unknown, i + 1);
             }
         }
     }
