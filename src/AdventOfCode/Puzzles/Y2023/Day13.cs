@@ -162,7 +162,10 @@ public sealed class Day13 : Puzzle
                 int count = 0;
                 int x = 0;
 
-                while (x < bounds.Width && mirrors[topY][x] == mirrors[bottomY][x++])
+                var first = mirrors[topY].AsSpan();
+                var second = mirrors[bottomY].AsSpan();
+
+                while (x < bounds.Width && first[x] == second[x++])
                 {
                     count++;
                 }
