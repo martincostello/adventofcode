@@ -12,7 +12,7 @@ export class Day13 extends Puzzle2023 {
     }
 
     override get name() {
-        return '';
+        return 'Point of Incidence';
     }
 
     override get day() {
