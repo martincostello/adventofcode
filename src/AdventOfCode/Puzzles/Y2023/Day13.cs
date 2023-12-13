@@ -104,7 +104,7 @@ public sealed class Day13 : Puzzle
                 string dirty = mirror[location.Y];
                 cleaned[location.Y] = string.Create(dirty.Length, (dirty, location), static (span, state) =>
                 {
-                    state.dirty.AsSpan().CopyTo(span);
+                    state.dirty.CopyTo(span);
                     span[state.location.X] = state.dirty[state.location.X] == Ash ? Rock : Ash;
                 });
 
