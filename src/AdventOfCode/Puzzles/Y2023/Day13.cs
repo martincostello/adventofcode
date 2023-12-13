@@ -15,13 +15,19 @@ public sealed class Day13 : Puzzle
     public int Summary { get; private set; }
 
     /// <summary>
+    /// Gets the number after summarizing all of the notes with all the smudges cleaned.
+    /// </summary>
+    public int SummaryWithSmudgesCleaned { get; private set; }
+
+    /// <summary>
     /// Finds the lines of symmetry for the specified mirrors.
     /// </summary>
     /// <param name="notes">The notes containing the mirrors.</param>
+    /// <param name="cleanSmudges">Whether to clean the smudges in the mirrors.</param>
     /// <returns>
     /// The number after summarizing all of the notes.
     /// </returns>
-    public static int Summarize(IList<string> notes)
+    public static int Summarize(IList<string> notes, bool cleanSmudges)
     {
         var mirrors = notes.ToArray().AsSpan();
         int sum = 0;
@@ -35,31 +41,95 @@ public sealed class Day13 : Puzzle
                 length = mirrors.Length;
             }
 
-            var pattern = mirrors[..length];
+            var mirror = mirrors[..length];
             mirrors = mirrors[Math.Min(mirrors.Length, length + 1)..];
 
-            var bounds = new Rectangle(0, 0, pattern[0].Length, pattern.Length);
+            var bounds = new Size(mirror[0].Length, mirror.Length);
 
-            int symmetry = FindSymmetry(pattern, bounds);
-            sum += symmetry;
+            var (columns, rows) = cleanSmudges ? FindSymmetryWithSmudge(mirror, bounds) : FindSymmetry(mirror, bounds);
+
+            sum += columns;
+            sum += rows * 100;
         }
 
         return sum;
 
-        static int FindSymmetry(ReadOnlySpan<string> pattern, Rectangle bounds)
+        static (int Columns, int Rows) FindSymmetryWithSmudge(ReadOnlySpan<string> mirror, Size bounds)
         {
+            var original = FindSymmetry(mirror, bounds);
+            var none = (0, 0);
+
+            for (int y = 0; y < bounds.Height; y++)
+            {
+                for (int x = 0; x < bounds.Width; x++)
+                {
+                    var cleaned = Clean(mirror, new(x, y));
+                    var symmetry = FindSymmetry(cleaned, bounds);
+
+                    if (symmetry != none && symmetry != original)
+                    {
+                        if (original.Columns == symmetry.Columns)
+                        {
+                            return (0, symmetry.Rows);
+                        }
+                        else
+                        {
+                            return (symmetry.Columns, 0);
+                        }
+                    }
+                }
+            }
+
+            return none;
+
+            static ReadOnlySpan<string> Clean(ReadOnlySpan<string> mirror, Point location)
+            {
+                const char Ash = '.';
+                const char Rock = '#';
+
+                string[] cleaned = new string[mirror.Length];
+
+                if (location.Y > 0)
+                {
+                    mirror[..location.Y].CopyTo(cleaned);
+                }
+
+                int rest = location.Y + 1;
+
+                if (rest < mirror.Length)
+                {
+                    mirror[rest..].CopyTo(cleaned.AsSpan(rest));
+                }
+
+                string dirty = mirror[location.Y];
+                cleaned[location.Y] = string.Create(dirty.Length, (dirty, location), static (span, state) =>
+                {
+                    state.dirty.AsSpan().CopyTo(span);
+                    span[state.location.X] = state.dirty[state.location.X] == Ash ? Rock : Ash;
+                });
+
+                return cleaned;
+            }
+        }
+
+        static (int Columns, int Rows) FindSymmetry(ReadOnlySpan<string> mirrors, Size bounds)
+        {
+            int columns = 0;
+            int rows = 0;
+
             for (int x = 1; x < bounds.Width; x++)
             {
                 bool symmetric = true;
 
                 for (int leftX = x - 1, rightX = x; symmetric && leftX > -1 && rightX < bounds.Width; leftX--, rightX++)
                 {
-                    symmetric &= HasVerticalSymmetry(pattern, leftX, rightX, bounds);
+                    symmetric &= HasVerticalSymmetry(mirrors, leftX, rightX, bounds);
                 }
 
                 if (symmetric)
                 {
-                    return x;
+                    columns = x;
+                    break;
                 }
             }
 
@@ -69,23 +139,24 @@ public sealed class Day13 : Puzzle
 
                 for (int leftY = y - 1, rightY = y; symmetric && leftY > -1 && rightY < bounds.Height; leftY--, rightY++)
                 {
-                    symmetric &= HasHorizontalSymmetry(pattern, leftY, rightY, bounds);
+                    symmetric &= HasHorizontalSymmetry(mirrors, leftY, rightY, bounds);
                 }
 
                 if (symmetric)
                 {
-                    return y * 100;
+                    rows = y;
+                    break;
                 }
             }
 
-            throw new PuzzleException("Failed to find any symmetry.");
+            return (columns, rows);
 
-            static bool HasHorizontalSymmetry(ReadOnlySpan<string> pattern, int topY, int bottomY, Rectangle bounds)
+            static bool HasHorizontalSymmetry(ReadOnlySpan<string> mirrors, int topY, int bottomY, Size bounds)
             {
                 int count = 0;
                 int x = 0;
 
-                while (x < bounds.Width && pattern[topY][x] == pattern[bottomY][x++])
+                while (x < bounds.Width && mirrors[topY][x] == mirrors[bottomY][x++])
                 {
                     count++;
                 }
@@ -93,12 +164,12 @@ public sealed class Day13 : Puzzle
                 return count == bounds.Width;
             }
 
-            static bool HasVerticalSymmetry(ReadOnlySpan<string> pattern, int leftX, int rightX, Rectangle bounds)
+            static bool HasVerticalSymmetry(ReadOnlySpan<string> mirrors, int leftX, int rightX, Size bounds)
             {
                 int count = 0;
                 int y = 0;
 
-                while (y < bounds.Height && pattern[y][leftX] == pattern[y++][rightX])
+                while (y < bounds.Height && mirrors[y][leftX] == mirrors[y++][rightX])
                 {
                     count++;
                 }
@@ -115,13 +186,15 @@ public sealed class Day13 : Puzzle
 
         var values = await ReadResourceAsLinesAsync(cancellationToken);
 
-        Summary = Summarize(values);
+        Summary = Summarize(values, cleanSmudges: false);
+        SummaryWithSmudgesCleaned = Summarize(values, cleanSmudges: true);
 
         if (Verbose)
         {
             Logger.WriteLine("The number after summarizing all of the notes is {0}.", Summary);
+            Logger.WriteLine("The number after summarizing all of the notes after cleaning the smudges is {0}.", SummaryWithSmudgesCleaned);
         }
 
-        return PuzzleResult.Create(Summary);
+        return PuzzleResult.Create(Summary, SummaryWithSmudgesCleaned);
     }
 }
