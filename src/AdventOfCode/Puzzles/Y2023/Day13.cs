@@ -9,8 +9,6 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2023;
 [Puzzle(2023, 13, "Point of Incidence", RequiresData = true)]
 public sealed class Day13 : Puzzle
 {
-    private static readonly (int Columns, int Rows) None = (-1, -1);
-
     /// <summary>
     /// Gets the number after summarizing all of the notes.
     /// </summary>
@@ -32,6 +30,8 @@ public sealed class Day13 : Puzzle
     public static int Summarize(IList<string> notes, bool cleanSmudges)
     {
         var mirrors = notes.ToArray().AsSpan();
+
+        int desiredDifferences = cleanSmudges ? 1 : 0;
         int sum = 0;
 
         while (!mirrors.IsEmpty)
@@ -48,142 +48,78 @@ public sealed class Day13 : Puzzle
 
             var bounds = new Size(mirror[0].Length, mirror.Length);
 
-            var (columns, rows) = cleanSmudges ? FindSymmetryWithSmudge(mirror, bounds) : FindSymmetry(mirror, bounds);
-
-            sum += columns;
-            sum += rows * 100;
+            sum += FindSymmetry(mirror, bounds, desiredDifferences);
         }
 
         return sum;
 
-        static (int Columns, int Rows) FindSymmetryWithSmudge(ReadOnlySpan<string> mirror, Size bounds)
+        static int FindSymmetry(ReadOnlySpan<string> mirrors, Size bounds, int desiredDifferences)
         {
-            var original = FindSymmetry(mirror, bounds);
-            var none = None;
-
-            for (int y = 0; y < bounds.Height; y++)
-            {
-                for (int x = 0; x < bounds.Width; x++)
-                {
-                    var cleaned = Clean(mirror, new(x, y));
-                    var symmetry = FindSymmetry(cleaned, bounds);
-
-                    if (symmetry != none && symmetry != original)
-                    {
-                        if (original.Columns == symmetry.Columns)
-                        {
-                            return (0, symmetry.Rows);
-                        }
-                        else
-                        {
-                            return (symmetry.Columns, 0);
-                        }
-                    }
-                }
-            }
-
-            throw new PuzzleException("Failed to find any symmetry for mirror.");
-
-            static ReadOnlySpan<string> Clean(ReadOnlySpan<string> mirror, Point location)
-            {
-                const char Ash = '.';
-                const char Rock = '#';
-
-                string[] cleaned = new string[mirror.Length];
-
-                if (location.Y > 0)
-                {
-                    mirror[..location.Y].CopyTo(cleaned);
-                }
-
-                int rest = location.Y + 1;
-
-                if (rest < mirror.Length)
-                {
-                    mirror[rest..].CopyTo(cleaned.AsSpan(rest));
-                }
-
-                string dirty = mirror[location.Y];
-                cleaned[location.Y] = string.Create(dirty.Length, (dirty, location), static (span, state) =>
-                {
-                    state.dirty.CopyTo(span);
-                    span[state.location.X] = state.dirty[state.location.X] == Ash ? Rock : Ash;
-                });
-
-                return cleaned;
-            }
-        }
-
-        static (int Columns, int Rows) FindSymmetry(ReadOnlySpan<string> mirrors, Size bounds)
-        {
-            int columns = 0;
-            int rows = 0;
-
-            bool found = false;
-
             for (int x = 1; x < bounds.Width; x++)
             {
-                bool symmetric = true;
+                int differences = 0;
 
-                for (int leftX = x - 1, rightX = x; symmetric && leftX > -1 && rightX < bounds.Width; leftX--, rightX++)
+                for (int leftX = x - 1, rightX = x; leftX > -1 && rightX < bounds.Width; leftX--, rightX++)
                 {
-                    symmetric &= HasVerticalSymmetry(mirrors, leftX, rightX, bounds);
+                    differences += CompareVertical(mirrors, leftX, rightX, bounds.Height);
                 }
 
-                if (symmetric)
+                if (differences == desiredDifferences)
                 {
-                    columns = x;
-                    found = true;
-                    break;
+                    return x;
                 }
             }
 
             for (int y = 1; y < bounds.Height; y++)
             {
-                bool symmetric = true;
+                int differences = 0;
 
-                for (int leftY = y - 1, rightY = y; symmetric && leftY > -1 && rightY < bounds.Height; leftY--, rightY++)
+                for (int leftY = y - 1, rightY = y; leftY > -1 && rightY < bounds.Height; leftY--, rightY++)
                 {
-                    symmetric &= HasHorizontalSymmetry(mirrors, leftY, rightY, bounds);
+                    differences += CompareHorizontal(mirrors, leftY, rightY, bounds.Width);
                 }
 
-                if (symmetric)
+                if (differences == desiredDifferences)
                 {
-                    rows = y;
-                    found = true;
-                    break;
+                    return y * 100;
                 }
             }
 
-            return found ? (columns, rows) : None;
+            throw new PuzzleException("Failed to find any symmetry for mirror.");
 
-            static bool HasHorizontalSymmetry(ReadOnlySpan<string> mirrors, int topY, int bottomY, Size bounds)
+            static int CompareHorizontal(ReadOnlySpan<string> mirrors, int topY, int bottomY, int width)
             {
-                int count = 0;
+                int differences = 0;
                 int x = 0;
 
                 var first = mirrors[topY].AsSpan();
                 var second = mirrors[bottomY].AsSpan();
 
-                while (x < bounds.Width && first[x] == second[x++])
+                while (x < width)
                 {
-                    count++;
+                    if (first[x] != second[x++])
+                    {
+                        differences++;
+                    }
                 }
 
-                return count == bounds.Width;
+                return differences;
             }
 
-            static bool HasVerticalSymmetry(ReadOnlySpan<string> mirrors, int leftX, int rightX, Size bounds)
+            static int CompareVertical(ReadOnlySpan<string> mirrors, int leftX, int rightX, int height)
             {
-                int count = 0;
+                int differences = 0;
                 int y = 0;
 
-                while (y < bounds.Height && mirrors[y][leftX] == mirrors[y++][rightX])
+                while (y < height)
                 {
-                    count++;
+                    if (mirrors[y][leftX] != mirrors[y++][rightX])
+                    {
+                        differences++;
+                    }
                 }
 
-                return count == bounds.Height;
+                return differences;
             }
         }
     }
