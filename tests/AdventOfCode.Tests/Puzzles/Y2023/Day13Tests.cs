@@ -47,6 +47,7 @@ public sealed class Day13Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         puzzle.ShouldNotBeNull();
         puzzle.Summary.ShouldBe(35538);
         puzzle.SummaryWithSmudgesCleaned.ShouldBeGreaterThan(21020);
+        puzzle.SummaryWithSmudgesCleaned.ShouldNotBeOneOf([23545]);
         puzzle.SummaryWithSmudgesCleaned.ShouldBeLessThan(33348);
         puzzle.SummaryWithSmudgesCleaned.ShouldBe(-1);
     }
