@@ -9,6 +9,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2023;
 [Puzzle(2023, 13, "Point of Incidence", RequiresData = true)]
 public sealed class Day13 : Puzzle
 {
+    private static readonly (int Columns, int Rows) None = (-1, -1);
+
     /// <summary>
     /// Gets the number after summarizing all of the notes.
     /// </summary>
@@ -57,7 +59,7 @@ public sealed class Day13 : Puzzle
         static (int Columns, int Rows) FindSymmetryWithSmudge(ReadOnlySpan<string> mirror, Size bounds)
         {
             var original = FindSymmetry(mirror, bounds);
-            var none = (0, 0);
+            var none = None;
 
             for (int y = 0; y < bounds.Height; y++)
             {
@@ -80,7 +82,7 @@ public sealed class Day13 : Puzzle
                 }
             }
 
-            return none;
+            throw new PuzzleException("Failed to find any symmetry for mirror.");
 
             static ReadOnlySpan<string> Clean(ReadOnlySpan<string> mirror, Point location)
             {
@@ -117,6 +119,8 @@ public sealed class Day13 : Puzzle
             int columns = 0;
             int rows = 0;
 
+            bool found = false;
+
             for (int x = 1; x < bounds.Width; x++)
             {
                 bool symmetric = true;
@@ -129,6 +133,7 @@ public sealed class Day13 : Puzzle
                 if (symmetric)
                 {
                     columns = x;
+                    found = true;
                     break;
                 }
             }
@@ -145,11 +150,12 @@ public sealed class Day13 : Puzzle
                 if (symmetric)
                 {
                     rows = y;
+                    found = true;
                     break;
                 }
             }
 
-            return (columns, rows);
+            return found ? (columns, rows) : None;
 
             static bool HasHorizontalSymmetry(ReadOnlySpan<string> mirrors, int topY, int bottomY, Size bounds)
             {
