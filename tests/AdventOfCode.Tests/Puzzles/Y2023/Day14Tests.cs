@@ -31,7 +31,7 @@ public sealed class Day14Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         ];
 
         // Act
-        int actual = Day14.ComputeLoad(rocks, rotations, Logger, cts.Token);
+        (int actual, _) = Day14.ComputeLoad(rocks, rotations, Logger, cts.Token);
 
         // Assert
         actual.ShouldBe(expected);
@@ -46,6 +46,6 @@ public sealed class Day14Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         // Assert
         puzzle.ShouldNotBeNull();
         puzzle.TotalLoad.ShouldBe(108641);
-        puzzle.TotalLoadWithSpinCycle.ShouldBe(-1);
+        puzzle.TotalLoadWithSpinCycle.ShouldBe(84328);
     }
 }
