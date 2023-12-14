@@ -27,9 +27,9 @@ public sealed class Day14 : Puzzle
     /// <param name="logger">The optional logger to use.</param>
     /// <param name="cancellationToken">The optional cancellation token to use.</param>
     /// <returns>
-    /// The total load on the northern support beams.
+    /// The total load on the northern support beams and a visualization of the rocks.
     /// </returns>
-    public static int ComputeLoad(
+    public static (int Load, string Visualization) ComputeLoad(
         IList<string> positions,
         int rotations,
         ILogger? logger = null,
@@ -43,14 +43,18 @@ public sealed class Day14 : Puzzle
 
             for (int x = 0; x < platform.Width; x++)
             {
-                char contents = row[x];
-                if (contents == 'O')
+                switch (row[x])
                 {
-                    platform.Locations.Add(new(x, y));
-                }
-                else if (contents == '#')
-                {
-                    platform.Borders.Add(new(x, y));
+                    case 'O':
+                        platform.Locations.Add(new(x, y));
+                        break;
+
+                    case '#':
+                        platform.Borders.Add(new(x, y));
+                        break;
+
+                    default:
+                        break;
                 }
             }
         }
@@ -60,13 +64,18 @@ public sealed class Day14 : Puzzle
         var east = new Size(1, 0);
         var west = new Size(-1, 0);
 
+        int load;
+
         if (rotations == 0)
         {
             SlideY(platform, north);
+            load = ComputeLoad(platform);
         }
         else
         {
-            for (int i = 0; i < rotations; i++)
+            var distributions = new List<(int Arrangement, int Load)>();
+
+            for (int i = 0; ; i++)
             {
                 cancellationToken.ThrowIfCancellationRequested();
 
@@ -74,36 +83,46 @@ public sealed class Day14 : Puzzle
                 SlideX(platform, west);
                 SlideY(platform, south);
                 SlideX(platform, east);
-            }
-        }
 
-        LogGrid(platform, logger);
+                var distribution = (Hash(platform.Locations), ComputeLoad(platform));
 
-        return platform.Locations.Sum((p) => platform.Height - p.Y);
-
-        static void LogGrid(SquareGrid platform, ILogger? logger)
-        {
-            if (logger is null)
-            {
-                return;
-            }
-
-            var line = new StringBuilder(platform.Width);
-
-            for (int y = 0; y < platform.Height; y++)
-            {
-                for (int x = 0; x < platform.Width; x++)
+                if (distributions.Contains(distribution))
                 {
-                    var location = new Point(x, y);
-                    char contents = platform.Locations.Contains(location) ? 'O' : platform.Borders.Contains(location) ? '#' : '.';
-                    line.Append(contents);
+                    break;
                 }
 
-                logger.WriteLine(line.ToString());
-                line.Clear();
+                distributions.Add(distribution);
             }
 
-            logger.WriteLine();
+            int start = distributions.IndexOf((Hash(platform.Locations), ComputeLoad(platform)));
+            int length = distributions.Count - start;
+
+            int cycles = (rotations - start) / length;
+            int offset = cycles == 0 ? rotations : (rotations - start) % cycles;
+            int index = cycles == 0 ? offset - 1 : start + offset - 1;
+
+            load = distributions[index].Load;
+        }
+
+        string visualization = Visualize(platform);
+
+        logger?.WriteLine(visualization);
+
+        return (load, visualization);
+
+        static int ComputeLoad(SquareGrid platforms)
+            => platforms.Locations.Sum((p) => platforms.Height - p.Y);
+
+        static int Hash(HashSet<Point> locations)
+        {
+            var hash = new HashCode();
+
+            foreach (var point in locations.OrderBy((p) => p.Y).ThenBy((p) => p.X))
+            {
+                hash.Add(point);
+            }
+
+            return hash.ToHashCode();
         }
 
         static void SlideY(SquareGrid platform, Size direction)
@@ -159,6 +178,27 @@ public sealed class Day14 : Puzzle
                 }
             }
         }
+
+        static string Visualize(SquareGrid platform)
+        {
+            var builder = new StringBuilder(platform.Width);
+
+            for (int y = 0; y < platform.Height; y++)
+            {
+                for (int x = 0; x < platform.Width; x++)
+                {
+                    var location = new Point(x, y);
+                    char contents = platform.Locations.Contains(location) ? 'O' : platform.Borders.Contains(location) ? '#' : '.';
+                    builder.Append(contents);
+                }
+
+                builder.AppendLine();
+            }
+
+            builder.AppendLine();
+
+            return builder.ToString();
+        }
     }
 
     /// <inheritdoc />
@@ -168,8 +208,8 @@ public sealed class Day14 : Puzzle
 
         var positions = await ReadResourceAsLinesAsync(cancellationToken);
 
-        TotalLoad = ComputeLoad(positions, rotations: 0, Logger, cancellationToken);
-        TotalLoadWithSpinCycle = ComputeLoad(positions, rotations: 1_000_000_000, Logger, cancellationToken);
+        (TotalLoad, string visualizationNorth) = ComputeLoad(positions, rotations: 0, Logger, cancellationToken);
+        (TotalLoadWithSpinCycle, string visualizationCycles) = ComputeLoad(positions, rotations: 1_000_000_000, Logger, cancellationToken);
 
         if (Verbose)
         {
@@ -177,6 +217,11 @@ public sealed class Day14 : Puzzle
             Logger.WriteLine("The total load on the north support beams after 1,000,000,000 spins is {0}.", TotalLoad, TotalLoadWithSpinCycle);
         }
 
-        return PuzzleResult.Create(TotalLoad, TotalLoadWithSpinCycle);
+        var result = PuzzleResult.Create(TotalLoad, TotalLoadWithSpinCycle);
+
+        result.Visualizations.Add(visualizationNorth);
+        result.Visualizations.Add(visualizationCycles);
+
+        return result;
     }
 }
