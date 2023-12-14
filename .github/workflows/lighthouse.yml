@@ -84,7 +84,7 @@ jobs:
         minSeoScore: ${{ vars.LIGHTHOUSE_MIN_SEO_SCORE }}
 
     - name: Publish artifacts
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       if: ${{ !cancelled() }}
       with:
         name: lighthouse
