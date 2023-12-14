@@ -43,27 +43,38 @@ public sealed class Day14 : Puzzle
             }
         }
 
-        for (int x = 0; x < platform.Width; x++)
-        {
-            for (int y = 1; y < platform.Height; y++)
-            {
-                var location = new Point(x, y);
-                var north = new Point(x, y - 1);
+        var north = new Size(0, -1);
 
-                while (platform.InBounds(north) &&
-                       platform.Locations.Contains(location) &&
-                       !platform.Borders.Contains(north) &&
-                       !platform.Locations.Contains(north))
+        SlideY(platform, north);
+
+        return platform.Locations.Sum((p) => platform.Height - p.Y);
+
+        static void SlideY(SquareGrid platform, Size direction)
+        {
+            int delta = -Math.Sign(direction.Height);
+            int minY = delta > 0 ? 1 : platform.Height - 2;
+            int maxY = delta > 0 ? platform.Height : 0;
+
+            for (int x = 0; x < platform.Width; x++)
+            {
+                for (int y = minY; y != maxY; y += delta)
                 {
-                    platform.Locations.Remove(location);
-                    platform.Locations.Add(north);
-                    location = north;
-                    north = new Point(location.X, location.Y - 1);
+                    var current = new Point(x, y);
+                    var next = current + direction;
+
+                    while (platform.InBounds(next) &&
+                           platform.Locations.Contains(current) &&
+                           !platform.Borders.Contains(next) &&
+                           !platform.Locations.Contains(next))
+                    {
+                        platform.Locations.Remove(current);
+                        platform.Locations.Add(next);
+                        current = next;
+                        next = new(current.X, current.Y - 1);
+                    }
                 }
             }
         }
-
-        return platform.Locations.Sum((p) => platform.Height - p.Y);
     }
 
     /// <inheritdoc />
