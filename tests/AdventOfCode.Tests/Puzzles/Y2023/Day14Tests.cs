@@ -5,10 +5,16 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2023;
 
 public sealed class Day14Tests(ITestOutputHelper outputHelper) : PuzzleTest(outputHelper)
 {
-    [Fact]
-    public void Y2023_Day14_ComputeLoad_Returns_Correct_Value()
+    [Theory]
+    [InlineData(0, 136)]
+    [InlineData(1, 87)]
+    [InlineData(2, 69)]
+    [InlineData(3, 69)]
+    public void Y2023_Day14_ComputeLoad_Returns_Correct_Value(int rotations, int expected)
     {
         // Arrange
+        using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(15));
+
         string[] rocks =
         [
             "O....#....",
@@ -24,10 +30,10 @@ public sealed class Day14Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         ];
 
         // Act
-        int actual = Day14.ComputeLoad(rocks);
+        int actual = Day14.ComputeLoad(rocks, rotations, Logger, cts.Token);
 
         // Assert
-        actual.ShouldBe(136);
+        actual.ShouldBe(expected);
     }
 
     [Fact]
@@ -39,5 +45,6 @@ public sealed class Day14Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         // Assert
         puzzle.ShouldNotBeNull();
         puzzle.TotalLoad.ShouldBe(108641);
+        puzzle.TotalLoadWithSpinCycle.ShouldBe(-1);
     }
 }
