@@ -5,23 +5,32 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2023;
 
 public sealed class Day14Tests(ITestOutputHelper outputHelper) : PuzzleTest(outputHelper)
 {
-    [Fact(Skip = "Not implemented.")]
-    public void Y2023_Day14_Solve_Returns_Correct_Value()
+    [Fact]
+    public void Y2023_Day14_ComputeLoad_Returns_Correct_Value()
     {
         // Arrange
-        string[] values =
+        string[] rocks =
         [
-            "_",
+            "O....#....",
+            "O.OO#....#",
+            ".....##...",
+            "OO.#O....O",
+            ".O.....O#.",
+            "O.#..O.#.#",
+            "..O..#O..O",
+            ".......O..",
+            "#....###..",
+            "#OO..#....",
         ];
 
         // Act
-        int actual = Day14.Solve(values);
+        int actual = Day14.ComputeLoad(rocks);
 
         // Assert
-        actual.ShouldBe(-1);
+        actual.ShouldBe(136);
     }
 
-    [Fact(Skip = "Not implemented.")]
+    [Fact]
     public async Task Y2023_Day14_Solve_Returns_Correct_Solution()
     {
         // Act
@@ -29,6 +38,6 @@ public sealed class Day14Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
 
         // Assert
         puzzle.ShouldNotBeNull();
-        puzzle.Solution.ShouldBe(-1);
+        puzzle.TotalLoad.ShouldBe(108641);
     }
 }

@@ -12,7 +12,7 @@ export class Day14 extends Puzzle2023 {
     }
 
     override get name() {
-        return '';
+        return 'Parabolic Reflector Dish';
     }
 
     override get day() {
