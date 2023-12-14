@@ -10,6 +10,7 @@ public sealed class Day14Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
     [InlineData(1, 87)]
     [InlineData(2, 69)]
     [InlineData(3, 69)]
+    [InlineData(1000000000, 64)]
     public void Y2023_Day14_ComputeLoad_Returns_Correct_Value(int rotations, int expected)
     {
         // Arrange
