@@ -4,7 +4,7 @@
 #pragma warning disable SA1008
 
 using System.Runtime.CompilerServices;
-using Lens = (string Sticker, int FocalLength);
+using Lens = (int Sticker, int FocalLength);
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2023;
 
@@ -14,6 +14,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2023;
 [Puzzle(2023, 15, "Lens Library", RequiresData = true)]
 public sealed class Day15 : Puzzle
 {
+    private const int Boxes = 256;
+
     /// <summary>
     /// Gets the sum of the hash values of the initialization sequence.
     /// </summary>
@@ -38,11 +40,11 @@ public sealed class Day15 : Puzzle
 
         while ((next = sequence.IndexOf(',')) != -1)
         {
-            sum += Hash(sequence[..next]);
+            sum += Hash(sequence[..next]).Box;
             sequence = sequence[(next + 1)..];
         }
 
-        sum += Hash(sequence);
+        sum += Hash(sequence).Box;
 
         return sum;
     }
@@ -56,7 +58,7 @@ public sealed class Day15 : Puzzle
     /// </returns>
     public static int Initialize(ReadOnlySpan<char> sequence)
     {
-        var boxes = new Dictionary<int, List<Lens>>(255);
+        var boxes = new List<Lens>[Boxes];
 
         int power = 0;
         int next;
@@ -69,25 +71,36 @@ public sealed class Day15 : Puzzle
 
         Shuffle(sequence, sequence.Length, boxes);
 
-        foreach (var (box, lenses) in boxes)
+        for (int j = 0; j < boxes.Length; j++)
         {
-            foreach (var ((_, focalLength), index) in lenses.Select((p, i) => (p, i + 1)))
+            if (boxes[j] is not { } lenses)
             {
-                power += (box + 1) * index * focalLength;
+                continue;
+            }
+
+            int number = j + 1;
+            int slots = lenses.Count;
+
+            for (int i = 0; i < slots; i++)
+            {
+                (_, int focalLength) = lenses[i];
+                power += number * (i + 1) * focalLength;
             }
         }
 
         return power;
 
-        static void Shuffle(ReadOnlySpan<char> sequence, int next, Dictionary<int, List<Lens>> boxes)
+        static void Shuffle(ReadOnlySpan<char> sequence, int next, List<Lens>[] boxes)
         {
             var step = sequence[..next];
             int index = step.IndexOfAnyExceptInRange('a', 'z');
 
             var label = step[..index];
-            int box = Hash(label);
+            (int box, int sticker) = Hash(label);
 
-            if (!boxes.TryGetValue(box, out var lenses))
+            var lenses = boxes[box];
+
+            if (lenses is null)
             {
                 boxes[box] = lenses = [];
             }
@@ -95,7 +108,6 @@ public sealed class Day15 : Puzzle
             var operation = step[index..];
             char symbol = operation[0];
 
-            string sticker = new(label);
             index = lenses.FindIndex((p) => p.Sticker == sticker);
 
             if (index is -1)
@@ -138,17 +150,22 @@ public sealed class Day15 : Puzzle
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    private static int Hash(ReadOnlySpan<char> value)
+    private static (int Box, int Sticker) Hash(ReadOnlySpan<char> value)
     {
-        int hash = 0;
+        int box = 0;
+        int sticker = 0;
 
         for (int i = 0; i < value.Length; i++)
         {
-            hash += value[i];
-            hash *= 17;
-            hash %= 256;
+            char ch = value[i];
+
+            box += ch;
+            box *= 17;
+            box %= Boxes;
+
+            sticker = HashCode.Combine(sticker, ch);
         }
 
-        return hash;
+        return (box, sticker);
     }
 }
