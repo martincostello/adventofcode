@@ -56,7 +56,7 @@ public sealed class Day15 : Puzzle
     /// </returns>
     public static int Initialize(ReadOnlySpan<char> sequence)
     {
-        var boxes = new Dictionary<int, List<Lens>>();
+        var boxes = new Dictionary<int, List<Lens>>(255);
 
         int power = 0;
         int next;
@@ -98,7 +98,11 @@ public sealed class Day15 : Puzzle
             string sticker = new(label);
             index = lenses.FindIndex((p) => p.Sticker == sticker);
 
-            if (index > -1)
+            if (index is -1)
+            {
+                index = lenses.Count;
+            }
+            else
             {
                 lenses.RemoveAt(index);
             }
@@ -108,14 +112,7 @@ public sealed class Day15 : Puzzle
                 int focalLength = Parse<int>(operation[1..]);
                 var lens = (sticker, focalLength);
 
-                if (index is -1)
-                {
-                    lenses.Add(lens);
-                }
-                else
-                {
-                    lenses.Insert(index, lens);
-                }
+                lenses.Insert(index, lens);
             }
         }
     }
@@ -133,8 +130,8 @@ public sealed class Day15 : Puzzle
 
         if (Verbose)
         {
-            Logger.WriteLine("The sum of the hash values of the initialization sequence is {0}", HashSum);
-            Logger.WriteLine("The focusing power of the lens configuration is {0}", FocusingPower);
+            Logger.WriteLine("The sum of the hash values of the initialization sequence is {0}.", HashSum);
+            Logger.WriteLine("The focusing power of the lens configuration is {0}.", FocusingPower);
         }
 
         return PuzzleResult.Create(HashSum, FocusingPower);
