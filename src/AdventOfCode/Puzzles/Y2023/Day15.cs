@@ -64,11 +64,11 @@ public sealed class Day15 : Puzzle
 
         while ((next = sequence.IndexOf(',')) != -1)
         {
-            Shuffle(sequence, next, boxes);
+            Shuffle(sequence[..next], boxes);
             sequence = sequence[(next + 1)..];
         }
 
-        Shuffle(sequence, sequence.Length, boxes);
+        Shuffle(sequence, boxes);
 
         int power = 0;
         int length = boxes.Length;
@@ -92,9 +92,8 @@ public sealed class Day15 : Puzzle
 
         return power;
 
-        static void Shuffle(ReadOnlySpan<char> sequence, int next, List<Lens>[] boxes)
+        static void Shuffle(ReadOnlySpan<char> step, List<Lens>[] boxes)
         {
-            var step = sequence[..next];
             int index = step.IndexOfAnyExceptInRange('a', 'z');
 
             var label = step[..index];
