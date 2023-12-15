@@ -75,6 +75,8 @@ public sealed class Day14 : Puzzle
         {
             var distributions = new List<(int Arrangement, int Load)>();
 
+            int hash = 0;
+
             for (int i = 0; ; i++)
             {
                 cancellationToken.ThrowIfCancellationRequested();
@@ -82,9 +84,9 @@ public sealed class Day14 : Puzzle
                 SlideY(platform, north);
                 SlideX(platform, west);
                 SlideY(platform, south);
-                SlideX(platform, east);
+                hash = SlideX(platform, east, computeHash: true);
 
-                var distribution = (Hash(platform.Locations), ComputeLoad(platform));
+                var distribution = (hash, ComputeLoad(platform));
 
                 if (distributions.Contains(distribution))
                 {
@@ -94,7 +96,7 @@ public sealed class Day14 : Puzzle
                 distributions.Add(distribution);
             }
 
-            int start = distributions.IndexOf((Hash(platform.Locations), ComputeLoad(platform)));
+            int start = distributions.IndexOf((hash, ComputeLoad(platform)));
             int length = distributions.Count - start;
 
             int cycles = (rotations - start) / length;
@@ -112,18 +114,6 @@ public sealed class Day14 : Puzzle
 
         static int ComputeLoad(SquareGrid platforms)
             => platforms.Locations.Sum((p) => platforms.Height - p.Y);
-
-        static int Hash(HashSet<Point> locations)
-        {
-            var hash = new HashCode();
-
-            foreach (var point in locations.OrderBy((p) => p.Y).ThenBy((p) => p.X))
-            {
-                hash.Add(point);
-            }
-
-            return hash.ToHashCode();
-        }
 
         static void SlideY(SquareGrid platform, Size direction)
         {
@@ -152,11 +142,13 @@ public sealed class Day14 : Puzzle
             }
         }
 
-        static void SlideX(SquareGrid platform, Size direction)
+        static int SlideX(SquareGrid platform, Size direction, bool computeHash = false)
         {
             int deltaX = -Math.Sign(direction.Width);
             int minX = deltaX > 0 ? 1 : platform.Width - 2;
             int maxX = deltaX > 0 ? platform.Width : -1;
+
+            int hash = 0;
 
             for (int y = 0; y < platform.Height; y++)
             {
@@ -164,6 +156,7 @@ public sealed class Day14 : Puzzle
                 {
                     var current = new Point(x, y);
                     var next = current + direction;
+                    bool moved = false;
 
                     while (platform.InBounds(next) &&
                            platform.Locations.Contains(current) &&
@@ -174,9 +167,17 @@ public sealed class Day14 : Puzzle
                         platform.Locations.Add(next);
                         current = next;
                         next = new(current.X - deltaX, current.Y);
+                        moved = true;
+                    }
+
+                    if (moved && computeHash)
+                    {
+                        hash = HashCode.Combine(hash, current);
                     }
                 }
             }
+
+            return hash;
         }
 
         static string Visualize(SquareGrid platform)
