@@ -11,10 +11,23 @@ public sealed class Day15Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
     public void Y2023_Day15_Hash_Returns_Correct_Value(string initializationSequence, int expected)
     {
         // Act
-        int actual = Day15.Hash(initializationSequence);
+        int actual = Day15.HashSequence(initializationSequence);
 
         // Assert
         actual.ShouldBe(expected);
+    }
+
+    [Fact]
+    public void Y2023_Day15_Initialize_Returns_Correct_Value()
+    {
+        // Arrange
+        string initializationSequence = "rn=1,cm-,qp=3,cm=2,qp-,pc=4,ot=9,ab=5,pc-,pc=6,ot=7";
+
+        // Act
+        int actual = Day15.Initialize(initializationSequence);
+
+        // Assert
+        actual.ShouldBe(145);
     }
 
     [Fact]
@@ -26,5 +39,6 @@ public sealed class Day15Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         // Assert
         puzzle.ShouldNotBeNull();
         puzzle.HashSum.ShouldBe(511215);
+        puzzle.FocusingPower.ShouldBe(236057);
     }
 }
