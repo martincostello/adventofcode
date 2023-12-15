@@ -5,23 +5,19 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2023;
 
 public sealed class Day15Tests(ITestOutputHelper outputHelper) : PuzzleTest(outputHelper)
 {
-    [Fact(Skip = "Not implemented.")]
-    public void Y2023_Day15_Solve_Returns_Correct_Value()
+    [Theory]
+    [InlineData("HASH", 52)]
+    [InlineData("rn=1,cm-,qp=3,cm=2,qp-,pc=4,ot=9,ab=5,pc-,pc=6,ot=7", 1320)]
+    public void Y2023_Day15_Hash_Returns_Correct_Value(string initializationSequence, int expected)
     {
-        // Arrange
-        string[] values =
-        [
-            "_",
-        ];
-
         // Act
-        int actual = Day15.Solve(values);
+        int actual = Day15.Hash(initializationSequence);
 
         // Assert
-        actual.ShouldBe(-1);
+        actual.ShouldBe(expected);
     }
 
-    [Fact(Skip = "Not implemented.")]
+    [Fact]
     public async Task Y2023_Day15_Solve_Returns_Correct_Solution()
     {
         // Act
@@ -29,6 +25,6 @@ public sealed class Day15Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
 
         // Assert
         puzzle.ShouldNotBeNull();
-        puzzle.Solution.ShouldBe(-1);
+        puzzle.HashSum.ShouldBe(511215);
     }
 }
