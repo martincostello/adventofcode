@@ -195,7 +195,7 @@ public class ApiTests(HttpServerFixture fixture, ITestOutputHelper outputHelper)
     [PuzzleData(2023, 12, -1, Skip = "Not implemented.")]
     [PuzzleData(2023, 13, 35538, 30442)]
     [PuzzleData(2023, 14, 108641, 84328, ExpectedVisualizations = 2)]
-    [PuzzleData(2023, 15, 511215)]
+    [PuzzleData(2023, 15, 511215, 236057)]
     [PuzzleData(2023, 16, -1, Skip = "Not implemented.")]
     [PuzzleData(2023, 17, -1, Skip = "Not implemented.")]
     [PuzzleData(2023, 18, -1, Skip = "Not implemented.")]
