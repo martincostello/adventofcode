@@ -60,7 +60,6 @@ public sealed class Day15 : Puzzle
     {
         var boxes = new List<Lens>[Boxes];
 
-        int power = 0;
         int next;
 
         while ((next = sequence.IndexOf(',')) != -1)
@@ -70,6 +69,8 @@ public sealed class Day15 : Puzzle
         }
 
         Shuffle(sequence, sequence.Length, boxes);
+
+        int power = 0;
 
         for (int j = 0; j < boxes.Length; j++)
         {
