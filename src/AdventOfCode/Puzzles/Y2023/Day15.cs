@@ -71,8 +71,9 @@ public sealed class Day15 : Puzzle
         Shuffle(sequence, sequence.Length, boxes);
 
         int power = 0;
+        int length = boxes.Length;
 
-        for (int j = 0; j < boxes.Length; j++)
+        for (int j = 0; j < length; j++)
         {
             if (boxes[j] is not { } lenses)
             {
