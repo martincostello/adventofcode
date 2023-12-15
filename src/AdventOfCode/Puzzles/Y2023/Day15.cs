@@ -6,18 +6,49 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2023;
 /// <summary>
 /// A class representing the puzzle for <c>https://adventofcode.com/2023/day/15</c>. This class cannot be inherited.
 /// </summary>
-[Puzzle(2023, 15, "", RequiresData = true, IsHidden = true)]
+[Puzzle(2023, 15, "Lens Library", RequiresData = true)]
 public sealed class Day15 : Puzzle
 {
-#pragma warning disable IDE0022
-#pragma warning disable IDE0060
-#pragma warning disable SA1600
+    /// <summary>
+    /// Gets the sum of the hash values of the initialization sequence.
+    /// </summary>
+    public int HashSum { get; private set; }
 
-    public int Solution { get; private set; }
-
-    public static int Solve(IList<string> values)
+    /// <summary>
+    /// Computes the hash of the specified initialization sequence.
+    /// </summary>
+    /// <param name="initializationSequence">The sequence to hash.</param>
+    /// <returns>
+    /// The sum of the hash values of <paramref name="initializationSequence"/>.
+    /// </returns>
+    public static int Hash(ReadOnlySpan<char> initializationSequence)
     {
-        return -1;
+        int sum = 0;
+        int next;
+
+        while ((next = initializationSequence.IndexOf(',')) != -1)
+        {
+            sum += Hash(initializationSequence[..next]);
+            initializationSequence = initializationSequence[(next + 1)..];
+        }
+
+        sum += Hash(initializationSequence);
+
+        return sum;
+
+        static int Hash(ReadOnlySpan<char> value)
+        {
+            int hash = 0;
+
+            for (int i = 0; i < value.Length; i++)
+            {
+                hash += value[i];
+                hash *= 17;
+                hash %= 256;
+            }
+
+            return hash;
+        }
     }
 
     /// <inheritdoc />
@@ -25,15 +56,15 @@ public sealed class Day15 : Puzzle
     {
         ArgumentNullException.ThrowIfNull(args);
 
-        var values = await ReadResourceAsLinesAsync(cancellationToken);
+        string initializationSequence = await ReadResourceAsStringAsync(cancellationToken);
 
-        Solution = Solve(values);
+        HashSum = Hash(initializationSequence.ReplaceLineEndings(string.Empty));
 
         if (Verbose)
         {
-            Logger.WriteLine("{0}", Solution);
+            Logger.WriteLine("The sum of the hash values of the initialization sequence is {0}", HashSum);
         }
 
-        return PuzzleResult.Create(Solution);
+        return PuzzleResult.Create(HashSum);
     }
 }
