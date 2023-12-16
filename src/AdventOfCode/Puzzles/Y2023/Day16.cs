@@ -59,9 +59,8 @@ public sealed class Day16 : Puzzle
 
             while (bounds.Contains(location))
             {
-                energized.AddOrIncrement(location, 1);
-
                 bool split = false;
+                bool wasEnergized = false;
 
                 switch (contraption[location.Y][location.X])
                 {
@@ -89,6 +88,10 @@ public sealed class Day16 : Puzzle
                             direction = new(0, 1);
                             split = true;
                         }
+                        else
+                        {
+                            wasEnergized = true;
+                        }
 
                         break;
 
@@ -98,12 +101,22 @@ public sealed class Day16 : Puzzle
                             direction = new(1, 0);
                             split = true;
                         }
+                        else
+                        {
+                            wasEnergized = true;
+                        }
 
                         break;
 
                     case '.':
                     default:
+                        wasEnergized = true;
                         break;
+                }
+
+                if (wasEnergized || !energized.ContainsKey(location))
+                {
+                    energized.AddOrIncrement(location, 1);
                 }
 
                 if (split)
@@ -125,7 +138,22 @@ public sealed class Day16 : Puzzle
             {
                 for (int x = 0; x < bounds.Width; x++)
                 {
-                    builder.Append(energized.ContainsKey(new(x, y)) ? '#' : '.');
+                    char c;
+
+                    if (energized.TryGetValue(new(x, y), out int value))
+                    {
+                        c = value switch
+                        {
+                            1 => '#',
+                            _ => (char)(value + '0'),
+                        };
+                    }
+                    else
+                    {
+                        c = '.';
+                    }
+
+                    builder.Append(c);
                 }
 
                 builder.AppendLine();
