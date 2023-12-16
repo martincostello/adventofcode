@@ -27,13 +27,13 @@ public sealed class Day16 : Puzzle
     {
         var bounds = new Rectangle(0, 0, layout[0].Length, layout.Count);
         var energized = new Dictionary<Point, int>();
-        var visited = new HashSet<(Point Location, bool Vertical)>();
+        var visited = new HashSet<(Point Location, Size Direction)>();
 
         var location = Point.Empty;
         var direction = new Size(1, 0);
 
         energized[location] = 1;
-        visited.Add((location, false));
+        visited.Add((location, direction));
 
         Trace(location, direction, layout, bounds, energized, visited);
 
@@ -47,17 +47,16 @@ public sealed class Day16 : Puzzle
             IList<string> contraption,
             Rectangle bounds,
             Dictionary<Point, int> energized,
-            HashSet<(Point Location, bool Vertical)> visited)
+            HashSet<(Point Location, Size Direction)> visited)
         {
             location += direction;
-            var visit = (location, direction.Height != 0);
 
-            if (!visited.Add(visit))
+            if (!visited.Add((location, direction)) || !bounds.Contains(location))
             {
                 return;
             }
 
-            while (bounds.Contains(location))
+            do
             {
                 bool split = false;
                 bool wasEnergized = false;
@@ -128,6 +127,7 @@ public sealed class Day16 : Puzzle
 
                 location += direction;
             }
+            while (bounds.Contains(location));
         }
 
         static string Visualize(Rectangle bounds, Dictionary<Point, int> energized)
