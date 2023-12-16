@@ -12,38 +12,86 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2023;
 public sealed class Day16 : Puzzle
 {
     /// <summary>
-    /// Gets how many tiles are energized.
+    /// Gets how many tiles are energized starting the beam from <c>0,0</c>.
     /// </summary>
-    public int EnergizedTiles { get; private set; }
+    public int EnergizedTiles00 { get; private set; }
+
+    /// <summary>
+    /// Gets how many tiles are energized starting the beam from the optimum position.
+    /// </summary>
+    public int EnergizedTilesOptimum { get; private set; }
 
     /// <summary>
     /// Determines how many tiles are energized in the specified contraption.
     /// </summary>
     /// <param name="layout">The layout of the contraption.</param>
+    /// <param name="optimize">Whether to optimize the number of tiles that are energized.</param>
     /// <returns>
     /// The number of tiles in the contraption that are energized.
     /// </returns>
-    public static (int EnergizedTiles, string Visualization) Energize(IList<string> layout)
+    public static (int EnergizedTiles, string Visualization) Energize(IList<string> layout, bool optimize)
     {
         var bounds = new Rectangle(0, 0, layout[0].Length, layout.Count);
-        var energized = new Dictionary<Point, int>();
+        var origins = new HashSet<(Point Location, Size Direction)>();
+
+        var up = new Size(0, -1);
+        var down = new Size(0, 1);
+        var left = new Size(-1, 0);
+        var right = new Size(1, 0);
+
+        if (optimize)
+        {
+            int above = bounds.Top - 1;
+            int below = bounds.Bottom + 1;
+            int leftOf = bounds.Left - 1;
+            int rightOf = bounds.Right + 1;
+
+            for (int x = 0; x < bounds.Width; x++)
+            {
+                origins.Add((new(x, above), down));
+                origins.Add((new(x, below), up));
+            }
+
+            for (int y = 0; y < bounds.Height; y++)
+            {
+                origins.Add((new(leftOf, y), right));
+                origins.Add((new(rightOf, y), left));
+            }
+        }
+        else
+        {
+            origins.Add((new(bounds.Left - 1, bounds.Top), right));
+        }
+
+        var energized = new HashSet<Point>();
         var visited = new HashSet<(Point Location, Size Direction)>();
 
-        var location = new Point(-1, 0);
-        var direction = new Size(1, 0);
+        HashSet<Point> optimum = [];
 
-        Trace(location, direction, layout, bounds, energized, visited);
+        foreach (var (location, direction) in origins)
+        {
+            energized.Clear();
+            visited.Clear();
 
-        string visualization = Visualize(bounds, energized);
+            Trace(location, direction, layout, bounds, energized, visited);
 
-        return (energized.Count, visualization);
+            if (energized.Count > optimum.Count)
+            {
+                optimum = energized;
+                energized = [];
+            }
+        }
+
+        string visualization = Visualize(bounds, optimum);
+
+        return (optimum.Count, visualization);
 
         static void Trace(
             Point location,
             Size direction,
             IList<string> contraption,
             Rectangle bounds,
-            Dictionary<Point, int> energized,
+            HashSet<Point> energized,
             HashSet<(Point Location, Size Direction)> visited)
         {
             location += direction;
@@ -56,7 +104,6 @@ public sealed class Day16 : Puzzle
             do
             {
                 bool split = false;
-                bool wasEnergized = false;
 
                 switch (contraption[location.Y][location.X])
                 {
@@ -84,10 +131,6 @@ public sealed class Day16 : Puzzle
                             direction = new(0, 1);
                             split = true;
                         }
-                        else
-                        {
-                            wasEnergized = true;
-                        }
 
                         break;
 
@@ -97,23 +140,15 @@ public sealed class Day16 : Puzzle
                             direction = new(1, 0);
                             split = true;
                         }
-                        else
-                        {
-                            wasEnergized = true;
-                        }
 
                         break;
 
                     case '.':
                     default:
-                        wasEnergized = true;
                         break;
                 }
 
-                if (wasEnergized || !energized.ContainsKey(location))
-                {
-                    energized.AddOrIncrement(location, 1);
-                }
+                energized.Add(location);
 
                 if (split)
                 {
@@ -127,7 +162,7 @@ public sealed class Day16 : Puzzle
             while (bounds.Contains(location));
         }
 
-        static string Visualize(Rectangle bounds, Dictionary<Point, int> energized)
+        static string Visualize(Rectangle bounds, HashSet<Point> energized)
         {
             var builder = new StringBuilder(bounds.Area() + (Environment.NewLine.Length * bounds.Height));
 
@@ -135,22 +170,7 @@ public sealed class Day16 : Puzzle
             {
                 for (int x = 0; x < bounds.Width; x++)
                 {
-                    char c;
-
-                    if (energized.TryGetValue(new(x, y), out int value))
-                    {
-                        c = value switch
-                        {
-                            1 => '#',
-                            _ => (char)(value + '0'),
-                        };
-                    }
-                    else
-                    {
-                        c = '.';
-                    }
-
-                    builder.Append(c);
+                    builder.Append(energized.Contains(new(x, y)) ? '#' : '.');
                 }
 
                 builder.AppendLine();
@@ -167,18 +187,22 @@ public sealed class Day16 : Puzzle
 
         var layout = await ReadResourceAsLinesAsync(cancellationToken);
 
-        (EnergizedTiles, string energized) = Energize(layout);
-
-        Logger.WriteLine(energized);
+        (EnergizedTiles00, string energized) = Energize(layout, optimize: false);
+        (EnergizedTilesOptimum, string optimized) = Energize(layout, optimize: true);
 
         if (Verbose)
         {
-            Logger.WriteLine("{0} tiles are energized.", EnergizedTiles);
+            Logger.WriteLine("{0} tiles are energized starting at 0,0.", EnergizedTiles00);
+            Logger.WriteLine(energized);
+
+            Logger.WriteLine("{0} tiles are energized starting at the optimum position.", EnergizedTilesOptimum);
+            Logger.WriteLine(optimized);
         }
 
-        var result = PuzzleResult.Create(EnergizedTiles);
+        var result = PuzzleResult.Create(EnergizedTiles00, EnergizedTilesOptimum);
 
         result.Visualizations.Add(energized);
+        result.Visualizations.Add(optimized);
 
         return result;
     }
