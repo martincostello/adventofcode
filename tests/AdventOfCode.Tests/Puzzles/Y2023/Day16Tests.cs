@@ -39,7 +39,7 @@ public sealed class Day16Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
 
         // Assert
         puzzle.ShouldNotBeNull();
-        puzzle.EnergizedTiles.ShouldBeGreaterThan(6875);
+        puzzle.EnergizedTiles.ShouldBeGreaterThan(6876);
         puzzle.EnergizedTiles.ShouldBe(-1);
     }
 }
