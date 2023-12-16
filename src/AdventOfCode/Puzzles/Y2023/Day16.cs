@@ -29,11 +29,8 @@ public sealed class Day16 : Puzzle
         var energized = new Dictionary<Point, int>();
         var visited = new HashSet<(Point Location, Size Direction)>();
 
-        var location = Point.Empty;
+        var location = new Point(-1, 0);
         var direction = new Size(1, 0);
-
-        energized[location] = 1;
-        visited.Add((location, direction));
 
         Trace(location, direction, layout, bounds, energized, visited);
 
