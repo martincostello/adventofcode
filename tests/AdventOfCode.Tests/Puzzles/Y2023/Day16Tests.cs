@@ -5,8 +5,10 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2023;
 
 public sealed class Day16Tests(ITestOutputHelper outputHelper) : PuzzleTest(outputHelper)
 {
-    [Fact]
-    public void Y2023_Day16_Energize_Returns_Correct_Value()
+    [Theory]
+    [InlineData(false, 46)]
+    [InlineData(true, 51)]
+    public void Y2023_Day16_Energize_Returns_Correct_Value(bool optimize, int expected)
     {
         // Arrange
         string[] layout =
@@ -24,11 +26,11 @@ public sealed class Day16Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         ];
 
         // Act
-        (int actual, string visualization) = Day16.Energize(layout);
+        (int actual, string visualization) = Day16.Energize(layout, optimize);
 
         // Assert
         Logger.WriteLine(visualization);
-        actual.ShouldBe(46);
+        actual.ShouldBe(expected);
     }
 
     [Fact]
@@ -39,6 +41,7 @@ public sealed class Day16Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
 
         // Assert
         puzzle.ShouldNotBeNull();
-        puzzle.EnergizedTiles.ShouldBe(6906);
+        puzzle.EnergizedTiles00.ShouldBe(6906);
+        puzzle.EnergizedTilesOptimum.ShouldBe(7330);
     }
 }
