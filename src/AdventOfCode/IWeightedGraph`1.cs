@@ -7,7 +7,7 @@ namespace MartinCostello.AdventOfCode;
 /// Defines a weighted graph of nodes.
 /// </summary>
 /// <typeparam name="T">The type of the nodes.</typeparam>
-public interface IWeightedGraph<T> : IGraph<T>
+public interface IWeightedGraph<T> : IGraph<T>, IEqualityComparer<T>
     where T : notnull
 {
     /// <summary>

@@ -198,6 +198,10 @@ public sealed class Day23 : Puzzle
             return steps * multiplier;
         }
 
+        public bool Equals(State x, State y) => x == y;
+
+        public int GetHashCode([DisallowNull] State obj) => obj.GetHashCode();
+
         public IEnumerable<State> Neighbors(State id)
         {
             var result = new List<State>();

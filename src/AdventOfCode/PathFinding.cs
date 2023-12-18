@@ -28,7 +28,7 @@ public static class PathFinding
         T goal,
         CancellationToken cancellationToken = default)
         where T : notnull
-        => AStar(graph, start, goal, graph.Cost, cancellationToken);
+        => AStar(graph, start, goal, graph, graph.Cost, cancellationToken);
 
     /// <summary>
     /// Finds the cheapest path between two nodes of the specified graph.
@@ -37,6 +37,7 @@ public static class PathFinding
     /// <param name="graph">A graph of nodes.</param>
     /// <param name="start">The starting node.</param>
     /// <param name="goal">The goal node to find a path to.</param>
+    /// <param name="comparer">The equality comparer to use between nodes.</param>
     /// <param name="heuristic">A heuristic to determine the cost of moving from one node to another.</param>
     /// <param name="cancellationToken">The optional <see cref="CancellationToken"/> to use.</param>
     /// <returns>
@@ -46,6 +47,7 @@ public static class PathFinding
         IGraph<T> graph,
         T start,
         T goal,
+        IEqualityComparer<T> comparer,
         Func<T, T, long> heuristic,
         CancellationToken cancellationToken = default)
         where T : notnull
@@ -53,13 +55,13 @@ public static class PathFinding
         var frontier = new PriorityQueue<T, long>();
         frontier.Enqueue(start, 0);
 
-        var costSoFar = new Dictionary<T, long>() { [start] = 0 };
+        var costSoFar = new Dictionary<T, long>(comparer) { [start] = 0 };
 
         while (frontier.Count > 0 && !cancellationToken.IsCancellationRequested)
         {
             T current = frontier.Dequeue();
 
-            if (current.Equals(goal))
+            if (comparer.Equals(current, goal))
             {
                 break;
             }
