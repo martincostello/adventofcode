@@ -15,13 +15,19 @@ public sealed class Day18 : Puzzle
     public long Volume { get; private set; }
 
     /// <summary>
+    /// Gets the volume of lava the lagoon can hold using the fixed plan.
+    /// </summary>
+    public long VolumeWithFix { get; private set; }
+
+    /// <summary>
     /// Digs out the lagoon specified in the plan and returns its volume.
     /// </summary>
     /// <param name="plan">The plan to dig the perimeter of the lagoon.</param>
+    /// <param name="fix">Whether to fix the instructions before digging the lagoon.</param>
     /// <returns>
     /// The volume of lava the lagoon can hold.
     /// </returns>
-    public static long Dig(IList<string> plan)
+    public static long Dig(IList<string> plan, bool fix)
     {
         var vertex = new Point(0, 0);
         var vertices = new List<Point>(plan.Count);
@@ -30,15 +36,26 @@ public sealed class Day18 : Puzzle
 
         foreach (string instruction in plan)
         {
-            instruction.AsSpan().Trifurcate(' ', out var direction, out var distance, out _);
+            instruction.AsSpan().Trifurcate(' ', out var direction, out var distance, out var color);
 
-            int steps = Parse<int>(distance);
+            int steps;
+
+            if (fix)
+            {
+                steps = Parse<int>(color.Slice(2, 5), NumberStyles.HexNumber);
+                direction = color[^2..];
+            }
+            else
+            {
+                steps = Parse<int>(distance);
+            }
+
             vertex += direction[0] switch
             {
-                'U' => new(0, -steps),
-                'D' => new(0, steps),
-                'L' => new(-steps, 0),
-                'R' => new(steps, 0),
+                'U' or '3' => new(0, -steps),
+                'D' or '1' => new(0, steps),
+                'L' or '2' => new(-steps, 0),
+                'R' or '0' => new(steps, 0),
                 _ => throw new PuzzleException($"Unknown direction '{direction}'."),
             };
 
@@ -52,12 +69,20 @@ public sealed class Day18 : Puzzle
         {
             // https://en.wikipedia.org/wiki/Shoelace_formula#Generalization
             long crossProductSum = vertices
-                .Pairwise((i, j) => i.Cross(j))
+                .Pairwise(CrossProduct)
                 .Aggregate(1L, (x, y) => x + y);
 
             long area = Math.Abs(crossProductSum) / 2;
             area += (perimeter / 2) + 1;
             return area;
+        }
+
+        static long CrossProduct(Point i, Point j)
+        {
+            long ix = i.X;
+            long jx = j.X;
+
+            return (ix * j.Y) - (jx * i.Y);
         }
     }
 
@@ -68,13 +93,15 @@ public sealed class Day18 : Puzzle
 
         var plan = await ReadResourceAsLinesAsync(cancellationToken);
 
-        Volume = Dig(plan);
+        Volume = Dig(plan, fix: false);
+        VolumeWithFix = Dig(plan, fix: true);
 
         if (Verbose)
         {
             Logger.WriteLine("The lagoon can hold {0} cubic meters of lava.", Volume);
+            Logger.WriteLine("The lagoon can hold {0} cubic meters of lava using the fixed plan.", VolumeWithFix);
         }
 
-        return PuzzleResult.Create(Volume);
+        return PuzzleResult.Create(Volume, VolumeWithFix);
     }
 }
