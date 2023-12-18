@@ -5,23 +5,40 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2023;
 
 public sealed class Day18Tests(ITestOutputHelper outputHelper) : PuzzleTest(outputHelper)
 {
-    [Fact(Skip = "Not implemented.")]
-    public void Y2023_Day18_Solve_Returns_Correct_Value()
+    [Fact]
+    public void Y2023_Day18_Dig_Returns_Correct_Value()
     {
         // Arrange
-        string[] values =
+        using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(15));
+
+        string[] plan =
         [
-            "_",
+            "R 6 (#70c710)",
+            "D 5 (#0dc571)",
+            "L 2 (#5713f0)",
+            "D 2 (#d2c081)",
+            "R 2 (#59c680)",
+            "D 2 (#411b91)",
+            "L 5 (#8ceee2)",
+            "U 2 (#caa173)",
+            "L 1 (#1b58a2)",
+            "U 2 (#caa171)",
+            "R 2 (#7807d2)",
+            "U 3 (#a77fa3)",
+            "L 2 (#015232)",
+            "U 2 (#7a21e3)",
         ];
 
         // Act
-        int actual = Day18.Solve(values);
+        (int actual, string visualization) = Day18.Dig(plan, cts.Token);
+
+        Logger.WriteLine(visualization);
 
         // Assert
-        actual.ShouldBe(-1);
+        actual.ShouldBe(62);
     }
 
-    [Fact(Skip = "Not implemented.")]
+    [Fact]
     public async Task Y2023_Day18_Solve_Returns_Correct_Solution()
     {
         // Act
@@ -29,6 +46,6 @@ public sealed class Day18Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
 
         // Assert
         puzzle.ShouldNotBeNull();
-        puzzle.Solution.ShouldBe(-1);
+        puzzle.Volume.ShouldBe(47139);
     }
 }
