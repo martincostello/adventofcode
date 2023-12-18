@@ -1,6 +1,8 @@
 ﻿// Copyright (c) Martin Costello, 2015. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
+using System.Diagnostics.CodeAnalysis;
+
 namespace MartinCostello.AdventOfCode;
 
 /// <summary>
@@ -41,6 +43,12 @@ public class SquareGrid(int width, int height) : IWeightedGraph<Point>
     /// Gets the borders within the grid.
     /// </summary>
     public HashSet<Point> Borders { get; } = [];
+
+    /// <inheritdoc/>
+    public bool Equals(Point x, Point y) => x == y;
+
+    /// <inheritdoc/>
+    public int GetHashCode([DisallowNull] Point obj) => obj.GetHashCode();
 
     /// <summary>
     /// Returns whether the specified point is in the bounds of the grid.

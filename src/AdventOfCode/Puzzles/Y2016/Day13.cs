@@ -149,6 +149,7 @@ public sealed class Day13 : Puzzle
             maze,
             start,
             goal,
+            EqualityComparer<Point>.Default,
             (x, y) => x.ManhattanDistance(y),
             cancellationToken);
     }
