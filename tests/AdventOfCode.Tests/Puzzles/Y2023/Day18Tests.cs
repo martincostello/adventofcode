@@ -30,9 +30,7 @@ public sealed class Day18Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         ];
 
         // Act
-        (int actual, string visualization) = Day18.Dig(plan, cts.Token);
-
-        Logger.WriteLine(visualization);
+        long actual = Day18.Dig(plan, cts.Token);
 
         // Assert
         actual.ShouldBe(62);

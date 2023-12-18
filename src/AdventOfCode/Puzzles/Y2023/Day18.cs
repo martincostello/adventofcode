@@ -12,7 +12,7 @@ public sealed class Day18 : Puzzle
     /// <summary>
     /// Gets the volume of lava the lagoon can hold.
     /// </summary>
-    public int Volume { get; private set; }
+    public long Volume { get; private set; }
 
     /// <summary>
     /// Digs out the lagoon specified in the plan and returns its volume.
@@ -20,9 +20,9 @@ public sealed class Day18 : Puzzle
     /// <param name="plan">The plan to dig the perimeter of the lagoon.</param>
     /// <param name="cancellationToken">The cancellation token to use.</param>
     /// <returns>
-    /// The volume of lava the lagoon can hold and a visualization of the lagoon.
+    /// The volume of lava the lagoon can hold.
     /// </returns>
-    public static (int Volume, string Visualization) Dig(IList<string> plan, CancellationToken cancellationToken)
+    public static long Dig(IList<string> plan, CancellationToken cancellationToken)
     {
         var location = Point.Empty;
         HashSet<Point> walls = [location];
@@ -58,28 +58,7 @@ public sealed class Day18 : Puzzle
         lagoon.Borders.Or(walls);
 
         var interior = PathFinding.DepthFirst(lagoon, new(1, 1), cancellationToken);
-        int volume = walls.Count + interior.Count;
-
-        string visualization = Visualize(lagoon);
-
-        return (volume, visualization);
-
-        static string Visualize(SquareGrid grid)
-        {
-            var builder = new StringBuilder(grid.Bounds.Area() + (Environment.NewLine.Length * grid.Height));
-
-            for (int y = grid.Bounds.Top; y <= grid.Bounds.Bottom; y++)
-            {
-                for (int x = grid.Bounds.Left; x <= grid.Bounds.Right; x++)
-                {
-                    builder.Append(grid.Borders.Contains(new(x, y)) ? '#' : '.');
-                }
-
-                builder.AppendLine();
-            }
-
-            return builder.ToString();
-        }
+        return walls.Count + interior.Count;
     }
 
     /// <inheritdoc />
@@ -89,18 +68,13 @@ public sealed class Day18 : Puzzle
 
         var plan = await ReadResourceAsLinesAsync(cancellationToken);
 
-        (Volume, string lagoon) = Dig(plan, cancellationToken);
+        Volume = Dig(plan, cancellationToken);
 
         if (Verbose)
         {
             Logger.WriteLine("The lagoon can hold {0} cubic meters of lava.", Volume);
-            Logger.WriteLine(lagoon);
         }
 
-        var result = PuzzleResult.Create(Volume);
-
-        result.Visualizations.Add(lagoon);
-
-        return result;
+        return PuzzleResult.Create(Volume);
     }
 }
