@@ -97,23 +97,71 @@ public sealed class Day10 : Puzzle
 
         var loop = PathFinding.BreadthFirst(maze, start, cancellationToken);
 
-        var grid = new SquareGrid(bounds.Width, bounds.Height);
-        grid.Borders.Or(loop);
+        int perimeter = loop.Count + 1;
+        int steps = perimeter / 2;
 
-        // 7F    L-J
-        // ||    F-7
-        // JL
-        HashSet<Point> outside = [];
+        List<Point> vertices = [start];
 
-        foreach (var edge in bounds.Border().Except(loop))
+        var current = start;
+        Size direction = startPipe switch
         {
-            outside.Or(PathFinding.BreadthFirst(grid, edge, cancellationToken));
+            '|' or '7' => new(0, 1),
+            '-' or 'F' or 'L' => new(1, 0),
+            'J' => new(0, -1),
+            _ => throw new PuzzleException("Invalid starting pipe."),
+        };
+
+        do
+        {
+            current += direction;
+
+            char nextPipe = sketch[current.Y][current.X];
+            Size nextDirection = direction switch
+            {
+                { Height: -1 } => nextPipe switch
+                {
+                    '7' => new(-1, 0),
+                    'F' => new(1, 0),
+                    _ => direction,
+                },
+                { Height: 1 } => nextPipe switch
+                {
+                    'J' => new(-1, 0),
+                    'L' => new(1, 0),
+                    _ => direction,
+                },
+                { Width: -1 } => nextPipe switch
+                {
+                    'L' => new(0, -1),
+                    'F' => new(0, 1),
+                    _ => direction,
+                },
+                { Width: 1 } => nextPipe switch
+                {
+                    'J' => new(0, -1),
+                    '7' => new(0, 1),
+                    _ => direction,
+                },
+                _ => throw new PuzzleException("Invalid pipe."),
+            };
+
+            if (nextDirection != direction)
+            {
+                vertices.Add(current);
+            }
+
+            direction = nextDirection;
         }
+        while (current != start);
 
-        int steps = loop.Count / 2;
-        int enclosed = bounds.Area() - outside.Count - loop.Count;
+        //// A = i + b/2 - 1
+        //// A + 1 - b/2 = i
 
-        return (steps, enclosed);
+        long area = vertices.Area(perimeter);
+
+        long enclosed = area - (vertices.Count / 2) + 1;
+
+        return (steps, (int)enclosed);
 
         static (Point Location, Rectangle Bounds) FindStart(IList<string> sketch)
         {
