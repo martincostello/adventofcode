@@ -37,6 +37,27 @@ public static class PathFinding
     /// <param name="graph">A graph of nodes.</param>
     /// <param name="start">The starting node.</param>
     /// <param name="goal">The goal node to find a path to.</param>
+    /// <param name="heuristic">A heuristic to determine the cost of moving from one node to another.</param>
+    /// <param name="cancellationToken">The optional <see cref="CancellationToken"/> to use.</param>
+    /// <returns>
+    /// The minimum cost to traverse the graph from <paramref name="start"/> to <paramref name="goal"/>.
+    /// </returns>
+    public static long AStar<T>(
+        IGraph<T> graph,
+        T start,
+        T goal,
+        Func<T, T, long> heuristic,
+        CancellationToken cancellationToken = default)
+        where T : notnull
+        => AStar(graph, start, goal, EqualityComparer<T>.Default, heuristic, cancellationToken);
+
+    /// <summary>
+    /// Finds the cheapest path between two nodes of the specified graph.
+    /// </summary>
+    /// <typeparam name="T">The type of the graph's nodes.</typeparam>
+    /// <param name="graph">A graph of nodes.</param>
+    /// <param name="start">The starting node.</param>
+    /// <param name="goal">The goal node to find a path to.</param>
     /// <param name="comparer">The equality comparer to use between nodes.</param>
     /// <param name="heuristic">A heuristic to determine the cost of moving from one node to another.</param>
     /// <param name="cancellationToken">The optional <see cref="CancellationToken"/> to use.</param>
@@ -111,13 +132,35 @@ public static class PathFinding
     /// <returns>
     /// An <see cref="IReadOnlySet{T}"/> of the visited nodes.
     /// </returns>
-    public static IReadOnlySet<T> BreadthFirst<T>(Func<T, IEnumerable<T>> neighbors, T start, CancellationToken cancellationToken)
+    public static IReadOnlySet<T> BreadthFirst<T>(
+        Func<T, IEnumerable<T>> neighbors,
+        T start,
+        CancellationToken cancellationToken)
+        where T : notnull
+        => BreadthFirst(neighbors, start, EqualityComparer<T>.Default, cancellationToken);
+
+    /// <summary>
+    /// Performs a breadth-first search of the specified graph.
+    /// </summary>
+    /// <typeparam name="T">The type of the nodes of the graph.</typeparam>
+    /// <param name="neighbors">A delegate to a method that can be used to get the neighbours of a node.</param>
+    /// <param name="start">The starting node.</param>
+    /// <param name="comparer">The equality comparer to use between nodes.</param>
+    /// <param name="cancellationToken">The <see cref="CancellationToken"/> to use.</param>
+    /// <returns>
+    /// An <see cref="IReadOnlySet{T}"/> of the visited nodes.
+    /// </returns>
+    public static IReadOnlySet<T> BreadthFirst<T>(
+        Func<T, IEnumerable<T>> neighbors,
+        T start,
+        IEqualityComparer<T> comparer,
+        CancellationToken cancellationToken)
         where T : notnull
     {
         var frontier = new Queue<T>();
         frontier.Enqueue(start);
 
-        var reached = new HashSet<T>() { start };
+        var reached = new HashSet<T>(comparer) { start };
 
         while (frontier.Count != 0 && !cancellationToken.IsCancellationRequested)
         {
@@ -150,7 +193,7 @@ public static class PathFinding
     /// </returns>
     public static IReadOnlySet<T> DepthFirst<T>(IGraph<T> graph, T start, CancellationToken cancellationToken)
         where T : notnull
-        => DepthFirst(graph.Neighbors, start, cancellationToken);
+        => DepthFirst(graph.Neighbors, start, EqualityComparer<T>.Default, cancellationToken);
 
     /// <summary>
     /// Performs a depth-first search of the specified graph.
@@ -162,10 +205,32 @@ public static class PathFinding
     /// <returns>
     /// An <see cref="IReadOnlySet{T}"/> of the visited nodes.
     /// </returns>
-    public static IReadOnlySet<T> DepthFirst<T>(Func<T, IEnumerable<T>> neighbors, T start, CancellationToken cancellationToken)
+    public static IReadOnlySet<T> DepthFirst<T>(
+        Func<T, IEnumerable<T>> neighbors,
+        T start,
+        CancellationToken cancellationToken)
+        where T : notnull
+        => DepthFirst(neighbors, start, EqualityComparer<T>.Default, cancellationToken);
+
+    /// <summary>
+    /// Performs a depth-first search of the specified graph.
+    /// </summary>
+    /// <typeparam name="T">The type of the nodes of the graph.</typeparam>
+    /// <param name="neighbors">A delegate to a method that can be used to get the neighbours of a node.</param>
+    /// <param name="start">The starting node.</param>
+    /// <param name="comparer">The equality comparer to use between nodes.</param>
+    /// <param name="cancellationToken">The <see cref="CancellationToken"/> to use.</param>
+    /// <returns>
+    /// An <see cref="IReadOnlySet{T}"/> of the visited nodes.
+    /// </returns>
+    public static IReadOnlySet<T> DepthFirst<T>(
+        Func<T, IEnumerable<T>> neighbors,
+        T start,
+        IEqualityComparer<T> comparer,
+        CancellationToken cancellationToken)
         where T : notnull
     {
-        var visited = new HashSet<T>();
+        var visited = new HashSet<T>(comparer);
 
         var frontier = new Stack<T>();
         frontier.Push(start);
