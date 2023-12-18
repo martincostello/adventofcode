@@ -18,47 +18,47 @@ public sealed class Day18 : Puzzle
     /// Digs out the lagoon specified in the plan and returns its volume.
     /// </summary>
     /// <param name="plan">The plan to dig the perimeter of the lagoon.</param>
-    /// <param name="cancellationToken">The cancellation token to use.</param>
     /// <returns>
     /// The volume of lava the lagoon can hold.
     /// </returns>
-    public static long Dig(IList<string> plan, CancellationToken cancellationToken)
+    public static long Dig(IList<string> plan)
     {
-        var location = Point.Empty;
-        HashSet<Point> walls = [location];
+        var vertex = new Point(0, 0);
+        var vertices = new List<Point>(plan.Count);
+
+        int perimeter = 0;
 
         foreach (string instruction in plan)
         {
             instruction.AsSpan().Trifurcate(' ', out var direction, out var distance, out _);
 
             int steps = Parse<int>(distance);
-            Size vector = direction[0] switch
+            vertex += direction[0] switch
             {
-                'U' => new(0, -1),
-                'D' => new(0, 1),
-                'L' => new(-1, 0),
-                'R' => new(1, 0),
+                'U' => new(0, -steps),
+                'D' => new(0, steps),
+                'L' => new(-steps, 0),
+                'R' => new(steps, 0),
                 _ => throw new PuzzleException($"Unknown direction '{direction}'."),
             };
 
-            for (int i = 0; i < steps; i++)
-            {
-                walls.Add(location += vector);
-            }
+            perimeter += steps;
+            vertices.Add(vertex);
         }
 
-        int minX = walls.Min((p) => p.X);
-        int minY = walls.Min((p) => p.Y);
-        int maxX = walls.Max((p) => p.X);
-        int maxY = walls.Max((p) => p.Y);
+        return Area(vertices, perimeter);
 
-        var bounds = new Rectangle(minX, minY, maxX - minX, maxY - minY);
+        static long Area(List<Point> vertices, int perimeter)
+        {
+            // https://en.wikipedia.org/wiki/Shoelace_formula#Generalization
+            long crossProductSum = vertices
+                .Pairwise((i, j) => i.Cross(j))
+                .Aggregate(1L, (x, y) => x + y);
 
-        var lagoon = new SquareGrid(bounds);
-        lagoon.Borders.Or(walls);
-
-        var interior = PathFinding.DepthFirst(lagoon, new(1, 1), cancellationToken);
-        return walls.Count + interior.Count;
+            long area = Math.Abs(crossProductSum) / 2;
+            area += (perimeter / 2) + 1;
+            return area;
+        }
     }
 
     /// <inheritdoc />
@@ -68,7 +68,7 @@ public sealed class Day18 : Puzzle
 
         var plan = await ReadResourceAsLinesAsync(cancellationToken);
 
-        Volume = Dig(plan, cancellationToken);
+        Volume = Dig(plan);
 
         if (Verbose)
         {
