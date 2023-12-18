@@ -39,9 +39,14 @@ public sealed class Day17 : Puzzle
         int width = map[0].Length;
 
         var grid = new HeatLossMap(width, height, heatLosses);
+
+        var start = new Move(Point.Empty, Size.Empty, 0);
         var goal = new Point(width - 1, height - 1);
 
-        return (int)PathFinding.AStar(grid, new(Point.Empty, Size.Empty, 0), new(goal, Size.Empty, 0));
+        int costFromLeft = (int)PathFinding.AStar(grid, start, new(goal, new(1, 0), 0));
+        int costFromAbove = (int)PathFinding.AStar(grid, start, new(goal, new(0, 1), 0));
+
+        return Math.Min(costFromLeft, costFromAbove);
     }
 
     /// <inheritdoc />
@@ -61,9 +66,13 @@ public sealed class Day17 : Puzzle
         return PuzzleResult.Create(MinimumHeatLoss);
     }
 
-    private record struct Move(Point Location, Size Direction, int Steps)
+    private readonly record struct Move(Point Location, Size Direction, int Steps) : IEquatable<Move>
     {
-        public override readonly int GetHashCode() => Location.GetHashCode();
+        public readonly bool Equals(Move other)
+            => Location == other.Location && Direction == other.Direction;
+
+        public override readonly int GetHashCode()
+            => HashCode.Combine(Location.GetHashCode(), Direction.GetHashCode());
     }
 
     private sealed class HeatLossMap(int width, int height, Dictionary<Point, int> heatLosses) : IWeightedGraph<Move>
@@ -78,25 +87,11 @@ public sealed class Day17 : Puzzle
 
         private readonly Rectangle _bounds = new(0, 0, width, height);
 
-        public long Cost(Move a, Move b)
-        {
-            if (a.Location == b.Location)
-            {
-                return 0;
-            }
-            else if (a.Location.ManhattanDistance(b.Location) is 1)
-            {
-                return heatLosses.GetValueOrDefault(b.Location);
-            }
-            else
-            {
-                return long.MaxValue;
-            }
-        }
+        public long Cost(Move a, Move b) => heatLosses.GetValueOrDefault(b.Location);
 
-        public bool Equals(Move x, Move y) => x.Location == y.Location;
+        public bool Equals(Move x, Move y) => x.Equals(y);
 
-        public int GetHashCode(Move obj) => obj.Location.GetHashCode();
+        public int GetHashCode(Move obj) => obj.GetHashCode();
 
         public IEnumerable<Move> Neighbors(Move id)
         {
