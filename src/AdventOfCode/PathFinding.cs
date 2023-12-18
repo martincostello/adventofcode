@@ -57,7 +57,7 @@ public static class PathFinding
 
         var costSoFar = new Dictionary<T, long>(comparer) { [start] = 0 };
 
-        while (frontier.Count > 0 && !cancellationToken.IsCancellationRequested)
+        while (frontier.Count != 0 && !cancellationToken.IsCancellationRequested)
         {
             T current = frontier.Dequeue();
 
@@ -119,7 +119,7 @@ public static class PathFinding
 
         var reached = new HashSet<T>() { start };
 
-        while (frontier.Count > 0 && !cancellationToken.IsCancellationRequested)
+        while (frontier.Count != 0 && !cancellationToken.IsCancellationRequested)
         {
             T current = frontier.Dequeue();
 
@@ -136,5 +136,62 @@ public static class PathFinding
         cancellationToken.ThrowIfCancellationRequested();
 
         return reached;
+    }
+
+    /// <summary>
+    /// Performs a depth-first search of the specified graph.
+    /// </summary>
+    /// <typeparam name="T">The type of the nodes of the graph.</typeparam>
+    /// <param name="graph">The graph to search.</param>
+    /// <param name="start">The starting node.</param>
+    /// <param name="cancellationToken">The <see cref="CancellationToken"/> to use.</param>
+    /// <returns>
+    /// An <see cref="IReadOnlySet{T}"/> of the visited nodes.
+    /// </returns>
+    public static IReadOnlySet<T> DepthFirst<T>(IGraph<T> graph, T start, CancellationToken cancellationToken)
+        where T : notnull
+        => DepthFirst(graph.Neighbors, start, cancellationToken);
+
+    /// <summary>
+    /// Performs a depth-first search of the specified graph.
+    /// </summary>
+    /// <typeparam name="T">The type of the nodes of the graph.</typeparam>
+    /// <param name="neighbors">A delegate to a method that can be used to get the neighbours of a node.</param>
+    /// <param name="start">The starting node.</param>
+    /// <param name="cancellationToken">The <see cref="CancellationToken"/> to use.</param>
+    /// <returns>
+    /// An <see cref="IReadOnlySet{T}"/> of the visited nodes.
+    /// </returns>
+    public static IReadOnlySet<T> DepthFirst<T>(Func<T, IEnumerable<T>> neighbors, T start, CancellationToken cancellationToken)
+        where T : notnull
+    {
+        var visited = new HashSet<T>();
+
+        var frontier = new Stack<T>();
+        frontier.Push(start);
+
+        while (frontier.Count != 0 && !cancellationToken.IsCancellationRequested)
+        {
+            var current = frontier.Pop();
+
+            if (!visited.Add(current))
+            {
+                continue;
+            }
+
+            foreach (var neighbour in neighbors(current))
+            {
+                if (visited.Contains(neighbour))
+                {
+                    continue;
+                }
+
+                frontier.Push(neighbour);
+            }
+        }
+
+        cancellationToken.ThrowIfCancellationRequested();
+
+        return visited;
     }
 }

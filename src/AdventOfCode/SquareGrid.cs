@@ -11,7 +11,7 @@ namespace MartinCostello.AdventOfCode;
 /// <remarks>
 /// Based on <c>https://www.redblobgames.com/pathfinding/a-star/implementation.html</c>.
 /// </remarks>
-public class SquareGrid(int width, int height) : IWeightedGraph<Point>
+public class SquareGrid(Rectangle bounds) : IWeightedGraph<Point>
 {
     /// <summary>
     /// The valid vectors of movement around the grid.
@@ -25,14 +25,30 @@ public class SquareGrid(int width, int height) : IWeightedGraph<Point>
     ];
 
     /// <summary>
+    /// Initializes a new instance of the <see cref="SquareGrid"/> class.
+    /// </summary>
+    /// <param name="width">The width of the grid.</param>
+    /// <param name="height">The height of the grid.</param>
+    /// <param name="origin">The optional origin of the grid.</param>
+    public SquareGrid(int width, int height, Point origin = default)
+        : this(new(origin, new(width, height)))
+    {
+    }
+
+    /// <summary>
+    /// Gets the bounds of the grid.
+    /// </summary>
+    public Rectangle Bounds { get; } = bounds;
+
+    /// <summary>
     /// Gets the height of the grid.
     /// </summary>
-    public int Height => height;
+    public int Height => Bounds.Height;
 
     /// <summary>
     /// Gets the width of the grid.
     /// </summary>
-    public int Width => width;
+    public int Width => Bounds.Width;
 
     /// <summary>
     /// Gets the locations within the grid.
@@ -57,7 +73,7 @@ public class SquareGrid(int width, int height) : IWeightedGraph<Point>
     /// <returns>
     /// <see langword="true"/> if <paramref name="id"/> is in bounds; otherwise <see langword="false"/>.
     /// </returns>
-    public bool InBounds(Point id) => id.X >= 0 && id.X < Width && id.Y >= 0 && id.Y < Height;
+    public bool InBounds(Point id) => Bounds.Contains(id);
 
     /// <summary>
     /// Returns whether the specified point is passable.
