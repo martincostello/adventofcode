@@ -11,6 +11,17 @@ namespace System.Drawing;
 internal static class PointExtensions
 {
     /// <summary>
+    /// Returns the cross product of the point with another.
+    /// </summary>
+    /// <param name="value">The value.</param>
+    /// <param name="other">The value to calculate the cross product with.</param>
+    /// <returns>
+    /// The cross product of <paramref name="value"/> and <paramref name="other"/>.
+    /// </returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static int Cross(this Point value, Point other) => (value.X * other.Y) - (other.X * value.Y);
+
+    /// <summary>
     /// Returns the absolute Manhattan Distance of a point.
     /// </summary>
     /// <param name="value">The value.</param>

@@ -9,8 +9,6 @@ public sealed class Day18Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
     public void Y2023_Day18_Dig_Returns_Correct_Value()
     {
         // Arrange
-        using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(15));
-
         string[] plan =
         [
             "R 6 (#70c710)",
@@ -30,7 +28,7 @@ public sealed class Day18Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         ];
 
         // Act
-        long actual = Day18.Dig(plan, cts.Token);
+        long actual = Day18.Dig(plan);
 
         // Assert
         actual.ShouldBe(62);
