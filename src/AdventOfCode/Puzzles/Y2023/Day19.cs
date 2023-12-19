@@ -131,15 +131,6 @@ public sealed class Day19 : Puzzle
                             _ => throw new PuzzleException($"Unknown operator '{op}'."),
                         };
 
-                        Func<Part, int> categoryProvider = category switch
-                        {
-                            'x' => (p) => p.X,
-                            'm' => (p) => p.M,
-                            'a' => (p) => p.A,
-                            's' => (p) => p.S,
-                            _ => throw new PuzzleException($"Unknown category '{category}'."),
-                        };
-
                         (string? Next, bool? Result) result = other switch
                         {
                             "A" => (null, true),
@@ -149,7 +140,7 @@ public sealed class Day19 : Puzzle
 
                         analyzers.Add((p) =>
                         {
-                            int value = categoryProvider(p);
+                            int value = p[category];
                             int comparison = comparer.Compare(value, operand);
                             bool matches = Math.Sign(comparison) == sign;
 
@@ -197,6 +188,18 @@ public sealed class Day19 : Puzzle
     private sealed record Part(int X, int M, int A, int S)
     {
         public int RatingNumber { get; } = X + M + A + S;
+
+        public int this[char category]
+        {
+            get => category switch
+            {
+                'x' => X,
+                'm' => M,
+                'a' => A,
+                's' => S,
+                _ => throw new ArgumentOutOfRangeException(nameof(category), category, $"Unknown category '{category}'."),
+            };
+        }
     }
 
     private sealed class Workflow(List<Analyzer> analyzers, Dictionary<string, Workflow> workflows)
