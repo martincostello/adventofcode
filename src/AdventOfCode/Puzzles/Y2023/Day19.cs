@@ -104,31 +104,31 @@ public sealed class Day19 : Puzzle
                         rule = rules[..index];
                     }
 
-                    int pointer = rule.IndexOf(':');
+                    int delimiter = rule.IndexOf(':');
 
-                    if (pointer is -1)
+                    if (delimiter is -1)
                     {
-                        string other = new(rule);
+                        string next = new(rule);
 
                         analyzers.Add(rule[0] switch
                         {
                             'A' => accept,
                             'R' => reject,
-                            _ => new((_) => (other, null)),
+                            _ => new((_) => (next, null)),
                         });
                     }
                     else
                     {
                         char category = rule[0];
-                        char op = rule[1];
-                        int operand = Parse<int>(rule[2..pointer]);
-                        string other = new(rule[(pointer + 1)..]);
+                        char operation = rule[1];
+                        int operand = Parse<int>(rule[2..delimiter]);
+                        string other = new(rule[(delimiter + 1)..]);
 
-                        int sign = op switch
+                        int sign = operation switch
                         {
                             '<' => -1,
                             '>' => 1,
-                            _ => throw new PuzzleException($"Unknown operator '{op}'."),
+                            _ => throw new PuzzleException($"Unknown operator '{operation}'."),
                         };
 
                         (string? Next, bool? Result) result = other switch
@@ -142,14 +142,9 @@ public sealed class Day19 : Puzzle
                         {
                             int value = p[category];
                             int comparison = comparer.Compare(value, operand);
-                            bool matches = Math.Sign(comparison) == sign;
+                            bool isMatch = Math.Sign(comparison) == sign;
 
-                            if (matches)
-                            {
-                                return result;
-                            }
-
-                            return (null, null);
+                            return isMatch ? result : (null, null);
                         });
                     }
 
