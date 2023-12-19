@@ -17,13 +17,19 @@ public sealed class Day19 : Puzzle
     public int RatingNumbersSum { get; private set; }
 
     /// <summary>
+    /// Gets how many distinct combinations of ratings will be accepted.
+    /// </summary>
+    public long CombinationsAccepted { get; private set; }
+
+    /// <summary>
     /// Runs the workflows for the specified parts.
     /// </summary>
     /// <param name="values">The workflows and parts to run.</param>
     /// <returns>
-    /// The sum of the rating numbers of all the parts that are accepted.
+    /// The sum of the rating numbers of all the parts that are accepted
+    /// and how many distinct combinations of ratings will be accepted.
     /// </returns>
-    public static int Run(IList<string> values)
+    public static (int Sum, long Combinations) Run(IList<string> values)
     {
         var rawWorkflows = new List<string>();
         var rawParts = new List<string>();
@@ -54,7 +60,7 @@ public sealed class Day19 : Puzzle
             }
         }
 
-        return accepted.Sum((p) => p.RatingNumber);
+        return (accepted.Sum((p) => p.RatingNumber), -1);
 
         static List<Part> ParseParts(List<string> values)
         {
@@ -170,14 +176,15 @@ public sealed class Day19 : Puzzle
 
         var values = await ReadResourceAsLinesAsync(cancellationToken);
 
-        RatingNumbersSum = Run(values);
+        (RatingNumbersSum, CombinationsAccepted) = Run(values);
 
         if (Verbose)
         {
             Logger.WriteLine("The sum of the rating numbers of all the accepted parts is {0}.", RatingNumbersSum);
+            Logger.WriteLine("{0} distinct combinations of ratings will be accepted.", CombinationsAccepted);
         }
 
-        return PuzzleResult.Create(RatingNumbersSum);
+        return PuzzleResult.Create(RatingNumbersSum, CombinationsAccepted);
     }
 
     private sealed record Part(int X, int M, int A, int S)
