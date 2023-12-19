@@ -154,8 +154,6 @@ public sealed class Day10Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         // Assert
         puzzle.ShouldNotBeNull();
         puzzle.Steps.ShouldBe(6870);
-        puzzle.Tiles.ShouldBeLessThan(586);
-        puzzle.Tiles.ShouldNotBeOneOf([28]);
-        puzzle.Tiles.ShouldBe(-1);
+        puzzle.Tiles.ShouldBe(287);
     }
 }
