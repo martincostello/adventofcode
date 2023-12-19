@@ -46,120 +46,14 @@ public sealed class Day10 : Puzzle
     public static (int Steps, int Tiles) Walk(IList<string> sketch, CancellationToken cancellationToken)
     {
         (Point start, Rectangle bounds) = FindStart(sketch);
-        char startPipe = GetStartShape(start, bounds, sketch);
+        char pipe = GetStartShape(start, bounds, sketch);
 
-        var maze = new Graph<Point>();
-        var tiles = new HashSet<Point>();
+        var loop = GetLoop(start, pipe, sketch);
 
-        for (int y = 0; y < sketch.Count; y++)
-        {
-            string row = sketch[y];
+        int steps = loop.Count / 2;
 
-            for (int x = 0; x < row.Length; x++)
-            {
-                char pipe = row[x];
-
-                var location = new Point(x, y);
-                var connections = maze.Edges[location] = [];
-
-                if (pipe is Start)
-                {
-                    pipe = startPipe;
-                }
-                else if (pipe is Empty)
-                {
-                    tiles.Add(location);
-                }
-
-                foreach (var offset in Directions)
-                {
-                    var neighbor = location + offset;
-
-                    if (!bounds.Contains(neighbor))
-                    {
-                        continue;
-                    }
-
-                    char other = sketch[neighbor.Y][neighbor.X];
-
-                    if (other is Start)
-                    {
-                        other = startPipe;
-                    }
-
-                    if (CanConnect((location, pipe), (neighbor, other)))
-                    {
-                        connections.Add(neighbor);
-                    }
-                }
-            }
-        }
-
-        var loop = PathFinding.BreadthFirst(maze, start, cancellationToken);
-
-        int perimeter = loop.Count + 1;
-        int steps = perimeter / 2;
-
-        List<Point> vertices = [start];
-
-        var current = start;
-        Size direction = startPipe switch
-        {
-            '|' or '7' => new(0, 1),
-            '-' or 'F' or 'L' => new(1, 0),
-            'J' => new(0, -1),
-            _ => throw new PuzzleException("Invalid starting pipe."),
-        };
-
-        do
-        {
-            current += direction;
-
-            char nextPipe = sketch[current.Y][current.X];
-            Size nextDirection = direction switch
-            {
-                { Height: -1 } => nextPipe switch
-                {
-                    '7' => new(-1, 0),
-                    'F' => new(1, 0),
-                    _ => direction,
-                },
-                { Height: 1 } => nextPipe switch
-                {
-                    'J' => new(-1, 0),
-                    'L' => new(1, 0),
-                    _ => direction,
-                },
-                { Width: -1 } => nextPipe switch
-                {
-                    'L' => new(0, -1),
-                    'F' => new(0, 1),
-                    _ => direction,
-                },
-                { Width: 1 } => nextPipe switch
-                {
-                    'J' => new(0, -1),
-                    '7' => new(0, 1),
-                    _ => direction,
-                },
-                _ => throw new PuzzleException("Invalid pipe."),
-            };
-
-            if (nextDirection != direction)
-            {
-                vertices.Add(current);
-            }
-
-            direction = nextDirection;
-        }
-        while (current != start);
-
-        //// A = i + b/2 - 1
-        //// A + 1 - b/2 = i
-
-        long area = vertices.Area(perimeter);
-
-        long enclosed = area - (vertices.Count / 2) + 1;
+        // See https://en.wikipedia.org/wiki/Pick%27s_theorem
+        long enclosed = loop.Area() - (loop.Count / 2) + 1;
 
         return (steps, (int)enclosed);
 
@@ -279,6 +173,60 @@ public sealed class Day10 : Puzzle
                 },
                 _ => false,
             };
+        }
+
+        static List<Point> GetLoop(Point start, char pipe, IList<string> sketch)
+        {
+            List<Point> vertices = [start];
+
+            var current = start;
+            Size direction = pipe switch
+            {
+                '|' or '7' => new(0, 1),
+                '-' or 'F' or 'L' => new(1, 0),
+                'J' => new(0, -1),
+                _ => throw new PuzzleException("Invalid starting pipe."),
+            };
+
+            do
+            {
+                current += direction;
+
+                vertices.Add(current);
+
+                pipe = sketch[current.Y][current.X];
+                direction = direction switch
+                {
+                    { Height: -1 } => pipe switch
+                    {
+                        '7' => new(-1, 0),
+                        'F' => new(1, 0),
+                        _ => direction,
+                    },
+                    { Height: 1 } => pipe switch
+                    {
+                        'J' => new(-1, 0),
+                        'L' => new(1, 0),
+                        _ => direction,
+                    },
+                    { Width: -1 } => pipe switch
+                    {
+                        'L' => new(0, -1),
+                        'F' => new(0, 1),
+                        _ => direction,
+                    },
+                    { Width: 1 } => pipe switch
+                    {
+                        'J' => new(0, -1),
+                        '7' => new(0, 1),
+                        _ => direction,
+                    },
+                    _ => throw new UnreachableException(),
+                };
+            }
+            while (current != start);
+
+            return vertices;
         }
     }
 
