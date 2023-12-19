@@ -31,10 +31,11 @@ public sealed class Day19Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         ];
 
         // Act
-        int actual = Day19.Run(values);
+        (int actualSum, long actualCombinations) = Day19.Run(values);
 
         // Assert
-        actual.ShouldBe(19114);
+        actualSum.ShouldBe(19114);
+        actualCombinations.ShouldBe(167409079868000);
     }
 
     [Fact]
@@ -46,5 +47,6 @@ public sealed class Day19Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         // Assert
         puzzle.ShouldNotBeNull();
         puzzle.RatingNumbersSum.ShouldBe(398527);
+        puzzle.CombinationsAccepted.ShouldBe(-1);
     }
 }
