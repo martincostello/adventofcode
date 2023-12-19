@@ -45,7 +45,7 @@ public sealed class Day10 : Puzzle
         int steps = loop.Count / 2;
 
         // See https://en.wikipedia.org/wiki/Pick%27s_theorem
-        long enclosed = loop.Area() - (loop.Count / 2) + 1;
+        long enclosed = loop.Area() - steps + 1;
 
         return (steps, (int)enclosed);
 
