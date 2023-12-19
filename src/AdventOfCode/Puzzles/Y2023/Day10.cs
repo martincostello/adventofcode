@@ -29,13 +29,12 @@ public sealed class Day10 : Puzzle
     /// the furthest position from the starting location.
     /// </summary>
     /// <param name="sketch">The sketch of the pipe maze.</param>
-    /// <param name="cancellationToken">The cancellation token to use.</param>
     /// <returns>
     /// The number of steps to the furthest position in the pipe
     /// from the starting location and the number of tiles enclosed
     /// by the loop of pipe containing the animal.
     /// </returns>
-    public static (int Steps, int Tiles) Walk(IList<string> sketch, CancellationToken cancellationToken)
+    public static (int Steps, int Tiles) Walk(IList<string> sketch)
     {
         (Point start, Rectangle bounds) = FindStart(sketch);
         char pipe = GetStartShape(start, bounds, sketch);
@@ -229,7 +228,7 @@ public sealed class Day10 : Puzzle
 
         var values = await ReadResourceAsLinesAsync(cancellationToken);
 
-        (Steps, Tiles) = Walk(values, cancellationToken);
+        (Steps, Tiles) = Walk(values);
 
         if (Verbose)
         {

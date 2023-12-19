@@ -19,7 +19,7 @@ public sealed class Day10Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         ];
 
         // Act
-        (int actualSteps, int actualTiles) = Day10.Walk(sketch, CancellationToken.None);
+        (int actualSteps, int actualTiles) = Day10.Walk(sketch);
 
         // Assert
         actualSteps.ShouldBe(4);
@@ -40,7 +40,7 @@ public sealed class Day10Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         ];
 
         // Act
-        (int actualSteps, int actualTiles) = Day10.Walk(sketch, CancellationToken.None);
+        (int actualSteps, int actualTiles) = Day10.Walk(sketch);
 
         // Assert
         actualSteps.ShouldBe(8);
@@ -65,7 +65,7 @@ public sealed class Day10Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         ];
 
         // Act
-        (_, int actual) = Day10.Walk(sketch, CancellationToken.None);
+        (_, int actual) = Day10.Walk(sketch);
 
         // Assert
         actual.ShouldBe(4);
@@ -89,7 +89,7 @@ public sealed class Day10Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         ];
 
         // Act
-        (_, int actual) = Day10.Walk(sketch, CancellationToken.None);
+        (_, int actual) = Day10.Walk(sketch);
 
         // Assert
         actual.ShouldBe(4);
@@ -114,7 +114,7 @@ public sealed class Day10Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         ];
 
         // Act
-        (_, int actual) = Day10.Walk(sketch, CancellationToken.None);
+        (_, int actual) = Day10.Walk(sketch);
 
         // Assert
         actual.ShouldBe(8);
@@ -139,7 +139,7 @@ public sealed class Day10Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         ];
 
         // Act
-        (_, int actual) = Day10.Walk(sketch, CancellationToken.None);
+        (_, int actual) = Day10.Walk(sketch);
 
         // Assert
         actual.ShouldBe(10);
