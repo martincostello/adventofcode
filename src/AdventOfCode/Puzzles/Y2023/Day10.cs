@@ -14,14 +14,6 @@ public sealed class Day10 : Puzzle
     private const char Empty = '.';
     private const char Start = 'S';
 
-    private static readonly Size[] Directions =
-    [
-        new(-1, 0),
-        new(1, 0),
-        new(0, -1),
-        new(0, 1),
-    ];
-
     /// <summary>
     /// Gets the number of steps to the furthest position in the pipe from the starting location.
     /// </summary>
@@ -86,7 +78,7 @@ public sealed class Day10 : Puzzle
             {
                 int connections = 0;
 
-                foreach (var offset in Directions)
+                foreach (var offset in Directions.All)
                 {
                     var neighbor = start + offset;
 
@@ -182,9 +174,9 @@ public sealed class Day10 : Puzzle
             var current = start;
             Size direction = pipe switch
             {
-                '|' or '7' => new(0, 1),
-                '-' or 'F' or 'L' => new(1, 0),
-                'J' => new(0, -1),
+                '|' or '7' => Directions.Down,
+                '-' or 'F' or 'L' => Directions.Right,
+                'J' => Directions.Up,
                 _ => throw new PuzzleException("Invalid starting pipe."),
             };
 
@@ -199,26 +191,26 @@ public sealed class Day10 : Puzzle
                 {
                     { Height: -1 } => pipe switch
                     {
-                        '7' => new(-1, 0),
-                        'F' => new(1, 0),
+                        '7' => Directions.Left,
+                        'F' => Directions.Right,
                         _ => direction,
                     },
                     { Height: 1 } => pipe switch
                     {
-                        'J' => new(-1, 0),
-                        'L' => new(1, 0),
+                        'J' => Directions.Left,
+                        'L' => Directions.Right,
                         _ => direction,
                     },
                     { Width: -1 } => pipe switch
                     {
-                        'L' => new(0, -1),
-                        'F' => new(0, 1),
+                        'L' => Directions.Up,
+                        'F' => Directions.Down,
                         _ => direction,
                     },
                     { Width: 1 } => pipe switch
                     {
-                        'J' => new(0, -1),
-                        '7' => new(0, 1),
+                        'J' => Directions.Up,
+                        '7' => Directions.Down,
                         _ => direction,
                     },
                     _ => throw new UnreachableException(),
