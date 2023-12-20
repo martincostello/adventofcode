@@ -5,23 +5,48 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2023;
 
 public sealed class Day20Tests(ITestOutputHelper outputHelper) : PuzzleTest(outputHelper)
 {
-    [Fact(Skip = "Not implemented.")]
-    public void Y2023_Day20_Solve_Returns_Correct_Value()
+    public static TheoryData<string[], int, int> Examples()
     {
-        // Arrange
-        string[] values =
+        var result = new TheoryData<string[], int, int>();
+
+        string[] configuration =
         [
-            "_",
+            "broadcaster -> a, b, c",
+            "%a -> b",
+            "%b -> c",
+            "%c -> inv",
+            "&inv -> a",
         ];
 
-        // Act
-        int actual = Day20.Solve(values);
+        result.Add(configuration, 1, 32);
+        result.Add(configuration, 1000, 32000000);
 
-        // Assert
-        actual.ShouldBe(-1);
+        configuration =
+        [
+            "broadcaster -> a",
+            "%a -> inv, con",
+            "&inv -> b",
+            "%b -> con",
+            "&con -> output",
+        ];
+
+        result.Add(configuration, 1000, 11687500);
+
+        return result;
     }
 
-    [Fact(Skip = "Not implemented.")]
+    [Theory]
+    [MemberData(nameof(Examples))]
+    public void Y2023_Day20_Run_Returns_Correct_Value_Example_1(string[] configuration, int presses, int expected)
+    {
+        // Act
+        int actual = Day20.Run(configuration, presses);
+
+        // Assert
+        actual.ShouldBe(expected);
+    }
+
+    [Fact]
     public async Task Y2023_Day20_Solve_Returns_Correct_Solution()
     {
         // Act
@@ -29,6 +54,8 @@ public sealed class Day20Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
 
         // Assert
         puzzle.ShouldNotBeNull();
-        puzzle.Solution.ShouldBe(-1);
+        puzzle.PulsesProduct.ShouldBeGreaterThan(650330673);
+        puzzle.PulsesProduct.ShouldBeLessThan(738980592);
+        puzzle.PulsesProduct.ShouldBe(-1);
     }
 }
