@@ -163,9 +163,9 @@ public sealed class Day20 : Puzzle
             Values.Enqueue(value);
         }
 
-        public virtual bool Send()
+        public virtual void Send()
         {
-            if (Values.TryDequeue(out var value))
+            while (Values.TryDequeue(out var value))
             {
                 foreach (var output in Outputs)
                 {
@@ -174,13 +174,9 @@ public sealed class Day20 : Puzzle
 
                 foreach (var output in Outputs)
                 {
-                    while (output.Send())
-                    {
-                    }
+                    output.Send();
                 }
             }
-
-            return Values.Count > 0;
         }
 
         protected virtual void OnPulseReceived(Module sender, Pulse value)
@@ -233,10 +229,7 @@ public sealed class Day20 : Puzzle
         public void Press()
         {
             Values.Enqueue(Pulse.Low);
-
-            while (Send())
-            {
-            }
+            Send();
         }
     }
 
