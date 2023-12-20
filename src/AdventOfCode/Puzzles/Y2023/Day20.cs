@@ -163,8 +163,6 @@ public sealed class Day20 : Puzzle
 
         public virtual bool Send()
         {
-            bool pending = false;
-
             if (Values.TryDequeue(out var value))
             {
                 foreach (var output in Outputs)
@@ -174,11 +172,13 @@ public sealed class Day20 : Puzzle
 
                 foreach (var output in Outputs)
                 {
-                    pending |= output.Send();
+                    while (output.Send())
+                    {
+                    }
                 }
             }
 
-            return pending || Values.Count > 0;
+            return Values.Count > 0;
         }
 
         protected void OnPulseReceived(Module sender, Pulse value)
