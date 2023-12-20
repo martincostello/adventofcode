@@ -9,6 +9,13 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2023;
 [Puzzle(2023, 19, "Aplenty", RequiresData = true)]
 public sealed class Day19 : Puzzle
 {
+    /*
+    private const int MinimumRating = 1;
+    private const int MaximumRating = 4000;
+    private static readonly char[] Categories = ['x', 'm', 'a', 's'];
+    private static readonly Range All = new(MinimumRating, MaximumRating + 1);
+    */
+
     private delegate (string? Next, bool? Result) Analyzer(Part part);
 
     /// <summary>
@@ -60,7 +67,12 @@ public sealed class Day19 : Puzzle
             }
         }
 
-        return (accepted.Sum((p) => p.RatingNumber), -1);
+        int sum = accepted.Sum((p) => p.RatingNumber);
+
+        // TODO Implement
+        long combinations = long.MaxValue;
+
+        return (sum, combinations);
 
         static List<Part> ParseParts(List<string> values)
         {
@@ -114,21 +126,28 @@ public sealed class Day19 : Puzzle
 
                     if (delimiter is -1)
                     {
-                        string next = new(rule);
-
-                        analyzers.Add(rule[0] switch
+                        switch (rule[0])
                         {
-                            'A' => accept,
-                            'R' => reject,
-                            _ => new((_) => (next, null)),
-                        });
+                            case 'A':
+                                analyzers.Add(accept);
+                                break;
+
+                            case 'R':
+                                analyzers.Add(reject);
+                                break;
+
+                            default:
+                                string next = new(rule);
+                                analyzers.Add(new((_) => (next, null)));
+                                break;
+                        }
                     }
                     else
                     {
                         char category = rule[0];
                         char operation = rule[1];
                         int operand = Parse<int>(rule[2..delimiter]);
-                        string other = new(rule[(delimiter + 1)..]);
+                        string next = new(rule[(delimiter + 1)..]);
 
                         int sign = operation switch
                         {
@@ -137,11 +156,11 @@ public sealed class Day19 : Puzzle
                             _ => throw new PuzzleException($"Unknown operator '{operation}'."),
                         };
 
-                        (string? Next, bool? Result) result = other switch
+                        (string? Next, bool? Result) result = next switch
                         {
                             "A" => (null, true),
                             "R" => (null, false),
-                            _ => (other, null),
+                            _ => (next, null),
                         };
 
                         analyzers.Add((p) =>
