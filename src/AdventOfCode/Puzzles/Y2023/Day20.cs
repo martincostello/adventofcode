@@ -138,9 +138,17 @@ public sealed class Day20 : Puzzle
 
         public abstract string Type { get; }
 
-        public abstract void Receive(Module sender, Pulse pulse);
+        public virtual void Receive(Module sender, Pulse pulse)
+        {
+            OnReceived(pulse);
 
-        protected virtual void OnReceived(Pulse pulse)
+            foreach (var output in Outputs)
+            {
+                output.Receive(this, pulse);
+            }
+        }
+
+        protected void OnReceived(Pulse pulse)
             => Received?.Invoke(this, pulse);
     }
 
@@ -191,16 +199,6 @@ public sealed class Day20 : Puzzle
     private sealed class BroadcasterModule() : Module(Broadcaster)
     {
         public override string Type { get; } = "Broadcast";
-
-        public override void Receive(Module sender, Pulse pulse)
-        {
-            OnReceived(pulse);
-
-            foreach (var output in Outputs)
-            {
-                output.Receive(this, pulse);
-            }
-        }
     }
 
     private sealed class ButtonModule() : Module(Button)
@@ -208,23 +206,10 @@ public sealed class Day20 : Puzzle
         public override string Type { get; } = "Button";
 
         public void Press() => Receive(this, Pulse.Low);
-
-        public override void Receive(Module sender, Pulse pulse)
-        {
-            OnReceived(pulse);
-
-            foreach (var output in Outputs)
-            {
-                output.Receive(this, pulse);
-            }
-        }
     }
 
     private sealed class OutputModule(string name) : Module(name)
     {
         public override string Type { get; } = "Output";
-
-        public override void Receive(Module sender, Pulse pulse)
-            => OnReceived(pulse);
     }
 }
