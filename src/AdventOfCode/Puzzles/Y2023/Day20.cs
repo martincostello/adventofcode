@@ -16,7 +16,7 @@ public sealed class Day20 : Puzzle
 
     private enum Pulse
     {
-        Low = 1,
+        Low = 0,
         High,
     }
 
@@ -31,11 +31,10 @@ public sealed class Day20 : Puzzle
     /// </summary>
     /// <param name="configuration">The configuration of the modules.</param>
     /// <param name="presses">The number of times to press the button.</param>
-    /// <param name="logger">The optional logger to use.</param>
     /// <returns>
     /// The product of the count of the number of high and low pulses sent.
     /// </returns>
-    public static int Run(IList<string> configuration, int presses, ILogger? logger = null)
+    public static int Run(IList<string> configuration, int presses)
     {
         int highPulses = 0;
         int lowPulses = 0;
@@ -93,6 +92,17 @@ public sealed class Day20 : Puzzle
             }
         }
 
+        foreach (var module in modules.Values)
+        {
+            if (module is ConjunctionModule conjunction)
+            {
+                foreach (var other in modules.Values.Where((p) => p.Outputs.Any((r) => r.Name == module.Name)))
+                {
+                    conjunction.Inputs[other] = Pulse.Low;
+                }
+            }
+        }
+
         for (int i = 0; i < presses; i++)
         {
             button.Press();
@@ -102,11 +112,6 @@ public sealed class Day20 : Puzzle
 
         void OnPulse(object? sender, PulseReceivedEventArgs args)
         {
-            if (presses < 4)
-            {
-                logger?.WriteLine($"{args.Sender.Name} -{args.Pulse}-> {args.Receiver.Name}");
-            }
-
             if (args.Pulse is Pulse.High)
             {
                 highPulses++;
@@ -203,7 +208,7 @@ public sealed class Day20 : Puzzle
 
     private sealed class ConjunctionModule(string name) : Module(name)
     {
-        private readonly Dictionary<Module, Pulse> _inputs = [];
+        public Dictionary<Module, Pulse> Inputs { get; } = [];
 
         public override string Type { get; } = "Conjunction";
 
@@ -211,9 +216,9 @@ public sealed class Day20 : Puzzle
         {
             OnPulseReceived(sender, value);
 
-            _inputs[sender] = value;
+            Inputs[sender] = value;
 
-            Values.Enqueue(_inputs.Values.All((p) => p is Pulse.High) ? Pulse.Low : Pulse.High);
+            Values.Enqueue(Inputs.Values.All((p) => p is Pulse.High) ? Pulse.Low : Pulse.High);
         }
     }
 
