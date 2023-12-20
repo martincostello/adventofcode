@@ -58,7 +58,7 @@ public sealed class Day20Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         // Assert
         puzzle.ShouldNotBeNull();
         puzzle.PulsesProduct.ShouldBeGreaterThan(650330673);
-        puzzle.PulsesProduct.ShouldBeLessThan(738980592);
+        puzzle.PulsesProduct.ShouldBeLessThan(737241472);
         puzzle.PulsesProduct.ShouldBe(-1);
     }
 }

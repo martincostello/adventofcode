@@ -37,7 +37,11 @@ public sealed class Day20 : Puzzle
     /// </returns>
     public static int Run(IList<string> configuration, int presses, ILogger? logger = null)
     {
+        int highPulses = 0;
+        int lowPulses = 0;
+
         var button = new ButtonModule();
+        button.PulseReceived += OnPulse;
 
         var modules = new Dictionary<string, Module>()
         {
@@ -61,14 +65,13 @@ public sealed class Day20 : Puzzle
                 _ => throw new PuzzleException($"Unknown module type '{type}'."),
             };
 
+            module.PulseReceived += OnPulse;
+
             modules[module.Name] = module;
             connections[module.Name] = outputs;
         }
 
         button.Outputs.Add(modules[Broadcaster]);
-
-        int highPulses = 0;
-        int lowPulses = 0;
 
         foreach (var module in modules.Values.ToArray())
         {
@@ -76,8 +79,6 @@ public sealed class Day20 : Puzzle
             {
                 continue;
             }
-
-            module.PulseReceived += OnPulse;
 
             foreach (string name in outputs)
             {
@@ -181,7 +182,7 @@ public sealed class Day20 : Puzzle
             return Values.Count > 0;
         }
 
-        protected void OnPulseReceived(Module sender, Pulse value)
+        protected virtual void OnPulseReceived(Module sender, Pulse value)
             => PulseReceived?.Invoke(this, new(value, sender, this));
     }
 
@@ -230,7 +231,7 @@ public sealed class Day20 : Puzzle
 
         public void Press()
         {
-            Receive(this, Pulse.Low);
+            Values.Enqueue(Pulse.Low);
 
             while (Send())
             {
