@@ -155,32 +155,30 @@ public sealed class Day20 : Puzzle
 
         protected Queue<Pulse> Values { get; } = new();
 
-        public virtual bool Receive(Module sender, Pulse value)
+        public virtual void Receive(Module sender, Pulse value)
         {
             OnPulseReceived(sender, value);
             Values.Enqueue(value);
-            return true;
         }
 
-        public virtual void Send()
+        public virtual bool Send()
         {
+            bool pending = false;
+
             if (Values.TryDequeue(out var value))
             {
-                var pending = new List<Module>();
+                foreach (var output in Outputs)
+                {
+                    output.Receive(this, value);
+                }
 
                 foreach (var output in Outputs)
                 {
-                    if (output.Receive(this, value))
-                    {
-                        pending.Add(output);
-                    }
-                }
-
-                foreach (var output in pending)
-                {
-                    output.Send();
+                    pending |= output.Send();
                 }
             }
+
+            return pending || Values.Count > 0;
         }
 
         protected void OnPulseReceived(Module sender, Pulse value)
@@ -193,7 +191,7 @@ public sealed class Day20 : Puzzle
 
         public override string Type { get; } = "Flip-flop";
 
-        public override bool Receive(Module sender, Pulse pulse)
+        public override void Receive(Module sender, Pulse pulse)
         {
             OnPulseReceived(sender, pulse);
 
@@ -201,11 +199,6 @@ public sealed class Day20 : Puzzle
             {
                 On = !On;
                 Values.Enqueue(On ? Pulse.High : Pulse.Low);
-                return true;
-            }
-            else
-            {
-                return false;
             }
         }
     }
@@ -216,14 +209,13 @@ public sealed class Day20 : Puzzle
 
         public override string Type { get; } = "Conjunction";
 
-        public override bool Receive(Module sender, Pulse value)
+        public override void Receive(Module sender, Pulse value)
         {
             OnPulseReceived(sender, value);
 
             _inputs[sender] = value;
 
             Values.Enqueue(_inputs.Values.All((p) => p is Pulse.High) ? Pulse.Low : Pulse.High);
-            return true;
         }
     }
 
@@ -239,7 +231,10 @@ public sealed class Day20 : Puzzle
         public void Press()
         {
             Receive(this, Pulse.Low);
-            Send();
+
+            while (Send())
+            {
+            }
         }
     }
 
