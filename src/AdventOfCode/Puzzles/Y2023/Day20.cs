@@ -153,18 +153,38 @@ public sealed class Day20 : Puzzle
 
         public abstract string Type { get; }
 
-        public virtual void Receive(Module sender, Pulse pulse)
-        {
-            OnPulseReceived(sender, pulse);
+        protected Queue<Pulse> Values { get; } = new();
 
-            foreach (var output in Outputs)
+        public virtual bool Receive(Module sender, Pulse value)
+        {
+            OnPulseReceived(sender, value);
+            Values.Enqueue(value);
+            return true;
+        }
+
+        public virtual void Send()
+        {
+            if (Values.TryDequeue(out var value))
             {
-                output.Receive(this, pulse);
+                var pending = new List<Module>();
+
+                foreach (var output in Outputs)
+                {
+                    if (output.Receive(this, value))
+                    {
+                        pending.Add(output);
+                    }
+                }
+
+                foreach (var output in pending)
+                {
+                    output.Send();
+                }
             }
         }
 
-        protected void OnPulseReceived(Module sender, Pulse pulse)
-            => PulseReceived?.Invoke(this, new(pulse, sender, this));
+        protected void OnPulseReceived(Module sender, Pulse value)
+            => PulseReceived?.Invoke(this, new(value, sender, this));
     }
 
     private sealed class FlipFlopModule(string name) : Module(name)
@@ -173,19 +193,19 @@ public sealed class Day20 : Puzzle
 
         public override string Type { get; } = "Flip-flop";
 
-        public override void Receive(Module sender, Pulse pulse)
+        public override bool Receive(Module sender, Pulse pulse)
         {
             OnPulseReceived(sender, pulse);
 
-            if (pulse is Pulse.Low)
+            if (pulse == Pulse.Low)
             {
-                pulse = On ? Pulse.Low : Pulse.High;
                 On = !On;
-
-                foreach (var output in Outputs)
-                {
-                    output.Receive(this, pulse);
-                }
+                Values.Enqueue(On ? Pulse.High : Pulse.Low);
+                return true;
+            }
+            else
+            {
+                return false;
             }
         }
     }
@@ -196,18 +216,14 @@ public sealed class Day20 : Puzzle
 
         public override string Type { get; } = "Conjunction";
 
-        public override void Receive(Module sender, Pulse pulse)
+        public override bool Receive(Module sender, Pulse value)
         {
-            OnPulseReceived(sender, pulse);
+            OnPulseReceived(sender, value);
 
-            _inputs[sender] = pulse;
+            _inputs[sender] = value;
 
-            pulse = _inputs.Values.All((p) => p is Pulse.High) ? Pulse.Low : Pulse.High;
-
-            foreach (var output in Outputs)
-            {
-                output.Receive(this, pulse);
-            }
+            Values.Enqueue(_inputs.Values.All((p) => p is Pulse.High) ? Pulse.Low : Pulse.High);
+            return true;
         }
     }
 
@@ -220,7 +236,11 @@ public sealed class Day20 : Puzzle
     {
         public override string Type { get; } = "Button";
 
-        public void Press() => Receive(this, Pulse.Low);
+        public void Press()
+        {
+            Receive(this, Pulse.Low);
+            Send();
+        }
     }
 
     private sealed class OutputModule(string name) : Module(name)
