@@ -31,10 +31,11 @@ public sealed class Day20 : Puzzle
     /// </summary>
     /// <param name="configuration">The configuration of the modules.</param>
     /// <param name="presses">The number of times to press the button.</param>
+    /// <param name="logger">The optional logger to use.</param>
     /// <returns>
     /// The product of the count of the number of high and low pulses sent.
     /// </returns>
-    public static int Run(IList<string> configuration, int presses)
+    public static int Run(IList<string> configuration, int presses, ILogger? logger = null)
     {
         var button = new ButtonModule();
 
@@ -76,14 +77,14 @@ public sealed class Day20 : Puzzle
                 continue;
             }
 
-            module.Received += OnPulse;
+            module.PulseReceived += OnPulse;
 
             foreach (string name in outputs)
             {
                 if (!modules.TryGetValue(name, out var next))
                 {
                     next = modules[name] = new OutputModule(name);
-                    next.Received += OnPulse;
+                    next.PulseReceived += OnPulse;
                 }
 
                 module.Outputs.Add(next);
@@ -97,9 +98,14 @@ public sealed class Day20 : Puzzle
 
         return highPulses * lowPulses;
 
-        void OnPulse(object? sender, Pulse p)
+        void OnPulse(object? sender, PulseReceivedEventArgs args)
         {
-            if (p is Pulse.High)
+            if (presses < 4)
+            {
+                logger?.WriteLine($"{args.Sender.Name} -{args.Pulse}-> {args.Receiver.Name}");
+            }
+
+            if (args.Pulse is Pulse.High)
             {
                 highPulses++;
             }
@@ -127,10 +133,19 @@ public sealed class Day20 : Puzzle
         return PuzzleResult.Create(PulsesProduct);
     }
 
+    private sealed class PulseReceivedEventArgs(Pulse pulse, Module sender, Module receiver) : EventArgs
+    {
+        public Pulse Pulse { get; } = pulse;
+
+        public Module Sender { get; } = sender;
+
+        public Module Receiver { get; } = receiver;
+    }
+
     [DebuggerDisplay("{Name,nq} ({Type,nq})")]
     private abstract class Module(string name)
     {
-        public event EventHandler<Pulse>? Received;
+        public event EventHandler<PulseReceivedEventArgs>? PulseReceived;
 
         public List<Module> Outputs { get; } = [];
 
@@ -140,7 +155,7 @@ public sealed class Day20 : Puzzle
 
         public virtual void Receive(Module sender, Pulse pulse)
         {
-            OnReceived(pulse);
+            OnPulseReceived(sender, pulse);
 
             foreach (var output in Outputs)
             {
@@ -148,8 +163,8 @@ public sealed class Day20 : Puzzle
             }
         }
 
-        protected void OnReceived(Pulse pulse)
-            => Received?.Invoke(this, pulse);
+        protected void OnPulseReceived(Module sender, Pulse pulse)
+            => PulseReceived?.Invoke(this, new(pulse, sender, this));
     }
 
     private sealed class FlipFlopModule(string name) : Module(name)
@@ -160,7 +175,7 @@ public sealed class Day20 : Puzzle
 
         public override void Receive(Module sender, Pulse pulse)
         {
-            OnReceived(pulse);
+            OnPulseReceived(sender, pulse);
 
             if (pulse is Pulse.Low)
             {
@@ -183,7 +198,7 @@ public sealed class Day20 : Puzzle
 
         public override void Receive(Module sender, Pulse pulse)
         {
-            OnReceived(pulse);
+            OnPulseReceived(sender, pulse);
 
             _inputs[sender] = pulse;
 

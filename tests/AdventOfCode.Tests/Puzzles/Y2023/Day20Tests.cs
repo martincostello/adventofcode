@@ -30,6 +30,9 @@ public sealed class Day20Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
             "&con -> output",
         ];
 
+        result.Add(configuration, 1, 16);
+        result.Add(configuration, 2, 48);
+        result.Add(configuration, 3, 117);
         result.Add(configuration, 1000, 11687500);
 
         return result;
@@ -40,7 +43,7 @@ public sealed class Day20Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
     public void Y2023_Day20_Run_Returns_Correct_Value_Example_1(string[] configuration, int presses, int expected)
     {
         // Act
-        int actual = Day20.Run(configuration, presses);
+        int actual = Day20.Run(configuration, presses, Logger);
 
         // Assert
         actual.ShouldBe(expected);
