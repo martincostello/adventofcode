@@ -18,6 +18,7 @@ public static class PathFinding
     /// <param name="graph">A graph of nodes.</param>
     /// <param name="start">The starting node.</param>
     /// <param name="goal">The goal node to find a path to.</param>
+    /// <param name="goalComparer">The optional equality comparer to use for the goal.</param>
     /// <param name="cancellationToken">The optional <see cref="CancellationToken"/> to use.</param>
     /// <returns>
     /// The minimum cost to traverse the graph from <paramref name="start"/> to <paramref name="goal"/>.
@@ -26,9 +27,10 @@ public static class PathFinding
         IWeightedGraph<T> graph,
         T start,
         T goal,
+        IEqualityComparer<T>? goalComparer = null,
         CancellationToken cancellationToken = default)
         where T : notnull
-        => AStar(graph, start, goal, graph, graph.Cost, cancellationToken);
+        => AStar(graph, start, goal, graph, goalComparer ?? graph, graph.Cost, cancellationToken);
 
     /// <summary>
     /// Finds the cheapest path between two nodes of the specified graph.
@@ -72,17 +74,42 @@ public static class PathFinding
         Func<T, T, long> heuristic,
         CancellationToken cancellationToken = default)
         where T : notnull
+        => AStar(graph, start, goal, comparer, comparer, heuristic, cancellationToken);
+
+    /// <summary>
+    /// Finds the cheapest path between two nodes of the specified graph.
+    /// </summary>
+    /// <typeparam name="T">The type of the graph's nodes.</typeparam>
+    /// <param name="graph">A graph of nodes.</param>
+    /// <param name="start">The starting node.</param>
+    /// <param name="goal">The goal node to find a path to.</param>
+    /// <param name="itemComparer">The equality comparer to use between nodes.</param>
+    /// <param name="goalComparer">The equality comparer to use for the goal.</param>
+    /// <param name="heuristic">A heuristic to determine the cost of moving from one node to another.</param>
+    /// <param name="cancellationToken">The optional <see cref="CancellationToken"/> to use.</param>
+    /// <returns>
+    /// The minimum cost to traverse the graph from <paramref name="start"/> to <paramref name="goal"/>.
+    /// </returns>
+    public static long AStar<T>(
+        IGraph<T> graph,
+        T start,
+        T goal,
+        IEqualityComparer<T> itemComparer,
+        IEqualityComparer<T> goalComparer,
+        Func<T, T, long> heuristic,
+        CancellationToken cancellationToken = default)
+        where T : notnull
     {
         var frontier = new PriorityQueue<T, long>();
         frontier.Enqueue(start, 0);
 
-        var costSoFar = new Dictionary<T, long>(comparer) { [start] = 0 };
+        var costSoFar = new Dictionary<T, long>(itemComparer) { [start] = 0 };
 
         while (frontier.Count != 0 && !cancellationToken.IsCancellationRequested)
         {
             T current = frontier.Dequeue();
 
-            if (comparer.Equals(current, goal))
+            if (goalComparer.Equals(current, goal))
             {
                 break;
             }
