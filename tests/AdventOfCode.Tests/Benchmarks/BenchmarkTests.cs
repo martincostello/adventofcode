@@ -7,12 +7,16 @@ namespace MartinCostello.AdventOfCode.Benchmarks;
 
 public static class BenchmarkTests
 {
-    public static IEnumerable<object[]> Benchmarks()
+    public static TheoryData<PuzzleInput> Benchmarks()
     {
-        foreach (object puzzle in PuzzleBenchmarks.Puzzles())
+        var result = new TheoryData<PuzzleInput>();
+
+        foreach (var puzzle in PuzzleBenchmarks.Puzzles().Cast<PuzzleInput>())
         {
-            yield return new[] { puzzle };
+            result.Add(puzzle);
         }
+
+        return result;
     }
 
     [Theory]

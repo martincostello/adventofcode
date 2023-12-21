@@ -5,15 +5,13 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2023;
 
 public sealed class Day08Tests(ITestOutputHelper outputHelper) : PuzzleTest(outputHelper)
 {
-    public static IEnumerable<object[]> TestCases
+    public static TheoryData<string[], bool, long> Examples()
     {
-        get
+        return new()
         {
-            yield return new object[]
             {
-                new[]
-                {
-                    "RL",
+                [
+                "RL",
                     string.Empty,
                     "AAA = (BBB, CCC)",
                     "BBB = (DDD, EEE)",
@@ -22,29 +20,23 @@ public sealed class Day08Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
                     "EEE = (EEE, EEE)",
                     "GGG = (GGG, GGG)",
                     "ZZZ = (ZZZ, ZZZ)",
-                },
+                ],
                 false,
-                2,
-            };
-
-            yield return new object[]
+                2
+            },
             {
-                new[]
-                {
-                    "LLR",
+                [
+                "LLR",
                     string.Empty,
                     "AAA = (BBB, BBB)",
                     "BBB = (AAA, ZZZ)",
                     "ZZZ = (ZZZ, ZZZ)",
-                },
+                ],
                 false,
-                6,
-            };
-
-            yield return new object[]
+                6
+            },
             {
-                new[]
-                {
+                [
                     "LR",
                     string.Empty,
                     "11A = (11B, XXX)",
@@ -55,15 +47,15 @@ public sealed class Day08Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
                     "22C = (22Z, 22Z)",
                     "22Z = (22B, 22B)",
                     "XXX = (XXX, XXX)",
-                },
+                ],
                 true,
-                6,
-            };
-        }
+                6
+            },
+        };
     }
 
     [Theory]
-    [MemberData(nameof(TestCases))]
+    [MemberData(nameof(Examples))]
     public void Y2023_Day08_WalkNetwork_Returns_Correct_Value(string[] network, bool asGhost, long expected)
     {
         // Act
