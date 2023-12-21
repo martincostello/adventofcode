@@ -77,14 +77,6 @@ public sealed class Day17 : Puzzle
 
     private sealed class HeatLossMap(int width, int height, Dictionary<Point, int> heatLosses) : IWeightedGraph<Move>
     {
-        private static readonly ImmutableArray<Size> Directions =
-        [
-            new(0, 1),
-            new(1, 0),
-            new(0, -1),
-            new(-1, 0),
-        ];
-
         private readonly Rectangle _bounds = new(0, 0, width, height);
 
         public long Cost(Move a, Move b) => heatLosses.GetValueOrDefault(b.Location);
@@ -96,10 +88,11 @@ public sealed class Day17 : Puzzle
         public IEnumerable<Move> Neighbors(Move id)
         {
             var backwards = id.Direction * -1;
+            var directions = Directions.All;
 
-            for (int i = 0; i < Directions.Length; i++)
+            for (int i = 0; i < directions.Count; i++)
             {
-                var direction = Directions[i];
+                var direction = directions[i];
 
                 if (direction == backwards)
                 {
