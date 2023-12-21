@@ -12,7 +12,7 @@ export class Day21 extends Puzzle2023 {
     }
 
     override get name() {
-        return '';
+        return 'Step Counter';
     }
 
     override get day() {
