@@ -43,7 +43,7 @@ public sealed class Day20Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
     public void Y2023_Day20_Run_Returns_Correct_Value_Example_1(string[] configuration, int presses, int expected)
     {
         // Act
-        int actual = Day20.Run(configuration, presses);
+        (int actual, _) = Day20.Run(configuration, presses, CancellationToken.None);
 
         // Assert
         actual.ShouldBe(expected);
@@ -58,5 +58,6 @@ public sealed class Day20Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         // Assert
         puzzle.ShouldNotBeNull();
         puzzle.PulsesProduct.ShouldBe(712543680);
+        puzzle.ActivationCycles.ShouldBe(238920142622879);
     }
 }
