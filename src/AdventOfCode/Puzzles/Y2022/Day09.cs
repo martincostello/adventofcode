@@ -56,10 +56,10 @@ public sealed class Day09 : Puzzle
 
                 result.Add(direction switch
                 {
-                    'U' => new(0, distance),
-                    'D' => new(0, -distance),
-                    'L' => new(-distance, 0),
-                    'R' => new(distance, 0),
+                    'U' => Directions.Down * distance,
+                    'D' => Directions.Up * distance,
+                    'L' => Directions.Left * distance,
+                    'R' => Directions.Right * distance,
                     _ => throw new PuzzleException($"Invalid direction '{direction}'."),
                 });
             }

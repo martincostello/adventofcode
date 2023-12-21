@@ -9,13 +9,13 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017;
 [Puzzle(2017, 03, "Spiral Memory", MinimumArguments = 1)]
 public sealed class Day03 : Puzzle
 {
-    private static readonly Size Left = new(width: -1, height: 0);
+    private static readonly Size Left = Directions.Left;
 
-    private static readonly Size Right = new(width: 1, height: 0);
+    private static readonly Size Right = Directions.Right;
 
-    private static readonly Size Up = new(width: 0, height: 1);
+    private static readonly Size Up = Directions.Down;
 
-    private static readonly Size Down = new(width: 0, height: -1);
+    private static readonly Size Down = Directions.Up;
 
     private static readonly Size[] Bounds = [Left, Down, Right];
 

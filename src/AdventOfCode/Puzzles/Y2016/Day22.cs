@@ -104,11 +104,6 @@ public sealed class Day22 : Puzzle
 
         logger?.WriteGrid(grid);
 
-        var up = new Size(0, -1);
-        var down = new Size(0, 1);
-        var left = new Size(-1, 0);
-        var right = new Size(1, 0);
-
         Point empty = emptyNode.Location;
 
         int steps = 0;
@@ -116,39 +111,39 @@ public sealed class Day22 : Puzzle
         // Move up until the "wall" is reached
         while (grid[empty.X, empty.Y - 1] == Available)
         {
-            empty += up;
+            empty += Directions.Up;
             steps++;
         }
 
         // Move left until there is no more blocking "wall"
         while (grid[empty.X, empty.Y - 1] == Full)
         {
-            empty += left;
+            empty += Directions.Left;
             steps++;
         }
 
         // Move to the top of the grid
         while (empty.Y > 0)
         {
-            empty += up;
+            empty += Directions.Up;
             steps++;
         }
 
         // Move to the square adjacent to the goal
         while (grid[empty.X, empty.Y] != Goal)
         {
-            empty += right;
+            empty += Directions.Right;
             steps++;
         }
 
         // Loop around to move the goal left
         while (empty.X != 1)
         {
-            empty += right;
-            empty += down;
-            empty += left;
-            empty += left;
-            empty += up;
+            empty += Directions.Right;
+            empty += Directions.Down;
+            empty += Directions.Left;
+            empty += Directions.Left;
+            empty += Directions.Up;
             steps += 5;
         }
 

@@ -2,6 +2,7 @@
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 using System.Runtime.CompilerServices;
+using MartinCostello.AdventOfCode;
 
 namespace System.Drawing;
 
@@ -10,6 +11,31 @@ namespace System.Drawing;
 /// </summary>
 internal static class PointExtensions
 {
+    /// <summary>
+    /// Returns the area of the polygon enclosed by the specified vertices.
+    /// </summary>
+    /// <param name="vertices">The verticies that define the polygon.</param>
+    /// <returns>
+    /// The area of the polygon enclosed by <paramref name="vertices"/>.
+    /// </returns>
+    public static long Area(this IReadOnlyList<Point> vertices)
+    {
+        // See https://en.wikipedia.org/wiki/Shoelace_formula
+        long crossProductSum = vertices
+            .Pairwise(CrossProduct)
+            .Aggregate(1L, (x, y) => x + y);
+
+        return Math.Abs(crossProductSum) / 2;
+
+        static long CrossProduct(Point i, Point j)
+        {
+            long ix = i.X;
+            long jx = j.X;
+
+            return (ix * j.Y) - (jx * i.Y);
+        }
+    }
+
     /// <summary>
     /// Returns the cross product of the point with another.
     /// </summary>

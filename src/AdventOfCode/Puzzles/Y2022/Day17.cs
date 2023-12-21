@@ -36,7 +36,7 @@ public sealed class Day17 : Puzzle
     {
         var tower = new Tower();
         var shapes = new[] { Rock.Horizontal, Rock.Plus, Rock.Boomerang, Rock.Vertical, Rock.Square };
-        var down = new Size(0, -1);
+        var down = Directions.Up;
 
         for (long i = 0, j = 0; i < count && !cancellationToken.IsCancellationRequested; i++)
         {
@@ -68,8 +68,8 @@ public sealed class Day17 : Puzzle
 
         static Size GetOffset(char direction) => direction switch
         {
-            '<' => new(-1, 0),
-            '>' => new(1, 0),
+            '<' => Directions.Left,
+            '>' => Directions.Right,
             _ => throw new PuzzleException($"Invalid direction '{direction}'."),
         };
     }
@@ -131,7 +131,7 @@ public sealed class Day17 : Puzzle
         {
             for (int i = 0; i < Points.Count; i++)
             {
-                Points[i] += new Size(0, -1);
+                Points[i] += Directions.Up;
             }
         }
 
@@ -139,7 +139,7 @@ public sealed class Day17 : Puzzle
         {
             for (int i = 0; i < Points.Count; i++)
             {
-                Points[i] += new Size(0, 1);
+                Points[i] += Directions.Down;
             }
         }
 
@@ -239,7 +239,7 @@ public sealed class Day17 : Puzzle
                 _offset += rowsToDelete;
                 _rocks.RemoveWhere((p) => p.Y < rowsToDelete);
 
-                var delta = new Size(0, rowsToDelete);
+                var delta = Directions.Down * rowsToDelete;
                 _rocks = _rocks.Select((p) => p - delta).ToHashSet();
             }
         }

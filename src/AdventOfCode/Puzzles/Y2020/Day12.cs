@@ -14,10 +14,10 @@ public sealed class Day12 : Puzzle
     /// </summary>
     private static readonly FrozenDictionary<int, Size> Vectors = new Dictionary<int, Size>(4)
     {
-        [Headings.North] = new(0, 1),
-        [Headings.South] = new(0, -1),
-        [Headings.East] = new(1, 0),
-        [Headings.West] = new(-1, 0),
+        [Headings.North] = Directions.Down,
+        [Headings.South] = Directions.Up,
+        [Headings.East] = Directions.Right,
+        [Headings.West] = Directions.Left,
     }.ToFrozenDictionary();
 
     /// <summary>

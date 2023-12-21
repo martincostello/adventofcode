@@ -47,7 +47,7 @@ public sealed class Day02 : Puzzle
                 if (adjustment.Width > 0)
                 {
                     position += adjustment;
-                    position += new Size(0, adjustment.Width * aim);
+                    position += Directions.Down * (adjustment.Width * aim);
                 }
             }
             else
@@ -65,9 +65,9 @@ public sealed class Day02 : Puzzle
 
             return direction switch
             {
-                "forward" => new(magnitude, 0),
-                "down" => new(0, magnitude),
-                "up" => new(0, -magnitude),
+                "forward" => Directions.Right * magnitude,
+                "down" => Directions.Down * magnitude,
+                "up" => Directions.Up * magnitude,
                 _ => throw new PuzzleException($"The direction '{direction}' is not supported."),
             };
         }

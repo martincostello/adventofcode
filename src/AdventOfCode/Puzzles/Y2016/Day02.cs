@@ -150,10 +150,10 @@ public sealed class Day02 : Puzzle
     {
         return direction switch
         {
-            Direction.Down => new(0, 1),
-            Direction.Left => new(-1, 0),
-            Direction.Right => new(1, 0),
-            Direction.Up => new(0, -1),
+            Direction.Down => Directions.Down,
+            Direction.Left => Directions.Left,
+            Direction.Right => Directions.Right,
+            Direction.Up => Directions.Up,
             _ => default,
         };
     }

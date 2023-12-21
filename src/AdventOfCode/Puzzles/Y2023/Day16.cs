@@ -34,11 +34,6 @@ public sealed class Day16 : Puzzle
         var bounds = new Rectangle(0, 0, layout[0].Length, layout.Count);
         var origins = new HashSet<(Point Location, Size Direction)>();
 
-        var up = new Size(0, -1);
-        var down = new Size(0, 1);
-        var left = new Size(-1, 0);
-        var right = new Size(1, 0);
-
         if (optimize)
         {
             int above = bounds.Top - 1;
@@ -48,19 +43,19 @@ public sealed class Day16 : Puzzle
 
             for (int x = 0; x < bounds.Width; x++)
             {
-                origins.Add((new(x, above), down));
-                origins.Add((new(x, below), up));
+                origins.Add((new(x, above), Directions.Down));
+                origins.Add((new(x, below), Directions.Up));
             }
 
             for (int y = 0; y < bounds.Height; y++)
             {
-                origins.Add((new(leftOf, y), right));
-                origins.Add((new(rightOf, y), left));
+                origins.Add((new(leftOf, y), Directions.Right));
+                origins.Add((new(rightOf, y), Directions.Left));
             }
         }
         else
         {
-            origins.Add((new(bounds.Left - 1, bounds.Top), right));
+            origins.Add((new(bounds.Left - 1, bounds.Top), Directions.Right));
         }
 
         var energized = new HashSet<Point>();
@@ -110,8 +105,8 @@ public sealed class Day16 : Puzzle
                     case '/':
                         direction = direction switch
                         {
-                            { Height: 0 } => new(0, -direction.Width),
-                            { Width: 0 } => new(-direction.Height, 0),
+                            { Height: 0 } => Directions.Up * direction.Width,
+                            { Width: 0 } => Directions.Left * direction.Height,
                             _ => throw new UnreachableException(),
                         };
                         break;
@@ -119,8 +114,8 @@ public sealed class Day16 : Puzzle
                     case '\\':
                         direction = direction switch
                         {
-                            { Height: 0 } => new(0, direction.Width),
-                            { Width: 0 } => new(direction.Height, 0),
+                            { Height: 0 } => Directions.Down * direction.Width,
+                            { Width: 0 } => Directions.Right * direction.Height,
                             _ => throw new UnreachableException(),
                         };
                         break;
@@ -128,7 +123,7 @@ public sealed class Day16 : Puzzle
                     case '|':
                         if (direction.Width != 0)
                         {
-                            direction = new(0, 1);
+                            direction = Directions.Down;
                             split = true;
                         }
 
@@ -137,7 +132,7 @@ public sealed class Day16 : Puzzle
                     case '-':
                         if (direction.Height != 0)
                         {
-                            direction = new(1, 0);
+                            direction = Directions.Right;
                             split = true;
                         }
 
