@@ -45,10 +45,12 @@ public sealed class Day17 : Puzzle
 
         var comparer = EqualityComparer<Move>.Create((x, y) => x.Location == goal);
 
-        int costFromLeft = (int)PathFinding.AStar(grid, start, new(goal, Directions.Right, 0), comparer);
-        int costFromAbove = (int)PathFinding.AStar(grid, start, new(goal, Directions.Down, 0), comparer);
+        long cost = long.MaxValue;
 
-        return Math.Min(costFromLeft, costFromAbove);
+        cost = Math.Min(cost, PathFinding.AStar(grid, start, new(goal, Directions.Down, 0), comparer));
+        cost = Math.Min(cost, PathFinding.AStar(grid, start, new(goal, Directions.Right, 0), comparer));
+
+        return (int)cost;
     }
 
     /// <inheritdoc />
