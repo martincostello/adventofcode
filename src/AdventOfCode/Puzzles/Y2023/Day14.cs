@@ -59,10 +59,10 @@ public sealed class Day14 : Puzzle
             }
         }
 
-        var north = new Size(0, -1);
-        var south = new Size(0, 1);
-        var east = new Size(1, 0);
-        var west = new Size(-1, 0);
+        var north = Directions.Up;
+        var south = Directions.Down;
+        var east = Directions.Right;
+        var west = Directions.Left;
 
         int load;
 

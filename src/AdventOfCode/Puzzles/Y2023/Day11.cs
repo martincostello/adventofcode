@@ -96,7 +96,7 @@ public sealed class Day11 : Puzzle
 
             if (rowsToExpand.Count > 0)
             {
-                var delta = new Size(0, expansion);
+                var delta = Directions.Down * expansion;
 
                 for (int i = 0; i < rowsToExpand.Count; i++)
                 {
@@ -116,7 +116,7 @@ public sealed class Day11 : Puzzle
 
             if (columnsToExpand.Count > 0)
             {
-                var delta = new Size(expansion, 0);
+                var delta = Directions.Right * expansion;
 
                 for (int i = 0; i < columnsToExpand.Count; i++)
                 {

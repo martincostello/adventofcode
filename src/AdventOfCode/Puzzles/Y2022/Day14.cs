@@ -9,7 +9,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2022;
 [Puzzle(2022, 14, "Regolith Reservoir", RequiresData = true)]
 public sealed class Day14 : Puzzle
 {
-    private static readonly Size Down = new(0, 1);
+    private static readonly Size Down = Directions.Down;
     private static readonly Size Left = new(-1, 1);
     private static readonly Size Right = new(1, 1);
 

@@ -85,11 +85,11 @@ public sealed class Day13 : Puzzle
 
                 if (fold.X > 0 && dot.X > fold.X)
                 {
-                    transformed = dot - new Size(Math.Abs(dot.X - fold.X) * 2, 0);
+                    transformed = dot - (Directions.Right * (Math.Abs(dot.X - fold.X) * 2));
                 }
                 else if (fold.Y > 0 && dot.Y > fold.Y)
                 {
-                    transformed = dot - new Size(0, Math.Abs(dot.Y - fold.Y) * 2);
+                    transformed = dot - (Directions.Down * Math.Abs(dot.Y - fold.Y) * 2);
                 }
 
                 if (transformed is { } point)

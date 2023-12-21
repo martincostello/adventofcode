@@ -49,9 +49,9 @@ public sealed class Day03 : Puzzle
             }
         }
 
-        var deltaX = new Size(x, 0);
-        var deltaY = new Size(0, y);
-        var wrap = new Size(width, 0);
+        var deltaX = Directions.Right * x;
+        var deltaY = Directions.Down * y;
+        var wrap = Directions.Right * width;
 
         int collisions = 0;
         var position = Point.Empty;

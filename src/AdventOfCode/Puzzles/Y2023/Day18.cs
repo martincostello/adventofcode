@@ -52,10 +52,10 @@ public sealed class Day18 : Puzzle
 
             vertex += direction[0] switch
             {
-                'U' or '3' => new(0, -steps),
-                'D' or '1' => new(0, steps),
-                'L' or '2' => new(-steps, 0),
-                'R' or '0' => new(steps, 0),
+                'U' or '3' => Directions.Up * steps,
+                'D' or '1' => Directions.Down * steps,
+                'L' or '2' => Directions.Left * steps,
+                'R' or '0' => Directions.Right * steps,
                 _ => throw new PuzzleException($"Unknown direction '{direction}'."),
             };
 
@@ -63,27 +63,8 @@ public sealed class Day18 : Puzzle
             vertices.Add(vertex);
         }
 
-        return Area(vertices, perimeter);
-
-        static long Area(List<Point> vertices, int perimeter)
-        {
-            // https://en.wikipedia.org/wiki/Shoelace_formula#Generalization
-            long crossProductSum = vertices
-                .Pairwise(CrossProduct)
-                .Aggregate(1L, (x, y) => x + y);
-
-            long area = Math.Abs(crossProductSum) / 2;
-            area += (perimeter / 2) + 1;
-            return area;
-        }
-
-        static long CrossProduct(Point i, Point j)
-        {
-            long ix = i.X;
-            long jx = j.X;
-
-            return (ix * j.Y) - (jx * i.Y);
-        }
+        // See https://en.wikipedia.org/wiki/Pick%27s_theorem
+        return vertices.Area() + (perimeter / 2) + 1;
     }
 
     /// <inheritdoc />

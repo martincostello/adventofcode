@@ -9,11 +9,6 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2022;
 [Puzzle(2022, 08, "Treetop Tree House", RequiresData = true)]
 public sealed class Day08 : Puzzle
 {
-    private static readonly Size Up = new(0, -1);
-    private static readonly Size Down = new(0, 1);
-    private static readonly Size Left = new(-1, 0);
-    private static readonly Size Right = new(1, 0);
-
     /// <summary>
     /// Gets how many trees are visible from outside the grid.
     /// </summary>
@@ -70,10 +65,10 @@ public sealed class Day08 : Puzzle
 
             var directions = new (Point Origin, Size Next, Size Forward)[]
             {
-                (topLeft,    Down,  Right), // Left to right
-                (topRight,   Down,  Left), // Right to left
-                (topLeft,    Right, Down), // Top to bottom
-                (bottomLeft, Left,  Up), // Bottom to top
+                (topLeft,    Directions.Down,  Directions.Right), // Left to right
+                (topRight,   Directions.Down,  Directions.Left), // Right to left
+                (topLeft,    Directions.Right, Directions.Down), // Top to bottom
+                (bottomLeft, Directions.Left,  Directions.Up), // Bottom to top
             };
 
             foreach (var (first, next, direction) in directions)
@@ -133,10 +128,10 @@ public sealed class Day08 : Puzzle
 
             var directions = new[]
             {
-                Up,
-                Down,
-                Left,
-                Right,
+                Directions.Up,
+                Directions.Down,
+                Directions.Left,
+                Directions.Right,
             };
 
             int maximum = 0;
