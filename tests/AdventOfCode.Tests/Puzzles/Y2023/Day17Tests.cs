@@ -41,7 +41,6 @@ public sealed class Day17Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
 
         // Assert
         puzzle.ShouldNotBeNull();
-        puzzle.MinimumHeatLoss.ShouldBeGreaterThan(1009);
-        puzzle.MinimumHeatLoss.ShouldBe(-1);
+        puzzle.MinimumHeatLoss.ShouldBe(1013);
     }
 }
