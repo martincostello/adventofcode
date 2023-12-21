@@ -22,7 +22,7 @@ public sealed class Day20Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
     }
 
     [Fact(Skip = "Not implemented.")]
-    public async Task Y2024_Day20_Solve_Returns_Correct_Solution()
+    public async Task Y2023_Day20_Solve_Returns_Correct_Solution()
     {
         // Act
         var puzzle = await SolvePuzzleAsync<Day20>();
