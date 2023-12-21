@@ -41,7 +41,7 @@ public sealed class Day20 : Puzzle
     /// <param name="cancellationToken">The cancellation token to use.</param>
     /// <returns>
     /// The product of the count of the number of high and low pulses sent and
-    /// he fewest number of button presses required to activate the machine
+    /// the fewest number of button presses required to activate the machine
     /// or -1 if the module used to activate the machine does not exist.
     /// </returns>
     public static (int PulsesProduct, long RxMinimum) Run(
