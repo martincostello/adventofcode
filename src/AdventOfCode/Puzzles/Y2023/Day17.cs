@@ -74,7 +74,7 @@ public sealed class Day17 : Puzzle
             => Location == other.Location && Direction == other.Direction;
 
         public override readonly int GetHashCode()
-            => HashCode.Combine(Location.GetHashCode(), Direction.GetHashCode());
+            => HashCode.Combine(Location, Direction);
     }
 
     private sealed class HeatLossMap(int width, int height, Dictionary<Point, int> heatLosses) : IWeightedGraph<Move>
