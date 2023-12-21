@@ -43,7 +43,7 @@ public sealed class Day17 : Puzzle
         var start = new Move(Point.Empty, Size.Empty, 0);
         var goal = new Point(width - 1, height - 1);
 
-        var comparer = EqualityComparer<Move>.Create((x, y) => x.Location == goal);
+        var comparer = EqualityComparer<Move>.Create(static (x, y) => x.Location == y.Location);
 
         long cost = long.MaxValue;
 
