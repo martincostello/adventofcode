@@ -11,6 +11,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2023;
 [Puzzle(2023, 20, "Pulse Propagation", RequiresData = true)]
 public sealed class Day20 : Puzzle
 {
+    private const string Activator = "rx";
     private const string Broadcaster = "broadcaster";
     private const string Button = "button";
 
@@ -27,14 +28,26 @@ public sealed class Day20 : Puzzle
     public int PulsesProduct { get; private set; }
 
     /// <summary>
+    /// Gets the fewest number of button presses required
+    /// to activate the machine, if possible.
+    /// </summary>
+    public long ActivationCycles { get; private set; }
+
+    /// <summary>
     /// Presses the button connecting the modules the specified number of times.
     /// </summary>
     /// <param name="configuration">The configuration of the modules.</param>
     /// <param name="presses">The number of times to press the button.</param>
+    /// <param name="cancellationToken">The cancellation token to use.</param>
     /// <returns>
-    /// The product of the count of the number of high and low pulses sent.
+    /// The product of the count of the number of high and low pulses sent and
+    /// he fewest number of button presses required to activate the machine
+    /// or -1 if the module used to activate the machine does not exist.
     /// </returns>
-    public static int Run(IList<string> configuration, int presses)
+    public static (int PulsesProduct, long RxMinimum) Run(
+        IList<string> configuration,
+        int presses,
+        CancellationToken cancellationToken)
     {
         int highPulses = 0;
         int lowPulses = 0;
@@ -108,7 +121,100 @@ public sealed class Day20 : Puzzle
             button.Press();
         }
 
-        return highPulses * lowPulses;
+        int product = highPulses * lowPulses;
+        long cycles = -1;
+
+        if (modules.TryGetValue(Activator, out var activator))
+        {
+            var inputs = modules.Values
+                .Where((p) => p.Outputs.Any((r) => r.Name == activator.Name))
+                .ToHashSet();
+
+            if (inputs.Count == 1)
+            {
+                var activationInput = inputs.First();
+
+                foreach (var module in modules.Values)
+                {
+                    module.PulseReceived -= OnPulse;
+                }
+
+                if (activationInput is ConjunctionModule conjunction)
+                {
+                    inputs = new(conjunction.Inputs.Keys);
+
+                    var activationMinima = new Dictionary<Module, long>(inputs.Count);
+
+                    foreach (var input in inputs)
+                    {
+                        presses = 1;
+                        bool found = false;
+
+                        foreach (var module in modules.Values)
+                        {
+                            module.Reset();
+                            module.PulseReceived += WaitForLowPulse;
+                        }
+
+                        for (; !found && !cancellationToken.IsCancellationRequested; presses++)
+                        {
+                            button.Press();
+                        }
+
+                        cancellationToken.ThrowIfCancellationRequested();
+
+                        void WaitForLowPulse(object? sender, PulseReceivedEventArgs args)
+                        {
+                            if (args.Pulse is Pulse.High &&
+                                args.Receiver == conjunction &&
+                                args.Sender == input &&
+                                !activationMinima.ContainsKey(input))
+                            {
+                                activationMinima[input] = presses;
+                                found = true;
+                            }
+                        }
+                    }
+
+                    cycles = activationMinima.Values.Aggregate(Maths.LowestCommonMultiple);
+                }
+                else if (activationInput is FlipFlopModule flipFlop)
+                {
+                    presses = 1;
+                    bool found = false;
+
+                    foreach (var module in modules.Values)
+                    {
+                        module.Reset();
+                        module.PulseReceived += WaitForLowPulseWhenOn;
+                    }
+
+                    for (; !found && !cancellationToken.IsCancellationRequested; presses++)
+                    {
+                        button.Press();
+                    }
+
+                    cancellationToken.ThrowIfCancellationRequested();
+
+                    void WaitForLowPulseWhenOn(object? sender, PulseReceivedEventArgs args)
+                    {
+                        if (args.Pulse is Pulse.Low &&
+                            args.Receiver == flipFlop &&
+                            flipFlop.On)
+                        {
+                            cycles = presses;
+                            found = true;
+                        }
+                    }
+                }
+            }
+            else if (inputs.Count > 1)
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        return (product, cycles);
 
         void OnPulse(object? sender, PulseReceivedEventArgs args)
         {
@@ -130,14 +236,15 @@ public sealed class Day20 : Puzzle
 
         var configuration = await ReadResourceAsLinesAsync(cancellationToken);
 
-        PulsesProduct = Run(configuration, presses: 1_000);
+        (PulsesProduct, ActivationCycles) = Run(configuration, presses: 1_000, cancellationToken);
 
         if (Verbose)
         {
             Logger.WriteLine("The total number of low pulses sent multiplied by the total number of high pulses sent is {0}.", PulsesProduct);
+            Logger.WriteLine("The fewest number of button presses required to deliver a single low pulse to the module named rx is {0}.", ActivationCycles);
         }
 
-        return PuzzleResult.Create(PulsesProduct);
+        return PuzzleResult.Create(PulsesProduct, ActivationCycles);
     }
 
     private sealed class PulseReceivedEventArgs(Pulse pulse, Module sender, Module receiver) : EventArgs
@@ -184,6 +291,8 @@ public sealed class Day20 : Puzzle
             }
         }
 
+        public virtual void Reset() => Values.Clear();
+
         protected virtual void OnPulseReceived(Module sender, Pulse value)
             => PulseReceived?.Invoke(this, new(value, sender, this));
     }
@@ -204,6 +313,12 @@ public sealed class Day20 : Puzzle
                 Values.Enqueue(On ? Pulse.High : Pulse.Low);
             }
         }
+
+        public override void Reset()
+        {
+            base.Reset();
+            On = false;
+        }
     }
 
     private sealed class ConjunctionModule(string name) : Module(name)
@@ -219,6 +334,16 @@ public sealed class Day20 : Puzzle
             Inputs[sender] = value;
 
             Values.Enqueue(Inputs.Values.All((p) => p is Pulse.High) ? Pulse.Low : Pulse.High);
+        }
+
+        public override void Reset()
+        {
+            base.Reset();
+
+            foreach (var input in Inputs.Keys)
+            {
+                Inputs[input] = Pulse.Low;
+            }
         }
     }
 
