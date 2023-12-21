@@ -43,8 +43,10 @@ public sealed class Day17 : Puzzle
         var start = new Move(Point.Empty, Size.Empty, 0);
         var goal = new Point(width - 1, height - 1);
 
-        int costFromLeft = (int)PathFinding.AStar(grid, start, new(goal, new(1, 0), 0));
-        int costFromAbove = (int)PathFinding.AStar(grid, start, new(goal, new(0, 1), 0));
+        var comparer = EqualityComparer<Move>.Create((x, y) => x.Location == goal);
+
+        int costFromLeft = (int)PathFinding.AStar(grid, start, new(goal, Directions.Right, 0), comparer);
+        int costFromAbove = (int)PathFinding.AStar(grid, start, new(goal, Directions.Down, 0), comparer);
 
         return Math.Min(costFromLeft, costFromAbove);
     }
