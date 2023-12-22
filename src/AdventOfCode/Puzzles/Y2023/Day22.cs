@@ -62,7 +62,7 @@ public sealed class Day22 : Puzzle
             var disintegrated = new HashSet<Vector3>(settled);
             disintegrated.ExceptWith(brick);
 
-            var remaining = bricks.Except([brick]).ToArray();
+            var remaining = bricks.Except([brick]).ToList();
 
             (var arranged, int moved) = Settle(remaining);
 
@@ -84,13 +84,13 @@ public sealed class Day22 : Puzzle
             return new(Parse<float>(x), Parse<float>(y), Parse<float>(z));
         }
 
-        static (List<HashSet<Vector3>> Transformed, int Moved) Settle(IEnumerable<HashSet<Vector3>> bricks)
+        static (List<HashSet<Vector3>> Transformed, int Moved) Settle(List<HashSet<Vector3>> bricks)
         {
             const float Floor = 1;
 
             var gravity = -Vector3.UnitZ;
 
-            var settled = new List<HashSet<Vector3>>();
+            var settled = new List<HashSet<Vector3>>(bricks.Count);
             var shape = new HashSet<Vector3>(bricks.Sum((p) => p.Count));
 
             int moved = 0;
