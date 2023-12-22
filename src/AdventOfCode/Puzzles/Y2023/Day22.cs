@@ -59,12 +59,9 @@ public sealed class Day22 : Puzzle
 
         foreach (var brick in bricks)
         {
-            var disintegrated = new HashSet<Vector3>(settled);
-            disintegrated.ExceptWith(brick);
-
             var remaining = bricks.Except([brick]).ToList();
 
-            (var arranged, int moved) = Settle(remaining);
+            (_, int moved) = Settle(remaining);
 
             if (moved == 0)
             {
