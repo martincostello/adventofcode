@@ -125,7 +125,13 @@ public sealed class Day22 : Puzzle
 
                 if (transform != Vector3.Zero)
                 {
-                    transformed = new HashSet<Vector3>(brick.Select((p) => p + transform));
+                    transformed = new HashSet<Vector3>(cubes!.Length);
+
+                    for (int i = 0; i < cubes.Length; i++)
+                    {
+                        transformed.Add(cubes[i] + transform);
+                    }
+
                     moved++;
                 }
 
