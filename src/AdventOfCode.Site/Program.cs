@@ -16,7 +16,7 @@ builder.WebHost.CaptureStartupErrors(true);
 builder.WebHost.ConfigureKestrel((p) =>
 {
     p.AddServerHeader = false;
-    p.Limits.MaxRequestBodySize = 10 * 1024; // Maximum upload file size of 10KB
+    p.Limits.MaxRequestBodySize = 200 * 1024; // Maximum upload file size of 200KB
 });
 
 builder.Services.AddSingleton<ICache>((_) => NullCache.Instance);
