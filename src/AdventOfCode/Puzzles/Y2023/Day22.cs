@@ -109,18 +109,16 @@ public sealed class Day22 : Puzzle
                     transform = next;
                 }
 
+                var transformed = brick;
+
                 if (transform != Vector3.Zero)
                 {
-                    var transformed = new HashSet<Vector3>(brick.Select((p) => p + transform));
-                    shape.UnionWith(transformed);
-                    settled.Add(transformed);
+                    transformed = new HashSet<Vector3>(brick.Select((p) => p + transform));
                     moved++;
                 }
-                else
-                {
-                    shape.UnionWith(brick);
-                    settled.Add(brick);
-                }
+
+                shape.UnionWith(transformed);
+                settled.Add(transformed);
             }
 
             return (settled, moved);
