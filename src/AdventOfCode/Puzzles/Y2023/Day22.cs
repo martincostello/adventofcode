@@ -52,8 +52,6 @@ public sealed class Day22 : Puzzle
 
         (bricks, _) = Settle(bricks);
 
-        var settled = new HashSet<Vector3>(bricks.SelectMany((p) => p));
-
         int count = 0;
         int chainReaction = 0;
 
@@ -77,8 +75,8 @@ public sealed class Day22 : Puzzle
 
         static Vector3 ParseVector(ReadOnlySpan<char> value)
         {
-            value.Trifurcate(',', out var x, out var y, out var z);
-            return new(Parse<float>(x), Parse<float>(y), Parse<float>(z));
+            (float x, float y, float z) = value.AsNumberTriple<int>();
+            return new(x, y, z);
         }
 
         static (List<HashSet<Vector3>> Transformed, int Moved) Settle(List<HashSet<Vector3>> bricks)
@@ -96,12 +94,26 @@ public sealed class Day22 : Puzzle
             {
                 float height = brick.Min((p) => p.Z);
                 var transform = Vector3.Zero;
+                Vector3[]? cubes = null;
 
                 for (float z = height; z > Floor; z--)
                 {
+                    cubes ??= [..brick];
+
                     var next = transform + gravity;
 
-                    if (shape.Overlaps(brick.Select((p) => p + next)))
+                    bool intersects = false;
+
+                    for (int i = 0; i < cubes.Length; i++)
+                    {
+                        if (shape.Contains(cubes[i] + next))
+                        {
+                            intersects = true;
+                            break;
+                        }
+                    }
+
+                    if (intersects)
                     {
                         break;
                     }
