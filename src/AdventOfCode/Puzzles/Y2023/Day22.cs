@@ -33,13 +33,10 @@ public sealed class Day22 : Puzzle
 
         foreach (string value in snapshot)
         {
-            value.AsSpan().Bifurcate('~', out var first, out var last);
+            value.AsSpan().Bifurcate('~', out var first, out var second);
 
-            first.Trifurcate(',', out var x, out var y, out var z);
-            var start = new Vector3(Parse<float>(x), Parse<float>(y), Parse<float>(z));
-
-            last.Trifurcate(',', out x, out y, out z);
-            var end = new Vector3(Parse<float>(x), Parse<float>(y), Parse<float>(z));
+            var start = ParseVector(first);
+            var end = ParseVector(second);
 
             var normal = Vector3.Normalize(end - start);
 
@@ -47,8 +44,7 @@ public sealed class Day22 : Puzzle
 
             while (start != end)
             {
-                start += normal;
-                brick.Add(start);
+                brick.Add(start += normal);
             }
 
             bricks.Add(brick);
@@ -81,6 +77,12 @@ public sealed class Day22 : Puzzle
         }
 
         return (count, chainReaction);
+
+        static Vector3 ParseVector(ReadOnlySpan<char> value)
+        {
+            value.Trifurcate(',', out var x, out var y, out var z);
+            return new(Parse<float>(x), Parse<float>(y), Parse<float>(z));
+        }
 
         static (List<HashSet<Vector3>> Transformed, int Moved) Settle(IEnumerable<HashSet<Vector3>> bricks)
         {
