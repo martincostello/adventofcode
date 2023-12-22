@@ -21,10 +21,11 @@ public sealed class Day22Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         ];
 
         // Act
-        int actual = Day22.Disintegrate(snapshot);
+        (int actualBricks, int actualSum) = Day22.Disintegrate(snapshot);
 
         // Assert
-        actual.ShouldBe(5);
+        actualBricks.ShouldBe(5);
+        actualSum.ShouldBe(7);
     }
 
     [Fact]
@@ -35,6 +36,7 @@ public sealed class Day22Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
 
         // Assert
         puzzle.ShouldNotBeNull();
-        puzzle.DisintegratedBricks.ShouldBe(454);
+        puzzle.SafeBricks.ShouldBe(454);
+        puzzle.MaximumChainReaction.ShouldBe(74287);
     }
 }

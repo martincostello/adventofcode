@@ -12,16 +12,22 @@ public sealed class Day22 : Puzzle
     /// <summary>
     /// Gets the number of bricks that could be safely chosen to be disintegrated.
     /// </summary>
-    public int DisintegratedBricks { get; private set; }
+    public int SafeBricks { get; private set; }
+
+    /// <summary>
+    /// Gets the sum of the number of bricks that would fall when removing each unsafe brick.
+    /// </summary>
+    public int MaximumChainReaction { get; private set; }
 
     /// <summary>
     /// Determines the number of bricks that could be safely chosen to be disintegrated.
     /// </summary>
     /// <param name="snapshot">The snapshot of bricks to analyze.</param>
     /// <returns>
-    /// The number of bricks that could be safely chosen to be disintegrated.
+    /// The number of bricks that could be safely chosen to be disintegrated
+    /// and the sum of the number of bricks that would fall when removing each unsafe brick.
     /// </returns>
-    public static int Disintegrate(IList<string> snapshot)
+    public static (int Bricks, int ChainReaction) Disintegrate(IList<string> snapshot)
     {
         List<HashSet<Vector3>> bricks = [];
 
@@ -48,28 +54,35 @@ public sealed class Day22 : Puzzle
             bricks.Add(brick);
         }
 
-        bricks = Settle(bricks);
+        (bricks, _) = Settle(bricks);
 
         var settled = new HashSet<Vector3>(bricks.SelectMany((p) => p));
 
         int count = 0;
+        int chainReaction = 0;
 
         foreach (var brick in bricks)
         {
             var disintegrated = new HashSet<Vector3>(settled);
             disintegrated.ExceptWith(brick);
 
-            var arranged = Settle(bricks.Except([brick]));
+            var remaining = bricks.Except([brick]).ToArray();
 
-            if (disintegrated.SetEquals(arranged.SelectMany((p) => p)))
+            (var arranged, int moved) = Settle(remaining);
+
+            if (moved == 0)
             {
                 count++;
             }
+            else
+            {
+                chainReaction += moved;
+            }
         }
 
-        return count;
+        return (count, chainReaction);
 
-        static List<HashSet<Vector3>> Settle(IEnumerable<HashSet<Vector3>> bricks)
+        static (List<HashSet<Vector3>> Transformed, int Moved) Settle(IEnumerable<HashSet<Vector3>> bricks)
         {
             const float Floor = 1;
 
@@ -77,6 +90,8 @@ public sealed class Day22 : Puzzle
 
             var settled = new List<HashSet<Vector3>>();
             var shape = new HashSet<Vector3>(bricks.Sum((p) => p.Count));
+
+            int moved = 0;
 
             foreach (var brick in bricks.OrderBy((p) => p.Min((r) => r.Z)))
             {
@@ -100,6 +115,7 @@ public sealed class Day22 : Puzzle
                     var transformed = new HashSet<Vector3>(brick.Select((p) => p + transform));
                     shape.UnionWith(transformed);
                     settled.Add(transformed);
+                    moved++;
                 }
                 else
                 {
@@ -108,7 +124,7 @@ public sealed class Day22 : Puzzle
                 }
             }
 
-            return settled;
+            return (settled, moved);
         }
     }
 
@@ -119,13 +135,14 @@ public sealed class Day22 : Puzzle
 
         var snapshot = await ReadResourceAsLinesAsync(cancellationToken);
 
-        DisintegratedBricks = Disintegrate(snapshot);
+        (SafeBricks, MaximumChainReaction) = Disintegrate(snapshot);
 
         if (Verbose)
         {
-            Logger.WriteLine("{0} bricks could be safely chosen as the one to get disintegrated.", DisintegratedBricks);
+            Logger.WriteLine("{0} bricks could be safely chosen as the one to get disintegrated.", SafeBricks);
+            Logger.WriteLine("The sum of the number of other bricks that would fall is {0}.", MaximumChainReaction);
         }
 
-        return PuzzleResult.Create(DisintegratedBricks);
+        return PuzzleResult.Create(SafeBricks, MaximumChainReaction);
     }
 }
