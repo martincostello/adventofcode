@@ -5,23 +5,45 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2023;
 
 public sealed class Day23Tests(ITestOutputHelper outputHelper) : PuzzleTest(outputHelper)
 {
-    [Fact(Skip = "Not implemented.")]
-    public void Y2023_Day23_Solve_Returns_Correct_Value()
+    [Fact]
+    public void Y2023_Day23_Walk_Returns_Correct_Value()
     {
         // Arrange
-        string[] values =
+        string[] hikingTrail =
         [
-            "_",
+            "#.#####################",
+            "#.......#########...###",
+            "#######.#########.#.###",
+            "###.....#.>.>.###.#.###",
+            "###v#####.#v#.###.#.###",
+            "###.>...#.#.#.....#...#",
+            "###v###.#.#.#########.#",
+            "###...#.#.#.......#...#",
+            "#####.#.#.#######.#.###",
+            "#.....#.#.#.......#...#",
+            "#.#####.#.#.#########v#",
+            "#.#...#...#...###...>.#",
+            "#.#.#v#######v###.###v#",
+            "#...#.>.#...>.>.#.###.#",
+            "#####v#.#.###v#.#.###.#",
+            "#.....#...#...#.#.#...#",
+            "#.#########.###.#.#.###",
+            "#...###...#...#...#.###",
+            "###.###.#.###v#####v###",
+            "#...#...#.#.>.>.#.>.###",
+            "#.###.###.#.###.#.#v###",
+            "#.....###...###...#...#",
+            "#####################.#",
         ];
 
         // Act
-        int actual = Day23.Solve(values);
+        int actual = Day23.Walk(hikingTrail, CancellationToken.None);
 
         // Assert
-        actual.ShouldBe(-1);
+        actual.ShouldBe(94);
     }
 
-    [Fact(Skip = "Not implemented.")]
+    [Fact]
     public async Task Y2023_Day23_Solve_Returns_Correct_Solution()
     {
         // Act
@@ -29,6 +51,6 @@ public sealed class Day23Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
 
         // Assert
         puzzle.ShouldNotBeNull();
-        puzzle.Solution.ShouldBe(-1);
+        puzzle.MaximumSteps.ShouldBe(-1);
     }
 }

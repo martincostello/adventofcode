@@ -16,7 +16,7 @@ public class SquareGrid(Rectangle bounds) : IWeightedGraph<Point>
     /// <summary>
     /// The valid vectors of movement around the grid.
     /// </summary>
-    private static readonly ImmutableArray<Size> Vectors =
+    protected static readonly ImmutableArray<Size> Vectors =
     [
         new(0, 1),
         new(1, 0),
@@ -82,7 +82,7 @@ public class SquareGrid(Rectangle bounds) : IWeightedGraph<Point>
     /// <returns>
     /// <see langword="true"/> if <paramref name="id"/> is passable; otherwise <see langword="false"/>.
     /// </returns>
-    public bool IsPassable(Point id) => !Borders.Contains(id);
+    public virtual bool IsPassable(Point id) => !Borders.Contains(id);
 
     /// <inheritdoc/>
     public virtual long Cost(Point a, Point b) => 1;
