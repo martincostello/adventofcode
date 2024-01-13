@@ -6,7 +6,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2023;
 /// <summary>
 /// A class representing the puzzle for <c>https://adventofcode.com/2023/day/23</c>. This class cannot be inherited.
 /// </summary>
-[Puzzle(2023, 23, "A Long Walk", RequiresData = true)]
+[Puzzle(2023, 23, "A Long Walk", RequiresData = true, Unsolved = true)]
 public sealed class Day23 : Puzzle
 {
     /// <summary>
@@ -65,7 +65,7 @@ public sealed class Day23 : Puzzle
         var start = new Point(1, 0);
         var goal = new Point(width - 2, height - 1);
 
-        return (int)PathFinding.AStar(trail, start, goal, cancellationToken);
+        return (int)PathFinding.AStar(trail, start, goal, cancellationToken: cancellationToken);
     }
 
     /// <inheritdoc />
