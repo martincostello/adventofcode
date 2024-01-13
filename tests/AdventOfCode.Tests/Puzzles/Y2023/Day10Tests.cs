@@ -95,7 +95,7 @@ public sealed class Day10Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         actual.ShouldBe(4);
     }
 
-    [Fact(Skip = "Not working due to bug.")]
+    [Fact(Skip = "Unsolved.")]
     public void Y2023_Day10_Walk_Returns_Correct_Value_For_Tiles_3()
     {
         // Arrange

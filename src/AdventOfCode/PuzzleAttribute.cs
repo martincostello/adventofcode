@@ -40,6 +40,11 @@ public sealed class PuzzleAttribute(int year, int day, string name) : Attribute
     public bool RequiresData { get; set; }
 
     /// <summary>
+    /// Gets or sets a value indicating whether the puzzle is unsolved.
+    /// </summary>
+    public bool Unsolved { get; set; }
+
+    /// <summary>
     /// Gets the year associated with the puzzle.
     /// </summary>
     public int Year { get; } = year;

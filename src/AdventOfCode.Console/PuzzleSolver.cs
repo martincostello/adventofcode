@@ -144,7 +144,7 @@ public sealed class PuzzleSolver
                 var puzzle = factory.Create(year, day);
 
                 if (puzzle.GetType().GetCustomAttribute<PuzzleAttribute>() is { } metadata &&
-                    (metadata.IsHidden || metadata.IsSlow || metadata.MinimumArguments > 0))
+                    (metadata.IsHidden || metadata.IsSlow || metadata.Unsolved || metadata.MinimumArguments > 0))
                 {
                     continue;
                 }
