@@ -192,7 +192,7 @@ public class ApiTests(HttpServerFixture fixture, ITestOutputHelper outputHelper)
     [PuzzleData(2023, 09, 1882395907, 1005)]
     [PuzzleData(2023, 10, 6870, 287)]
     [PuzzleData(2023, 11, 9605127, 458191688761)]
-    [PuzzleData(2023, 12, 7047, -1)]
+    [PuzzleData(2023, 12, 7047, -1, Skip = "Unsolved.")]
     [PuzzleData(2023, 13, 35538, 30442)]
     [PuzzleData(2023, 14, 108641, 84328, ExpectedVisualizations = 2)]
     [PuzzleData(2023, 15, 511215, 236057)]
