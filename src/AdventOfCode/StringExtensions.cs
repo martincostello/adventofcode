@@ -160,22 +160,29 @@ internal static class StringExtensions
     /// <typeparam name="T">The type of the numbers.</typeparam>
     /// <param name="value">The span to parse as a triple of numbers.</param>
     /// <param name="separator">The optional separator between the three numbers.</param>
+    /// <param name="style">
+    /// An optional bitwise combination of enumeration values that indicates
+    /// the style elements that can be present in <paramref name="value"/>.
+    /// </param>
     /// <returns>
     /// The three numbers parsed from the span.
     /// </returns>
-    public static (T First, T Second, T Third) AsNumberTriple<T>(this ReadOnlySpan<char> value, char separator = ',')
+    public static (T First, T Second, T Third) AsNumberTriple<T>(
+        this ReadOnlySpan<char> value,
+        char separator = ',',
+        NumberStyles style = NumberStyles.None)
         where T : INumber<T>
     {
         var tokens = value.Tokenize(separator);
 
         tokens.MoveNext();
-        T first = Puzzle.Parse<T>(tokens.Current);
+        T first = Puzzle.Parse<T>(tokens.Current, style);
 
         tokens.MoveNext();
-        T second = Puzzle.Parse<T>(tokens.Current);
+        T second = Puzzle.Parse<T>(tokens.Current, style);
 
         tokens.MoveNext();
-        T third = Puzzle.Parse<T>(tokens.Current);
+        T third = Puzzle.Parse<T>(tokens.Current, style);
 
         return (first, second, third);
     }
