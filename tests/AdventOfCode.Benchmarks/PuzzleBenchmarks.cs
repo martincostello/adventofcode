@@ -193,6 +193,7 @@ public class PuzzleBenchmarks
             .Where((p) => p.Metadata.Year == year)
             .Where((p) => !p.Metadata.IsHidden)
             .Where((p) => !p.Metadata.IsSlow)
+            .Where((p) => !p.Metadata.Unsolved)
             .Where((p) => day is null || day.GetValueOrDefault() == p.Metadata.Day)
             .OrderBy((p) => p.Metadata.Year)
             .OrderBy((p) => p.Metadata.Day)
