@@ -204,7 +204,7 @@ public class ApiTests(HttpServerFixture fixture, ITestOutputHelper outputHelper)
     [PuzzleData(2023, 21, 3782)]
     [PuzzleData(2023, 22, 454, 74287)]
     [PuzzleData(2023, 23, -1, Skip = "Unsolved.")]
-    [PuzzleData(2023, 24, -1, Skip = "Not implemented.")]
+    [PuzzleData(2023, 24, -1, Skip = "Unsolved.")]
     [PuzzleData(2023, 25, -1, Skip = "Not implemented.")]
     public async Task Can_Solve_Puzzle(int year, int day, PuzzleDataAttribute testCase)
     {

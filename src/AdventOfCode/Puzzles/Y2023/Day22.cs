@@ -75,7 +75,7 @@ public sealed class Day22 : Puzzle
 
         static Vector3 ParseVector(ReadOnlySpan<char> value)
         {
-            (float x, float y, float z) = value.AsNumberTriple<int>();
+            (float x, float y, float z) = value.AsNumberTriple<float>();
             return new(x, y, z);
         }
 
