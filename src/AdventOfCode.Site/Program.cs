@@ -77,9 +77,10 @@ builder.Services.AddRazorPages();
 if (builder.Environment.IsDevelopment())
 {
     builder.Services.AddEndpointsApiExplorer();
-    builder.Services.AddSwaggerGen(options =>
+    builder.Services.AddOpenApiDocument((options) =>
     {
-        options.SwaggerDoc("v1", new() { Title = "Advent of Code", Version = "v1" });
+        options.Title = "Advent of Code";
+        options.Version = "v1";
     });
 }
 
@@ -118,7 +119,7 @@ app.UseStaticFiles();
 
 if (app.Environment.IsDevelopment())
 {
-    app.UseSwagger();
+    app.UseOpenApi();
 }
 
 app.MapRazorPages();
