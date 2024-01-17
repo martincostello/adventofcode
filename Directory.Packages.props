@@ -11,7 +11,7 @@
     <PackageVersion Include="Microsoft.Extensions.Caching.Memory" Version="8.0.0" />
     <PackageVersion Include="Microsoft.ICU.ICU4C.Runtime" Version="72.1.0.3" />
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.8.0" />
-    <PackageVersion Include="Microsoft.Playwright" Version="1.40.0" />
+    <PackageVersion Include="Microsoft.Playwright" Version="1.41.0" />
     <PackageVersion Include="Microsoft.Toolkit.HighPerformance" Version="7.1.2" />
     <PackageVersion Include="Microsoft.TypeScript.MSBuild" Version="5.3.3" />
     <PackageVersion Include="NSwag.AspNetCore" Version="14.0.1" />
