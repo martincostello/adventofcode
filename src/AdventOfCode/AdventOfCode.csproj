@@ -14,6 +14,9 @@
     <ProjectReference Include="..\AdventOfCode.Resources\AdventOfCode.Resources.csproj" />
   </ItemGroup>
   <ItemGroup>
+    <AssemblyAttribute Include="System.Runtime.InteropServices.GuidAttribute">
+      <_Parameter1>73a5961b-1a23-4d45-9baf-b5ac2070963e</_Parameter1>
+    </AssemblyAttribute>
     <InternalsVisibleTo Include="AdventOfCode.Benchmarks" Key="$(StrongNamePublicKey)" />
     <InternalsVisibleTo Include="AdventOfCode.Tests" Key="$(StrongNamePublicKey)" />
   </ItemGroup>
