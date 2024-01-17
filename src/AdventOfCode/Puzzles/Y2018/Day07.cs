@@ -24,7 +24,7 @@ public sealed class Day07 : Puzzle
     /// </summary>
     /// <param name="instructions">The assembly instructions.</param>
     /// <param name="partDuration">The amount of time, in seconds, each part takes to assemble.</param>
-    /// <param name="workers">How many workers can assembly the sleigh in parallel.</param>
+    /// <param name="workers">How many workers can assemble the sleigh in parallel.</param>
     /// <returns>
     /// The order in which the sleigh should be assembled and the time,
     /// in seconds, it takes to assemble the sleigh.
