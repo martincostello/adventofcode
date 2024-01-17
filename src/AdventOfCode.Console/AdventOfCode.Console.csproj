@@ -19,4 +19,9 @@
   <ItemGroup>
     <TrimmerRootAssembly Include="AdventOfCode" />
   </ItemGroup>
+  <ItemGroup>
+    <AssemblyAttribute Include="System.Runtime.InteropServices.GuidAttribute">
+      <_Parameter1>3a43dddc-04d3-4691-8e96-f8e5f4b3a553</_Parameter1>
+    </AssemblyAttribute>
+  </ItemGroup>
 </Project>

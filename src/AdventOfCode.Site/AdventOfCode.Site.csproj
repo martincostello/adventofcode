@@ -26,6 +26,11 @@
     <ProjectReference Include="..\AdventOfCode\AdventOfCode.csproj" />
   </ItemGroup>
   <ItemGroup>
+    <AssemblyAttribute Include="System.Runtime.InteropServices.GuidAttribute">
+      <_Parameter1>ec13ef2b-d4c6-43c0-9ed0-9b5832b70154</_Parameter1>
+    </AssemblyAttribute>
+  </ItemGroup>
+  <ItemGroup>
     <Content Update="coverage\**;package.json;package-lock.json;tsconfig.json" CopyToPublishDirectory="Never" />
     <None Remove="scripts\ts\**\*.ts" />
     <TypeScriptCompile Include="scripts\ts\**\*.ts" />

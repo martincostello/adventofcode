@@ -9,4 +9,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Input\**\input.txt" />
   </ItemGroup>
+  <ItemGroup>
+    <AssemblyAttribute Include="System.Runtime.InteropServices.GuidAttribute">
+      <_Parameter1>b128af97-316b-4726-b31b-3f7c0c5d22c2</_Parameter1>
+    </AssemblyAttribute>
+  </ItemGroup>
 </Project>
