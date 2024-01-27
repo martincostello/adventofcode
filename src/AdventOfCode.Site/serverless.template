@@ -28,7 +28,8 @@
         "Environment": {
           "Variables": {
             "Logging__Console__DisableColors": "true",
-            "Logging__Console__FormatterName": "Json"
+            "Logging__Console__FormatterName": "Json",
+            "SSL_CERT_FILE": "/tmp/noop"
           }
         },
         "Events": {
