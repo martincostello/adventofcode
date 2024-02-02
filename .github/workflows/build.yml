@@ -172,10 +172,9 @@ jobs:
 
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v4
-      env:
-        CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
       with:
         files: ./src/AdventOfCode.Site/coverage/lcov.info
+        token: ${{ secrets.CODECOV_TOKEN }}
 
   deploy:
     if: github.event.repository.fork == false && github.ref_name == github.event.repository.default_branch
