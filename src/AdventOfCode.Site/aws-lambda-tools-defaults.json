@@ -2,7 +2,7 @@
   "region": "eu-west-2",
   "profile": "",
   "configuration": "Release",
-  "framework": "net8.0",
+  "framework": "net9.0",
   "function-architecture": "arm64",
   "function-description": "The Advent of Code as a Service function.",
   "function-handler": "AdventOfCode.Site",
