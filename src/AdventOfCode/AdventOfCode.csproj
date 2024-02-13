@@ -6,7 +6,7 @@
     <NoWarn>$(NoWarn);CA1034;CA2007;CA2225;CA5351</NoWarn>
     <OutputType>Library</OutputType>
     <RootNamespace>MartinCostello.AdventOfCode</RootNamespace>
-    <TargetFramework>net8.0</TargetFramework>
+    <TargetFramework>net9.0</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.Toolkit.HighPerformance" />
