@@ -4,7 +4,7 @@
     <IsAotCompatible>true</IsAotCompatible>
     <OutputType>Library</OutputType>
     <RootNamespace>MartinCostello.AdventOfCode</RootNamespace>
-    <TargetFramework>net8.0</TargetFramework>
+    <TargetFramework>net9.0</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
     <EmbeddedResource Include="Input\**\input.txt" />
