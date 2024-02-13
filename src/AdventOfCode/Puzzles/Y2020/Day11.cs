@@ -193,7 +193,7 @@ public sealed class Day11 : Puzzle
     /// <returns>
     /// The visualization of the data.
     /// </returns>
-    private static string WriteGrid(IList<char[]> grid, ILogger? logger)
+    private static string WriteGrid(List<char[]> grid, ILogger? logger)
     {
         int width = grid.Count;
         int height = grid[0].Length;

@@ -104,7 +104,7 @@ public sealed class Day04 : Puzzle
             _squares = squares;
         }
 
-        public static BingoCard Create(IList<string> card)
+        public static BingoCard Create(List<string> card)
         {
             var squares = new Square[card.Count, card.Count];
 
