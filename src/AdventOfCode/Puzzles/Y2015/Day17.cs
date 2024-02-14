@@ -47,12 +47,12 @@ public sealed class Day17 : Puzzle
         var combinations = GetContainerCombinations(volume, containerVolumes);
 
         var combinationsWithLeastContainers = combinations
-            .GroupBy((p) => p.Count)
+            .CountBy((p) => p.Count)
             .OrderBy((p) => p.Key)
             .First();
 
         Combinations = combinations.Count;
-        CombinationsWithMinimumContainers = combinationsWithLeastContainers.Count();
+        CombinationsWithMinimumContainers = combinationsWithLeastContainers.Value;
 
         if (Verbose)
         {
