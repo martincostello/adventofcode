@@ -75,8 +75,8 @@ public sealed class Day07 : Puzzle
             int[] cards = hand.Select((p) => scoreMap[p]).ToArray();
 
             var counts = cards
-                .GroupBy((p) => p)
-                .Select((p) => new { Card = p.Key, Count = p.Count() })
+                .CountBy((p) => p)
+                .Select((p) => new { Card = p.Key, Count = p.Value })
                 .OrderByDescending((p) => p.Count)
                 .ToArray();
 
