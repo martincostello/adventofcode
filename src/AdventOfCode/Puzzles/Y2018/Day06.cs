@@ -105,10 +105,9 @@ public sealed class Day06 : Puzzle
         // Compute each non-infinite area and return the largest one
         int largestNonInfiniteArea = closestPoints
             .Where((p) => !infiniteAreas.Contains(p.Value))
-            .GroupBy((p) => p.Value)
-            .Select((p) => p.Count())
-            .OrderDescending()
-            .First();
+            .CountBy((p) => p.Value)
+            .OrderByDescending((p) => p.Value)
+            .First().Value;
 
         int areaOfRegion = closeRegion.Count;
 
