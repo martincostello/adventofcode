@@ -31,11 +31,11 @@ internal static class Directions
     /// <summary>
     /// The sizes to move a point in each cardinal direction.
     /// </summary>
-    public static readonly IReadOnlyList<Size> All = new[]
-    {
+    public static readonly IReadOnlyList<Size> All =
+    [
         Left,
         Right,
         Up,
         Down,
-    };
+    ];
 }

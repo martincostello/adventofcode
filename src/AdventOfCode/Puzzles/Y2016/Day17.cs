@@ -57,7 +57,7 @@ public sealed class Day17 : Puzzle
 
         void GetPathsToVault(Point current, Stack<char> path, List<string> routes)
         {
-            char[] reversed = [.. path];
+            char[] reversed = [..path];
             Array.Reverse(reversed);
 
             string pathSoFar = new(reversed);

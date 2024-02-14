@@ -61,9 +61,7 @@ public sealed class Day19 : Puzzle
             }
         }
 
-        return molecules
-            .Order(StringComparer.Ordinal)
-            .ToList();
+        return [..molecules.Order(StringComparer.Ordinal)];
     }
 
     /// <summary>

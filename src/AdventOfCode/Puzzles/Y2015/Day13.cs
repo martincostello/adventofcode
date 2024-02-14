@@ -47,9 +47,7 @@ public sealed class Day13 : Puzzle
             (p) => potentials.Where((r) => r.Name == p).ToDictionary((r) => r.AdjacentName, (r) => r.Happiness));
 
         // Get the maximum potential happiness from all the seating arrangements
-        return permutations
-            .Select((p) => GetHappiness(p, happinesses))
-            .Max();
+        return permutations.Max((p) => GetHappiness(p, happinesses));
     }
 
     /// <inheritdoc />

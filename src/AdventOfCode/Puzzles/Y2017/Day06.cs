@@ -29,7 +29,7 @@ public sealed class Day06 : Puzzle
     /// </returns>
     public static (int CycleCount, int LoopSize) Debug(IList<int> memory)
     {
-        int[] copy = [.. memory];
+        int[] copy = [..memory];
 
         int cycles = GetRepeatCount(copy);
         int loopSize = GetRepeatCount(copy);

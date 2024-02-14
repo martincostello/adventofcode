@@ -9,13 +9,13 @@ public sealed class Day23Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
     public void Y2015_Day23_ProcessInstructions()
     {
         // Arrange
-        IList<string> instructions = new[]
-        {
+        IList<string> instructions =
+        [
             "inc a",
             "jio a, +2",
             "tpl a",
             "inc a",
-        };
+        ];
 
         uint initialValue = 0;
 

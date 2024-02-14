@@ -58,9 +58,9 @@ public sealed class Day05 : Puzzle
     {
         string[] units =
         [
-            .. polymer.Select((p) => char.ToLowerInvariant(p).ToString(CultureInfo.InvariantCulture))
-                      .Distinct()
-                      .Order(),
+            ..polymer.Select((p) => char.ToLowerInvariant(p).ToString(CultureInfo.InvariantCulture))
+                     .Distinct()
+                     .Order(),
         ];
 
         string optimized = units

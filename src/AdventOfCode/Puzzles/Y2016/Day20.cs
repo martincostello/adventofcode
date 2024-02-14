@@ -43,8 +43,8 @@ public sealed class Day20 : Puzzle
 
         ranges =
         [
-            .. ranges.OrderBy((p) => p.Start)
-                     .ThenBy((p) => p.End),
+            ..ranges.OrderBy((p) => p.Start)
+                    .ThenBy((p) => p.End),
         ];
 
         for (int i = 0; i < ranges.Count - 1; i++)
@@ -71,8 +71,8 @@ public sealed class Day20 : Puzzle
 
                     ranges =
                     [
-                        .. ranges.OrderBy((p) => p.Start)
-                                 .ThenBy((p) => p.End),
+                        ..ranges.OrderBy((p) => p.Start)
+                                .ThenBy((p) => p.End),
                     ];
                 }
 
