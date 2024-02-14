@@ -91,7 +91,7 @@ public sealed class Day05 : Puzzle
         return PuzzleResult.Create(HighestSeatId, MySeatId);
     }
 
-    private static (int MySetId, int HighestSeatId) Process(IList<string> boardingPasses)
+    private static (int MySetId, int HighestSeatId) Process(List<string> boardingPasses)
     {
         Span<int> ids = new int[boardingPasses.Count];
 
