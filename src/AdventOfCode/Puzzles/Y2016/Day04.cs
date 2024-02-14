@@ -165,8 +165,8 @@ public sealed class Day04 : Puzzle
 
         var top5Letters = encryptedName
             .Where((p) => p is not '-')
-            .GroupBy((p) => p)
-            .OrderByDescending((p) => p.Count())
+            .CountBy((p) => p)
+            .OrderByDescending((p) => p.Value)
             .ThenBy((p) => p.Key)
             .Take(5)
             .Select((p) => p.Key);
