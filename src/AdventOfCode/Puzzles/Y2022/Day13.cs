@@ -142,13 +142,13 @@ public sealed class Day13 : Puzzle
     {
         public Packet()
         {
-            Values = new List<Packet>();
+            Values = [];
         }
 
         public Packet(int value)
         {
             Value = value;
-            Values = Array.Empty<Packet>();
+            Values = [];
         }
 
         public int? Value { get; }

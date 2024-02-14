@@ -379,7 +379,7 @@ public class ApiTests(HttpServerFixture fixture, ITestOutputHelper outputHelper)
         internal object[] ExpectedSolutions { get; }
 
         public override IEnumerable<object[]> GetData(MethodInfo testMethod)
-            => new object[1][] { [Year, Day, this] };
+            => [[Year, Day, this]];
 
         public override string ToString() => string.Join(", ", ExpectedSolutions);
     }

@@ -33,9 +33,7 @@ public sealed class Day14 : Puzzle
             .Select(FlightData.Parse)
             .ToList();
 
-        return data
-            .Select((p) => p.GetDistanceAfterTimeIndex(timeIndex))
-            .Max();
+        return data.Max((p) => p.GetDistanceAfterTimeIndex(timeIndex));
     }
 
     /// <summary>

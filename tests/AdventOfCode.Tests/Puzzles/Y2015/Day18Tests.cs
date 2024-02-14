@@ -28,15 +28,14 @@ public sealed class Day18Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         // Assert
         actual.ShouldNotBeNull();
         actual.ShouldBe(
-            new[]
-            {
+            [
                 ".#.#.#",
                 "...##.",
                 "#....#",
                 "..#...",
                 "#.#..#",
                 "####..",
-            });
+            ]);
 
         // Arrange
         steps = 4;
@@ -47,15 +46,14 @@ public sealed class Day18Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         // Assert
         actual.ShouldNotBeNull();
         actual.ShouldBe(
-            new[]
-            {
+            [
                 "......",
                 "......",
                 "..##..",
                 "..##..",
                 "......",
                 "......",
-            });
+            ]);
 
         // Arrange
         steps = 5;
@@ -67,15 +65,14 @@ public sealed class Day18Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         // Assert
         actual.ShouldNotBeNull();
         actual.ShouldBe(
-            new[]
-            {
+            [
                 "##.###",
                 ".##..#",
                 ".##...",
                 ".##...",
                 "#.#...",
                 "##...#",
-            });
+            ]);
     }
 
     [Fact]

@@ -113,21 +113,12 @@ public sealed class Day11 : Puzzle
     /// <summary>
     /// The base class for Radioisotope Thermoelectric elements.
     /// </summary>
-    private abstract class Element
+    private abstract class Element(string name)
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Element"/> class.
-        /// </summary>
-        /// <param name="name">The name of the element.</param>
-        protected Element(string name)
-        {
-            Name = name;
-        }
-
         /// <summary>
         /// Gets the name of the element associated with the element.
         /// </summary>
-        public string Name { get; }
+        public string Name { get; } = name;
     }
 
     /// <summary>

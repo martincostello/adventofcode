@@ -14,7 +14,7 @@ public sealed class Day02 : Puzzle
     /// <summary>
     /// Gets the output of the program.
     /// </summary>
-    public IReadOnlyList<long> Output { get; private set; } = Array.Empty<long>();
+    public IReadOnlyList<long> Output { get; private set; } = [];
 
     /// <summary>
     /// Runs the specified Intcode program.

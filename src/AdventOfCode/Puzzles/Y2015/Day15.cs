@@ -107,7 +107,7 @@ public sealed class Day15 : Puzzle
     /// at least one spoon of ingredient is required and no more than 100 teaspoons can be used.
     /// </returns>
     private static List<List<int>> GetTeaspoonPermutations(int recipeCount)
-        => GetTeaspoonPermutations(new(0), 0, recipeCount);
+        => GetTeaspoonPermutations([], 0, recipeCount);
 
     /// <summary>
     /// Gets the permutation of teaspoon values for a recipe with the specified number of ingredients.

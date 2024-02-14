@@ -50,7 +50,6 @@ public sealed class Day10 : Puzzle
 
         static (Point Location, Rectangle Bounds) FindStart(IList<string> sketch)
         {
-            var start = Point.Empty;
             var bounds = new Rectangle(0, 0, sketch[0].Length, sketch.Count);
 
             for (int y = 0; y < sketch.Count; y++)

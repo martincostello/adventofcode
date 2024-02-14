@@ -14,8 +14,7 @@ public sealed class CustomHttpHeadersMiddleware(RequestDelegate next)
 {
     private static readonly CompositeFormat ContentSecurityPolicyTemplate = CompositeFormat.Parse(string.Join(
         ';',
-        new[]
-        {
+        [
             "default-src 'self'",
             "script-src 'self' 'nonce-{0}' cdnjs.cloudflare.com",
             "script-src-elem 'self' 'nonce-{0}' cdnjs.cloudflare.com",
@@ -33,7 +32,7 @@ public sealed class CustomHttpHeadersMiddleware(RequestDelegate next)
             "base-uri 'self'",
             "manifest-src 'self'",
             "upgrade-insecure-requests",
-        }));
+        ]));
 
     /// <summary>
     /// Invokes the specified middleware.

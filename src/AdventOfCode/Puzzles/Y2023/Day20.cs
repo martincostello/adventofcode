@@ -96,7 +96,7 @@ public sealed class Day20 : Puzzle
             {
                 if (!modules.TryGetValue(name, out var next))
                 {
-                    connections[name] = Array.Empty<string>();
+                    connections[name] = [];
                     next = modules[name] = new OutputModule(name);
                     next.PulseReceived += OnPulse;
                 }
