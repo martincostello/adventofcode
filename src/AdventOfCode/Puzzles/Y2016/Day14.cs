@@ -167,7 +167,5 @@ public sealed class Day14 : Puzzle
     /// A <see cref="string"/> containing the hexadecimal representation of <paramref name="bytes"/>.
     /// </returns>
     private static string GetStringForHash(ReadOnlySpan<byte> bytes)
-#pragma warning disable CA1308
-        => Convert.ToHexString(bytes).ToLowerInvariant();
-#pragma warning restore CA1308
+        => Convert.ToHexStringLower(bytes);
 }
