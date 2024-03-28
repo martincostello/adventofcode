@@ -1,6 +1,8 @@
 ﻿// Copyright (c) Martin Costello, 2015. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
+using System.Buffers;
+
 namespace MartinCostello.AdventOfCode.Puzzles.Y2015;
 
 /// <summary>
@@ -12,7 +14,7 @@ public sealed class Day05 : Puzzle
     /// <summary>
     /// The sequences of characters that are not considered nice. This field is read-only.
     /// </summary>
-    private static readonly ImmutableArray<string> NotNiceSequences = ["ab", "cd", "pq", "xy"];
+    private static readonly SearchValues<string> NotNiceSequences = SearchValues.Create(["ab", "cd", "pq", "xy"], StringComparison.Ordinal);
 
     /// <summary>
     /// Gets the number of 'nice' strings using version 1 of the rules.
@@ -34,7 +36,7 @@ public sealed class Day05 : Puzzle
     public static bool IsNiceV1(string value)
     {
         // The string is not nice if it contain any of the following sequences
-        if (NotNiceSequences.Any((p) => value.Contains(p, StringComparison.Ordinal)))
+        if (value.AsSpan().ContainsAny(NotNiceSequences))
         {
             return false;
         }

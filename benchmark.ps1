@@ -11,8 +11,6 @@ param(
 $ErrorActionPreference = "Stop"
 $global:ProgressPreference = "SilentlyContinue"
 
-$env:MSBUILDTERMINALLOGGER = "auto"
-
 $solutionPath = $PSScriptRoot
 $sdkFile = Join-Path $solutionPath "global.json"
 

@@ -6,7 +6,7 @@
       "type": "coreclr",
       "request": "launch",
       "preLaunchTask": "build",
-      "program": "${workspaceFolder}/src/AdventOfCode.Site/bin/Debug/net8.0/AdventOfCode.Site.dll",
+      "program": "${workspaceFolder}/src/AdventOfCode.Site/bin/Debug/net9.0/AdventOfCode.Site.dll",
       "args": [],
       "cwd": "${workspaceFolder}/src/AdventOfCode.Site",
       "stopAtEntry": false,
