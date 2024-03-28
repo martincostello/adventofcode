@@ -14,7 +14,7 @@
     <PackageVersion Include="Microsoft.Playwright" Version="1.42.0" />
     <PackageVersion Include="Microsoft.Toolkit.HighPerformance" Version="7.1.2" />
     <PackageVersion Include="Microsoft.TypeScript.MSBuild" Version="5.4.3" />
-    <PackageVersion Include="NSwag.AspNetCore" Version="14.0.3" />
+    <PackageVersion Include="NSwag.AspNetCore" Version="14.0.7" />
     <PackageVersion Include="Shouldly" Version="4.2.1" />
     <PackageVersion Include="Spectre.Console" Version="0.48.0" />
     <PackageVersion Include="StyleCop.Analyzers" Version="1.2.0-beta.556" />
