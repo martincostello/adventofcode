@@ -40,8 +40,7 @@ jobs:
     - name: Start website
       shell: pwsh
       run: |
-        dotnet build ./src/AdventOfCode.Site/AdventOfCode.Site.csproj --configuration Release
-        Start-Process nohup 'dotnet run --project ./src/AdventOfCode.Site/AdventOfCode.Site.csproj --configuration Release'
+        Start-Process nohup 'dotnet run --project ./src/AdventOfCode.Site/AdventOfCode.Site.csproj --configuration Release /p:EnableNETAnalyzers=false /p:EnforceCodeStyleInBuild=false'
         $StatusCode = 0
         $Attempts = 0
         While ($Attempts -lt 25) {
