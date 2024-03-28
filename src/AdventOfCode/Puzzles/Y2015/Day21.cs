@@ -90,10 +90,10 @@ public sealed class Day21 : Puzzle
 
         var bossStats = (bossHitPoints, bossDamage, bossArmor);
 
-        string[] potentialWeapons = [..Shop.PotentialWeapons.Keys];
-        string?[] potentialArmor = [..Shop.PotentialArmor.Keys, null!];
+        string[] potentialWeapons = [.. Shop.PotentialWeapons.Keys];
+        string?[] potentialArmor = [.. Shop.PotentialArmor.Keys, null!];
 
-        string[] keys = [..Shop.PotentialRings.Keys];
+        string[] keys = [.. Shop.PotentialRings.Keys];
 
         var potentialRings = new List<IList<string>>((keys.Length * 2) + 1)
         {

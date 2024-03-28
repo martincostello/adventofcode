@@ -172,7 +172,7 @@ public sealed class Day18 : Puzzle
                         break;
                     }
                 }
-                else if (ch == ']' || ch == ',')
+                else if (ch is ']' or ',')
                 {
                     continue;
                 }

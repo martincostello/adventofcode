@@ -171,6 +171,7 @@ public sealed class Day08 : Puzzle
                     i += instruction.Argument - 1;
                     break;
 
+                case Operation.NoOp:
                 default:
                     break;
             }

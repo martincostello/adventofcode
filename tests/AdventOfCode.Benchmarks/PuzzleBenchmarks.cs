@@ -267,14 +267,9 @@ public class PuzzleBenchmarks
         }
     }
 
-    public abstract class PuzzleInput
+    public abstract class PuzzleInput(params string[] args)
     {
-        protected PuzzleInput(params string[] args)
-        {
-            Args = args;
-        }
-
-        public string[] Args { get; }
+        public string[] Args { get; } = args;
 
         public abstract IPuzzle Puzzle { get; }
 

@@ -5,12 +5,7 @@ namespace MartinCostello.AdventOfCode.EndToEnd;
 
 [Collection(SiteCollection.Name)]
 [Trait("Category", "EndToEnd")]
-public abstract class EndToEndTest
+public abstract class EndToEndTest(SiteFixture fixture)
 {
-    protected EndToEndTest(SiteFixture fixture)
-    {
-        Fixture = fixture;
-    }
-
-    protected SiteFixture Fixture { get; }
+    protected SiteFixture Fixture { get; } = fixture;
 }

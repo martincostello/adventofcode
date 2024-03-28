@@ -67,6 +67,9 @@ public sealed class Day14 : Puzzle
                             case '1':
                                 maskedValue |= 1L << i;
                                 break;
+
+                            default:
+                                break;
                         }
                     }
 
