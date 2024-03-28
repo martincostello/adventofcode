@@ -415,7 +415,7 @@ public sealed class Day20 : Puzzle
 
                 if (lineSpan.IsEmpty)
                 {
-                    image[id] = new Tile([..grid], id);
+                    image[id] = new Tile([.. grid], id);
                     grid.Clear();
                 }
                 else if (lineSpan.StartsWith("Tile ", StringComparison.Ordinal))

@@ -103,7 +103,7 @@ public sealed class Day07 : Puzzle
                 }
             }
 
-            return [..fileSystem.Values];
+            return [.. fileSystem.Values];
         }
 
         static int ParseEntries(Directory current, ReadOnlySpan<string> terminalOutput)

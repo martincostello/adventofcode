@@ -168,11 +168,11 @@ public sealed class Day18 : Puzzle
 
                     if (input[x, y])
                     {
-                        newState = neighborsOn == 2 || neighborsOn == 3;
+                        newState = neighborsOn is 2 or 3;
                     }
                     else
                     {
-                        newState = neighborsOn == 3;
+                        newState = neighborsOn is 3;
                     }
                 }
 

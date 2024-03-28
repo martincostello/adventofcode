@@ -58,9 +58,7 @@ public sealed class Day15 : Puzzle
         return lastSpoken;
 
         void UpdateNumber(int value, int time)
-        {
-            numbers.GetOrAdd(value).Add(time);
-        }
+            => numbers.GetOrAdd(value).Add(time);
     }
 
     /// <inheritdoc />

@@ -98,7 +98,7 @@ public sealed class Day22 : Puzzle
 
                 for (float z = height; z > Floor; z--)
                 {
-                    cubes ??= [..brick];
+                    cubes ??= [.. brick];
 
                     var next = transform + gravity;
 

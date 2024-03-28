@@ -43,8 +43,7 @@ public sealed class Day14 : Puzzle
 
             squaresUsed += bits
                 .SelectMany((p) => p.OfType<bool>().Take(4))
-                .Where((p) => p)
-                .Count();
+                .Count((p) => p);
         }
 
         return squaresUsed;

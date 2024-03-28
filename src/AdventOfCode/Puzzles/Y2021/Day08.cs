@@ -79,45 +79,39 @@ public sealed class Day08 : Puzzle
             // 3 is the same as 7 plus two other elements
             digits[3] = new(signals
                 .Where((p) => p.Length == 5)
-                .Where((p) => digits[7].IsSubsetOf(p))
-                .Single());
+                .Single((p) => digits[7].IsSubsetOf(p)));
 
             // 9 is the same as 3 plus one other element
             digits[9] = new(signals
                 .Where((p) => p.Length == 6)
-                .Where((p) => digits[3].IsSubsetOf(p))
-                .Single());
+                .Single((p) => digits[3].IsSubsetOf(p)));
 
             // 0 is the only remaining unknown signal that contains 7's elements
             digits[0] = new(signals
                 .Where((p) => p.Length == 6)
                 .Where((p) => digits[7].IsSubsetOf(p))
-                .Where((p) => !digits.Any((r) => r.Value.SetEquals(p)))
-                .Single());
+                .Single((p) => !digits.Any((r) => r.Value.SetEquals(p))));
 
             // 6 is the only remaining signal with six elements
             digits[6] = new(signals
                 .Where((p) => p.Length == 6)
-                .Where((p) => !digits.Any((r) => r.Value.SetEquals(p)))
-                .Single());
+                .Single((p) => !digits.Any((r) => r.Value.SetEquals(p))));
 
             // 5 is a proper subset of 6
             digits[5] = new(signals
                 .Where((p) => p.Length == 5)
-                .Where((p) => new HashSet<char>(p).IsProperSubsetOf(digits[6]))
-                .Single());
+                .Single((p) => new HashSet<char>(p).IsProperSubsetOf(digits[6])));
 
             // 2 is the only remaining signal with 5 elements
             digits[2] = new(signals
                 .Where((p) => p.Length == 5)
-                .Where((p) => !digits.Any((r) => r.Value.SetEquals(p)))
-                .Single());
+                .Single((p) => !digits.Any((r) => r.Value.SetEquals(p))));
 
             int[] output = new int[numbers.Length];
 
             for (int i = 0; i < numbers.Length; i++)
             {
-                output[i] = digits.Where((p) => p.Value.SetEquals(numbers[i])).Single().Key;
+                output[i] = digits.Single((p) => p.Value.SetEquals(numbers[i])).Key;
             }
 
             return Maths.FromDigits<int>(output);

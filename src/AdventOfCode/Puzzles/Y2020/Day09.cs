@@ -39,8 +39,7 @@ public sealed class Day09 : Puzzle
 
             bool isValid = Maths.GetPermutations(preamble, 2)
                 .Where((p) => p.Sum() == current)
-                .Where((p) => p.ElementAt(0) != p.ElementAt(1))
-                .Any();
+                .Any((p) => p.ElementAt(0) != p.ElementAt(1));
 
             if (!isValid)
             {
@@ -91,7 +90,7 @@ public sealed class Day09 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        long[] values = [..await ReadResourceAsNumbersAsync<long>(cancellationToken)];
+        long[] values = [.. await ReadResourceAsNumbersAsync<long>(cancellationToken)];
 
         WeakNumber = GetWeakNumber(values, 25);
         Weakness = GetWeakness(values, WeakNumber);

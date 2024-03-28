@@ -106,7 +106,7 @@ public sealed class Day08 : Puzzle
                         case '\\':
                             char next = characters.Peek();
 
-                            if (next == '\"' || next == '\'' || next == '\\')
+                            if (next is '\"' or '\'' or '\\')
                             {
                                 characters.Dequeue();
                             }

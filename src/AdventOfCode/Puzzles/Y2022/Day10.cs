@@ -53,6 +53,9 @@ public sealed class Day10 : Puzzle
                     Tick();
                     Tick(instruction[5..]);
                     break;
+
+                default:
+                    break;
             }
         }
 

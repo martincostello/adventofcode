@@ -1,7 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <Description>Resources for the solutions for Advent of Code.</Description>
-    <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <OutputType>Library</OutputType>
     <RootNamespace>MartinCostello.AdventOfCode</RootNamespace>
     <TargetFramework>net8.0</TargetFramework>
