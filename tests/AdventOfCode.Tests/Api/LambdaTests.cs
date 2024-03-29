@@ -261,7 +261,7 @@ public class LambdaTests : IAsyncLifetime, IDisposable
             {
                 try
                 {
-                    typeof(Site.Program).Assembly.EntryPoint!.Invoke(null, new[] { Array.Empty<string>() });
+                    typeof(Site.Program).Assembly.EntryPoint!.Invoke(null, []);
                 }
                 catch (Exception ex) when (LambdaServerWasShutDown(ex))
                 {
