@@ -16,6 +16,5 @@
     <PackageReference Include="BenchmarkDotNet" />
     <PackageReference Include="BenchmarkDotNet.TestAdapter" />
     <PackageReference Include="Microsoft.Extensions.Caching.Memory" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" />
   </ItemGroup>
 </Project>
