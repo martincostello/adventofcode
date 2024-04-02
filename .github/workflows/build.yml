@@ -89,9 +89,9 @@ jobs:
           ~/.cache/ms-playwright
           ~/Library/Caches/ms-playwright
 
-    - name: Install .NET Lambda tool
+    - name: Install .NET tools
       shell: pwsh
-      run: dotnet tool install --global Amazon.Lambda.Tools
+      run: dotnet tool restore
 
     - name: Build, test and publish
       shell: pwsh
@@ -287,9 +287,9 @@ jobs:
     - name: Setup .NET SDK
       uses: actions/setup-dotnet@v4
 
-    - name: Install .NET Lambda tool
+    - name: Install .NET tools
       shell: pwsh
-      run: dotnet tool install --global Amazon.Lambda.Tools
+      run: dotnet tool restore
 
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v4
