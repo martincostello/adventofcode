@@ -128,7 +128,7 @@ if ($SkipPublish -eq $false) {
     $packageFile = Join-Path $PSScriptRoot "artifacts" "publish" "lambda.zip"
 
     # Requires that `dotnet tool restore` is run first
-    dotnet-lambda `
+    dotnet tool run dotnet-lambda `
         package `
         --output-package $packageFile `
         --project-location $projectPath
