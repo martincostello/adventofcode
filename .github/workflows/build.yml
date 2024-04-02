@@ -39,6 +39,9 @@ jobs:
     name: ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
 
+    outputs:
+      lambda-tools-version: ${{ steps.get-lambda-tools-version.outputs.lambda-tools-version }}
+
     strategy:
       fail-fast: false
       matrix:
@@ -136,6 +139,13 @@ jobs:
         name: videos-${{ matrix.os }}
         path: ./artifacts/videos/*
         if-no-files-found: ignore
+
+    - name: Get Amazon Lambda tools version
+      id: get-lambda-tools-version
+      shell: pwsh
+      run: |
+        $lambdaToolsVersion = (Get-Content "./.config/dotnet-tools.json" | Out-String | ConvertFrom-Json).tools.'amazon.lambda.tools'.version
+        "lambda-tools-version=${lambdaToolsVersion}" >> $env:GITHUB_OUTPUT
 
   typescript:
     runs-on: ubuntu-latest
@@ -287,9 +297,12 @@ jobs:
     - name: Setup .NET SDK
       uses: actions/setup-dotnet@v4
 
-    - name: Install .NET tools
+    - name: Install .NET Lambda tool
       shell: pwsh
-      run: dotnet tool restore
+      env:
+        LAMBDA_TOOLS_VERSION: ${{ needs.build.outputs.lambda-tools-version }}
+      run: |
+        dotnet tool install --global Amazon.Lambda.Tools --version ${env:LAMBDA_TOOLS_VERSION}
 
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v4
@@ -306,7 +319,7 @@ jobs:
         $description = "Deploy build ${env:GITHUB_RUN_NUMBER} to AWS via GitHub Actions"
         $configPath = Join-Path $pwd "aws-lambda-tools-defaults.json"
         $packagePath = Join-Path $pwd "lambda.zip"
-        dotnet tool run dotnet-lambda `
+        dotnet-lambda `
             deploy-serverless `
             ${env:AWS_CLOUDFORMATION_STACK} `
             --cloudformation-role ${env:AWS_CLOUDFORMATION_ROLE} `
