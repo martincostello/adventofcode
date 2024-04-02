@@ -306,7 +306,7 @@ jobs:
         $description = "Deploy build ${env:GITHUB_RUN_NUMBER} to AWS via GitHub Actions"
         $configPath = Join-Path $pwd "aws-lambda-tools-defaults.json"
         $packagePath = Join-Path $pwd "lambda.zip"
-        dotnet-lambda `
+        dotnet tool run dotnet-lambda `
             deploy-serverless `
             ${env:AWS_CLOUDFORMATION_STACK} `
             --cloudformation-role ${env:AWS_CLOUDFORMATION_ROLE} `
