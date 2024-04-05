@@ -3,7 +3,7 @@
   "isRoot": true,
   "tools": {
     "amazon.lambda.tools": {
-      "version": "5.10.3",
+      "version": "5.10.4",
       "commands": [
         "dotnet-lambda"
       ]
