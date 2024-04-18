@@ -138,7 +138,7 @@ public sealed class Day13 : Puzzle
         return PuzzleResult.Create(SumOfPresortedIndicies, DecoderKey);
     }
 
-    private sealed class Packet : IComparable<Packet>
+    private sealed class Packet : IComparable<Packet>, IEquatable<Packet>
     {
         public Packet()
         {
@@ -180,6 +180,30 @@ public sealed class Day13 : Puzzle
             else
             {
                 return ExpandToArray(this).CompareTo(ExpandToArray(other));
+            }
+        }
+
+        public override bool Equals(object? obj)
+            => obj is Packet packet ? Equals(packet) : base.Equals(obj);
+
+        public bool Equals(Packet? other) => CompareTo(other) is 0;
+
+        public override int GetHashCode()
+        {
+            if (Value is { } value)
+            {
+                return value.GetHashCode();
+            }
+            else
+            {
+                var builder = new HashCode();
+
+                foreach (var packet in Values)
+                {
+                    builder.Add(packet);
+                }
+
+                return builder.ToHashCode();
             }
         }
 

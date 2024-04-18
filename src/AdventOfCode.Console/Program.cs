@@ -42,15 +42,5 @@ Console.CancelKeyPress += (_, e) =>
     cts.Cancel();
 };
 
-PuzzleSolver solver;
-
-if (day == 0)
-{
-    solver = new(year);
-}
-else
-{
-    solver = new(year, day, args);
-}
-
+PuzzleSolver solver = day == 0 ? new(year) : new(year, day, args);
 return await solver.SolveAsync(cts.Token);

@@ -125,17 +125,7 @@ public sealed class Day11 : Puzzle
                 var recipientForTrue = monkeys[Parse<int>(monkeyForTrue)].Monkey;
                 var recipientForFalse = monkeys[Parse<int>(monkeyForFalse)].Monkey;
 
-                monkey.Next = (p) =>
-                {
-                    if (p % divisor == 0)
-                    {
-                        return recipientForTrue;
-                    }
-                    else
-                    {
-                        return recipientForFalse;
-                    }
-                };
+                monkey.Next = (p) => p % divisor == 0 ? recipientForTrue : recipientForFalse;
             }
 
             return monkeys.Values

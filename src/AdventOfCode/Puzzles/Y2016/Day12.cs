@@ -64,16 +64,7 @@ public sealed class Day12 : Puzzle
             switch (split[0])
             {
                 case "cpy":
-
-                    if (TryParse(split[1], out value))
-                    {
-                        registers[split[2][0]] = value;
-                    }
-                    else
-                    {
-                        registers[split[2][0]] = registers[split[1][0]];
-                    }
-
+                    registers[split[2][0]] = TryParse(split[1], out value) ? value : registers[split[1][0]];
                     break;
 
                 case "inc":
@@ -102,25 +93,16 @@ public sealed class Day12 : Puzzle
 
                         if (split.Length == 2)
                         {
-                            if (string.Equals(split[0], "inc", StringComparison.OrdinalIgnoreCase))
-                            {
-                                toggled = $"dec {split[1]}";
-                            }
-                            else
-                            {
-                                toggled = $"inc {split[1]}";
-                            }
+                            toggled = string.Equals(split[0], "inc", StringComparison.OrdinalIgnoreCase) ?
+                                $"dec {split[1]}" :
+                                $"inc {split[1]}";
                         }
                         else
                         {
-                            if (string.Equals(split[0], "jnz", StringComparison.OrdinalIgnoreCase))
-                            {
-                                toggled = $"cpy {split[1]} {split[2]}";
-                            }
-                            else
-                            {
-                                toggled = $"jnz {split[1]} {split[2]}";
-                            }
+                            toggled =
+                                string.Equals(split[0], "jnz", StringComparison.OrdinalIgnoreCase) ?
+                                $"cpy {split[1]} {split[2]}" :
+                                $"jnz {split[1]} {split[2]}";
                         }
 
                         instructions[target] = toggled;

@@ -448,16 +448,7 @@ public sealed class Day06 : Puzzle
         /// <returns>The new brightness of the light at <paramref name="position"/>.</returns>
         private int IncrementOrSetBrightness(Point position, int delta, bool set = false)
         {
-            int current;
-
-            if (set)
-            {
-                current = delta;
-            }
-            else
-            {
-                current = _lightBrightnesses.GetValueOrDefault(position) + delta;
-            }
+            int current = set ? delta : _lightBrightnesses.GetValueOrDefault(position) + delta;
 
             int value = Math.Max(current, 0);
 

@@ -76,20 +76,12 @@ public sealed class Day10 : Puzzle
         {
             (int y, int x) = Math.DivRem(cycle, DisplayWidth);
 
-            char ch;
-
-            if (register == sprite - 1 ||
+            crt[x, y] =
+                register == sprite - 1 ||
                 register == sprite ||
-                register == sprite + 1)
-            {
-                ch = '#';
-            }
-            else
-            {
-                ch = '.';
-            }
-
-            crt[x, y] = ch;
+                register == sprite + 1 ?
+                '#' :
+                '.';
         }
 
         string message = CharacterRecognition.Read(crt, '#');

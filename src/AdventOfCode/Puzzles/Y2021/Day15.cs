@@ -85,7 +85,7 @@ public sealed class Day15 : Puzzle
                         risk = risks[new(point.X - initialWidth, point.Y)];
                     }
 
-                    risks[point] = risk > 8 ? 1 : ++risk;
+                    risks[point] = risk > 8 ? 1 : risk + 1;
                 }
             }
         }

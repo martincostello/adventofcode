@@ -169,16 +169,8 @@ public sealed class Day04 : Puzzle
             sum += hash[j];
         }
 
-        if (sum == 0)
-        {
-            // The current value is a solution if there is an even number
-            // of zeroes or if the low bits of the odd byte are zero.
-            if (!hasHalfByte || hash[wholeBytes] < 0x10)
-            {
-                return true;
-            }
-        }
-
-        return false;
+        // The current value is a solution if there is an even number
+        // of zeroes or if the low bits of the odd byte are zero.
+        return sum is 0 && (!hasHalfByte || hash[wholeBytes] < 0x10);
     }
 }

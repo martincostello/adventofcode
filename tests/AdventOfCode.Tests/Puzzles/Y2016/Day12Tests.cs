@@ -19,8 +19,6 @@ public sealed class Day12Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
             "dec a",
         ];
 
-        int[] binsOfInterest = [0, 1, 2];
-
         // Act
         var actual = Day12.Process(instructions, initialValueOfC: 0);
 
@@ -47,8 +45,6 @@ public sealed class Day12Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
             "dec a",
             "dec a",
         ];
-
-        int[] binsOfInterest = [0, 1, 2];
 
         // Act
         var actual = Day12.Process(instructions, initialValueOfC: 0);

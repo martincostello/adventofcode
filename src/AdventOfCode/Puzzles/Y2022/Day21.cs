@@ -110,26 +110,14 @@ public sealed class Day21 : Puzzle
                 string name = split[0];
                 string[] values = split[1].TrimStart().Split(' ');
 
-                Monkey monkey;
-
-                if (values.Length == 1)
-                {
-                    monkey = new(name)
-                    {
-                        Value = Parse<long>(values[0]),
-                    };
-                }
-                else
-                {
-                    monkey = new(name)
+                monkeys[name] = values.Length == 1 ?
+                    new(name) { Value = Parse<long>(values[0]) } :
+                    new(name)
                     {
                         LeftName = values[0],
                         RightName = values[2],
                         Operation = values[1][0],
                     };
-                }
-
-                monkeys[name] = monkey;
             }
 
             foreach (var monkey in monkeys.Values)

@@ -27,7 +27,8 @@ internal static class EnumerableExtensions
 
         count = 0;
 
-        foreach (T item in collection)
+        using var enumerator = collection.GetEnumerator();
+        while (enumerator.MoveNext())
         {
             if (++count > value)
             {

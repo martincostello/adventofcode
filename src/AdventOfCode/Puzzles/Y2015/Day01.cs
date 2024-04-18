@@ -51,13 +51,10 @@ public sealed class Day01 : Puzzle
                     break;
             }
 
-            if (!hasVisitedBasement)
+            if (!hasVisitedBasement && floor is -1)
             {
-                if (floor == -1)
-                {
-                    instructionThatEntersBasement = i + 1;
-                    hasVisitedBasement = true;
-                }
+                instructionThatEntersBasement = i + 1;
+                hasVisitedBasement = true;
             }
         }
 

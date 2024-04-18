@@ -30,17 +30,8 @@ internal static class DictionaryExtensions
     /// <param name="value">The value to add to the dictionary if the key is not found.</param>
     /// <param name="increment">The value to increment by.</param>
     public static void AddOrIncrement<TKey, TValue>(this IDictionary<TKey, TValue> dictionary, TKey key, TValue value, TValue increment)
-        where TValue : INumber<TValue>
-    {
-        if (dictionary.TryGetValue(key, out var current))
-        {
-            dictionary[key] = current + increment;
-        }
-        else
-        {
-            dictionary[key] = value;
-        }
-    }
+        where TValue : INumber<TValue> =>
+        dictionary[key] = dictionary.TryGetValue(key, out var current) ? current + increment : value;
 
     /// <summary>
     /// Decrements the value of the specified key, or adds it if not already present.

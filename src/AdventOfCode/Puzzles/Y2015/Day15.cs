@@ -209,17 +209,11 @@ public sealed class Day15 : Puzzle
             texture += ingredient.Texture * teaspoons;
         }
 
-        int score;
-
         // Negative properties cause the score to become zero
-        if (capacity < 0 || durability < 0 || flavor < 0 || texture < 0)
-        {
-            score = 0;
-        }
-        else
-        {
-            score = capacity * durability * flavor * texture;
-        }
+        int score =
+            capacity < 0 || durability < 0 || flavor < 0 || texture < 0 ?
+            0 :
+            capacity * durability * flavor * texture;
 
         if (calorieCount.HasValue && calories != calorieCount.GetValueOrDefault())
         {

@@ -53,9 +53,11 @@ public sealed class Day18 : Puzzle
 
         string[] result = new string[width];
 
+        var builder = new StringBuilder();
+
         for (int x = 0; x < width; x++)
         {
-            var builder = new StringBuilder(height);
+            builder.EnsureCapacity(height);
 
             for (int y = 0; y < height; y++)
             {
@@ -63,6 +65,7 @@ public sealed class Day18 : Puzzle
             }
 
             result[x] = builder.ToString();
+            builder.Clear();
         }
 
         return result;
@@ -114,20 +117,13 @@ public sealed class Day18 : Puzzle
 
         Point[] cornerLights;
 
-        if (areCornerLightsBroken)
-        {
-            cornerLights =
+        cornerLights = !areCornerLightsBroken ? [] :
             [
                 new(0, 0),
                 new(width - 1, 0),
                 new(0, height - 1),
                 new(width - 1, height - 1),
             ];
-        }
-        else
-        {
-            cornerLights = [];
-        }
 
         for (int x = 0; x < width; x++)
         {
@@ -157,23 +153,16 @@ public sealed class Day18 : Puzzle
 
                     foreach (Point neighbor in neighbors)
                     {
-                        if (neighbor.X >= 0 && neighbor.X < width && neighbor.Y >= 0 && neighbor.Y < height)
+                        if (neighbor.X >= 0 && neighbor.X < width && neighbor.Y >= 0 && neighbor.Y < height &&
+                            (input[neighbor.X, neighbor.Y] || cornerLights.Contains(new(neighbor.X, neighbor.Y))))
                         {
-                            if (input[neighbor.X, neighbor.Y] || cornerLights.Contains(new Point(neighbor.X, neighbor.Y)))
-                            {
-                                neighborsOn++;
-                            }
+                            neighborsOn++;
                         }
                     }
 
-                    if (input[x, y])
-                    {
-                        newState = neighborsOn is 2 or 3;
-                    }
-                    else
-                    {
-                        newState = neighborsOn is 3;
-                    }
+                    newState = input[x, y] ?
+                        neighborsOn is 2 or 3 :
+                        neighborsOn is 3;
                 }
 
                 output[x, y] = newState;

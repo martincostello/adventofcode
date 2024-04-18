@@ -43,14 +43,7 @@ public sealed class Day15 : Puzzle
         {
             var times = numbers.GetOrAdd(lastSpoken);
 
-            if (times.Count < 2)
-            {
-                lastSpoken = 0;
-            }
-            else
-            {
-                lastSpoken = times[^1] - times[^2];
-            }
+            lastSpoken = times.Count < 2 ? 0 : times[^1] - times[^2];
 
             UpdateNumber(lastSpoken, i);
         }

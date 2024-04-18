@@ -45,6 +45,7 @@ public sealed class Day11 : Puzzle
 
                     if (orphanMicrochipsOnThisFloor.Count > 0 && orphanGeneratorUpstairs.Count > 0)
                     {
+                        // TODO
                     }
                 }
             }
