@@ -88,17 +88,14 @@ internal static partial class PuzzlesApi
 
         arguments ??= [];
 
-        if (metadata.RequiresData || metadata.MinimumArguments > 0)
+        if ((metadata.RequiresData || metadata.MinimumArguments > 0) && metadata.RequiresData)
         {
-            if (metadata.RequiresData)
+            if (resource is null)
             {
-                if (resource is null)
-                {
-                    return Results.Problem("No puzzle resource provided.", statusCode: StatusCodes.Status400BadRequest);
-                }
-
-                puzzle.Resource = resource.OpenReadStream();
+                return Results.Problem("No puzzle resource provided.", statusCode: StatusCodes.Status400BadRequest);
             }
+
+            puzzle.Resource = resource.OpenReadStream();
         }
 
         var timeout = TimeSpan.FromSeconds(30);

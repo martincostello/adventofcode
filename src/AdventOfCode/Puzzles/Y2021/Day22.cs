@@ -198,15 +198,7 @@ public sealed class Day22 : Puzzle
             Cuboid largest = otherIsLarger ? other : this;
             Cuboid smallest = !otherIsLarger ? other : this;
 
-            foreach (Vector3 vertex in smallest.Verticies())
-            {
-                if (largest.Contains(vertex))
-                {
-                    return true;
-                }
-            }
-
-            return false;
+            return smallest.Verticies().Any((p) => largest.Contains(p));
         }
 
         public readonly HashSet<Vector3> IntersectWith(in Cuboid other)

@@ -149,7 +149,8 @@ public sealed class Day19 : Puzzle
 
                     int withinReach = 0;
 
-                    foreach (var item in rotated.Where((p) => aligned.Location.ManhattanDistance(first - p) <= MaximumRange))
+                    using var reachable = rotated.Where((p) => aligned.Location.ManhattanDistance(first - p) <= MaximumRange).GetEnumerator();
+                    while (reachable.MoveNext())
                     {
                         if (++withinReach >= CommonBeacons)
                         {
@@ -176,7 +177,8 @@ public sealed class Day19 : Puzzle
 
                         int count = 0;
 
-                        foreach (Vector3 common in transformed.Intersect(aligned))
+                        using var intersection = transformed.Intersect(aligned).GetEnumerator();
+                        while (intersection.MoveNext())
                         {
                             if (++count == CommonBeacons)
                             {

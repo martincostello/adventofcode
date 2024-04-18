@@ -38,14 +38,7 @@ public sealed class Day05 : Puzzle
         {
             int offset = jumps[index];
 
-            if (version == 2 && offset >= 3)
-            {
-                jumps[index] = offset - 1;
-            }
-            else
-            {
-                jumps[index] = offset + 1;
-            }
+            jumps[index] = version == 2 && offset >= 3 ? offset - 1 : offset + 1;
 
             index += offset;
             counter++;

@@ -86,8 +86,8 @@ public sealed class Day20 : Puzzle
         // Count the number of IPs not in the deny-list ranges
         for (int i = 0; i < ranges.Count - 1; i++)
         {
-            var (start1, end1) = ranges[i];
-            var (start2, end2) = ranges[i + 1];
+            var (_, end1) = ranges[i];
+            var (start2, _) = ranges[i + 1];
 
             count += start2 - end1 - 1;
 
@@ -102,7 +102,7 @@ public sealed class Day20 : Puzzle
 
         // Add on the remaining IPs if the last deny-list
         // does not run to the maximum allowed IP address.
-        var (start, end) = ranges[^1];
+        var (_, end) = ranges[^1];
 
         if (end != maxValue)
         {

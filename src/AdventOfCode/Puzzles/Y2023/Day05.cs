@@ -40,8 +40,6 @@ public sealed class Day05 : Puzzle
 
         if (useRanges)
         {
-            var lengths = new List<long>(seeds.Count / 2);
-
             for (int i = 0; i < seeds.Count; i++)
             {
                 long seed = seeds[i].Item1;

@@ -336,6 +336,7 @@ public sealed class Day20 : Puzzle
 
                 if (aligned)
                 {
+                    aligned = false;
                     break;
                 }
 

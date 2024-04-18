@@ -57,10 +57,12 @@ public sealed class Day16 : Puzzle
     {
         string? result = null;
 
+        var builder = new StringBuilder();
+
         while (result is null)
         {
             int length = data.Count - 1;
-            var builder = new StringBuilder(length / 2);
+            builder.EnsureCapacity(length / 2);
 
             for (int i = 0; i < length; i += 2)
             {
@@ -78,6 +80,8 @@ public sealed class Day16 : Puzzle
             {
                 data = new List<char>(checksum);
             }
+
+            builder.Clear();
         }
 
         return result;

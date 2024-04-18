@@ -40,14 +40,11 @@ public sealed class Day25 : Puzzle
                         stop = false;
                     }
                 }
-                else if (p == 1)
+                else if (p == 1 && lastSignal == 0)
                 {
-                    if (lastSignal == 0)
-                    {
-                        // Alternation continues
-                        lastSignal = 1;
-                        stop = false;
-                    }
+                    // Alternation continues
+                    lastSignal = 1;
+                    stop = false;
                 }
 
                 if (!stop && iterations++ > 100)

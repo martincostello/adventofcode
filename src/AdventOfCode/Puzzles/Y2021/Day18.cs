@@ -125,17 +125,7 @@ public sealed class Day18 : Puzzle
     }
 
     private static List<SnailPair> ParseRaw(IList<string> numbers)
-    {
-        var pairs = new List<SnailPair>(numbers.Count);
-
-        foreach (string number in numbers)
-        {
-            SnailPair parsed = ParseRaw(number);
-            pairs.Add(parsed);
-        }
-
-        return pairs;
-    }
+        => numbers.Select(ParseRaw).ToList();
 
     private static SnailPair ParseRaw(string number)
     {
@@ -357,20 +347,16 @@ public sealed class Day18 : Puzzle
                     return true;
                 }
 
-                if (pair.Left is SnailPair leftPair)
+                if (pair.Left is SnailPair leftPair &&
+                    FindExplode(leftPair, depth + 1, out value))
                 {
-                    if (FindExplode(leftPair, depth + 1, out value))
-                    {
-                        return true;
-                    }
+                    return true;
                 }
 
-                if (pair.Right is SnailPair rightPair)
+                if (pair.Right is SnailPair rightPair &&
+                    FindExplode(rightPair, depth + 1, out value))
                 {
-                    if (FindExplode(rightPair, depth + 1, out value))
-                    {
-                        return true;
-                    }
+                    return true;
                 }
 
                 value = null;

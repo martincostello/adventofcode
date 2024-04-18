@@ -30,7 +30,6 @@ public sealed class Day17 : Puzzle
     public static (int MaxApogee, int Count) Calculate(string target)
     {
         Rectangle targetArea = GetTargetArea(target);
-        Point extent = new(targetArea.Right, targetArea.Top);
 
         var apogees = new List<int>();
 
