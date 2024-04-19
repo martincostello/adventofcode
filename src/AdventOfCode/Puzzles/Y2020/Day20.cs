@@ -25,18 +25,20 @@ public sealed class Day20 : Puzzle
     /// </summary>
     /// <param name="input">The input data containing the description of the tiles of the image.</param>
     /// <param name="logger">The logger to use.</param>
+    /// <param name="cancellationToken">The <see cref="CancellationToken"/> to use.</param>
     /// <returns>
     /// The product of the Ids of the four corner tiles and the roughness of the water and the final image.
     /// </returns>
     public static (long CornerIdProduct, int Roughness, string Visualization) GetCornerTileIdProduct(
         IList<string> input,
-        ILogger logger)
+        ILogger logger,
+        CancellationToken cancellationToken)
     {
         var tiles = ParseTiles(input);
 
         (List<Tile> corners, List<Tile> edges, List<Tile> others) = Geometry(tiles.Values);
 
-        Tile[,] image = BuildImage(corners, edges, others);
+        Tile[,] image = BuildImage(corners, edges, others, cancellationToken);
 
         int width = image.GetLength(0);
         int extent = width - 1;
@@ -221,7 +223,8 @@ public sealed class Day20 : Puzzle
         static Tile[,] BuildImage(
             List<Tile> corners,
             List<Tile> edges,
-            List<Tile> others)
+            List<Tile> others,
+            CancellationToken cancellationToken)
         {
             int width = (int)Math.Sqrt(corners.Count + edges.Count + others.Count);
 
@@ -307,12 +310,11 @@ public sealed class Day20 : Puzzle
             }
 
             // Align the grid's edge tiles with each other
-            bool aligned;
             Tile topLeft = result[0, 0];
 
             do
             {
-                aligned = true;
+                bool aligned = true;
 
                 for (int i = 1; i < topRow.Count; i++)
                 {
@@ -336,13 +338,14 @@ public sealed class Day20 : Puzzle
 
                 if (aligned)
                 {
-                    aligned = false;
                     break;
                 }
 
                 topLeft.NextOrientation();
             }
-            while (!aligned);
+            while (!cancellationToken.IsCancellationRequested);
+
+            cancellationToken.ThrowIfCancellationRequested();
 
             // Fill and align the inner square(s)
             for (int y = 1; y < width - 1; y++)
@@ -457,7 +460,7 @@ public sealed class Day20 : Puzzle
     {
         var tiles = await ReadResourceAsLinesAsync(cancellationToken);
 
-        (long productOfCornerTiles, int waterRoughness, string image) = GetCornerTileIdProduct(tiles, Logger);
+        (long productOfCornerTiles, int waterRoughness, string image) = GetCornerTileIdProduct(tiles, Logger, cancellationToken);
 
         ProductOfCornerTiles = productOfCornerTiles;
         WaterRoughness = waterRoughness;
