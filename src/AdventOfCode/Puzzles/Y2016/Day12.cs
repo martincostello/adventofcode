@@ -89,23 +89,13 @@ public sealed class Day12 : Puzzle
                         string otherInstruction = instructions[target];
                         split = otherInstruction.Split(' ');
 
-                        string toggled;
-
-                        if (split.Length == 2)
-                        {
-                            toggled = string.Equals(split[0], "inc", StringComparison.OrdinalIgnoreCase) ?
+                        instructions[target] = split.Length == 2 ?
+                            string.Equals(split[0], "inc", StringComparison.OrdinalIgnoreCase) ?
                                 $"dec {split[1]}" :
-                                $"inc {split[1]}";
-                        }
-                        else
-                        {
-                            toggled =
-                                string.Equals(split[0], "jnz", StringComparison.OrdinalIgnoreCase) ?
+                                $"inc {split[1]}" :
+                            string.Equals(split[0], "jnz", StringComparison.OrdinalIgnoreCase) ?
                                 $"cpy {split[1]} {split[2]}" :
                                 $"jnz {split[1]} {split[2]}";
-                        }
-
-                        instructions[target] = toggled;
                     }
 
                     break;

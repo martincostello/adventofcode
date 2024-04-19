@@ -192,7 +192,7 @@ public sealed class Day13 : Puzzle
         {
             if (Value is { } value)
             {
-                return value.GetHashCode();
+                return value;
             }
             else
             {

@@ -56,16 +56,7 @@ internal static class DictionaryExtensions
     /// <param name="decrement">The value to decrement by.</param>
     public static void AddOrDecrement<TKey, TValue>(this IDictionary<TKey, TValue> dictionary, TKey key, TValue value, TValue decrement)
         where TValue : INumber<TValue>
-    {
-        if (dictionary.TryGetValue(key, out var current))
-        {
-            dictionary[key] = current - decrement;
-        }
-        else
-        {
-            dictionary[key] = value;
-        }
-    }
+        => dictionary[key] = dictionary.TryGetValue(key, out var current) ? current - decrement : value;
 
     /// <summary>
     /// Gets the reference with the specified key, adding it if not already present.

@@ -122,7 +122,7 @@ public sealed class Day20Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         ];
 
         // Act
-        (long actualCornerIdProduct, int actualRoughness, _) = Day20.GetCornerTileIdProduct(input, Logger);
+        (long actualCornerIdProduct, int actualRoughness, _) = Day20.GetCornerTileIdProduct(input, Logger, CancellationToken.None);
 
         // Assert
         actualCornerIdProduct.ShouldBe(20899048083289L);
