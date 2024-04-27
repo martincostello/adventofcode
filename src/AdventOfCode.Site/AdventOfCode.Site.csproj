@@ -13,9 +13,29 @@
     <TypeScriptCompileBlocked>true</TypeScriptCompileBlocked>
     <TypeScriptToolsVersion>latest</TypeScriptToolsVersion>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(RuntimeIdentifier)' == 'linux-arm64' ">
+  <PropertyGroup Condition=" '$(PublishForAWSLambda)' == 'true' ">
     <AssemblyName>bootstrap</AssemblyName>
+    <PublishReadyToRun>true</PublishReadyToRun>
+    <RuntimeIdentifier>linux-arm64</RuntimeIdentifier>
+    <SelfContained>true</SelfContained>
+    <TieredCompilation>false</TieredCompilation>
   </PropertyGroup>
+  <PropertyGroup Condition=" '$(CI)' == 'true' ">
+    <EnableSdkContainerSupport>true</EnableSdkContainerSupport>
+    <ContainerBaseImage>mcr.microsoft.com/dotnet/nightly/runtime-deps:8.0-noble-chiseled-extra</ContainerBaseImage>
+    <ContainerImageTags>github-$(GITHUB_RUN_NUMBER);latest</ContainerImageTags>
+    <ContainerRegistry>$(GITHUB_REPOSITORY_OWNER).azurecr.io</ContainerRegistry>
+    <ContainerRepository>$(GITHUB_REPOSITORY)</ContainerRepository>
+    <ContainerTitle>$(GITHUB_REPOSITORY)</ContainerTitle>
+    <ContainerVendor>$(GITHUB_REPOSITORY_OWNER)</ContainerVendor>
+    <ContainerVersion>$(GITHUB_SHA)</ContainerVersion>
+    <PublishSelfContained>true</PublishSelfContained>
+  </PropertyGroup>
+  <ItemGroup Condition=" '$(CI)' == 'true' ">
+    <ContainerLabel Include="com.docker.extension.changelog" Value="$(GITHUB_SERVER_URL)/$(GITHUB_REPOSITORY)/commit/$(GITHUB_SHA)" />
+    <ContainerLabel Include="com.docker.extension.publisher-url" Value="$(GITHUB_SERVER_URL)/$(GITHUB_REPOSITORY_OWNER)" />
+    <ContainerPort Include="8080" Type="tcp" />
+  </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Amazon.Lambda.AspNetCoreServer.Hosting" />
     <PackageReference Include="Amazon.Lambda.RuntimeSupport" />
@@ -43,10 +63,10 @@
     <Exec Command="npm install" Condition=" !Exists('$(MSBuildThisFileDirectory)\node_modules') AND '$(GITHUB_ACTIONS)' == '' " />
     <Exec Command="npm run publish" Condition=" !Exists('$(MSBuildThisFileDirectory)\wwwroot\static\js\main.js') " />
   </Target>
-  <ItemGroup Condition=" '$(RuntimeIdentifier)' == 'linux-arm64' ">
+  <ItemGroup Condition=" '$(PublishForAWSLambda)' == 'true' ">
     <PackageReference Include="Microsoft.ICU.ICU4C.Runtime" />
   </ItemGroup>
-  <Target Name="SetAppLocalIcuVersion" BeforeTargets="Compile" Condition=" '$(RuntimeIdentifier)' == 'linux-arm64' ">
+  <Target Name="SetAppLocalIcuVersion" BeforeTargets="Compile" Condition=" '$(PublishForAWSLambda)' == 'true' ">
     <ItemGroup>
       <RuntimeHostConfigurationOption Condition=" '%(PackageVersion.Identity)' == 'Microsoft.ICU.ICU4C.Runtime' " Include="System.Globalization.AppLocalIcu" Value="%(PackageVersion.Version)" />
     </ItemGroup>
