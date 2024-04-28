@@ -111,15 +111,7 @@ if ($SkipPublish -eq $false) {
     $projectPath = (Join-Path $solutionPath "src" "AdventOfCode.Site")
     $projectFile = Join-Path $projectPath "AdventOfCode.Site.csproj"
 
-    $additionalArgs = @()
-
-    if (![string]::IsNullOrEmpty($Runtime)) {
-        $additionalArgs += "--self-contained"
-        $additionalArgs += "--runtime"
-        $additionalArgs += $Runtime
-    }
-
-    & $dotnet publish $projectFile $additionalArgs
+    & $dotnet publish $projectFile
 
     if ($LASTEXITCODE -ne 0) {
         throw "dotnet publish failed with exit code $LASTEXITCODE"
