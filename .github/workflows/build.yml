@@ -17,8 +17,8 @@ on:
 env:
   AWS_CLOUDFORMATION_STACK: adventofcode
   AWS_REGION: eu-west-2
-  AWS_URL_PROD: https://aoc.martincostello.com/
-  AZURE_URL_PROD: https://adventofcode-martincostello.azurewebsites.net/
+  AWS_URL_PROD: https://aoc.martincostello.com
+  AZURE_URL_PROD: https://adventofcode-martincostello.azurewebsites.net
   AZURE_WEBAPP_NAME: adventofcode-martincostello
   CONTAINER_REGISTRY: '${{ github.repository_owner }}.azurecr.io'
   DOTNET_CLI_TELEMETRY_OPTOUT: true
