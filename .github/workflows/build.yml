@@ -221,11 +221,6 @@ jobs:
 
     steps:
 
-    - name: Download artifacts
-      uses: actions/download-artifact@v4
-      with:
-        name: webapp
-
     - name: Azure log in
       uses: azure/login@v2
       with:
