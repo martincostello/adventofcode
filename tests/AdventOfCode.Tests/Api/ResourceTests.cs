@@ -16,6 +16,7 @@ public class ResourceTests(HttpServerFixture fixture, ITestOutputHelper outputHe
     [InlineData("humans.txt", MediaTypeNames.Text.Plain)]
     [InlineData("manifest.webmanifest", "application/manifest+json")]
     [InlineData("robots.txt", MediaTypeNames.Text.Plain)]
+    [InlineData("robots933456.txt", MediaTypeNames.Text.Plain)]
     [InlineData("static/js/main.js", "text/javascript")]
     [InlineData("static/js/main.js.map", MediaTypeNames.Text.Plain)]
     [InlineData("version", MediaTypeNames.Application.Json)]
