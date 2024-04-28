@@ -19,7 +19,7 @@ env:
   AWS_REGION: eu-west-2
   AWS_URL_PROD: https://aoc.martincostello.com/
   AZURE_URL_PROD: https://advent--of--code.azurewebsites.net/
-  AZURE_WEBAPP_NAME: advent--of--code
+  AZURE_WEBAPP_NAME: adventofcode-martincostello
   CONTAINER_REGISTRY: '${{ github.repository_owner }}.azurecr.io'
   DOTNET_CLI_TELEMETRY_OPTOUT: true
   DOTNET_GENERATE_ASPNET_CERTIFICATE: false
@@ -29,7 +29,6 @@ env:
   DOTNET_SYSTEM_CONSOLE_ALLOW_ANSI_COLOR_REDIRECTION: 1
   FORCE_COLOR: 1
   NUGET_XMLDOC_MODE: skip
-  PUBLISH_RUNTIME: win-x64
   TERM: xterm
 
 permissions:
@@ -51,10 +50,10 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        include:
-          - os: macos-latest
-          - os: ubuntu-latest
-          - os: windows-latest
+        os:
+          - macos-latest
+          - ubuntu-latest
+          - windows-latest
 
     steps:
 
@@ -104,19 +103,11 @@ jobs:
 
     - name: Build, test and publish
       shell: pwsh
-      run: ./build.ps1 -Runtime "${env:PUBLISH_RUNTIME}"
-
-    - name: Publish web app
-      uses: actions/upload-artifact@v4
-      if: runner.os == 'Windows' && success()
-      with:
-        name: webapp
-        path: ./artifacts/publish/AdventOfCode.Site/release_${{ env.PUBLISH_RUNTIME }}
-        if-no-files-found: error
+      run: ./build.ps1
 
     - name: Publish lambda
       uses: actions/upload-artifact@v4
-      if: runner.os == 'Windows' && success()
+      if: runner.os == 'Linux' && success()
       with:
         name: lambda
         path: ./artifacts/publish/lambda.zip
@@ -147,22 +138,26 @@ jobs:
         if-no-files-found: ignore
 
     - name: Docker log in
-      uses: azure/docker-login@v1
+      uses: docker/login-action@v3
       if: env.PUBLISH_CONTAINER == 'true'
       with:
-        login-server: ${{ env.CONTAINER_REGISTRY }}
+        registry: ${{ env.CONTAINER_REGISTRY }}
         username: ${{ secrets.ACR_REGISTRY_USERNAME }}
         password: ${{ secrets.ACR_REGISTRY_PASSWORD }}
 
     - name: Publish container
       id: publish-container
-      if: env.PUBLISH_CONTAINER == 'true'
+      if: runner.os == 'Linux'
       shell: pwsh
+      env:
+        ContainerRegistry: ${{ env.PUBLISH_CONTAINER == 'true' && env.CONTAINER_REGISTRY || '' }}
       run: |
         dotnet publish ./src/AdventOfCode.Site --arch x64 --os linux -p:PublishProfile=DefaultContainer
-        $containerImage = "${env:CONTAINER_REGISTRY}/${env:GITHUB_REPOSITORY}"
-        "container-image=${containerImage}" >> "${env:GITHUB_OUTPUT}"
-        "container-tag=${containerImage}:github-${env:GITHUB_RUN_NUMBER}" >> "${env:GITHUB_OUTPUT}"
+        if (-Not [string]::IsNullOrWhiteSpace(${env:CONTAINER_REGISTRY})) {
+          $containerImage = "${env:CONTAINER_REGISTRY}/${env:GITHUB_REPOSITORY}"
+          "container-image=${containerImage}" >> "${env:GITHUB_OUTPUT}"
+          "container-tag=${containerImage}:github-${env:GITHUB_RUN_NUMBER}" >> "${env:GITHUB_OUTPUT}"
+        }
 
     - name: Get Amazon Lambda tools version
       id: get-lambda-tools-version
@@ -214,7 +209,7 @@ jobs:
     if: github.event.repository.fork == false && github.ref_name == github.event.repository.default_branch
     name: deploy-production
     needs: [ build, typescript ]
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
     concurrency: production_environment
 
     environment:
@@ -238,17 +233,11 @@ jobs:
         tenant-id: ${{ secrets.AZURE_TENANT_ID }}
         subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
-    - name: Deploy application to Azure App Service
-      uses: azure/webapps-deploy@v3
-      id: deploy_production
-      with:
-        app-name: ${{ env.AZURE_WEBAPP_NAME }}
-
     - name: Deploy container to Azure App Service
       uses: azure/webapps-deploy@v3
       if: needs.build.outputs.container-tag != ''
       with:
-        app-name: 'adventofcode-martincostello'
+        app-name: ${{ env.AZURE_WEBAPP_NAME }}
         images: ${{ needs.build.outputs.container-tag }}
 
     - name: Check application health
