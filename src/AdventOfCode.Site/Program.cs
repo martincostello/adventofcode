@@ -3,7 +3,9 @@
 
 using System.IO.Compression;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
+using System.Text.Json.Nodes;
 using MartinCostello.AdventOfCode;
 using MartinCostello.AdventOfCode.Site;
 using Microsoft.AspNetCore.ResponseCompression;
@@ -137,18 +139,30 @@ if (app.Environment.IsDevelopment())
 
 app.MapGet("/version", () =>
 {
-    var result = new ApplicationInfo()
+    return new JsonObject()
     {
-        ApplicationVersion = GetVersion<ApplicationJsonSerializerContext>(),
-        FrameworkDescription = RuntimeInformation.FrameworkDescription,
-        OperatingSystem = RuntimeInformation.OSDescription,
-        OperatingSystemArchitecture = RuntimeInformation.OSArchitecture.ToString(),
-        ProcessArchitecture = RuntimeInformation.ProcessArchitecture.ToString(),
-        DotNetRuntimeVersion = GetVersion<object>(),
-        AspNetCoreVersion = GetVersion<RequestDelegateFactoryOptions>(),
+        ["applicationVersion"] = GitMetadata.Version,
+        ["frameworkDescription"] = RuntimeInformation.FrameworkDescription,
+        ["operatingSystem"] = new JsonObject()
+        {
+            ["description"] = RuntimeInformation.OSDescription,
+            ["architecture"] = RuntimeInformation.OSArchitecture.ToString(),
+            ["version"] = Environment.OSVersion.VersionString,
+            ["is64Bit"] = Environment.Is64BitOperatingSystem,
+        },
+        ["process"] = new JsonObject()
+        {
+            ["architecture"] = RuntimeInformation.ProcessArchitecture.ToString(),
+            ["is64BitProcess"] = Environment.Is64BitProcess,
+            ["isNativeAoT"] = !RuntimeFeature.IsDynamicCodeSupported,
+            ["isPrivilegedProcess"] = Environment.IsPrivilegedProcess,
+        },
+        ["dotnetVersions"] = new JsonObject()
+        {
+            ["runtime"] = GetVersion<object>(),
+            ["aspNetCore"] = GetVersion<HttpContext>(),
+        },
     };
-
-    return Results.Json(result, ApplicationJsonSerializerContext.Default.ApplicationInfo);
 }).AllowAnonymous();
 
 app.Run();

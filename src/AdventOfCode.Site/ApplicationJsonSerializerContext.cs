@@ -2,6 +2,7 @@
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 using System.Diagnostics.CodeAnalysis;
+using System.Text.Json.Nodes;
 using System.Text.Json.Serialization;
 
 namespace MartinCostello.AdventOfCode.Site;
@@ -12,9 +13,9 @@ namespace MartinCostello.AdventOfCode.Site;
 [JsonSerializable(typeof(string))]
 [JsonSerializable(typeof(uint))]
 [JsonSerializable(typeof(ulong))]
+[JsonSerializable(typeof(JsonObject))]
 [JsonSerializable(typeof(List<PuzzlesApi.PuzzleMetadata>))]
 [JsonSerializable(typeof(PuzzlesApi.PuzzleSolution))]
-[JsonSerializable(typeof(ApplicationInfo))]
 [JsonSourceGenerationOptions(PropertyNamingPolicy = JsonKnownNamingPolicy.CamelCase)]
 internal sealed partial class ApplicationJsonSerializerContext : JsonSerializerContext
 {
