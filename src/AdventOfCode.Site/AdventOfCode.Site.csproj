@@ -9,6 +9,7 @@
     <InvariantGlobalization>false</InvariantGlobalization>
     <NoWarn>$(NoWarn);CA2007</NoWarn>
     <OutputType>Exe</OutputType>
+    <PublishSelfContained>true</PublishSelfContained>
     <RootNamespace>MartinCostello.AdventOfCode.Site</RootNamespace>
     <TargetFramework>net8.0</TargetFramework>
     <TypeScriptCompileBlocked>true</TypeScriptCompileBlocked>
@@ -25,24 +26,7 @@
     <!-- TODO Remove if https://github.com/dotnet/sdk/issues/40500 implemented or when no longer only in nightly -->
     <ContainerBaseImage>mcr.microsoft.com/dotnet/nightly/runtime-deps:8.0-noble-chiseled-extra</ContainerBaseImage>
     <ContainerFamily>noble-chiseled-extra</ContainerFamily>
-    <EnableSdkContainerSupport>true</EnableSdkContainerSupport>
-    <PublishSelfContained>true</PublishSelfContained>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(CI)' == 'true' ">
-    <ContainerImageTags>github-$(GITHUB_RUN_NUMBER)</ContainerImageTags>
-    <ContainerImageTags Condition=" '$(GITHUB_HEAD_REF)' == '' ">$(ContainerImageTags);latest</ContainerImageTags>
-    <ContainerRepository>$(GITHUB_REPOSITORY)</ContainerRepository>
-    <ContainerTitle>$(GITHUB_REPOSITORY)</ContainerTitle>
-    <ContainerVendor>$(GITHUB_REPOSITORY_OWNER)</ContainerVendor>
-    <ContainerVersion>$(GITHUB_SHA)</ContainerVersion>
-  </PropertyGroup>
-  <ItemGroup>
-    <ContainerPort Include="8080" Type="tcp" />
-  </ItemGroup>
-  <ItemGroup Condition=" '$(CI)' == 'true' ">
-    <ContainerLabel Include="com.docker.extension.changelog" Value="$(GITHUB_SERVER_URL)/$(GITHUB_REPOSITORY)/commit/$(GITHUB_SHA)" />
-    <ContainerLabel Include="com.docker.extension.publisher-url" Value="$(GITHUB_SERVER_URL)/$(GITHUB_REPOSITORY_OWNER)" />
-  </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Amazon.Lambda.AspNetCoreServer.Hosting" />
     <PackageReference Include="Amazon.Lambda.RuntimeSupport" />
@@ -58,6 +42,7 @@
     </AssemblyAttribute>
   </ItemGroup>
   <ItemGroup>
+    <ContainerPort Include="8080" Type="tcp" />
     <Content Update="coverage\**;package.json;package-lock.json;tsconfig.json" CopyToPublishDirectory="Never" />
     <None Remove="scripts\ts\**\*.ts" />
     <TypeScriptCompile Include="scripts\ts\**\*.ts" />
