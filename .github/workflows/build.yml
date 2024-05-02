@@ -46,6 +46,11 @@ jobs:
       container-tag: ${{ steps.publish-container.outputs.container-tag }}
       lambda-tools-version: ${{ steps.get-lambda-tools-version.outputs.lambda-tools-version }}
 
+    permissions:
+      attestations: write
+      contents: read
+      id-token: write
+
     strategy:
       fail-fast: false
       matrix:
@@ -112,6 +117,31 @@ jobs:
         path: ./artifacts/publish/lambda.zip
         if-no-files-found: error
 
+    - name: Docker log in
+      uses: docker/login-action@v3
+      if: env.PUBLISH_CONTAINER == 'true'
+      with:
+        registry: ${{ env.CONTAINER_REGISTRY }}
+        username: ${{ secrets.ACR_REGISTRY_USERNAME }}
+        password: ${{ secrets.ACR_REGISTRY_PASSWORD }}
+
+    - name: Publish container
+      id: publish-container
+      if: runner.os == 'Linux'
+      shell: pwsh
+      env:
+        ContainerRegistry: ${{ env.PUBLISH_CONTAINER == 'true' && env.CONTAINER_REGISTRY || '' }}
+      run: |
+        dotnet publish ./src/AdventOfCode.Site --arch x64 --os linux -p:PublishProfile=DefaultContainer
+
+    - name: Attest container image
+      uses: actions/attest-build-provenance@v1
+      if: steps.publish-container.outputs.container-digest != ''
+      with:
+        push-to-registry: true
+        subject-digest: ${{ steps.publish-container.outputs.container-digest }}
+        subject-name: ${{ steps.publish-container.outputs.container-image }}
+
     - name: Publish screenshots
       uses: actions/upload-artifact@v4
       if: ${{ !cancelled() }}
@@ -135,27 +165,6 @@ jobs:
         name: videos-${{ matrix.os }}
         path: ./artifacts/videos/*
         if-no-files-found: ignore
-
-    - name: Docker log in
-      uses: docker/login-action@v3
-      if: env.PUBLISH_CONTAINER == 'true'
-      with:
-        registry: ${{ env.CONTAINER_REGISTRY }}
-        username: ${{ secrets.ACR_REGISTRY_USERNAME }}
-        password: ${{ secrets.ACR_REGISTRY_PASSWORD }}
-
-    - name: Publish container
-      id: publish-container
-      if: runner.os == 'Linux'
-      shell: pwsh
-      env:
-        ContainerRegistry: ${{ env.PUBLISH_CONTAINER == 'true' && env.CONTAINER_REGISTRY || '' }}
-      run: |
-        dotnet publish ./src/AdventOfCode.Site --arch x64 --os linux -p:PublishProfile=DefaultContainer
-        if (-Not [string]::IsNullOrWhiteSpace(${env:CONTAINER_REGISTRY})) {
-          $containerTag = "${env:CONTAINER_REGISTRY}/${env:GITHUB_REPOSITORY}:github-${env:GITHUB_RUN_NUMBER}".ToLowerInvariant()
-          "container-tag=${containerTag}" >> "${env:GITHUB_OUTPUT}"
-        }
 
     - name: Get Amazon Lambda tools version
       id: get-lambda-tools-version
