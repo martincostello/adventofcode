@@ -1,6 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
   <PropertyGroup>
     <AWSProjectType>Lambda</AWSProjectType>
+    <ContainerFamily>noble-chiseled-extra</ContainerFamily>
     <Description>Web app for solving Advent of Code.</Description>
     <EnableConfigurationBindingGenerator>true</EnableConfigurationBindingGenerator>
     <EnableRequestDelegateGenerator>true</EnableRequestDelegateGenerator>
@@ -20,11 +21,6 @@
     <RuntimeIdentifier>linux-arm64</RuntimeIdentifier>
     <SelfContained>true</SelfContained>
     <TieredCompilation>false</TieredCompilation>
-  </PropertyGroup>
-  <PropertyGroup>
-    <!-- TODO Remove if https://github.com/dotnet/sdk/issues/40500 implemented or when no longer only in nightly -->
-    <ContainerBaseImage>mcr.microsoft.com/dotnet/nightly/runtime-deps:8.0-noble-chiseled-extra</ContainerBaseImage>
-    <ContainerFamily>noble-chiseled-extra</ContainerFamily>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Amazon.Lambda.AspNetCoreServer.Hosting" />
