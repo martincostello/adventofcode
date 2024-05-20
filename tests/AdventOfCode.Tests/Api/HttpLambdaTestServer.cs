@@ -17,6 +17,8 @@ internal sealed class HttpLambdaTestServer()
     private bool _disposed;
     private IWebHost? _webHost;
 
+    public CancellationToken CancellationToken => _cts.Token;
+
     public ITestOutputHelper? OutputHelper { get; set; }
 
     public async Task DisposeAsync()
