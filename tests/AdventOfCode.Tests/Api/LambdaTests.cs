@@ -254,6 +254,9 @@ public class LambdaTests : IAsyncLifetime, IDisposable
         LambdaTestContext context = await _server.EnqueueAsync(json);
 
         using var cts = GetCancellationTokenSourceForResponseAvailable(context);
+        using var combined = CancellationTokenSource.CreateLinkedTokenSource(cts.Token, _server.CancellationToken);
+
+        combined.CancelAfter(LambdaTestTimeout);
 
         // Act
         _ = Task.Factory.StartNew(
@@ -268,12 +271,12 @@ public class LambdaTests : IAsyncLifetime, IDisposable
                     // The Lambda runtime server was shut down
                 }
             },
-            cts.Token,
+            combined.Token,
             TaskCreationOptions.None,
             TaskScheduler.Default);
 
         // Assert
-        await context.Response.WaitToReadAsync(cts.IsCancellationRequested ? default : cts.Token);
+        await context.Response.WaitToReadAsync(combined.Token);
 
         context.Response.TryRead(out LambdaTestResponse? response).ShouldBeTrue();
         response.IsSuccessful.ShouldBeTrue($"Failed to process request: {await response.ReadAsStringAsync()}");
