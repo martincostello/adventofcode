@@ -25,7 +25,16 @@ internal sealed class HttpLambdaTestServer()
     {
         if (_webHost is not null)
         {
-            await _webHost.StopAsync();
+            using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(2));
+
+            try
+            {
+                await _webHost.StopAsync(cts.Token);
+            }
+            catch (OperationCanceledException)
+            {
+                // Took too long
+            }
         }
 
         Dispose();
