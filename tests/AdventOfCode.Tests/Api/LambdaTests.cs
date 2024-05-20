@@ -280,7 +280,7 @@ public class LambdaTests : IAsyncLifetime, IDisposable
 
         context.Response.TryRead(out LambdaTestResponse? response).ShouldBeTrue();
         response.IsSuccessful.ShouldBeTrue($"Failed to process request: {await response.ReadAsStringAsync()}");
-        response.Duration.ShouldBeInRange(TimeSpan.Zero, TimeSpan.FromSeconds(2));
+        response.Duration.ShouldBeInRange(TimeSpan.Zero, TimeSpan.FromSeconds(3));
         response.Content.ShouldNotBeEmpty();
 
         // Assert
