@@ -12,7 +12,25 @@ namespace MartinCostello.AdventOfCode.Site;
 /// <param name="next">The next request delegate in the pipeline.</param>
 public sealed class CustomHttpHeadersMiddleware(RequestDelegate next)
 {
-    private static readonly CompositeFormat ContentSecurityPolicyTemplate = CreateContentSecurityPolicyTemplate();
+    private static readonly CompositeFormat ContentSecurityPolicyTemplate = CompositeFormat.Parse(string.Join(
+        ';',
+        "default-src 'self'",
+        "script-src 'self' 'nonce-{0}' cdnjs.cloudflare.com",
+        "script-src-elem 'self' 'nonce-{0}' cdnjs.cloudflare.com",
+        "style-src 'self' 'nonce-{0}' cdnjs.cloudflare.com",
+        "style-src-elem 'self' 'nonce-{0}' cdnjs.cloudflare.com",
+        "img-src 'self' data:",
+        "font-src 'self' cdnjs.cloudflare.com",
+        "connect-src 'self'",
+        "media-src 'none'",
+        "object-src 'none'",
+        "child-src 'self'",
+        "frame-ancestors 'none'",
+        "form-action 'self'",
+        "block-all-mixed-content",
+        "base-uri 'self'",
+        "manifest-src 'self'",
+        "upgrade-insecure-requests"));
 
     /// <summary>
     /// Invokes the specified middleware.
@@ -65,30 +83,4 @@ public sealed class CustomHttpHeadersMiddleware(RequestDelegate next)
 
     private static string ContentSecurityPolicy(string nonce)
         => string.Format(CultureInfo.InvariantCulture, ContentSecurityPolicyTemplate, nonce);
-
-    private static CompositeFormat CreateContentSecurityPolicyTemplate()
-    {
-        ReadOnlySpan<string?> policies =
-        [
-            "default-src 'self'",
-            "script-src 'self' 'nonce-{0}' cdnjs.cloudflare.com",
-            "script-src-elem 'self' 'nonce-{0}' cdnjs.cloudflare.com",
-            "style-src 'self' 'nonce-{0}' cdnjs.cloudflare.com",
-            "style-src-elem 'self' 'nonce-{0}' cdnjs.cloudflare.com",
-            "img-src 'self' data:",
-            "font-src 'self' cdnjs.cloudflare.com",
-            "connect-src 'self'",
-            "media-src 'none'",
-            "object-src 'none'",
-            "child-src 'self'",
-            "frame-ancestors 'none'",
-            "form-action 'self'",
-            "block-all-mixed-content",
-            "base-uri 'self'",
-            "manifest-src 'self'",
-            "upgrade-insecure-requests",
-        ];
-
-        return CompositeFormat.Parse(string.Join(';', policies));
-    }
 }
