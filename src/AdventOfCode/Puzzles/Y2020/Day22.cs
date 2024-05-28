@@ -29,7 +29,7 @@ public sealed class Day22 : Puzzle
     /// </returns>
     public static int PlayCombat(IList<string> startingDeck, bool recursive)
     {
-        // With help from https://github.com/DanaL/AdventOfCode/blob/master/2020/Day22.cs for part 2
+        // With help from https://github.com/DanaL/AdventOfCode/blob/main/2020/Day22.cs for part 2
         int index = startingDeck.IndexOf(string.Empty);
 
         var deck1 = startingDeck

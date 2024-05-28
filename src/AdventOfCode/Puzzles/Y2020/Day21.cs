@@ -33,7 +33,7 @@ public sealed class Day21 : Puzzle
         IList<string> foods,
         CancellationToken cancellationToken = default)
     {
-        // Based on https://github.com/DanaL/AdventOfCode/blob/master/2020/Day21.cs
+        // Based on https://github.com/DanaL/AdventOfCode/blob/main/2020/Day21.cs
         var parsedFoods = new (string[] Ingredients, string[] Allergen)[foods.Count];
 
         for (int i = 0; i < foods.Count; i++)
