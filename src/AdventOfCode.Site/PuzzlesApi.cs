@@ -83,22 +83,22 @@ internal static partial class PuzzlesApi
             return Results.Problem("This puzzle cannot be solved.", statusCode: StatusCodes.Status403Forbidden);
         }
 
-        if (metadata.RequiresData)
-        {
-            if (resource is null)
-            {
-                return Results.Problem("No puzzle resource provided.", statusCode: StatusCodes.Status400BadRequest);
-            }
-
-            puzzle.Resource = resource.OpenReadStream();
-        }
-
-        // HACK Manually read the form due to Request Delegate Generator not being able to bind to a
-        // `[FromForm] string[]?` from .NET 9 preview.5. See https://github.com/dotnet/aspnetcore/issues/55840.
         string[] arguments = [];
 
-        if (metadata.MinimumArguments > 0)
+        if (metadata.RequiresData || metadata.MinimumArguments > 0)
         {
+            if (metadata.RequiresData)
+            {
+                if (resource is null)
+                {
+                    return Results.Problem("No puzzle resource provided.", statusCode: StatusCodes.Status400BadRequest);
+                }
+
+                puzzle.Resource = resource.OpenReadStream();
+            }
+
+            // HACK Manually read the form due to Request Delegate Generator not being able to bind to a
+            // `[FromForm] string[]?` from .NET 9 preview.5. See https://github.com/dotnet/aspnetcore/issues/55840.
             var form = await request.ReadFormAsync(cancellationToken);
 
             if (form.TryGetValue("arguments", out var values))
