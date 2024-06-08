@@ -1,6 +1,7 @@
 ﻿// Copyright (c) Martin Costello, 2015. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
+using System.Diagnostics.CodeAnalysis;
 using System.IO.Compression;
 using System.Reflection;
 using System.Runtime.CompilerServices;
@@ -29,17 +30,7 @@ builder.Services.AddSingleton<ILogger, WebLogger>();
 builder.Services.AddSingleton<PuzzleFactory>();
 builder.Services.AddSingleton(TimeProvider.System);
 
-#pragma warning disable IL2026 // Assembly is trim rooted and all the types requested are available.
-var puzzles = typeof(Puzzle).Assembly
-    .GetTypes()
-    .Where((p) => p.IsAssignableTo(typeof(Puzzle)))
-    .Select((p) => p.GetCustomAttribute<PuzzleAttribute>())
-    .Where((p) => p is not null)
-    .Cast<PuzzleAttribute>()
-    .Where((p) => !p.IsHidden)
-    .Where((p) => !p.Unsolved)
-    .ToList();
-#pragma warning restore IL2026
+var puzzles = MartinCostello.AdventOfCode.Site.Program.GetPuzzles();
 
 foreach (var puzzle in puzzles)
 {
@@ -183,8 +174,33 @@ static string GetVersion<T>()
 
 namespace MartinCostello.AdventOfCode.Site
 {
+#pragma warning disable CA1052
     public partial class Program
+#pragma warning restore CA1052
     {
-        // Expose the Program class for use with WebApplicationFactory<T>
+        //// Expose the Program class for use with WebApplicationFactory<T>
+
+        /// <summary>
+        /// Gets all the puzzles available in the assembly.
+        /// </summary>
+        /// <returns>
+        /// The attributes for the puzzles which are available to be solved.
+        /// </returns>
+        [UnconditionalSuppressMessage(
+            "Trimming",
+            "IL2026:Members annotated with 'RequiresUnreferencedCodeAttribute' require dynamic access otherwise can break functionality when trimming application code",
+            Justification = "Assembly is trim rooted and all the types requested are available.")]
+        internal static List<PuzzleAttribute> GetPuzzles()
+        {
+            return typeof(Puzzle).Assembly
+                .GetTypes()
+                .Where((p) => p.IsAssignableTo(typeof(Puzzle)))
+                .Select((p) => p.GetCustomAttribute<PuzzleAttribute>())
+                .Where((p) => p is not null)
+                .Cast<PuzzleAttribute>()
+                .Where((p) => !p.IsHidden)
+                .Where((p) => !p.Unsolved)
+                .ToList();
+        }
     }
 }
