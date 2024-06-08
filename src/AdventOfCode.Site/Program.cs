@@ -78,7 +78,7 @@ builder.Services.Configure<StaticFileOptions>((options) =>
     };
 });
 
-if (builder.Environment.IsDevelopment())
+if (builder.Environment.IsDevelopment() && RuntimeFeature.IsDynamicCodeSupported)
 {
     builder.Services.AddEndpointsApiExplorer();
     builder.Services.AddOpenApiDocument((options) =>
@@ -125,7 +125,7 @@ app.UseResponseCompression();
 
 app.UseStaticFiles();
 
-if (app.Environment.IsDevelopment())
+if (app.Environment.IsDevelopment() && RuntimeFeature.IsDynamicCodeSupported)
 {
     app.UseOpenApi();
 }
