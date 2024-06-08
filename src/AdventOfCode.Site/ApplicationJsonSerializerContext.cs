@@ -4,6 +4,7 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Text.Json.Nodes;
 using System.Text.Json.Serialization;
+using Amazon.Lambda.APIGatewayEvents;
 
 namespace MartinCostello.AdventOfCode.Site;
 
@@ -13,6 +14,8 @@ namespace MartinCostello.AdventOfCode.Site;
 [JsonSerializable(typeof(string))]
 [JsonSerializable(typeof(uint))]
 [JsonSerializable(typeof(ulong))]
+[JsonSerializable(typeof(APIGatewayProxyRequest))]
+[JsonSerializable(typeof(APIGatewayProxyResponse))]
 [JsonSerializable(typeof(JsonObject))]
 [JsonSerializable(typeof(List<PuzzlesApi.PuzzleMetadata>))]
 [JsonSerializable(typeof(PuzzlesApi.PuzzleSolution))]

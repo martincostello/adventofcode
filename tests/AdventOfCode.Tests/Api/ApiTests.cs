@@ -322,7 +322,7 @@ public class ApiTests(HttpServerFixture fixture, ITestOutputHelper outputHelper)
     }
 
     [Fact]
-    public async Task Api_Returns_400_If_Puzzle_Content_Incorrect()
+    public async Task Api_Returns_415_If_Puzzle_Content_Incorrect()
     {
         // Arrange
         using var client = Fixture.CreateClient();
@@ -332,9 +332,9 @@ public class ApiTests(HttpServerFixture fixture, ITestOutputHelper outputHelper)
         using var response = await client.PostAsync("/api/puzzles/2015/1/solve", content);
 
         // Assert
-        response.StatusCode.ShouldBe(HttpStatusCode.BadRequest);
+        response.StatusCode.ShouldBe(HttpStatusCode.UnsupportedMediaType);
         response.Content.ShouldNotBeNull();
-        response.Content!.Headers.ContentLength.ShouldBe(0);
+        response.Content!.Headers.ContentLength.ShouldNotBe(0);
     }
 
     private static string GetPuzzleInput(int year, int day)

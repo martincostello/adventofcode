@@ -8,6 +8,8 @@ using System.Runtime.InteropServices;
 using System.Text.Json.Nodes;
 using MartinCostello.AdventOfCode;
 using MartinCostello.AdventOfCode.Site;
+using MartinCostello.AdventOfCode.Site.Slices;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.ResponseCompression;
 using ILogger = MartinCostello.AdventOfCode.ILogger;
 
@@ -27,6 +29,7 @@ builder.Services.AddSingleton<ILogger, WebLogger>();
 builder.Services.AddSingleton<PuzzleFactory>();
 builder.Services.AddSingleton(TimeProvider.System);
 
+#pragma warning disable IL2026 // Assembly is trim rooted and all the types requested are available.
 var puzzles = typeof(Puzzle).Assembly
     .GetTypes()
     .Where((p) => p.IsAssignableTo(typeof(Puzzle)))
@@ -36,6 +39,7 @@ var puzzles = typeof(Puzzle).Assembly
     .Where((p) => !p.IsHidden)
     .Where((p) => !p.Unsolved)
     .ToList();
+#pragma warning restore IL2026
 
 foreach (var puzzle in puzzles)
 {
@@ -74,8 +78,6 @@ builder.Services.Configure<StaticFileOptions>((options) =>
     };
 });
 
-builder.Services.AddRazorPages();
-
 if (builder.Environment.IsDevelopment())
 {
     builder.Services.AddEndpointsApiExplorer();
@@ -96,7 +98,7 @@ builder.Services.AddResponseCompression((p) =>
     p.Providers.Add<GzipCompressionProvider>();
 });
 
-builder.Services.AddAWSLambdaHosting(LambdaEventSource.RestApi);
+builder.Services.AddAWSLambdaHosting(LambdaEventSource.RestApi, new ApplicationLambdaSerializer());
 
 var app = builder.Build();
 
@@ -127,8 +129,6 @@ if (app.Environment.IsDevelopment())
 {
     app.UseOpenApi();
 }
-
-app.MapRazorPages();
 
 app.MapGet("/api/puzzles", PuzzlesApi.GetPuzzlesAsync);
 
@@ -168,6 +168,20 @@ app.MapGet("/version", () =>
         },
     };
 }).AllowAnonymous();
+
+string[] methods =
+[
+    HttpMethod.Get.Method,
+    HttpMethod.Head.Method,
+    HttpMethod.Post.Method,
+];
+
+app.MapMethods("/", [HttpMethod.Get.Method, HttpMethod.Head.Method], () => Results.Extensions.RazorSlice<Home>())
+   .ExcludeFromDescription();
+
+app.MapMethods("/error", [HttpMethod.Get.Method, HttpMethod.Head.Method, HttpMethod.Post.Method], (HttpContext context) => Results.Extensions.RazorSlice<Error>(context.Response.StatusCode))
+   .ExcludeFromDescription()
+   .WithMetadata(new ResponseCacheAttribute() { Duration = 0, Location = ResponseCacheLocation.None, NoStore = true });
 
 app.Run();
 

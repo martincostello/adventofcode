@@ -9,6 +9,7 @@
     <InvariantGlobalization>false</InvariantGlobalization>
     <NoWarn>$(NoWarn);CA2007</NoWarn>
     <OutputType>Exe</OutputType>
+    <PublishAot>true</PublishAot>
     <PublishSelfContained>true</PublishSelfContained>
     <RootNamespace>MartinCostello.AdventOfCode.Site</RootNamespace>
     <TargetFramework>net8.0</TargetFramework>
@@ -27,9 +28,13 @@
     <PackageReference Include="Amazon.Lambda.RuntimeSupport" />
     <PackageReference Include="Microsoft.TypeScript.MSBuild" PrivateAssets="all" />
     <PackageReference Include="NSwag.AspNetCore" />
+    <PackageReference Include="RazorSlices" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\AdventOfCode\AdventOfCode.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <TrimmerRootAssembly Include="AdventOfCode" />
   </ItemGroup>
   <ItemGroup>
     <AssemblyAttribute Include="System.Runtime.InteropServices.GuidAttribute">

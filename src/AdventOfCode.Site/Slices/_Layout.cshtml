@@ -1,8 +1,10 @@
+@inherits RazorLayoutSlice
 @{
     string appName = "Advent of Code as a Service";
     string description = "Find solutions for the puzzles of Advent of Code";
-    string domain = Context.Request.Host.ToString();
+    string domain = HttpContext!.Request.Host.ToString();
     string twitterHandle = "@martin_costello";
+    int thisYear = DateTimeOffset.UtcNow.Year;
 }
 <!DOCTYPE html>
 <html lang="en-gb">
@@ -15,7 +17,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="author" content="Martin Costello" />
     <meta name="bitcoin" content="12uKG1MwnApd6uiFQ3VXLxFMNC3Z74Z2NG" />
-    <meta name="copyright" content="&copy; Martin Costello @DateTimeOffset.UtcNow.Year" />
+    <meta name="copyright" content="&copy; Martin Costello @(thisYear)" />
     <meta name="description" content="@(description)" />
     <meta name="language" content="en" />
     <meta name="keywords" content="advent,of,code" />
@@ -42,7 +44,7 @@
     <meta name="application-name" content="@(appName)" />
     <link rel="manifest" href="~/manifest.webmanifest" />
     <link rel="shortcut icon" href="~/favicon.png" type="image/x-icon" />
-    <script type="text/javascript" nonce="@(Context.Items["csp-hash"])">
+    <script type="text/javascript" nonce="@(HttpContext.Items["csp-hash"])">
         if (self == top) {
             document.documentElement.className = document.documentElement.className.replace(/\bjs-flash\b/, '');
         }
@@ -69,15 +71,15 @@
         </div>
     </nav>
     <main class="container body-content">
-        @RenderBody()
+        @await RenderBodyAsync()
         <hr />
         <footer>
-            <p>&copy; Martin Costello @DateTimeOffset.UtcNow.Year</p>
+            <p>&copy; Martin Costello @(thisYear)</p>
         </footer>
     </main>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/5.3.3/slate/bootstrap.min.css" integrity="sha512-3EVe7TjxthzbTGfmRFr7zIvHjDWW7viFDgKOoTJ7S5IIrrKVN5rbPVjj0F7nT6rTyAkURnzwoujxlALvHoO9jw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/js/bootstrap.bundle.min.js" integrity="sha512-7Pi/otdlbbCR+LnW+F7PwFcSDJOuUJB3OxtEHbg4vSMvzvJjde4Po1v4BR9Gdc9aXNUNFVUY+SK51wWT8WF0Gg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="~/static/js/main.js" asp-append-version="true"></script>
+    <script src="/static/js/main.js?v=@(GitMetadata.Commit)"></script>
 </body>
 <!--
     Deployment:    https://github.com/martincostello/adventofcode/actions/runs/@(GitMetadata.DeployId)
