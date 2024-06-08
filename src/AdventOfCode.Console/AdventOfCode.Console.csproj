@@ -4,7 +4,6 @@
     <NoWarn>$(NoWarn);CA2007</NoWarn>
     <OptimizationPreference>Speed</OptimizationPreference>
     <OutputType>Exe</OutputType>
-    <PublishAot>true</PublishAot>
     <RootNamespace>MartinCostello.AdventOfCode.Console</RootNamespace>
     <PublicSign>false</PublicSign>
     <SignAssembly>false</SignAssembly>

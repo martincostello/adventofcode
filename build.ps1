@@ -129,4 +129,3 @@ if ($SkipPublish -eq $false) {
         throw "dotnet-lambda package failed with exit code $LASTEXITCODE"
     }
 }
-

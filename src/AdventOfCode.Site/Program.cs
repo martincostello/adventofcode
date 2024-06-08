@@ -1,6 +1,7 @@
 ﻿// Copyright (c) Martin Costello, 2015. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
+using System.Diagnostics.CodeAnalysis;
 using System.IO.Compression;
 using System.Reflection;
 using System.Runtime.CompilerServices;
@@ -8,6 +9,8 @@ using System.Runtime.InteropServices;
 using System.Text.Json.Nodes;
 using MartinCostello.AdventOfCode;
 using MartinCostello.AdventOfCode.Site;
+using MartinCostello.AdventOfCode.Site.Slices;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.ResponseCompression;
 using ILogger = MartinCostello.AdventOfCode.ILogger;
 
@@ -27,15 +30,7 @@ builder.Services.AddSingleton<ILogger, WebLogger>();
 builder.Services.AddSingleton<PuzzleFactory>();
 builder.Services.AddSingleton(TimeProvider.System);
 
-var puzzles = typeof(Puzzle).Assembly
-    .GetTypes()
-    .Where((p) => p.IsAssignableTo(typeof(Puzzle)))
-    .Select((p) => p.GetCustomAttribute<PuzzleAttribute>())
-    .Where((p) => p is not null)
-    .Cast<PuzzleAttribute>()
-    .Where((p) => !p.IsHidden)
-    .Where((p) => !p.Unsolved)
-    .ToList();
+var puzzles = MartinCostello.AdventOfCode.Site.Program.GetPuzzles();
 
 foreach (var puzzle in puzzles)
 {
@@ -74,9 +69,7 @@ builder.Services.Configure<StaticFileOptions>((options) =>
     };
 });
 
-builder.Services.AddRazorPages();
-
-if (builder.Environment.IsDevelopment())
+if (builder.Environment.IsDevelopment() && RuntimeFeature.IsDynamicCodeSupported)
 {
     builder.Services.AddEndpointsApiExplorer();
     builder.Services.AddOpenApiDocument((options) =>
@@ -96,7 +89,7 @@ builder.Services.AddResponseCompression((p) =>
     p.Providers.Add<GzipCompressionProvider>();
 });
 
-builder.Services.AddAWSLambdaHosting(LambdaEventSource.RestApi);
+builder.Services.AddAWSLambdaHosting(LambdaEventSource.RestApi, new ApplicationLambdaSerializer());
 
 var app = builder.Build();
 
@@ -123,12 +116,10 @@ app.UseResponseCompression();
 
 app.UseStaticFiles();
 
-if (app.Environment.IsDevelopment())
+if (app.Environment.IsDevelopment() && RuntimeFeature.IsDynamicCodeSupported)
 {
     app.UseOpenApi();
 }
-
-app.MapRazorPages();
 
 app.MapGet("/api/puzzles", PuzzlesApi.GetPuzzlesAsync);
 
@@ -169,6 +160,13 @@ app.MapGet("/version", () =>
     };
 }).AllowAnonymous();
 
+app.MapMethods("/", [HttpMethod.Get.Method, HttpMethod.Head.Method], () => Results.Extensions.RazorSlice<Home>())
+   .ExcludeFromDescription();
+
+app.MapMethods("/error", [HttpMethod.Get.Method, HttpMethod.Head.Method, HttpMethod.Post.Method], (HttpContext context) => Results.Extensions.RazorSlice<Error>(context.Response.StatusCode))
+   .ExcludeFromDescription()
+   .WithMetadata(new ResponseCacheAttribute() { Duration = 0, Location = ResponseCacheLocation.None, NoStore = true });
+
 app.Run();
 
 static string GetVersion<T>()
@@ -176,8 +174,33 @@ static string GetVersion<T>()
 
 namespace MartinCostello.AdventOfCode.Site
 {
+#pragma warning disable CA1052
     public partial class Program
+#pragma warning restore CA1052
     {
-        // Expose the Program class for use with WebApplicationFactory<T>
+        //// Expose the Program class for use with WebApplicationFactory<T>
+
+        /// <summary>
+        /// Gets all the puzzles available in the assembly.
+        /// </summary>
+        /// <returns>
+        /// The attributes for the puzzles which are available to be solved.
+        /// </returns>
+        [UnconditionalSuppressMessage(
+            "Trimming",
+            "IL2026:Members annotated with 'RequiresUnreferencedCodeAttribute' require dynamic access otherwise can break functionality when trimming application code",
+            Justification = "Assembly is trim rooted and all the types requested are available.")]
+        internal static List<PuzzleAttribute> GetPuzzles()
+        {
+            return typeof(Puzzle).Assembly
+                .GetTypes()
+                .Where((p) => p.IsAssignableTo(typeof(Puzzle)))
+                .Select((p) => p.GetCustomAttribute<PuzzleAttribute>())
+                .Where((p) => p is not null)
+                .Cast<PuzzleAttribute>()
+                .Where((p) => !p.IsHidden)
+                .Where((p) => !p.Unsolved)
+                .ToList();
+        }
     }
 }
