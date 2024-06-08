@@ -169,13 +169,6 @@ app.MapGet("/version", () =>
     };
 }).AllowAnonymous();
 
-string[] methods =
-[
-    HttpMethod.Get.Method,
-    HttpMethod.Head.Method,
-    HttpMethod.Post.Method,
-];
-
 app.MapMethods("/", [HttpMethod.Get.Method, HttpMethod.Head.Method], () => Results.Extensions.RazorSlice<Home>())
    .ExcludeFromDescription();
 
