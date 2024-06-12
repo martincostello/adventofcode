@@ -4,7 +4,6 @@
 using System.Runtime.CompilerServices;
 using MartinCostello.AdventOfCode;
 
-#pragma warning disable IDE0130
 namespace System.Drawing;
 
 /// <summary>
