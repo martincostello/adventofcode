@@ -12,7 +12,7 @@
     <PackageVersion Include="MartinCostello.Logging.XUnit" Version="0.4.0" />
     <PackageVersion Include="MartinCostello.Testing.AwsLambdaTestServer" Version="0.8.0" />
     <PackageVersion Include="Microsoft.AspNetCore.Mvc.Testing" Version="9.0.0-preview.6.24312.1" />
-    <PackageVersion Include="Microsoft.Extensions.Caching.Memory" Version="9.0.0-preview.6.24307.2" />
+    <PackageVersion Include="Microsoft.Extensions.Caching.Memory" Version="9.0.0-preview.6.24312.10" />
     <PackageVersion Include="Microsoft.ICU.ICU4C.Runtime" Version="72.1.0.3" />
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.10.0" />
     <PackageVersion Include="Microsoft.Playwright" Version="1.44.0" />
