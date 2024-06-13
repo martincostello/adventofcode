@@ -158,7 +158,8 @@ app.MapGet("/version", () =>
             ["aspNetCore"] = GetVersion<HttpContext>(),
         },
     };
-}).AllowAnonymous();
+}).AllowAnonymous()
+  .ExcludeFromDescription();
 
 app.MapMethods("/", [HttpMethod.Get.Method, HttpMethod.Head.Method], () => Results.Extensions.RazorSlice<Home>())
    .ExcludeFromDescription();
