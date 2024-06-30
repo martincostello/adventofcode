@@ -12,7 +12,7 @@ public class CustomBenchmarkConfig : ManualConfig
     public CustomBenchmarkConfig()
         : base()
     {
-        var job = Job.Default
+        var job = Job.ShortRun
             .WithId("AdventOfCode")
             .WithArguments([new MsBuildArgument("/p:UseArtifactsOutput=false")]);
 
