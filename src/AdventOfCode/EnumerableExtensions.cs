@@ -67,4 +67,16 @@ internal static class EnumerableExtensions
             previous = enumerator.Current;
         }
     }
+
+    /// <summary>
+    /// Returns the product of the specified sequence of numbers.
+    /// </summary>
+    /// <typeparam name="T">The type of the numbers.</typeparam>
+    /// <param name="source">The source to enumerate for numbers.</param>
+    /// <returns>
+    /// The product of the specified sequence of numbers.
+    /// </returns>
+    public static T Product<T>(this IEnumerable<T> source)
+        where T : IMultiplyOperators<T, T, T>
+        => source.Aggregate(static (x, y) => x * y);
 }

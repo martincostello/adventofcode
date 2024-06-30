@@ -49,7 +49,7 @@ public sealed class Day01 : Puzzle
 
                 return sum is 2020;
             })
-            .Select((p) => p.Aggregate((x, y) => x * y))
+            .Select((p) => p.Product())
             .First();
     }
 
