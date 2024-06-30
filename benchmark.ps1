@@ -5,7 +5,7 @@
 
 param(
     [Parameter(Mandatory = $false)][string] $Filter = "*",
-    [Parameter(Mandatory = $false)][string] $Job = "short"
+    [Parameter(Mandatory = $false)][string] $Job = ""
 )
 
 $ErrorActionPreference = "Stop"
