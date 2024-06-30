@@ -99,14 +99,12 @@ public sealed class Day09 : Puzzle
             basinAreas.Add(basin.Count);
         }
 
-        int sumOfRiskLevels = lowPoints.Values
-            .Select((p) => p + 1)
-            .Sum();
+        int sumOfRiskLevels = lowPoints.Values.Sum() + lowPoints.Count;
 
         int areaOfThreeLargestBasins = basinAreas
             .OrderDescending()
             .Take(3)
-            .Aggregate((x, y) => x *= y);
+            .Product();
 
         return (sumOfRiskLevels, areaOfThreeLargestBasins);
     }

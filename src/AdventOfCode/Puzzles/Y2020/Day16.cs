@@ -183,7 +183,7 @@ public sealed class Day16 : Puzzle
         DepartureProduct = ticket
             .Where((p) => p.Key.AsSpan().StartsWith("departure"))
             .Select((p) => (long)p.Value)
-            .Aggregate((x, y) => x * y);
+            .Product();
 
         if (Verbose)
         {

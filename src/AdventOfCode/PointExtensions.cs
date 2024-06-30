@@ -23,17 +23,12 @@ internal static class PointExtensions
         // See https://en.wikipedia.org/wiki/Shoelace_formula
         long crossProductSum = vertices
             .Pairwise(CrossProduct)
-            .Aggregate(1L, (x, y) => x + y);
+            .Sum();
 
-        return Math.Abs(crossProductSum) / 2;
+        return Math.Abs(crossProductSum + 1) / 2;
 
         static long CrossProduct(Point i, Point j)
-        {
-            long ix = i.X;
-            long jx = j.X;
-
-            return (ix * j.Y) - (jx * i.Y);
-        }
+            => Math.BigMul(i.X, j.Y) - Math.BigMul(j.X, i.Y);
     }
 
     /// <summary>

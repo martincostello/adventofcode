@@ -35,7 +35,7 @@ public sealed class Day24 : Puzzle
         int total = weights.Sum() / compartments;
 
         var optimumConfiguration = Maths.GetCombinations(total, weights)
-            .Select((p) => new { p.Count, QuantumEntanglement = p.Aggregate((x, y) => x * y) })
+            .Select((p) => new { p.Count, QuantumEntanglement = p.Product() })
             .OrderBy((p) => p.Count)
             .ThenBy((p) => p.QuantumEntanglement)
             .First();
