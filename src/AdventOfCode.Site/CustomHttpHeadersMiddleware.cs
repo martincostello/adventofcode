@@ -14,25 +14,23 @@ public sealed class CustomHttpHeadersMiddleware(RequestDelegate next)
 {
     private static readonly CompositeFormat ContentSecurityPolicyTemplate = CompositeFormat.Parse(string.Join(
         ';',
-        [
-            "default-src 'self'",
-            "script-src 'self' 'nonce-{0}' cdnjs.cloudflare.com",
-            "script-src-elem 'self' 'nonce-{0}' cdnjs.cloudflare.com",
-            "style-src 'self' 'nonce-{0}' cdnjs.cloudflare.com",
-            "style-src-elem 'self' 'nonce-{0}' cdnjs.cloudflare.com",
-            "img-src 'self' data:",
-            "font-src 'self' cdnjs.cloudflare.com",
-            "connect-src 'self'",
-            "media-src 'none'",
-            "object-src 'none'",
-            "child-src 'self'",
-            "frame-ancestors 'none'",
-            "form-action 'self'",
-            "block-all-mixed-content",
-            "base-uri 'self'",
-            "manifest-src 'self'",
-            "upgrade-insecure-requests",
-        ]));
+        "default-src 'self'",
+        "script-src 'self' 'nonce-{0}' cdnjs.cloudflare.com",
+        "script-src-elem 'self' 'nonce-{0}' cdnjs.cloudflare.com",
+        "style-src 'self' 'nonce-{0}' cdnjs.cloudflare.com",
+        "style-src-elem 'self' 'nonce-{0}' cdnjs.cloudflare.com",
+        "img-src 'self' data:",
+        "font-src 'self' cdnjs.cloudflare.com",
+        "connect-src 'self'",
+        "media-src 'none'",
+        "object-src 'none'",
+        "child-src 'self'",
+        "frame-ancestors 'none'",
+        "form-action 'self'",
+        "block-all-mixed-content",
+        "base-uri 'self'",
+        "manifest-src 'self'",
+        "upgrade-insecure-requests"));
 
     /// <summary>
     /// Invokes the specified middleware.

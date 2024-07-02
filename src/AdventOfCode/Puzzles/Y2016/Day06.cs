@@ -37,8 +37,8 @@ public sealed class Day06 : Puzzle
         {
             var characters = messages
                 .Select((p) => p[i])
-                .GroupBy((p) => p)
-                .OrderBy((p) => p.Count())
+                .CountBy((p) => p)
+                .OrderBy((p) => p.Value)
                 .Select((p) => p.Key);
 
             char ch =

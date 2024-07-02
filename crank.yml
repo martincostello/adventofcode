@@ -27,14 +27,14 @@ jobs:
 scenarios:
   microbenchmarks:
     application:
-      framework: net8.0
+      framework: net9.0
       job: microbenchmarks
   root:
     application:
-      framework: net8.0
+      framework: net9.0
       job: server
     load:
-      framework: net8.0
+      framework: net9.0
       job: bombardier
       variables:
         serverPort: 5000
