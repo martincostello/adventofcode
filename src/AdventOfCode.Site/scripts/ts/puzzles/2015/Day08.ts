@@ -111,10 +111,12 @@ export class Day08 extends Puzzle2015 {
         this.secondSolution = countEncoded - countForCode;
 
         console.info(
-            `The number of characters of code for string literals minus the number of characters in memory for the values of the strings is ${this.firstSolution}.`
+            'The number of characters of code for string literals minus the number of characters ' +
+                `in memory for the values of the strings is ${this.firstSolution}.`
         );
         console.info(
-            `The total number of characters to represent the newly encoded strings minus the number of characters of code in each original string literal is ${this.secondSolution}.`
+            'The total number of characters to represent the newly encoded strings minus the number ' +
+                `of characters of code in each original string literal is ${this.secondSolution}.`
         );
 
         return this.createResult([this.firstSolution, this.secondSolution]);
