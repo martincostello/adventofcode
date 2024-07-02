@@ -122,10 +122,12 @@ export class Day07 extends Puzzle2022 {
         [this.totalSizeOfDirectoriesLargerThanLimit, this.sizeOfSmallestDirectoryToDelete] = Day07.getDirectorySizes(terminalOutput);
 
         console.info(
-            `The sum of the total sizes of the directories with a total size of at most 100,000 is ${this.totalSizeOfDirectoriesLargerThanLimit}.`
+            'The sum of the total sizes of the directories with a total size of ' +
+                `at most 100,000 is ${this.totalSizeOfDirectoriesLargerThanLimit}.`
         );
         console.info(
-            `The sizes of the directory would free up enough space on the filesystem to run the update is ${this.sizeOfSmallestDirectoryToDelete}.`
+            'The sizes of the directory would free up enough space on the filesystem ' +
+                `to run the update is ${this.sizeOfSmallestDirectoryToDelete}.`
         );
 
         return this.createResult([this.totalSizeOfDirectoriesLargerThanLimit, this.sizeOfSmallestDirectoryToDelete]);

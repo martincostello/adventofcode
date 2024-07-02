@@ -29,7 +29,8 @@ export class Day02 extends Puzzle2015 {
         [this.totalAreaOfPaper, this.totalLengthOfRibbon] = Day02.getTotalWrappingPaperAreaAndRibbonLength(dimensions);
 
         console.info(
-            `The elves should order ${this.totalAreaOfPaper} square feet of wrapping paper.\nThey also need ${this.totalLengthOfRibbon} feet of ribbon.`
+            `The elves should order ${this.totalAreaOfPaper} square feet of wrapping paper.\n` +
+                `They also need ${this.totalLengthOfRibbon} feet of ribbon.`
         );
 
         return this.createResult([this.totalAreaOfPaper, this.totalLengthOfRibbon]);

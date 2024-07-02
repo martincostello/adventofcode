@@ -8,6 +8,7 @@
     "format": "prettier --write scripts/**/*.ts",
     "format-check": "prettier --check scripts/**/*.ts",
     "lint": "eslint --ext .ts scripts",
+    "lint:fix": "eslint --ext .ts scripts --fix",
     "test": "jest",
     "watch": "webpack --watch",
     "publish": "npm run build && npm run format && npm run lint",
@@ -62,7 +63,11 @@
       "jest"
     ],
     "rules": {
-      "@stylistic/js/indent": "error",
+      "@stylistic/js/indent": [
+        "error",
+        4,
+        { "SwitchCase": 1 }
+      ],
       "@stylistic/js/quotes": [
         "error",
         "single",
@@ -99,8 +104,20 @@
         "undefined"
       ],
       "id-match": "error",
+      "max-len": [
+        "error",
+        {
+            "code": 140,
+            "ignoreUrls": true,
+            "tabWidth": 4
+        }
+      ],
       "no-eval": "error",
       "no-redeclare": "error",
+      "no-tabs": [
+        "error",
+        { "allowIndentationTabs": true }
+      ],
       "no-trailing-spaces": "error",
       "no-underscore-dangle": "error",
       "no-var": "error",

@@ -69,7 +69,8 @@ export class Day03 extends Puzzle2022 {
 
         console.info(`The sum of the priorities of the item types which appear in both compartments is ${this.sumOfPriorities}.`);
         console.info(
-            `The sum of the priorities of the item types which appear in all three rucksacks of each group of elves is ${this.sumOfPrioritiesOfGroups}.`
+            'The sum of the priorities of the item types which appear in all three rucksacks of each ' +
+                `group of elves is ${this.sumOfPrioritiesOfGroups}.`
         );
 
         return this.createResult([this.sumOfPriorities, this.sumOfPrioritiesOfGroups]);
