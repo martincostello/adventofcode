@@ -27,6 +27,9 @@ public sealed partial class Day04 : Puzzle
     /// </summary>
     public int VerifiedPassports { get; private set; }
 
+    [GeneratedRegex("#[0-9a-f]{6}", RegexOptions.IgnoreCase)]
+    private static partial Regex HexColor { get; }
+
     /// <summary>
     /// Gets the number of valid passports in the specified batch file.
     /// </summary>
@@ -184,7 +187,4 @@ public sealed partial class Day04 : Puzzle
 
         return true;
     }
-
-    [GeneratedRegex("#[0-9a-f]{6}", RegexOptions.IgnoreCase)]
-    private static partial Regex HexColor { get; }
 }
