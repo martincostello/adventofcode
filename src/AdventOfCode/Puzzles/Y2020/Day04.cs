@@ -125,7 +125,7 @@ public sealed partial class Day04 : Puzzle
                 return false;
             }
 
-            return HexColor().IsMatch(value);
+            return HexColor.IsMatch(value);
         }
 
         static bool IsValidHeight(ReadOnlySpan<char> value)
@@ -186,5 +186,5 @@ public sealed partial class Day04 : Puzzle
     }
 
     [GeneratedRegex("#[0-9a-f]{6}", RegexOptions.IgnoreCase)]
-    private static partial Regex HexColor();
+    private static partial Regex HexColor { get; }
 }
