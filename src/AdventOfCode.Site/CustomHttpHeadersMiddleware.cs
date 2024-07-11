@@ -43,7 +43,7 @@ public sealed class CustomHttpHeadersMiddleware(RequestDelegate next)
     public Task Invoke(HttpContext context, IWebHostEnvironment environment)
     {
         byte[] data = RandomNumberGenerator.GetBytes(32);
-        string nonce = Convert.ToBase64String(data).Replace('+', '/');
+        string nonce = System.Buffers.Text.Base64Url.EncodeToString(data);
 
         context.Items["csp-hash"] = nonce;
 
