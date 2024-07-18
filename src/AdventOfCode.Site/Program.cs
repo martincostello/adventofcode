@@ -74,7 +74,7 @@ if (builder.Environment.IsDevelopment() && RuntimeFeature.IsDynamicCodeSupported
 {
     builder.Services.AddOpenApi((options) =>
     {
-        options.UseTransformer((document, _, _) =>
+        options.AddDocumentTransformer((document, _, _) =>
         {
             document.Info.Title = "Advent of Code";
             document.Info.Version = "v1";
