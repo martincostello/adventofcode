@@ -161,6 +161,7 @@ jobs:
       env:
         BENCHMARK_NAME: ${{ steps.parse-comment.outputs.benchmark }}
         COMMIT_SHA: ${{ steps.parse-comment.outputs.commit-sha }}
+        OUTCOME: ${{ job.status }}
       with:
         script: |
           const owner = context.repo.owner;
