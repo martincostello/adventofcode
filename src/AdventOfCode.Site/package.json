@@ -1,6 +1,7 @@
 {
   "name": "adventofcode",
   "private": true,
+  "type": "module",
   "version": "9.0.0",
   "description": "Solutions for Advent of Code in C# and TypeScript",
   "scripts": {
