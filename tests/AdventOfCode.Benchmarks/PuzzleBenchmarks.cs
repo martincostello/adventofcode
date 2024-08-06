@@ -3,11 +3,13 @@
 
 using System.Reflection;
 using BenchmarkDotNet.Attributes;
+using BenchmarkDotNet.Diagnosers;
 using Microsoft.Extensions.Caching.Memory;
 
 namespace MartinCostello.AdventOfCode.Benchmarks;
 
-[Config(typeof(CustomBenchmarkConfig))]
+[MemoryDiagnoser]
+[ShortRunJob]
 public class PuzzleBenchmarks
 {
     public static IEnumerable<object> Puzzles()
