@@ -69,13 +69,18 @@ builder.Services.Configure<StaticFileOptions>((options) =>
     };
 });
 
+// HACK Disabled until https://github.com/dotnet/aspnetcore/issues/56023 is fixed
 if (builder.Environment.IsDevelopment() && RuntimeFeature.IsDynamicCodeSupported)
 {
-    builder.Services.AddEndpointsApiExplorer();
-    builder.Services.AddOpenApiDocument((options) =>
+    builder.Services.AddOpenApi((options) =>
     {
-        options.Title = "Advent of Code";
-        options.Version = "v1";
+        options.UseTransformer((document, _, _) =>
+        {
+            document.Info.Title = "Advent of Code";
+            document.Info.Version = "v1";
+
+            return Task.CompletedTask;
+        });
     });
 }
 
@@ -116,9 +121,10 @@ app.UseResponseCompression();
 
 app.UseStaticFiles();
 
+// HACK Disabled until https://github.com/dotnet/aspnetcore/issues/56023 is fixed
 if (app.Environment.IsDevelopment() && RuntimeFeature.IsDynamicCodeSupported)
 {
-    app.UseOpenApi();
+    app.MapOpenApi();
 }
 
 app.MapGet("/api/puzzles", PuzzlesApi.GetPuzzlesAsync);

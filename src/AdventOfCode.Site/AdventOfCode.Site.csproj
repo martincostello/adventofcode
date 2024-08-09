@@ -11,7 +11,7 @@
     <OutputType>Exe</OutputType>
     <PublishSelfContained>true</PublishSelfContained>
     <RootNamespace>MartinCostello.AdventOfCode.Site</RootNamespace>
-    <TargetFramework>net8.0</TargetFramework>
+    <TargetFramework>net9.0</TargetFramework>
     <TypeScriptCompileBlocked>true</TypeScriptCompileBlocked>
     <TypeScriptToolsVersion>latest</TypeScriptToolsVersion>
   </PropertyGroup>
@@ -25,8 +25,8 @@
   <ItemGroup>
     <PackageReference Include="Amazon.Lambda.AspNetCoreServer.Hosting" />
     <PackageReference Include="Amazon.Lambda.RuntimeSupport" />
+    <PackageReference Include="Microsoft.AspNetCore.OpenApi" />
     <PackageReference Include="Microsoft.TypeScript.MSBuild" PrivateAssets="all" />
-    <PackageReference Include="NSwag.AspNetCore" />
     <PackageReference Include="RazorSlices" />
   </ItemGroup>
   <ItemGroup>

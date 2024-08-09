@@ -30,17 +30,14 @@ public sealed class Day06 : Puzzle
     public static int FindFirstPacket(string datastream, int distinctCharacters)
     {
         var queue = new Queue<char>(distinctCharacters);
-        int index = 0;
 
-        foreach (char item in datastream)
+        foreach ((int index, char item) in datastream.Index())
         {
             if (queue.Count == distinctCharacters &&
                 queue.Distinct().Count() == distinctCharacters)
             {
-                break;
+                return index;
             }
-
-            index++;
 
             queue.Enqueue(item);
 
@@ -50,7 +47,7 @@ public sealed class Day06 : Puzzle
             }
         }
 
-        return index;
+        return 0;
     }
 
     /// <inheritdoc />

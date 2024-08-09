@@ -91,9 +91,7 @@ public sealed class Day17 : Puzzle
             byte[] buffer = Encoding.UTF8.GetBytes(value);
             byte[] hash = MD5.HashData(buffer);
 
-#pragma warning disable CA1308
-            return Convert.ToHexString(hash)[0..4].ToLowerInvariant();
-#pragma warning restore CA1308
+            return Convert.ToHexStringLower(hash)[0..4];
         }
 
         static bool IsOpenDoor(char value)

@@ -4,7 +4,7 @@
     <IsTestProject>true</IsTestProject>
     <NoWarn>$(NoWarn);CA1054;CA1707;CA1711;CA1812;CA1861;CA2007;CA2234;SA1600;xUnit1004</NoWarn>
     <RootNamespace>MartinCostello.AdventOfCode</RootNamespace>
-    <TargetFramework>net8.0</TargetFramework>
+    <TargetFramework>net9.0</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
     <None Update="localhost-dev.pfx;xunit.runner.json" CopyToOutputDirectory="PreserveNewest" />
