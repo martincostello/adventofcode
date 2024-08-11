@@ -4,7 +4,7 @@
 #Requires -Version 7
 
 param(
-    [Parameter(Mandatory = $false)][string] $Filter = "*",
+    [Parameter(Mandatory = $false)][string] $Filter = "",
     [Parameter(Mandatory = $false)][string] $Job = ""
 )
 
@@ -85,6 +85,11 @@ if (![string]::IsNullOrEmpty($Filter)) {
 if (![string]::IsNullOrEmpty($Job)) {
     $additionalArgs += "--job"
     $additionalArgs += $Job
+}
+
+if (-Not [string]::IsNullOrEmpty(${env:GITHUB_SHA})) {
+    $additionalArgs += "--exporters"
+    $additionalArgs += "json"
 }
 
 & $dotnet run `
