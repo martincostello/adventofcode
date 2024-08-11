@@ -38,7 +38,7 @@ jobs:
 
     - name: Run benchmarks
       shell: pwsh
-      run: ./benchmark.ps1 -Job Short
+      run: ./benchmark.ps1 -Filter "*2016*" -Job Short
 
     - name: Publish results
       uses: benchmark-action/github-action-benchmark@v1
