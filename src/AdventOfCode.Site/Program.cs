@@ -69,12 +69,11 @@ builder.Services.Configure<StaticFileOptions>((options) =>
     };
 });
 
-// HACK Disabled until https://github.com/dotnet/aspnetcore/issues/56023 is fixed
-if (builder.Environment.IsDevelopment() && RuntimeFeature.IsDynamicCodeSupported)
+if (builder.Environment.IsDevelopment())
 {
     builder.Services.AddOpenApi((options) =>
     {
-        options.UseTransformer((document, _, _) =>
+        options.AddDocumentTransformer((document, _, _) =>
         {
             document.Info.Title = "Advent of Code";
             document.Info.Version = "v1";
@@ -121,8 +120,7 @@ app.UseResponseCompression();
 
 app.UseStaticFiles();
 
-// HACK Disabled until https://github.com/dotnet/aspnetcore/issues/56023 is fixed
-if (app.Environment.IsDevelopment() && RuntimeFeature.IsDynamicCodeSupported)
+if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
 }
