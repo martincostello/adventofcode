@@ -2,6 +2,7 @@
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 using System.Text.Json.Serialization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace MartinCostello.AdventOfCode.Site;
 
@@ -42,6 +43,7 @@ internal static partial class PuzzlesApi
     /// <param name="year">The year the puzzle to solve is from.</param>
     /// <param name="day">The day the puzzle to solve is from.</param>
     /// <param name="request">The HTTP request.</param>
+    /// <param name="arguments">The optional arguments to use to solve the puzzle with.</param>
     /// <param name="resource">The optional resource to use to solve the puzzle.</param>
     /// <param name="factory">The <see cref="PuzzleFactory"/> to use.</param>
     /// <param name="timeProvider">The <see cref="TimeProvider"/> to use.</param>
@@ -54,6 +56,7 @@ internal static partial class PuzzlesApi
         int year,
         int day,
         HttpRequest request,
+        [FromForm] string[]? arguments,
         IFormFile? resource,
         PuzzleFactory factory,
         TimeProvider timeProvider,
@@ -83,28 +86,16 @@ internal static partial class PuzzlesApi
             return Results.Problem("This puzzle cannot be solved.", statusCode: StatusCodes.Status403Forbidden);
         }
 
-        string[] arguments = [];
+        arguments ??= [];
 
-        if (metadata.RequiresData || metadata.MinimumArguments > 0)
+        if ((metadata.RequiresData || metadata.MinimumArguments > 0) && metadata.RequiresData)
         {
-            if (metadata.RequiresData)
+            if (resource is null)
             {
-                if (resource is null)
-                {
-                    return Results.Problem("No puzzle resource provided.", statusCode: StatusCodes.Status400BadRequest);
-                }
-
-                puzzle.Resource = resource.OpenReadStream();
+                return Results.Problem("No puzzle resource provided.", statusCode: StatusCodes.Status400BadRequest);
             }
 
-            // HACK Manually read the form due to Request Delegate Generator not being able to bind to a
-            // `[FromForm] string[]?` from .NET 9 preview.5. See https://github.com/dotnet/aspnetcore/issues/55840.
-            var form = await request.ReadFormAsync(cancellationToken);
-
-            if (form.TryGetValue("arguments", out var values))
-            {
-                arguments = values.Select((p) => p).ToArray()!;
-            }
+            puzzle.Resource = resource.OpenReadStream();
         }
 
         var timeout = TimeSpan.FromSeconds(30);
