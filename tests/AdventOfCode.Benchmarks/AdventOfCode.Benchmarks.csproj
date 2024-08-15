@@ -2,7 +2,6 @@
   <PropertyGroup>
     <DefineConstants>$(DefineConstants);BENCHMARKS</DefineConstants>
     <Description>Benchmarks for AdventOfCode.</Description>
-    <GenerateProgramFile>false</GenerateProgramFile>
     <NoWarn>$(NoWarn);CA1034;CA1056;CA1819;CA2007;SA1600</NoWarn>
     <OutputType>Exe</OutputType>
     <RootNamespace>MartinCostello.AdventOfCode.Benchmarks</RootNamespace>
@@ -14,7 +13,6 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="BenchmarkDotNet" />
-    <PackageReference Include="BenchmarkDotNet.TestAdapter" />
     <PackageReference Include="Microsoft.Extensions.Caching.Memory" />
   </ItemGroup>
 </Project>
