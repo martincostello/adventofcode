@@ -1,6 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
   <PropertyGroup>
     <AWSProjectType>Lambda</AWSProjectType>
+    <ContainerBaseImage>mcr.microsoft.com/dotnet/nightly/runtime-deps:9.0-preview-noble-chiseled-extra</ContainerBaseImage>
     <ContainerFamily>noble-chiseled-extra</ContainerFamily>
     <Description>Web app for solving Advent of Code.</Description>
     <EnableConfigurationBindingGenerator>true</EnableConfigurationBindingGenerator>
@@ -14,8 +15,6 @@
     <TargetFramework>net9.0</TargetFramework>
     <TypeScriptCompileBlocked>true</TypeScriptCompileBlocked>
     <TypeScriptToolsVersion>latest</TypeScriptToolsVersion>
-    <!-- HACK Workaround for https://github.com/dotnet/runtime/issues/106566 -->
-    <UseSystemZlib>false</UseSystemZlib>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(PublishForAWSLambda)' == 'true' ">
     <AssemblyName>bootstrap</AssemblyName>
