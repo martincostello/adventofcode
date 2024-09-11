@@ -69,13 +69,17 @@ builder.Services.Configure<StaticFileOptions>((options) =>
     };
 });
 
-if (builder.Environment.IsDevelopment() && RuntimeFeature.IsDynamicCodeSupported)
+if (builder.Environment.IsDevelopment())
 {
-    builder.Services.AddEndpointsApiExplorer();
-    builder.Services.AddOpenApiDocument((options) =>
+    builder.Services.AddOpenApi((options) =>
     {
-        options.Title = "Advent of Code";
-        options.Version = "v1";
+        options.AddDocumentTransformer((document, _, _) =>
+        {
+            document.Info.Title = "Advent of Code";
+            document.Info.Version = "v1";
+
+            return Task.CompletedTask;
+        });
     });
 }
 
@@ -116,9 +120,9 @@ app.UseResponseCompression();
 
 app.UseStaticFiles();
 
-if (app.Environment.IsDevelopment() && RuntimeFeature.IsDynamicCodeSupported)
+if (app.Environment.IsDevelopment())
 {
-    app.UseOpenApi();
+    app.MapOpenApi();
 }
 
 app.MapGet("/api/puzzles", PuzzlesApi.GetPuzzlesAsync);

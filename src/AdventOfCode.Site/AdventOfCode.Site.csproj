@@ -11,9 +11,11 @@
     <OutputType>Exe</OutputType>
     <PublishSelfContained>true</PublishSelfContained>
     <RootNamespace>MartinCostello.AdventOfCode.Site</RootNamespace>
-    <TargetFramework>net8.0</TargetFramework>
+    <TargetFramework>net9.0</TargetFramework>
     <TypeScriptCompileBlocked>true</TypeScriptCompileBlocked>
     <TypeScriptToolsVersion>latest</TypeScriptToolsVersion>
+    <!-- HACK Workaround for https://github.com/dotnet/runtime/issues/106566 -->
+    <UseSystemZlib>false</UseSystemZlib>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(PublishForAWSLambda)' == 'true' ">
     <AssemblyName>bootstrap</AssemblyName>
@@ -25,8 +27,8 @@
   <ItemGroup>
     <PackageReference Include="Amazon.Lambda.AspNetCoreServer.Hosting" />
     <PackageReference Include="Amazon.Lambda.RuntimeSupport" />
+    <PackageReference Include="Microsoft.AspNetCore.OpenApi" />
     <PackageReference Include="Microsoft.TypeScript.MSBuild" PrivateAssets="all" />
-    <PackageReference Include="NSwag.AspNetCore" />
     <PackageReference Include="RazorSlices" />
   </ItemGroup>
   <ItemGroup>
