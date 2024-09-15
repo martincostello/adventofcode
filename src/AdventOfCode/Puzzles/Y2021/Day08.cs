@@ -34,11 +34,8 @@ public sealed class Day08 : Puzzle
 
         for (int i = 0; i < entries.Count; i++)
         {
-            string[] parts = entries[i].Split(" | ");
-            string[] signals = parts[0].Split(' ');
-            string[] numbers = parts[1].Split(' ');
-
-            panels[i] = (signals, numbers);
+            (string signals, string numbers) = entries[i].Bifurcate(" | ");
+            panels[i] = (signals.Split(' '), numbers.Split(' '));
         }
 
         int count = 0;

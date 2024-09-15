@@ -63,11 +63,11 @@ public sealed class Day18 : Puzzle
                     {
                         char thisChar = expression[j];
 
-                        if (thisChar == '(')
+                        if (thisChar is '(')
                         {
                             openCount++;
                         }
-                        else if (thisChar == ')')
+                        else if (thisChar is ')')
                         {
                             closedCount++;
                         }

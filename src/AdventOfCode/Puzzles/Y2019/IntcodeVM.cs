@@ -71,9 +71,9 @@ internal sealed class IntcodeVM
 
         int i = 0;
 
-        foreach (var instruction in program.Tokenize(','))
+        foreach (var range in program.Split(','))
         {
-            instructions[i++] = Puzzle.Parse<long>(instruction);
+            instructions[i++] = Puzzle.Parse<long>(program[range]);
         }
 
         return instructions;
@@ -249,7 +249,7 @@ internal sealed class IntcodeVM
         {
             if (instruction == 99)
             {
-                return (99, Array.Empty<int>(), 1);
+                return (99, [], 1);
             }
 
             string digits = instruction.ToString(CultureInfo.InvariantCulture);

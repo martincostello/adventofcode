@@ -57,9 +57,7 @@ public sealed class Day15 : Puzzle
     /// <inheritdoc />
     protected override Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        IList<int> startingNumbers = args[0]
-            .AsNumbers<int>()
-            .ToList();
+        var startingNumbers = args[0].AsNumbers<int>();
 
         Number2020 = GetSpokenNumber(startingNumbers, 2020);
         Number30000000 = GetSpokenNumber(startingNumbers, 30000000);

@@ -95,7 +95,7 @@ public sealed class Day11 : Puzzle
 
                 if (operation.StartsWith('+'))
                 {
-                    if (operationString == "old")
+                    if (operationString is "old")
                     {
                         monkey.Inspector = static (p) => p + p;
                     }
@@ -107,7 +107,7 @@ public sealed class Day11 : Puzzle
                 }
                 else if (operation.StartsWith('*'))
                 {
-                    if (operationString == "old")
+                    if (operationString is "old")
                     {
                         monkey.Inspector = (p) => p * p;
                     }

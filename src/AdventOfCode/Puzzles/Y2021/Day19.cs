@@ -112,7 +112,7 @@ public sealed class Day19 : Puzzle
                     continue;
                 }
 
-                int[] values = value.AsNumbers<int>().ToArray();
+                var values = value.AsNumbers<int>();
 
                 current.Add(new(values[0], values[1], values[2]));
             }

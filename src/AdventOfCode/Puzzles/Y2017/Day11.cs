@@ -153,9 +153,9 @@ public sealed class Day11 : Puzzle
 
         int i = 0;
 
-        foreach (var direction in path.Tokenize(','))
+        foreach (var range in path.Split(','))
         {
-            result[i++] = new string(direction) switch
+            result[i++] = path[range] switch
             {
                 "n" => CardinalDirection.North,
                 "ne" => CardinalDirection.NorthEast,
@@ -163,7 +163,7 @@ public sealed class Day11 : Puzzle
                 "s" => CardinalDirection.South,
                 "se" => CardinalDirection.SouthEast,
                 "sw" => CardinalDirection.SouthWest,
-                _ => throw new PuzzleException($"Unknown direction '{direction}'."),
+                _ => throw new PuzzleException($"Unknown direction '{range}'."),
             };
         }
 

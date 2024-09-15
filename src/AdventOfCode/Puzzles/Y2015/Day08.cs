@@ -78,8 +78,8 @@ public sealed class Day08 : Puzzle
         int count = 0;
 
         // Remove quotes if present as first/last characters
-        bool removeFirstQuote = value.Length > 0 && value[0] == '\"';
-        bool removeLastQuote = value.Length > 1 && value[^1] == '\"';
+        bool removeFirstQuote = value.Length > 0 && value[0] is '\"';
+        bool removeLastQuote = value.Length > 1 && value[^1] is '\"';
 
         if (removeFirstQuote)
         {
@@ -93,7 +93,7 @@ public sealed class Day08 : Puzzle
 
         if (value.Length > 0)
         {
-            var characters = new Queue<char>(new string(value));
+            var characters = new Queue<char>(value.ToString());
 
             while (characters.Count > 0)
             {

@@ -112,7 +112,7 @@ public sealed class Day17 : Puzzle
                 visualization = WriteState(currentState, logger);
             }
 
-            int activeCubes = currentState.Values.Count((p) => p == Active);
+            int activeCubes = currentState.Values.Count((p) => p is Active);
 
             return (activeCubes, visualization);
 
@@ -126,10 +126,7 @@ public sealed class Day17 : Puzzle
                 {
                     foreach (Vector3 adjacent in AdjacentCubes(point))
                     {
-                        if (!states.ContainsKey(adjacent))
-                        {
-                            states[adjacent] = Inactive;
-                        }
+                        states.TryAdd(adjacent, Inactive);
                     }
                 }
             }
@@ -187,9 +184,9 @@ public sealed class Day17 : Puzzle
         {
             var builder = new StringBuilder();
 
-            float maxY = states.Max((p) => p.Key.Y);
-            float maxX = states.Max((p) => p.Key.X);
-            float maxZ = states.Max((p) => p.Key.Z);
+            float maxY = states.Keys.Max((p) => p.Y);
+            float maxX = states.Keys.Max((p) => p.X);
+            float maxZ = states.Keys.Max((p) => p.Z);
             float minZ = -maxZ;
 
             for (float z = minZ; z <= maxZ; z++)
@@ -344,10 +341,10 @@ public sealed class Day17 : Puzzle
         {
             var builder = new StringBuilder();
 
-            float maxW = states.Max((p) => p.Key.W);
-            float maxY = states.Max((p) => p.Key.Y);
-            float maxX = states.Max((p) => p.Key.X);
-            float maxZ = states.Max((p) => p.Key.Z);
+            float maxW = states.Keys.Max((p) => p.W);
+            float maxY = states.Keys.Max((p) => p.Y);
+            float maxX = states.Keys.Max((p) => p.X);
+            float maxZ = states.Keys.Max((p) => p.Z);
             float minW = -maxW;
             float minZ = -maxZ;
 

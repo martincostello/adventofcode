@@ -33,9 +33,10 @@ public sealed class Day04 : Puzzle
 
         foreach (string assignment in assignments)
         {
-            string[] split = assignment.Split(',');
-            Range first = AsRange(split[0].AsNumberPair<int>('-'));
-            Range second = AsRange(split[1].AsNumberPair<int>('-'));
+            assignment.AsSpan().Bifurcate(',', out var firstSpan, out var secondSpan);
+
+            Range first = AsRange(firstSpan.AsNumberPair<int>('-'));
+            Range second = AsRange(secondSpan.AsNumberPair<int>('-'));
 
             if (partial)
             {

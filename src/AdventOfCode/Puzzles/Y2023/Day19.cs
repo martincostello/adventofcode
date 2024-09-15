@@ -96,6 +96,7 @@ public sealed class Day19 : Puzzle
         static Dictionary<string, Workflow> ParseWorkflows(List<string> values)
         {
             var workflows = new Dictionary<string, Workflow>(values.Count);
+            var alternate = workflows.GetAlternateLookup();
 
             var comparer = Comparer<int>.Default;
             var accept = new Analyzer(static (p) => (null, true));
@@ -137,7 +138,7 @@ public sealed class Day19 : Puzzle
                                 break;
 
                             default:
-                                string next = new(rule);
+                                string next = rule.ToString();
                                 analyzers.Add(new((_) => (next, null)));
                                 break;
                         }
@@ -147,7 +148,7 @@ public sealed class Day19 : Puzzle
                         char category = rule[0];
                         char operation = rule[1];
                         int operand = Parse<int>(rule[2..delimiter]);
-                        string next = new(rule[(delimiter + 1)..]);
+                        string next = rule[(delimiter + 1)..].ToString();
 
                         int sign = operation switch
                         {
@@ -181,7 +182,7 @@ public sealed class Day19 : Puzzle
                     rules = rules[(index + 1)..];
                 }
 
-                workflows[new(name)] = new(analyzers, workflows);
+                alternate[name] = new(analyzers, workflows);
             }
 
             return workflows;

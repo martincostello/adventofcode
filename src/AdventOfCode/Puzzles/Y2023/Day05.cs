@@ -33,10 +33,13 @@ public sealed class Day05 : Puzzle
     /// </returns>
     public static long Parse(IList<string> almanac, bool useRanges, CancellationToken cancellationToken = default)
     {
-        var seeds = almanac[0]["seeds: ".Length..]
-            .Split(' ')
-            .Select((p) => (Parse<long>(p), 1L))
-            .ToList();
+        var seeds = new List<(long, long)>();
+
+        var header = almanac[0]["seeds: ".Length..].AsSpan();
+        foreach (var range in header.Split(' '))
+        {
+            seeds.Add((Parse<long>(header[range]), 1L));
+        }
 
         if (useRanges)
         {
@@ -47,13 +50,15 @@ public sealed class Day05 : Puzzle
                 seeds.RemoveAt(i + 1);
                 seeds[i] = (seed, length);
             }
-
-            seeds.TrimExcess();
         }
+
+        seeds.TrimExcess();
 
         var seedLocations = new Dictionary<long, long>();
 
         LocationMap map = [];
+        var alternate = map.GetAlternateLookup();
+
         (string Destination, List<(long Destination, long Source, long Length)> Values) ranges = default;
 
         foreach (string value in almanac.Skip(2))
@@ -72,7 +77,7 @@ public sealed class Day05 : Puzzle
                 var key = line[..^MapPrefix.Length];
                 key.Trifurcate('-', out var source, out _, out var destination);
 
-                map[new(source)] = ranges = (new(destination), []);
+                alternate[source] = ranges = (new(destination), []);
             }
             else
             {
@@ -83,16 +88,16 @@ public sealed class Day05 : Puzzle
 
         foreach ((long offset, long length) in seeds)
         {
-            seedLocations[offset] = FindValue("seed", (offset, length), "location", map, useRanges, cancellationToken);
+            seedLocations[offset] = FindValue("seed", (offset, length), "location", alternate, useRanges, cancellationToken);
         }
 
         return seedLocations.Values.Min();
 
         static long FindValue(
-            string key,
+            ReadOnlySpan<char> key,
             (long Offset, long Length) range,
             string destinationKey,
-            LocationMap map,
+            LocationMap.AlternateLookup<ReadOnlySpan<char>> map,
             bool useRanges,
             CancellationToken cancellationToken)
         {

@@ -75,7 +75,7 @@ public sealed class Day09 : Puzzle
 
             if (isInMarker)
             {
-                if (ch == ')')
+                if (ch is ')')
                 {
                     isInMarker = false;
 
@@ -89,7 +89,7 @@ public sealed class Day09 : Puzzle
                     marker.Append(ch);
                 }
             }
-            else if (ch == '(' && !isInRepeat)
+            else if (ch is '(' && !isInRepeat)
             {
                 isInMarker = true;
             }

@@ -54,15 +54,15 @@ public sealed class Day23 : Puzzle
             switch (operation)
             {
                 case "hlf":
-                    (registerOrOffset == "a" ? a : b).Value /= 2;
+                    (registerOrOffset is "a" ? a : b).Value /= 2;
                     break;
 
                 case "tpl":
-                    (registerOrOffset == "a" ? a : b).Value *= 3;
+                    (registerOrOffset is "a" ? a : b).Value *= 3;
                     break;
 
                 case "inc":
-                    (registerOrOffset == "a" ? a : b).Value++;
+                    (registerOrOffset is "a" ? a : b).Value++;
                     break;
 
                 case "jmp":
@@ -70,7 +70,7 @@ public sealed class Day23 : Puzzle
                     break;
 
                 case "jie":
-                    if ((registerOrOffset!.Split(',')[0].Trim() == "a" ? a : b).Value % 2 == 0)
+                    if ((registerOrOffset!.Split(',')[0].Trim() is "a" ? a : b).Value % 2 == 0)
                     {
                         next = i + Parse<int>(offset!);
                     }
@@ -78,7 +78,7 @@ public sealed class Day23 : Puzzle
                     break;
 
                 case "jio":
-                    if ((registerOrOffset!.Split(',')[0].Trim() == "a" ? a : b).Value == 1)
+                    if ((registerOrOffset!.Split(',')[0].Trim() is "a" ? a : b).Value == 1)
                     {
                         next = i + Parse<int>(offset!);
                     }

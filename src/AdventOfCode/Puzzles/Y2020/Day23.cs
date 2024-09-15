@@ -89,7 +89,7 @@ public sealed class Day23 : Puzzle
     /// <inheritdoc />
     protected override Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        IEnumerable<int> arrangement = args[0].Select((p) => p - '0').ToArray();
+        IEnumerable<int> arrangement = args[0].Select((p) => p - '0');
 
         var circle = Play(arrangement, moves: 100);
 

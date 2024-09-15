@@ -103,4 +103,105 @@ internal static class DictionaryExtensions
 
         return result;
     }
+
+    /// <summary>
+    /// Increments the value of the specified key, or adds it if not already present.
+    /// </summary>
+    /// <typeparam name="TValue">The type of the value.</typeparam>
+    /// <param name="alternate">The dictionary to add or increment the value for.</param>
+    /// <param name="key">The key to increment the value of or add to the dictionary.</param>
+    /// <param name="value">The value to add to the dictionary if the key is not found.</param>
+    public static void AddOrIncrement<TValue>(this Dictionary<string, TValue>.AlternateLookup<ReadOnlySpan<char>> alternate, ReadOnlySpan<char> key, TValue value)
+        where TValue : INumber<TValue>
+        => alternate.AddOrIncrement(key, value, TValue.One);
+
+    /// <summary>
+    /// Increments the value of the specified key by the specified value, or adds it if not already present.
+    /// </summary>
+    /// <typeparam name="TValue">The type of the value.</typeparam>
+    /// <param name="alternate">The dictionary to add or increment the value for.</param>
+    /// <param name="key">The key to increment the value of or add to the dictionary.</param>
+    /// <param name="value">The value to add to the dictionary if the key is not found.</param>
+    /// <param name="increment">The value to increment by.</param>
+    public static void AddOrIncrement<TValue>(this Dictionary<string, TValue>.AlternateLookup<ReadOnlySpan<char>> alternate, ReadOnlySpan<char> key, TValue value, TValue increment)
+        where TValue : INumber<TValue> =>
+        alternate[key] = alternate.TryGetValue(key, out var current) ? current + increment : value;
+
+    /// <summary>
+    /// Decrements the value of the specified key, or adds it if not already present.
+    /// </summary>
+    /// <typeparam name="TValue">The type of the value.</typeparam>
+    /// <param name="alternate">The dictionary to add or decrement the value for.</param>
+    /// <param name="key">The key to decrement the value of or add to the dictionary.</param>
+    /// <param name="value">The value to add to the dictionary if the key is not found.</param>
+    public static void AddOrDecrement<TValue>(this Dictionary<string, TValue>.AlternateLookup<ReadOnlySpan<char>> alternate, ReadOnlySpan<char> key, TValue value)
+        where TValue : INumber<TValue>
+        => alternate.AddOrDecrement(key, value, TValue.One);
+
+    /// <summary>
+    /// Decrements the value of the specified key by the specified value, or adds it if not already present.
+    /// </summary>
+    /// <typeparam name="TValue">The type of the value.</typeparam>
+    /// <param name="alternate">The dictionary to add or decrement the value for.</param>
+    /// <param name="key">The key to decrement the value of or add to the dictionary.</param>
+    /// <param name="value">The value to add to the dictionary if the key is not found.</param>
+    /// <param name="decrement">The value to decrement by.</param>
+    public static void AddOrDecrement<TValue>(this Dictionary<string, TValue>.AlternateLookup<ReadOnlySpan<char>> alternate, ReadOnlySpan<char> key, TValue value, TValue decrement)
+        where TValue : INumber<TValue>
+        => alternate[key] = alternate.TryGetValue(key, out var current) ? current - decrement : value;
+
+    /// <summary>
+    /// Gets the reference with the specified key, adding it if not already present.
+    /// </summary>
+    /// <typeparam name="TValue">The type of the value.</typeparam>
+    /// <param name="alternate">The dictionary to get the reference for.</param>
+    /// <param name="key">The key to get the reference for.</param>
+    /// <param name="factory">A delegate to a method to create the reference if not found.</param>
+    /// <returns>
+    /// The value reference with the specified key.
+    /// </returns>
+    public static TValue GetOrAdd<TValue>(
+        this Dictionary<string, TValue>.AlternateLookup<ReadOnlySpan<char>> alternate,
+        ReadOnlySpan<char> key,
+        Func<TValue> factory)
+        where TValue : class
+    {
+        if (!alternate.TryGetValue(key, out var result))
+        {
+            result = alternate[key] = factory();
+        }
+
+        return result;
+    }
+
+    /// <summary>
+    /// Gets the reference with the specified key, adding it if not already present.
+    /// </summary>
+    /// <typeparam name="TValue">The type of the value.</typeparam>
+    /// <param name="alternate">The dictionary alternate lookup to get the reference for.</param>
+    /// <param name="key">The key to get the reference for.</param>
+    /// <returns>
+    /// The value reference with the specified key.
+    /// </returns>
+    public static TValue GetOrAdd<TValue>(this Dictionary<string, TValue>.AlternateLookup<ReadOnlySpan<char>> alternate, ReadOnlySpan<char> key)
+        where TValue : class, new()
+    {
+        if (!alternate.TryGetValue(key, out var result))
+        {
+            result = alternate[key] = new();
+        }
+
+        return result;
+    }
+
+    /// <summary>
+    /// Gets the <see cref="ReadOnlySpan{T}"/> alternate lookup for the specified dictionary of strings.
+    /// </summary>
+    /// <typeparam name="TValue">The type of the value.</typeparam>
+    /// <param name="dictionary">The dictionary to get the alternate lookup for.</param>
+    /// <returns>
+    /// The alternate lookup for spans for the specified dictionary.
+    /// </returns>
+    public static Dictionary<string, TValue>.AlternateLookup<ReadOnlySpan<char>> GetAlternateLookup<TValue>(this Dictionary<string, TValue> dictionary)
+        => dictionary.GetAlternateLookup<ReadOnlySpan<char>>();
 }

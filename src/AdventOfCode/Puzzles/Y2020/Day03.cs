@@ -42,7 +42,7 @@ public sealed class Day03 : Puzzle
 
             for (int j = 0; j < width; j++)
             {
-                if (row[j] == '#')
+                if (row[j] is '#')
                 {
                     space[i, j] = true;
                 }

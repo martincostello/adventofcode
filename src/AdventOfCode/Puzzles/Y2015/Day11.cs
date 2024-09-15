@@ -34,7 +34,7 @@ public sealed class Day11 : Puzzle
         }
         while (!(ContainsTriumvirateOfLetters(next) && ContainsNoForbiddenCharacters(next) && HasMoreThanOneDistinctPairOfLetters(next)));
 
-        return new string(next);
+        return next.ToString();
     }
 
     /// <summary>
@@ -70,6 +70,7 @@ public sealed class Day11 : Puzzle
     public static bool HasMoreThanOneDistinctPairOfLetters(ReadOnlySpan<char> value)
     {
         var letterPairs = new Dictionary<string, List<int>>();
+        var alternate = letterPairs.GetAlternateLookup();
 
         for (int i = 0; i < value.Length - 1; i++)
         {
@@ -83,7 +84,7 @@ public sealed class Day11 : Puzzle
 
             string pair = new(value.Slice(i, 2));
 
-            var indexes = letterPairs.GetOrAdd(pair);
+            var indexes = alternate.GetOrAdd(pair);
 
             if (!indexes.Contains(i - 1))
             {
@@ -121,7 +122,7 @@ public sealed class Day11 : Puzzle
 
         for (int i = value.Length - 1; !done && i > -1; i--)
         {
-            if (value[i] == 'z')
+            if (value[i] is 'z')
             {
                 value[i] = 'a';
             }

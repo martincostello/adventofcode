@@ -126,7 +126,7 @@ public sealed class Day01 : Puzzle
 
             result[i] = new Instruction()
             {
-                Direction = rawInstruction[0] == 'L' ? Direction.Left : Direction.Right,
+                Direction = rawInstruction[0] is 'L' ? Direction.Left : Direction.Right,
                 Distance = Parse<int>(rawInstruction[1..]),
             };
         }
@@ -146,10 +146,10 @@ public sealed class Day01 : Puzzle
     {
         return bearing switch
         {
-            CardinalDirection.East => direction == Direction.Left ? CardinalDirection.North : CardinalDirection.South,
-            CardinalDirection.North => direction == Direction.Left ? CardinalDirection.West : CardinalDirection.East,
-            CardinalDirection.South => direction == Direction.Left ? CardinalDirection.East : CardinalDirection.West,
-            CardinalDirection.West => direction == Direction.Left ? CardinalDirection.South : CardinalDirection.North,
+            CardinalDirection.East => direction is Direction.Left ? CardinalDirection.North : CardinalDirection.South,
+            CardinalDirection.North => direction is Direction.Left ? CardinalDirection.West : CardinalDirection.East,
+            CardinalDirection.South => direction is Direction.Left ? CardinalDirection.East : CardinalDirection.West,
+            CardinalDirection.West => direction is Direction.Left ? CardinalDirection.South : CardinalDirection.North,
             _ => throw new PuzzleException($"Invalid bearing '{bearing}'."),
         };
     }

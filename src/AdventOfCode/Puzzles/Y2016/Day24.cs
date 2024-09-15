@@ -128,15 +128,15 @@ public sealed class Day24 : Puzzle
             {
                 char content = layout[y][x];
 
-                if (content == '#')
+                if (content is '#')
                 {
                     maze.Borders.Add(new(x, y));
                 }
-                else if (content == '0')
+                else if (content is '0')
                 {
                     origin = new(x, y);
                 }
-                else if (content != '.')
+                else if (content is not '.')
                 {
                     waypoints.Add(new(x, y));
                 }

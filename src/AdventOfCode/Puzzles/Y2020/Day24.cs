@@ -71,9 +71,9 @@ public sealed class Day24 : Puzzle
         static Dictionary<Tile, bool> Iterate(Dictionary<Tile, bool> floor)
         {
             // See https://www.redblobgames.com/grids/hexagons/#range
-            int maximumX = floor.Max((p) => Math.Abs(p.Key.X));
-            int maximumY = floor.Max((p) => Math.Abs(p.Key.Y));
-            int maximumZ = floor.Max((p) => Math.Abs(p.Key.Z));
+            int maximumX = floor.Keys.Max((p) => Math.Abs(p.X));
+            int maximumY = floor.Keys.Max((p) => Math.Abs(p.Y));
+            int maximumZ = floor.Keys.Max((p) => Math.Abs(p.Z));
 
             int n = Math.Max(maximumX, maximumY);
             n = Math.Max(n, maximumZ) + 1;

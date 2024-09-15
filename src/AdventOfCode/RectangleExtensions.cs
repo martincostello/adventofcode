@@ -29,14 +29,14 @@ internal static class RectangleExtensions
     {
         for (int x = 0; x < rectangle.Width; x++)
         {
-            yield return new Point(x, 0);
-            yield return new Point(x, rectangle.Height - 1);
+            yield return new(x, 0);
+            yield return new(x, rectangle.Height - 1);
         }
 
         for (int y = 1; y < rectangle.Height - 1; y++)
         {
-            yield return new Point(0, y);
-            yield return new Point(rectangle.Width - 1, y);
+            yield return new(0, y);
+            yield return new(rectangle.Width - 1, y);
         }
     }
 }

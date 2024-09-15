@@ -120,7 +120,7 @@ public sealed class Day04 : Puzzle
 
         foreach (char ch in encryptedName)
         {
-            if (ch == '-')
+            if (ch is '-')
             {
                 builder.Append(' ');
             }

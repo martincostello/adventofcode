@@ -145,15 +145,18 @@ public sealed class Day16 : Puzzle
         internal static AuntSue Parse(string value)
         {
             var result = new AuntSue();
+            var alternate = result.Metadata.GetAlternateLookup();
 
             string[] split = value.Split(' ');
 
             result.Number = Parse<int>(split[1].TrimEnd(':'));
 
-            foreach (var item in string.Join(' ', split, 2, split.Length - 2).Tokenize(','))
+            var joined = string.Join(' ', split, 2, split.Length - 2).AsSpan();
+
+            foreach (var range in joined.Split(','))
             {
-                item.Bifurcate(':', out var first, out var second);
-                result.Metadata[new(first.Trim())] = Parse<int>(second.Trim());
+                joined[range].Bifurcate(':', out var first, out var second);
+                alternate[first.Trim()] = Parse<int>(second.Trim());
             }
 
             return result;

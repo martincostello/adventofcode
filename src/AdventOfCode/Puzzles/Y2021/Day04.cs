@@ -28,10 +28,7 @@ public sealed class Day04 : Puzzle
     /// </returns>
     public static (int FirstWinningScore, int LastWinningScore) PlayBingo(IEnumerable<string> game)
     {
-        int[] numbers = game
-            .First()
-            .AsNumbers<int>()
-            .ToArray();
+        var numbers = game.First().AsNumbers<int>();
 
         var cards = ParseCards(game);
 
@@ -112,11 +109,9 @@ public sealed class Day04 : Puzzle
             {
                 string line = card[i];
 
-                int[] numbers = line
-                    .AsNumbers<int>(' ', StringSplitOptions.RemoveEmptyEntries)
-                    .ToArray();
+                var numbers = line.AsNumbers<int>(' ', StringSplitOptions.RemoveEmptyEntries);
 
-                for (int j = 0; j < numbers.Length; j++)
+                for (int j = 0; j < numbers.Count; j++)
                 {
                     squares[i, j] = new() { Number = numbers[j] };
                 }

@@ -49,7 +49,7 @@ public sealed class Day02 : Puzzle
 
                 foreach (string cube in cubes)
                 {
-                    (string count, string color) = cube.TrimStart().Bifurcate(' ');
+                    cube.AsSpan().TrimStart().Bifurcate(' ', out var count, out var color);
                     int number = Parse<int>(count);
 
                     switch (color)

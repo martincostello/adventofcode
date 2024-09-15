@@ -84,9 +84,7 @@ public sealed class Day10 : Puzzle
     {
         string rawLengths = (await ReadResourceAsStringAsync(cancellationToken)).Trim();
 
-        var lengths = rawLengths
-            .AsNumbers<int>()
-            .ToList();
+        var lengths = rawLengths.AsNumbers<int>();
 
         ProductOfFirstTwoElements = FindProductOfFirstTwoHashElements(SequenceLength, lengths);
         DenseHash = ComputeHash(rawLengths);

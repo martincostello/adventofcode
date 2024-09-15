@@ -12,7 +12,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2022;
 public sealed class Day07 : Puzzle
 {
     /// <summary>
-    /// Gets the total size of all directories with a total size of at least 100000.
+    /// Gets the total size of all directories with a total size of at least 100,000.
     /// </summary>
     public long TotalSizeOfDirectoriesLargerThanLimit { get; private set; }
 
@@ -22,12 +22,12 @@ public sealed class Day07 : Puzzle
     public long SizeOfSmallestDirectoryToDelete { get; private set; }
 
     /// <summary>
-    /// Finds the total size of the directories with a total size of at least 100000 and
+    /// Finds the total size of the directories with a total size of at least 100,000 and
     /// the total size of the smallest directory to delete that frees enough disk space.
     /// </summary>
     /// <param name="terminalOutput">The terminal output to parse.</param>
     /// <returns>
-    /// The total size of all directories with a total size of at least 100000 and
+    /// The total size of all directories with a total size of at least 100,000 and
     /// the total size of the smallest directory to delete that frees enough disk space.
     /// </returns>
     public static (long TotalSizeOfDirectoriesLargerThanLimit, long SizeOfSmallestDirectoryToDelete) GetDirectorySizes(
@@ -125,7 +125,7 @@ public sealed class Day07 : Puzzle
                 }
                 else
                 {
-                    (string first, string second) = item.AsPair(' ');
+                    (string first, string second) = item.AsSpan().AsPair(' ');
                     current.Children.Add(new File(second, current, Parse<long>(first)));
                 }
             }

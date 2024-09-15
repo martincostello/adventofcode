@@ -35,15 +35,12 @@ public sealed class Day09 : Puzzle
 
         for (int i = 0; i < collection.Count; i++)
         {
-            string[] split = collection[i].Split(" = ");
-            string[] locations = split[0].Split(" to ");
-
-            string start = locations[0];
-            string end = locations[1];
+            collection[i].AsSpan().Bifurcate(" = ", out var first, out var second);
+            (string start, string end) = first.ToString().Bifurcate(" to ");
 
             vectors[i] = (start, end);
 
-            int distance = Parse<int>(split[1]);
+            int distance = Parse<int>(second);
 
             distances[$"{start} to {end}"] = distance;
             distances[$"{end} to {start}"] = distance;

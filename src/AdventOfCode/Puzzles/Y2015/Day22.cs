@@ -199,12 +199,12 @@ public sealed class Day22 : Puzzle
         /// <summary>
         /// Gets the names of the active spells cast by the wizard.
         /// </summary>
-        internal IList<string> ActiveSpells => _spells.Where((p) => p.TurnsLeft > 0).Select((p) => p.Name).ToArray();
+        internal string[] ActiveSpells => [.. _spells.Where((p) => p.TurnsLeft > 0).Select((p) => p.Name)];
 
         /// <summary>
         /// Gets the names of all the spells cast by the wizard.
         /// </summary>
-        internal IList<string> SpellsCast => _spells.Select((p) => p.Name).ToArray();
+        internal string[] SpellsCast => [.. _spells.Select((p) => p.Name)];
 
         /// <summary>
         /// Gets or sets the amount of mana the wizard has.
@@ -235,7 +235,7 @@ public sealed class Day22 : Puzzle
             }
 
             // Determine which spell the wizard should cast
-            string spellToConjure = _spellSelector(this, availableSpells.Select((p) => p.Key).ToList());
+            string spellToConjure = _spellSelector(this, [.. availableSpells.Select((p) => p.Key)]);
 
             // Get the spell
             SpellInfo info = availableSpells
