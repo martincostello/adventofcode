@@ -3,7 +3,7 @@ imports:
 
 jobs:
   bombardier:
-    channel: current
+    channel: Latest
   microbenchmarks:
     source:
       repository: https://github.com/martincostello/adventofcode
@@ -12,7 +12,7 @@ jobs:
     variables:
       filterArg: "*"
     arguments: --filter {{filterArg}} --memory
-    channel: current
+    channel: Latest
     options:
       benchmarkDotNet: true
   server:
@@ -20,7 +20,7 @@ jobs:
       repository: https://github.com/martincostello/adventofcode
       branchOrCommit: main
       project: src/AdventOfCode.Site/AdventOfCode.Site.csproj
-    channel: current
+    channel: Latest
     readyStateText: Application started.
 
 scenarios:
