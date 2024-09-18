@@ -9,7 +9,6 @@ using Microsoft.Extensions.Caching.Memory;
 namespace MartinCostello.AdventOfCode.Benchmarks;
 
 [MemoryDiagnoser]
-[ShortRunJob]
 public class PuzzleBenchmarks
 {
     public static IEnumerable<object> Puzzles()
