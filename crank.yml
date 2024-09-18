@@ -11,7 +11,7 @@ jobs:
       project: tests/AdventOfCode.Benchmarks/AdventOfCode.Benchmarks.csproj
     variables:
       filterArg: "*"
-    arguments: --filter {{filterArg}} --memory
+    arguments: --filter {{filterArg}} --job Short --memory
     channel: Current
     options:
       benchmarkDotNet: true
