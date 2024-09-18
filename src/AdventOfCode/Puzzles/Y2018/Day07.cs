@@ -40,12 +40,12 @@ public sealed class Day07 : Puzzle
         foreach (string item in instructions)
         {
             var instruction = item.AsSpan();
-            string constraint = instruction["Step ".Length..].ToString();
+            var constraint = instruction["Step ".Length..];
             string antecedent = constraint[..1].ToString();
 
             constraint = constraint[(" must be finished before step ".Length + 1)..];
 
-            string part = constraint[..1];
+            string part = constraint[..1].ToString();
 
             constraints.GetOrAdd(part).Add(antecedent);
 
