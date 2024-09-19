@@ -117,7 +117,7 @@ public sealed class Day08 : Puzzle
 
         foreach (ReadOnlySpan<char> operation in program)
         {
-            var op = new string(operation[..3]) switch
+            var op = operation[..3] switch
             {
                 "acc" => Operation.Accumulate,
                 "jmp" => Operation.Jump,

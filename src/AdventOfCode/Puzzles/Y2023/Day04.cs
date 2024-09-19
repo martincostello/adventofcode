@@ -42,8 +42,28 @@ public sealed class Day04 : Puzzle
 
             scratchcard[(index + 1)..].Bifurcate('|', out var winningNumbers, out var numbersHave);
 
-            HashSet<int> winning = new(new string(winningNumbers).Split(' ', StringSplitOptions.RemoveEmptyEntries).Select(Parse<int>));
-            HashSet<int> have = new(new string(numbersHave).Split(' ', StringSplitOptions.RemoveEmptyEntries).Select(Parse<int>));
+            var winning = new HashSet<int>();
+            var have = new HashSet<int>();
+
+            foreach (var range in winningNumbers.Split(' '))
+            {
+                var number = winningNumbers[range];
+
+                if (!number.IsEmpty)
+                {
+                    winning.Add(Parse<int>(number));
+                }
+            }
+
+            foreach (var range in numbersHave.Split(' '))
+            {
+                var number = numbersHave[range];
+
+                if (!number.IsEmpty)
+                {
+                    have.Add(Parse<int>(number));
+                }
+            }
 
             have.IntersectWith(winning);
 

@@ -42,8 +42,9 @@ public sealed class Day12 : Puzzle
         int heading = Headings.East;
         var ship = Point.Empty;
 
-        foreach (string instruction in instructions)
+        foreach (string item in instructions)
         {
+            var instruction = item.AsSpan();
             int units = Parse<int>(instruction[1..]);
 
             switch (instruction[0..1])
@@ -96,8 +97,9 @@ public sealed class Day12 : Puzzle
         var ship = Point.Empty;
         var waypoint = new Point(10, 1);
 
-        foreach (string instruction in instructions)
+        foreach (string item in instructions)
         {
+            var instruction = item.AsSpan();
             int units = Parse<int>(instruction[1..]);
 
             switch (instruction[0..1])

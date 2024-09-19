@@ -31,13 +31,14 @@ public sealed class Day16 : Puzzle
         int indexOfFirstTicket = notes.IndexOf("your ticket:") + 1;
         int indexOfSecondTicket = notes.IndexOf("nearby tickets:") + 1;
 
-        var rules = new Dictionary<string, ICollection<Range>>(indexOfFirstTicket - 2);
+        var rules = new Dictionary<string, Range[]>(indexOfFirstTicket - 2);
+        var alternate = rules.GetAlternateLookup();
 
         // Parse the rules
         foreach (string line in notes.Take(indexOfFirstTicket - 2))
         {
-            (string name, string instruction) = line.Bifurcate(':');
-            string[] split = instruction.Split(" or ", StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+            line.AsSpan().Bifurcate(':', out var name, out var instruction);
+            string[] split = instruction.ToString().Split(" or ", StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
 
             var ranges = new Range[split.Length];
 
@@ -47,25 +48,21 @@ public sealed class Day16 : Puzzle
                 ranges[i] = new(start, end);
             }
 
-            rules[name] = ranges;
+            alternate[name] = ranges;
         }
 
-        var allTickets = new IList<int>[notes.Count - indexOfSecondTicket + 1];
+        var allTickets = new List<int>[notes.Count - indexOfSecondTicket + 1];
 
-        allTickets[0] = notes[indexOfFirstTicket]
-            .AsNumbers<int>()
-            .ToArray();
+        allTickets[0] = notes[indexOfFirstTicket].AsNumbers<int>();
 
         // Parse the nearby tickets
         for (int i = indexOfSecondTicket; i < notes.Count; i++)
         {
-            allTickets[i - indexOfSecondTicket + 1] = notes[i]
-                .AsNumbers<int>()
-                .ToArray();
+            allTickets[i - indexOfSecondTicket + 1] = notes[i].AsNumbers<int>();
         }
 
         int invalidValues = 0;
-        var validTickets = new List<IList<int>>();
+        var validTickets = new List<List<int>>();
 
         // Find the valid tickets
         for (int i = 1; i < allTickets.Length; i++)
@@ -77,7 +74,7 @@ public sealed class Day16 : Puzzle
             {
                 int value = ticket[j];
 
-                foreach (ICollection<Range> ranges in rules.Values)
+                foreach (var ranges in rules.Values)
                 {
                     isValid = ranges.Any((p) => InRange(value, p));
 
@@ -135,7 +132,7 @@ public sealed class Day16 : Puzzle
 
                     for (int j = 0; j < validTickets.Count; j++)
                     {
-                        IList<int> ticket = validTickets[j];
+                        var ticket = validTickets[j];
                         int value = ticket[index];
 
                         bool isInRange = rule.Value.Any((p) => InRange(value, p));

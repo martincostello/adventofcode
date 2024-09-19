@@ -39,7 +39,7 @@ public sealed class Day04 : Puzzle
                 {
                     Span<char> span = p.ToCharArray();
                     span.Sort();
-                    return new string(span);
+                    return span.ToString();
                 })
                 .ToArray();
 

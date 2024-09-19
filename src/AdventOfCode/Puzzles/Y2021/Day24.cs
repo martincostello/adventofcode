@@ -39,8 +39,8 @@ public sealed class Day24 : Puzzle
         {
             int section = i * Sections;
 
-            int a = Parse<int>(instructions[section + 5][6..]);
-            int b = Parse<int>(instructions[section + 15][6..]);
+            int a = Parse<int>(instructions[section + 5].AsSpan()[6..]);
+            int b = Parse<int>(instructions[section + 15].AsSpan()[6..]);
 
             constants[i] = (a, b);
         }

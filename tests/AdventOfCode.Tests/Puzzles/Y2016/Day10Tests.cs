@@ -9,7 +9,7 @@ public sealed class Day10Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
     public static void Y2016_Day10_GetBotNumber_Returns_Correct_Solution()
     {
         // Arrange
-        string[] instructions =
+        List<string> instructions =
         [
             "value 5 goes to bot 2",
             "bot 2 gives low to bot 1 and high to bot 0",

@@ -19,7 +19,21 @@ internal static class StringExtensions
     public static (string First, string Second) Bifurcate(this string value, char separator)
     {
         value.AsSpan().Bifurcate(separator, out var first, out var second);
-        return (new(first), new(second));
+        return (first.ToString(), second.ToString());
+    }
+
+    /// <summary>
+    /// Bifurcates the specified string.
+    /// </summary>
+    /// <param name="value">The string to bifurcate.</param>
+    /// <param name="separator">The separator between the two strings.</param>
+    /// <returns>
+    /// The two strings separated by the specified character.
+    /// </returns>
+    public static (string First, string Second) Bifurcate(this string value, ReadOnlySpan<char> separator)
+    {
+        value.AsSpan().Bifurcate(separator, out var first, out var second);
+        return (first.ToString(), second.ToString());
     }
 
     /// <summary>
@@ -35,13 +49,35 @@ internal static class StringExtensions
         out ReadOnlySpan<char> first,
         out ReadOnlySpan<char> second)
     {
-        var tokens = value.Tokenize(separator);
+        var tokens = value.Split(separator);
 
         tokens.MoveNext();
-        first = tokens.Current;
+        first = value[tokens.Current];
 
         tokens.MoveNext();
-        second = tokens.Current;
+        second = value[tokens.Current];
+    }
+
+    /// <summary>
+    /// Bifurcates the specified span.
+    /// </summary>
+    /// <param name="value">The span to bifurcate.</param>
+    /// <param name="separator">The separator between the two spans.</param>
+    /// <param name="first">The first value.</param>
+    /// <param name="second">The second value.</param>
+    public static void Bifurcate(
+        this ReadOnlySpan<char> value,
+        ReadOnlySpan<char> separator,
+        out ReadOnlySpan<char> first,
+        out ReadOnlySpan<char> second)
+    {
+        var tokens = value.Split(separator);
+
+        tokens.MoveNext();
+        first = value[tokens.Current];
+
+        tokens.MoveNext();
+        second = value[tokens.Current];
     }
 
     /// <summary>
@@ -55,7 +91,7 @@ internal static class StringExtensions
     public static (string First, string Second, string Third) Trifurcate(this string value, char separator)
     {
         value.AsSpan().Trifurcate(separator, out var first, out var second, out var third);
-        return (new(first), new(second), new(third));
+        return (first.ToString(), second.ToString(), third.ToString());
     }
 
     /// <summary>
@@ -73,16 +109,16 @@ internal static class StringExtensions
         out ReadOnlySpan<char> second,
         out ReadOnlySpan<char> third)
     {
-        var tokens = value.Tokenize(separator);
+        var tokens = value.Split(separator);
 
         tokens.MoveNext();
-        first = tokens.Current;
+        first = value[tokens.Current];
 
         tokens.MoveNext();
-        second = tokens.Current;
+        second = value[tokens.Current];
 
         tokens.MoveNext();
-        third = tokens.Current;
+        third = value[tokens.Current];
     }
 
     /// <summary>
@@ -99,10 +135,7 @@ internal static class StringExtensions
             return value;
         }
 
-        Span<char> reversed = value.ToCharArray();
-        reversed.Reverse();
-
-        return new(reversed);
+        return new([.. value.Reverse()]);
     }
 
     /// <summary>
@@ -130,13 +163,36 @@ internal static class StringExtensions
     public static (T First, T Second) AsNumberPair<T>(this ReadOnlySpan<char> value, char separator = ',')
         where T : INumber<T>
     {
-        var tokens = value.Tokenize(separator);
+        var tokens = value.Split(separator);
 
         tokens.MoveNext();
-        T first = Puzzle.Parse<T>(tokens.Current);
+        T first = Puzzle.Parse<T>(value[tokens.Current]);
 
         tokens.MoveNext();
-        T second = Puzzle.Parse<T>(tokens.Current);
+        T second = Puzzle.Parse<T>(value[tokens.Current]);
+
+        return (first, second);
+    }
+
+    /// <summary>
+    /// Parses the specified span as a pair of numbers.
+    /// </summary>
+    /// <typeparam name="T">The type of the numbers.</typeparam>
+    /// <param name="value">The span to parse as a pair of numbers.</param>
+    /// <param name="separator">The optional separator between the two numbers.</param>
+    /// <returns>
+    /// The two numbers parsed from the span.
+    /// </returns>
+    public static (T First, T Second) AsNumberPair<T>(this ReadOnlySpan<char> value, ReadOnlySpan<char> separator)
+        where T : INumber<T>
+    {
+        var tokens = value.Split(separator);
+
+        tokens.MoveNext();
+        T first = Puzzle.Parse<T>(value[tokens.Current]);
+
+        tokens.MoveNext();
+        T second = Puzzle.Parse<T>(value[tokens.Current]);
 
         return (first, second);
     }
@@ -173,16 +229,16 @@ internal static class StringExtensions
         NumberStyles style = NumberStyles.None)
         where T : INumber<T>
     {
-        var tokens = value.Tokenize(separator);
+        var tokens = value.Split(separator);
 
         tokens.MoveNext();
-        T first = Puzzle.Parse<T>(tokens.Current, style);
+        T first = Puzzle.Parse<T>(value[tokens.Current], style);
 
         tokens.MoveNext();
-        T second = Puzzle.Parse<T>(tokens.Current, style);
+        T second = Puzzle.Parse<T>(value[tokens.Current], style);
 
         tokens.MoveNext();
-        T third = Puzzle.Parse<T>(tokens.Current, style);
+        T third = Puzzle.Parse<T>(value[tokens.Current], style);
 
         return (first, second, third);
     }
@@ -195,22 +251,29 @@ internal static class StringExtensions
     /// <param name="separator">The optional separator character for the numbers.</param>
     /// <param name="options">The optional options to use to split the string.</param>
     /// <returns>
-    /// An <see cref="IEnumerable{T}"/> containing the parsed numbers.
+    /// A <see cref="List{T}"/> containing the parsed numbers.
     /// </returns>
-    public static IEnumerable<T> AsNumbers<T>(this string value, char separator = ',', StringSplitOptions options = StringSplitOptions.None)
+    public static List<T> AsNumbers<T>(this string value, char separator = ',', StringSplitOptions options = StringSplitOptions.None)
         where T : INumber<T>
-        => value.Split(separator, options).Select(Puzzle.Parse<T>);
+    {
+        if (options is StringSplitOptions.None)
+        {
+            var numbers = new List<T>();
 
-    /// <summary>
-    /// Parses the specified string as a pair of strings.
-    /// </summary>
-    /// <param name="value">The string to parse as a pair of strings.</param>
-    /// <param name="separator">The optional separator between the two strings.</param>
-    /// <returns>
-    /// The two strings parsed from the string.
-    /// </returns>
-    public static (string First, string Second) AsPair(this string value, char separator = ',')
-        => value.AsSpan().AsPair(separator);
+            foreach (var range in value.AsSpan().Split(separator))
+            {
+                numbers.Add(Puzzle.Parse<T>(value[range]));
+            }
+
+            numbers.TrimExcess();
+
+            return numbers;
+        }
+        else
+        {
+            return value.Split(separator, options).Select(Puzzle.Parse<T>).ToList();
+        }
+    }
 
     /// <summary>
     /// Parses the specified span as a pair of strings.
@@ -222,14 +285,32 @@ internal static class StringExtensions
     /// </returns>
     public static (string First, string Second) AsPair(this ReadOnlySpan<char> value, char separator = ',')
     {
-        var tokens = value.Tokenize(separator);
+        var tokens = value.Split(separator);
 
         tokens.MoveNext();
-        string first = new(tokens.Current);
+        string first = value[tokens.Current].ToString();
 
         tokens.MoveNext();
-        string second = new(tokens.Current);
+        string second = value[tokens.Current].ToString();
 
         return (first, second);
+    }
+
+    /// <summary>
+    /// Parses the specified span as a pair of strings.
+    /// </summary>
+    /// <param name="value">The span to parse as a pair of strings.</param>
+    /// <param name="separator">The optional separator between the two strings.</param>
+    /// <param name="first">The first value of the pair.</param>
+    /// <param name="second">The second value of the pair.</param>
+    public static void AsPair(this ReadOnlySpan<char> value, char separator, out ReadOnlySpan<char> first, out ReadOnlySpan<char> second)
+    {
+        var tokens = value.Split(separator);
+
+        tokens.MoveNext();
+        first = value[tokens.Current];
+
+        tokens.MoveNext();
+        second = value[tokens.Current];
     }
 }

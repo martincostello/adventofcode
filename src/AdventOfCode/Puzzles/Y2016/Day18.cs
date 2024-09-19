@@ -39,7 +39,7 @@ public sealed class Day18 : Puzzle
 
         for (int x = 0; x < width; x++)
         {
-            if (firstRowTiles[x] == '^')
+            if (firstRowTiles[x] is '^')
             {
                 tiles[x, 0] = true;
             }

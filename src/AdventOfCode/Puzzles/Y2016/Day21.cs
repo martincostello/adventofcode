@@ -26,21 +26,21 @@ public sealed class Day21 : Puzzle
     /// The scrambled text after applying the instructions in <paramref name="instructions"/>
     /// to the text specified by <paramref name="text"/>.
     /// </returns>
-    internal static string Scramble(string text, IEnumerable<string> instructions, bool reverse)
+    internal static string Scramble(ReadOnlySpan<char> text, IEnumerable<string> instructions, bool reverse)
     {
         if (reverse)
         {
             instructions = instructions.Reverse();
         }
 
-        Span<char> values = text.ToCharArray();
+        Span<char> values = [.. text];
 
         foreach (string instruction in instructions)
         {
             Process(instruction, values, reverse);
         }
 
-        return new string(values);
+        return values.ToString();
     }
 
     /// <summary>
@@ -183,13 +183,14 @@ public sealed class Day21 : Puzzle
             (x, y) = (y, x);
         }
 
-        string value = new(values);
-        string ch = values[x].ToString(CultureInfo.InvariantCulture);
+        List<char> swap = [.. values];
 
-        value = value.Remove(x, 1);
-        value = value.Insert(y, ch);
+        char ch = values[x];
 
-        value.CopyTo(values);
+        swap.RemoveAt(x);
+        swap.Insert(y, ch);
+
+        swap.CopyTo(values);
     }
 
     /// <summary>

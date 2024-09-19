@@ -30,7 +30,7 @@ public sealed class Day25 : Puzzle
 
         ulong result = 2015_11_25;
 
-        var current = new Point(0, 0);
+        var current = Point.Empty;
         var target = new Point(column, row);
 
         int currentRow = 0;

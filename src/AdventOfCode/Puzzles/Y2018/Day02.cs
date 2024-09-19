@@ -58,8 +58,8 @@ public sealed class Day02 : Puzzle
             counts[ch]++;
         }
 
-        bool hasDoubles = counts.Values.Any((p) => p == 2);
-        bool hasTriples = counts.Values.Any((p) => p == 3);
+        bool hasDoubles = counts.Values.Any((p) => p is 2);
+        bool hasTriples = counts.Values.Any((p) => p is 3);
 
         return (hasDoubles ? 1 : 0, hasTriples ? 1 : 0);
     }

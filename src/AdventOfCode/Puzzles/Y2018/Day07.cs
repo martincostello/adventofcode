@@ -37,14 +37,15 @@ public sealed class Day07 : Puzzle
         var available = new HashSet<string>(instructions.Count * 2);
         var constraints = new Dictionary<string, HashSet<string>>();
 
-        foreach (string instruction in instructions)
+        foreach (string item in instructions)
         {
-            string constraint = instruction["Step ".Length..];
-            string antecedent = constraint[..1];
+            var instruction = item.AsSpan();
+            var constraint = instruction["Step ".Length..];
+            string antecedent = constraint[..1].ToString();
 
             constraint = constraint[(" must be finished before step ".Length + 1)..];
 
-            string part = constraint[..1];
+            string part = constraint[..1].ToString();
 
             constraints.GetOrAdd(part).Add(antecedent);
 

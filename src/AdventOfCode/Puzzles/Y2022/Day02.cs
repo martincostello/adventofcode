@@ -52,7 +52,7 @@ public sealed class Day02 : Puzzle
 
         foreach (string move in moves)
         {
-            (string opponent, string player) = move.AsPair(' ');
+            (string opponent, string player) = move.AsSpan().AsPair(' ');
 
             Move opponentMove = ParseMove(opponent);
             Move playerMove = moveSelector(player, opponentMove);

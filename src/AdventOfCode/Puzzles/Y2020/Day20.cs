@@ -560,7 +560,7 @@ public sealed class Day20 : Puzzle
                     rotation[length - y - 1] = Grid[y][x];
                 }
 
-                rotated[x] = new(rotation);
+                rotated[x] = rotation.ToString();
             }
 
             Grid = rotated;

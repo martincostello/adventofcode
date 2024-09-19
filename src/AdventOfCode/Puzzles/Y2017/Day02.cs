@@ -119,13 +119,13 @@ public sealed class Day02 : Puzzle
     /// <returns>
     /// An array containing the columns for each row of the spreadsheet.
     /// </returns>
-    private static IList<int>[] ParseSpreadsheet(List<string> rows)
+    private static List<int>[] ParseSpreadsheet(List<string> rows)
     {
-        var spreadsheet = new IList<int>[rows.Count];
+        var spreadsheet = new List<int>[rows.Count];
 
         for (int i = 0; i < spreadsheet.Length; i++)
         {
-            spreadsheet[i] = rows[i].AsNumbers<int>('\t').ToArray();
+            spreadsheet[i] = rows[i].AsNumbers<int>('\t');
         }
 
         return spreadsheet;

@@ -41,7 +41,7 @@ public sealed class Day15 : Puzzle
 
         for (int t = 0; ; t++)
         {
-            bool areAllDiscsAligned = discs.All((p) => p.GetPosition(t + p.Offset) == 0);
+            bool areAllDiscsAligned = discs.All((p) => p.GetPosition(t + p.Offset) is 0);
 
             if (areAllDiscsAligned)
             {

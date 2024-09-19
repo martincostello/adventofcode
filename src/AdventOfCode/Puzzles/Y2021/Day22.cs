@@ -107,22 +107,13 @@ public sealed class Day22 : Puzzle
 
         static (Cuboid Cuboid, bool TurnOn) Parse(string instruction)
         {
-            (string state, string coordinates) = instruction.Bifurcate(' ');
-            (string rangeX, string rangeY, string rangeZ) = coordinates.Trifurcate(',');
+            instruction.AsSpan().Bifurcate(' ', out var state, out var coordinates);
+            coordinates.Trifurcate(',', out var rangeX, out var rangeY, out var rangeZ);
 
             const string Range = "..";
-            string[] valuesX = rangeX[2..].Split(Range);
-            string[] valuesY = rangeY[2..].Split(Range);
-            string[] valuesZ = rangeZ[2..].Split(Range);
-
-            int minX = Parse<int>(valuesX[0]);
-            int maxX = Parse<int>(valuesX[1]);
-
-            int minY = Parse<int>(valuesY[0]);
-            int maxY = Parse<int>(valuesY[1]);
-
-            int minZ = Parse<int>(valuesZ[0]);
-            int maxZ = Parse<int>(valuesZ[1]);
+            (int minX, int maxX) = rangeX[2..].AsNumberPair<int>(Range);
+            (int minY, int maxY) = rangeY[2..].AsNumberPair<int>(Range);
+            (int minZ, int maxZ) = rangeZ[2..].AsNumberPair<int>(Range);
 
             int lengthX = maxX - minX + 1;
             int lengthY = maxY - minY + 1;

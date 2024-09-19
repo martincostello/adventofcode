@@ -45,13 +45,13 @@ public sealed class Day13 : Puzzle
                 continue;
             }
 
-            if (instruction[0] == 'f')
+            if (instruction[0] is 'f')
             {
                 string fold = instruction.Split(' ')[2];
                 string[] parts = fold.Split('=');
                 int size = Parse<int>(parts[1]);
 
-                if (parts[0][0] == 'x')
+                if (parts[0][0] is 'x')
                 {
                     foldLines.Add(new(size, 0));
                 }
@@ -63,7 +63,7 @@ public sealed class Day13 : Puzzle
                 continue;
             }
 
-            int[] points = instruction.AsNumbers<int>().ToArray();
+            var points = instruction.AsNumbers<int>();
 
             paper[new(points[0], points[1])] = true;
         }

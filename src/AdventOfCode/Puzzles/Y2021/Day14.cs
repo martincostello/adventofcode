@@ -36,14 +36,12 @@ public sealed class Day14 : Puzzle
         string template = instructions[0];
 
         var insertions = new Dictionary<string, char>(instructions.Count - 2);
+        var alternate = insertions.GetAlternateLookup();
 
         foreach (string instruction in instructions.Skip(2))
         {
-            string[] split = instruction.Split(" -> ");
-            string pair = split[0];
-            char element = split[1][0];
-
-            insertions[pair] = element;
+            instruction.AsSpan().Bifurcate(" -> ", out var pair, out var element);
+            alternate[pair] = element[0];
         }
 
         var pairCounts = new Dictionary<string, long>();
@@ -66,8 +64,8 @@ public sealed class Day14 : Puzzle
                 {
                     pairCounts[pair] -= count;
 
-                    string pair1 = pair[0] + string.Empty + element;
-                    string pair2 = element + string.Empty + pair[1];
+                    string pair1 = $"{pair[0]}{element}";
+                    string pair2 = $"{element}{pair[1]}";
 
                     pairCounts.AddOrIncrement(pair1, count, count);
                     pairCounts.AddOrIncrement(pair2, count, count);

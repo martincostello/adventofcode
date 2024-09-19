@@ -62,16 +62,19 @@ public sealed class Day08 : Puzzle
         {
             string path = nodes[0];
             var network = new Graph<string>();
+            var alternate = network.Edges.GetAlternateLookup();
 
             foreach (string node in nodes.Skip(2))
             {
-                string location = node[..3];
-                string left = node.Substring(7, 3);
-                string right = node.Substring(12, 3);
+                var span = node.AsSpan();
 
-                var edge = network.Edges.GetOrAdd(location);
-                edge.Add(left);
-                edge.Add(right);
+                var location = span[..3];
+                var left = span.Slice(7, 3);
+                var right = span.Slice(12, 3);
+
+                var edge = alternate.GetOrAdd(location);
+                edge.Add(left.ToString());
+                edge.Add(right.ToString());
             }
 
             return (path, network);

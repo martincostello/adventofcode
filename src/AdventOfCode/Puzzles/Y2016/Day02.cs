@@ -89,7 +89,7 @@ public sealed class Day02 : Puzzle
         {
             for (int x = 0; x < width; x++)
             {
-                if (grid[y, x] == '5')
+                if (grid[y, x] is '5')
                 {
                     origin = new(x, y);
                     break;

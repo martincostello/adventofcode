@@ -115,7 +115,7 @@ public sealed class Day08 : Puzzle
     /// <returns>
     /// The result of evaluating the logic condition.
     /// </returns>
-    private static bool Evaluate(int left, int right, string operation)
+    private static bool Evaluate(int left, int right, ReadOnlySpan<char> operation)
     {
         return operation switch
         {

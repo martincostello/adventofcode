@@ -1,7 +1,6 @@
 ﻿// Copyright (c) Martin Costello, 2015. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
-using System.Collections.Specialized;
 using System.Text.RegularExpressions;
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2020;
@@ -39,21 +38,23 @@ public sealed partial class Day04 : Puzzle
     /// </returns>
     public static (int Valid, int Verified) VerifyPassports(ICollection<string> batch)
     {
-        var passports = new List<NameValueCollection>();
-        var current = new NameValueCollection();
+        var passports = new List<Dictionary<string, string>>();
+        var current = new Dictionary<string, string>();
 
-        foreach (string line in batch)
+        foreach (string item in batch)
         {
-            if (string.IsNullOrEmpty(line))
+            var line = item.AsSpan();
+
+            if (line.IsEmpty)
             {
                 passports.Add(current);
                 current = [];
                 continue;
             }
 
-            foreach (var pair in line.Tokenize(' '))
+            foreach (var range in line.Split(' '))
             {
-                pair.Bifurcate(':', out var name, out var value);
+                line[range].Bifurcate(':', out var name, out var value);
                 current[new string(name)] = new(value);
             }
         }
@@ -68,7 +69,7 @@ public sealed partial class Day04 : Puzzle
 
         foreach (var passport in passports)
         {
-            bool isValid = passport.AllKeys.Intersect(RequiredKeys).ExactCount(RequiredKeys.Length);
+            bool isValid = passport.Keys.Intersect(RequiredKeys).ExactCount(RequiredKeys.Length);
 
             if (isValid)
             {
@@ -107,9 +108,9 @@ public sealed partial class Day04 : Puzzle
     /// <returns>
     /// <see langword="true"/> if the passport is verified; otherwise <see langword="false"/>.
     /// </returns>
-    private static bool IsPasswordVerified(NameValueCollection passport)
+    private static bool IsPasswordVerified(Dictionary<string, string> passport)
     {
-        static bool IsValidEyeColor(string? value) => value switch
+        static bool IsValidEyeColor(ReadOnlySpan<char> value) => value switch
         {
             "amb" => true,
             "blu" => true,
@@ -121,9 +122,9 @@ public sealed partial class Day04 : Puzzle
             _ => false,
         };
 
-        static bool IsValidHairColor(string? value)
+        static bool IsValidHairColor(ReadOnlySpan<char> value)
         {
-            if (string.IsNullOrEmpty(value))
+            if (value.IsEmpty)
             {
                 return false;
             }
@@ -163,9 +164,9 @@ public sealed partial class Day04 : Puzzle
         static bool IsValidYear(ReadOnlySpan<char> value, int minimum, int maximum)
             => IsValidNumber(value, minimum, maximum) && value!.Length == 4;
 
-        foreach (string? key in passport.AllKeys)
+        foreach (string? key in passport.Keys)
         {
-            string? value = passport[key];
+            ReadOnlySpan<char> value = passport[key];
 
             bool isValid = key switch
             {

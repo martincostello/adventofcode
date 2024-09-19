@@ -43,7 +43,9 @@ public sealed class Day10 : Puzzle
 
         foreach (string instruction in program)
         {
-            switch (instruction[..4])
+            var span = instruction.AsSpan();
+
+            switch (span[..4])
             {
                 case "noop":
                     Tick();
@@ -51,7 +53,7 @@ public sealed class Day10 : Puzzle
 
                 case "addx":
                     Tick();
-                    Tick(instruction[5..]);
+                    Tick(span[5..]);
                     break;
 
                 default:
@@ -59,11 +61,11 @@ public sealed class Day10 : Puzzle
             }
         }
 
-        void Tick(string? operand = null)
+        void Tick(ReadOnlySpan<char> operand = default)
         {
             Draw();
 
-            if (operand is { })
+            if (!operand.IsEmpty)
             {
                 register += Parse<int>(operand);
             }

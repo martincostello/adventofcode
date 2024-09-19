@@ -63,7 +63,7 @@ public sealed class Day07 : Puzzle
                         result[wireId] = value;
                     }
                 }
-                else if (words.Length == 2 && firstOperand == "NOT")
+                else if (words.Length == 2 && firstOperand is "NOT")
                 {
                     // "NOT e -> f" or "NOT 1 -> g"
                     secondOperand = words.ElementAtOrDefault(1);
@@ -139,7 +139,7 @@ public sealed class Day07 : Puzzle
     /// <returns>
     /// The solved value for the specified parameters if solved; otherwise <see langword="null"/>.
     /// </returns>
-    private static ushort? TrySolveValueForOperation(string operation, ushort firstValue, ushort secondValue)
+    private static ushort? TrySolveValueForOperation(ReadOnlySpan<char> operation, ushort firstValue, ushort secondValue)
     {
         return operation switch
         {

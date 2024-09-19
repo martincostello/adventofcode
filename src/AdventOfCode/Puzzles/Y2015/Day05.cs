@@ -33,10 +33,10 @@ public sealed class Day05 : Puzzle
     /// <returns>
     /// <see langword="true"/> if <paramref name="value"/> is 'nice'; otherwise <see langword="false"/>.
     /// </returns>
-    public static bool IsNiceV1(string value)
+    public static bool IsNiceV1(ReadOnlySpan<char> value)
     {
         // The string is not nice if it contain any of the following sequences
-        if (value.AsSpan().ContainsAny(NotNiceSequences))
+        if (value.ContainsAny(NotNiceSequences))
         {
             return false;
         }
@@ -105,12 +105,11 @@ public sealed class Day05 : Puzzle
     internal static bool HasPairOfLettersWithMoreThanOneOccurrence(ReadOnlySpan<char> value)
     {
         var letterPairs = new Dictionary<string, List<int>>();
+        var alternate = letterPairs.GetAlternateLookup();
 
         for (int i = 0; i < value.Length - 1; i++)
         {
-            string pair = new(value.Slice(i, 2));
-
-            var indexes = letterPairs.GetOrAdd(pair);
+            var indexes = alternate.GetOrAdd(value.Slice(i, 2));
 
             if (!indexes.Contains(i - 1))
             {
@@ -128,7 +127,7 @@ public sealed class Day05 : Puzzle
     /// <returns>
     /// <see langword="true"/> if <paramref name="value"/> meets the rule; otherwise <see langword="false"/>.
     /// </returns>
-    internal static bool HasLetterThatIsTheBreadOfALetterSandwich(string value)
+    internal static bool HasLetterThatIsTheBreadOfALetterSandwich(ReadOnlySpan<char> value)
     {
         if (value.Length < 3)
         {
@@ -152,7 +151,7 @@ public sealed class Day05 : Puzzle
     {
         var values = await ReadResourceAsLinesAsync(cancellationToken);
 
-        NiceStringCountV1 = values.Count(IsNiceV1);
+        NiceStringCountV1 = values.Count((p) => IsNiceV1(p));
         NiceStringCountV2 = values.Count(IsNiceV2);
 
         if (Verbose)

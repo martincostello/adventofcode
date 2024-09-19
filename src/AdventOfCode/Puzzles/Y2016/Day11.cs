@@ -227,7 +227,7 @@ public sealed class Day11 : Puzzle
         {
             State = initialState;
 
-            AssemblyFloor = State.Max((p) => p.Key);
+            AssemblyFloor = State.Keys.Max();
             TotalItems = State.SelectMany((p) => p.Value).Count();
 
             Elevator = new Elevator(AssemblyFloor);

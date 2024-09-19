@@ -50,22 +50,14 @@ public sealed class Day17 : Puzzle
 
         return (apogees.Max(), apogees.Count);
 
-        static Rectangle GetTargetArea(string target)
+        static Rectangle GetTargetArea(ReadOnlySpan<char> target)
         {
             target = target["target area: ".Length..];
 
-            string[] split = target.Split(',', StringSplitOptions.TrimEntries);
-            string rangeX = split[0][2..];
-            string rangeY = split[1][2..];
+            target.Bifurcate(',', out var rangeX, out var rangeY);
 
-            string[] valuesX = rangeX.Split("..");
-            string[] valuesY = rangeY.Split("..");
-
-            int minX = Parse<int>(valuesX[0]);
-            int maxX = Parse<int>(valuesX[1]);
-
-            int minY = Parse<int>(valuesY[0]);
-            int maxY = Parse<int>(valuesY[1]);
+            (int minX, int maxX) = rangeX.Trim()[2..].AsNumberPair<int>("..");
+            (int minY, int maxY) = rangeY.Trim()[2..].AsNumberPair<int>("..");
 
             return new(
                 minX,

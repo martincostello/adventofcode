@@ -1,8 +1,6 @@
 ﻿// Copyright (c) Martin Costello, 2015. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
-using System.Buffers;
-
 namespace MartinCostello.AdventOfCode.Puzzles.Y2016;
 
 /// <summary>
@@ -136,22 +134,10 @@ public sealed class Day07 : Puzzle
             char ch2 = value[i + 1];
             char ch3 = value[i + 2];
 
-            char[] shared = ArrayPool<char>.Shared.Rent(3);
-
-            try
+            if (ch1 != ch2 && ch1 == ch3)
             {
-                shared[0] = ch1;
-                shared[1] = ch2;
-                shared[2] = ch3;
-
-                if (ch1 != ch2 && ch1 == ch3)
-                {
-                    result.Add(new(shared.AsSpan(0, 3)));
-                }
-            }
-            finally
-            {
-                ArrayPool<char>.Shared.Return(shared);
+                Span<char> span = [ch1, ch2, ch3];
+                result.Add(span.ToString());
             }
         }
 
