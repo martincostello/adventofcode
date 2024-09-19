@@ -45,14 +45,14 @@ public sealed class Day02 : Puzzle
     {
         int total = 0;
 
-        Func<ReadOnlySpan<char>, Move, Move> moveSelector =
+        Func<string, Move, Move> moveSelector =
             containsDesiredOutcome ?
             (value, opponent) => GetMove(ParseOutcome(value), opponent) :
             (value, _) => ParseMove(value);
 
         foreach (string move in moves)
         {
-            move.AsSpan().AsPair(' ', out var opponent, out var player);
+            (string opponent, string player) = move.AsPair(' ');
 
             Move opponentMove = ParseMove(opponent);
             Move playerMove = moveSelector(player, opponentMove);
@@ -87,20 +87,20 @@ public sealed class Day02 : Puzzle
             _ => player == opponent ? Outcome.Draw : throw new InvalidOperationException("Invalid move combination."),
         };
 
-        static Move ParseMove(ReadOnlySpan<char> value) => value switch
+        static Move ParseMove(string value) => value switch
         {
             "A" or "X" => Move.Rock,
             "B" or "Y" => Move.Paper,
             "C" or "Z" => Move.Scissors,
-            _ => throw new ArgumentOutOfRangeException(nameof(value), value.ToString(), "Invalid move."),
+            _ => throw new ArgumentOutOfRangeException(nameof(value), value, "Invalid move."),
         };
 
-        static Outcome ParseOutcome(ReadOnlySpan<char> value) => value switch
+        static Outcome ParseOutcome(string value) => value switch
         {
             "X" => Outcome.Lose,
             "Y" => Outcome.Draw,
             "Z" => Outcome.Win,
-            _ => throw new ArgumentOutOfRangeException(nameof(value), value.ToString(), "Invalid outcome."),
+            _ => throw new ArgumentOutOfRangeException(nameof(value), value, "Invalid outcome."),
         };
     }
 
