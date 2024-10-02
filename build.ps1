@@ -5,11 +5,11 @@
 
 param(
     [Parameter(Mandatory = $false)][switch] $SkipPublish,
-    [Parameter(Mandatory = $false)][switch] $SkipTests,
-    [Parameter(Mandatory = $false)][string] $Runtime = ""
+    [Parameter(Mandatory = $false)][switch] $SkipTests
 )
 
 $ErrorActionPreference = "Stop"
+$InformationPreference = "Continue"
 $global:ProgressPreference = "SilentlyContinue"
 
 $solutionPath = $PSScriptRoot
@@ -19,7 +19,7 @@ $dotnetVersion = (Get-Content $sdkFile | Out-String | ConvertFrom-Json).sdk.vers
 $installDotNetSdk = $false;
 
 if (($null -eq (Get-Command "dotnet" -ErrorAction SilentlyContinue)) -and ($null -eq (Get-Command "dotnet.exe" -ErrorAction SilentlyContinue))) {
-    Write-Host "The .NET SDK is not installed."
+    Write-Information "The .NET SDK is not installed."
     $installDotNetSdk = $true
 }
 else {
@@ -31,7 +31,7 @@ else {
     }
 
     if ($installedDotNetVersion -ne $dotnetVersion) {
-        Write-Host "The required version of the .NET SDK is not installed. Expected $dotnetVersion."
+        Write-Information "The required version of the .NET SDK is not installed. Expected $dotnetVersion."
         $installDotNetSdk = $true
     }
 }
@@ -70,7 +70,7 @@ if ($installDotNetSdk -eq $true) {
     $env:PATH = "$env:DOTNET_INSTALL_DIR;$env:PATH"
 }
 
-Write-Host "Building solution..." -ForegroundColor Green
+Write-Information "Building solution..."
 
 & $dotnet build ./AdventOfCode.sln
 
@@ -79,7 +79,7 @@ if ($LASTEXITCODE -ne 0) {
 }
 
 if ($SkipTests -eq $false) {
-    Write-Host "Running tests..." -ForegroundColor Green
+    Write-Information "Running tests..."
 
     $additionalArgs = @()
 
@@ -104,7 +104,7 @@ if ($SkipTests -eq $false) {
 
 if ($SkipPublish -eq $false) {
 
-    Write-Host "Publishing application..." -ForegroundColor Green
+    Write-Information "Publishing application..."
 
     $projectPath = (Join-Path $solutionPath "src" "AdventOfCode.Site")
     $projectFile = Join-Path $projectPath "AdventOfCode.Site.csproj"
