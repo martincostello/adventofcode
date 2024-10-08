@@ -14,8 +14,6 @@
     <TargetFramework>net9.0</TargetFramework>
     <TypeScriptCompileBlocked>true</TypeScriptCompileBlocked>
     <TypeScriptToolsVersion>latest</TypeScriptToolsVersion>
-    <!-- HACK Workaround for https://github.com/dotnet/runtime/issues/106566 -->
-    <UseSystemZlib>false</UseSystemZlib>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(PublishForAWSLambda)' == 'true' ">
     <AssemblyName>bootstrap</AssemblyName>
