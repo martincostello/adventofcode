@@ -16,7 +16,7 @@
     <PackageVersion Include="Microsoft.ICU.ICU4C.Runtime" Version="72.1.0.3" />
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.12.0" />
     <PackageVersion Include="Microsoft.OpenApi" Version="1.6.22" />
-    <PackageVersion Include="Microsoft.Playwright" Version="1.48.0" />
+    <PackageVersion Include="Microsoft.Playwright" Version="1.49.0" />
     <PackageVersion Include="Microsoft.Toolkit.HighPerformance" Version="7.1.2" />
     <PackageVersion Include="Microsoft.TypeScript.MSBuild" Version="5.7.1" />
     <PackageVersion Include="RazorSlices" Version="0.8.1" />
