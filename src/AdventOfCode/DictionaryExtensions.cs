@@ -1,6 +1,9 @@
 ﻿// Copyright (c) Martin Costello, 2015. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
+using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
+
 namespace MartinCostello.AdventOfCode;
 
 /// <summary>
@@ -16,8 +19,10 @@ internal static class DictionaryExtensions
     /// <param name="dictionary">The dictionary to add or increment the value for.</param>
     /// <param name="key">The key to increment the value of or add to the dictionary.</param>
     /// <param name="value">The value to add to the dictionary if the key is not found.</param>
-    public static void AddOrIncrement<TKey, TValue>(this IDictionary<TKey, TValue> dictionary, TKey key, TValue value)
-        where TValue : INumber<TValue>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static void AddOrIncrement<TKey, TValue>(this Dictionary<TKey, TValue> dictionary, TKey key, TValue value)
+        where TKey : notnull
+        where TValue : notnull, INumber<TValue>
         => dictionary.AddOrIncrement(key, value, TValue.One);
 
     /// <summary>
@@ -29,9 +34,13 @@ internal static class DictionaryExtensions
     /// <param name="key">The key to increment the value of or add to the dictionary.</param>
     /// <param name="value">The value to add to the dictionary if the key is not found.</param>
     /// <param name="increment">The value to increment by.</param>
-    public static void AddOrIncrement<TKey, TValue>(this IDictionary<TKey, TValue> dictionary, TKey key, TValue value, TValue increment)
-        where TValue : INumber<TValue> =>
-        dictionary[key] = dictionary.TryGetValue(key, out var current) ? current + increment : value;
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static void AddOrIncrement<TKey, TValue>(this Dictionary<TKey, TValue> dictionary, TKey key, TValue value, TValue increment)
+        where TKey : notnull
+        where TValue : notnull, INumber<TValue>
+#pragma warning disable CS8604
+        => CollectionsMarshal.GetValueRefOrAddDefault(dictionary, key, out bool found) += found ? increment : value;
+#pragma warning restore CS8604
 
     /// <summary>
     /// Decrements the value of the specified key, or adds it if not already present.
@@ -41,9 +50,11 @@ internal static class DictionaryExtensions
     /// <param name="dictionary">The dictionary to add or decrement the value for.</param>
     /// <param name="key">The key to decrement the value of or add to the dictionary.</param>
     /// <param name="value">The value to add to the dictionary if the key is not found.</param>
-    public static void AddOrDecrement<TKey, TValue>(this IDictionary<TKey, TValue> dictionary, TKey key, TValue value)
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static void AddOrDecrement<TKey, TValue>(this Dictionary<TKey, TValue> dictionary, TKey key, TValue value)
+        where TKey : notnull
         where TValue : INumber<TValue>
-        => dictionary.AddOrDecrement(key, value, TValue.One);
+        => dictionary.AddOrIncrement(key, value, -TValue.One);
 
     /// <summary>
     /// Decrements the value of the specified key by the specified value, or adds it if not already present.
@@ -54,9 +65,11 @@ internal static class DictionaryExtensions
     /// <param name="key">The key to decrement the value of or add to the dictionary.</param>
     /// <param name="value">The value to add to the dictionary if the key is not found.</param>
     /// <param name="decrement">The value to decrement by.</param>
-    public static void AddOrDecrement<TKey, TValue>(this IDictionary<TKey, TValue> dictionary, TKey key, TValue value, TValue decrement)
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static void AddOrDecrement<TKey, TValue>(this Dictionary<TKey, TValue> dictionary, TKey key, TValue value, TValue decrement)
+        where TKey : notnull
         where TValue : INumber<TValue>
-        => dictionary[key] = dictionary.TryGetValue(key, out var current) ? current - decrement : value;
+        => dictionary.AddOrIncrement(key, value, -decrement);
 
     /// <summary>
     /// Gets the reference with the specified key, adding it if not already present.
@@ -111,6 +124,7 @@ internal static class DictionaryExtensions
     /// <param name="alternate">The dictionary to add or increment the value for.</param>
     /// <param name="key">The key to increment the value of or add to the dictionary.</param>
     /// <param name="value">The value to add to the dictionary if the key is not found.</param>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static void AddOrIncrement<TValue>(this Dictionary<string, TValue>.AlternateLookup<ReadOnlySpan<char>> alternate, ReadOnlySpan<char> key, TValue value)
         where TValue : INumber<TValue>
         => alternate.AddOrIncrement(key, value, TValue.One);
@@ -123,9 +137,12 @@ internal static class DictionaryExtensions
     /// <param name="key">The key to increment the value of or add to the dictionary.</param>
     /// <param name="value">The value to add to the dictionary if the key is not found.</param>
     /// <param name="increment">The value to increment by.</param>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static void AddOrIncrement<TValue>(this Dictionary<string, TValue>.AlternateLookup<ReadOnlySpan<char>> alternate, ReadOnlySpan<char> key, TValue value, TValue increment)
-        where TValue : INumber<TValue> =>
-        alternate[key] = alternate.TryGetValue(key, out var current) ? current + increment : value;
+        where TValue : INumber<TValue>
+#pragma warning disable CS8604
+        => CollectionsMarshal.GetValueRefOrAddDefault(alternate, key, out bool found) += found ? increment : value;
+#pragma warning restore CS8604
 
     /// <summary>
     /// Decrements the value of the specified key, or adds it if not already present.
@@ -134,9 +151,10 @@ internal static class DictionaryExtensions
     /// <param name="alternate">The dictionary to add or decrement the value for.</param>
     /// <param name="key">The key to decrement the value of or add to the dictionary.</param>
     /// <param name="value">The value to add to the dictionary if the key is not found.</param>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static void AddOrDecrement<TValue>(this Dictionary<string, TValue>.AlternateLookup<ReadOnlySpan<char>> alternate, ReadOnlySpan<char> key, TValue value)
         where TValue : INumber<TValue>
-        => alternate.AddOrDecrement(key, value, TValue.One);
+        => alternate.AddOrIncrement(key, value, -TValue.One);
 
     /// <summary>
     /// Decrements the value of the specified key by the specified value, or adds it if not already present.
@@ -146,9 +164,12 @@ internal static class DictionaryExtensions
     /// <param name="key">The key to decrement the value of or add to the dictionary.</param>
     /// <param name="value">The value to add to the dictionary if the key is not found.</param>
     /// <param name="decrement">The value to decrement by.</param>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static void AddOrDecrement<TValue>(this Dictionary<string, TValue>.AlternateLookup<ReadOnlySpan<char>> alternate, ReadOnlySpan<char> key, TValue value, TValue decrement)
         where TValue : INumber<TValue>
-        => alternate[key] = alternate.TryGetValue(key, out var current) ? current - decrement : value;
+#pragma warning disable CS8604
+        => alternate.AddOrIncrement(key, value, -decrement);
+#pragma warning restore CS8604
 
     /// <summary>
     /// Gets the reference with the specified key, adding it if not already present.
@@ -202,6 +223,7 @@ internal static class DictionaryExtensions
     /// <returns>
     /// The alternate lookup for spans for the specified dictionary.
     /// </returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Dictionary<string, TValue>.AlternateLookup<ReadOnlySpan<char>> GetAlternateLookup<TValue>(this Dictionary<string, TValue> dictionary)
         => dictionary.GetAlternateLookup<ReadOnlySpan<char>>();
 }
