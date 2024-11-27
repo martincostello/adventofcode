@@ -16,7 +16,8 @@ internal static class DictionaryExtensions
     /// <param name="dictionary">The dictionary to add or increment the value for.</param>
     /// <param name="key">The key to increment the value of or add to the dictionary.</param>
     /// <param name="value">The value to add to the dictionary if the key is not found.</param>
-    public static void AddOrIncrement<TKey, TValue>(this IDictionary<TKey, TValue> dictionary, TKey key, TValue value)
+    public static void AddOrIncrement<TKey, TValue>(this Dictionary<TKey, TValue> dictionary, TKey key, TValue value)
+        where TKey : notnull
         where TValue : INumber<TValue>
         => dictionary.AddOrIncrement(key, value, TValue.One);
 
@@ -29,7 +30,8 @@ internal static class DictionaryExtensions
     /// <param name="key">The key to increment the value of or add to the dictionary.</param>
     /// <param name="value">The value to add to the dictionary if the key is not found.</param>
     /// <param name="increment">The value to increment by.</param>
-    public static void AddOrIncrement<TKey, TValue>(this IDictionary<TKey, TValue> dictionary, TKey key, TValue value, TValue increment)
+    public static void AddOrIncrement<TKey, TValue>(this Dictionary<TKey, TValue> dictionary, TKey key, TValue value, TValue increment)
+        where TKey : notnull
         where TValue : INumber<TValue> =>
         dictionary[key] = dictionary.TryGetValue(key, out var current) ? current + increment : value;
 
@@ -41,9 +43,10 @@ internal static class DictionaryExtensions
     /// <param name="dictionary">The dictionary to add or decrement the value for.</param>
     /// <param name="key">The key to decrement the value of or add to the dictionary.</param>
     /// <param name="value">The value to add to the dictionary if the key is not found.</param>
-    public static void AddOrDecrement<TKey, TValue>(this IDictionary<TKey, TValue> dictionary, TKey key, TValue value)
+    public static void AddOrDecrement<TKey, TValue>(this Dictionary<TKey, TValue> dictionary, TKey key, TValue value)
+        where TKey : notnull
         where TValue : INumber<TValue>
-        => dictionary.AddOrDecrement(key, value, TValue.One);
+        => dictionary.AddOrIncrement(key, value, -TValue.One);
 
     /// <summary>
     /// Decrements the value of the specified key by the specified value, or adds it if not already present.
@@ -54,9 +57,10 @@ internal static class DictionaryExtensions
     /// <param name="key">The key to decrement the value of or add to the dictionary.</param>
     /// <param name="value">The value to add to the dictionary if the key is not found.</param>
     /// <param name="decrement">The value to decrement by.</param>
-    public static void AddOrDecrement<TKey, TValue>(this IDictionary<TKey, TValue> dictionary, TKey key, TValue value, TValue decrement)
+    public static void AddOrDecrement<TKey, TValue>(this Dictionary<TKey, TValue> dictionary, TKey key, TValue value, TValue decrement)
+        where TKey : notnull
         where TValue : INumber<TValue>
-        => dictionary[key] = dictionary.TryGetValue(key, out var current) ? current - decrement : value;
+        => dictionary.AddOrIncrement(key, value, -decrement);
 
     /// <summary>
     /// Gets the reference with the specified key, adding it if not already present.
@@ -103,52 +107,6 @@ internal static class DictionaryExtensions
 
         return result;
     }
-
-    /// <summary>
-    /// Increments the value of the specified key, or adds it if not already present.
-    /// </summary>
-    /// <typeparam name="TValue">The type of the value.</typeparam>
-    /// <param name="alternate">The dictionary to add or increment the value for.</param>
-    /// <param name="key">The key to increment the value of or add to the dictionary.</param>
-    /// <param name="value">The value to add to the dictionary if the key is not found.</param>
-    public static void AddOrIncrement<TValue>(this Dictionary<string, TValue>.AlternateLookup<ReadOnlySpan<char>> alternate, ReadOnlySpan<char> key, TValue value)
-        where TValue : INumber<TValue>
-        => alternate.AddOrIncrement(key, value, TValue.One);
-
-    /// <summary>
-    /// Increments the value of the specified key by the specified value, or adds it if not already present.
-    /// </summary>
-    /// <typeparam name="TValue">The type of the value.</typeparam>
-    /// <param name="alternate">The dictionary to add or increment the value for.</param>
-    /// <param name="key">The key to increment the value of or add to the dictionary.</param>
-    /// <param name="value">The value to add to the dictionary if the key is not found.</param>
-    /// <param name="increment">The value to increment by.</param>
-    public static void AddOrIncrement<TValue>(this Dictionary<string, TValue>.AlternateLookup<ReadOnlySpan<char>> alternate, ReadOnlySpan<char> key, TValue value, TValue increment)
-        where TValue : INumber<TValue> =>
-        alternate[key] = alternate.TryGetValue(key, out var current) ? current + increment : value;
-
-    /// <summary>
-    /// Decrements the value of the specified key, or adds it if not already present.
-    /// </summary>
-    /// <typeparam name="TValue">The type of the value.</typeparam>
-    /// <param name="alternate">The dictionary to add or decrement the value for.</param>
-    /// <param name="key">The key to decrement the value of or add to the dictionary.</param>
-    /// <param name="value">The value to add to the dictionary if the key is not found.</param>
-    public static void AddOrDecrement<TValue>(this Dictionary<string, TValue>.AlternateLookup<ReadOnlySpan<char>> alternate, ReadOnlySpan<char> key, TValue value)
-        where TValue : INumber<TValue>
-        => alternate.AddOrDecrement(key, value, TValue.One);
-
-    /// <summary>
-    /// Decrements the value of the specified key by the specified value, or adds it if not already present.
-    /// </summary>
-    /// <typeparam name="TValue">The type of the value.</typeparam>
-    /// <param name="alternate">The dictionary to add or decrement the value for.</param>
-    /// <param name="key">The key to decrement the value of or add to the dictionary.</param>
-    /// <param name="value">The value to add to the dictionary if the key is not found.</param>
-    /// <param name="decrement">The value to decrement by.</param>
-    public static void AddOrDecrement<TValue>(this Dictionary<string, TValue>.AlternateLookup<ReadOnlySpan<char>> alternate, ReadOnlySpan<char> key, TValue value, TValue decrement)
-        where TValue : INumber<TValue>
-        => alternate[key] = alternate.TryGetValue(key, out var current) ? current - decrement : value;
 
     /// <summary>
     /// Gets the reference with the specified key, adding it if not already present.
