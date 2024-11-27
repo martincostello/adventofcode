@@ -118,60 +118,6 @@ internal static class DictionaryExtensions
     }
 
     /// <summary>
-    /// Increments the value of the specified key, or adds it if not already present.
-    /// </summary>
-    /// <typeparam name="TValue">The type of the value.</typeparam>
-    /// <param name="alternate">The dictionary to add or increment the value for.</param>
-    /// <param name="key">The key to increment the value of or add to the dictionary.</param>
-    /// <param name="value">The value to add to the dictionary if the key is not found.</param>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static void AddOrIncrement<TValue>(this Dictionary<string, TValue>.AlternateLookup<ReadOnlySpan<char>> alternate, ReadOnlySpan<char> key, TValue value)
-        where TValue : INumber<TValue>
-        => alternate.AddOrIncrement(key, value, TValue.One);
-
-    /// <summary>
-    /// Increments the value of the specified key by the specified value, or adds it if not already present.
-    /// </summary>
-    /// <typeparam name="TValue">The type of the value.</typeparam>
-    /// <param name="alternate">The dictionary to add or increment the value for.</param>
-    /// <param name="key">The key to increment the value of or add to the dictionary.</param>
-    /// <param name="value">The value to add to the dictionary if the key is not found.</param>
-    /// <param name="increment">The value to increment by.</param>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static void AddOrIncrement<TValue>(this Dictionary<string, TValue>.AlternateLookup<ReadOnlySpan<char>> alternate, ReadOnlySpan<char> key, TValue value, TValue increment)
-        where TValue : INumber<TValue>
-#pragma warning disable CS8604
-        => CollectionsMarshal.GetValueRefOrAddDefault(alternate, key, out bool found) += found ? increment : value;
-#pragma warning restore CS8604
-
-    /// <summary>
-    /// Decrements the value of the specified key, or adds it if not already present.
-    /// </summary>
-    /// <typeparam name="TValue">The type of the value.</typeparam>
-    /// <param name="alternate">The dictionary to add or decrement the value for.</param>
-    /// <param name="key">The key to decrement the value of or add to the dictionary.</param>
-    /// <param name="value">The value to add to the dictionary if the key is not found.</param>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static void AddOrDecrement<TValue>(this Dictionary<string, TValue>.AlternateLookup<ReadOnlySpan<char>> alternate, ReadOnlySpan<char> key, TValue value)
-        where TValue : INumber<TValue>
-        => alternate.AddOrIncrement(key, value, -TValue.One);
-
-    /// <summary>
-    /// Decrements the value of the specified key by the specified value, or adds it if not already present.
-    /// </summary>
-    /// <typeparam name="TValue">The type of the value.</typeparam>
-    /// <param name="alternate">The dictionary to add or decrement the value for.</param>
-    /// <param name="key">The key to decrement the value of or add to the dictionary.</param>
-    /// <param name="value">The value to add to the dictionary if the key is not found.</param>
-    /// <param name="decrement">The value to decrement by.</param>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static void AddOrDecrement<TValue>(this Dictionary<string, TValue>.AlternateLookup<ReadOnlySpan<char>> alternate, ReadOnlySpan<char> key, TValue value, TValue decrement)
-        where TValue : INumber<TValue>
-#pragma warning disable CS8604
-        => alternate.AddOrIncrement(key, value, -decrement);
-#pragma warning restore CS8604
-
-    /// <summary>
     /// Gets the reference with the specified key, adding it if not already present.
     /// </summary>
     /// <typeparam name="TValue">The type of the value.</typeparam>
