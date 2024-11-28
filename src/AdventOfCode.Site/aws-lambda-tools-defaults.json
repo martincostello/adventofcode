@@ -10,7 +10,7 @@
   "function-name": "adventofcode",
   "function-runtime": "provided.al2023",
   "function-timeout": 30,
-  "msbuild-parameters": "/p:PublishForAWSLambda=true",
+  "msbuild-parameters": "/p:PublishForAWSLambda=true /p:PublishAot=false",
   "package-type": "Zip",
   "runtime": "linux-arm64",
   "s3-bucket": "adventofcode",
