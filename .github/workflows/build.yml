@@ -108,6 +108,17 @@ jobs:
       shell: pwsh
       run: ./build.ps1
 
+    - name: Create Lambda ZIP file
+      if: runner.os == 'Linux'
+      shell: bash
+      run: |
+        cd "./artifacts/publish/AdventOfCode.Site/release_linux-arm64" || exit
+        if [ -f "./bootstrap" ]
+        then
+          chmod +x ./bootstrap
+        fi
+        zip -r "../../../lambda.zip" . || exit 1
+
     - name: Publish lambda
       uses: actions/upload-artifact@v4
       if: runner.os == 'Linux' && success()

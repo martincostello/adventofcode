@@ -16,7 +16,7 @@ $solutionPath = $PSScriptRoot
 $sdkFile = Join-Path $solutionPath "global.json"
 
 $dotnetVersion = (Get-Content $sdkFile | Out-String | ConvertFrom-Json).sdk.version
-$installDotNetSdk = $false;
+$installDotNetSdk = $false
 
 if (($null -eq (Get-Command "dotnet" -ErrorAction SilentlyContinue)) -and ($null -eq (Get-Command "dotnet.exe" -ErrorAction SilentlyContinue))) {
     Write-Information "The .NET SDK is not installed."
@@ -66,7 +66,7 @@ else {
 
 $dotnet = Join-Path "$env:DOTNET_INSTALL_DIR" "dotnet"
 
-if ($installDotNetSdk -eq $true) {
+if ($installDotNetSdk) {
     $env:PATH = "$env:DOTNET_INSTALL_DIR;$env:PATH"
 }
 
@@ -78,7 +78,7 @@ if ($LASTEXITCODE -ne 0) {
     throw "dotnet build failed with exit code $LASTEXITCODE"
 }
 
-if ($SkipTests -eq $false) {
+if (-Not $SkipTests) {
     Write-Information "Running tests..."
 
     $additionalArgs = @()
@@ -102,7 +102,7 @@ if ($SkipTests -eq $false) {
     }
 }
 
-if ($SkipPublish -eq $false) {
+if (-Not $SkipPublish) {
 
     Write-Information "Publishing application..."
 
@@ -115,15 +115,9 @@ if ($SkipPublish -eq $false) {
         throw "dotnet publish failed with exit code $LASTEXITCODE"
     }
 
-    $packageFile = Join-Path $PSScriptRoot "artifacts" "publish" "lambda.zip"
-
-    # Requires that `dotnet tool restore` is run first
-    dotnet tool run dotnet-lambda `
-        package `
-        --output-package $packageFile `
-        --project-location $projectPath
+    & $dotnet publish $projectFile /p:PublishForAWSLambda=true
 
     if ($LASTEXITCODE -ne 0) {
-        throw "dotnet-lambda package failed with exit code $LASTEXITCODE"
+        throw "dotnet publish for Lambda failed with exit code $LASTEXITCODE"
     }
 }
