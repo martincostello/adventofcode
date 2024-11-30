@@ -10,6 +10,7 @@ import { PuzzleFactory2020 } from './2020/PuzzleFactory2020';
 import { PuzzleFactory2021 } from './2021/PuzzleFactory2021';
 import { PuzzleFactory2022 } from './2022/PuzzleFactory2022';
 import { PuzzleFactory2023 } from './2023/PuzzleFactory2023';
+import { PuzzleFactory2024 } from './2024/PuzzleFactory2024';
 import { Puzzle, PuzzleFactory } from './index';
 
 export class DefaultPuzzleFactory implements PuzzleFactory {
@@ -43,6 +44,9 @@ export class DefaultPuzzleFactory implements PuzzleFactory {
                 break;
             case 2023:
                 factory = new PuzzleFactory2023();
+                break;
+            case 2024:
+                factory = new PuzzleFactory2024();
                 break;
             default:
                 factory = null;
