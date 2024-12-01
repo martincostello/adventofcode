@@ -6,7 +6,7 @@ import { Day01 } from './index';
 
 describe('2024', () => {
     describe.skip('Day 01', () => {
-        test.each([[[], -1]])('returns correct value for %s', (inputs: string[], expected: number) => {
+        test.each([[[], 1530215]])('returns correct value for %s', (inputs: string[], expected: number) => {
             // Act
             const actual = Day01.solve(inputs);
 
