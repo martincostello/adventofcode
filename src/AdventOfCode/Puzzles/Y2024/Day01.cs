@@ -51,8 +51,22 @@ public sealed class Day01 : Puzzle
             int left = first[i];
             int right = second[i];
 
+            if (second.IndexOf(left) is int index && index > -1)
+            {
+                int count = 1;
+
+                if (index < second.Count - 1)
+                {
+                    while (second[++index] == left)
+                    {
+                        count++;
+                    }
+                }
+
+                similarity += left * count;
+            }
+
             total += Math.Abs(left - right);
-            similarity += left * second.Count((p) => p == left);
         }
 
         return (total, similarity);
