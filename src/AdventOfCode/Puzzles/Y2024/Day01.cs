@@ -15,13 +15,19 @@ public sealed class Day01 : Puzzle
     public int TotalDistance { get; private set; }
 
     /// <summary>
+    /// Gets the similarity score between the values in the list.
+    /// </summary>
+    public int SimilarityScore { get; private set; }
+
+    /// <summary>
     /// Gets the total distance between the values in the list.
     /// </summary>
     /// <param name="values">The list of values to get the total distance for.</param>
     /// <returns>
-    /// The total distance between the values in the list.
+    /// The total distance between the values and the
+    /// similarity score for the values in the list.
     /// </returns>
-    public static int GetTotalDistance(IList<string> values)
+    public static (int TotalDistance, int SimilarityScore) ParseList(IList<string> values)
     {
         List<int> first = new(values.Count);
         List<int> second = new(values.Count);
@@ -38,13 +44,18 @@ public sealed class Day01 : Puzzle
         second.Sort();
 
         int total = 0;
+        int similarity = 0;
 
         for (int i = 0; i < first.Count; i++)
         {
-            total += Math.Abs(first[i] - second[i]);
+            int left = first[i];
+            int right = second[i];
+
+            total += Math.Abs(left - right);
+            similarity += left * second.Count((p) => p == left);
         }
 
-        return total;
+        return (total, similarity);
     }
 
     /// <inheritdoc />
@@ -54,13 +65,14 @@ public sealed class Day01 : Puzzle
 
         var values = await ReadResourceAsLinesAsync(cancellationToken);
 
-        TotalDistance = GetTotalDistance(values);
+        (TotalDistance, SimilarityScore) = ParseList(values);
 
         if (Verbose)
         {
-            Logger.WriteLine("{0}", TotalDistance);
+            Logger.WriteLine("The total distance between the lists is {0}", TotalDistance);
+            Logger.WriteLine("The similarity score for the lists is {0}", SimilarityScore);
         }
 
-        return PuzzleResult.Create(TotalDistance);
+        return PuzzleResult.Create(TotalDistance, SimilarityScore);
     }
 }

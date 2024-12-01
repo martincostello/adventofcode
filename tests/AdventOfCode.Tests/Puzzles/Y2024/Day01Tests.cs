@@ -6,7 +6,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2024;
 public sealed class Day01Tests(ITestOutputHelper outputHelper) : PuzzleTest(outputHelper)
 {
     [Fact]
-    public void Y2024_Day01_GetTotalDistance_Returns_Correct_Value()
+    public void Y2024_Day01_ParseList_Returns_Correct_Value()
     {
         // Arrange
         string[] values =
@@ -20,10 +20,11 @@ public sealed class Day01Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         ];
 
         // Act
-        int actual = Day01.GetTotalDistance(values);
+        (int totalDistance, int similarity) = Day01.ParseList(values);
 
         // Assert
-        actual.ShouldBe(11);
+        totalDistance.ShouldBe(11);
+        similarity.ShouldBe(31);
     }
 
     [Fact]
@@ -35,5 +36,6 @@ public sealed class Day01Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         // Assert
         puzzle.ShouldNotBeNull();
         puzzle.TotalDistance.ShouldBe(1530215);
+        puzzle.SimilarityScore.ShouldBe(26800609);
     }
 }
