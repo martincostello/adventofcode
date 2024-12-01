@@ -6,18 +6,45 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2024;
 /// <summary>
 /// A class representing the puzzle for <c>https://adventofcode.com/2024/day/1</c>. This class cannot be inherited.
 /// </summary>
-[Puzzle(2024, 01, "", RequiresData = true, IsHidden = true)]
+[Puzzle(2024, 01, "Historian Hysteria", RequiresData = true)]
 public sealed class Day01 : Puzzle
 {
-#pragma warning disable IDE0022
-#pragma warning disable IDE0060
-#pragma warning disable SA1600
+    /// <summary>
+    /// Gets the total distance between the values in the list.
+    /// </summary>
+    public int TotalDistance { get; private set; }
 
-    public int Solution { get; private set; }
-
-    public static int Solve(IList<string> values)
+    /// <summary>
+    /// Gets the total distance between the values in the list.
+    /// </summary>
+    /// <param name="values">The list of values to get the total distance for.</param>
+    /// <returns>
+    /// The total distance between the values in the list.
+    /// </returns>
+    public static int GetTotalDistance(IList<string> values)
     {
-        return -1;
+        List<int> first = new(values.Count);
+        List<int> second = new(values.Count);
+
+        foreach (string pair in values)
+        {
+            string[] split = pair.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+
+            first.Add(Parse<int>(split[0]));
+            second.Add(Parse<int>(split[1]));
+        }
+
+        first.Sort();
+        second.Sort();
+
+        int total = 0;
+
+        for (int i = 0; i < first.Count; i++)
+        {
+            total += Math.Abs(first[i] - second[i]);
+        }
+
+        return total;
     }
 
     /// <inheritdoc />
@@ -27,13 +54,13 @@ public sealed class Day01 : Puzzle
 
         var values = await ReadResourceAsLinesAsync(cancellationToken);
 
-        Solution = Solve(values);
+        TotalDistance = GetTotalDistance(values);
 
         if (Verbose)
         {
-            Logger.WriteLine("{0}", Solution);
+            Logger.WriteLine("{0}", TotalDistance);
         }
 
-        return PuzzleResult.Create(Solution);
+        return PuzzleResult.Create(TotalDistance);
     }
 }
