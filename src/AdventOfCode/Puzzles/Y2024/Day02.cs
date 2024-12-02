@@ -15,29 +15,58 @@ public sealed class Day02 : Puzzle
     public int SafeReports { get; private set; }
 
     /// <summary>
+    /// Gets the numnber of safe reports with the Problem Dampener in use.
+    /// </summary>
+    public int SafeReportsWithDampener { get; private set; }
+
+    /// <summary>
     /// Counts the number of reports that are safe.
     /// </summary>
     /// <param name="reports">The reports to check for safety.</param>
+    /// <param name="useProblemDampener">Whether to use the Problem Dampener.</param>
     /// <returns>
     /// The number of reports that are safe.
     /// </returns>
-    public static int CountSafeReports(IList<string> reports)
+    public static int CountSafeReports(
+        IList<string> reports,
+        bool useProblemDampener)
     {
         int count = 0;
 
         foreach (string report in reports)
         {
-            int[] values = report.Split(' ').Select(Parse<int>).ToArray();
+            var values = report
+                .Split(' ')
+                .Select(Parse<int>)
+                .ToList();
 
-            bool safe = true;
+            if (IsSafe(values))
+            {
+                count++;
+            }
+            else if (useProblemDampener)
+            {
+                for (int i = 0; i < values.Count; i++)
+                {
+                    List<int> dampened = [.. values];
+                    dampened.RemoveAt(i);
+
+                    if (IsSafe(dampened))
+                    {
+                        count++;
+                        break;
+                    }
+                }
+            }
+        }
+
+        return count;
+
+        static bool IsSafe(List<int> values)
+        {
             int sign = Math.Sign(values[0] - values[1]);
 
-            if (sign is 0)
-            {
-                continue;
-            }
-
-            for (int i = 1; i < values.Length; i++)
+            for (int i = 1; i < values.Count; i++)
             {
                 int left = values[i - 1];
                 int right = values[i];
@@ -46,18 +75,12 @@ public sealed class Day02 : Puzzle
 
                 if (Math.Sign(left - right) != sign || delta > 3)
                 {
-                    safe = false;
-                    break;
+                    return false;
                 }
             }
 
-            if (safe)
-            {
-                count++;
-            }
+            return true;
         }
-
-        return count;
     }
 
     /// <inheritdoc />
@@ -67,13 +90,15 @@ public sealed class Day02 : Puzzle
 
         var values = await ReadResourceAsLinesAsync(cancellationToken);
 
-        SafeReports = CountSafeReports(values);
+        SafeReports = CountSafeReports(values, useProblemDampener: false);
+        SafeReportsWithDampener = CountSafeReports(values, useProblemDampener: true);
 
         if (Verbose)
         {
             Logger.WriteLine("{0} reports are safe.", SafeReports);
+            Logger.WriteLine("{0} reports are safe with the Problem Dampener.", SafeReportsWithDampener);
         }
 
-        return PuzzleResult.Create(SafeReports);
+        return PuzzleResult.Create(SafeReports, SafeReportsWithDampener);
     }
 }
