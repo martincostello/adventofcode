@@ -5,8 +5,12 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2024;
 
 public sealed class Day02Tests(ITestOutputHelper outputHelper) : PuzzleTest(outputHelper)
 {
-    [Fact]
-    public void Y2024_Day02_CountSafeReports_Returns_Correct_Value()
+    [Theory]
+    [InlineData(false, 2)]
+    [InlineData(true, 4)]
+    public void Y2024_Day02_CountSafeReports_Returns_Correct_Value(
+        bool useProblemDampener,
+        int expected)
     {
         // Arrange
         string[] values =
@@ -20,10 +24,10 @@ public sealed class Day02Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         ];
 
         // Act
-        int actual = Day02.CountSafeReports(values);
+        int actual = Day02.CountSafeReports(values, useProblemDampener);
 
         // Assert
-        actual.ShouldBe(2);
+        actual.ShouldBe(expected);
     }
 
     [Fact]
@@ -35,5 +39,6 @@ public sealed class Day02Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         // Assert
         puzzle.ShouldNotBeNull();
         puzzle.SafeReports.ShouldBe(236);
+        puzzle.SafeReportsWithDampener.ShouldBe(308);
     }
 }
