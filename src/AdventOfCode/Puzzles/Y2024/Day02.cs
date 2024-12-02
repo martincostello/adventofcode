@@ -6,18 +6,58 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2024;
 /// <summary>
 /// A class representing the puzzle for <c>https://adventofcode.com/2024/day/2</c>. This class cannot be inherited.
 /// </summary>
-[Puzzle(2024, 02, "", RequiresData = true, IsHidden = true)]
+[Puzzle(2024, 02, "Red-Nosed Reports", RequiresData = true)]
 public sealed class Day02 : Puzzle
 {
-#pragma warning disable IDE0022
-#pragma warning disable IDE0060
-#pragma warning disable SA1600
+    /// <summary>
+    /// Gets the numnber of safe reports.
+    /// </summary>
+    public int SafeReports { get; private set; }
 
-    public int Solution { get; private set; }
-
-    public static int Solve(IList<string> values)
+    /// <summary>
+    /// Counts the number of reports that are safe.
+    /// </summary>
+    /// <param name="reports">The reports to check for safety.</param>
+    /// <returns>
+    /// The number of reports that are safe.
+    /// </returns>
+    public static int CountSafeReports(IList<string> reports)
     {
-        return -1;
+        int count = 0;
+
+        foreach (string report in reports)
+        {
+            int[] values = report.Split(' ').Select(Parse<int>).ToArray();
+
+            bool safe = true;
+            int sign = Math.Sign(values[0] - values[1]);
+
+            if (sign is 0)
+            {
+                continue;
+            }
+
+            for (int i = 1; i < values.Length; i++)
+            {
+                int left = values[i - 1];
+                int right = values[i];
+
+                int delta = Math.Abs(left - right);
+
+                if (Math.Sign(left - right) != sign || delta > 3)
+                {
+                    safe = false;
+                    break;
+                }
+            }
+
+            if (safe)
+            {
+                count++;
+            }
+        }
+
+        return count;
     }
 
     /// <inheritdoc />
@@ -27,13 +67,13 @@ public sealed class Day02 : Puzzle
 
         var values = await ReadResourceAsLinesAsync(cancellationToken);
 
-        Solution = Solve(values);
+        SafeReports = CountSafeReports(values);
 
         if (Verbose)
         {
-            Logger.WriteLine("{0}", Solution);
+            Logger.WriteLine("{0} reports are safe.", SafeReports);
         }
 
-        return PuzzleResult.Create(Solution);
+        return PuzzleResult.Create(SafeReports);
     }
 }
