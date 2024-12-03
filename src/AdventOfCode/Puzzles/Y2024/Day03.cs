@@ -49,14 +49,14 @@ public sealed partial class Day03 : Puzzle
 
         if (enhancedAccuracy)
         {
-            var remaining = memory;
             var simplified = new StringBuilder(memory.Length);
 
             bool enabled = true;
+            int index = 0;
 
             while (!cancellationToken.IsCancellationRequested)
             {
-                var enumerator = DoOrDont.EnumerateMatches(remaining);
+                var enumerator = DoOrDont.EnumerateMatches(memory, index);
 
                 if (enumerator.MoveNext())
                 {
@@ -64,10 +64,10 @@ public sealed partial class Day03 : Puzzle
 
                     if (enabled)
                     {
-                        simplified.Append(remaining[..match.Index]);
+                        simplified.Append(memory[index..match.Index]);
                     }
 
-                    remaining = remaining[(match.Index + match.Length)..];
+                    index = match.Index + match.Length;
                     enabled = match.Length == DoInstruction.Length;
                 }
                 else
@@ -80,7 +80,7 @@ public sealed partial class Day03 : Puzzle
 
             if (enabled)
             {
-                simplified.Append(remaining);
+                simplified.Append(memory[index..]);
             }
 
             memory = simplified.ToString().AsSpan();
