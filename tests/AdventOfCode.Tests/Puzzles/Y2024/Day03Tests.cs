@@ -29,7 +29,6 @@ public sealed class Day03Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         // Assert
         puzzle.ShouldNotBeNull();
         puzzle.Sum.ShouldBe(165225049);
-        puzzle.AccurateSum.ShouldNotBe(491517);
-        puzzle.AccurateSum.ShouldBe(-1);
+        puzzle.AccurateSum.ShouldBe(108830766);
     }
 }

@@ -8,7 +8,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2024;
 /// <summary>
 /// A class representing the puzzle for <c>https://adventofcode.com/2024/day/3</c>. This class cannot be inherited.
 /// </summary>
-[Puzzle(2024, 03, "Mull It Over", RequiresData = true, IsHidden = true)]
+[Puzzle(2024, 03, "Mull It Over", RequiresData = true)]
 public sealed partial class Day03 : Puzzle
 {
     /// <summary>
@@ -21,11 +21,17 @@ public sealed partial class Day03 : Puzzle
     /// </summary>
     public int AccurateSum { get; private set; }
 
+    /// <summary>
+    /// A regular expression that finds <c>mul</c> instructions.
+    /// </summary>
     [GeneratedRegex(@"mul\([0-9]+\,[0-9]+\)")]
-    private static partial Regex Instructions { get; }
+    private static partial Regex Mul { get; }
 
+    /// <summary>
+    /// A regular expression that finds <c>do</c> or <c>dont</c> instructions.
+    /// </summary>
     [GeneratedRegex(@"do(n\'t)?\(\)")]
-    private static partial Regex Enabled { get; }
+    private static partial Regex DoOrDont { get; }
 
     /// <summary>
     /// Scans the specified list of instructions and returns the sum of the multiplications.
@@ -37,56 +43,49 @@ public sealed partial class Day03 : Puzzle
     /// </returns>
     public static int Scan(ReadOnlySpan<char> memory, bool enhancedAccuracy)
     {
-        const string Prefix = "mul(";
-
-        int sum = 0;
-        var ranges = new List<Range>();
-
         if (enhancedAccuracy)
         {
-            int firstDisabled = -1;
-            int lastEnabled = -1;
+            var remaining = memory;
+            var simplified = new StringBuilder(memory.Length);
 
-            foreach (var match in Enabled.EnumerateMatches(memory))
+            bool enabled = true;
+
+            while (!remaining.IsEmpty)
             {
-                if (match.Length is 4)
+                var enumerator = DoOrDont.EnumerateMatches(remaining);
+
+                if (enumerator.MoveNext())
                 {
-                    lastEnabled = match.Index;
-                    ranges.Add(new(match.Index, match.Index + match.Length));
+                    var match = enumerator.Current;
+
+                    if (enabled)
+                    {
+                        simplified.Append(remaining[..match.Index]);
+                    }
+
+                    remaining = remaining[(match.Index + match.Length)..];
+                    enabled = match.Length is 4; // do()
                 }
-                else if (firstDisabled is -1)
+                else
                 {
-                    firstDisabled = match.Index;
-                }
-            }
-
-            ranges.Add(new(0, firstDisabled - 1));
-            ranges.Add(new(lastEnabled, memory.Length));
-        }
-        else
-        {
-            ranges.Add(new(0, memory.Length));
-        }
-
-        foreach (var match in Instructions.EnumerateMatches(memory))
-        {
-            bool found = false;
-
-            foreach (var r in ranges)
-            {
-                if (match.Index >= r.Start.Value &&
-                    match.Index + match.Length <= r.End.Value - 1)
-                {
-                    found = true;
                     break;
                 }
             }
 
-            if (!found)
+            if (enabled)
             {
-                continue;
+                simplified.Append(remaining);
             }
 
+            memory = simplified.ToString().AsSpan();
+        }
+
+        const string Prefix = "mul(";
+
+        int sum = 0;
+
+        foreach (var match in Mul.EnumerateMatches(memory))
+        {
             var digits = memory.Slice(match.Index + Prefix.Length, match.Length - Prefix.Length - 1);
 
             (int x, int y) = digits.AsNumberPair<int>();
