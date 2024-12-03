@@ -43,6 +43,9 @@ public sealed partial class Day03 : Puzzle
     /// </returns>
     public static int Scan(ReadOnlySpan<char> memory, bool enhancedAccuracy)
     {
+        const string DoInstruction = "do()";
+        const string MulPrefix = "mul(";
+
         if (enhancedAccuracy)
         {
             var remaining = memory;
@@ -64,7 +67,7 @@ public sealed partial class Day03 : Puzzle
                     }
 
                     remaining = remaining[(match.Index + match.Length)..];
-                    enabled = match.Length is 4; // do()
+                    enabled = match.Length == DoInstruction.Length;
                 }
                 else
                 {
@@ -80,13 +83,11 @@ public sealed partial class Day03 : Puzzle
             memory = simplified.ToString().AsSpan();
         }
 
-        const string Prefix = "mul(";
-
         int sum = 0;
 
         foreach (var match in Mul.EnumerateMatches(memory))
         {
-            var digits = memory.Slice(match.Index + Prefix.Length, match.Length - Prefix.Length - 1);
+            var digits = memory.Slice(match.Index + MulPrefix.Length, match.Length - MulPrefix.Length - 1);
 
             (int x, int y) = digits.AsNumberPair<int>();
 
