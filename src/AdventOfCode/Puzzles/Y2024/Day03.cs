@@ -38,10 +38,11 @@ public sealed partial class Day03 : Puzzle
     /// </summary>
     /// <param name="memory">The memory to scan.</param>
     /// <param name="enhancedAccuracy">Whether to enable enhanced accuracy.</param>
+    /// <param name="cancellationToken">The optional <see cref="CancellationToken"/> to use.</param>
     /// <returns>
     /// The sum of the multiplications.
     /// </returns>
-    public static int Scan(ReadOnlySpan<char> memory, bool enhancedAccuracy)
+    public static int Scan(ReadOnlySpan<char> memory, bool enhancedAccuracy, CancellationToken cancellationToken = default)
     {
         const string DoInstruction = "do()";
         const string MulPrefix = "mul(";
@@ -53,7 +54,7 @@ public sealed partial class Day03 : Puzzle
 
             bool enabled = true;
 
-            while (!remaining.IsEmpty)
+            while (!cancellationToken.IsCancellationRequested)
             {
                 var enumerator = DoOrDont.EnumerateMatches(remaining);
 
@@ -104,8 +105,8 @@ public sealed partial class Day03 : Puzzle
 
         string memory = await ReadResourceAsStringAsync(cancellationToken);
 
-        Sum = Scan(memory, enhancedAccuracy: false);
-        AccurateSum = Scan(memory, enhancedAccuracy: true);
+        Sum = Scan(memory, enhancedAccuracy: false, cancellationToken);
+        AccurateSum = Scan(memory, enhancedAccuracy: true, cancellationToken);
 
         if (Verbose)
         {
