@@ -28,7 +28,7 @@ public sealed partial class Day03 : Puzzle
     private static partial Regex Mul { get; }
 
     /// <summary>
-    /// A regular expression that finds <c>do</c> or <c>dont</c> instructions.
+    /// A regular expression that finds <c>do</c> or <c>don't</c> instructions.
     /// </summary>
     [GeneratedRegex(@"do(n\'t)?\(\)")]
     private static partial Regex DoOrDont { get; }
