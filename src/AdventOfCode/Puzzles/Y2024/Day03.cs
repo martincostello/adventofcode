@@ -1,23 +1,46 @@
 ﻿// Copyright (c) Martin Costello, 2015. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
+using System.Text.RegularExpressions;
+
 namespace MartinCostello.AdventOfCode.Puzzles.Y2024;
 
 /// <summary>
 /// A class representing the puzzle for <c>https://adventofcode.com/2024/day/3</c>. This class cannot be inherited.
 /// </summary>
-[Puzzle(2024, 03, "", RequiresData = true, IsHidden = true)]
-public sealed class Day03 : Puzzle
+[Puzzle(2024, 03, "Mull It Over", RequiresData = true, IsHidden = true)]
+public sealed partial class Day03 : Puzzle
 {
-#pragma warning disable IDE0022
-#pragma warning disable IDE0060
-#pragma warning disable SA1600
+    /// <summary>
+    /// Gets the sum of the multiplications.
+    /// </summary>
+    public int Sum { get; private set; }
 
-    public int Solution { get; private set; }
+    [GeneratedRegex(@"mul\([0-9]+\,[0-9]+\)")]
+    private static partial Regex Instructions { get; }
 
-    public static int Solve(IList<string> values)
+    /// <summary>
+    /// Scans the specified list of instructions and returns the sum of the multiplications.
+    /// </summary>
+    /// <param name="memory">The memory to scan.</param>
+    /// <returns>
+    /// The sum of the multiplications.
+    /// </returns>
+    public static int Scan(ReadOnlySpan<char> memory)
     {
-        return -1;
+        int sum = 0;
+
+        foreach (var match in Instructions.EnumerateMatches(memory))
+        {
+            const string Prefix = "mul(";
+            var digits = memory.Slice(match.Index + Prefix.Length, match.Length - Prefix.Length - 1);
+
+            (int x, int y) = digits.AsNumberPair<int>();
+
+            sum += x * y;
+        }
+
+        return sum;
     }
 
     /// <inheritdoc />
@@ -25,15 +48,15 @@ public sealed class Day03 : Puzzle
     {
         ArgumentNullException.ThrowIfNull(args);
 
-        var values = await ReadResourceAsLinesAsync(cancellationToken);
+        string memory = await ReadResourceAsStringAsync(cancellationToken);
 
-        Solution = Solve(values);
+        Sum = Scan(memory);
 
         if (Verbose)
         {
-            Logger.WriteLine("{0}", Solution);
+            Logger.WriteLine("The sum of the multiplications is {0}", Sum);
         }
 
-        return PuzzleResult.Create(Solution);
+        return PuzzleResult.Create(Sum);
     }
 }

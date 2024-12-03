@@ -5,23 +5,20 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2024;
 
 public sealed class Day03Tests(ITestOutputHelper outputHelper) : PuzzleTest(outputHelper)
 {
-    [Fact(Skip = "Not implemented.")]
-    public void Y2024_Day03_Solve_Returns_Correct_Value()
+    [Fact]
+    public void Y2024_Day03_Scan_Returns_Correct_Value()
     {
         // Arrange
-        string[] values =
-        [
-            "_",
-        ];
+        string memory = "xmul(2,4)%&mul[3,7]!@^do_not_mul(5,5)+mul(32,64]then(mul(11,8)mul(8,5))";
 
         // Act
-        int actual = Day03.Solve(values);
+        int actual = Day03.Scan(memory);
 
         // Assert
-        actual.ShouldBe(-1);
+        actual.ShouldBe(161);
     }
 
-    [Fact(Skip = "Not implemented.")]
+    [Fact]
     public async Task Y2024_Day03_Solve_Returns_Correct_Solution()
     {
         // Act
@@ -29,6 +26,6 @@ public sealed class Day03Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
 
         // Assert
         puzzle.ShouldNotBeNull();
-        puzzle.Solution.ShouldBe(-1);
+        puzzle.Sum.ShouldBe(165225049);
     }
 }
