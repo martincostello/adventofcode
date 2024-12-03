@@ -5,17 +5,19 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2024;
 
 public sealed class Day03Tests(ITestOutputHelper outputHelper) : PuzzleTest(outputHelper)
 {
-    [Fact]
-    public void Y2024_Day03_Scan_Returns_Correct_Value()
+    [Theory]
+    [InlineData("xmul(2,4)%&mul[3,7]!@^do_not_mul(5,5)+mul(32,64]then(mul(11,8)mul(8,5))", false, 161)]
+    [InlineData("xmul(2,4)&mul[3,7]!^don't()_mul(5,5)+mul(32,64](mul(11,8)undo()?mul(8,5))", true, 48)]
+    public void Y2024_Day03_Scan_Returns_Correct_Value(
+        string memory,
+        bool enhancedAccuracy,
+        int expected)
     {
-        // Arrange
-        string memory = "xmul(2,4)%&mul[3,7]!@^do_not_mul(5,5)+mul(32,64]then(mul(11,8)mul(8,5))";
-
         // Act
-        int actual = Day03.Scan(memory);
+        int actual = Day03.Scan(memory, enhancedAccuracy);
 
         // Assert
-        actual.ShouldBe(161);
+        actual.ShouldBe(expected);
     }
 
     [Fact]
@@ -27,5 +29,7 @@ public sealed class Day03Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         // Assert
         puzzle.ShouldNotBeNull();
         puzzle.Sum.ShouldBe(165225049);
+        puzzle.AccurateSum.ShouldNotBe(491517);
+        puzzle.AccurateSum.ShouldBe(-1);
     }
 }
