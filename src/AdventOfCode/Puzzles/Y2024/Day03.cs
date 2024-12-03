@@ -76,6 +76,8 @@ public sealed partial class Day03 : Puzzle
                 }
             }
 
+            cancellationToken.ThrowIfCancellationRequested();
+
             if (enabled)
             {
                 simplified.Append(remaining);
