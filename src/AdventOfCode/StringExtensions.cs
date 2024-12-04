@@ -313,4 +313,20 @@ internal static class StringExtensions
         tokens.MoveNext();
         second = value[tokens.Current];
     }
+
+    /// <summary>
+    /// Reverses the specified string.
+    /// </summary>
+    /// <param name="value">The string to reverse.</param>
+    /// <returns>
+    /// A string that is the reverse of <paramref name="value"/>.
+    /// </returns>
+    public static string Reverse(this string value)
+    {
+        return string.Create(value.Length, value, static (buffer, text) =>
+        {
+            text.AsSpan().CopyTo(buffer);
+            buffer.Reverse();
+        });
+    }
 }
