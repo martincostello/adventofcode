@@ -44,11 +44,13 @@ public sealed class Day04 : Puzzle
         // Build the rows and columns
         for (int y = 0; y < height; y++)
         {
+            // Add row
             string row = grid[y];
 
             slices.Add(row);
             slices.Add(row.Reverse());
 
+            // Add column
             for (int x = 0; x < row.Length; x++)
             {
                 builder.Append(grid[x][y]);
@@ -57,61 +59,8 @@ public sealed class Day04 : Puzzle
             AddSlices(builder);
         }
 
-        // Diagonals down and right
-        for (int y = 0; y < height; y++)
-        {
-            int width = grid[y].Length;
-
-            builder.Append(grid[y][0]);
-
-            for (int x = 1, δy = y + 1; x < width && δy < height; x++, δy++)
-            {
-                builder.Append(grid[δy][x]);
-            }
-
-            AddSlices(builder);
-        }
-
-        string firstRow = grid[0];
-
-        for (int x = 1; x < firstRow.Length; x++)
-        {
-            builder.Append(firstRow[x]);
-
-            for (int y = 1, δx = x + 1; y < height && δx < firstRow.Length; y++, δx++)
-            {
-                builder.Append(grid[y][δx]);
-            }
-
-            AddSlices(builder);
-        }
-
-        // Diagonals down and left
-        for (int y = 0; y < height; y++)
-        {
-            int width = grid[y].Length;
-
-            builder.Append(grid[y][width - 1]);
-
-            for (int x = width - 2, δy = y + 1; x > -1 && δy < height; x--, δy++)
-            {
-                builder.Append(grid[δy][x]);
-            }
-
-            AddSlices(builder);
-        }
-
-        for (int x = firstRow.Length - 2; x > -1; x--)
-        {
-            builder.Append(firstRow[x]);
-
-            for (int y = 1, δx = x - 1; δx > -1 && y < height; y++, δx--)
-            {
-                builder.Append(grid[y][δx]);
-            }
-
-            AddSlices(builder);
-        }
+        AddDiagonals(Index.FromStart(0), 1);
+        AddDiagonals(Index.FromEnd(1), -1);
 
         int count = 0;
 
@@ -132,12 +81,52 @@ public sealed class Day04 : Puzzle
 
         void AddSlices(StringBuilder builder)
         {
-            string value = builder.ToString();
+            if (builder.Length >= Target.Length)
+            {
+                string value = builder.ToString();
 
-            slices.Add(value);
-            slices.Add(value.Reverse());
+                slices.Add(value);
+                slices.Add(value.Reverse());
+            }
 
             builder.Clear();
+        }
+
+        void AddDiagonals(Index originX, int deltaX)
+        {
+            int width;
+
+            // Diagonals below and including the midpoint
+            for (int y = 0; y < height; y++)
+            {
+                string row = grid[y];
+                width = row.Length;
+
+                builder.Append(row[originX]);
+
+                for (int x = originX.GetOffset(width) + deltaX, δy = y + 1; x > -1 && x < width && δy < height; x += deltaX, δy++)
+                {
+                    builder.Append(grid[δy][x]);
+                }
+
+                AddSlices(builder);
+            }
+
+            // Diagonals above the midpoint
+            string firstRow = grid[0];
+            width = firstRow.Length;
+
+            for (int x = originX.GetOffset(width) + deltaX; x > -1 && x < width; x += deltaX)
+            {
+                builder.Append(firstRow[x]);
+
+                for (int y = 1, δx = x + deltaX; y < height && δx > -1 && δx < width; y++, δx += deltaX)
+                {
+                    builder.Append(grid[y][δx]);
+                }
+
+                AddSlices(builder);
+            }
         }
     }
 
