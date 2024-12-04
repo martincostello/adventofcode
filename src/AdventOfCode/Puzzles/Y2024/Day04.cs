@@ -63,65 +63,42 @@ public sealed class Day04 : Puzzle
 
     private static int CountXmas(IList<string> grid)
     {
-        int height = grid.Count;
-
-        var builder = new StringBuilder(height);
-
-        List<string> slices = [];
+        Span<char> buffer = new char[Math.Max(grid.Count, grid.Max((p) => p.Length))];
+        int count = 0;
 
         // Build the rows and columns
-        for (int y = 0; y < height; y++)
+        for (int y = 0; y < grid.Count; y++)
         {
             // Add row
             string row = grid[y];
 
-            slices.Add(row);
-            slices.Add(row.Reverse());
+            row.CopyTo(buffer);
+
+            count += CountXmases(buffer[..row.Length]);
 
             // Add column
             for (int x = 0; x < row.Length; x++)
             {
-                builder.Append(grid[x][y]);
+                buffer[x] = grid[x][y];
             }
 
-            AddSlices(builder);
+            count += CountXmases(buffer[..row.Length]);
         }
 
-        AddDiagonals(Index.FromStart(0), 1);
-        AddDiagonals(Index.FromEnd(1), -1);
-
-        int count = 0;
-
-        foreach (ReadOnlySpan<char> slice in slices)
-        {
-            ReadOnlySpan<char> span = slice;
-
-            int index;
-
-            while ((index = span.IndexOfAny(XmasNeedle)) != -1)
-            {
-                count++;
-                span = span[(index + 1)..];
-            }
-        }
+        count += CountDiagonalXmases(grid, buffer, Index.FromStart(0), deltaX: 1);
+        count += CountDiagonalXmases(grid, buffer, Index.FromEnd(1), deltaX: -1);
 
         return count;
 
-        void AddSlices(StringBuilder builder)
+        static int CountDiagonalXmases(
+            IList<string> grid,
+            Span<char> buffer,
+            Index originX,
+            int deltaX)
         {
-            if (builder.Length >= XmasTarget.Length)
-            {
-                string value = builder.ToString();
+            int count = 0;
 
-                slices.Add(value);
-                slices.Add(value.Reverse());
-            }
-
-            builder.Clear();
-        }
-
-        void AddDiagonals(Index originX, int deltaX)
-        {
+            int height = grid.Count;
             int width;
 
             // Diagonals below and including the midpoint
@@ -130,14 +107,16 @@ public sealed class Day04 : Puzzle
                 string row = grid[y];
                 width = row.Length;
 
-                builder.Append(row[originX]);
+                buffer[0] = row[originX];
+
+                int length = 1;
 
                 for (int x = originX.GetOffset(width) + deltaX, δy = y + 1; x > -1 && x < width && δy < height; x += deltaX, δy++)
                 {
-                    builder.Append(grid[δy][x]);
+                    buffer[length++] = grid[δy][x];
                 }
 
-                AddSlices(builder);
+                count += CountXmases(buffer[..length]);
             }
 
             // Diagonals above the midpoint
@@ -146,15 +125,46 @@ public sealed class Day04 : Puzzle
 
             for (int x = originX.GetOffset(width) + deltaX; x > -1 && x < width; x += deltaX)
             {
-                builder.Append(firstRow[x]);
+                buffer[0] = firstRow[x];
+
+                int length = 1;
 
                 for (int y = 1, δx = x + deltaX; y < height && δx > -1 && δx < width; y++, δx += deltaX)
                 {
-                    builder.Append(grid[y][δx]);
+                    buffer[length++] = grid[y][δx];
                 }
 
-                AddSlices(builder);
+                count += CountXmases(buffer[..length]);
             }
+
+            return count;
+        }
+
+        static int CountXmases(Span<char> value)
+        {
+            int count = CountXmas(value);
+
+            value.Reverse();
+
+            count += CountXmas(value);
+
+            return count;
+        }
+
+        static int CountXmas(ReadOnlySpan<char> value)
+        {
+            ReadOnlySpan<char> remaining = value;
+
+            int count = 0;
+            int index;
+
+            while ((index = remaining.IndexOfAny(XmasNeedle)) != -1)
+            {
+                count++;
+                remaining = remaining[(index + 1)..];
+            }
+
+            return count;
         }
     }
 
