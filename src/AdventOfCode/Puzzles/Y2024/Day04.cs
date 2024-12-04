@@ -12,28 +12,56 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2024;
 public sealed class Day04 : Puzzle
 {
     /// <summary>
-    /// The target string to search for.
+    /// The target string to search for <c>XMAS</c>.
     /// </summary>
-    private const string Target = "XMAS";
+    private const string XmasTarget = "XMAS";
 
     /// <summary>
-    /// The search space for the target string. This field is read-only.
+    /// The search space for the <see cref="XmasTarget"/> string. This field is read-only.
     /// </summary>
-    private static readonly SearchValues<string> Needle = SearchValues.Create([Target], StringComparison.Ordinal);
+    private static readonly SearchValues<string> XmasNeedle = SearchValues.Create([XmasTarget], StringComparison.Ordinal);
 
     /// <summary>
     /// Gets the count of the number of occurences of <c>XMAS</c> in the grid.
     /// </summary>
-    public int Count { get; private set; }
+    public int SimpleCount { get; private set; }
 
     /// <summary>
-    /// Searches for the number of occurences of <c>XMAS</c> in the specified grid.
+    /// Gets the count of the number of occurences of <c>MAS</c>-crossed in the grid.
+    /// </summary>
+    public int CrossCount { get; private set; }
+
+    /// <summary>
+    /// Searches for the number of occurences of a value in the specified grid.
     /// </summary>
     /// <param name="grid">The word grid to search.</param>
+    /// <param name="crossCount"><see langword="false"/> to count <c>XMAS</c>; otherwise <see langword="true"/> to count <c>MAS</c>-crossed.</param>
     /// <returns>
-    /// The number of occurences of <c>XMAS</c> in the grid.
+    /// The number of occurences of <c>XMAS</c> or <c>MAS</c>-crossed in the grid.
     /// </returns>
-    public static int Search(IList<string> grid)
+    public static int Search(IList<string> grid, bool crossCount)
+        => crossCount ? CountCrossMas(grid) : CountXmas(grid);
+
+    /// <inheritdoc />
+    protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
+    {
+        ArgumentNullException.ThrowIfNull(args);
+
+        var values = await ReadResourceAsLinesAsync(cancellationToken);
+
+        SimpleCount = Search(values, crossCount: false);
+        CrossCount = Search(values, crossCount: true);
+
+        if (Verbose)
+        {
+            Logger.WriteLine("XMAS appears {0} times.", SimpleCount);
+            Logger.WriteLine("MAS appears crossed {0} times.", CrossCount);
+        }
+
+        return PuzzleResult.Create(SimpleCount, CrossCount);
+    }
+
+    private static int CountXmas(IList<string> grid)
     {
         int height = grid.Count;
 
@@ -70,7 +98,7 @@ public sealed class Day04 : Puzzle
 
             int index;
 
-            while ((index = span.IndexOfAny(Needle)) != -1)
+            while ((index = span.IndexOfAny(XmasNeedle)) != -1)
             {
                 count++;
                 span = span[(index + 1)..];
@@ -81,7 +109,7 @@ public sealed class Day04 : Puzzle
 
         void AddSlices(StringBuilder builder)
         {
-            if (builder.Length >= Target.Length)
+            if (builder.Length >= XmasTarget.Length)
             {
                 string value = builder.ToString();
 
@@ -130,20 +158,43 @@ public sealed class Day04 : Puzzle
         }
     }
 
-    /// <inheritdoc />
-    protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
+    private static int CountCrossMas(IList<string> grid)
     {
-        ArgumentNullException.ThrowIfNull(args);
+        int height = grid.Count;
+        int width = grid[0].Length;
 
-        var values = await ReadResourceAsLinesAsync(cancellationToken);
+        int count = 0;
 
-        Count = Search(values);
-
-        if (Verbose)
+        for (int y = 0; y < height; y++)
         {
-            Logger.WriteLine("XMAS appears {0} times.", Count);
+            for (int x = 0; x < width; x++)
+            {
+                if (HasCrossMas(new(x, y)))
+                {
+                    count++;
+                }
+            }
         }
 
-        return PuzzleResult.Create(Count);
+        return count;
+
+        bool HasCrossMas(Point location)
+        {
+            if (location.X == 0 || location.Y == 0 || location.X == width - 1 || location.Y == height - 1)
+            {
+                return false;
+            }
+
+            if (grid[location.Y][location.X] is not 'A')
+            {
+                return false;
+            }
+
+            return
+                ((grid[location.Y - 1][location.X - 1] is 'M' && grid[location.Y + 1][location.X + 1] is 'S') ||
+                 (grid[location.Y - 1][location.X - 1] is 'S' && grid[location.Y + 1][location.X + 1] is 'M')) &&
+                ((grid[location.Y + 1][location.X - 1] is 'M' && grid[location.Y - 1][location.X + 1] is 'S') ||
+                 (grid[location.Y + 1][location.X - 1] is 'S' && grid[location.Y - 1][location.X + 1] is 'M'));
+        }
     }
 }

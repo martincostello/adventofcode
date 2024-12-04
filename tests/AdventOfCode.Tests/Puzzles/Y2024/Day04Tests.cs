@@ -5,8 +5,10 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2024;
 
 public sealed class Day04Tests(ITestOutputHelper outputHelper) : PuzzleTest(outputHelper)
 {
-    [Fact]
-    public void Y2024_Day04_Search_Returns_Correct_Value()
+    [Theory]
+    [InlineData(false, 18)]
+    [InlineData(true, 9)]
+    public void Y2024_Day04_Search_Returns_Correct_Value(bool crossCount, int expected)
     {
         // Arrange
         string[] values =
@@ -24,10 +26,10 @@ public sealed class Day04Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         ];
 
         // Act
-        int actual = Day04.Search(values);
+        int actual = Day04.Search(values, crossCount);
 
         // Assert
-        actual.ShouldBe(18);
+        actual.ShouldBe(expected);
     }
 
     [Fact]
@@ -38,6 +40,7 @@ public sealed class Day04Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
 
         // Assert
         puzzle.ShouldNotBeNull();
-        puzzle.Count.ShouldBe(2603);
+        puzzle.SimpleCount.ShouldBe(2603);
+        puzzle.CrossCount.ShouldBe(1965);
     }
 }
