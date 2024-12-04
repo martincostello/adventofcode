@@ -169,7 +169,7 @@ public sealed class Day04 : Puzzle
         {
             for (int x = 0; x < width; x++)
             {
-                if (HasCrossMas(new(x, y)))
+                if (HasCrossMas(x, y))
                 {
                     count++;
                 }
@@ -178,22 +178,22 @@ public sealed class Day04 : Puzzle
 
         return count;
 
-        bool HasCrossMas(Point location)
+        bool HasCrossMas(int x, int y)
         {
-            if (location.X == 0 || location.Y == 0 || location.X == width - 1 || location.Y == height - 1)
+            if (x == 0 || y == 0 || x == width - 1 || y == height - 1)
             {
                 return false;
             }
 
-            if (grid[location.Y][location.X] is not 'A')
+            if (grid[y][x] is not 'A')
             {
                 return false;
             }
 
-            int up = location.Y - 1;
-            int down = location.Y + 1;
-            int left = location.X - 1;
-            int right = location.X + 1;
+            int up = y - 1;
+            int down = y + 1;
+            int left = x - 1;
+            int right = x + 1;
 
             // M.?    S.?
             // .A. or .A.
