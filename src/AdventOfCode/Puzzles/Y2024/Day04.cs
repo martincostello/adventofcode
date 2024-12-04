@@ -190,11 +190,25 @@ public sealed class Day04 : Puzzle
                 return false;
             }
 
-            return
-                ((grid[location.Y - 1][location.X - 1] is 'M' && grid[location.Y + 1][location.X + 1] is 'S') ||
-                 (grid[location.Y - 1][location.X - 1] is 'S' && grid[location.Y + 1][location.X + 1] is 'M')) &&
-                ((grid[location.Y + 1][location.X - 1] is 'M' && grid[location.Y - 1][location.X + 1] is 'S') ||
-                 (grid[location.Y + 1][location.X - 1] is 'S' && grid[location.Y - 1][location.X + 1] is 'M'));
+            int up = location.Y - 1;
+            int down = location.Y + 1;
+            int left = location.X - 1;
+            int right = location.X + 1;
+
+            // M.?    S.?
+            // .A. or .A.
+            // ?.S    ?.M
+            if (!((grid[up][left] is 'M' && grid[down][right] is 'S') ||
+                  (grid[up][left] is 'S' && grid[down][right] is 'M')))
+            {
+                return false;
+            }
+
+            // ?.S    ?.M
+            // .A. or .A.
+            // M.?    S.?
+            return (grid[down][left] is 'M' && grid[up][right] is 'S') ||
+                   (grid[down][left] is 'S' && grid[up][right] is 'M');
         }
     }
 }
