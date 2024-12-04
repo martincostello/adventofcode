@@ -165,11 +165,11 @@ public sealed class Day04 : Puzzle
 
         int count = 0;
 
-        for (int y = 0; y < height; y++)
+        for (int y = 1; y < height - 1; y++)
         {
-            for (int x = 0; x < width; x++)
+            for (int x = 1; x < width - 1; x++)
             {
-                if (HasCrossMas(x, y))
+                if (HasCrossMas(x, y, grid))
                 {
                     count++;
                 }
@@ -178,13 +178,8 @@ public sealed class Day04 : Puzzle
 
         return count;
 
-        bool HasCrossMas(int x, int y)
+        static bool HasCrossMas(int x, int y, IList<string> grid)
         {
-            if (x == 0 || y == 0 || x == width - 1 || y == height - 1)
-            {
-                return false;
-            }
-
             if (grid[y][x] is not 'A')
             {
                 return false;
