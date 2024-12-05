@@ -56,7 +56,7 @@ public sealed class Day05 : Puzzle
 
             if (!correct && fix)
             {
-                var counts = update.ToDictionary((k) => k, (v) => updateRules.Count((q) => q.First == v));
+                var counts = update.ToDictionary((k) => k, (v) => updateRules.Count((p) => p.First == v));
                 update.Sort((x, y) => counts[y] - counts[x]);
             }
 
