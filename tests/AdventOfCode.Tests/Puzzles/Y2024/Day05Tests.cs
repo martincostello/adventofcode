@@ -5,23 +5,50 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2024;
 
 public sealed class Day05Tests(ITestOutputHelper outputHelper) : PuzzleTest(outputHelper)
 {
-    [Fact(Skip = "Not implemented.")]
-    public void Y2024_Day05_Solve_Returns_Correct_Value()
+    [Fact]
+    public void Y2024_Day05_Sort_Returns_Correct_Value()
     {
         // Arrange
-        string[] values =
+        string[] rules =
         [
-            "_",
+            "47|53",
+            "97|13",
+            "97|61",
+            "97|47",
+            "75|29",
+            "61|13",
+            "75|53",
+            "29|13",
+            "97|29",
+            "53|29",
+            "61|53",
+            "97|53",
+            "61|29",
+            "47|13",
+            "75|47",
+            "97|75",
+            "47|61",
+            "75|61",
+            "47|29",
+            "75|13",
+            "53|13",
+            string.Empty,
+            "75,47,61,53,29",
+            "97,61,53,29,13",
+            "75,29,13",
+            "75,97,47,61,53",
+            "61,13,29",
+            "97,13,75,29,47",
         ];
 
         // Act
-        int actual = Day05.Solve(values);
+        int actual = Day05.Sort(rules);
 
         // Assert
-        actual.ShouldBe(-1);
+        actual.ShouldBe(143);
     }
 
-    [Fact(Skip = "Not implemented.")]
+    [Fact]
     public async Task Y2024_Day05_Solve_Returns_Correct_Solution()
     {
         // Act
@@ -29,6 +56,6 @@ public sealed class Day05Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
 
         // Assert
         puzzle.ShouldNotBeNull();
-        puzzle.Solution.ShouldBe(-1);
+        puzzle.MiddlePageSum.ShouldBe(5948);
     }
 }
