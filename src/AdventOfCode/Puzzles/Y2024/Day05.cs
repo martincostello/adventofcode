@@ -60,12 +60,9 @@ public sealed class Day05 : Puzzle
             }
             else if (!correct && fix)
             {
-                update.Sort((x, y) =>
-                {
-                    int countX = updateRules.Count((p) => p.First == x);
-                    int countY = updateRules.Count((p) => p.First == y);
-                    return countY - countX;
-                });
+                var counts = update.ToDictionary((k) => k, (v) => updateRules.Count((q) => q.First == v));
+
+                update.Sort((x, y) => counts[y] - counts[x]);
 
                 sum += update[update.Count / 2];
             }
