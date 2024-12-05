@@ -22,24 +22,24 @@ public sealed class Day05 : Puzzle
     /// <summary>
     /// Sorts the rules and returns the sum of the middle page numbers for page updates.
     /// </summary>
-    /// <param name="rulesAndUpdates">The page ordering rules to use and the updates.</param>
+    /// <param name="pageOrderingRulesAndUpdates">The page ordering rules to use and the updates.</param>
     /// <param name="fix">Whether to fix the incorrect updates and return their sum or not.</param>
     /// <returns>
     /// The sum of the middle page numbers for the updates.
     /// </returns>
-    public static int Sort(IList<string> rulesAndUpdates, bool fix)
+    public static int Sort(IList<string> pageOrderingRulesAndUpdates, bool fix)
     {
         var rules = new List<(int First, int Second)>();
         var updates = new List<List<int>>();
 
-        int midpoint = rulesAndUpdates.IndexOf(string.Empty);
+        int midpoint = pageOrderingRulesAndUpdates.IndexOf(string.Empty);
 
-        foreach (string rule in rulesAndUpdates.Take(midpoint))
+        foreach (string rule in pageOrderingRulesAndUpdates.Take(midpoint))
         {
             rules.Add(rule.AsNumberPair<int>('|'));
         }
 
-        foreach (string update in rulesAndUpdates.Skip(midpoint + 1))
+        foreach (string update in pageOrderingRulesAndUpdates.Skip(midpoint + 1))
         {
             updates.Add(update.AsNumbers<int>());
         }
