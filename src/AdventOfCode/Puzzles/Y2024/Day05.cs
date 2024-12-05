@@ -54,16 +54,14 @@ public sealed class Day05 : Puzzle
 
             bool correct = updateRules.All((p) => update.IndexOf(p.First) < update.IndexOf(p.Second));
 
-            if (correct && !fix)
-            {
-                sum += update[update.Count / 2];
-            }
-            else if (!correct && fix)
+            if (!correct && fix)
             {
                 var counts = update.ToDictionary((k) => k, (v) => updateRules.Count((q) => q.First == v));
-
                 update.Sort((x, y) => counts[y] - counts[x]);
+            }
 
+            if (correct ^ fix)
+            {
                 sum += update[update.Count / 2];
             }
         }
