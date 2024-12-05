@@ -5,8 +5,10 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2024;
 
 public sealed class Day05Tests(ITestOutputHelper outputHelper) : PuzzleTest(outputHelper)
 {
-    [Fact]
-    public void Y2024_Day05_Sort_Returns_Correct_Value()
+    [Theory]
+    [InlineData(false, 143)]
+    [InlineData(true, 123)]
+    public void Y2024_Day05_Sort_Returns_Correct_Value(bool fix, int expected)
     {
         // Arrange
         string[] rules =
@@ -42,10 +44,10 @@ public sealed class Day05Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         ];
 
         // Act
-        int actual = Day05.Sort(rules);
+        int actual = Day05.Sort(rules, fix);
 
         // Assert
-        actual.ShouldBe(143);
+        actual.ShouldBe(expected);
     }
 
     [Fact]
@@ -56,6 +58,7 @@ public sealed class Day05Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
 
         // Assert
         puzzle.ShouldNotBeNull();
-        puzzle.MiddlePageSum.ShouldBe(5948);
+        puzzle.MiddlePageSumCorrect.ShouldBe(5948);
+        puzzle.MiddlePageSumIncorrect.ShouldBe(3062);
     }
 }
