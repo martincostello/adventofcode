@@ -12,16 +12,22 @@ public sealed class Day05 : Puzzle
     /// <summary>
     /// Gets the sum of the middle page numbers for correctly-ordered updates.
     /// </summary>
-    public int MiddlePageSum { get; private set; }
+    public int MiddlePageSumCorrect { get; private set; }
 
     /// <summary>
-    /// Sorts the rules and returns the sum of the middle page numbers for correctly-ordered updates.
+    /// Gets the sum of the middle page numbers for incorrectly-ordered updates once fixed.
+    /// </summary>
+    public int MiddlePageSumIncorrect { get; private set; }
+
+    /// <summary>
+    /// Sorts the rules and returns the sum of the middle page numbers for page updates.
     /// </summary>
     /// <param name="rulesAndUpdates">The page ordering rules to use and the updates.</param>
+    /// <param name="fix">Whether to fix the incorrect updates and return their sum or not.</param>
     /// <returns>
-    /// The sum of the middle page numbers for correctly-ordered updates.
+    /// The sum of the middle page numbers for the updates.
     /// </returns>
-    public static int Sort(IList<string> rulesAndUpdates)
+    public static int Sort(IList<string> rulesAndUpdates, bool fix)
     {
         var rules = new List<(int First, int Second)>();
         var updates = new List<List<int>>();
@@ -42,12 +48,25 @@ public sealed class Day05 : Puzzle
 
         foreach (var update in updates)
         {
-            bool correct = rules
+            var updateRules = rules
                 .Where((p) => update.Contains(p.First) && update.Contains(p.Second))
-                .All((p) => update.IndexOf(p.First) < update.IndexOf(p.Second));
+                .ToList();
 
-            if (correct)
+            bool correct = updateRules.All((p) => update.IndexOf(p.First) < update.IndexOf(p.Second));
+
+            if (correct && !fix)
             {
+                sum += update[update.Count / 2];
+            }
+            else if (!correct && fix)
+            {
+                update.Sort((x, y) =>
+                {
+                    int countX = updateRules.Count((p) => p.First == x);
+                    int countY = updateRules.Count((p) => p.First == y);
+                    return countY - countX;
+                });
+
                 sum += update[update.Count / 2];
             }
         }
@@ -62,13 +81,15 @@ public sealed class Day05 : Puzzle
 
         var values = await ReadResourceAsLinesAsync(cancellationToken);
 
-        MiddlePageSum = Sort(values);
+        MiddlePageSumCorrect = Sort(values, fix: false);
+        MiddlePageSumIncorrect = Sort(values, fix: true);
 
         if (Verbose)
         {
-            Logger.WriteLine("The sum of the middle page numbers from correctly-ordered updates is {0}.", MiddlePageSum);
+            Logger.WriteLine("The sum of the middle page numbers from correctly-ordered updates is {0}.", MiddlePageSumCorrect);
+            Logger.WriteLine("The sum of the middle page numbers after correctly ordering incorrectly-ordered updates is {0}.", MiddlePageSumIncorrect);
         }
 
-        return PuzzleResult.Create(MiddlePageSum);
+        return PuzzleResult.Create(MiddlePageSumCorrect, MiddlePageSumIncorrect);
     }
 }
