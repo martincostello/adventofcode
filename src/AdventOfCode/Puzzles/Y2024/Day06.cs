@@ -43,9 +43,7 @@ public sealed class Day06 : Puzzle
 
             lab[obstruction] = true;
 
-            (_, bool loop) = Patrol(lab, origin, cancellationToken);
-
-            if (loop)
+            if (Patrol(lab, origin, cancellationToken) is { Loop: true })
             {
                 loops++;
             }
