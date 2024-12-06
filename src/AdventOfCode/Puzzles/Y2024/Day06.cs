@@ -86,19 +86,15 @@ public sealed class Day06 : Puzzle
             for (int x = 0; x < row.Length; x++)
             {
                 bool obstructed = false;
+                char contents = row[x];
 
-                switch (row[x])
+                if (contents is '^')
                 {
-                    case '^':
-                        origin = new(x, y);
-                        break;
-
-                    case '#':
-                        obstructed = true;
-                        break;
-
-                    default:
-                        break;
+                    origin = new(x, y);
+                }
+                else if (contents is '#')
+                {
+                    obstructed = true;
                 }
 
                 lab[new(x, y)] = obstructed;
@@ -115,7 +111,6 @@ public sealed class Day06 : Puzzle
     {
         var direction = Directions.Up;
         var location = origin;
-        var locations = new HashSet<Point>();
         var route = new HashSet<(Point, Size)>();
 
         bool loop = false;
@@ -128,8 +123,6 @@ public sealed class Day06 : Puzzle
                 loop = true;
                 break;
             }
-
-            locations.Add(location);
 
             Point next = location + direction;
 
