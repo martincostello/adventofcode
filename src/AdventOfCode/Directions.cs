@@ -38,38 +38,4 @@ internal static class Directions
         Up,
         Down,
     ];
-
-    /// <summary>
-    /// Returns the direction to the right of the specified direction.
-    /// </summary>
-    /// <param name="direction">The direction.</param>
-    /// <returns>
-    /// The direction after turning right by 90 degrees.
-    /// </returns>
-    /// <exception cref="ArgumentOutOfRangeException">
-    /// <paramref name="direction"/> is not a valid direction.
-    /// </exception>
-    public static Size TurnRight(Size direction)
-    {
-        if (direction == Up)
-        {
-            return Right;
-        }
-        else if (direction == Right)
-        {
-            return Down;
-        }
-        else if (direction == Down)
-        {
-            return Left;
-        }
-        else if (direction == Left)
-        {
-            return Up;
-        }
-        else
-        {
-            throw new ArgumentOutOfRangeException(nameof(direction), direction, "Invalid direction.");
-        }
-    }
 }

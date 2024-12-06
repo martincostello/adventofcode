@@ -134,7 +134,8 @@ public sealed class Day06 : Puzzle
 
             if (obstructed)
             {
-                direction = Directions.TurnRight(direction);
+                // Turn right by 90°
+                direction = new(-direction.Height, direction.Width);
             }
             else
             {
