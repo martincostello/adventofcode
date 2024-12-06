@@ -33,11 +33,11 @@ public sealed class Day06 : Puzzle
 
         (var route, _) = Patrol(lab, origin, cancellationToken);
 
-        var locations = route.Select((p) => p.Location).ToHashSet();
+        var visited = route.Select((p) => p.Location).ToHashSet();
 
         int loops = 0;
 
-        foreach (var obstruction in locations)
+        foreach (var obstruction in visited)
         {
             cancellationToken.ThrowIfCancellationRequested();
 
@@ -51,7 +51,7 @@ public sealed class Day06 : Puzzle
             lab[obstruction] = false;
         }
 
-        return (locations.Count, loops);
+        return (visited.Count, loops);
     }
 
     /// <inheritdoc />
