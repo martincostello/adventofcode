@@ -5,23 +5,34 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2024;
 
 public sealed class Day06Tests(ITestOutputHelper outputHelper) : PuzzleTest(outputHelper)
 {
-    [Fact(Skip = "Not implemented.")]
-    public void Y2024_Day06_Solve_Returns_Correct_Value()
+    [Fact]
+    public void Y2024_Day06_Patrol_Returns_Correct_Value()
     {
         // Arrange
         string[] values =
         [
-            "_",
+            "....#.....",
+            ".........#",
+            "..........",
+            "..#.......",
+            ".......#..",
+            "..........",
+            ".#..^.....",
+            "........#.",
+            "#.........",
+            "......#...",
         ];
 
+        using var cts = System.Diagnostics.Debugger.IsAttached ? new CancellationTokenSource() : new CancellationTokenSource(TimeSpan.FromSeconds(5));
+
         // Act
-        int actual = Day06.Solve(values);
+        int actual = Day06.Patrol(values, cts.Token);
 
         // Assert
-        actual.ShouldBe(-1);
+        actual.ShouldBe(41);
     }
 
-    [Fact(Skip = "Not implemented.")]
+    [Fact]
     public async Task Y2024_Day06_Solve_Returns_Correct_Solution()
     {
         // Act
@@ -29,6 +40,6 @@ public sealed class Day06Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
 
         // Assert
         puzzle.ShouldNotBeNull();
-        puzzle.Solution.ShouldBe(-1);
+        puzzle.DistinctPositions.ShouldBe(5453);
     }
 }
