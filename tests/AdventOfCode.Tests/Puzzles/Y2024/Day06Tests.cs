@@ -23,13 +23,14 @@ public sealed class Day06Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
             "......#...",
         ];
 
-        using var cts = System.Diagnostics.Debugger.IsAttached ? new CancellationTokenSource() : new CancellationTokenSource(TimeSpan.FromSeconds(5));
+        using var cts = Timeout();
 
         // Act
-        int actual = Day06.Patrol(values, cts.Token);
+        (int actualPositions, int actualLoops) = Day06.Patrol(values, cts.Token);
 
         // Assert
-        actual.ShouldBe(41);
+        actualPositions.ShouldBe(41);
+        actualLoops.ShouldBe(6);
     }
 
     [Fact]
@@ -41,5 +42,6 @@ public sealed class Day06Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         // Assert
         puzzle.ShouldNotBeNull();
         puzzle.DistinctPositions.ShouldBe(5453);
+        puzzle.DistinctObstructions.ShouldBe(2188);
     }
 }

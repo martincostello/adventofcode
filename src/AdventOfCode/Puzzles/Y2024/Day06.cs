@@ -15,6 +15,11 @@ public sealed class Day06 : Puzzle
     public int DistinctPositions { get; private set; }
 
     /// <summary>
+    /// Gets the number of distinct positions where an obstruction can be placed to cause the guard to patrol in a loop.
+    /// </summary>
+    public int DistinctObstructions { get; private set; }
+
+    /// <summary>
     /// Patrol the lab defined by the specified map.
     /// </summary>
     /// <param name="map">The map of the lab to patrol.</param>
@@ -22,11 +27,68 @@ public sealed class Day06 : Puzzle
     /// <returns>
     /// The number of distinct positions visited by the guard before leaving the lab.
     /// </returns>
-    public static int Patrol(IList<string> map, CancellationToken cancellationToken)
+    public static (int Positions, int Loops) Patrol(IList<string> map, CancellationToken cancellationToken)
+    {
+        (var lab, var origin) = ParseMap(map);
+
+        (int positions, _) = Patrol(lab, origin, cancellationToken);
+
+        int loops = 0;
+
+        var obstructed = new Dictionary<Point, bool>(lab);
+
+        for (int y = 0; y < map.Count; y++)
+        {
+            for (int x = 0; x < map[y].Length; x++)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+
+                var obstruction = new Point(x, y);
+
+                if (!lab[obstruction] || obstruction == origin)
+                {
+                    // Already obstructed or the current position of the guard
+                    continue;
+                }
+
+                obstructed[obstruction] = false;
+
+                (_, bool loop) = Patrol(obstructed, origin, cancellationToken);
+
+                if (loop)
+                {
+                    loops++;
+                }
+
+                obstructed[obstruction] = lab[obstruction];
+            }
+        }
+
+        return (positions, loops);
+    }
+
+    /// <inheritdoc />
+    protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
+    {
+        ArgumentNullException.ThrowIfNull(args);
+
+        var values = await ReadResourceAsLinesAsync(cancellationToken);
+
+        (DistinctPositions, DistinctObstructions) = Patrol(values, cancellationToken);
+
+        if (Verbose)
+        {
+            Logger.WriteLine("{0} distinct positions are visited by the guard before leaving the mapped area.", DistinctPositions);
+            Logger.WriteLine("{0} distinct positions can be chosen for an obstruction to create a loop.", DistinctObstructions);
+        }
+
+        return PuzzleResult.Create(DistinctPositions, DistinctObstructions);
+    }
+
+    private static (Dictionary<Point, bool> Lab, Point Origin) ParseMap(IList<string> map)
     {
         var lab = new Dictionary<Point, bool>();
-        var location = Point.Empty;
-        var direction = Directions.Up;
+        var origin = Point.Empty;
 
         for (int y = 0; y < map.Count; y++)
         {
@@ -39,7 +101,7 @@ public sealed class Day06 : Puzzle
                 switch (row[x])
                 {
                     case '^':
-                        location = new(x, y);
+                        origin = new(x, y);
                         break;
 
                     case '#':
@@ -54,10 +116,31 @@ public sealed class Day06 : Puzzle
             }
         }
 
+        return (lab, origin);
+    }
+
+    private static (int Locations, bool Loop) Patrol(
+        Dictionary<Point, bool> lab,
+        Point origin,
+        CancellationToken cancellationToken)
+    {
+        var direction = Directions.Up;
+        var location = origin;
         var locations = new HashSet<Point>();
+
+        bool loop = false;
+
+        var path = new HashSet<(Point, Size)>();
 
         do
         {
+            if (!path.Add((location, direction)))
+            {
+                // The guard has reached a position previously visited
+                loop = true;
+                break;
+            }
+
             locations.Add(location);
 
             Point next = location + direction;
@@ -81,23 +164,6 @@ public sealed class Day06 : Puzzle
 
         cancellationToken.ThrowIfCancellationRequested();
 
-        return locations.Count;
-    }
-
-    /// <inheritdoc />
-    protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
-    {
-        ArgumentNullException.ThrowIfNull(args);
-
-        var values = await ReadResourceAsLinesAsync(cancellationToken);
-
-        DistinctPositions = Patrol(values, cancellationToken);
-
-        if (Verbose)
-        {
-            Logger.WriteLine("{0} distinct positions are visited by the guard before leaving the mapped area.", DistinctPositions);
-        }
-
-        return PuzzleResult.Create(DistinctPositions);
+        return (locations.Count, loop);
     }
 }

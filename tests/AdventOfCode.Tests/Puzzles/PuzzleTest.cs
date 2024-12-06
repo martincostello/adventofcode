@@ -29,6 +29,15 @@ public abstract class PuzzleTest
     private protected ILogger Logger { get; }
 
     /// <summary>
+    /// Returns a <see cref="CancellationTokenSource"/> representing the timeout to solve a puzzle.
+    /// </summary>
+    /// <returns>
+    /// A <see cref="CancellationTokenSource"/> associated with the puzzle solution timeout.
+    /// </returns>
+    protected static CancellationTokenSource Timeout()
+        => System.Diagnostics.Debugger.IsAttached ? new() : new(TimeSpan.FromMinutes(1));
+
+    /// <summary>
     /// Solves the specified puzzle type asynchronously.
     /// </summary>
     /// <typeparam name="T">The type of the puzzle to solve.</typeparam>
@@ -57,7 +66,7 @@ public abstract class PuzzleTest
             Verbose = true,
         };
 
-        using var cts = new CancellationTokenSource(TimeSpan.FromMinutes(1));
+        using var cts = Timeout();
 
         // Act
         PuzzleResult result = await puzzle.SolveAsync(args, cts.Token);
