@@ -133,14 +133,14 @@ public sealed class Day06 : Puzzle
             }
             else
             {
-                location = next;
-
-                if (!route.Add((location, direction)))
+                if (!route.Add((next, direction)))
                 {
                     // The guard has reached a position and orientation previously visited
                     loop = true;
                     break;
                 }
+
+                location = next;
             }
         }
         while (!cancellationToken.IsCancellationRequested);
