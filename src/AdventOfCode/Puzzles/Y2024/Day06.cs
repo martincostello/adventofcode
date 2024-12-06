@@ -109,19 +109,15 @@ public sealed class Day06 : Puzzle
     {
         var direction = Directions.Up;
         var location = origin;
-        var route = new HashSet<(Point, Size)>();
+        var route = new HashSet<(Point, Size)>()
+        {
+            (location, direction),
+        };
 
         bool loop = false;
 
         do
         {
-            if (!route.Add((location, direction)))
-            {
-                // The guard has reached a position and orientation previously visited
-                loop = true;
-                break;
-            }
-
             Point next = location + direction;
 
             if (!lab.TryGetValue(next, out bool obstructed))
@@ -138,6 +134,13 @@ public sealed class Day06 : Puzzle
             else
             {
                 location = next;
+
+                if (!route.Add((location, direction)))
+                {
+                    // The guard has reached a position and orientation previously visited
+                    loop = true;
+                    break;
+                }
             }
         }
         while (!cancellationToken.IsCancellationRequested);
