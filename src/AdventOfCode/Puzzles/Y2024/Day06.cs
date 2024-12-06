@@ -6,18 +6,82 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2024;
 /// <summary>
 /// A class representing the puzzle for <c>https://adventofcode.com/2024/day/6</c>. This class cannot be inherited.
 /// </summary>
-[Puzzle(2024, 06, "", RequiresData = true, IsHidden = true)]
+[Puzzle(2024, 06, "Guard Gallivant", RequiresData = true)]
 public sealed class Day06 : Puzzle
 {
-#pragma warning disable IDE0022
-#pragma warning disable IDE0060
-#pragma warning disable SA1600
+    /// <summary>
+    /// Gets the number of distinct positions visited by the guard.
+    /// </summary>
+    public int DistinctPositions { get; private set; }
 
-    public int Solution { get; private set; }
-
-    public static int Solve(IList<string> values)
+    /// <summary>
+    /// Patrol the lab defined by the specified map.
+    /// </summary>
+    /// <param name="map">The map of the lab to patrol.</param>
+    /// <param name="cancellationToken">The <see cref="CancellationToken"/> to use.</param>
+    /// <returns>
+    /// The number of distinct positions visited by the guard before leaving the lab.
+    /// </returns>
+    public static int Patrol(IList<string> map, CancellationToken cancellationToken)
     {
-        return -1;
+        var lab = new Dictionary<Point, bool>();
+        var location = Point.Empty;
+        var direction = Directions.Up;
+
+        for (int y = 0; y < map.Count; y++)
+        {
+            string row = map[y];
+
+            for (int x = 0; x < row.Length; x++)
+            {
+                bool passable = true;
+
+                switch (row[x])
+                {
+                    case '^':
+                        location = new(x, y);
+                        break;
+
+                    case '#':
+                        passable = false;
+                        break;
+
+                    default:
+                        break;
+                }
+
+                lab[new(x, y)] = passable;
+            }
+        }
+
+        var locations = new HashSet<Point>();
+
+        do
+        {
+            locations.Add(location);
+
+            Point next = location + direction;
+
+            if (!lab.TryGetValue(next, out bool passable))
+            {
+                // The guard has left the lab
+                break;
+            }
+
+            if (passable)
+            {
+                location = next;
+            }
+            else
+            {
+                direction = Directions.TurnRight(direction);
+            }
+        }
+        while (!cancellationToken.IsCancellationRequested);
+
+        cancellationToken.ThrowIfCancellationRequested();
+
+        return locations.Count;
     }
 
     /// <inheritdoc />
@@ -27,13 +91,13 @@ public sealed class Day06 : Puzzle
 
         var values = await ReadResourceAsLinesAsync(cancellationToken);
 
-        Solution = Solve(values);
+        DistinctPositions = Patrol(values, cancellationToken);
 
         if (Verbose)
         {
-            Logger.WriteLine("{0}", Solution);
+            Logger.WriteLine("{0} distinct positions are visited by the guard before leaving the mapped area.", DistinctPositions);
         }
 
-        return PuzzleResult.Create(Solution);
+        return PuzzleResult.Create(DistinctPositions);
     }
 }
