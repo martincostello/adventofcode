@@ -31,40 +31,29 @@ public sealed class Day06 : Puzzle
     {
         (var lab, var origin) = ParseMap(map);
 
-        (int positions, _) = Patrol(lab, origin, cancellationToken);
+        (var route, _) = Patrol(lab, origin, cancellationToken);
+
+        var locations = route.Select((p) => p.Location).ToHashSet();
 
         int loops = 0;
 
-        var obstructed = new Dictionary<Point, bool>(lab);
-
-        for (int y = 0; y < map.Count; y++)
+        foreach (var obstruction in locations)
         {
-            for (int x = 0; x < map[y].Length; x++)
+            cancellationToken.ThrowIfCancellationRequested();
+
+            lab[obstruction] = true;
+
+            (_, bool loop) = Patrol(lab, origin, cancellationToken);
+
+            if (loop)
             {
-                cancellationToken.ThrowIfCancellationRequested();
-
-                var obstruction = new Point(x, y);
-
-                if (!lab[obstruction] || obstruction == origin)
-                {
-                    // Already obstructed or the current position of the guard
-                    continue;
-                }
-
-                obstructed[obstruction] = false;
-
-                (_, bool loop) = Patrol(obstructed, origin, cancellationToken);
-
-                if (loop)
-                {
-                    loops++;
-                }
-
-                obstructed[obstruction] = lab[obstruction];
+                loops++;
             }
+
+            lab[obstruction] = false;
         }
 
-        return (positions, loops);
+        return (locations.Count, loops);
     }
 
     /// <inheritdoc />
@@ -96,7 +85,7 @@ public sealed class Day06 : Puzzle
 
             for (int x = 0; x < row.Length; x++)
             {
-                bool passable = true;
+                bool obstructed = false;
 
                 switch (row[x])
                 {
@@ -105,21 +94,21 @@ public sealed class Day06 : Puzzle
                         break;
 
                     case '#':
-                        passable = false;
+                        obstructed = true;
                         break;
 
                     default:
                         break;
                 }
 
-                lab[new(x, y)] = passable;
+                lab[new(x, y)] = obstructed;
             }
         }
 
         return (lab, origin);
     }
 
-    private static (int Locations, bool Loop) Patrol(
+    private static (HashSet<(Point Location, Size Direction)> Route, bool Loop) Patrol(
         Dictionary<Point, bool> lab,
         Point origin,
         CancellationToken cancellationToken)
@@ -127,16 +116,15 @@ public sealed class Day06 : Puzzle
         var direction = Directions.Up;
         var location = origin;
         var locations = new HashSet<Point>();
+        var route = new HashSet<(Point, Size)>();
 
         bool loop = false;
 
-        var path = new HashSet<(Point, Size)>();
-
         do
         {
-            if (!path.Add((location, direction)))
+            if (!route.Add((location, direction)))
             {
-                // The guard has reached a position previously visited
+                // The guard has reached a position and orientation previously visited
                 loop = true;
                 break;
             }
@@ -145,25 +133,25 @@ public sealed class Day06 : Puzzle
 
             Point next = location + direction;
 
-            if (!lab.TryGetValue(next, out bool passable))
+            if (!lab.TryGetValue(next, out bool obstructed))
             {
                 // The guard has left the lab
                 break;
             }
 
-            if (passable)
+            if (obstructed)
             {
-                location = next;
+                direction = Directions.TurnRight(direction);
             }
             else
             {
-                direction = Directions.TurnRight(direction);
+                location = next;
             }
         }
         while (!cancellationToken.IsCancellationRequested);
 
         cancellationToken.ThrowIfCancellationRequested();
 
-        return (locations.Count, loop);
+        return (route, loop);
     }
 }
