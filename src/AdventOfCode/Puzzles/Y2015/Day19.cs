@@ -29,12 +29,13 @@ public sealed class Day19 : Puzzle
     /// The distinct molecules that can be created from <paramref name="molecule"/> using all of the
     /// possible replacements specified by <paramref name="replacements"/>.
     /// </returns>
-    internal static SortedSet<string> GetPossibleMolecules(
+    internal static HashSet<string> GetPossibleMolecules(
         string molecule,
         List<(string Source, string Target)> replacements,
         CancellationToken cancellationToken)
     {
-        var molecules = new SortedSet<string>();
+        var builder = new StringBuilder();
+        var molecules = new HashSet<string>();
 
         foreach ((string source, string target) in replacements)
         {
@@ -46,12 +47,17 @@ public sealed class Day19 : Puzzle
 
                 if (index > -1)
                 {
-                    string newMolecule =
-                        (index == 0 ? string.Empty : molecule[0..index]) +
-                        target +
-                        molecule[(index + source.Length)..];
+                    builder.Clear();
 
-                    molecules.Add(newMolecule);
+                    if (index > 0)
+                    {
+                        builder.Append(molecule[..index]);
+                    }
+
+                    builder.Append(target);
+                    builder.Append(molecule[(index + source.Length)..]);
+
+                    molecules.Add(builder.ToString());
                 }
             }
         }
