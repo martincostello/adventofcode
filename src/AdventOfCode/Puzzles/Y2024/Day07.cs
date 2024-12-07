@@ -96,20 +96,22 @@ public sealed class Day07 : Puzzle
 
         static long Concat(long x, long y)
         {
-            long q = y switch
+            long factor = y switch
             {
                 < 10 => 10,
                 < 100 => 100,
                 < 1_000 => 1_000,
-                < 10_000 => 10_000,
-                < 100_000 => 100_000,
-                < 1_000_000 => 1_000_000,
-                < 10_000_000 => 10_000_000,
-                < 100_000_000 => 100_000_000,
-                _ => 1_000_000_000,
+                _ => GetFactorSlow(y),
             };
 
-            return (q * x) + y;
+            return (factor * x) + y;
+
+            static long GetFactorSlow(long y)
+            {
+                float log10 = MathF.Log10(y);
+                float tens = MathF.Floor(log10);
+                return (long)MathF.Pow(10, tens + 1);
+            }
         }
     }
 
