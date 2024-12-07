@@ -106,15 +106,10 @@ public sealed class Day19 : Puzzle
             {
                 cancellationToken.ThrowIfCancellationRequested();
 
-                for (int i = 0; i < molecule.Length; i++)
+                int index = molecule.LastIndexOf(source, StringComparison.Ordinal);
+
+                if (index > -1)
                 {
-                    int index = molecule.IndexOf(source, i, StringComparison.Ordinal);
-
-                    if (index is -1)
-                    {
-                        break;
-                    }
-
                     builder.Clear();
 
                     if (index > 0)
