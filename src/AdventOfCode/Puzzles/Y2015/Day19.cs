@@ -150,6 +150,7 @@ public sealed class Day19 : Puzzle
             .Where((p) => !string.IsNullOrEmpty(p))
             .Select((p) => p.Split(" => "))
             .Select((p) => (p[0], p[1]))
+            .OrderByDescending((p) => p.Item2.Length)
             .ToList();
 
         FabricationSolution = GetPossibleMolecules(molecule, replacements, cancellationToken);
