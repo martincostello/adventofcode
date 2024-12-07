@@ -51,7 +51,7 @@ public sealed class Day19Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         actual.ShouldBe(expected);
     }
 
-    [Fact(Skip = "Too slow.")]
+    [Fact]
     public async Task Y2015_Day19_Solve_Returns_Correct_Solution()
     {
         // Act
