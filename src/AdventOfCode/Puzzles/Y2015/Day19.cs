@@ -26,10 +26,10 @@ public sealed class Day19 : Puzzle
     /// <param name="replacements">The possible replacements.</param>
     /// <param name="cancellationToken">The cancellation token to use.</param>
     /// <returns>
-    /// The distinct molecules that can be created from <paramref name="molecule"/> using all of the
+    /// The number of distinct molecules that can be created from <paramref name="molecule"/> using all of the
     /// possible replacements specified by <paramref name="replacements"/>.
     /// </returns>
-    internal static HashSet<string> GetPossibleMolecules(
+    internal static int GetPossibleMolecules(
         string molecule,
         List<(string Source, string Target)> replacements,
         CancellationToken cancellationToken)
@@ -64,7 +64,7 @@ public sealed class Day19 : Puzzle
             }
         }
 
-        return molecules;
+        return molecules.Count;
     }
 
     /// <summary>
@@ -72,23 +72,6 @@ public sealed class Day19 : Puzzle
     /// </summary>
     /// <param name="molecule">The desired molecule.</param>
     /// <param name="replacements">The possible replacements.</param>
-    /// <param name="logger">The logger to use.</param>
-    /// <param name="cancellationToken">The cancellation token to use.</param>
-    /// <returns>
-    /// The minimum number of steps required to create <paramref name="molecule"/> using the possible
-    /// replacements specified by <paramref name="replacements"/>.
-    /// </returns>
-    internal static int GetMinimumSteps(string molecule, List<(string Source, string Target)> replacements, ILogger logger, CancellationToken cancellationToken)
-        => GetMinimumSteps(molecule, replacements, "e", 1, logger, cancellationToken);
-
-    /// <summary>
-    /// Gets the minimum number of steps that can be performed to make the specified molecule using the specified replacements.
-    /// </summary>
-    /// <param name="molecule">The desired molecule.</param>
-    /// <param name="replacements">The possible replacements.</param>
-    /// <param name="current">The current molecule being worked with.</param>
-    /// <param name="step">The current step number.</param>
-    /// <param name="logger">The logger to use.</param>
     /// <param name="cancellationToken">The cancellation token to use.</param>
     /// <returns>
     /// The minimum number of steps required to create <paramref name="molecule"/> using the possible
@@ -97,30 +80,67 @@ public sealed class Day19 : Puzzle
     internal static int GetMinimumSteps(
         string molecule,
         List<(string Source, string Target)> replacements,
-        string current,
-        int step,
-        ILogger logger,
         CancellationToken cancellationToken)
     {
-        var nextSteps = GetPossibleMolecules(current, replacements, cancellationToken);
+        int minimum = int.MaxValue;
+        int step = 1;
+        return Synthesize("e", molecule, replacements, step, ref minimum, cancellationToken) ? minimum : -1;
 
-        if (nextSteps.Contains(molecule))
+        static bool Synthesize(
+            string molecule,
+            string desired,
+            List<(string Source, string Target)> replacements,
+            int step,
+            ref int minimum,
+            CancellationToken cancellationToken)
         {
-            logger.WriteLine($"Found solution that takes {step:N0} steps.");
-            return step;
+            if (step > minimum || molecule.Length >= desired.Length)
+            {
+                return false;
+            }
+
+            var builder = new StringBuilder();
+
+            foreach ((string source, string target) in replacements)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+
+                for (int i = 0; i < molecule.Length; i++)
+                {
+                    int index = molecule.IndexOf(source, i, StringComparison.Ordinal);
+
+                    if (index is -1)
+                    {
+                        break;
+                    }
+
+                    builder.Clear();
+
+                    if (index > 0)
+                    {
+                        builder.Append(molecule[..index]);
+                    }
+
+                    builder.Append(target);
+                    builder.Append(molecule[(index + source.Length)..]);
+
+                    string next = builder.ToString();
+
+                    if (next == desired)
+                    {
+                        minimum = step;
+                        return true;
+                    }
+
+                    if (Synthesize(next, desired, replacements, step + 1, ref minimum, cancellationToken))
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
         }
-
-        var steps = new List<int>(nextSteps.Count);
-
-        foreach (string next in nextSteps.Where((p) => p.Length < molecule.Length))
-        {
-            steps.Add(GetMinimumSteps(molecule, replacements, next, step + 1, logger, cancellationToken));
-        }
-
-        return steps
-            .Where((p) => p > 0)
-            .DefaultIfEmpty()
-            .Min();
     }
 
     /// <inheritdoc />
@@ -137,13 +157,13 @@ public sealed class Day19 : Puzzle
             .Select((p) => (p[0], p[1]))
             .ToList();
 
-        CalibrationSolution = GetMinimumSteps(molecule, replacements, Logger, cancellationToken);
-        FabricationSolution = GetPossibleMolecules(molecule, replacements, cancellationToken).Count;
+        FabricationSolution = GetPossibleMolecules(molecule, replacements, cancellationToken);
+        CalibrationSolution = GetMinimumSteps(molecule, replacements, cancellationToken);
 
         if (Verbose)
         {
-            Logger.WriteLine($"The target molecule can be made in a minimum of {CalibrationSolution:N0} steps.");
             Logger.WriteLine($"{CalibrationSolution:N0} distinct molecules can be created from {FabricationSolution:N0} possible replacements.");
+            Logger.WriteLine($"The target molecule can be made in a minimum of {CalibrationSolution:N0} steps.");
         }
 
         return PuzzleResult.Create(CalibrationSolution, FabricationSolution);
