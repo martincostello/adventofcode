@@ -36,7 +36,7 @@ public class ApiTests(HttpServerFixture fixture, ITestOutputHelper outputHelper)
     [PuzzleData(2015, 16, 373, 260)]
     [PuzzleData(2015, 17, ["150"], 1304, 18, SendResource = true)]
     [PuzzleData(2015, 18, 814, 924)]
-    [PuzzleData(2015, 19, 576, 207, Skip = "Too slow.")]
+    [PuzzleData(2015, 19, 576, 207)]
     [PuzzleData(2015, 20, ["34000000"], 786240, 831600)]
     [PuzzleData(2015, 21, 148, 78)]
     [PuzzleData(2015, 22, ["easy"], 953)]
