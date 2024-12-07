@@ -5,8 +5,10 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2024;
 
 public sealed class Day07Tests(ITestOutputHelper outputHelper) : PuzzleTest(outputHelper)
 {
-    [Fact]
-    public void Y2024_Day07_Calibrate_Returns_Correct_Value()
+    [Theory]
+    [InlineData(false, 3749)]
+    [InlineData(true, 11387)]
+    public void Y2024_Day07_Calibrate_Returns_Correct_Value(bool useConcatenation, long expected)
     {
         // Arrange
         string[] equations =
@@ -23,10 +25,10 @@ public sealed class Day07Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         ];
 
         // Act
-        long actual = Day07.Calibrate(equations);
+        long actual = Day07.Calibrate(equations, useConcatenation);
 
         // Assert
-        actual.ShouldBe(3749);
+        actual.ShouldBe(expected);
     }
 
     [Fact]
@@ -37,6 +39,7 @@ public sealed class Day07Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
 
         // Assert
         puzzle.ShouldNotBeNull();
-        puzzle.CalibrationResult.ShouldBe(1153997401072);
+        puzzle.CalibrationResult1.ShouldBe(1153997401072);
+        puzzle.CalibrationResult2.ShouldBe(97902809384118);
     }
 }
