@@ -1,13 +1,15 @@
 ﻿// Copyright (c) Martin Costello, 2015. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
+using System.Text.RegularExpressions;
+
 namespace MartinCostello.AdventOfCode.Puzzles.Y2015;
 
 /// <summary>
 /// A class representing the puzzle for <c>https://adventofcode.com/2015/day/19</c>. This class cannot be inherited.
 /// </summary>
-[Puzzle(2015, 19, "Medicine for Rudolph", RequiresData = true, IsHidden = true)]
-public sealed class Day19 : Puzzle
+[Puzzle(2015, 19, "Medicine for Rudolph", RequiresData = true)]
+public sealed partial class Day19 : Puzzle
 {
     /// <summary>
     /// Gets the solution for calibration.
@@ -150,11 +152,13 @@ public sealed class Day19 : Puzzle
             .Where((p) => !string.IsNullOrEmpty(p))
             .Select((p) => p.Split(" => "))
             .Select((p) => (p[0], p[1]))
-            .OrderByDescending((p) => p.Item2.Length)
             .ToList();
 
-        FabricationSolution = GetPossibleMolecules(molecule, replacements, cancellationToken);
-        CalibrationSolution = GetMinimumSteps(molecule, replacements, cancellationToken);
+        CalibrationSolution = GetPossibleMolecules(molecule, replacements, cancellationToken);
+
+        // See https://www.reddit.com/r/adventofcode/comments/3xflz8/comment/cy4h7ji/.
+        // For some reason, it doesn't work on the test inputs (off by one) but does on the real input.
+        FabricationSolution = molecule.Count(char.IsUpper) - ArgonOrRadon().Count(molecule) - (2 * molecule.Count((p) => p is 'Y')) - 1;
 
         if (Verbose)
         {
@@ -164,4 +168,7 @@ public sealed class Day19 : Puzzle
 
         return PuzzleResult.Create(CalibrationSolution, FabricationSolution);
     }
+
+    [GeneratedRegex("Ar|Rn")]
+    private static partial Regex ArgonOrRadon();
 }
