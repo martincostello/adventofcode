@@ -29,21 +29,16 @@ public sealed class Day19 : Puzzle
     /// The distinct molecules that can be created from <paramref name="molecule"/> using all of the
     /// possible replacements specified by <paramref name="replacements"/>.
     /// </returns>
-    internal static HashSet<string> GetPossibleMolecules(
+    internal static SortedSet<string> GetPossibleMolecules(
         string molecule,
-        List<string> replacements,
+        List<(string Source, string Target)> replacements,
         CancellationToken cancellationToken)
     {
-        var molecules = new HashSet<string>();
+        var molecules = new SortedSet<string>();
 
-        foreach (string replacement in replacements)
+        foreach ((string source, string target) in replacements)
         {
             cancellationToken.ThrowIfCancellationRequested();
-
-            string[] split = replacement.Split(" => ");
-
-            string source = split[0];
-            string target = split[1];
 
             for (int i = 0; i < molecule.Length; i++)
             {
@@ -75,7 +70,7 @@ public sealed class Day19 : Puzzle
     /// The minimum number of steps required to create <paramref name="molecule"/> using the possible
     /// replacements specified by <paramref name="replacements"/>.
     /// </returns>
-    internal static int GetMinimumSteps(string molecule, List<string> replacements, ILogger logger, CancellationToken cancellationToken)
+    internal static int GetMinimumSteps(string molecule, List<(string Source, string Target)> replacements, ILogger logger, CancellationToken cancellationToken)
         => GetMinimumSteps(molecule, replacements, "e", 1, logger, cancellationToken);
 
     /// <summary>
@@ -93,7 +88,7 @@ public sealed class Day19 : Puzzle
     /// </returns>
     internal static int GetMinimumSteps(
         string molecule,
-        List<string> replacements,
+        List<(string Source, string Target)> replacements,
         string current,
         int step,
         ILogger logger,
@@ -130,6 +125,8 @@ public sealed class Day19 : Puzzle
         var replacements = lines
             .Take(lines.Count - 1)
             .Where((p) => !string.IsNullOrEmpty(p))
+            .Select((p) => p.Split(" => "))
+            .Select((p) => (p[0], p[1]))
             .ToList();
 
         CalibrationSolution = GetMinimumSteps(molecule, replacements, Logger, cancellationToken);

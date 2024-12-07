@@ -11,7 +11,12 @@ public sealed class Day19Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
     public static void Y2015_Day19_GetPossibleMolecules(string molecule, int expected)
     {
         // Arrange
-        List<string> replacements = ["H => HO", "H => OH", "O => HH"];
+        List<(string Source, string Target)> replacements =
+        [
+            ("H", "HO"),
+            ("H", "OH"),
+            ("O", "HH"),
+        ];
 
         using var cts = Timeout();
 
@@ -23,18 +28,26 @@ public sealed class Day19Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         actual.Count.ShouldBe(expected);
     }
 
-    [Fact]
-    public void Y2015_Day19_GetMinimumSteps()
+    [Theory]
+    [InlineData("HOH", 3)]
+    [InlineData("HOHOHO", 6)]
+    public void Y2015_Day19_GetMinimumSteps(string molecule, int expected)
     {
         // Arrange
-        string molecule = "HOH";
-        List<string> replacements = ["e => H", "e => O", "H => HO", "H => OH", "O => HH"];
+        List<(string Source, string Target)> replacements =
+        [
+            ("e", "H"),
+            ("e", "O"),
+            ("H", "HO"),
+            ("H", "OH"),
+            ("O", "HH"),
+        ];
 
         // Act
         int actual = Day19.GetMinimumSteps(molecule, replacements, Logger, CancellationToken.None);
 
         // Assert
-        actual.ShouldBe(3);
+        actual.ShouldBe(expected);
     }
 
     [Fact(Skip = "Too slow.")]
