@@ -131,8 +131,7 @@ public sealed class Day19 : Puzzle
                         minimum = step;
                         return true;
                     }
-
-                    if (Synthesize(next, desired, replacements, step + 1, ref minimum, cancellationToken))
+                    else if (Synthesize(next, desired, replacements, step + 1, ref minimum, cancellationToken))
                     {
                         return true;
                     }
