@@ -29,9 +29,9 @@ public sealed class Day07 : Puzzle
     /// </returns>
     public static long Calibrate(IList<string> equations, bool useConcatenation)
     {
-        var parsed = new List<(long Target, long[] Values)>(equations.Count);
+        long result = 0;
 
-        foreach (string equation in equations)
+        Parallel.ForEach(equations, (equation) =>
         {
             string[] parts = equation.Split(':');
 
@@ -45,18 +45,11 @@ public sealed class Day07 : Puzzle
                 values[i] = Parse<long>(rawValues[i]);
             }
 
-            parsed.Add((target, values));
-        }
-
-        long result = 0;
-
-        foreach ((long target, long[] values) in parsed)
-        {
             if (TrySolve(values, 0, 0, target, useConcatenation))
             {
-                result += target;
+                Interlocked.Add(ref result, target);
             }
-        }
+        });
 
         return result;
 
