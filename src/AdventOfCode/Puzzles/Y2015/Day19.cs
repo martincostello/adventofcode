@@ -29,7 +29,7 @@ public sealed class Day19 : Puzzle
     /// The distinct molecules that can be created from <paramref name="molecule"/> using all of the
     /// possible replacements specified by <paramref name="replacements"/>.
     /// </returns>
-    internal static ICollection<string> GetPossibleMolecules(
+    internal static HashSet<string> GetPossibleMolecules(
         string molecule,
         List<string> replacements,
         CancellationToken cancellationToken)
@@ -61,7 +61,7 @@ public sealed class Day19 : Puzzle
             }
         }
 
-        return [.. molecules.Order(StringComparer.Ordinal)];
+        return molecules;
     }
 
     /// <summary>

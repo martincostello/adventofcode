@@ -5,19 +5,22 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015;
 
 public sealed class Day19Tests(ITestOutputHelper outputHelper) : PuzzleTest(outputHelper)
 {
-    [Fact]
-    public static void Y2015_Day19_GetPossibleMolecules()
+    [Theory]
+    [InlineData("HOH", 4)]
+    [InlineData("HOHOHO", 7)]
+    public static void Y2015_Day19_GetPossibleMolecules(string molecule, int expected)
     {
         // Arrange
-        string molecule = "HOH";
         List<string> replacements = ["H => HO", "H => OH", "O => HH"];
 
+        using var cts = Timeout();
+
         // Act
-        var actual = Day19.GetPossibleMolecules(molecule, replacements, CancellationToken.None);
+        var actual = Day19.GetPossibleMolecules(molecule, replacements, cts.Token);
 
         // Assert
         actual.ShouldNotBeNull();
-        actual.ShouldBe(["HHHH", "HOHO", "HOOH", "OHOH"]);
+        actual.Count.ShouldBe(expected);
     }
 
     [Fact]
