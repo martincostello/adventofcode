@@ -82,8 +82,6 @@ public sealed class Day07 : Puzzle
                 return true;
             }
 
-            index--;
-
             return false;
         }
 
