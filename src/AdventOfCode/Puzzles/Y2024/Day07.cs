@@ -6,18 +6,84 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2024;
 /// <summary>
 /// A class representing the puzzle for <c>https://adventofcode.com/2024/day/7</c>. This class cannot be inherited.
 /// </summary>
-[Puzzle(2024, 07, "", RequiresData = true, IsHidden = true)]
+[Puzzle(2024, 07, "Bridge Repair", RequiresData = true)]
 public sealed class Day07 : Puzzle
 {
-#pragma warning disable IDE0022
-#pragma warning disable IDE0060
-#pragma warning disable SA1600
+    /// <summary>
+    /// Gets the calibration result for the bridge.
+    /// </summary>
+    public long CalibrationResult { get; private set; }
 
-    public int Solution { get; private set; }
-
-    public static int Solve(IList<string> values)
+    /// <summary>
+    /// Calibrates the bridge using the specified equations.
+    /// </summary>
+    /// <param name="equations">The equations to use to calibrate the bridge.</param>
+    /// <returns>
+    /// The calibration result for the bridge.
+    /// </returns>
+    public static long Calibrate(IList<string> equations)
     {
-        return -1;
+        var parsed = new List<(long Target, Stack<int> Values)>(equations.Count);
+
+        foreach (string equation in equations)
+        {
+            string[] parts = equation.Split(':');
+
+            long target = Parse<long>(parts[0]);
+
+            string[] values = parts[1].Split(' ', StringSplitOptions.RemoveEmptyEntries);
+            Array.Reverse(values);
+
+            var stack = new Stack<int>(values.Length);
+
+            foreach (string value in values)
+            {
+                stack.Push(Parse<int>(value));
+            }
+
+            parsed.Add((target, stack));
+        }
+
+        long result = 0;
+
+        foreach ((long target, var values) in parsed)
+        {
+            if (TrySolve(values, 0, target))
+            {
+                result += target;
+            }
+        }
+
+        return result;
+
+        static bool TrySolve(Stack<int> values, long current, long target)
+        {
+            if (current > target)
+            {
+                return false;
+            }
+
+            if (values.Count == 0)
+            {
+                return current == target;
+            }
+
+            int value = values.Pop();
+
+            if (TrySolve(values, current + value, target))
+            {
+                return true;
+            }
+
+            if (TrySolve(values, current * value, target))
+            {
+                return true;
+            }
+
+            values.Push(value);
+
+            return false;
+        }
     }
 
     /// <inheritdoc />
@@ -25,15 +91,15 @@ public sealed class Day07 : Puzzle
     {
         ArgumentNullException.ThrowIfNull(args);
 
-        var values = await ReadResourceAsLinesAsync(cancellationToken);
+        var equations = await ReadResourceAsLinesAsync(cancellationToken);
 
-        Solution = Solve(values);
+        CalibrationResult = Calibrate(equations);
 
         if (Verbose)
         {
-            Logger.WriteLine("{0}", Solution);
+            Logger.WriteLine("The total calibration result is {0}.", CalibrationResult);
         }
 
-        return PuzzleResult.Create(Solution);
+        return PuzzleResult.Create(CalibrationResult);
     }
 }
