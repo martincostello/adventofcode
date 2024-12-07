@@ -21,11 +21,10 @@ public sealed class Day19Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         using var cts = Timeout();
 
         // Act
-        var actual = Day19.GetPossibleMolecules(molecule, replacements, cts.Token);
+        int actual = Day19.GetPossibleMolecules(molecule, replacements, cts.Token);
 
         // Assert
-        actual.ShouldNotBeNull();
-        actual.Count.ShouldBe(expected);
+        actual.ShouldBe(expected);
     }
 
     [Theory]
@@ -46,7 +45,7 @@ public sealed class Day19Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         using var cts = Timeout();
 
         // Act
-        int actual = Day19.GetMinimumSteps(molecule, replacements, Logger, cts.Token);
+        int actual = Day19.GetMinimumSteps(molecule, replacements, cts.Token);
 
         // Assert
         actual.ShouldBe(expected);
