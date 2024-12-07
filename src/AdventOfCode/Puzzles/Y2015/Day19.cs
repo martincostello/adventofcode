@@ -45,20 +45,22 @@ public sealed class Day19 : Puzzle
             {
                 int index = molecule.IndexOf(source, i, StringComparison.Ordinal);
 
-                if (index > -1)
+                if (index is -1)
                 {
-                    builder.Clear();
-
-                    if (index > 0)
-                    {
-                        builder.Append(molecule[..index]);
-                    }
-
-                    builder.Append(target);
-                    builder.Append(molecule[(index + source.Length)..]);
-
-                    molecules.Add(builder.ToString());
+                    break;
                 }
+
+                builder.Clear();
+
+                if (index > 0)
+                {
+                    builder.Append(molecule[..index]);
+                }
+
+                builder.Append(target);
+                builder.Append(molecule[(index + source.Length)..]);
+
+                molecules.Add(builder.ToString());
             }
         }
 
