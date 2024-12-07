@@ -29,30 +29,30 @@ public sealed class Day07 : Puzzle
     /// </returns>
     public static long Calibrate(IList<string> equations, bool useConcatenation)
     {
-        var parsed = new List<(long Target, Stack<long> Values)>(equations.Count);
+        var parsed = new List<(long Target, long[] Values)>(equations.Count);
 
         foreach (string equation in equations)
         {
             string[] parts = equation.Split(':');
 
             long target = Parse<long>(parts[0]);
-            string[] values = parts[1].Split(' ', StringSplitOptions.RemoveEmptyEntries);
+            string[] rawValues = parts[1].Split(' ', StringSplitOptions.RemoveEmptyEntries);
 
-            var stack = new Stack<long>(values.Length);
+            long[] values = new long[rawValues.Length];
 
-            for (int i = values.Length - 1; i > -1; i--)
+            for (int i = 0; i < rawValues.Length; i++)
             {
-                stack.Push(Parse<long>(values[i]));
+                values[i] = Parse<long>(rawValues[i]);
             }
 
-            parsed.Add((target, stack));
+            parsed.Add((target, values));
         }
 
         long result = 0;
 
-        foreach ((long target, var values) in parsed)
+        foreach ((long target, long[] values) in parsed)
         {
-            if (TrySolve(values, 0, target, useConcatenation))
+            if (TrySolve(values, 0, 0, target, useConcatenation))
             {
                 result += target;
             }
@@ -60,36 +60,36 @@ public sealed class Day07 : Puzzle
 
         return result;
 
-        static bool TrySolve(Stack<long> values, long current, long target, bool useConcatenation)
+        static bool TrySolve(long[] values, int index, long current, long target, bool useConcatenation)
         {
             if (current > target)
             {
                 return false;
             }
 
-            if (values.Count == 0)
+            if (index >= values.Length)
             {
                 return current == target;
             }
 
-            long value = values.Pop();
+            long value = values[index++];
 
-            if (TrySolve(values, current + value, target, useConcatenation))
+            if (TrySolve(values, index, current + value, target, useConcatenation))
             {
                 return true;
             }
 
-            if (TrySolve(values, current * value, target, useConcatenation))
+            if (TrySolve(values, index, current * value, target, useConcatenation))
             {
                 return true;
             }
 
-            if (useConcatenation && TrySolve(values, Concat(current, value), target, true))
+            if (useConcatenation && TrySolve(values, index, Concat(current, value), target, true))
             {
                 return true;
             }
 
-            values.Push(value);
+            index--;
 
             return false;
         }
