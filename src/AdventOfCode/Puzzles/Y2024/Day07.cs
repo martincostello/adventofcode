@@ -109,8 +109,8 @@ public sealed class Day07 : Puzzle
             static long GetFactorSlow(long y)
             {
                 float log10 = MathF.Log10(y);
-                float tens = MathF.Floor(log10);
-                return (long)MathF.Pow(10, tens + 1);
+                float tens = MathF.Floor(log10 + 1);
+                return (long)MathF.Pow(10, tens);
             }
         }
     }
