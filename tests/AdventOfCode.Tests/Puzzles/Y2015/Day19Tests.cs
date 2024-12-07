@@ -43,8 +43,10 @@ public sealed class Day19Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
             ("O", "HH"),
         ];
 
+        using var cts = Timeout();
+
         // Act
-        int actual = Day19.GetMinimumSteps(molecule, replacements, Logger, CancellationToken.None);
+        int actual = Day19.GetMinimumSteps(molecule, replacements, Logger, cts.Token);
 
         // Assert
         actual.ShouldBe(expected);
