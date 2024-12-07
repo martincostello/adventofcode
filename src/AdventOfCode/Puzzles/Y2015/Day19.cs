@@ -82,9 +82,11 @@ public sealed class Day19 : Puzzle
         List<(string Source, string Target)> replacements,
         CancellationToken cancellationToken)
     {
+        var builder = new StringBuilder();
         int minimum = int.MaxValue;
         int step = 1;
-        return Synthesize("e", molecule, replacements, step, ref minimum, cancellationToken) ? minimum : -1;
+
+        return Synthesize("e", molecule, replacements, step, ref minimum, builder, cancellationToken) ? minimum : -1;
 
         static bool Synthesize(
             string molecule,
@@ -92,14 +94,13 @@ public sealed class Day19 : Puzzle
             List<(string Source, string Target)> replacements,
             int step,
             ref int minimum,
+            StringBuilder builder,
             CancellationToken cancellationToken)
         {
             if (step > minimum || molecule.Length >= desired.Length)
             {
                 return false;
             }
-
-            var builder = new StringBuilder();
 
             foreach ((string source, string target) in replacements)
             {
@@ -131,7 +132,7 @@ public sealed class Day19 : Puzzle
                         minimum = step;
                         return true;
                     }
-                    else if (Synthesize(next, desired, replacements, step + 1, ref minimum, cancellationToken))
+                    else if (Synthesize(next, desired, replacements, step + 1, ref minimum, builder, cancellationToken))
                     {
                         return true;
                     }
