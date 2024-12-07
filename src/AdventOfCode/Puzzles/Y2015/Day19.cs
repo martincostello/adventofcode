@@ -86,7 +86,7 @@ public sealed class Day19 : Puzzle
         int minimum = int.MaxValue;
         int step = 1;
 
-        return Synthesize("e", molecule, replacements, step, ref minimum, builder, cancellationToken) ? minimum : -1;
+        return Synthesize(molecule, "e", replacements, step, ref minimum, builder, cancellationToken) ? minimum : -1;
 
         static bool Synthesize(
             string molecule,
@@ -97,7 +97,7 @@ public sealed class Day19 : Puzzle
             StringBuilder builder,
             CancellationToken cancellationToken)
         {
-            if (step > minimum || molecule.Length >= desired.Length)
+            if (step > minimum)
             {
                 return false;
             }
@@ -106,7 +106,7 @@ public sealed class Day19 : Puzzle
             {
                 cancellationToken.ThrowIfCancellationRequested();
 
-                int index = molecule.LastIndexOf(source, StringComparison.Ordinal);
+                int index = molecule.LastIndexOf(target, StringComparison.Ordinal);
 
                 if (index > -1)
                 {
@@ -117,17 +117,17 @@ public sealed class Day19 : Puzzle
                         builder.Append(molecule[..index]);
                     }
 
-                    builder.Append(target);
-                    builder.Append(molecule[(index + source.Length)..]);
+                    builder.Append(source);
+                    builder.Append(molecule[(index + target.Length)..]);
 
-                    string next = builder.ToString();
+                    string reduced = builder.ToString();
 
-                    if (next == desired)
+                    if (reduced == desired)
                     {
                         minimum = step;
                         return true;
                     }
-                    else if (Synthesize(next, desired, replacements, step + 1, ref minimum, builder, cancellationToken))
+                    else if (Synthesize(reduced, desired, replacements, step + 1, ref minimum, builder, cancellationToken))
                     {
                         return true;
                     }
