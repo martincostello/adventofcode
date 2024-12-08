@@ -6,18 +6,84 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2024;
 /// <summary>
 /// A class representing the puzzle for <c>https://adventofcode.com/2024/day/8</c>. This class cannot be inherited.
 /// </summary>
-[Puzzle(2024, 08, "", RequiresData = true, IsHidden = true)]
+[Puzzle(2024, 08, "Resonant Collinearity", RequiresData = true)]
 public sealed class Day08 : Puzzle
 {
-#pragma warning disable IDE0022
-#pragma warning disable IDE0060
-#pragma warning disable SA1600
+    /// <summary>
+    /// Gets the number of unique locations within the bounds of the map that contain an antinode.
+    /// </summary>
+    public int UniqueAntinodes { get; private set; }
 
-    public int Solution { get; private set; }
-
-    public static int Solve(IList<string> values)
+    /// <summary>
+    /// Solves the puzzle for the specified map.
+    /// </summary>
+    /// <param name="map">The map of anntenae.</param>
+    /// <returns>
+    /// The number of unique locations within the bounds of the map that contain an antinode.
+    /// </returns>
+    public static int FindAntinodes(IList<string> map)
     {
-        return -1;
+        var antinodes = new HashSet<Point>();
+        var frequencies = new Dictionary<char, List<Point>>();
+
+        for (int y = 0; y < map.Count; y++)
+        {
+            string row = map[y];
+
+            for (int x = 0; x < row.Length; x++)
+            {
+                char value = row[x];
+
+                if (value is '.')
+                {
+                    continue;
+                }
+
+                if (!frequencies.TryGetValue(value, out var antennae))
+                {
+                    frequencies[value] = antennae = [];
+                }
+
+                antennae.Add(new(x, y));
+            }
+        }
+
+        var bounds = new Rectangle(0, 0, map[0].Length, map.Count);
+
+        foreach ((_, var antennae) in frequencies)
+        {
+            for (int i = 0; i < antennae.Count; i++)
+            {
+                for (int j = 0; j < antennae.Count; j++)
+                {
+                    if (i == j)
+                    {
+                        continue;
+                    }
+
+                    var first = antennae[i];
+                    var second = antennae[j];
+
+                    var vector = new Size(second.X - first.X, second.Y - first.Y);
+
+                    var antinode = first - vector;
+
+                    if (bounds.Contains(antinode))
+                    {
+                        antinodes.Add(antinode);
+                    }
+
+                    antinode = second + vector;
+
+                    if (bounds.Contains(antinode))
+                    {
+                        antinodes.Add(antinode);
+                    }
+                }
+            }
+        }
+
+        return antinodes.Count;
     }
 
     /// <inheritdoc />
@@ -27,13 +93,13 @@ public sealed class Day08 : Puzzle
 
         var values = await ReadResourceAsLinesAsync(cancellationToken);
 
-        Solution = Solve(values);
+        UniqueAntinodes = FindAntinodes(values);
 
         if (Verbose)
         {
-            Logger.WriteLine("{0}", Solution);
+            Logger.WriteLine("{0} unique locations within the bounds of the map contain an antinode.", UniqueAntinodes);
         }
 
-        return PuzzleResult.Create(Solution);
+        return PuzzleResult.Create(UniqueAntinodes);
     }
 }

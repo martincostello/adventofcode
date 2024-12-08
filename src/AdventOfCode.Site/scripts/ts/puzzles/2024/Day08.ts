@@ -12,7 +12,7 @@ export class Day08 extends Puzzle2024 {
     }
 
     override get name() {
-        return '';
+        return 'Resonant Collinearity';
     }
 
     override get day() {
