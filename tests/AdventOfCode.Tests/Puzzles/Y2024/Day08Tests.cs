@@ -5,8 +5,10 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2024;
 
 public sealed class Day08Tests(ITestOutputHelper outputHelper) : PuzzleTest(outputHelper)
 {
-    [Fact]
-    public void Y2024_Day08_FindAntinodes_Returns_Correct_Value()
+    [Theory]
+    [InlineData(false, 14)]
+    [InlineData(true, 34)]
+    public void Y2024_Day08_FindAntinodes_Returns_Correct_Value(bool resonantHarmonics, int expected)
     {
         // Arrange
         string[] values =
@@ -26,10 +28,10 @@ public sealed class Day08Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         ];
 
         // Act
-        int actual = Day08.FindAntinodes(values);
+        int actual = Day08.FindAntinodes(values, resonantHarmonics);
 
         // Assert
-        actual.ShouldBe(14);
+        actual.ShouldBe(expected);
     }
 
     [Fact]
@@ -41,5 +43,6 @@ public sealed class Day08Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         // Assert
         puzzle.ShouldNotBeNull();
         puzzle.UniqueAntinodes.ShouldBe(308);
+        puzzle.UniqueAntinodesWithResonance.ShouldBe(1147);
     }
 }

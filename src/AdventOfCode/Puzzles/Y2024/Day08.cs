@@ -15,15 +15,21 @@ public sealed class Day08 : Puzzle
     public int UniqueAntinodes { get; private set; }
 
     /// <summary>
+    /// Gets the number of unique locations within the bounds of the map that contain an antinode
+    /// when resonant harmonics are applied.
+    /// </summary>
+    public int UniqueAntinodesWithResonance { get; private set; }
+
+    /// <summary>
     /// Solves the puzzle for the specified map.
     /// </summary>
     /// <param name="map">The map of anntenae.</param>
+    /// <param name="resonantHarmonics">Whether to apply resonant harmonics.</param>
     /// <returns>
     /// The number of unique locations within the bounds of the map that contain an antinode.
     /// </returns>
-    public static int FindAntinodes(IList<string> map)
+    public static int FindAntinodes(IList<string> map, bool resonantHarmonics)
     {
-        var antinodes = new HashSet<Point>();
         var frequencies = new Dictionary<char, List<Point>>();
 
         for (int y = 0; y < map.Count; y++)
@@ -48,12 +54,16 @@ public sealed class Day08 : Puzzle
             }
         }
 
+        var antinodes = new HashSet<Point>();
         var bounds = new Rectangle(0, 0, map[0].Length, map.Count);
+        int distance = resonantHarmonics ? int.MaxValue : 1;
 
         foreach ((_, var antennae) in frequencies)
         {
             for (int i = 0; i < antennae.Count; i++)
             {
+                var first = antennae[i];
+
                 for (int j = 0; j < antennae.Count; j++)
                 {
                     if (i == j)
@@ -61,23 +71,38 @@ public sealed class Day08 : Puzzle
                         continue;
                     }
 
-                    var first = antennae[i];
                     var second = antennae[j];
 
                     var vector = new Size(second.X - first.X, second.Y - first.Y);
 
-                    var antinode = first - vector;
-
-                    if (bounds.Contains(antinode))
+                    for (int k = 1; k <= distance; k++)
                     {
+                        var antinode = first - (vector * k);
+
+                        if (!bounds.Contains(antinode))
+                        {
+                            break;
+                        }
+
                         antinodes.Add(antinode);
                     }
 
-                    antinode = second + vector;
-
-                    if (bounds.Contains(antinode))
+                    for (int k = 1; k <= distance; k++)
                     {
+                        var antinode = second + (vector * k);
+
+                        if (!bounds.Contains(antinode))
+                        {
+                            break;
+                        }
+
                         antinodes.Add(antinode);
+                    }
+
+                    if (resonantHarmonics)
+                    {
+                        antinodes.Add(first);
+                        antinodes.Add(second);
                     }
                 }
             }
@@ -93,13 +118,15 @@ public sealed class Day08 : Puzzle
 
         var values = await ReadResourceAsLinesAsync(cancellationToken);
 
-        UniqueAntinodes = FindAntinodes(values);
+        UniqueAntinodes = FindAntinodes(values, resonantHarmonics: false);
+        UniqueAntinodesWithResonance = FindAntinodes(values, resonantHarmonics: true);
 
         if (Verbose)
         {
             Logger.WriteLine("{0} unique locations within the bounds of the map contain an antinode.", UniqueAntinodes);
+            Logger.WriteLine("{0} unique locations within the bounds of the map contain an antinode using resonant harmonics.", UniqueAntinodesWithResonance);
         }
 
-        return PuzzleResult.Create(UniqueAntinodes);
+        return PuzzleResult.Create(UniqueAntinodes, UniqueAntinodesWithResonance);
     }
 }
