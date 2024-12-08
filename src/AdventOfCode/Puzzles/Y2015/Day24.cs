@@ -44,87 +44,79 @@ public sealed class Day24 : Puzzle
         // How much should each compartment weigh?
         long total = weights.Sum() / compartments;
 
-        int bestCount = int.MaxValue;
-        long bestEntanglement = long.MaxValue;
+        int length = weights.Count;
+        var bits = new BitArray(length);
+        int limit = (int)Math.Pow(2, length);
 
-        foreach ((int count, long entanglement) in GetDistrubutions(total, weights))
+        int minCount = int.MaxValue;
+        long minEntanglement = long.MaxValue;
+
+        for (int i = 0; i < limit; i++)
         {
-            if (count == bestCount)
+            long sum = 0;
+
+            for (int j = 0; j < length && sum < total; j++)
             {
-                bestEntanglement = Math.Min(bestEntanglement, entanglement);
+                if (bits[j])
+                {
+                    sum += weights[j];
+                }
             }
-            else
+
+            if (sum == total)
             {
-                bestCount = count;
-                bestEntanglement = entanglement;
+                int count = Count(bits);
+
+                if (count < minCount)
+                {
+                    minCount = count;
+                    minEntanglement = Entanglement(bits, weights);
+                }
+                else if (count == minCount)
+                {
+                    minEntanglement = Math.Min(minEntanglement, Entanglement(bits, weights));
+                }
+            }
+
+            for (int j = 0; j < length; j++)
+            {
+                if (bits[j] = !bits[j])
+                {
+                    break;
+                }
             }
         }
 
-        return bestEntanglement;
+        return minEntanglement;
 
-        static IEnumerable<(int Count, long Entanglement)> GetDistrubutions(long total, List<long> values)
+        static int Count(BitArray bits)
         {
-            int length = values.Count;
-            var bits = new BitArray(length);
-            int limit = (int)Math.Pow(2, length);
-            int lowCount = int.MaxValue;
+            uint[] buffer = new uint[(bits.Count >> 5) + 1];
+            bits.CopyTo(buffer, 0);
+            int count = 0;
 
-            for (int i = 0; i < limit; i++)
+            for (int i = 0; i < buffer.Length; i++)
             {
-                long sum = 0;
+                count += BitOperations.PopCount(buffer[i]);
+            }
 
-                for (int j = 0; j < length && sum < total; j++)
+            return count;
+        }
+
+        static long Entanglement(BitArray bits, List<long> weights)
+        {
+            long entanglement = 1;
+            int length = bits.Length;
+
+            for (int j = 0; j < length; j++)
+            {
+                if (bits[j])
                 {
-                    if (bits[j])
-                    {
-                        sum += values[j];
-                    }
-                }
-
-                if (sum == total)
-                {
-                    int count = WeightCount(bits);
-
-                    if (count <= lowCount)
-                    {
-                        lowCount = count;
-
-                        long entanglement = 1;
-
-                        for (int j = 0; j < length; j++)
-                        {
-                            if (bits[j])
-                            {
-                                entanglement *= values[j];
-                            }
-                        }
-
-                        yield return (count, entanglement);
-                    }
-                }
-
-                for (int j = 0; j < length; j++)
-                {
-                    if (bits[j] = !bits[j])
-                    {
-                        break;
-                    }
+                    entanglement *= weights[j];
                 }
             }
 
-            static int WeightCount(BitArray bits)
-            {
-                uint[] buffer = new uint[(bits.Count >> 5) + 1];
-                bits.CopyTo(buffer, 0);
-                int count = 0;
-
-                for (int i = 0; i < buffer.Length; i++)
-                {
-                    count += BitOperations.PopCount(buffer[i]);
-                }
-
-                return count;
-            }
+            return entanglement;
         }
     }
 
