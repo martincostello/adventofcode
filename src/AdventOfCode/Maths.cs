@@ -121,6 +121,20 @@ internal static class Maths
         }
 
         return result;
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        static void Increment(BitArray value)
+        {
+            int length = value.Length;
+
+            for (int i = 0; i < length; i++)
+            {
+                if (value[i] = !value[i])
+                {
+                    return;
+                }
+            }
+        }
     }
 
     /// <summary>
@@ -216,25 +230,4 @@ internal static class Maths
     internal static T LowestCommonMultiple<T>(T a, T b)
         where T : INumber<T>
         => a / GreatestCommonDivisor(a, b) * b;
-
-    /// <summary>
-    /// Increments the value of the specified <see cref="BitArray"/>.
-    /// </summary>
-    /// <param name="value">The value to increment.</param>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    private static void Increment(BitArray value)
-    {
-        int length = value.Length;
-
-        for (int i = 0; i < length; i++)
-        {
-            bool previous = value.Get(i);
-            value.Set(i, !previous);
-
-            if (!previous)
-            {
-                return;
-            }
-        }
-    }
 }

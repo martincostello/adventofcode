@@ -1,6 +1,8 @@
 ﻿// Copyright (c) Martin Costello, 2015. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
+using System.Collections;
+
 namespace MartinCostello.AdventOfCode.Puzzles.Y2015;
 
 /// <summary>
@@ -11,9 +13,17 @@ public sealed class Day24 : Puzzle
 {
     /// <summary>
     /// Gets the quantum entanglement of the first group
-    /// of packages of the optimum package configuration.
+    /// of packages of the optimum package configuration
+    /// when there are 3 compartments in the sleigh.
     /// </summary>
-    internal long QuantumEntanglementOfFirstGroup { get; private set; }
+    internal long QuantumEntanglementFor3 { get; private set; }
+
+    /// <summary>
+    /// Gets the quantum entanglement of the first group
+    /// of packages of the optimum package configuration
+    /// when there are 4 compartments in the sleigh.
+    /// </summary>
+    internal long QuantumEntanglementFor4 { get; private set; }
 
     /// <summary>
     /// Gets the quantum entanglement of the first group of packages of
@@ -29,37 +39,121 @@ public sealed class Day24 : Puzzle
     /// The quantum entanglement of the first group of packages of the ideal
     /// configuration of the packages with weights specified by <paramref name="weights"/>.
     /// </returns>
-    internal static long GetQuantumEntanglementOfIdealConfiguration(int compartments, IList<int> weights)
+    internal static long GetQuantumEntanglementOfIdealConfiguration(int compartments, List<long> weights)
     {
         // How much should each compartment weigh?
-        int total = weights.Sum() / compartments;
+        long total = weights.Sum() / compartments;
 
-        var optimumConfiguration = Maths.GetCombinations(total, weights)
-            .Select((p) => new { p.Count, QuantumEntanglement = p.Product() })
-            .OrderBy((p) => p.Count)
-            .ThenBy((p) => p.QuantumEntanglement)
-            .First();
+        int bestCount = int.MaxValue;
+        long bestEntanglement = long.MaxValue;
 
-        return optimumConfiguration.QuantumEntanglement;
+        foreach (var combination in GetCombinations(total, weights))
+        {
+            long entanglement = combination.Product();
+
+            if (combination.Count == bestCount)
+            {
+                bestEntanglement = Math.Min(bestEntanglement, entanglement);
+            }
+            else
+            {
+                bestCount = combination.Count;
+                bestEntanglement = entanglement;
+            }
+        }
+
+        return bestEntanglement;
+
+        static IEnumerable<HashSet<long>> GetCombinations(long total, List<long> values)
+        {
+            int length = values.Count;
+            var bits = new BitArray(length);
+
+            var combination = new HashSet<long>(length);
+            int limit = (int)Math.Pow(2, length);
+
+            int lowCount = int.MaxValue;
+
+            for (int i = 0; i < limit; i++)
+            {
+                long sum = 0;
+
+                for (int j = 0; j < length && sum < total; j++)
+                {
+                    if (bits[j])
+                    {
+                        sum += values[j];
+                    }
+                }
+
+                if (sum == total)
+                {
+                    int count = WeightCount(bits);
+
+                    if (count <= lowCount)
+                    {
+                        lowCount = count;
+
+                        combination.Clear();
+
+                        for (int j = 0; j < length; j++)
+                        {
+                            if (bits[j])
+                            {
+                                combination.Add(values[j]);
+                            }
+                        }
+
+                        yield return combination;
+                    }
+                }
+
+                for (int j = 0; j < length; j++)
+                {
+                    if (bits[j] = !bits[j])
+                    {
+                        break;
+                    }
+                }
+            }
+
+            static int WeightCount(BitArray bits)
+            {
+                uint[] buffer = new uint[(bits.Count >> 5) + 1];
+                bits.CopyTo(buffer, 0);
+                int count = 0;
+
+                for (int i = 0; i < buffer.Length; i++)
+                {
+                    count += BitOperations.PopCount(buffer[i]);
+                }
+
+                return count;
+            }
+        }
     }
 
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        var weights = await ReadResourceAsNumbersAsync<int>(cancellationToken);
+        var weights = await ReadResourceAsNumbersAsync<long>(cancellationToken);
 
-        int compartments = args.Length == 1 ? Parse<int>(args[0]) : 3;
-
-        QuantumEntanglementOfFirstGroup = GetQuantumEntanglementOfIdealConfiguration(compartments, weights);
+        QuantumEntanglementFor3 = GetQuantumEntanglementOfIdealConfiguration(compartments: 3, weights);
+        QuantumEntanglementFor4 = GetQuantumEntanglementOfIdealConfiguration(compartments: 4, weights);
 
         if (Verbose)
         {
             Logger.WriteLine(
-                "The quantum entanglement of the ideal configuration of {0:N0} packages is {1:N0}.",
+                "The quantum entanglement of the ideal configuration of {0:N0} packages in 3 compartments is {1:N0}.",
                 weights.Count,
-                QuantumEntanglementOfFirstGroup);
+                QuantumEntanglementFor3);
+
+            Logger.WriteLine(
+                "The quantum entanglement of the ideal configuration of {0:N0} packages in 4 compartments is {1:N0}.",
+                weights.Count,
+                QuantumEntanglementFor4);
         }
 
-        return PuzzleResult.Create(QuantumEntanglementOfFirstGroup);
+        return PuzzleResult.Create(QuantumEntanglementFor3);
     }
 }
