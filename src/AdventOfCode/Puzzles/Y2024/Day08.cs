@@ -87,29 +87,28 @@ public sealed class Day08 : Puzzle
 
                     do
                     {
-                        var antinode = first - (vector * k++);
+                        bool added = false;
 
-                        if (!bounds.Contains(antinode))
+                        var antinode = first - (vector * k);
+
+                        if (bounds.Contains(antinode))
+                        {
+                            antinodes.Add(antinode);
+                            added = true;
+                        }
+
+                        antinode = second + (vector * k++);
+
+                        if (bounds.Contains(antinode))
+                        {
+                            antinodes.Add(antinode);
+                            added = true;
+                        }
+
+                        if (!added)
                         {
                             break;
                         }
-
-                        antinodes.Add(antinode);
-                    }
-                    while (resonantHarmonics);
-
-                    k = 1;
-
-                    do
-                    {
-                        var antinode = second + (vector * k++);
-
-                        if (!bounds.Contains(antinode))
-                        {
-                            break;
-                        }
-
-                        antinodes.Add(antinode);
                     }
                     while (resonantHarmonics);
 
