@@ -1,8 +1,6 @@
 ﻿// Copyright (c) Martin Costello, 2015. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
-using System.Collections;
-
 namespace MartinCostello.AdventOfCode.Puzzles.Y2015;
 
 /// <summary>
@@ -45,7 +43,7 @@ public sealed class Day24 : Puzzle
         long total = weights.Sum() / compartments;
 
         int length = weights.Count;
-        var bits = new BitArray(length);
+        uint bits = 0;
 
         weights.Reverse();
 
@@ -58,16 +56,16 @@ public sealed class Day24 : Puzzle
 
             for (int j = 0; j < length && sum < total; j++)
             {
-                if (bits[j])
+                if (((bits >> j) & 1) != 0)
                 {
                     sum += weights[j];
                 }
             }
 
+            int count = BitOperations.PopCount(bits);
+
             if (sum == total)
             {
-                int count = Count(bits);
-
                 if (count <= minCount)
                 {
                     minCount = count;
@@ -77,7 +75,9 @@ public sealed class Day24 : Puzzle
 
             for (int j = 0; j < length; j++)
             {
-                if (bits[j] = !bits[j])
+                bits ^= (uint)(1 << j);
+
+                if (((bits >> j) & 1) != 0)
                 {
                     break;
                 }
@@ -86,28 +86,13 @@ public sealed class Day24 : Puzzle
 
         return minEntanglement;
 
-        static int Count(BitArray bits)
-        {
-            uint[] buffer = new uint[(bits.Count >> 5) + 1];
-            bits.CopyTo(buffer, 0);
-            int count = 0;
-
-            for (int i = 0; i < buffer.Length; i++)
-            {
-                count += BitOperations.PopCount(buffer[i]);
-            }
-
-            return count;
-        }
-
-        static long Entanglement(BitArray bits, List<long> weights)
+        static long Entanglement(uint bits, List<long> weights)
         {
             long entanglement = 1;
-            int length = bits.Length;
 
-            for (int j = 0; j < length; j++)
+            for (int j = 0; j < weights.Count; j++)
             {
-                if (bits[j])
+                if (((bits >> j) & 1) != 0)
                 {
                     entanglement *= weights[j];
                 }
