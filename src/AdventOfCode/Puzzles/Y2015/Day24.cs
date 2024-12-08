@@ -48,6 +48,8 @@ public sealed class Day24 : Puzzle
         var bits = new BitArray(length);
         int limit = (int)Math.Pow(2, length);
 
+        weights.Reverse();
+
         int minCount = int.MaxValue;
         long minEntanglement = long.MaxValue;
 
