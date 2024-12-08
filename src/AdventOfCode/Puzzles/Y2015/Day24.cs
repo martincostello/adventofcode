@@ -69,13 +69,9 @@ public sealed class Day24 : Puzzle
             {
                 int count = Count(bits);
 
-                if (count < minCount)
+                if (count <= minCount)
                 {
                     minCount = count;
-                    minEntanglement = Entanglement(bits, weights);
-                }
-                else if (count == minCount)
-                {
                     minEntanglement = Math.Min(minEntanglement, Entanglement(bits, weights));
                 }
             }
