@@ -58,11 +58,21 @@ public sealed class Day08 : Puzzle
         var bounds = new Rectangle(0, 0, map[0].Length, map.Count);
         int distance = resonantHarmonics ? int.MaxValue : 1;
 
-        foreach ((_, var antennae) in frequencies)
+        foreach (var antennae in frequencies.Values)
         {
+            if (antennae.Count < 2)
+            {
+                continue;
+            }
+
             for (int i = 0; i < antennae.Count; i++)
             {
                 var first = antennae[i];
+
+                if (resonantHarmonics)
+                {
+                    antinodes.Add(first);
+                }
 
                 for (int j = 0; j < antennae.Count; j++)
                 {
@@ -72,7 +82,6 @@ public sealed class Day08 : Puzzle
                     }
 
                     var second = antennae[j];
-
                     var vector = new Size(second.X - first.X, second.Y - first.Y);
 
                     for (int k = 1; k <= distance; k++)
@@ -101,7 +110,6 @@ public sealed class Day08 : Puzzle
 
                     if (resonantHarmonics)
                     {
-                        antinodes.Add(first);
                         antinodes.Add(second);
                     }
                 }
