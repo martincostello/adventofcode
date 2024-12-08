@@ -23,7 +23,7 @@ public sealed class Day08 : Puzzle
     /// <summary>
     /// Solves the puzzle for the specified map.
     /// </summary>
-    /// <param name="map">The map of anntenae.</param>
+    /// <param name="map">The map of antennae.</param>
     /// <param name="resonantHarmonics">Whether to apply resonant harmonics.</param>
     /// <returns>
     /// The number of unique locations within the bounds of the map that contain an antinode.
