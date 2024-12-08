@@ -47,31 +47,26 @@ public sealed class Day24 : Puzzle
         int bestCount = int.MaxValue;
         long bestEntanglement = long.MaxValue;
 
-        foreach (var combination in GetCombinations(total, weights))
+        foreach ((int count, long entanglement) in GetDistrubutions(total, weights))
         {
-            long entanglement = combination.Product();
-
-            if (combination.Count == bestCount)
+            if (count == bestCount)
             {
                 bestEntanglement = Math.Min(bestEntanglement, entanglement);
             }
             else
             {
-                bestCount = combination.Count;
+                bestCount = count;
                 bestEntanglement = entanglement;
             }
         }
 
         return bestEntanglement;
 
-        static IEnumerable<HashSet<long>> GetCombinations(long total, List<long> values)
+        static IEnumerable<(int Count, long Entanglement)> GetDistrubutions(long total, List<long> values)
         {
             int length = values.Count;
             var bits = new BitArray(length);
-
-            var combination = new HashSet<long>(length);
             int limit = (int)Math.Pow(2, length);
-
             int lowCount = int.MaxValue;
 
             for (int i = 0; i < limit; i++)
@@ -94,17 +89,17 @@ public sealed class Day24 : Puzzle
                     {
                         lowCount = count;
 
-                        combination.Clear();
+                        long entanglement = 1;
 
                         for (int j = 0; j < length; j++)
                         {
                             if (bits[j])
                             {
-                                combination.Add(values[j]);
+                                entanglement *= values[j];
                             }
                         }
 
-                        yield return combination;
+                        yield return (count, entanglement);
                     }
                 }
 
