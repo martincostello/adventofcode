@@ -52,7 +52,7 @@ public sealed class Day24 : Puzzle
         int minCount = int.MaxValue;
         long minEntanglement = long.MaxValue;
 
-        for (int i = (int)Math.Pow(2, length); i > -1; i--)
+        for (int i = 1 << length; i > -1; i--)
         {
             long sum = 0;
 
