@@ -46,14 +46,13 @@ public sealed class Day24 : Puzzle
 
         int length = weights.Count;
         var bits = new BitArray(length);
-        int limit = (int)Math.Pow(2, length);
 
         weights.Reverse();
 
         int minCount = int.MaxValue;
         long minEntanglement = long.MaxValue;
 
-        for (int i = 0; i < limit; i++)
+        for (int i = (int)Math.Pow(2, length); i > -1; i--)
         {
             long sum = 0;
 
