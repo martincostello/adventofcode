@@ -64,13 +64,10 @@ public sealed class Day24 : Puzzle
 
             int count = BitOperations.PopCount(bits);
 
-            if (sum == total)
+            if (sum == total && count <= minCount)
             {
-                if (count <= minCount)
-                {
-                    minCount = count;
-                    minEntanglement = Math.Min(minEntanglement, Entanglement(bits, weights));
-                }
+                minCount = count;
+                minEntanglement = Math.Min(minEntanglement, Entanglement(bits, weights));
             }
 
             for (int j = 0; j < length; j++)
