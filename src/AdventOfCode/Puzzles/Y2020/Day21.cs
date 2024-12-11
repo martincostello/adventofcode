@@ -29,7 +29,7 @@ public sealed class Day21 : Puzzle
     /// The number of times ingredients with no allergens appear in the food and
     /// the canonical sorted list of ingredients which are allergens.
     /// </returns>
-    public static (int Occurences, string CanonicalAllergens) GetIngredientsWithNoAllergens(
+    public static (int Occurrences, string CanonicalAllergens) GetIngredientsWithNoAllergens(
         IList<string> foods,
         CancellationToken cancellationToken = default)
     {
@@ -52,7 +52,7 @@ public sealed class Day21 : Puzzle
         {
             foreach (string allergen in allergens)
             {
-                var candidates = allergenCandidates.GetOrAdd(allergen, () => new HashSet<string>(ingredients));
+                var candidates = allergenCandidates.GetOrAdd(allergen, () => [.. ingredients]);
                 candidates.IntersectWith(ingredients);
             }
 

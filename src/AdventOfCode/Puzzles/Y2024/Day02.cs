@@ -10,12 +10,12 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2024;
 public sealed class Day02 : Puzzle
 {
     /// <summary>
-    /// Gets the numnber of safe reports.
+    /// Gets the number of safe reports.
     /// </summary>
     public int SafeReports { get; private set; }
 
     /// <summary>
-    /// Gets the numnber of safe reports with the Problem Dampener in use.
+    /// Gets the number of safe reports with the Problem Dampener in use.
     /// </summary>
     public int SafeReportsWithDampener { get; private set; }
 
