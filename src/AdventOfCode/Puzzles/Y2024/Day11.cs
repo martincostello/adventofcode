@@ -6,18 +6,54 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2024;
 /// <summary>
 /// A class representing the puzzle for <c>https://adventofcode.com/2024/day/11</c>. This class cannot be inherited.
 /// </summary>
-[Puzzle(2024, 11, "", RequiresData = true, IsHidden = true)]
+[Puzzle(2024, 11, "Plutonian Pebbles", RequiresData = true)]
 public sealed class Day11 : Puzzle
 {
-#pragma warning disable IDE0022
-#pragma warning disable IDE0060
-#pragma warning disable SA1600
+    /// <summary>
+    /// Gets the number of stones after 25 blinks.
+    /// </summary>
+    public int Count { get; private set; }
 
-    public int Solution { get; private set; }
-
-    public static int Solve(IList<string> values)
+    /// <summary>
+    /// Counts the number of stones after the specified number of blinks.
+    /// </summary>
+    /// <param name="sequence">The current arrangement of the stones.</param>
+    /// <param name="blinks">The number of times to blink.</param>
+    /// <returns>
+    /// The number of stones in the arrangement after <paramref name="blinks"/> blinks.
+    /// </returns>
+    public static int Blink(string sequence, int blinks)
     {
-        return -1;
+        List<long> stones = sequence.AsNumbers<long>(' ');
+
+        for (int i = 0; i < blinks; i++)
+        {
+            for (int j = 0; j < stones.Count; j++)
+            {
+                long stone = stones[j];
+
+                if (stone is 0)
+                {
+                    stones[j] = 1;
+                }
+                else
+                {
+                    var digits = Maths.Digits(stone);
+
+                    if (digits.Count % 2 is 0)
+                    {
+                        stones[j] = Maths.FromDigits<long>(digits[0..(digits.Count / 2)]);
+                        stones.Insert(++j, Maths.FromDigits<long>(digits[(digits.Count / 2)..]));
+                    }
+                    else
+                    {
+                        stones[j] *= 2024;
+                    }
+                }
+            }
+        }
+
+        return stones.Count;
     }
 
     /// <inheritdoc />
@@ -25,15 +61,15 @@ public sealed class Day11 : Puzzle
     {
         ArgumentNullException.ThrowIfNull(args);
 
-        var values = await ReadResourceAsLinesAsync(cancellationToken);
+        string stones = await ReadResourceAsStringAsync(cancellationToken);
 
-        Solution = Solve(values);
+        Count = Blink(stones, blinks: 25);
 
         if (Verbose)
         {
-            Logger.WriteLine("{0}", Solution);
+            Logger.WriteLine("There are {0} stones after blinking 25 times", Count);
         }
 
-        return PuzzleResult.Create(Solution);
+        return PuzzleResult.Create(Count);
     }
 }
