@@ -12,7 +12,12 @@ public sealed class Day11 : Puzzle
     /// <summary>
     /// Gets the number of stones after 25 blinks.
     /// </summary>
-    public int Count { get; private set; }
+    public long Count25 { get; private set; }
+
+    /// <summary>
+    /// Gets the number of stones after 75 blinks.
+    /// </summary>
+    public long Count75 { get; private set; }
 
     /// <summary>
     /// Counts the number of stones after the specified number of blinks.
@@ -22,34 +27,62 @@ public sealed class Day11 : Puzzle
     /// <returns>
     /// The number of stones in the arrangement after <paramref name="blinks"/> blinks.
     /// </returns>
-    public static int Blink(string sequence, int blinks)
+    public static long Blink(string sequence, int blinks)
     {
         List<long> stones = sequence.AsNumbers<long>(' ');
 
-        for (int i = 0; i < blinks; i++)
+        Dictionary<long, long> cache = [];
+
+        long sum = 0;
+
+        for (int i = 0; i < stones.Count; i++)
         {
-            for (int j = 0; j < stones.Count; j++)
+            sum += Count(stones[i], blinks, cache);
+        }
+
+        return sum;
+
+        static long Count(long value, int blinks, Dictionary<long, long> cache)
+        {
+            long key = (value * 1000) + blinks;
+
+            if (cache.TryGetValue(key, out long count))
             {
-                long stone = stones[j];
+                return count;
+            }
 
-                if (stone is 0)
+            int digits = (int)Math.Log10(value) + 1;
+
+            if (blinks is 1)
+            {
+                count = digits % 2 == 0 ? 2 : 1;
+            }
+            else
+            {
+                int next = blinks - 1;
+
+                if (value is 0)
                 {
-                    stones[j] = 1;
+                    count = Count(1, blinks - 1, cache);
                 }
+                else if (digits % 2 is 0)
                 {
-                    var digits = Maths.Digits(stone);
+                    int midpoint = digits / 2;
+                    int divisor = (int)Math.Pow(10, midpoint);
 
-                    stones[j] = Maths.FromDigits<long>(digits[0..(digits.Count / 2)]);
-                    stones.Insert(++j, Maths.FromDigits<long>(digits[(digits.Count / 2)..]));
+                    count = Count(value / divisor, next, cache);
+                    count += Count(value % divisor, next, cache);
                 }
                 else
                 {
-                    stones[j] *= 2024;
+                    count = Count(value * 2024, next, cache);
                 }
             }
-        }
 
-        return stones.Count;
+            cache[key] = count;
+
+            return count;
+        }
     }
 
     /// <inheritdoc />
@@ -59,13 +92,15 @@ public sealed class Day11 : Puzzle
 
         string stones = await ReadResourceAsStringAsync(cancellationToken);
 
-        Count = Blink(stones, blinks: 25);
+        Count25 = Blink(stones, blinks: 25);
+        Count75 = Blink(stones, blinks: 75);
 
         if (Verbose)
         {
-            Logger.WriteLine("There are {0} stones after blinking 25 times", Count);
+            Logger.WriteLine("There are {0} stones after blinking 25 times", Count25);
+            Logger.WriteLine("There are {0} stones after blinking 75 times", Count75);
         }
 
-        return PuzzleResult.Create(Count);
+        return PuzzleResult.Create(Count25, Count75);
     }
 }
