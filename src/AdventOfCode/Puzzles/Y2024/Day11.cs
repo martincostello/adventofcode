@@ -36,19 +36,15 @@ public sealed class Day11 : Puzzle
                 {
                     stones[j] = 1;
                 }
-                else
                 {
                     var digits = Maths.Digits(stone);
 
-                    if (digits.Count % 2 is 0)
-                    {
-                        stones[j] = Maths.FromDigits<long>(digits[0..(digits.Count / 2)]);
-                        stones.Insert(++j, Maths.FromDigits<long>(digits[(digits.Count / 2)..]));
-                    }
-                    else
-                    {
-                        stones[j] *= 2024;
-                    }
+                    stones[j] = Maths.FromDigits<long>(digits[0..(digits.Count / 2)]);
+                    stones.Insert(++j, Maths.FromDigits<long>(digits[(digits.Count / 2)..]));
+                }
+                else
+                {
+                    stones[j] *= 2024;
                 }
             }
         }
