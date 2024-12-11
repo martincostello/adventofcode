@@ -22,10 +22,11 @@ public sealed class Day10Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         ];
 
         // Act
-        int actual = Day10.Explore(values);
+        (int actualScore, int actualRating) = Day10.Explore(values);
 
         // Assert
-        actual.ShouldBe(36);
+        actualScore.ShouldBe(36);
+        actualRating.ShouldBe(81);
     }
 
     [Fact]
@@ -36,6 +37,7 @@ public sealed class Day10Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
 
         // Assert
         puzzle.ShouldNotBeNull();
-        puzzle.Sum.ShouldBe(778);
+        puzzle.SumOfScores.ShouldBe(778);
+        puzzle.SumOfRatings.ShouldBe(1925);
     }
 }

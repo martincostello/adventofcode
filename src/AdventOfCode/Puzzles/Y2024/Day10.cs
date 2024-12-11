@@ -12,16 +12,21 @@ public sealed class Day10 : Puzzle
     /// <summary>
     /// Gets the sum of the trailhead scores.
     /// </summary>
-    public int Sum { get; private set; }
+    public int SumOfScores { get; private set; }
+
+    /// <summary>
+    /// Gets the sum of the trailhead ratings.
+    /// </summary>
+    public int SumOfRatings { get; private set; }
 
     /// <summary>
     /// Explores the specified map of trails.
     /// </summary>
     /// <param name="map">The topographic map of trails.</param>
     /// <returns>
-    /// The sum of the trailhead scores for the specified map.
+    /// The sum of the trailhead scores and ratings for the specified map.
     /// </returns>
-    public static int Explore(IList<string> map)
+    public static (int SumOfScores, int SumOfRatings) Explore(IList<string> map)
     {
         var grid = new TopographicMap(new(0, 0, map[0].Length, map.Count));
 
@@ -42,7 +47,8 @@ public sealed class Day10 : Puzzle
             }
         }
 
-        int result = 0;
+        int scoresSum = 0;
+        int ratingsSum = 0;
 
         for (int y = 0; y < map.Count; y++)
         {
@@ -59,21 +65,22 @@ public sealed class Day10 : Puzzle
 
                 var summits = new HashSet<Point>();
 
-                Explore(grid, origin, 0, summits);
-
-                result += summits.Count;
+                ratingsSum += Explore(grid, origin, 0, summits);
+                scoresSum += summits.Count;
             }
         }
 
-        return result;
+        return (scoresSum, ratingsSum);
 
-        static void Explore(TopographicMap grid, Point origin, int height, HashSet<Point> summits)
+        static int Explore(TopographicMap grid, Point origin, int height, HashSet<Point> summits)
         {
             if (height is 9)
             {
                 summits.Add(origin);
-                return;
+                return 1;
             }
+
+            int rating = 0;
 
             foreach (var next in grid.Neighbors(origin))
             {
@@ -82,8 +89,10 @@ public sealed class Day10 : Puzzle
                     continue;
                 }
 
-                Explore(grid, next, nextHeight, summits);
+                rating += Explore(grid, next, nextHeight, summits);
             }
+
+            return rating;
         }
     }
 
@@ -94,14 +103,15 @@ public sealed class Day10 : Puzzle
 
         var values = await ReadResourceAsLinesAsync(cancellationToken);
 
-        Sum = Explore(values);
+        (SumOfScores, SumOfRatings) = Explore(values);
 
         if (Verbose)
         {
-            Logger.WriteLine("The sum of the scores of all trailheads in the topographic map is {0}.", Sum);
+            Logger.WriteLine("The sum of the scores of all trailheads in the topographic map is {0}.", SumOfScores);
+            Logger.WriteLine("The sum of the ratings of all trailheads in the topographic map is {0}.", SumOfRatings);
         }
 
-        return PuzzleResult.Create(Sum);
+        return PuzzleResult.Create(SumOfScores, SumOfRatings);
     }
 
     private sealed class TopographicMap(Rectangle bounds) : SquareGrid(bounds)
