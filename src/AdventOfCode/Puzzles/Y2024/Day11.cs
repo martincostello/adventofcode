@@ -63,7 +63,7 @@ public sealed class Day11 : Puzzle
 
                 if (value is 0)
                 {
-                    count = Count(1, blinks - 1, cache);
+                    count = Count(1, next, cache);
                 }
                 else if (digits % 2 is 0)
                 {
