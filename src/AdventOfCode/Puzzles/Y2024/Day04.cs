@@ -22,22 +22,22 @@ public sealed class Day04 : Puzzle
     private static readonly SearchValues<string> XmasNeedle = SearchValues.Create([XmasTarget], StringComparison.Ordinal);
 
     /// <summary>
-    /// Gets the count of the number of occurences of <c>XMAS</c> in the grid.
+    /// Gets the count of the number of occurrences of <c>XMAS</c> in the grid.
     /// </summary>
     public int SimpleCount { get; private set; }
 
     /// <summary>
-    /// Gets the count of the number of occurences of <c>MAS</c>-crossed in the grid.
+    /// Gets the count of the number of occurrences of <c>MAS</c>-crossed in the grid.
     /// </summary>
     public int CrossCount { get; private set; }
 
     /// <summary>
-    /// Searches for the number of occurences of a value in the specified grid.
+    /// Searches for the number of occurrences of a value in the specified grid.
     /// </summary>
     /// <param name="grid">The word grid to search.</param>
     /// <param name="crossCount"><see langword="false"/> to count <c>XMAS</c>; otherwise <see langword="true"/> to count <c>MAS</c>-crossed.</param>
     /// <returns>
-    /// The number of occurences of <c>XMAS</c> or <c>MAS</c>-crossed in the grid.
+    /// The number of occurrences of <c>XMAS</c> or <c>MAS</c>-crossed in the grid.
     /// </returns>
     public static int Search(IList<string> grid, bool crossCount)
         => crossCount ? CountCrossMas(grid) : CountXmas(grid);
