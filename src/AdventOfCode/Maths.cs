@@ -43,41 +43,6 @@ internal static class Maths
     }
 
     /// <summary>
-    /// Returns the digits of the specified value in base 10.
-    /// </summary>
-    /// <typeparam name="T">The type of the number.</typeparam>
-    /// <param name="value">The value to get the digits for.</param>
-    /// <returns>
-    /// The digits of <paramref name="value"/> in base 10.
-    /// </returns>
-    internal static List<int> Digits<T>(T value)
-        where T : INumber<T>
-    {
-        if (value == T.Zero)
-        {
-            return [0];
-        }
-
-        value = T.Abs(value);
-
-        var digits = new List<int>();
-        var ten = T.CreateSaturating(10);
-
-        while (value > T.Zero)
-        {
-            T div = value / ten;
-            T rem = value % ten;
-
-            digits.Add(int.CreateSaturating(rem));
-            value = div;
-        }
-
-        digits.Reverse();
-
-        return digits;
-    }
-
-    /// <summary>
     /// Returns the number represented by the specified digits.
     /// </summary>
     /// <typeparam name="T">The type of the number.</typeparam>
