@@ -1,8 +1,4 @@
 <Project>
-  <!--
-    HACK dotnet-lambda searches for <PublishAot>true</PublishAot> in the project
-    file without any regard for conditions, so this needs to be set here instead.
-  -->
   <PropertyGroup Condition=" ('$(MSBuildProjectName)' == 'AdventOfCode.Console' OR '$(MSBuildProjectName)' == 'AdventOfCode.Site') AND '$(PublishForAWSLambda)' != 'true' ">
     <PublishAot>true</PublishAot>
   </PropertyGroup>

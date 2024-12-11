@@ -276,6 +276,30 @@ internal static class StringExtensions
     }
 
     /// <summary>
+    /// Parse the specified span as a sequence of numbers.
+    /// </summary>
+    /// <typeparam name="T">The type of the numbers.</typeparam>
+    /// <param name="value">The span of characters to parse into a sequence.</param>
+    /// <param name="separator">The optional separator character for the numbers.</param>
+    /// <returns>
+    /// A <see cref="List{T}"/> containing the parsed numbers.
+    /// </returns>
+    public static List<T> AsNumbers<T>(this ReadOnlySpan<char> value, char separator = ',')
+        where T : INumber<T>
+    {
+        var numbers = new List<T>();
+
+        foreach (var range in value.Split(separator))
+        {
+            numbers.Add(Puzzle.Parse<T>(value[range]));
+        }
+
+        numbers.TrimExcess();
+
+        return numbers;
+    }
+
+    /// <summary>
     /// Parses the specified span as a pair of strings.
     /// </summary>
     /// <param name="value">The span to parse as a pair of strings.</param>

@@ -12,7 +12,7 @@ export class Day09 extends Puzzle2024 {
     }
 
     override get name() {
-        return '';
+        return 'Disk Fragmenter';
     }
 
     override get day() {
