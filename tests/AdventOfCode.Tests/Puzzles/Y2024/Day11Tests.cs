@@ -9,10 +9,10 @@ public sealed class Day11Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
     [InlineData("0 1 10 99 999", 1, 7)]
     [InlineData("125 17", 6, 22)]
     [InlineData("125 17", 25, 55312)]
-    public void Y2024_Day11_Blink_Returns_Correct_Value(string stones, int blinks, int expected)
+    public void Y2024_Day11_Blink_Returns_Correct_Value(string stones, int blinks, long expected)
     {
         // Act
-        int actual = Day11.Blink(stones, blinks);
+        long actual = Day11.Blink(stones, blinks);
 
         // Assert
         actual.ShouldBe(expected);
@@ -26,6 +26,7 @@ public sealed class Day11Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
 
         // Assert
         puzzle.ShouldNotBeNull();
-        puzzle.Count.ShouldBe(220722);
+        puzzle.Count25.ShouldBe(220722);
+        puzzle.Count75.ShouldBe(261952051690787);
     }
 }
