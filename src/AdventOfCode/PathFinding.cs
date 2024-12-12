@@ -143,9 +143,9 @@ public static class PathFinding
     /// <param name="start">The starting node.</param>
     /// <param name="cancellationToken">The <see cref="CancellationToken"/> to use.</param>
     /// <returns>
-    /// An <see cref="IReadOnlySet{T}"/> of the visited nodes.
+    /// An <see cref="HashSet{T}"/> of the visited nodes.
     /// </returns>
-    public static IReadOnlySet<T> BreadthFirst<T>(IGraph<T> graph, T start, CancellationToken cancellationToken)
+    public static HashSet<T> BreadthFirst<T>(IGraph<T> graph, T start, CancellationToken cancellationToken)
         where T : notnull
         => BreadthFirst(graph.Neighbors, start, cancellationToken);
 
@@ -157,9 +157,9 @@ public static class PathFinding
     /// <param name="start">The starting node.</param>
     /// <param name="cancellationToken">The <see cref="CancellationToken"/> to use.</param>
     /// <returns>
-    /// An <see cref="IReadOnlySet{T}"/> of the visited nodes.
+    /// A <see cref="HashSet{T}"/> of the visited nodes.
     /// </returns>
-    public static IReadOnlySet<T> BreadthFirst<T>(
+    public static HashSet<T> BreadthFirst<T>(
         Func<T, IEnumerable<T>> neighbors,
         T start,
         CancellationToken cancellationToken)
@@ -175,9 +175,9 @@ public static class PathFinding
     /// <param name="comparer">The equality comparer to use between nodes.</param>
     /// <param name="cancellationToken">The <see cref="CancellationToken"/> to use.</param>
     /// <returns>
-    /// An <see cref="IReadOnlySet{T}"/> of the visited nodes.
+    /// A <see cref="HashSet{T}"/> of the visited nodes.
     /// </returns>
-    public static IReadOnlySet<T> BreadthFirst<T>(
+    public static HashSet<T> BreadthFirst<T>(
         Func<T, IEnumerable<T>> neighbors,
         T start,
         IEqualityComparer<T> comparer,
@@ -216,9 +216,9 @@ public static class PathFinding
     /// <param name="start">The starting node.</param>
     /// <param name="cancellationToken">The <see cref="CancellationToken"/> to use.</param>
     /// <returns>
-    /// An <see cref="IReadOnlySet{T}"/> of the visited nodes.
+    /// An <see cref="HashSet{T}"/> of the visited nodes.
     /// </returns>
-    public static IReadOnlySet<T> DepthFirst<T>(IGraph<T> graph, T start, CancellationToken cancellationToken)
+    public static HashSet<T> DepthFirst<T>(IGraph<T> graph, T start, CancellationToken cancellationToken)
         where T : notnull
         => DepthFirst(graph.Neighbors, start, EqualityComparer<T>.Default, cancellationToken);
 
@@ -230,9 +230,9 @@ public static class PathFinding
     /// <param name="start">The starting node.</param>
     /// <param name="cancellationToken">The <see cref="CancellationToken"/> to use.</param>
     /// <returns>
-    /// An <see cref="IReadOnlySet{T}"/> of the visited nodes.
+    /// An <see cref="HashSet{T}"/> of the visited nodes.
     /// </returns>
-    public static IReadOnlySet<T> DepthFirst<T>(
+    public static HashSet<T> DepthFirst<T>(
         Func<T, IEnumerable<T>> neighbors,
         T start,
         CancellationToken cancellationToken)
@@ -248,9 +248,9 @@ public static class PathFinding
     /// <param name="comparer">The equality comparer to use between nodes.</param>
     /// <param name="cancellationToken">The <see cref="CancellationToken"/> to use.</param>
     /// <returns>
-    /// An <see cref="IReadOnlySet{T}"/> of the visited nodes.
+    /// An <see cref="HashSet{T}"/> of the visited nodes.
     /// </returns>
-    public static IReadOnlySet<T> DepthFirst<T>(
+    public static HashSet<T> DepthFirst<T>(
         Func<T, IEnumerable<T>> neighbors,
         T start,
         IEqualityComparer<T> comparer,
