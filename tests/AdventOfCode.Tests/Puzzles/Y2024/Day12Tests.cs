@@ -5,23 +5,55 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2024;
 
 public sealed class Day12Tests(ITestOutputHelper outputHelper) : PuzzleTest(outputHelper)
 {
-    [Fact(Skip = "Not implemented.")]
-    public void Y2024_Day12_Solve_Returns_Correct_Value()
+    public static TheoryData<string[], int> Examples()
     {
-        // Arrange
-        string[] values =
-        [
-            "_",
-        ];
-
-        // Act
-        int actual = Day12.Solve(values);
-
-        // Assert
-        actual.ShouldBe(-1);
+        return new()
+        {
+            {
+                new[]
+                {
+                    "OOOOO",
+                    "OXOXO",
+                    "OOOOO",
+                    "OXOXO",
+                    "OOOOO",
+                },
+                772
+            },
+            {
+                new[]
+                {
+                    "RRRRIICCFF",
+                    "RRRRIICCCF",
+                    "VVRRRCCFFF",
+                    "VVRCCCJFFF",
+                    "VVVVCJJCFE",
+                    "VVIVCCJJEE",
+                    "VVIIICJJEE",
+                    "MIIIIIJJEE",
+                    "MIIISIJEEE",
+                    "MMMISSJEEE",
+                },
+                1930
+            },
+        };
     }
 
-    [Fact(Skip = "Not implemented.")]
+    [Theory]
+    [MemberData(nameof(Examples))]
+    public void Y2024_Day12_Compute_Returns_Correct_Value(string[] values, int expected)
+    {
+        // Arrange
+        using var cts = Timeout();
+
+        // Act
+        int actual = Day12.Compute(values, cts.Token);
+
+        // Assert
+        actual.ShouldBe(expected);
+    }
+
+    [Fact]
     public async Task Y2024_Day12_Solve_Returns_Correct_Solution()
     {
         // Act
@@ -29,6 +61,6 @@ public sealed class Day12Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
 
         // Assert
         puzzle.ShouldNotBeNull();
-        puzzle.Solution.ShouldBe(-1);
+        puzzle.TotalPrice.ShouldBe(1465112);
     }
 }
