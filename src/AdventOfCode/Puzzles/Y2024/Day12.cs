@@ -10,19 +10,25 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2024;
 public sealed class Day12 : Puzzle
 {
     /// <summary>
-    /// Gets the total price for the fencing.
+    /// Gets the total price for the fencing without a bulk discount.
     /// </summary>
-    public int TotalPrice { get; private set; }
+    public int TotalPriceWithoutDiscount { get; private set; }
+
+    /// <summary>
+    /// Gets the total price for the fencing with a bulk discount.
+    /// </summary>
+    public int TotalPriceWithDiscount { get; private set; }
 
     /// <summary>
     /// Computes the price of adding fencing to separate the regions of the specified map.
     /// </summary>
     /// <param name="map">The map to compute the fencing price for.</param>
+    /// <param name="bulkDiscount">Whether to compute the price for a bulk discount.</param>
     /// <param name="cancellationToken">The <see cref="CancellationToken"/> to use.</param>
     /// <returns>
     /// The total price for the fencing.
     /// </returns>
-    public static int Compute(IList<string> map, CancellationToken cancellationToken)
+    public static int Compute(IList<string> map, bool bulkDiscount, CancellationToken cancellationToken)
     {
         var bounds = new Rectangle(0, 0, map[0].Length, map.Count);
         var regions = new List<HashSet<Point>>();
@@ -55,35 +61,38 @@ public sealed class Day12 : Puzzle
 
         foreach (var region in regions)
         {
+            int factor = bulkDiscount ? Sides(region) : Perimeter(region);
+            price += region.Count * factor;
+        }
+
+        return price;
+
+        static int Perimeter(HashSet<Point> region)
+        {
             int perimeter = 0;
 
             foreach (var point in region)
             {
-                if (!region.Contains(new(point.X, point.Y - 1)))
-                {
-                    perimeter++;
-                }
+                var direction = new Size(0, 1);
 
-                if (!region.Contains(new(point.X, point.Y + 1))!)
+                for (int i = 0; i < 4; i++)
                 {
-                    perimeter++;
-                }
+                    if (!region.Contains(point + direction))
+                    {
+                        perimeter++;
+                    }
 
-                if (!region.Contains(new(point.X - 1, point.Y)))
-                {
-                    perimeter++;
-                }
-
-                if (!region.Contains(new(point.X + 1, point.Y)))
-                {
-                    perimeter++;
+                    direction = Right(direction);
                 }
             }
 
-            price += region.Count * perimeter;
+            return perimeter;
         }
 
-        return price;
+        static int Sides(HashSet<Point> region)
+            => Perimeter(region); // TODO Walk all the borders of the region and count the number of turns
+
+        static Size Right(Size direction) => new(-direction.Height, direction.Width);
     }
 
     /// <inheritdoc />
@@ -93,14 +102,16 @@ public sealed class Day12 : Puzzle
 
         var values = await ReadResourceAsLinesAsync(cancellationToken);
 
-        TotalPrice = Compute(values, cancellationToken);
+        TotalPriceWithoutDiscount = Compute(values, bulkDiscount: false, cancellationToken);
+        TotalPriceWithDiscount = Compute(values, bulkDiscount: true, cancellationToken);
 
         if (Verbose)
         {
-            Logger.WriteLine("The total price of fencing all regions of the map is {0}.", TotalPrice);
+            Logger.WriteLine("The total price of fencing all regions of the map is {0} with no discount.", TotalPriceWithoutDiscount);
+            Logger.WriteLine("The total price of fencing all regions of the map is {0} with a bulk discount.", TotalPriceWithDiscount);
         }
 
-        return PuzzleResult.Create(TotalPrice);
+        return PuzzleResult.Create(TotalPriceWithoutDiscount, TotalPriceWithDiscount);
     }
 
     private sealed class Garden(char plant, IList<string> plants, Rectangle bounds) : SquareGrid(bounds)

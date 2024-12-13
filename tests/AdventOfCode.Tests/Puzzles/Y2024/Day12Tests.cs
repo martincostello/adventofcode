@@ -5,7 +5,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2024;
 
 public sealed class Day12Tests(ITestOutputHelper outputHelper) : PuzzleTest(outputHelper)
 {
-    public static TheoryData<string[], int> Examples()
+    public static TheoryData<string[], bool, int> Examples()
     {
         return new()
         {
@@ -18,6 +18,7 @@ public sealed class Day12Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
                     "OXOXO",
                     "OOOOO",
                 },
+                false,
                 772
             },
             {
@@ -34,20 +35,57 @@ public sealed class Day12Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
                     "MIIISIJEEE",
                     "MMMISSJEEE",
                 },
+                false,
                 1930
+            },
+            {
+                new[]
+                {
+                    "AAAA",
+                    "BBCD",
+                    "BBCC",
+                    "EEEC",
+                },
+                true,
+                80
+            },
+            {
+                new[]
+                {
+                    "EEEEE",
+                    "EXXXX",
+                    "EEEEE",
+                    "EXXXX",
+                    "EEEEE",
+                },
+                true,
+                236
+            },
+            {
+                new[]
+                {
+                    "AAAAAA",
+                    "AAABBA",
+                    "AAABBA",
+                    "ABBAAA",
+                    "ABBAAA",
+                    "AAAAAA",
+                },
+                true,
+                368
             },
         };
     }
 
     [Theory]
     [MemberData(nameof(Examples))]
-    public void Y2024_Day12_Compute_Returns_Correct_Value(string[] values, int expected)
+    public void Y2024_Day12_Compute_Returns_Correct_Value(string[] values, bool bulkDiscount, int expected)
     {
         // Arrange
         using var cts = Timeout();
 
         // Act
-        int actual = Day12.Compute(values, cts.Token);
+        int actual = Day12.Compute(values, bulkDiscount, cts.Token);
 
         // Assert
         actual.ShouldBe(expected);
@@ -61,6 +99,7 @@ public sealed class Day12Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
 
         // Assert
         puzzle.ShouldNotBeNull();
-        puzzle.TotalPrice.ShouldBe(1465112);
+        puzzle.TotalPriceWithoutDiscount.ShouldBe(1465112);
+        puzzle.TotalPriceWithDiscount.ShouldBe(-1);
     }
 }
