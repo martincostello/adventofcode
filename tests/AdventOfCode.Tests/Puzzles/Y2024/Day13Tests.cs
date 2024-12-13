@@ -29,7 +29,7 @@ public sealed class Day13Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         ];
 
         // Act
-        int actual = Day13.Play(values);
+        long actual = Day13.Play(values, offset: 0, limit: 100);
 
         // Assert
         actual.ShouldBe(480);
@@ -44,5 +44,6 @@ public sealed class Day13Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         // Assert
         puzzle.ShouldNotBeNull();
         puzzle.FewestTokens.ShouldBe(37680);
+        puzzle.FewestTokensFixed.ShouldBe(87550094242995);
     }
 }
