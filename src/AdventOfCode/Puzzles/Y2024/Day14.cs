@@ -52,19 +52,12 @@ public sealed class Day14 : Puzzle
         int limitX = (bounds.Width / 3) - 1;
         int limitY = (bounds.Height / 3) - 1;
 
-        var unique = new HashSet<Point>(patrol.Count);
-
         for (int t = 0; (t < seconds || findEasterEgg) && !cancellationToken.IsCancellationRequested; t++)
         {
             for (int i = 0; i < patrol.Count; i++)
             {
                 var robot = patrol[i];
                 robot.Move();
-
-                if (findEasterEgg)
-                {
-                    unique.Add(robot.Position);
-                }
             }
 
             if (!findEasterEgg)
@@ -95,8 +88,6 @@ public sealed class Day14 : Puzzle
             {
                 return t + 1;
             }
-
-            unique.Clear();
         }
 
         if (findEasterEgg)
