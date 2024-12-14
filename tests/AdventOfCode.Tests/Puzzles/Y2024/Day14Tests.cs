@@ -28,8 +28,10 @@ public sealed class Day14Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
             "p=9,5 v=-3,-3",
         ];
 
+        using var cts = Timeout();
+
         // Act
-        int actual = Day14.Simulate(values, bounds, seconds);
+        int actual = Day14.Simulate(values, bounds, seconds, findEasterEgg: false, cts.Token);
 
         // Assert
         actual.ShouldBe(12);
@@ -44,5 +46,6 @@ public sealed class Day14Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         // Assert
         puzzle.ShouldNotBeNull();
         puzzle.SafetyFactor.ShouldBe(231782040);
+        puzzle.EasterEggSeconds.ShouldBe(6475);
     }
 }
