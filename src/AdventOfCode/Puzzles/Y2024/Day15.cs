@@ -25,14 +25,25 @@ public sealed class Day15 : Puzzle
     public int GpsSum { get; private set; }
 
     /// <summary>
+    /// Gets the sum of the GPS coordinates of the boxes in the warehouse when it is scaled-up.
+    /// </summary>
+    public int GpsSumScaledUp { get; private set; }
+
+    /// <summary>
     /// Moves the boxes in the warehouse around using the specified instructions.
     /// </summary>
     /// <param name="values">The map of the warehouse and the moves to make.</param>
+    /// <param name="scaledUp">Whether the warehouse map is scaled-up to double its width.</param>
     /// <returns>
     /// The sum of the GPS coordinates of the boxes in the warehouse after moving them.
     /// </returns>
-    public static int Move(IList<string> values)
+    public static int Move(IList<string> values, bool scaledUp)
     {
+        if (scaledUp)
+        {
+            // TODO
+        }
+
         int delimiter = values.IndexOf(string.Empty);
 
         var robot = Point.Empty;
@@ -132,13 +143,15 @@ public sealed class Day15 : Puzzle
 
         var values = await ReadResourceAsLinesAsync(cancellationToken);
 
-        GpsSum = Move(values);
+        GpsSum = Move(values, scaledUp: false);
+        GpsSumScaledUp = Move(values, scaledUp: true);
 
         if (Verbose)
         {
-            Logger.WriteLine("The sum of all boxes' GPS coordinates is {0}.", GpsSum);
+            Logger.WriteLine("The sum of all boxes' GPS coordinates in the first warehouse is {0}.", GpsSum);
+            Logger.WriteLine("The sum of all boxes' GPS coordinates in the second warehouse is {0}.", GpsSumScaledUp);
         }
 
-        return PuzzleResult.Create(GpsSum);
+        return PuzzleResult.Create(GpsSum, GpsSumScaledUp);
     }
 }

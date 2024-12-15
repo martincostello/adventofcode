@@ -5,7 +5,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2024;
 
 public sealed class Day15Tests(ITestOutputHelper outputHelper) : PuzzleTest(outputHelper)
 {
-    public static TheoryData<string[], int> Examples()
+    public static TheoryData<string[], bool, int> Examples()
     {
         return new()
         {
@@ -23,6 +23,7 @@ public sealed class Day15Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
                     string.Empty,
                     "<^^>>>vv<v>>v<<",
                 },
+                false,
                 2028
             },
             {
@@ -50,17 +51,46 @@ public sealed class Day15Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
                     "^^>vv<^v^v<vv>^<><v<^v>^^^>>>^^vvv^>vvv<>>>^<^>>>>>^<<^v>^vvv<>^<><<v>",
                     "v^^>>><<^^<>>^v^<v^vv<>v^<<>^<^v^v><^<<<><<^<v><v<>vv>>v><v^<vv<>v^<<^",
                 },
+                false,
                 10092
+            },
+            {
+                new[]
+                {
+                    "##########",
+                    "#..O..O.O#",
+                    "#......O.#",
+                    "#.OO..O.O#",
+                    "#..O@..O.#",
+                    "#O#..O...#",
+                    "#O..O..O.#",
+                    "#.OO.O.OO#",
+                    "#....O...#",
+                    "##########",
+                    string.Empty,
+                    "<vv>^<v^>v>^vv^v>v<>v^v<v<^vv<<<^><<><>>v<vvv<>^v^>^<<<><<v<<<v^vv^v>^",
+                    "vvv<<^>^v^^><<>>><>^<<><^vv^^<>vvv<>><^^v>^>vv<>v<<<<v<^v>^<^^>>>^<v<v",
+                    "><>vv>v^v^<>><>>>><^^>vv>v<^^^>>v^v^<^^>v^^>v^<^v>v<>>v^v^<v>v^^<^^vv<",
+                    "<<v<^>>^^^^>>>v^<>vvv^><v<<<>^^^vv^<vvv>^>v<^^^^v<>^>vvvv><>>v^<<^^^^^",
+                    "^><^><>>><>^^<<^^v>>><^<v>^<vv>>v>>>^v><>^v><<<<v>>v<v<v>vvv>^<><<>^><",
+                    "^>><>^v<><^vvv<^^<><v<<<<<><^v<<<><<<^^<v<^^^><^>>^<v^><<<^>>^v<v^v<v^",
+                    ">^>>^v>vv>^<<^v<>><<><<v<<v><>v<^vv<<<>^^v^>^^>>><<^v>>v^v><^^>>^<>vv^",
+                    "<><^^>^^^<><vvvvv^v<v<<>^v<v>v<<^><<><<><<<^^<<<^<<>><<><^^^>^^<>^>v<>",
+                    "^^>vv<^v^v<vv>^<><v<^v>^^^>>>^^vvv^>vvv<>>>^<^>>>>>^<<^v>^vvv<>^<><<v>",
+                    "v^^>>><<^^<>>^v^<v^vv<>v^<<>^<^v^v><^<<<><<^<v><v<>vv>>v><v^<vv<>v^<<^",
+                },
+                true,
+                9021
             },
         };
     }
 
     [Theory]
     [MemberData(nameof(Examples))]
-    public void Y2024_Day15_Move_Returns_Correct_Value(string[] values, int expected)
+    public void Y2024_Day15_Move_Returns_Correct_Value(string[] values, bool scaledUp, int expected)
     {
         // Act
-        int actual = Day15.Move(values);
+        int actual = Day15.Move(values, scaledUp);
 
         // Assert
         actual.ShouldBe(expected);
@@ -75,5 +105,6 @@ public sealed class Day15Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         // Assert
         puzzle.ShouldNotBeNull();
         puzzle.GpsSum.ShouldBe(1465152);
+        puzzle.GpsSumScaledUp.ShouldBe(-1);
     }
 }
