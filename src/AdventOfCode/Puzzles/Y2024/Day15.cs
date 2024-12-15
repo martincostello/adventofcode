@@ -100,6 +100,7 @@ public sealed class Day15 : Puzzle
 
                 while (warehouse.TryGetValue(ahead += direction, out square) && square is Square.Box)
                 {
+                    // Find a free space at the end of a contiguous row of boxes
                 }
 
                 if (square is Square.Empty)
