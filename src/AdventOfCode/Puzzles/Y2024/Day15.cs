@@ -40,9 +40,11 @@ public sealed class Day15 : Puzzle
 
         for (int y = 0; y < delimiter; y++)
         {
-            for (int x = 0; x < values[y].Length; x++)
+            string row = values[y];
+
+            for (int x = 0; x < row.Length; x++)
             {
-                var square = values[y][x] switch
+                var square = row[x] switch
                 {
                     'O' => Square.Box,
                     '@' => Square.Robot,
