@@ -5,23 +5,72 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2024;
 
 public sealed class Day16Tests(ITestOutputHelper outputHelper) : PuzzleTest(outputHelper)
 {
-    [Fact(Skip = "Not implemented.")]
-    public void Y2024_Day16_Solve_Returns_Correct_Value()
+    public static TheoryData<string[], int> Examples()
     {
-        // Arrange
-        string[] values =
-        [
-            "_",
-        ];
-
-        // Act
-        int actual = Day16.Solve(values);
-
-        // Assert
-        actual.ShouldBe(-1);
+        return new()
+        {
+            {
+                new[]
+                {
+                    "###############",
+                    "#.......#....E#",
+                    "#.#.###.#.###.#",
+                    "#.....#.#...#.#",
+                    "#.###.#####.#.#",
+                    "#.#.#.......#.#",
+                    "#.#.#####.###.#",
+                    "#...........#.#",
+                    "###.#.#####.#.#",
+                    "#...#.....#.#.#",
+                    "#.#.#.###.#.#.#",
+                    "#.....#...#.#.#",
+                    "#.###.#.#.#.#.#",
+                    "#S..#.....#...#",
+                    "###############",
+                },
+                7036
+            },
+            {
+                new[]
+                {
+                    "#################",
+                    "#...#...#...#..E#",
+                    "#.#.#.#.#.#.#.#.#",
+                    "#.#.#.#...#...#.#",
+                    "#.#.#.#.###.#.#.#",
+                    "#...#.#.#.....#.#",
+                    "#.#.#.#.#.#####.#",
+                    "#.#...#.#.#.....#",
+                    "#.#.#####.#.###.#",
+                    "#.#.#.......#...#",
+                    "#.#.###.#####.###",
+                    "#.#.#...#.....#.#",
+                    "#.#.#.#####.###.#",
+                    "#.#.#.........#.#",
+                    "#.#.#.#########.#",
+                    "#S#.............#",
+                    "#################",
+                },
+                11048
+            },
+        };
     }
 
-    [Fact(Skip = "Not implemented.")]
+    [Theory]
+    [MemberData(nameof(Examples))]
+    public void Y2024_Day16_Solve_Returns_Correct_Value(string[] values, int expected)
+    {
+        // Arrange
+        using var cts = Timeout();
+
+        // Act
+        int actual = Day16.Race(values, cts.Token);
+
+        // Assert
+        actual.ShouldBe(expected);
+    }
+
+    [Fact]
     public async Task Y2024_Day16_Solve_Returns_Correct_Solution()
     {
         // Act
@@ -29,6 +78,6 @@ public sealed class Day16Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
 
         // Assert
         puzzle.ShouldNotBeNull();
-        puzzle.Solution.ShouldBe(-1);
+        puzzle.WinningScore.ShouldBe(90440);
     }
 }
