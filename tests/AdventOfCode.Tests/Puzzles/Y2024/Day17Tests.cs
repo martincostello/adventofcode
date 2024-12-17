@@ -5,24 +5,52 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2024;
 
 public sealed class Day17Tests(ITestOutputHelper outputHelper) : PuzzleTest(outputHelper)
 {
-    [Fact]
-    public void Y2024_Day17_Run_Returns_Correct_Value()
+    public static TheoryData<string[], bool, string, int> Examples()
+    {
+        return new()
+        {
+            {
+                new[]
+                {
+                    "Register A: 729",
+                    "Register B: 0",
+                    "Register C: 0",
+                    string.Empty,
+                    "Program: 0,1,5,4,3,0",
+                },
+                false,
+                "4,6,3,5,6,3,5,2,1,0",
+                729
+            },
+            {
+                new[]
+                {
+                    "Register A: 2024",
+                    "Register B: 0",
+                    "Register C: 0",
+                    string.Empty,
+                    "Program: 0,3,5,4,3,0",
+                },
+                true,
+                "0,3,5,4,3,0",
+                117440
+            },
+        };
+    }
+
+    [Theory]
+    [MemberData(nameof(Examples))]
+    public void Y2024_Day17_Run_Returns_Correct_Value(string[] values, bool fix, string expectedOutput, int expectedA)
     {
         // Arrange
-        string[] values =
-        [
-            "Register A: 729",
-            "Register B: 0",
-            "Register C: 0",
-            string.Empty,
-            "Program: 0,1,5,4,3,0",
-        ];
+        using var cts = Timeout();
 
         // Act
-        string actual = Day17.Run(values);
+        (string actualOutput, int actualA) = Day17.Run(values, fix, cts.Token);
 
         // Assert
-        actual.ShouldBe("4,6,3,5,6,3,5,2,1,0");
+        actualOutput.ShouldBe(expectedOutput);
+        actualA.ShouldBe(expectedA);
     }
 
     [Fact]
@@ -34,5 +62,7 @@ public sealed class Day17Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         // Assert
         puzzle.ShouldNotBeNull();
         puzzle.Output.ShouldBe("1,2,3,1,3,2,5,3,1");
+        puzzle.RegisterA.ShouldBeGreaterThan(34615120);
+        puzzle.RegisterA.ShouldBe(-1);
     }
 }
