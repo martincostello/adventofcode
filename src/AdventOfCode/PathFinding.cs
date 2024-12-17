@@ -114,9 +114,11 @@ public static class PathFinding
                 break;
             }
 
+            long currentCost = costSoFar[current];
+
             foreach (T next in graph.Neighbors(current))
             {
-                long newCost = costSoFar[current] + heuristic(current, next);
+                long newCost = currentCost + heuristic(current, next);
 
                 if (!costSoFar.TryGetValue(next, out long otherCost) || newCost < otherCost)
                 {
