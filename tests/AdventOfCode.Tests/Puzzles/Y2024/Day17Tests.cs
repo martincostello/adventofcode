@@ -5,23 +5,27 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2024;
 
 public sealed class Day17Tests(ITestOutputHelper outputHelper) : PuzzleTest(outputHelper)
 {
-    [Fact(Skip = "Not implemented.")]
-    public void Y2024_Day17_Solve_Returns_Correct_Value()
+    [Fact]
+    public void Y2024_Day17_Run_Returns_Correct_Value()
     {
         // Arrange
         string[] values =
         [
-            "_",
+            "Register A: 729",
+            "Register B: 0",
+            "Register C: 0",
+            string.Empty,
+            "Program: 0,1,5,4,3,0",
         ];
 
         // Act
-        int actual = Day17.Solve(values);
+        string actual = Day17.Run(values);
 
         // Assert
-        actual.ShouldBe(-1);
+        actual.ShouldBe("4,6,3,5,6,3,5,2,1,0");
     }
 
-    [Fact(Skip = "Not implemented.")]
+    [Fact]
     public async Task Y2024_Day17_Solve_Returns_Correct_Solution()
     {
         // Act
@@ -29,6 +33,6 @@ public sealed class Day17Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
 
         // Assert
         puzzle.ShouldNotBeNull();
-        puzzle.Solution.ShouldBe(-1);
+        puzzle.Output.ShouldBe("1,2,3,1,3,2,5,3,1");
     }
 }
