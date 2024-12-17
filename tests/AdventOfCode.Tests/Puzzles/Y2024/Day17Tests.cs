@@ -5,7 +5,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2024;
 
 public sealed class Day17Tests(ITestOutputHelper outputHelper) : PuzzleTest(outputHelper)
 {
-    public static TheoryData<string[], bool, string, int> Examples()
+    public static TheoryData<string[], bool, string, long> Examples()
     {
         return new()
         {
@@ -40,13 +40,13 @@ public sealed class Day17Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
 
     [Theory]
     [MemberData(nameof(Examples))]
-    public void Y2024_Day17_Run_Returns_Correct_Value(string[] values, bool fix, string expectedOutput, int expectedA)
+    public void Y2024_Day17_Run_Returns_Correct_Value(string[] values, bool fix, string expectedOutput, long expectedA)
     {
         // Arrange
         using var cts = Timeout();
 
         // Act
-        (string actualOutput, int actualA) = Day17.Run(values, fix, cts.Token);
+        (string actualOutput, long actualA) = Day17.Run(values, fix, cts.Token);
 
         // Assert
         actualOutput.ShouldBe(expectedOutput);
@@ -62,7 +62,7 @@ public sealed class Day17Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         // Assert
         puzzle.ShouldNotBeNull();
         puzzle.Output.ShouldBe("1,2,3,1,3,2,5,3,1");
-        puzzle.RegisterA.ShouldBeGreaterThan(34615120);
+        puzzle.RegisterA.ShouldBeGreaterThan(int.MaxValue);
         puzzle.RegisterA.ShouldBe(-1);
     }
 }
