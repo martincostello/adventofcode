@@ -2,7 +2,6 @@
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 using System.Diagnostics.CodeAnalysis;
-
 using Move = (System.Drawing.Point Location, System.Drawing.Size Direction);
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2024;
@@ -19,14 +18,19 @@ public sealed class Day16 : Puzzle
     public int WinningScore { get; private set; }
 
     /// <summary>
+    /// Gets the number of tiles that lie on one of the shortest paths to the finish.
+    /// </summary>
+    public int BestTiles { get; private set; }
+
+    /// <summary>
     /// Races the reindeer through the maze and returns the winning score.
     /// </summary>
     /// <param name="course">The layout of the race course.</param>
     /// <param name="cancellationToken">The <see cref="CancellationToken"/> to use.</param>
     /// <returns>
-    /// The winning score.
+    /// The winning score and the number of tiles that lie on a winning path.
     /// </returns>
-    public static int Race(IList<string> course, CancellationToken cancellationToken)
+    public static (int WinningScore, int BestTiles) Race(IList<string> course, CancellationToken cancellationToken)
     {
         int height = course.Count;
         int width = course[0].Length;
@@ -62,7 +66,7 @@ public sealed class Day16 : Puzzle
             }
         }
 
-        return (int)PathFinding.AStar(grid, start, finish, cancellationToken: cancellationToken);
+        return Race(grid, start, finish, cancellationToken: cancellationToken);
     }
 
     /// <inheritdoc />
@@ -72,14 +76,88 @@ public sealed class Day16 : Puzzle
 
         var values = await ReadResourceAsLinesAsync(cancellationToken);
 
-        WinningScore = Race(values, cancellationToken);
+        (WinningScore, BestTiles) = Race(values, cancellationToken);
 
         if (Verbose)
         {
             Logger.WriteLine("The lowest score a Reindeer could possibly get is {0}.", WinningScore);
+            Logger.WriteLine("The lowest score a Reindeer could possibly get is {0}.", BestTiles);
         }
 
-        return PuzzleResult.Create(WinningScore);
+        return PuzzleResult.Create(WinningScore, BestTiles);
+    }
+
+    private static (int LowestScore, int LowestScoreLocations) Race(
+        RaceCourse graph,
+        Move start,
+        Move goal,
+        CancellationToken cancellationToken)
+    {
+        var frontier = new PriorityQueue<Move, long>();
+        frontier.Enqueue(start, 0);
+
+        var comparer = EqualityComparer<Move>.Default;
+        var costSoFar = new Dictionary<Move, long>(graph) { [start] = 0 };
+        var parents = new Dictionary<Move, List<Move>> { [start] = [] };
+
+        while (frontier.Count != 0 && !cancellationToken.IsCancellationRequested)
+        {
+            var current = frontier.Dequeue();
+
+            if (comparer.Equals(current, goal))
+            {
+                break;
+            }
+
+            long currentCost = costSoFar[current];
+
+            foreach (var next in graph.Neighbors(current))
+            {
+                long newCost = currentCost + graph.Cost(current, next);
+
+                if (!costSoFar.TryGetValue(next, out long otherCost) || newCost < otherCost)
+                {
+                    costSoFar[next] = newCost;
+
+                    long goalCost = graph.Cost(next, goal);
+                    long priority = newCost + goalCost;
+
+                    frontier.Enqueue(next, priority);
+
+                    if (!parents.TryGetValue(next, out var moves))
+                    {
+                        parents[next] = moves = [];
+                    }
+
+                    moves.Add(current);
+                }
+            }
+        }
+
+        cancellationToken.ThrowIfCancellationRequested();
+
+        long lowestScore = costSoFar.GetValueOrDefault(goal, long.MaxValue);
+
+        var uniquePoints = new HashSet<Move>();
+
+        var stack = new Stack<Move>();
+        stack.Push(goal);
+
+        while (stack.Count > 0)
+        {
+            var node = stack.Pop();
+            uniquePoints.Add(node);
+
+            if (parents.TryGetValue(node, out var value))
+            {
+                foreach (var parent in value)
+                {
+                    stack.Push(parent);
+                }
+            }
+        }
+
+        return ((int)lowestScore, uniquePoints.Count);
     }
 
     private sealed class RaceCourse(int width, int height) : IWeightedGraph<Move>

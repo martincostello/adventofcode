@@ -5,7 +5,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2024;
 
 public sealed class Day16Tests(ITestOutputHelper outputHelper) : PuzzleTest(outputHelper)
 {
-    public static TheoryData<string[], int> Examples()
+    public static TheoryData<string[], int, int> Examples()
     {
         return new()
         {
@@ -28,7 +28,8 @@ public sealed class Day16Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
                     "#S..#.....#...#",
                     "###############",
                 },
-                7036
+                7036,
+                45
             },
             {
                 new[]
@@ -51,23 +52,25 @@ public sealed class Day16Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
                     "#S#.............#",
                     "#################",
                 },
-                11048
+                11048,
+                64
             },
         };
     }
 
     [Theory]
     [MemberData(nameof(Examples))]
-    public void Y2024_Day16_Solve_Returns_Correct_Value(string[] values, int expected)
+    public void Y2024_Day16_Solve_Returns_Correct_Value(string[] values, int expectedScore, int expectedTiles)
     {
         // Arrange
         using var cts = Timeout();
 
         // Act
-        int actual = Day16.Race(values, cts.Token);
+        (int actualScore, int actualTiles) = Day16.Race(values, cts.Token);
 
         // Assert
-        actual.ShouldBe(expected);
+        actualScore.ShouldBe(expectedScore);
+        actualTiles.ShouldBe(expectedTiles);
     }
 
     [Fact]
@@ -79,5 +82,6 @@ public sealed class Day16Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         // Assert
         puzzle.ShouldNotBeNull();
         puzzle.WinningScore.ShouldBe(90440);
+        puzzle.BestTiles.ShouldBe(-1);
     }
 }
