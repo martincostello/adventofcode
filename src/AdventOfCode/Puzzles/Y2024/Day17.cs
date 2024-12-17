@@ -20,7 +20,7 @@ public sealed class Day17 : Puzzle
     /// Gets the lowest positive initial value for register A
     /// that causes the program to output a copy of itself.
     /// </summary>
-    public int RegisterA { get; private set; }
+    public long RegisterA { get; private set; }
 
     /// <summary>
     /// Runs the specified 7-bit program.
@@ -34,10 +34,10 @@ public sealed class Day17 : Puzzle
     /// that causes the program to output a copy of itself if
     /// <paramref name="fix"/> is <see langword="true"/>.
     /// </returns>
-    public static (string Output, int A) Run(IList<string> values, bool fix, CancellationToken cancellationToken)
+    public static (string Output, long A) Run(IList<string> values, bool fix, CancellationToken cancellationToken)
     {
         var program = new List<int>();
-        (int a, int b, int c) = (0, 0, 0);
+        (long a, long b, long c) = (0, 0, 0);
 
         for (int i = 0; i < values.Count; i++)
         {
@@ -49,7 +49,7 @@ public sealed class Day17 : Puzzle
             if (line.StartsWith(Register))
             {
                 char register = line[Register.Length];
-                int value = Parse<int>(line[(Register.Length + 3)..]);
+                long value = Parse<long>(line[(Register.Length + 3)..]);
 
                 switch (register)
                 {
@@ -75,13 +75,13 @@ public sealed class Day17 : Puzzle
             }
         }
 
-        var output = Run(program, (a, b, c));
+        var output = Run(program, (a, b, c), find: false);
 
         if (fix)
         {
-            for (a = 0; a < int.MaxValue && !cancellationToken.IsCancellationRequested; a++)
+            for (a = 0; a < long.MaxValue && !cancellationToken.IsCancellationRequested; a++)
             {
-                output = Run(program, (a, b, c));
+                output = Run(program, (a, b, c), find: true);
 
                 if (program.SequenceEqual(output))
                 {
@@ -114,12 +114,24 @@ public sealed class Day17 : Puzzle
         return PuzzleResult.Create(Output, RegisterA);
     }
 
-    private static List<int> Run(List<int> program, (int A, int B, int C) registers)
+    private static List<int> Run(List<int> program, (long A, long B, long C) registers, bool find)
     {
         var output = new List<int>();
 
         for (int ip = 0; ip < program.Count; ip += 2)
         {
+            if (find)
+            {
+                if (output.Count > program.Count)
+                {
+                    break;
+                }
+                else if (output.Count < program.Count && !output.SequenceEqual(program[..output.Count]))
+                {
+                    break;
+                }
+            }
+
             int opcode = program[ip];
             int operand = program[ip + 1];
 
@@ -178,13 +190,13 @@ public sealed class Day17 : Puzzle
 
         void Bxc() => registers.B ^= registers.C;
 
-        void Out(int operand) => output.Add(Combo(operand) % 8);
+        void Out(int operand) => output.Add((int)Combo(operand) % 8);
 
         void Bdv(int operand) => registers.B = Divide(operand);
 
         void Cdv(int operand) => registers.C = Divide(operand);
 
-        int Combo(int value)
+        long Combo(long value)
         {
             return value switch
             {
@@ -199,10 +211,10 @@ public sealed class Day17 : Puzzle
             };
         }
 
-        int Divide(int operand)
+        long Divide(int operand)
         {
-            int numerator = registers.A;
-            int denominator = (int)Math.Pow(2, Combo(operand));
+            long numerator = registers.A;
+            long denominator = (long)Math.Pow(2, Combo(operand));
 
             return numerator / denominator;
         }
