@@ -12,7 +12,7 @@ export class Day17 extends Puzzle2024 {
     }
 
     override get name() {
-        return '';
+        return 'Chronospatial Computer';
     }
 
     override get day() {
