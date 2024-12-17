@@ -120,18 +120,6 @@ public sealed class Day17 : Puzzle
 
         for (int ip = 0; ip < program.Count; ip += 2)
         {
-            if (find)
-            {
-                if (output.Count > program.Count)
-                {
-                    break;
-                }
-                else if (output.Count < program.Count && !output.SequenceEqual(program[..output.Count]))
-                {
-                    break;
-                }
-            }
-
             int opcode = program[ip];
             int operand = program[ip + 1];
 
@@ -162,7 +150,11 @@ public sealed class Day17 : Puzzle
                     break;
 
                 case 5:
-                    Out(operand);
+                    if (!Out(operand) && find)
+                    {
+                        return output;
+                    }
+
                     break;
 
                 case 6:
@@ -190,7 +182,25 @@ public sealed class Day17 : Puzzle
 
         void Bxc() => registers.B ^= registers.C;
 
-        void Out(int operand) => output.Add((int)Combo(operand) % 8);
+        bool Out(int operand)
+        {
+            int result = (int)Combo(operand) % 8;
+
+            if (find)
+            {
+                if (output.Count >= program.Count)
+                {
+                    return false;
+                }
+                else if (result != program[output.Count])
+                {
+                    return false;
+                }
+            }
+
+            output.Add(result);
+            return true;
+        }
 
         void Bdv(int operand) => registers.B = Divide(operand);
 
