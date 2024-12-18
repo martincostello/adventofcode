@@ -6,7 +6,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2024;
 public sealed class Day18Tests(ITestOutputHelper outputHelper) : PuzzleTest(outputHelper)
 {
     [Fact]
-    public void Y2024_Day18_Solve_Returns_Correct_Value()
+    public void Y2024_Day18_Simulate_Returns_Correct_Value()
     {
         // Arrange
         string[] values =
@@ -41,10 +41,11 @@ public sealed class Day18Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         using var cts = Timeout();
 
         // Act
-        int actual = Day18.Simulate(values, size: 7, ticks: 12, cts.Token);
+        (int actualSteps, string actualCoordinate) = Day18.Simulate(values, size: 7, ticks: 12, cts.Token);
 
         // Assert
-        actual.ShouldBe(22);
+        actualSteps.ShouldBe(22);
+        actualCoordinate.ShouldBe("6,1");
     }
 
     [Fact]
@@ -56,5 +57,6 @@ public sealed class Day18Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         // Assert
         puzzle.ShouldNotBeNull();
         puzzle.MinimumSteps.ShouldBe(308);
+        puzzle.BlockingByte.ShouldBe("46,28");
     }
 }

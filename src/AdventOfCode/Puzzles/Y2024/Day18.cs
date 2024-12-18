@@ -15,6 +15,11 @@ public sealed class Day18 : Puzzle
     public int MinimumSteps { get; private set; }
 
     /// <summary>
+    /// Gets the coordinate of the byte that blocks the exit.
+    /// </summary>
+    public string BlockingByte { get; private set; } = string.Empty;
+
+    /// <summary>
     /// Simulates RAM falling into the specified region for the specified period of time.
     /// </summary>
     /// <param name="coordinates">The coordinates of the bytes that will fall into the region.</param>
@@ -22,10 +27,23 @@ public sealed class Day18 : Puzzle
     /// <param name="ticks">The number of ticks to simulate for.</param>
     /// <param name="cancellationToken">The <see cref="CancellationToken"/> to use.</param>
     /// <returns>
-    /// The minimum number of steps needed to reach the exit.
+    /// The minimum number of steps needed to reach the exit at the time specified by
+    /// <paramref name="ticks"/> and the coordinates of the byte that blocks the exit.
     /// </returns>
-    public static int Simulate(IList<string> coordinates, int size, int ticks, CancellationToken cancellationToken)
+    public static (int MinimumSteps, string BlockingByte) Simulate(
+        IList<string> coordinates,
+        int size,
+        int ticks,
+        CancellationToken cancellationToken)
     {
+        var bytes = new List<Point>();
+
+        for (int i = 0; i < coordinates.Count; i++)
+        {
+            (int x, int y) = coordinates[i].AsNumberPair<int>();
+            bytes.Add(new(x, y));
+        }
+
         var grid = new SquareGrid(size, size);
 
         for (int y = 0; y < size; y++)
@@ -36,20 +54,36 @@ public sealed class Day18 : Puzzle
             }
         }
 
-        for (int i = 0; i < ticks; i++)
+        for (int i = 0; i < ticks && i < bytes.Count; i++)
         {
-            (int x, int y) = coordinates[i].AsNumberPair<int>();
-
-            var corruption = new Point(x, y);
-
-            grid.Borders.Add(corruption);
-            grid.Locations.Add(corruption);
+            var location = bytes[i];
+            grid.Borders.Add(location);
+            grid.Locations.Add(location);
         }
 
         var start = new Point(0, 0);
         var goal = new Point(size - 1, size - 1);
 
-        return (int)PathFinding.AStar(grid, start, goal, cancellationToken: cancellationToken);
+        int minimum = (int)PathFinding.AStar(grid, start, goal, cancellationToken: cancellationToken);
+
+        string blockingByte = string.Empty;
+
+        for (int i = ticks; i < bytes.Count && !cancellationToken.IsCancellationRequested; i++)
+        {
+            var location = bytes[i];
+            grid.Borders.Add(location);
+            grid.Locations.Add(location);
+
+            if (PathFinding.AStar(grid, start, goal, cancellationToken: cancellationToken) is long.MaxValue)
+            {
+                blockingByte = $"{location.X},{location.Y}";
+                break;
+            }
+        }
+
+        cancellationToken.ThrowIfCancellationRequested();
+
+        return (minimum, blockingByte);
     }
 
     /// <inheritdoc />
@@ -59,13 +93,14 @@ public sealed class Day18 : Puzzle
 
         var values = await ReadResourceAsLinesAsync(cancellationToken);
 
-        MinimumSteps = Simulate(values, size: 71, ticks: 1024, cancellationToken);
+        (MinimumSteps, BlockingByte) = Simulate(values, size: 71, ticks: 1024, cancellationToken);
 
         if (Verbose)
         {
             Logger.WriteLine("The minimum number of steps needed to reach the exit is {0}.", MinimumSteps);
+            Logger.WriteLine("The coordinates of the first byte that will prevent the exit from being reachable is {0}.", BlockingByte);
         }
 
-        return PuzzleResult.Create(MinimumSteps);
+        return PuzzleResult.Create(MinimumSteps, BlockingByte);
     }
 }
