@@ -23,8 +23,9 @@ public sealed class Day09 : Puzzle
     /// </returns>
     public static long Defragment(ReadOnlySpan<char> map)
     {
-        var blocks = new List<(int Id, int Index, int Length)>();
-        var spaces = new List<(int Index, int Length)>();
+        const int Empty = -1;
+
+        var disk = new List<int>();
 
         int id = 0;
         int offset = 0;
@@ -35,67 +36,58 @@ public sealed class Day09 : Puzzle
 
             if (i % 2 is 0)
             {
-                blocks.Add((id++, offset, length));
+                for (int j = 0; j < length; j++)
+                {
+                    disk.Add(id);
+                }
+
+                id++;
             }
             else
             {
-                spaces.Add((offset, length));
+                for (int j = 0; j < length; j++)
+                {
+                    disk.Add(Empty);
+                }
             }
 
             offset += length;
         }
 
-        spaces.Reverse();
+        int free = 0;
 
-        var availableSpace = new Stack<(int Index, int Length)>(spaces);
-        var defragmented = new List<(int Id, int Index, int Length)>();
-
-        while (availableSpace.Count > 0)
+        for (int i = disk.Count - 1; i > -1; i--)
         {
-            var space = availableSpace.Pop();
+            id = disk[i];
 
-            (id, offset, int length) = blocks[^1];
-
-            if (offset + length < space.Index)
+            if (id is Empty)
             {
-                // The next file is before the first remaining free space, so we're done
+                continue;
+            }
+
+            while (disk[free] > Empty)
+            {
+                free++;
+            }
+
+            if (free >= i)
+            {
                 break;
             }
 
-            blocks.RemoveAt(blocks.Count - 1);
-
-            if (length > space.Length)
-            {
-                blocks.Add((id, offset, length - space.Length));
-                defragmented.Add((id, space.Index, space.Length));
-            }
-            else if (length == space.Length)
-            {
-                defragmented.Add((id, space.Index, space.Length));
-            }
-            else
-            {
-                // Space bigger than required
-                defragmented.Add((id, space.Index, length));
-                availableSpace.Push((space.Index + length, space.Length - length));
-            }
+            disk[free] = id;
+            disk[i] = Empty;
         }
 
         long checksum = 0;
 
-        foreach (var block in blocks)
+        for (int i = 0; i < disk.Count; i++)
         {
-            for (int i = 0; i < block.Length; i++)
-            {
-                checksum += (block.Index + i) * block.Id;
-            }
-        }
+            id = disk[i];
 
-        foreach (var block in defragmented)
-        {
-            for (int i = 0; i < block.Length; i++)
+            if (id is not -1)
             {
-                checksum += (block.Index + i) * block.Id;
+                checksum += i * id;
             }
         }
 
