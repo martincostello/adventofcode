@@ -200,7 +200,7 @@ public sealed class Day17 : Puzzle
 
         void Out(int operand)
         {
-            int result = (int)Combo(operand) % 8;
+            int result = (int)(Combo(operand) % 8);
             output.Add(result);
         }
 
@@ -216,7 +216,7 @@ public sealed class Day17 : Puzzle
                 4 => registers.A,
                 5 => registers.B,
                 6 => registers.C,
-                _ => long.MinValue,
+                _ => throw new UnreachableException(),
             };
         }
 
