@@ -5,17 +5,30 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2024;
 
 public sealed class Day09Tests(ITestOutputHelper outputHelper) : PuzzleTest(outputHelper)
 {
-    [Fact]
-    public void Y2024_Day09_Defragment_Returns_Correct_Value()
+    public static TheoryData<string, long> Examples()
     {
-        // Arrange
-        string map = "2333133121414131402";
+        return new()
+        {
+            {
+                "12345",
+                60
+            },
+            {
+                "2333133121414131402",
+                1928
+            },
+        };
+    }
 
+    [Theory]
+    [MemberData(nameof(Examples))]
+    public void Y2024_Day09_Defragment_Returns_Correct_Value(string map, long expected)
+    {
         // Act
-        int actual = Day09.Defragment(map);
+        long actual = Day09.Defragment(map);
 
         // Assert
-        actual.ShouldBe(1928);
+        actual.ShouldBe(expected);
     }
 
     [Fact]
@@ -26,6 +39,8 @@ public sealed class Day09Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
 
         // Assert
         puzzle.ShouldNotBeNull();
+        puzzle.Checksum.ShouldBeGreaterThan(6381221135317);
+        puzzle.Checksum.ShouldBeLessThan(8316563075681);
         puzzle.Checksum.ShouldBe(-1);
     }
 }
