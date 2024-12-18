@@ -75,19 +75,39 @@ public sealed class Day17 : Puzzle
             }
         }
 
-        var output = Run(program, (a, b, c), find: false);
+        IList<int> output = [];
 
         if (fix)
         {
-            for (a = 0; a < long.MaxValue && !cancellationToken.IsCancellationRequested; a++)
-            {
-                output = Run(program, (a, b, c), find: true);
+            var queue = new Queue<(long A, int Digit)>(program.Count);
+            queue.Enqueue((0, program.Count - 1));
 
-                if (program.SequenceEqual(output))
+            while (queue.Count > 0 && !cancellationToken.IsCancellationRequested)
+            {
+                (long floor, int digit) = queue.Dequeue();
+
+                for (long i = 0; i < 8; i++)
                 {
-                    break;
+                    a = (floor << 3) + i;
+
+                    output = Run(program, (a, b, c));
+
+                    if (output.SequenceEqual(program[digit..]))
+                    {
+                        if (digit is 0)
+                        {
+                            queue.Clear();
+                            break;
+                        }
+
+                        queue.Enqueue((a, digit - 1));
+                    }
                 }
             }
+        }
+        else
+        {
+            output = Run(program, (a, b, c));
         }
 
         cancellationToken.ThrowIfCancellationRequested();
@@ -114,7 +134,7 @@ public sealed class Day17 : Puzzle
         return PuzzleResult.Create(Output, RegisterA);
     }
 
-    private static List<int> Run(List<int> program, (long A, long B, long C) registers, bool find)
+    private static List<int> Run(List<int> program, (long A, long B, long C) registers)
     {
         var output = new List<int>();
 
@@ -150,11 +170,7 @@ public sealed class Day17 : Puzzle
                     break;
 
                 case 5:
-                    if (!Out(operand) && find)
-                    {
-                        return output;
-                    }
-
+                    Out(operand);
                     break;
 
                 case 6:
@@ -182,24 +198,10 @@ public sealed class Day17 : Puzzle
 
         void Bxc() => registers.B ^= registers.C;
 
-        bool Out(int operand)
+        void Out(int operand)
         {
             int result = (int)Combo(operand) % 8;
-
-            if (find)
-            {
-                if (output.Count >= program.Count)
-                {
-                    return false;
-                }
-                else if (result != program[output.Count])
-                {
-                    return false;
-                }
-            }
-
             output.Add(result);
-            return true;
         }
 
         void Bdv(int operand) => registers.B = Divide(operand);
@@ -210,23 +212,14 @@ public sealed class Day17 : Puzzle
         {
             return value switch
             {
-                0 => 0,
-                1 => 1,
-                2 => 2,
-                3 => 3,
+                < 4 => value,
                 4 => registers.A,
                 5 => registers.B,
                 6 => registers.C,
-                _ => throw new UnreachableException(),
+                _ => long.MinValue,
             };
         }
 
-        long Divide(int operand)
-        {
-            long numerator = registers.A;
-            long denominator = (long)Math.Pow(2, Combo(operand));
-
-            return numerator / denominator;
-        }
+        long Divide(int operand) => registers.A >> (int)Combo(operand);
     }
 }
