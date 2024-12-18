@@ -12,7 +12,7 @@ public sealed class Day09 : Puzzle
     /// <summary>
     /// Gets the checksum of the defragmented disk.
     /// </summary>
-    public int Checksum { get; private set; }
+    public long Checksum { get; private set; }
 
     /// <summary>
     /// Defragments the specified disk.
@@ -21,72 +21,85 @@ public sealed class Day09 : Puzzle
     /// <returns>
     /// The checksum of the defragmented disk.
     /// </returns>
-    public static int Defragment(ReadOnlySpan<char> map)
+    public static long Defragment(ReadOnlySpan<char> map)
     {
-        var files = new List<(int Id, int Length, Range Location)>();
-        var spaces = new List<(int Length, Range Location)>();
+        var blocks = new List<(int Id, int Index, int Length)>();
+        var spaces = new List<(int Index, int Length)>();
 
         int id = 0;
-        int length = 0;
+        int offset = 0;
 
         for (int i = 0; i < map.Length; i++)
         {
-            int count = map[i] - '0';
-            var range = new Range(length, length + count);
+            int length = map[i] - '0';
 
             if (i % 2 is 0)
             {
-                files.Add((id++, count, range));
+                blocks.Add((id++, offset, length));
             }
             else
             {
-                spaces.Add((count, range));
+                spaces.Add((offset, length));
             }
 
-            length += count;
+            offset += length;
         }
 
-        while (spaces.Count > 1 && spaces[0].Location.GetOffsetAndLength(spaces[0].Length).Length != length - 1)
+        spaces.Reverse();
+
+        var availableSpace = new Stack<(int Index, int Length)>(spaces);
+        var defragmented = new List<(int Id, int Index, int Length)>();
+
+        while (availableSpace.Count > 0)
         {
-            var space = spaces[0];
-            spaces.RemoveAt(0);
+            var space = availableSpace.Pop();
 
-            while (space.Length > 0)
+            (id, offset, int length) = blocks[^1];
+
+            if (offset + length < space.Index)
             {
-                (id, int size, var location) = files[^1];
+                // The next file is before the first remaining free space, so we're done
+                break;
+            }
 
-                files.RemoveAt(files.Count - 1);
+            blocks.RemoveAt(blocks.Count - 1);
 
-                if (size == space.Length)
-                {
-                    files.Add((id, size, space.Location));
-                    space = (0, space.Location.Start..space.Location.Start);
-                }
-                else if (size < space.Length)
-                {
-                    var newLocation = space.Location.Start..size;
-
-                    int ix = files.FindLastIndex((p) => p.Location.End.Value == newLocation.Start.Value);
-
-                    files.Insert(ix + 1, (id, size, newLocation));
-                    spaces.Add((space.Length, location));
-                    space = (size, space.Location.Start..size);
-                }
-                else if (size > remaining)
-                {
-                    int ix = files.FindLastIndex((p) => p.Location.End.Value == space.Start.Value);
-
-                    files.Insert(ix, (id, remaining, space));
-
-                    files.Add((id, size - remaining, location.Start..^remaining));
-                    space = space.Start..space.Start;
-                }
+            if (length > space.Length)
+            {
+                blocks.Add((id, offset, length - space.Length));
+                defragmented.Add((id, space.Index, space.Length));
+            }
+            else if (length == space.Length)
+            {
+                defragmented.Add((id, space.Index, space.Length));
+            }
+            else
+            {
+                // Space bigger than required
+                defragmented.Add((id, space.Index, length));
+                availableSpace.Push((space.Index + length, space.Length - length));
             }
         }
 
-        files.Sort((x, y) => y.Location.Start.Value - x.Location.Start.Value);
+        long checksum = 0;
 
-        return -1;
+        foreach (var block in blocks)
+        {
+            for (int i = 0; i < block.Length; i++)
+            {
+                checksum += (block.Index + i) * block.Id;
+            }
+        }
+
+        foreach (var block in defragmented)
+        {
+            for (int i = 0; i < block.Length; i++)
+            {
+                checksum += (block.Index + i) * block.Id;
+            }
+        }
+
+        return checksum;
     }
 
     /// <inheritdoc />
