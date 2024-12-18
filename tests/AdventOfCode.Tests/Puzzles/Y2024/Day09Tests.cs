@@ -39,8 +39,6 @@ public sealed class Day09Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
 
         // Assert
         puzzle.ShouldNotBeNull();
-        puzzle.Checksum.ShouldBeGreaterThan(6381221135317);
-        puzzle.Checksum.ShouldBeLessThan(8316563075681);
-        puzzle.Checksum.ShouldBe(-1);
+        puzzle.Checksum.ShouldBe(6395800119709);
     }
 }
