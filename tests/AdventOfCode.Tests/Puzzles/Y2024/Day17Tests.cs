@@ -62,7 +62,6 @@ public sealed class Day17Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         // Assert
         puzzle.ShouldNotBeNull();
         puzzle.Output.ShouldBe("1,2,3,1,3,2,5,3,1");
-        puzzle.RegisterA.ShouldBeGreaterThan(2760093950);
-        puzzle.RegisterA.ShouldBe(-1);
+        puzzle.RegisterA.ShouldBe(105706277661082);
     }
 }
