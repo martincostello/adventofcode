@@ -5,23 +5,49 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2024;
 
 public sealed class Day18Tests(ITestOutputHelper outputHelper) : PuzzleTest(outputHelper)
 {
-    [Fact(Skip = "Not implemented.")]
+    [Fact]
     public void Y2024_Day18_Solve_Returns_Correct_Value()
     {
         // Arrange
         string[] values =
         [
-            "_",
+            "5,4",
+            "4,2",
+            "4,5",
+            "3,0",
+            "2,1",
+            "6,3",
+            "2,4",
+            "1,5",
+            "0,6",
+            "3,3",
+            "2,6",
+            "5,1",
+            "1,2",
+            "5,5",
+            "2,5",
+            "6,5",
+            "1,4",
+            "0,4",
+            "6,4",
+            "1,1",
+            "6,1",
+            "1,0",
+            "0,5",
+            "1,6",
+            "2,0",
         ];
 
+        using var cts = Timeout();
+
         // Act
-        int actual = Day18.Solve(values);
+        int actual = Day18.Simulate(values, size: 7, ticks: 12, cts.Token);
 
         // Assert
-        actual.ShouldBe(-1);
+        actual.ShouldBe(22);
     }
 
-    [Fact(Skip = "Not implemented.")]
+    [Fact]
     public async Task Y2024_Day18_Solve_Returns_Correct_Solution()
     {
         // Act
@@ -29,6 +55,6 @@ public sealed class Day18Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
 
         // Assert
         puzzle.ShouldNotBeNull();
-        puzzle.Solution.ShouldBe(-1);
+        puzzle.MinimumSteps.ShouldBe(308);
     }
 }
