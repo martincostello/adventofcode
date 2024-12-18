@@ -2,6 +2,7 @@
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 using System.Diagnostics;
+using System.Runtime.CompilerServices;
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2024;
 
@@ -37,7 +38,7 @@ public sealed class Day17 : Puzzle
     public static (string Output, long A) Run(IList<string> values, bool fix, CancellationToken cancellationToken)
     {
         var program = new List<int>();
-        (long a, long b, long c) = (0, 0, 0);
+        long a = 0, b = 0, c = 0;
 
         for (int i = 0; i < values.Count; i++)
         {
@@ -90,7 +91,7 @@ public sealed class Day17 : Puzzle
                 {
                     a = (floor << 3) + i;
 
-                    output = Run(program, (a, b, c));
+                    output = Run(program, a, b, c);
 
                     if (output.SequenceEqual(program[digit..]))
                     {
@@ -107,7 +108,7 @@ public sealed class Day17 : Puzzle
         }
         else
         {
-            output = Run(program, (a, b, c));
+            output = Run(program, a, b, c);
         }
 
         cancellationToken.ThrowIfCancellationRequested();
@@ -134,9 +135,9 @@ public sealed class Day17 : Puzzle
         return PuzzleResult.Create(Output, RegisterA);
     }
 
-    private static List<int> Run(List<int> program, (long A, long B, long C) registers)
+    private static List<int> Run(List<int> program, long a, long b, long c)
     {
-        var output = new List<int>();
+        var output = new List<int>(program.Count);
 
         for (int ip = 0; ip < program.Count; ip += 2)
         {
@@ -145,40 +146,40 @@ public sealed class Day17 : Puzzle
 
             switch (opcode)
             {
-                case 0:
-                    Adv(operand);
+                case 0: // adv
+                    a >>= (int)Combo(operand);
                     break;
 
-                case 1:
-                    Bxl(operand);
+                case 1: // bxl
+                    b ^= operand;
                     break;
 
-                case 2:
-                    Bst(operand);
+                case 2: // bst
+                    b = Combo(operand) % 8;
                     break;
 
-                case 3:
-                    if (Jnz())
+                case 3: // jnz
+                    if (a is not 0)
                     {
                         ip = operand - 2;
                     }
 
                     break;
 
-                case 4:
-                    Bxc();
+                case 4: // bxc
+                    b ^= c;
                     break;
 
-                case 5:
-                    Out(operand);
+                case 5: // out
+                    output.Add((int)(Combo(operand) % 8));
                     break;
 
-                case 6:
-                    Bdv(operand);
+                case 6: // bdv
+                    b = a >> (int)Combo(operand);
                     break;
 
-                case 7:
-                    Cdv(operand);
+                case 7: // cdv
+                    c = a >> (int)Combo(operand);
                     break;
 
                 default:
@@ -188,38 +189,17 @@ public sealed class Day17 : Puzzle
 
         return output;
 
-        void Adv(int operand) => registers.A = Divide(operand);
-
-        void Bxl(int operand) => registers.B ^= operand;
-
-        void Bst(int operand) => registers.B = Combo(operand) % 8;
-
-        bool Jnz() => registers.A is not 0;
-
-        void Bxc() => registers.B ^= registers.C;
-
-        void Out(int operand)
-        {
-            int result = (int)(Combo(operand) % 8);
-            output.Add(result);
-        }
-
-        void Bdv(int operand) => registers.B = Divide(operand);
-
-        void Cdv(int operand) => registers.C = Divide(operand);
-
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         long Combo(long value)
         {
             return value switch
             {
                 < 4 => value,
-                4 => registers.A,
-                5 => registers.B,
-                6 => registers.C,
+                4 => a,
+                5 => b,
+                6 => c,
                 _ => throw new UnreachableException(),
             };
         }
-
-        long Divide(int operand) => registers.A >> (int)Combo(operand);
     }
 }
