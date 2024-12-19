@@ -31,13 +31,14 @@ public sealed class Day19 : Puzzle
         string[] towels = [.. values[0].Split(", ").OrderByDescending((p) => p.Length)];
 
         var cache = new Dictionary<string, long>();
+        var lookup = cache.GetAlternateLookup<ReadOnlySpan<char>>();
 
         int possible = 0;
         long designs = 0;
 
         foreach (string pattern in values.Skip(2))
         {
-            long count = CountDesigns(pattern, towels, cache);
+            long count = CountDesigns(pattern, towels, lookup);
 
             if (count > 0)
             {
@@ -59,7 +60,10 @@ public sealed class Day19 : Puzzle
     /// <returns>
     /// The number of possible designs that can create the pattern.
     /// </returns>
-    internal static long CountDesigns(string pattern, ReadOnlySpan<string> towels, Dictionary<string, long> cache)
+    internal static long CountDesigns(
+        ReadOnlySpan<char> pattern,
+        ReadOnlySpan<string> towels,
+        Dictionary<string, long>.AlternateLookup<ReadOnlySpan<char>> cache)
     {
         if (cache.TryGetValue(pattern, out long count))
         {
@@ -72,13 +76,11 @@ public sealed class Day19 : Puzzle
             return 1;
         }
 
-        var patternSpan = pattern.AsSpan();
-
         count = 0;
 
         foreach (ReadOnlySpan<char> towel in towels)
         {
-            if (!patternSpan.StartsWith(towel))
+            if (!pattern.StartsWith(towel))
             {
                 continue;
             }
@@ -89,7 +91,7 @@ public sealed class Day19 : Puzzle
                 continue;
             }
 
-            string next = pattern[towel.Length..];
+            var next = pattern[towel.Length..];
             count += CountDesigns(next, towels, cache);
         }
 
