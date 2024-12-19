@@ -70,12 +70,6 @@ public sealed class Day19 : Puzzle
             return count;
         }
 
-        if (pattern.Length < 1)
-        {
-            cache[pattern] = 1;
-            return 1;
-        }
-
         count = 0;
 
         foreach (ReadOnlySpan<char> towel in towels)
