@@ -24,10 +24,11 @@ public sealed class Day19Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         ];
 
         // Act
-        int actual = Day19.CountPossibilities(values);
+        (int actualPossible, long actualDesigns) = Day19.CountPossibilities(values);
 
         // Assert
-        actual.ShouldBe(6);
+        actualPossible.ShouldBe(6);
+        actualDesigns.ShouldBe(16);
     }
 
     [Fact]
@@ -39,5 +40,6 @@ public sealed class Day19Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         // Assert
         puzzle.ShouldNotBeNull();
         puzzle.PossibleDesigns.ShouldBe(371);
+        puzzle.UniqueDesigns.ShouldBe(650354687260341);
     }
 }
