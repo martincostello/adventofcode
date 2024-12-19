@@ -38,7 +38,6 @@ public sealed class Day19Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
 
         // Assert
         puzzle.ShouldNotBeNull();
-        puzzle.PossibleDesigns.ShouldBeLessThan(399);
-        puzzle.PossibleDesigns.ShouldBe(-1);
+        puzzle.PossibleDesigns.ShouldBe(371);
     }
 }
