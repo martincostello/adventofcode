@@ -15,80 +15,86 @@ public sealed class Day19 : Puzzle
     public int PossibleDesigns { get; private set; }
 
     /// <summary>
+    /// Gets the number of unique towel designs that can be created.
+    /// </summary>
+    public long UniqueDesigns { get; private set; }
+
+    /// <summary>
     /// Counts the number of possible towel designs that can be created from the specified values.
     /// </summary>
     /// <param name="values">The possible towels and desired patterns.</param>
     /// <returns>
-    /// The number of possible towel designs that can be created.
+    /// The number of possible towel designs that can be created and the number of unique designs.
     /// </returns>
-    public static int CountPossibilities(IList<string> values)
+    public static (int Possibilities, long Designs) CountPossibilities(IList<string> values)
     {
         string[] towels = [.. values[0].Split(", ").OrderByDescending((p) => p.Length)];
 
-        var cache = new Dictionary<string, bool>();
+        var cache = new Dictionary<string, long>();
 
-        int count = 0;
+        int possible = 0;
+        long designs = 0;
 
         foreach (string pattern in values.Skip(2))
         {
-            if (IsPossible(pattern, towels, cache))
+            long count = CountDesigns(pattern, towels, cache);
+
+            if (count > 0)
             {
-                count++;
+                possible++;
+                designs += count;
             }
         }
 
-        return count;
+        return (possible, designs);
     }
 
     /// <summary>
-    /// Determines whether the specified pattern is possible with the specified values.
+    /// Determines how many possible designs can be created for
+    /// the specified pattern with the specified towels.
     /// </summary>
     /// <param name="pattern">The desired pattern.</param>
     /// <param name="towels">The possible towels.</param>
     /// <param name="cache">The cache of possibilities.</param>
     /// <returns>
-    /// <see langword="true"/> if the pattern is possible; otherwise <see langword="false"/>.
+    /// The number of possible designs that can create the pattern.
     /// </returns>
-    internal static bool IsPossible(
-        string pattern,
-        ReadOnlySpan<string> towels,
-        Dictionary<string, bool> cache)
+    internal static long CountDesigns(string pattern, ReadOnlySpan<string> towels, Dictionary<string, long> cache)
     {
-        if (cache.TryGetValue(pattern, out bool isPossible))
+        if (cache.TryGetValue(pattern, out long count))
         {
-            return isPossible;
+            return count;
         }
 
         if (pattern.Length < 1)
         {
-            cache[pattern] = true;
-            return true;
+            cache[pattern] = 1;
+            return 1;
         }
 
         var patternSpan = pattern.AsSpan();
 
+        count = 0;
+
         foreach (ReadOnlySpan<char> towel in towels)
         {
-            if (patternSpan.StartsWith(towel))
+            if (!patternSpan.StartsWith(towel))
             {
-                if (towel.Length == pattern.Length)
-                {
-                    cache[pattern] = true;
-                    return true;
-                }
-
-                string next = pattern[towel.Length..];
-
-                if (IsPossible(next, towels, cache))
-                {
-                    cache[pattern] = true;
-                    return true;
-                }
+                continue;
             }
+
+            if (towel.Length == pattern.Length)
+            {
+                count++;
+                continue;
+            }
+
+            string next = pattern[towel.Length..];
+            count += CountDesigns(next, towels, cache);
         }
 
-        cache[pattern] = false;
-        return false;
+        cache[pattern] = count;
+        return count;
     }
 
     /// <inheritdoc />
@@ -98,13 +104,14 @@ public sealed class Day19 : Puzzle
 
         var values = await ReadResourceAsLinesAsync(cancellationToken);
 
-        PossibleDesigns = CountPossibilities(values);
+        (PossibleDesigns, UniqueDesigns) = CountPossibilities(values);
 
         if (Verbose)
         {
             Logger.WriteLine("{0} designs are possible.", PossibleDesigns);
+            Logger.WriteLine("There are {0} different ways to make each design.", UniqueDesigns);
         }
 
-        return PuzzleResult.Create(PossibleDesigns);
+        return PuzzleResult.Create(PossibleDesigns, UniqueDesigns);
     }
 }
