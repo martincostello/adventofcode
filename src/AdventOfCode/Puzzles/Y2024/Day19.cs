@@ -36,9 +36,9 @@ public sealed class Day19 : Puzzle
         int possible = 0;
         long designs = 0;
 
-        foreach (string pattern in values.Skip(2))
+        for (int i = 2; i < values.Count; i++)
         {
-            long count = CountDesigns(pattern, towels, lookup);
+            long count = CountDesigns(values[i], towels, lookup);
 
             if (count > 0)
             {
@@ -91,8 +91,7 @@ public sealed class Day19 : Puzzle
                 continue;
             }
 
-            var next = pattern[towel.Length..];
-            count += CountDesigns(next, towels, cache);
+            count += CountDesigns(pattern[towel.Length..], towels, cache);
         }
 
         cache[pattern] = count;
