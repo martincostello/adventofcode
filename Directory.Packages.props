@@ -19,7 +19,7 @@
     <PackageVersion Include="Microsoft.Playwright" Version="1.49.0" />
     <PackageVersion Include="Microsoft.Toolkit.HighPerformance" Version="7.1.2" />
     <PackageVersion Include="Microsoft.TypeScript.MSBuild" Version="5.7.1" />
-    <PackageVersion Include="RazorSlices" Version="0.8.1" />
+    <PackageVersion Include="RazorSlices" Version="0.9.0" />
     <PackageVersion Include="Shouldly" Version="4.2.1" />
     <PackageVersion Include="Spectre.Console" Version="0.49.1" />
     <PackageVersion Include="System.Private.Uri" Version="4.3.2" />
