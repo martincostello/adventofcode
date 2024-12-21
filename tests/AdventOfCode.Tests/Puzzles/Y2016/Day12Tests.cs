@@ -20,7 +20,7 @@ public sealed class Day12Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         ];
 
         // Act
-        var actual = Day12.Process(instructions, initialValueOfC: 0);
+        var actual = Day12.Process(instructions, initialValueOfC: 0, cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
         actual.ShouldNotBeNull();
@@ -47,7 +47,7 @@ public sealed class Day12Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         ];
 
         // Act
-        var actual = Day12.Process(instructions, initialValueOfC: 0);
+        var actual = Day12.Process(instructions, initialValueOfC: 0, cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
         actual.ShouldNotBeNull();

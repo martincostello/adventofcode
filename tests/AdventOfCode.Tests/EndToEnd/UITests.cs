@@ -16,7 +16,7 @@ public class UITests : EndToEndTest, IClassFixture<PlaywrightFixture>
 
     private ITestOutputHelper OutputHelper { get; }
 
-    [SkippableTheory]
+    [Theory]
     [InlineData("2015", "25", new[] { "2947", "3029" }, new[] { "19980801" })]
     public async Task Can_Solve_Puzzle_With_Input(
         string year,
@@ -43,7 +43,7 @@ public class UITests : EndToEndTest, IClassFixture<PlaywrightFixture>
         });
     }
 
-    [SkippableTheory]
+    [Theory]
     [InlineData("2016", "25", new[] { "198" })]
     [InlineData("2022", "1", new[] { "68775", "202585" })]
     public async Task Can_Solve_Puzzle_With_Input_File(

@@ -14,7 +14,7 @@ public sealed class Day03Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         int expected)
     {
         // Act
-        int actual = Day03.Scan(memory, enhancedAccuracy);
+        int actual = Day03.Scan(memory, enhancedAccuracy, TestContext.Current.CancellationToken);
 
         // Assert
         actual.ShouldBe(expected);

@@ -21,7 +21,7 @@ public sealed class Day18Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
     public void Y2022_Day18_GetSurfaceArea_Returns_Correct_Value(string[] cubes, bool excludeInterior, int expected)
     {
         // Act
-        int actual = Day18.GetSurfaceArea(cubes, excludeInterior);
+        int actual = Day18.GetSurfaceArea(cubes, excludeInterior, TestContext.Current.CancellationToken);
 
         // Assert
         actual.ShouldBe(expected);

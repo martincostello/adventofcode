@@ -49,7 +49,7 @@ public sealed class Day05Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         ];
 
         // Act
-        long actual = Day05.Parse(almanac, useRanges);
+        long actual = Day05.Parse(almanac, useRanges, TestContext.Current.CancellationToken);
 
         // Assert
         actual.ShouldBe(expected);

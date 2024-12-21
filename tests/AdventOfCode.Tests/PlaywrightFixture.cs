@@ -5,12 +5,16 @@ namespace MartinCostello.AdventOfCode;
 
 public class PlaywrightFixture : IAsyncLifetime
 {
-    public Task DisposeAsync() => Task.CompletedTask;
+    public ValueTask DisposeAsync()
+    {
+        GC.SuppressFinalize(this);
+        return ValueTask.CompletedTask;
+    }
 
-    public Task InitializeAsync()
+    public ValueTask InitializeAsync()
     {
         InstallPlaywright();
-        return Task.CompletedTask;
+        return ValueTask.CompletedTask;
     }
 
     private static void InstallPlaywright()

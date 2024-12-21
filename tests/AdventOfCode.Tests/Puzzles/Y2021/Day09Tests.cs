@@ -19,7 +19,7 @@ public sealed class Day09Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         ];
 
         // Act
-        (int sumOfRiskLevels, int areaOfThreeLargestBasins) = Day09.AnalyzeRisk(heightmap);
+        (int sumOfRiskLevels, int areaOfThreeLargestBasins) = Day09.AnalyzeRisk(heightmap, TestContext.Current.CancellationToken);
 
         // Assert
         sumOfRiskLevels.ShouldBe(15);

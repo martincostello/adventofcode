@@ -7,14 +7,13 @@ using System.Text.Json;
 using Amazon.Lambda.APIGatewayEvents;
 using MartinCostello.Testing.AwsLambdaTestServer;
 using Microsoft.AspNetCore.Http;
-using xRetry;
 
 namespace MartinCostello.AdventOfCode.Api;
 
 /// <summary>
 /// A class containing tests for the API when hosted in AWS Lambda.
 /// </summary>
-[Collection(nameof(LambdaTestsCollection))]
+[Collection<LambdaTestsCollection>]
 public class LambdaTests : IAsyncLifetime, IDisposable
 {
     private const int LambdaTestTimeout = 10_000;
@@ -44,13 +43,16 @@ public class LambdaTests : IAsyncLifetime, IDisposable
         GC.SuppressFinalize(this);
     }
 
-    public async Task DisposeAsync()
-        => await _server.DisposeAsync();
+    public async ValueTask DisposeAsync()
+    {
+        await _server.DisposeAsync();
+        GC.SuppressFinalize(this);
+    }
 
-    public async Task InitializeAsync()
+    public async ValueTask InitializeAsync()
         => await _server.InitializeAsync();
 
-    [RetryFact(Timeout = LambdaTestTimeout)]
+    [Fact(Timeout = LambdaTestTimeout)]
     public async Task Can_Get_Puzzle_Metadata()
     {
         // Arrange
@@ -83,7 +85,7 @@ public class LambdaTests : IAsyncLifetime, IDisposable
         }
     }
 
-    [RetryTheory(Timeout = LambdaTestTimeout)]
+    [Theory(Timeout = LambdaTestTimeout)]
     [InlineData(2015, 11, new[] { "cqjxjnds" }, new[] { "cqjxxyzz", "cqkaabcc" })]
     public async Task Can_Solve_Puzzle_With_Input_Arguments(int year, int day, string[] arguments, string[] expected)
     {
@@ -128,7 +130,7 @@ public class LambdaTests : IAsyncLifetime, IDisposable
         solutions.EnumerateArray().ToArray().Select((p) => p.GetString()).ToArray().ShouldBe(expected);
     }
 
-    [RetryTheory(Timeout = LambdaTestTimeout)]
+    [Theory(Timeout = LambdaTestTimeout)]
     [InlineData(2015, 1, new[] { 232, 1783 })]
     public async Task Can_Solve_Puzzle_With_Input_File(int year, int day, int[] expected)
     {

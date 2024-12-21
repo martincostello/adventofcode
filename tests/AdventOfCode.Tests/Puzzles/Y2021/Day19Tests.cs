@@ -150,7 +150,7 @@ public sealed class Day19Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         ];
 
         // Act
-        (int actualCount, int actualLargestDistance) = Day19.FindBeacons(data);
+        (int actualCount, int actualLargestDistance) = Day19.FindBeacons(data, TestContext.Current.CancellationToken);
 
         // Assert
         actualCount.ShouldBe(79);
