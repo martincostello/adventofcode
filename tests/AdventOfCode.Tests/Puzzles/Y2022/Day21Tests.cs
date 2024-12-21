@@ -31,7 +31,7 @@ public sealed class Day21Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         ];
 
         // Act
-        long actual = Day21.GetRootNumber(jobs, withEquality);
+        long actual = Day21.GetRootNumber(jobs, withEquality, TestContext.Current.CancellationToken);
 
         // Assert
         actual.ShouldBe(expected);

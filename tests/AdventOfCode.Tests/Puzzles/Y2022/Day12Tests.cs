@@ -19,7 +19,7 @@ public sealed class Day12Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         ];
 
         // Act
-        (int actualFromStart, int actualFromGround) = Day12.GetMinimumSteps(heightmap);
+        (int actualFromStart, int actualFromGround) = Day12.GetMinimumSteps(heightmap, TestContext.Current.CancellationToken);
 
         // Assert
         actualFromStart.ShouldBe(31);

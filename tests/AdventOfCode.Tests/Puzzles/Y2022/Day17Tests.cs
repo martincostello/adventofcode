@@ -14,7 +14,7 @@ public sealed class Day17Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         string jets = ">>><<><>><<<>><>>><<<>>><<<><<<>><>><<>>";
 
         // Act
-        long actual = Day17.GetHeightOfTower(jets, count);
+        long actual = Day17.GetHeightOfTower(jets, count, TestContext.Current.CancellationToken);
 
         // Assert
         actual.ShouldBe(expected);

@@ -21,7 +21,7 @@ internal sealed class HttpLambdaTestServer()
 
     public ITestOutputHelper? OutputHelper { get; set; }
 
-    public async Task DisposeAsync()
+    public async ValueTask DisposeAsync()
     {
         if (_webHost is not null)
         {
@@ -38,9 +38,10 @@ internal sealed class HttpLambdaTestServer()
         }
 
         Dispose();
+        GC.SuppressFinalize(this);
     }
 
-    public async Task InitializeAsync()
+    public async ValueTask InitializeAsync()
         => await StartAsync(_cts.Token);
 
     protected override IServer CreateServer(WebHostBuilder builder)

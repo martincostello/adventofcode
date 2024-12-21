@@ -19,7 +19,7 @@ public sealed class Day24Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         ];
 
         // Act
-        int actual = Day24.GetMinimumStepsToVisitLocations(layout, returnToOrigin: false);
+        int actual = Day24.GetMinimumStepsToVisitLocations(layout, returnToOrigin: false, TestContext.Current.CancellationToken);
 
         // Assert
         actual.ShouldBe(14);

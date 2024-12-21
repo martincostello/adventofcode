@@ -18,7 +18,7 @@ public sealed class Day14Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         ];
 
         // Act
-        (int actual, _) = Day14.Simulate(paths, hasFloor);
+        (int actual, _) = Day14.Simulate(paths, hasFloor, TestContext.Current.CancellationToken);
 
         // Assert
         actual.ShouldBe(expected);

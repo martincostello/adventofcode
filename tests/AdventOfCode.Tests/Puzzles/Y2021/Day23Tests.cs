@@ -21,7 +21,7 @@ public sealed class Day23Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         ];
 
         // Act
-        int actual = Day23.Organize(diagram, unfoldDiagram);
+        int actual = Day23.Organize(diagram, unfoldDiagram, TestContext.Current.CancellationToken);
 
         // Assert
         actual.ShouldBe(expected);

@@ -35,7 +35,7 @@ public abstract class PuzzleTest
     /// A <see cref="CancellationTokenSource"/> associated with the puzzle solution timeout.
     /// </returns>
     protected static CancellationTokenSource Timeout()
-        => System.Diagnostics.Debugger.IsAttached ? new() : new(TimeSpan.FromMinutes(1));
+        => System.Diagnostics.Debugger.IsAttached ? CancellationTokenSource.CreateLinkedTokenSource(TestContext.Current.CancellationToken) : new(TimeSpan.FromMinutes(1));
 
     /// <summary>
     /// Solves the specified puzzle type asynchronously.

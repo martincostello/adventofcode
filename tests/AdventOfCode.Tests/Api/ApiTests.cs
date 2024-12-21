@@ -5,6 +5,7 @@ using System.Net;
 using System.Reflection;
 using System.Text.Json;
 using Xunit.Sdk;
+using Xunit.v3;
 
 namespace MartinCostello.AdventOfCode.Api;
 
@@ -13,7 +14,7 @@ namespace MartinCostello.AdventOfCode.Api;
 /// </summary>
 /// <param name="fixture">The fixture to use.</param>
 /// <param name="outputHelper">The test output helper to use.</param>
-[Collection(HttpServerCollection.Name)]
+[Collection<HttpServerCollection>]
 public class ApiTests(HttpServerFixture fixture, ITestOutputHelper outputHelper)
     : IntegrationTest(fixture, outputHelper)
 {
@@ -256,15 +257,15 @@ public class ApiTests(HttpServerFixture fixture, ITestOutputHelper outputHelper)
         }
 
         // Act
-        using var response = await client.PostAsync($"/api/puzzles/{year}/{day}/solve", content);
+        using var response = await client.PostAsync($"/api/puzzles/{year}/{day}/solve", content, CancellationToken);
 
         // Assert
-        response.StatusCode.ShouldBe(HttpStatusCode.OK, await response.Content.ReadAsStringAsync());
+        response.StatusCode.ShouldBe(HttpStatusCode.OK, await response.Content.ReadAsStringAsync(CancellationToken));
         response.Content.ShouldNotBeNull();
         response.Content!.Headers.ContentType.ShouldNotBeNull();
         response.Content.Headers.ContentType.MediaType.ShouldBe("application/json");
 
-        using var solution = await JsonDocument.ParseAsync(await response.Content.ReadAsStreamAsync());
+        using var solution = await JsonDocument.ParseAsync(await response.Content.ReadAsStreamAsync(CancellationToken), cancellationToken: CancellationToken);
 
         solution.RootElement.GetProperty("year").GetInt32().ShouldBe(year);
         solution.RootElement.GetProperty("day").GetInt32().ShouldBe(day);
@@ -299,7 +300,7 @@ public class ApiTests(HttpServerFixture fixture, ITestOutputHelper outputHelper)
         using var client = Fixture.CreateClient();
 
         // Act
-        using var response = await client.GetAsync("/api/puzzles");
+        using var response = await client.GetAsync("/api/puzzles", CancellationToken);
 
         // Assert
         response.StatusCode.ShouldBe(HttpStatusCode.OK);
@@ -307,7 +308,7 @@ public class ApiTests(HttpServerFixture fixture, ITestOutputHelper outputHelper)
         response.Content!.Headers.ContentType.ShouldNotBeNull();
         response.Content.Headers.ContentType.MediaType.ShouldBe("application/json");
 
-        using var puzzles = await JsonDocument.ParseAsync(await response.Content.ReadAsStreamAsync());
+        using var puzzles = await JsonDocument.ParseAsync(await response.Content.ReadAsStreamAsync(CancellationToken), cancellationToken: CancellationToken);
 
         puzzles.RootElement.GetArrayLength().ShouldBeGreaterThan(0);
 
@@ -336,7 +337,7 @@ public class ApiTests(HttpServerFixture fixture, ITestOutputHelper outputHelper)
         };
 
         // Act
-        using var response = await client.PostAsync("/api/puzzles/2014/1/solve", content);
+        using var response = await client.PostAsync("/api/puzzles/2014/1/solve", content, CancellationToken);
 
         // Assert
         response.StatusCode.ShouldBe(HttpStatusCode.NotFound);
@@ -353,7 +354,7 @@ public class ApiTests(HttpServerFixture fixture, ITestOutputHelper outputHelper)
         using var content = new StringContent("{}", Encoding.UTF8, "application/json");
 
         // Act
-        using var response = await client.PostAsync("/api/puzzles/2015/1/solve", content);
+        using var response = await client.PostAsync("/api/puzzles/2015/1/solve", content, CancellationToken);
 
         // Assert
         response.StatusCode.ShouldBe(HttpStatusCode.UnsupportedMediaType);
@@ -402,8 +403,13 @@ public class ApiTests(HttpServerFixture fixture, ITestOutputHelper outputHelper)
 
         internal object[] ExpectedSolutions { get; }
 
-        public override IEnumerable<object[]> GetData(MethodInfo testMethod)
-            => [[Year, Day, this]];
+        public override ValueTask<IReadOnlyCollection<ITheoryDataRow>> GetData(MethodInfo testMethod, DisposalTracker disposalTracker)
+        {
+            IReadOnlyCollection<ITheoryDataRow> rows = [new TheoryDataRow<int, int, PuzzleDataAttribute>(Year, Day, this)];
+            return ValueTask.FromResult(rows);
+        }
+
+        public override bool SupportsDiscoveryEnumeration() => true;
 
         public override string ToString() => string.Join(", ", ExpectedSolutions);
     }

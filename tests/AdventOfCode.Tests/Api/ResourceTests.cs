@@ -9,7 +9,7 @@ namespace MartinCostello.AdventOfCode.Api;
 public class ResourceTests(HttpServerFixture fixture, ITestOutputHelper outputHelper)
     : IntegrationTest(fixture, outputHelper)
 {
-    [SkippableTheory]
+    [Theory]
     [InlineData("", MediaTypeNames.Text.Html)]
     [InlineData("error.html", MediaTypeNames.Text.Html)]
     [InlineData("favicon.ico", "image/x-icon")]
@@ -26,10 +26,10 @@ public class ResourceTests(HttpServerFixture fixture, ITestOutputHelper outputHe
         using var client = Fixture.CreateClient();
 
         // Act
-        using var response = await client.GetAsync(requestUri);
+        using var response = await client.GetAsync(requestUri, CancellationToken);
 
         // Assert
-        response.StatusCode.ShouldBe(HttpStatusCode.OK, await response.Content.ReadAsStringAsync());
+        response.StatusCode.ShouldBe(HttpStatusCode.OK, await response.Content.ReadAsStringAsync(CancellationToken));
         response.Content.ShouldNotBeNull();
         response.Content!.Headers.ContentType?.MediaType?.ShouldBe(contentType);
     }

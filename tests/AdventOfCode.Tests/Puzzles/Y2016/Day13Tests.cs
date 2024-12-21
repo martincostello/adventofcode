@@ -14,7 +14,7 @@ public sealed class Day13Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         int expected)
     {
         // Act
-        int actual = Day13.GetMinimumStepsToReachCoordinate(favoriteNumber, x, y);
+        int actual = Day13.GetMinimumStepsToReachCoordinate(favoriteNumber, x, y, TestContext.Current.CancellationToken);
 
         // Assert
         actual.ShouldBe(expected);

@@ -26,7 +26,7 @@ public sealed class Day15Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         ];
 
         // Act
-        int actual = Day15.GetRiskLevel(riskMap, largeMap);
+        int actual = Day15.GetRiskLevel(riskMap, largeMap, TestContext.Current.CancellationToken);
 
         // Assert
         actual.ShouldBe(expected);

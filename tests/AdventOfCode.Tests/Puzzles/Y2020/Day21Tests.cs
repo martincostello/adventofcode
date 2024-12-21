@@ -18,7 +18,7 @@ public sealed class Day21Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         ];
 
         // Act
-        (int actualOccurrences, string actualAllergens) = Day21.GetIngredientsWithNoAllergens(foods);
+        (int actualOccurrences, string actualAllergens) = Day21.GetIngredientsWithNoAllergens(foods, TestContext.Current.CancellationToken);
 
         // Assert
         actualOccurrences.ShouldBe(5);
