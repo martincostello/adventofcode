@@ -5,23 +5,49 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2024;
 
 public sealed class Day22Tests(ITestOutputHelper outputHelper) : PuzzleTest(outputHelper)
 {
-    [Fact(Skip = "Not implemented.")]
-    public void Y2024_Day22_Solve_Returns_Correct_Value()
+    [Theory]
+    [InlineData("123", 15887950)]
+    [InlineData("15887950", 16495136)]
+    [InlineData("16495136", 527345)]
+    [InlineData("527345", 704524)]
+    [InlineData("704524", 1553684)]
+    [InlineData("1553684", 12683156)]
+    [InlineData("12683156", 11100544)]
+    [InlineData("11100544", 12249484)]
+    [InlineData("12249484", 7753432)]
+    [InlineData("7753432", 5908254)]
+    public void Y2024_Day22_Simulate_One_Returns_Correct_Value(string value, long expected)
+    {
+        // Arrange
+        string[] values = [value];
+
+        // Act
+        long actual = Day22.Simulate(values, iterations: 1);
+
+        // Assert
+        actual.ShouldBe(expected);
+    }
+
+    [Fact]
+    public void Y2024_Day22_Simulate_Many_Returns_Correct_Value()
     {
         // Arrange
         string[] values =
         [
-            "_",
+            "1",
+            "10",
+            "100",
+            "2024",
         ];
 
         // Act
-        int actual = Day22.Solve(values);
+        long actual = Day22.Simulate(values, iterations: 2000);
 
         // Assert
-        actual.ShouldBe(-1);
+        actual.ShouldBe(37327623);
     }
 
-    [Fact(Skip = "Not implemented.")]
+    [Fact]
     public async Task Y2024_Day22_Solve_Returns_Correct_Solution()
     {
         // Act
@@ -29,6 +55,6 @@ public sealed class Day22Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
 
         // Assert
         puzzle.ShouldNotBeNull();
-        puzzle.Solution.ShouldBe(-1);
+        puzzle.SecretNumber2000Sum.ShouldBe(14623556510);
     }
 }
