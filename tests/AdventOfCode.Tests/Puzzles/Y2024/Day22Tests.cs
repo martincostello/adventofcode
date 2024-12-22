@@ -22,7 +22,7 @@ public sealed class Day22Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         string[] values = [value];
 
         // Act
-        long actual = Day22.Simulate(values, iterations: 1);
+        long actual = Day22.Simulate(values, rounds: 1);
 
         // Assert
         actual.ShouldBe(expected);
@@ -41,7 +41,7 @@ public sealed class Day22Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         ];
 
         // Act
-        long actual = Day22.Simulate(values, iterations: 2000);
+        long actual = Day22.Simulate(values, rounds: 2000);
 
         // Assert
         actual.ShouldBe(37327623);

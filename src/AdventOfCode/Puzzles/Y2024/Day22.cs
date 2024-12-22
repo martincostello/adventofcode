@@ -18,15 +18,15 @@ public sealed class Day22 : Puzzle
     /// Simulates the Monkey Market for the specified secret values.
     /// </summary>
     /// <param name="values">The initial secret number for each buyer.</param>
-    /// <param name="iterations">The number of secret iterations to simulate for.</param>
+    /// <param name="rounds">The number of rounds to simulate for.</param>
     /// <returns>
-    /// The sum of the <paramref name="iterations"/>-th secret number for each buyer.
+    /// The sum of the <paramref name="rounds"/>-th secret number for each buyer.
     /// </returns>
-    public static long Simulate(IList<string> values, int iterations)
+    public static long Simulate(IList<string> values, int rounds)
     {
-        long[] secrets = values.Select(Parse<long>).ToArray();
+        long[] secrets = [.. values.Select(Parse<long>)];
 
-        for (int i = 0; i < iterations; i++)
+        for (int i = 0; i < rounds; i++)
         {
             for (int j = 0; j < secrets.Length; j++)
             {
@@ -69,7 +69,7 @@ public sealed class Day22 : Puzzle
 
         var values = await ReadResourceAsLinesAsync(cancellationToken);
 
-        SecretNumber2000Sum = Simulate(values, iterations: 2000);
+        SecretNumber2000Sum = Simulate(values, rounds: 2000);
 
         if (Verbose)
         {
