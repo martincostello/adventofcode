@@ -6,19 +6,50 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2024;
 public sealed class Day23Tests(ITestOutputHelper outputHelper) : PuzzleTest(outputHelper)
 {
     [Fact(Skip = "Not implemented.")]
-    public void Y2024_Day23_Solve_Returns_Correct_Value()
+    public void Y2024_Day23_CountNetworks_Returns_Correct_Value()
     {
         // Arrange
         string[] values =
         [
-            "_",
+            "kh-tc",
+            "qp-kh",
+            "de-cg",
+            "ka-co",
+            "yn-aq",
+            "qp-ub",
+            "cg-tb",
+            "vc-aq",
+            "tb-ka",
+            "wh-tc",
+            "yn-cg",
+            "kh-ub",
+            "ta-co",
+            "de-co",
+            "tc-td",
+            "tb-wq",
+            "wh-td",
+            "ta-ka",
+            "td-qp",
+            "aq-cg",
+            "wq-ub",
+            "ub-vc",
+            "de-ta",
+            "wq-aq",
+            "wq-vc",
+            "wh-yn",
+            "ka-de",
+            "kh-ta",
+            "co-tc",
+            "wh-qp",
+            "tb-vc",
+            "td-yn",
         ];
 
         // Act
-        int actual = Day23.Solve(values);
+        int actual = Day23.CountNetworks(values);
 
         // Assert
-        actual.ShouldBe(-1);
+        actual.ShouldBe(7);
     }
 
     [Fact(Skip = "Not implemented.")]
@@ -29,6 +60,6 @@ public sealed class Day23Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
 
         // Assert
         puzzle.ShouldNotBeNull();
-        puzzle.Solution.ShouldBe(-1);
+        puzzle.TNetworkCount.ShouldBe(-1);
     }
 }
