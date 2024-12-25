@@ -5,23 +5,61 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2024;
 
 public sealed class Day25Tests(ITestOutputHelper outputHelper) : PuzzleTest(outputHelper)
 {
-    [Fact(Skip = "Not implemented.")]
-    public void Y2024_Day25_Solve_Returns_Correct_Value()
+    [Fact]
+    public void Y2024_Day25_Simulate_Returns_Correct_Value()
     {
         // Arrange
         string[] values =
         [
-            "_",
+            "#####",
+            ".####",
+            ".####",
+            ".####",
+            ".#.#.",
+            ".#...",
+            ".....",
+            string.Empty,
+            "#####",
+            "##.##",
+            ".#.##",
+            "...##",
+            "...#.",
+            "...#.",
+            ".....",
+            string.Empty,
+            ".....",
+            "#....",
+            "#....",
+            "#...#",
+            "#.#.#",
+            "#.###",
+            "#####",
+            string.Empty,
+            ".....",
+            ".....",
+            "#.#..",
+            "###..",
+            "###.#",
+            "###.#",
+            "#####",
+            string.Empty,
+            ".....",
+            ".....",
+            ".....",
+            "#....",
+            "#.#..",
+            "#.#.#",
+            "#####",
         ];
 
         // Act
-        int actual = Day25.Solve(values);
+        int actual = Day25.Simulate(values);
 
         // Assert
-        actual.ShouldBe(-1);
+        actual.ShouldBe(3);
     }
 
-    [Fact(Skip = "Not implemented.")]
+    [Fact]
     public async Task Y2024_Day25_Solve_Returns_Correct_Solution()
     {
         // Act
@@ -29,6 +67,6 @@ public sealed class Day25Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
 
         // Assert
         puzzle.ShouldNotBeNull();
-        puzzle.Solution.ShouldBe(-1);
+        puzzle.UniquePairs.ShouldBe(2835);
     }
 }

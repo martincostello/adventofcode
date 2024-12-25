@@ -6,17 +6,25 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2024;
 /// <summary>
 /// A class representing the puzzle for <c>https://adventofcode.com/2024/day/23</c>. This class cannot be inherited.
 /// </summary>
-[Puzzle(2024, 23, "", RequiresData = true, IsHidden = true)]
+[Puzzle(2024, 23, "LAN Party", RequiresData = true, IsHidden = true)]
 public sealed class Day23 : Puzzle
 {
-#pragma warning disable IDE0022
-#pragma warning disable IDE0060
-#pragma warning disable SA1600
+    /// <summary>
+    /// Gets the number of networks that contain at least one computer with a name that starts with <c>t</c>.
+    /// </summary>
+    public int TNetworkCount { get; private set; }
 
-    public int Solution { get; private set; }
-
-    public static int Solve(IList<string> values)
+    /// <summary>
+    /// Counts the number of networks that contain at least
+    /// one computer with a name that starts with <c>t</c>.
+    /// </summary>
+    /// <param name="values">A list of connections in the network(s).</param>
+    /// <returns>
+    /// The number of networks that contain at least one computer with a name that starts with <c>t</c>.
+    /// </returns>
+    public static int CountNetworks(IList<string> values)
     {
+        ArgumentNullException.ThrowIfNull(values);
         return -1;
     }
 
@@ -27,13 +35,13 @@ public sealed class Day23 : Puzzle
 
         var values = await ReadResourceAsLinesAsync(cancellationToken);
 
-        Solution = Solve(values);
+        TNetworkCount = CountNetworks(values);
 
         if (Verbose)
         {
-            Logger.WriteLine("{0}", Solution);
+            Logger.WriteLine("{0} networks contain at least one computer with a name that starts with t.", TNetworkCount);
         }
 
-        return PuzzleResult.Create(Solution);
+        return PuzzleResult.Create(TNetworkCount);
     }
 }

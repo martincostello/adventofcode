@@ -12,7 +12,7 @@ export class Day25 extends Puzzle2024 {
     }
 
     override get name() {
-        return '';
+        return 'Code Chronicle';
     }
 
     override get day() {
