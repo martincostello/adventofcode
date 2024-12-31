@@ -57,6 +57,10 @@ public sealed class CustomHttpHeadersMiddleware(RequestDelegate next)
                 context.Response.Headers.ContentSecurityPolicy = ContentSecurityPolicy(nonce);
             }
 
+            context.Response.Headers.Append("Cross-Origin-Embedder-Policy", "unsafe-none");
+            context.Response.Headers.Append("Cross-Origin-Opener-Policy", "same-origin");
+            context.Response.Headers.Append("Cross-Origin-Resource-Policy", "same-origin");
+
             if (context.Request.IsHttps)
             {
                 context.Response.Headers.Append("Expect-CT", "max-age=1800");
