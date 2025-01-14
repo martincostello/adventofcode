@@ -1,6 +1,6 @@
 # Advent of Code
 
-[![Build status](https://github.com/martincostello/adventofcode/workflows/build/badge.svg?branch=main&event=push)](https://github.com/martincostello/adventofcode/actions?query=workflow%3Abuild+branch%3Amain+event%3Apush)
+[![Build status](https://github.com/martincostello/adventofcode/actions/workflows/build.yml/badge.svg?branch=main&event=push)](https://github.com/martincostello/adventofcode/actions/workflows/build.yml?query=branch%3Amain+event%3Apush)
 
 ## Overview
 
