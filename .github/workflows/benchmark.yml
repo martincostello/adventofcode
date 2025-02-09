@@ -1,7 +1,6 @@
 name: benchmark
 
 env:
-  CRANK_VERSION: '0.2.0-*'
   DOTNET_CLI_TELEMETRY_OPTOUT: true
   DOTNET_NOLOGO: true
   DOTNET_SYSTEM_CONSOLE_ALLOW_ANSI_COLOR_REDIRECTION: 1
@@ -12,19 +11,20 @@ on:
   issue_comment:
     types: [ created ]
 
-permissions:
-  contents: read
-  pull-requests: write
-  statuses: write
+permissions: {}
 
 jobs:
   benchmark:
-    name: benchmark
     runs-on: ubuntu-latest
     if: |
       github.event.repository.fork == false &&
       github.event.issue.pull_request != '' &&
       startsWith(github.event.comment.body, '/benchmark')
+
+    permissions:
+      contents: read
+      pull-requests: write
+      statuses: write
 
     steps:
 
@@ -141,10 +141,12 @@ jobs:
 
     - name: Install crank
       shell: pwsh
+      env:
+        CRANK_VERSION: '0.2.0-*'
       run: |
-        dotnet tool install --global Microsoft.Crank.Agent --version "${env:CRANK_VERSION}"
-        dotnet tool install --global Microsoft.Crank.Controller --version "${env:CRANK_VERSION}"
-        dotnet tool install --global Microsoft.Crank.PullRequestBot --version "${env:CRANK_VERSION}"
+        dotnet tool install --global Microsoft.Crank.Agent --version ${env:CRANK_VERSION}
+        dotnet tool install --global Microsoft.Crank.Controller --version ${env:CRANK_VERSION}
+        dotnet tool install --global Microsoft.Crank.PullRequestBot --version ${env:CRANK_VERSION}
 
     - name: Run crank
       shell: pwsh
@@ -171,7 +173,6 @@ jobs:
         script: |
           const owner = context.repo.owner;
           const repo = context.repo.repo;
-          const issue_number = context.issue.number;
 
           const benchmark = process.env.BENCHMARK_NAME;
           const workflowUrl = `${process.env.GITHUB_SERVER_URL}/${owner}/${repo}/actions/runs/${process.env.GITHUB_RUN_ID}`;
@@ -184,7 +185,7 @@ jobs:
           await github.rest.issues.createComment({
             owner,
             repo,
-            issue_number,
+            issue_number: context.issue.number,
             body: `Benchmark [${benchmark}](${workflowUrl}) ${outcome} ${emoji}`,
           });
 
@@ -195,5 +196,5 @@ jobs:
             state,
             target_url: workflowUrl,
             description: `Benchmark ${benchmark} ${outcome}.`,
-            context: `benchmarks / ${benchmark.toLowerCase()}`
+            context: `benchmarks / ${benchmark.toLowerCase()}`,
           });

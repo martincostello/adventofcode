@@ -14,16 +14,18 @@ on:
       - dotnet-nightly
   workflow_dispatch:
 
-permissions:
-  contents: read
-
-env:
-  FORCE_COLOR: 3
-  TERM: xterm
+permissions: {}
 
 jobs:
   lint:
     runs-on: ubuntu-latest
+
+    env:
+      FORCE_COLOR: 3
+      TERM: xterm
+
+    permissions:
+      contents: read
 
     steps:
 
