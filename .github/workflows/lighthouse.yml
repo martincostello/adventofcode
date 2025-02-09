@@ -67,11 +67,11 @@ jobs:
       uses: foo-software/lighthouse-check-action@v12.0.1
       id: lighthouse
       with:
-        device: 'all'
+        device: all
         gitHubAccessToken: ${{ secrets.LIGHTHOUSE_ACCESS_TOKEN }}
         outputDirectory: ${{ github.workspace }}/artifacts/lighthouse
         prCommentEnabled: true
-        urls: 'https://localhost:50001'
+        urls: https://localhost:50001
         wait: true
 
     - name: Check Lighthouse scores

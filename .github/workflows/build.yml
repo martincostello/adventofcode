@@ -15,12 +15,10 @@ on:
   workflow_dispatch:
 
 env:
-  AWS_CLOUDFORMATION_STACK: adventofcode
   AWS_REGION: eu-west-2
   AWS_URL_PROD: https://aoc.martincostello.com
   AZURE_URL_PROD: https://adventofcode-martincostello.azurewebsites.net
   AZURE_WEBAPP_NAME: adventofcode-martincostello
-  CONTAINER_REGISTRY: '${{ github.repository_owner }}.azurecr.io'
   DOTNET_CLI_TELEMETRY_OPTOUT: true
   DOTNET_GENERATE_ASPNET_CERTIFICATE: false
   DOTNET_NOLOGO: true
@@ -29,8 +27,7 @@ env:
   NUGET_XMLDOC_MODE: skip
   TERM: xterm
 
-permissions:
-  contents: read
+permissions: {}
 
 jobs:
   build:
@@ -39,6 +36,7 @@ jobs:
     timeout-minutes: 20
 
     env:
+      CONTAINER_REGISTRY: '${{ github.repository_owner }}.azurecr.io'
       PUBLISH_CONTAINER: ${{ github.event.repository.fork == false && github.ref_name == github.event.repository.default_branch && matrix.os-name == 'linux' }}
 
     outputs:
@@ -108,7 +106,6 @@ jobs:
           ~/Library/Caches/ms-playwright
 
     - name: Install .NET tools
-      shell: pwsh
       run: dotnet tool restore
 
     - name: Build, test and publish
@@ -178,7 +175,7 @@ jobs:
       shell: pwsh
       run: |
         $lambdaToolsVersion = (Get-Content "./.config/dotnet-tools.json" | Out-String | ConvertFrom-Json).tools.'amazon.lambda.tools'.version
-        "lambda-tools-version=${lambdaToolsVersion}" >> $env:GITHUB_OUTPUT
+        "lambda-tools-version=${lambdaToolsVersion}" >> ${env:GITHUB_OUTPUT}
 
     - name: Upload any crash dumps
       shell: pwsh
@@ -222,6 +219,9 @@ jobs:
   typescript:
     runs-on: ubuntu-latest
 
+    permissions:
+      contents: read
+
     steps:
 
     - name: Checkout code
@@ -250,7 +250,6 @@ jobs:
         restore-keys: ${{ runner.os }}-node-
 
     - name: Build and test
-      shell: pwsh
       working-directory: ./src/AdventOfCode.Site
       run: |
         npm ci
@@ -262,9 +261,8 @@ jobs:
         files: ./src/AdventOfCode.Site/coverage/lcov.info
         token: ${{ secrets.CODECOV_TOKEN }}
 
-  deploy:
+  deploy-production:
     if: github.event.repository.fork == false && github.ref_name == github.event.repository.default_branch
-    name: deploy-production
     needs: [ build, typescript ]
     runs-on: ubuntu-latest
     concurrency: production_environment
@@ -321,11 +319,13 @@ jobs:
           throw "${env:APPLICATION_URL} did not return a successful status code and the expected version within the time limit after $limit attempts."
         }
 
-  test:
-    name: test-production
-    needs: deploy
+  test-production:
+    needs: deploy-production
     runs-on: ubuntu-latest
     concurrency: production_environment
+
+    permissions:
+      contents: read
 
     steps:
 
@@ -362,7 +362,6 @@ jobs:
 
   deploy-aws:
     if: github.event.repository.fork == false && github.ref_name == github.event.repository.default_branch
-    name: deploy-aws
     needs: [ build, typescript ]
     runs-on: ubuntu-latest
     concurrency: aws_environment
@@ -372,6 +371,7 @@ jobs:
       url: ${{ env.AWS_URL_PROD }}
 
     permissions:
+      contents: read
       id-token: write
 
     steps:
@@ -419,6 +419,7 @@ jobs:
       shell: pwsh
       env:
         AWS_CLOUDFORMATION_ROLE: ${{ secrets.AWS_CLOUDFORMATION_ROLE }}
+        AWS_CLOUDFORMATION_STACK: adventofcode
       run: |
         $description = "Deploy build ${env:GITHUB_RUN_NUMBER} to AWS via GitHub Actions"
         $configPath = Join-Path $pwd "aws-lambda-tools-defaults.json"
@@ -464,10 +465,12 @@ jobs:
         }
 
   test-aws:
-    name: test-aws
     needs: deploy-aws
     runs-on: ubuntu-latest
     concurrency: aws_environment
+
+    permissions:
+      contents: read
 
     steps:
 
