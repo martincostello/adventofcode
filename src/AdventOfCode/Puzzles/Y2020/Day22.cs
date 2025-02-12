@@ -42,7 +42,9 @@ public sealed class Day22 : Puzzle
             .TakeWhile((p) => !string.IsNullOrEmpty(p))
             .Select(Parse<int>);
 
+#pragma warning disable IDE0306
         return Play(new(deck1), new(deck2), recursive);
+#pragma warning restore IDE0306
 
         static int Play(Queue<int> deck1, Queue<int> deck2, bool recursive)
         {

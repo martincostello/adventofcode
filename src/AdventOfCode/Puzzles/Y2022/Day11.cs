@@ -158,7 +158,9 @@ public sealed class Day11 : Puzzle
     {
         public int Inspections { get; private set; }
 
+#pragma warning disable IDE0306
         public Queue<long> Items { get; } = new(items);
+#pragma warning restore IDE0306
 
         public Func<long, Monkey> Next { get; set; } = default!;
 

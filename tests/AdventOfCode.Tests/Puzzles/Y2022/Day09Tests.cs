@@ -116,7 +116,7 @@ public sealed class Day09Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
 
         return testCases;
 
-        static Point[] EmptyPoints(int count) => Enumerable.Repeat(Point.Empty, count).ToArray();
+        static Point[] EmptyPoints(int count) => [.. Enumerable.Repeat(Point.Empty, count)];
 
         static IEnumerable<Point> Points(params Point[] points) => points;
     }

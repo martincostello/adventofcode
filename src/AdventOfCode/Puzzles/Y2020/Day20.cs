@@ -602,7 +602,7 @@ public sealed class Day20 : Puzzle
         /// <returns>
         /// The right edge of the tile.
         /// </returns>
-        public string Right() => [.. Grid.Select((p) => p[^1])];
+        public string Right() => new([.. Grid.Select((p) => p[^1])]);
 
         /// <summary>
         /// Tries to align the other tile to this tile's edge.
