@@ -262,11 +262,10 @@ public sealed class Day11 : Puzzle
         /// </returns>
         internal List<Element> GetOrphansOnFloor(int floor)
         {
-            return State[floor]
+            return [.. State[floor]
                 .GroupBy((p) => p.Name)
                 .Where((p) => p.ExactCount(1))
-                .SelectMany((p) => p)
-                .ToList();
+                .SelectMany((p) => p)];
         }
     }
 

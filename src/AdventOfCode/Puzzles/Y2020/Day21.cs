@@ -104,8 +104,7 @@ public sealed class Day21 : Puzzle
 
         int count = occurrences.Keys
             .Where((p) => !allergicIngredients.Contains(p))
-            .Select((p) => occurrences[p])
-            .Sum();
+            .Sum((p) => occurrences[p]);
 
         var sortedAllergens = allergensForIngredients
             .OrderBy((p) => p.Value)

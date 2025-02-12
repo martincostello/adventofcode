@@ -68,10 +68,9 @@ public sealed class Day11 : Puzzle
 
                 int monkey = Parse<int>(monkeyLine);
 
-                long[] items = observations[i + 1][ItemsPrefix.Length..]
+                long[] items = [.. observations[i + 1][ItemsPrefix.Length..]
                     .Split(", ")
-                    .Select(Parse<long>)
-                    .ToArray();
+                    .Select(Parse<long>)];
 
                 long divisor = Parse<long>(testValue);
                 commonDivisor *= divisor;
@@ -128,9 +127,7 @@ public sealed class Day11 : Puzzle
                 monkey.Next = (p) => p % divisor == 0 ? recipientForTrue : recipientForFalse;
             }
 
-            return monkeys.Values
-                .Select((p) => p.Monkey)
-                .ToArray();
+            return [.. monkeys.Values.Select((p) => p.Monkey)];
         }
     }
 
@@ -161,7 +158,10 @@ public sealed class Day11 : Puzzle
     {
         public int Inspections { get; private set; }
 
+#pragma warning disable IDE0306
+        // HACK https://github.com/dotnet/roslyn/issues/77177
         public Queue<long> Items { get; } = new(items);
+#pragma warning restore IDE0306
 
         public Func<long, Monkey> Next { get; set; } = default!;
 

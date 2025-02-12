@@ -34,14 +34,13 @@ public sealed class Day04 : Puzzle
 
         if (isValid && version == 2)
         {
-            string[] sorted = words
+            string[] sorted = [.. words
                 .Select((p) =>
                 {
                     Span<char> span = p.ToCharArray();
                     span.Sort();
                     return span.ToString();
-                })
-                .ToArray();
+                })];
 
             isValid = sorted.Distinct().ExactCount(words.Length);
         }

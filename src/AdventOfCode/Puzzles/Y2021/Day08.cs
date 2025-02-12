@@ -69,40 +69,40 @@ public sealed class Day08 : Puzzle
 
                 if (key is { } value)
                 {
-                    digits[value] = new(signal);
+                    digits[value] = [.. signal];
                 }
             }
 
             // 3 is the same as 7 plus two other elements
-            digits[3] = new(signals
+            digits[3] = [.. signals
                 .Where((p) => p.Length == 5)
-                .Single((p) => digits[7].IsSubsetOf(p)));
+                .Single((p) => digits[7].IsSubsetOf(p))];
 
             // 9 is the same as 3 plus one other element
-            digits[9] = new(signals
+            digits[9] = [.. signals
                 .Where((p) => p.Length == 6)
-                .Single((p) => digits[3].IsSubsetOf(p)));
+                .Single((p) => digits[3].IsSubsetOf(p))];
 
             // 0 is the only remaining unknown signal that contains 7's elements
-            digits[0] = new(signals
+            digits[0] = [.. signals
                 .Where((p) => p.Length == 6)
                 .Where((p) => digits[7].IsSubsetOf(p))
-                .Single((p) => !digits.Any((r) => r.Value.SetEquals(p))));
+                .Single((p) => !digits.Any((r) => r.Value.SetEquals(p)))];
 
             // 6 is the only remaining signal with six elements
-            digits[6] = new(signals
+            digits[6] = [.. signals
                 .Where((p) => p.Length == 6)
-                .Single((p) => !digits.Any((r) => r.Value.SetEquals(p))));
+                .Single((p) => !digits.Any((r) => r.Value.SetEquals(p)))];
 
             // 5 is a proper subset of 6
-            digits[5] = new(signals
+            digits[5] = [.. signals
                 .Where((p) => p.Length == 5)
-                .Single((p) => new HashSet<char>(p).IsProperSubsetOf(digits[6])));
+                .Single((p) => new HashSet<char>(p).IsProperSubsetOf(digits[6]))];
 
             // 2 is the only remaining signal with 5 elements
-            digits[2] = new(signals
+            digits[2] = [.. signals
                 .Where((p) => p.Length == 5)
-                .Single((p) => !digits.Any((r) => r.Value.SetEquals(p))));
+                .Single((p) => !digits.Any((r) => r.Value.SetEquals(p)))];
 
             int[] output = new int[numbers.Length];
 

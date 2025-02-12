@@ -32,7 +32,7 @@ internal sealed class IntcodeVM
     /// <param name="size">The optional amount of memory to allocate.</param>
     internal IntcodeVM(IEnumerable<long> instructions, int? size = null)
     {
-        _memory = instructions.ToArray();
+        _memory = [.. instructions];
 
         if (size.HasValue)
         {

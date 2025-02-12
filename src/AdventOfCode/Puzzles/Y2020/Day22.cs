@@ -35,16 +35,17 @@ public sealed class Day22 : Puzzle
         var deck1 = startingDeck
             .Skip(1)
             .Take(index - 1)
-            .Select(Parse<int>)
-            .ToList();
+            .Select(Parse<int>);
 
         var deck2 = startingDeck
             .Skip(index + 2)
             .TakeWhile((p) => !string.IsNullOrEmpty(p))
-            .Select(Parse<int>)
-            .ToList();
+            .Select(Parse<int>);
 
-        return Play(new Queue<int>(deck1), new Queue<int>(deck2), recursive);
+#pragma warning disable IDE0306
+        // HACK https://github.com/dotnet/roslyn/issues/77177
+        return Play(new(deck1), new(deck2), recursive);
+#pragma warning restore IDE0306
 
         static int Play(Queue<int> deck1, Queue<int> deck2, bool recursive)
         {

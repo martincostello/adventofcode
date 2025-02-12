@@ -141,7 +141,7 @@ public sealed class Day20 : Puzzle
 
                 if (activationInput is ConjunctionModule conjunction)
                 {
-                    inputs = new(conjunction.Inputs.Keys);
+                    inputs = [.. conjunction.Inputs.Keys];
 
                     var activationMinima = new Dictionary<Module, long>(inputs.Count);
 

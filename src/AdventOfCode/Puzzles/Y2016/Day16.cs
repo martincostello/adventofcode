@@ -78,7 +78,7 @@ public sealed class Day16 : Puzzle
             }
             else
             {
-                data = new List<char>(checksum);
+                data = [.. checksum];
             }
 
             builder.Clear();

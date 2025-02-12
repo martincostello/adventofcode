@@ -40,7 +40,7 @@ public sealed class Day08 : Puzzle
         if (asGhost)
         {
             destination = (p) => p.EndsWith('Z');
-            locations = network.Edges.Keys.Where((p) => p.EndsWith('A')).ToList();
+            locations = [.. network.Edges.Keys.Where((p) => p.EndsWith('A'))];
         }
         else
         {

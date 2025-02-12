@@ -39,7 +39,7 @@ public sealed class Day09 : Puzzle
 
             while (!sequence.All((p) => p is 0))
             {
-                sequence = sequence.Pairwise((x, y) => y - x).ToList();
+                sequence = [.. sequence.Pairwise((x, y) => y - x)];
                 sequences.Add(sequence);
             }
 

@@ -72,7 +72,7 @@ public sealed class Day07 : Puzzle
         {
             (string hand, string bid) = value.Bifurcate(' ');
 
-            int[] cards = hand.Select((p) => scoreMap[p]).ToArray();
+            int[] cards = [.. hand.Select((p) => scoreMap[p])];
 
             var counts = cards
                 .CountBy((p) => p)

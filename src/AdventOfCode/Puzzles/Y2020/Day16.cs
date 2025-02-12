@@ -102,7 +102,7 @@ public sealed class Day16 : Puzzle
 
         foreach (string key in rules.Keys)
         {
-            possibleIndexes[key] = new List<int>(allIndexes);
+            possibleIndexes[key] = [.. allIndexes];
         }
 
         var indexes = new Dictionary<int, string>();

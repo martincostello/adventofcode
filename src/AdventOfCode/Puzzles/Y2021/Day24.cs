@@ -69,10 +69,7 @@ public sealed class Day24 : Puzzle
             output[x] = maximumValue ? Math.Min(9, 9 - y) : Math.Max(1, 1 - y);
         }
 
-        int[] digits = output
-            .OrderBy((p) => p.Key)
-            .Select((p) => p.Value)
-            .ToArray();
+        int[] digits = [.. output.OrderBy((p) => p.Key).Select((p) => p.Value)];
 
         return Maths.FromDigits<long>(digits);
     }

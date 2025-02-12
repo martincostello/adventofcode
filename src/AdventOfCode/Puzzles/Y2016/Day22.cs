@@ -70,7 +70,7 @@ public sealed class Day22 : Puzzle
 
         Node emptyNode = nodes.First((p) => p.Used == 0);
 
-        int minimumSize = nodes.Select((p) => p.Size).Min();
+        int minimumSize = nodes.Min((p) => p.Size);
 
         const char Available = '.';
         const char Empty = '_';

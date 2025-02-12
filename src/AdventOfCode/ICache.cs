@@ -17,5 +17,5 @@ public interface ICache
     /// <returns>
     /// A <see cref="Task{TResult}"/> that represents the asynchronous operation which returns the value associated with the specified key.
     /// </returns>
-    Task<TItem> GetOrCreateAsync<TItem>(object key, Func<Task<TItem>> factory);
+    public Task<TItem> GetOrCreateAsync<TItem>(object key, Func<Task<TItem>> factory);
 }

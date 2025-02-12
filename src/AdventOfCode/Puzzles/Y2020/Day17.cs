@@ -249,9 +249,7 @@ public sealed class Day17 : Puzzle
                 visualization = WriteState(currentState, logger);
             }
 
-            int activeCubes = currentState.Values
-                .Where((p) => p == Active)
-                .Count();
+            int activeCubes = currentState.Values.Count((p) => p == Active);
 
             return (activeCubes, visualization);
 

@@ -41,7 +41,7 @@ public sealed class Day12 : Puzzle
             countList = string.Join(',', Enumerable.Repeat(countList, 5));
         }
 
-        int[] counts = countList.Split(',').Select(Parse<int>).ToArray();
+        int[] counts = [.. countList.Split(',').Select(Parse<int>)];
         int actual = values.Count(Damaged);
         int desired = counts.Sum();
 
@@ -61,7 +61,7 @@ public sealed class Day12 : Puzzle
     /// The sum of the counts of the possible spring arrangements.
     /// </returns>
     public static int Analyze(IList<string> records, bool unfold, CancellationToken cancellationToken)
-        => records.Select((p) => Analyze(p, unfold, cancellationToken)).Sum();
+        => records.Sum((p) => Analyze(p, unfold, cancellationToken));
 
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)

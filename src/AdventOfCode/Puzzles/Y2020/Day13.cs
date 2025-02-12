@@ -30,11 +30,10 @@ public sealed class Day13 : Puzzle
     {
         int timestamp = Parse<int>(notes[0]);
 
-        int[] buses = notes[1]
+        int[] buses = [.. notes[1]
             .Split(',')
             .Where((p) => p is not "x")
-            .Select(Parse<int>)
-            .ToArray();
+            .Select(Parse<int>)];
 
         var nextBusesInMinutes = new Dictionary<int, int>(buses.Length);
 

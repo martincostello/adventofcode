@@ -39,9 +39,7 @@ public sealed class Day24 : Puzzle
 
         var costs = new Dictionary<(Point A, Point B), long>();
 
-        Point[] allWaypoints = waypoints
-            .Prepend(origin)
-            .ToArray();
+        Point[] allWaypoints = [.. waypoints.Prepend(origin)];
 
         foreach (Point a in allWaypoints)
         {
