@@ -159,6 +159,7 @@ public sealed class Day11 : Puzzle
         public int Inspections { get; private set; }
 
 #pragma warning disable IDE0306
+// HACK https://github.com/dotnet/roslyn/issues/77177
         public Queue<long> Items { get; } = new(items);
 #pragma warning restore IDE0306
 

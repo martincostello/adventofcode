@@ -43,6 +43,7 @@ public sealed class Day22 : Puzzle
             .Select(Parse<int>);
 
 #pragma warning disable IDE0306
+// HACK https://github.com/dotnet/roslyn/issues/77177
         return Play(new(deck1), new(deck2), recursive);
 #pragma warning restore IDE0306
 
