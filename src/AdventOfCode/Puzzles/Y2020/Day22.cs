@@ -32,17 +32,17 @@ public sealed class Day22 : Puzzle
         // With help from https://github.com/DanaL/AdventOfCode/blob/main/2020/Day22.cs for part 2
         int index = startingDeck.IndexOf(string.Empty);
 
-        var deck1 = [.. startingDeck
+        var deck1 = startingDeck
             .Skip(1)
             .Take(index - 1)
-            .Select(Parse<int>)];
+            .Select(Parse<int>);
 
-        var deck2 = [.. startingDeck
+        var deck2 = startingDeck
             .Skip(index + 2)
             .TakeWhile((p) => !string.IsNullOrEmpty(p))
-            .Select(Parse<int>)];
+            .Select(Parse<int>);
 
-        return Play(new Queue<int>(deck1), new Queue<int>(deck2), recursive);
+        return Play(new(deck1), new(deck2), recursive);
 
         static int Play(Queue<int> deck1, Queue<int> deck2, bool recursive)
         {

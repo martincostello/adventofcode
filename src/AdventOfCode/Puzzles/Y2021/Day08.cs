@@ -84,7 +84,7 @@ public sealed class Day08 : Puzzle
                 .Single((p) => digits[3].IsSubsetOf(p))];
 
             // 0 is the only remaining unknown signal that contains 7's elements
-            digits[0] = [signals
+            digits[0] = [.. signals
                 .Where((p) => p.Length == 6)
                 .Where((p) => digits[7].IsSubsetOf(p))
                 .Single((p) => !digits.Any((r) => r.Value.SetEquals(p)))];

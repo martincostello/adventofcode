@@ -158,7 +158,7 @@ public sealed class Day11 : Puzzle
     {
         public int Inspections { get; private set; }
 
-        public Queue<long> Items { get; } = [.. items];
+        public Queue<long> Items { get; } = new(items);
 
         public Func<long, Monkey> Next { get; set; } = default!;
 
