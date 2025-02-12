@@ -114,9 +114,7 @@ public sealed class Day03 : Puzzle
     /// </returns>
     private static (Square[,] Fabric, IList<Claim> Claims) ParseFabric(IEnumerable<string> claims)
     {
-        IList<Claim> fabricClaims = claims
-            .Select(Claim.Parse)
-            .ToList();
+        IList<Claim> fabricClaims = [.. claims.Select(Claim.Parse)];
 
         int totalWidth = fabricClaims.Max((p) => p.X + p.Width);
         int totalHeight = fabricClaims.Max((p) => p.Y + p.Height);

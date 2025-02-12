@@ -20,5 +20,5 @@ public interface IGraph<T>
     /// <returns>
     /// The neighbors of the specified node.
     /// </returns>
-    IEnumerable<T> Neighbors(T id);
+    public IEnumerable<T> Neighbors(T id);
 }

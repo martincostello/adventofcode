@@ -31,7 +31,7 @@ public sealed class Day09 : Puzzle
     public static int Move(IList<string> moves, int knots)
     {
         var directions = Parse(moves);
-        var rope = new Rope(Enumerable.Repeat(Point.Empty, knots).ToArray());
+        var rope = new Rope([.. Enumerable.Repeat(Point.Empty, knots)]);
 
         var positions = new HashSet<Point>(moves.Count)
         {

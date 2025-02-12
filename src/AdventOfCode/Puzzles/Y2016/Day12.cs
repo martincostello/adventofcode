@@ -43,7 +43,7 @@ public sealed class Day12 : Puzzle
         Func<int, bool>? signal = null,
         CancellationToken cancellationToken = default)
     {
-        instructions = new List<string>(instructions); // Copy before possible modification
+        instructions = [.. instructions]; // Copy before possible modification
 
         var registers = new Dictionary<char, int>()
         {

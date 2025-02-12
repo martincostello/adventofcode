@@ -101,7 +101,7 @@ public sealed class Day17 : Puzzle
 
         private Rock(IReadOnlyList<Point> points)
         {
-            Points = new List<Point>(points);
+            Points = [.. points];
         }
 
         public int Left => Points.Min((p) => p.X);
@@ -240,7 +240,7 @@ public sealed class Day17 : Puzzle
                 _rocks.RemoveWhere((p) => p.Y < rowsToDelete);
 
                 var delta = Directions.Down * rowsToDelete;
-                _rocks = _rocks.Select((p) => p - delta).ToHashSet();
+                _rocks = [.. _rocks.Select((p) => p - delta)];
             }
         }
     }

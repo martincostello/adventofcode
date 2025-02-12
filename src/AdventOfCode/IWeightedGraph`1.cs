@@ -18,5 +18,5 @@ public interface IWeightedGraph<T> : IGraph<T>, IEqualityComparer<T>
     /// <returns>
     /// The cost of moving from node <paramref name="a"/> to node <paramref name="b"/>.
     /// </returns>
-    long Cost(T a, T b);
+    public long Cost(T a, T b);
 }

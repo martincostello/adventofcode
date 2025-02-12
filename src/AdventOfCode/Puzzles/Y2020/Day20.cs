@@ -512,7 +512,7 @@ public sealed class Day20 : Puzzle
         /// Flips the tile's grid around the Y axis.
         /// </summary>
         public void Flip()
-            => Grid = Grid.Select((p) => p.Mirror()).ToArray();
+            => Grid = [.. Grid.Select((p) => p.Mirror())];
 
         /// <summary>
         /// Returns whether the specified tile is a neighbor of this tile.
@@ -590,7 +590,7 @@ public sealed class Day20 : Puzzle
         /// </returns>
         public string Left()
         {
-            char[] reversed = Grid.Select((p) => p[0]).ToArray();
+            char[] reversed = [.. Grid.Select((p) => p[0])];
             Array.Reverse(reversed);
 
             return new(reversed);
@@ -602,7 +602,7 @@ public sealed class Day20 : Puzzle
         /// <returns>
         /// The right edge of the tile.
         /// </returns>
-        public string Right() => new(Grid.Select((p) => p[^1]).ToArray());
+        public string Right() => [.. Grid.Select((p) => p[^1])];
 
         /// <summary>
         /// Tries to align the other tile to this tile's edge.

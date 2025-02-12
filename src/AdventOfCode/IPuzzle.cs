@@ -11,7 +11,7 @@ public interface IPuzzle
     /// <summary>
     /// Gets or sets a value indicating whether the puzzle should be run verbosely.
     /// </summary>
-    bool Verbose { get; set; }
+    public bool Verbose { get; set; }
 
     /// <summary>
     /// Solves the puzzle given the specified input as an asynchronous operation.
@@ -22,5 +22,5 @@ public interface IPuzzle
     /// A <see cref="Task{TResult}"/> representing the asynchronous
     /// operation which returns the solution to the puzzle.
     /// </returns>
-    Task<PuzzleResult> SolveAsync(string[] args, CancellationToken cancellationToken);
+    public Task<PuzzleResult> SolveAsync(string[] args, CancellationToken cancellationToken);
 }

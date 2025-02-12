@@ -157,10 +157,7 @@ public sealed class Day12 : Puzzle
 
             Id = Parse<int>(split[0]);
 
-            EdgeIds = split
-                .Skip(2)
-                .Select((p) => Parse<int>(p.TrimEnd(',')))
-                .ToList();
+            EdgeIds = [.. split.Skip(2).Select((p) => Parse<int>(p.TrimEnd(',')))];
         }
 
         /// <summary>

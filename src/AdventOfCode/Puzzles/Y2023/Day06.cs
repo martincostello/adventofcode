@@ -42,13 +42,11 @@ public sealed class Day06 : Puzzle
         }
         else
         {
-            times = timeValues.Split(' ', StringSplitOptions.RemoveEmptyEntries).Select(Parse<long>).ToList();
-            distances = distanceValues.Split(' ', StringSplitOptions.RemoveEmptyEntries).Select(Parse<long>).ToList();
+            times = [.. timeValues.Split(' ', StringSplitOptions.RemoveEmptyEntries).Select(Parse<long>)];
+            distances = [.. distanceValues.Split(' ', StringSplitOptions.RemoveEmptyEntries).Select(Parse<long>)];
         }
 
-        List<(long Time, long Distance)> timesAndDistances = times
-            .Zip(distances, (t, d) => (t, d))
-            .ToList();
+        List<(long Time, long Distance)> timesAndDistances = [.. times.Zip(distances, (t, d) => (t, d))];
 
         var ways = new List<long>();
 

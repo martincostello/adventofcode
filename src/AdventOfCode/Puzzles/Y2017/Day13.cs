@@ -33,8 +33,8 @@ public sealed class Day13 : Puzzle
             .Select((p) => new { Layer = Parse<int>(p.First), Range = Parse<int>(p.Second.Trim()) })
             .ToList();
 
-        int[] depths = configuration.Select((p) => p.Layer).ToArray();
-        int[] ranges = configuration.Select((p) => p.Range).ToArray();
+        int[] depths = [.. configuration.Select((p) => p.Layer)];
+        int[] ranges = [.. configuration.Select((p) => p.Range)];
 
         int severity = 0;
 
@@ -69,8 +69,8 @@ public sealed class Day13 : Puzzle
             .Select((p) => new { Layer = Parse<int>(p.First), Range = Parse<int>(p.Second.Trim()) })
             .ToList();
 
-        int[] depths = configuration.Select((p) => p.Layer).ToArray();
-        int[] ranges = configuration.Select((p) => p.Range).ToArray();
+        int[] depths = [.. configuration.Select((p) => p.Layer)];
+        int[] ranges = [.. configuration.Select((p) => p.Range)];
 
         bool caught = false;
         int delay = 0;

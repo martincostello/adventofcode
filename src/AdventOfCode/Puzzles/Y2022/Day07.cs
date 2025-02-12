@@ -49,8 +49,7 @@ public sealed class Day07 : Puzzle
 
         long sizeOfSmallestDirectoryToDelete = directories
             .Where((p) => p.TotalSize >= required)
-            .Select((p) => p.TotalSize)
-            .Min();
+            .Min((p) => p.TotalSize);
 
         return (totalSizeOfDirectoriesLargerThanLimit, sizeOfSmallestDirectoryToDelete);
 

@@ -17,12 +17,12 @@ public interface ILogger
     /// <returns>
     /// The visualization of the grid.
     /// </returns>
-    string WriteGrid(bool[,] array, char falseChar, char trueChar);
+    public string WriteGrid(bool[,] array, char falseChar, char trueChar);
 
     /// <summary>
     /// Writes a message to the log.
     /// </summary>
     /// <param name="format">The format string to use to generate the message.</param>
     /// <param name="args">The arguments for the format string.</param>
-    void WriteLine(string format, params object[] args);
+    public void WriteLine(string format, params object[] args);
 }

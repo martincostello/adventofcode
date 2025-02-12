@@ -56,8 +56,7 @@ public sealed class Day03 : Puzzle
                     string second = inventory[(inventory.Length / 2)..];
                     return GetCommonItemType(first, second);
                 })
-                .Select(GetPriority)
-                .Sum();
+                .Sum(GetPriority);
         }
 
         static char GetCommonItemType(params string[] inventories)

@@ -32,9 +32,7 @@ public sealed class Day14 : Puzzle
             string input = $"{key}-{i}";
             string knotHash = Day10.ComputeHash(input);
 
-            int[] numbers = knotHash
-                .Select((p) => Parse<int>(p.ToString(), NumberStyles.HexNumber))
-                .ToArray();
+            int[] numbers = [.. knotHash.Select((p) => Parse<int>(p.ToString(), NumberStyles.HexNumber))];
 
             var bits = numbers
                 .Select(BitConverter.GetBytes)

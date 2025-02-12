@@ -125,7 +125,7 @@ public sealed class Day18 : Puzzle
     }
 
     private static List<SnailPair> ParseRaw(IList<string> numbers)
-        => numbers.Select(ParseRaw).ToList();
+        => [.. numbers.Select(ParseRaw)];
 
     private static SnailPair ParseRaw(string number)
     {

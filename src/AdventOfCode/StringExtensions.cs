@@ -271,7 +271,7 @@ internal static class StringExtensions
         }
         else
         {
-            return value.Split(separator, options).Select(Puzzle.Parse<T>).ToList();
+            return [.. value.Split(separator, options).Select(Puzzle.Parse<T>)];
         }
     }
 

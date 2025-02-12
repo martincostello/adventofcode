@@ -109,7 +109,7 @@ public sealed class Day21 : Puzzle
 
         foreach (var permutation in permutations)
         {
-            potentialRings.Add(permutation.ToArray());
+            potentialRings.Add([.. permutation]);
         }
 
         var costsToLose = new List<int>((potentialArmor.Length + potentialRings.Count + potentialWeapons.Length) / 2);

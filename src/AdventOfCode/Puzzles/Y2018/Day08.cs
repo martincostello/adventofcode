@@ -28,7 +28,7 @@ public sealed class Day08 : Puzzle
     /// </returns>
     public static (long SumOfMetadata, long RootNodeValue) ParseTree(IEnumerable<int> data)
     {
-        int[] span = data.ToArray();
+        int[] span = [.. data];
 
         var root = Parse(span, out _);
 

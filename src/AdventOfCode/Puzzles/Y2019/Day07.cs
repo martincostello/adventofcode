@@ -43,7 +43,7 @@ public sealed class Day07 : Puzzle
         foreach (var permutation in Maths.GetPermutations(seed))
         {
             long signal = 0;
-            long[] phases = permutation.Select((p) => (long)p).ToArray();
+            long[] phases = [.. permutation.Select((p) => (long)p)];
 
             if (!useFeedback)
             {

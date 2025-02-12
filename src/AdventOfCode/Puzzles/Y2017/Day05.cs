@@ -29,7 +29,7 @@ public sealed class Day05 : Puzzle
     /// </returns>
     public static int Execute(IEnumerable<int> program, int version)
     {
-        int[] jumps = program.ToArray();
+        int[] jumps = [.. program];
 
         int counter = 0;
         int index = 0;
