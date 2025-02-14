@@ -1,4 +1,4 @@
-name: code-scan
+name: codeql
 
 on:
   push:
@@ -15,8 +15,7 @@ on:
 permissions: {}
 
 jobs:
-  code-ql:
-
+  analysis:
     runs-on: ubuntu-latest
 
     permissions:
@@ -27,7 +26,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        language: [ 'csharp', 'javascript' ]
+        language: [ 'actions', 'csharp', 'javascript' ]
 
     steps:
     - name: Checkout repository
@@ -47,3 +46,22 @@ jobs:
       uses: github/codeql-action/analyze@v3
       with:
         category: '/language:${{ matrix.language }}'
+
+  codeql:
+    if: ${{ !cancelled() }}
+    needs: [ analysis ]
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Report status
+      shell: bash
+      env:
+        SCAN_SUCCESS: ${{ !contains(needs.*.result, 'failure') && !contains(needs.*.result, 'cancelled') }}
+      run: |
+        if [ "${SCAN_SUCCESS}" == "true" ]
+        then
+          echo 'CodeQL analysis successful ✅'
+        else
+          echo 'CodeQL analysis failed ❌'
+          exit 1
+        fi
