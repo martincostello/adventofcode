@@ -1,8 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <Description>Tests for AdventOfCode.</Description>
-    <IsTestProject>true</IsTestProject>
-    <NoWarn>$(NoWarn);CA1054;CA1707;CA1711;CA1812;CA1861;CA2007;CA2234;SA1600;xUnit1004</NoWarn>
+    <NoWarn>$(NoWarn);CA1054;CA2234;xUnit1004</NoWarn>
     <OutputType>Exe</OutputType>
     <RootNamespace>MartinCostello.AdventOfCode</RootNamespace>
     <TargetFramework>net9.0</TargetFramework>
@@ -25,9 +24,5 @@
     <PackageReference Include="Shouldly" />
     <PackageReference Include="xunit.runner.visualstudio" />
     <PackageReference Include="xunit.v3" />
-  </ItemGroup>
-  <ItemGroup>
-    <Using Include="Shouldly" />
-    <Using Include="Xunit" />
   </ItemGroup>
 </Project>
