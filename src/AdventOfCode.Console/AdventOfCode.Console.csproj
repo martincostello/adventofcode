@@ -5,8 +5,6 @@
     <OptimizationPreference>Speed</OptimizationPreference>
     <OutputType>Exe</OutputType>
     <RootNamespace>MartinCostello.AdventOfCode.Console</RootNamespace>
-    <PublicSign>false</PublicSign>
-    <SignAssembly>false</SignAssembly>
     <TargetFramework>net9.0</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
