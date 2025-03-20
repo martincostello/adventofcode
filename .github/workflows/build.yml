@@ -114,7 +114,7 @@ jobs:
       run: ./build.ps1
 
     - name: Publish lambda
-      uses: actions/upload-artifact@4cec3d8aa04e39d1a68397de0c4cd6fb9dce8ec1 # v4.6.1
+      uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
       if: runner.os == 'Linux' && success()
       with:
         name: lambda
@@ -147,7 +147,7 @@ jobs:
         subject-name: ${{ steps.publish-container.outputs.container-image }}
 
     - name: Publish screenshots
-      uses: actions/upload-artifact@4cec3d8aa04e39d1a68397de0c4cd6fb9dce8ec1 # v4.6.1
+      uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
       if: ${{ !cancelled() }}
       with:
         name: screenshots-${{ matrix.os-name }}
@@ -155,7 +155,7 @@ jobs:
         if-no-files-found: ignore
 
     - name: Publish traces
-      uses: actions/upload-artifact@4cec3d8aa04e39d1a68397de0c4cd6fb9dce8ec1 # v4.6.1
+      uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
       if: ${{ !cancelled() }}
       with:
         name: traces-${{ matrix.os-name }}
@@ -163,7 +163,7 @@ jobs:
         if-no-files-found: ignore
 
     - name: Publish videos
-      uses: actions/upload-artifact@4cec3d8aa04e39d1a68397de0c4cd6fb9dce8ec1 # v4.6.1
+      uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
       if: ${{ !cancelled() }}
       with:
         name: videos-${{ matrix.os-name }}
