@@ -72,7 +72,7 @@ if ($installDotNetSdk -eq $true) {
 
 Write-Information "Building solution..."
 
-& $dotnet build ./AdventOfCode.sln
+& $dotnet build ./AdventOfCode.slnx
 
 if ($LASTEXITCODE -ne 0) {
     throw "dotnet build failed with exit code $LASTEXITCODE"
@@ -88,17 +88,10 @@ if ($SkipTests -eq $false) {
         $additionalArgs += "GitHubActions;report-warnings=false"
     }
 
-    $testProjects = @(
-        (Join-Path $solutionPath "tests" "AdventOfCode.Tests" "AdventOfCode.Tests.csproj")
-    )
+    & $dotnet test --configuration "Release" $additionalArgs
 
-    ForEach ($testProject in $testProjects) {
-
-        & $dotnet test $testProject --configuration "Release" $additionalArgs
-
-        if ($LASTEXITCODE -ne 0) {
-            throw "dotnet test failed with exit code $LASTEXITCODE"
-        }
+    if ($LASTEXITCODE -ne 0) {
+        throw "dotnet test failed with exit code $LASTEXITCODE"
     }
 }
 
