@@ -1,0 +1,55 @@
+<Solution>
+  <Folder Name="/Solution Items/">
+    <File Path=".editorconfig" />
+    <File Path=".gitattributes" />
+    <File Path=".gitignore" />
+    <File Path=".vsconfig" />
+    <File Path="AdventOfCode.ruleset" />
+    <File Path="benchmark-crank.ps1" />
+    <File Path="benchmark.ps1" />
+    <File Path="benchmark.yml" />
+    <File Path="build.ps1" />
+    <File Path="CODE_OF_CONDUCT.md" />
+    <File Path="crank.ps1" />
+    <File Path="crank.yml" />
+    <File Path="Directory.Build.props" />
+    <File Path="Directory.Packages.props" />
+    <File Path="exclusion.dic" />
+    <File Path="global.json" />
+    <File Path="LICENSE" />
+    <File Path="NuGet.config" />
+    <File Path="README.md" />
+    <File Path="stylecop.json" />
+    <File Path="tsconfig.json" />
+  </Folder>
+  <Folder Name="/Solution Items/.github/">
+    <File Path=".github/CONTRIBUTING.md" />
+    <File Path=".github/dependabot.yml" />
+    <File Path=".github/ISSUE_TEMPLATE.md" />
+    <File Path=".github/PULL_REQUEST_TEMPLATE.md" />
+  </Folder>
+  <Folder Name="/Solution Items/.github/workflows/">
+    <File Path=".github/workflows/benchmark.yml" />
+    <File Path=".github/workflows/build.yml" />
+    <File Path=".github/workflows/dependency-review.yml" />
+    <File Path=".github/workflows/lighthouse.yml" />
+    <File Path=".github/workflows/update-dotnet-sdk.yml" />
+    <File Path=".github/workflows/update-static-assets.yml" />
+  </Folder>
+  <Folder Name="/Solution Items/.vscode/">
+    <File Path=".vscode/extensions.json" />
+    <File Path=".vscode/launch.json" />
+    <File Path=".vscode/settings.json" />
+    <File Path=".vscode/tasks.json" />
+  </Folder>
+  <Folder Name="/src/">
+    <Project Path="src/AdventOfCode.Console/AdventOfCode.Console.csproj" />
+    <Project Path="src/AdventOfCode.Resources/AdventOfCode.Resources.csproj" />
+    <Project Path="src/AdventOfCode.Site/AdventOfCode.Site.csproj" />
+    <Project Path="src/AdventOfCode/AdventOfCode.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/AdventOfCode.Benchmarks/AdventOfCode.Benchmarks.csproj" />
+    <Project Path="tests/AdventOfCode.Tests/AdventOfCode.Tests.csproj" />
+  </Folder>
+</Solution>
