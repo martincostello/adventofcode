@@ -6,11 +6,15 @@
       "VARIANT": "5.0"
     }
   },
-  "extensions": [
-    "editorconfig.editorconfig",
-    "ms-dotnettools.csharp",
-    "ms-vscode.PowerShell"
-  ],
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "editorconfig.editorconfig",
+        "ms-dotnettools.csharp",
+        "ms-vscode.PowerShell"
+      ]
+    }
+  },
   "forwardPorts": [ 5000 ],
   "portsAttributes":{
     "5000": {
