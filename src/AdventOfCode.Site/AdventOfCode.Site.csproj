@@ -14,7 +14,6 @@
     <TargetFramework>net10.0</TargetFramework>
     <TypeScriptCompileBlocked>true</TypeScriptCompileBlocked>
     <TypeScriptToolsVersion>latest</TypeScriptToolsVersion>
-    <ContainerBaseImage>mcr.microsoft.com/dotnet/nightly/runtime-deps:$([MSBuild]::GetTargetFrameworkVersion('$(TargetFramework)'))-preview-$(ContainerFamily)</ContainerBaseImage>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(PublishForAWSLambda)' == 'true' ">
     <AssemblyName>bootstrap</AssemblyName>
