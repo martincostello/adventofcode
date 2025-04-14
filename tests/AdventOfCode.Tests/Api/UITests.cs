@@ -5,6 +5,8 @@ using Microsoft.Playwright;
 
 namespace MartinCostello.AdventOfCode.Api;
 
+[Category("Puzzle")]
+[Category("UI")]
 [Collection<HttpServerCollection>]
 public class UITests : IntegrationTest, IClassFixture<PlaywrightFixture>
 {

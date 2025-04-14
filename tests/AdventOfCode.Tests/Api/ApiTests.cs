@@ -14,6 +14,7 @@ namespace MartinCostello.AdventOfCode.Api;
 /// </summary>
 /// <param name="fixture">The fixture to use.</param>
 /// <param name="outputHelper">The test output helper to use.</param>
+[Category("Puzzle")]
 [Collection<HttpServerCollection>]
 public class ApiTests(HttpServerFixture fixture, ITestOutputHelper outputHelper)
     : IntegrationTest(fixture, outputHelper)

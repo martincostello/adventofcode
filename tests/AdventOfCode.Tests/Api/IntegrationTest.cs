@@ -6,6 +6,7 @@ namespace MartinCostello.AdventOfCode.Api;
 /// <summary>
 /// The base class for integration tests.
 /// </summary>
+[Category("Integration")]
 [Collection<HttpServerCollection>]
 public abstract class IntegrationTest : IDisposable
 {

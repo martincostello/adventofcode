@@ -6,6 +6,7 @@ namespace MartinCostello.AdventOfCode.Puzzles;
 /// <summary>
 /// The class class for puzzle tests.
 /// </summary>
+[Category("Puzzle")]
 public abstract class PuzzleTest
 {
     /// <summary>
