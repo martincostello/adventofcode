@@ -3,8 +3,8 @@
 
 namespace MartinCostello.AdventOfCode.EndToEnd;
 
+[Category("EndToEnd")]
 [Collection<SiteCollection>]
-[Trait("Category", "EndToEnd")]
 public abstract class EndToEndTest(SiteFixture fixture)
 {
     protected virtual CancellationToken CancellationToken => TestContext.Current.CancellationToken;

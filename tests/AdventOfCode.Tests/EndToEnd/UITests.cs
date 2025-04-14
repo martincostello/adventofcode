@@ -5,6 +5,8 @@ using Microsoft.Playwright;
 
 namespace MartinCostello.AdventOfCode.EndToEnd;
 
+[Category("Puzzle")]
+[Category("UI")]
 public class UITests : EndToEndTest, IClassFixture<PlaywrightFixture>
 {
     public UITests(SiteFixture fixture, PlaywrightFixture playwrightFixture, ITestOutputHelper outputHelper)
