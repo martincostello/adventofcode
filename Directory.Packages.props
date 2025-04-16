@@ -11,9 +11,9 @@
     <PackageVersion Include="GitHubActionsTestLogger" Version="2.4.1" />
     <PackageVersion Include="MartinCostello.Logging.XUnit.v3" Version="0.5.1" />
     <PackageVersion Include="MartinCostello.Testing.AwsLambdaTestServer" Version="0.9.0" />
-    <PackageVersion Include="Microsoft.AspNetCore.Mvc.Testing" Version="10.0.0-preview.4.25215.2" />
-    <PackageVersion Include="Microsoft.AspNetCore.OpenApi" Version="10.0.0-preview.4.25215.2" />
-    <PackageVersion Include="Microsoft.Extensions.Caching.Memory" Version="10.0.0-preview.4.25215.3" />
+    <PackageVersion Include="Microsoft.AspNetCore.Mvc.Testing" Version="10.0.0-preview.4.25215.101" />
+    <PackageVersion Include="Microsoft.AspNetCore.OpenApi" Version="10.0.0-preview.4.25215.101" />
+    <PackageVersion Include="Microsoft.Extensions.Caching.Memory" Version="10.0.0-preview.4.25215.101" />
     <PackageVersion Include="Microsoft.ICU.ICU4C.Runtime" Version="72.1.0.3" />
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.13.0" />
     <PackageVersion Include="Microsoft.OpenApi" Version="2.0.0-preview7" />
