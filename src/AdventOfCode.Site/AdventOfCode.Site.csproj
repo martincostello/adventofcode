@@ -25,7 +25,7 @@
   <ItemGroup>
     <PackageReference Include="Amazon.Lambda.AspNetCoreServer.Hosting" />
     <PackageReference Include="Amazon.Lambda.RuntimeSupport" />
-    <PackageReference Include="Microsoft.AspNetCore.OpenApi" GeneratePathProperty="true"  />
+    <PackageReference Include="Microsoft.AspNetCore.OpenApi" />
     <PackageReference Include="Microsoft.TypeScript.MSBuild" PrivateAssets="all" />
     <PackageReference Include="RazorSlices" />
   </ItemGroup>
@@ -58,14 +58,6 @@
   <Target Name="SetAppLocalIcuVersion" BeforeTargets="Compile" Condition=" '$(PublishForAWSLambda)' == 'true' ">
     <ItemGroup>
       <RuntimeHostConfigurationOption Condition=" '%(PackageVersion.Identity)' == 'Microsoft.ICU.ICU4C.Runtime' " Include="System.Globalization.AppLocalIcu" Value="%(PackageVersion.Version)" />
-    </ItemGroup>
-  </Target>
-  <!--
-    HACK Workaround for https://github.com/dotnet/aspnetcore/issues/61037
-  -->
-  <Target Name="DisableCompileTimeOpenApiXmlGenerator" BeforeTargets="CoreCompile">
-    <ItemGroup>
-      <Analyzer Remove="$(PkgMicrosoft_AspNetCore_OpenApi)\analyzers\dotnet\cs\Microsoft.AspNetCore.OpenApi.SourceGenerators.dll" />
     </ItemGroup>
   </Target>
 </Project>
