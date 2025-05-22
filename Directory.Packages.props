@@ -1,6 +1,6 @@
 <Project>
   <ItemGroup>
-    <GlobalPackageReference Include="MartinCostello.BuildKit" Version="0.6.3" />
+    <GlobalPackageReference Include="MartinCostello.BuildKit" Version="0.6.4" />
     <GlobalPackageReference Include="StyleCop.Analyzers" Version="1.2.0-beta.556" PrivateAssets="All" />
     <GlobalPackageReference Include="ReferenceTrimmer" Version="3.3.11" />
   </ItemGroup>
@@ -9,7 +9,7 @@
     <PackageVersion Include="Amazon.Lambda.RuntimeSupport" Version="1.13.0" />
     <PackageVersion Include="BenchmarkDotNet" Version="0.14.0" />
     <PackageVersion Include="GitHubActionsTestLogger" Version="2.4.1" />
-    <PackageVersion Include="MartinCostello.Logging.XUnit.v3" Version="0.5.1" />
+    <PackageVersion Include="MartinCostello.Logging.XUnit.v3" Version="0.6.0" />
     <PackageVersion Include="MartinCostello.Testing.AwsLambdaTestServer" Version="0.9.0" />
     <PackageVersion Include="Microsoft.AspNetCore.Mvc.Testing" Version="9.0.5" />
     <PackageVersion Include="Microsoft.AspNetCore.OpenApi" Version="9.0.5" />
