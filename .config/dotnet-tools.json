@@ -7,6 +7,27 @@
       "commands": [
         "dotnet-lambda"
       ]
+    },
+    "microsoft.crank.agent": {
+      "version": "0.2.0-alpha.25128.2",
+      "commands": [
+        "crank-agent"
+      ],
+      "rollForward": true
+    },
+    "microsoft.crank.controller": {
+      "version": "0.2.0-alpha.25128.2",
+      "commands": [
+        "crank"
+      ],
+      "rollForward": true
+    },
+    "microsoft.crank.pullrequestbot": {
+      "version": "0.2.0-alpha.25128.2",
+      "commands": [
+        "crank-pr"
+      ],
+      "rollForward": true
     }
   }
 }

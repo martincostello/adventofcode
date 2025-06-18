@@ -23,15 +23,15 @@ $repoPath = $PSScriptRoot
 $config = Join-Path $repoPath "crank.yml"
 
 if ($IsWindows) {
-    $agent = Start-Process -FilePath "crank-agent" -WindowStyle Hidden -PassThru
+    $agent = Start-Process -FilePath "dotnet" -ArgumentList @("crank-agent") -PassThru -WindowStyle Hidden
 } else {
-    $agent = Start-Process -FilePath "crank-agent" -PassThru
+    $agent = Start-Process -FilePath "dotnet" -ArgumentList @("crank-agent") -PassThru
 }
 
 Start-Sleep -Seconds 2
 
 try {
-    crank --config $config --scenario $Scenario --profile $Profile $additionalArgs
+    dotnet crank --config $config --scenario $Scenario --profile $Profile $additionalArgs
 }
 finally {
     Stop-Process -InputObject $agent -Force | Out-Null
