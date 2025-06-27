@@ -34,7 +34,7 @@
     "globals": "16.2.0",
     "jest": "30.0.3",
     "linq-to-typescript": "10.0.0",
-    "prettier": "3.6.1",
+    "prettier": "3.6.2",
     "ts-jest": "29.4.0",
     "ts-loader": "9.5.2",
     "ts-md5": "1.3.1",
