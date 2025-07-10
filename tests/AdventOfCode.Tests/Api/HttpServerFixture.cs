@@ -1,6 +1,7 @@
 ﻿// Copyright (c) Martin Costello, 2015. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
+using System.Reflection;
 using System.Security.Cryptography.X509Certificates;
 using MartinCostello.Logging.XUnit;
 using Microsoft.AspNetCore.Hosting;
@@ -76,7 +77,7 @@ public sealed class HttpServerFixture : WebApplicationFactory<Site.Program>, ITe
 
         builder.ConfigureKestrel(
             (p) => p.ConfigureHttpsDefaults(
-                (r) => r.ServerCertificate = X509CertificateLoader.LoadPkcs12FromFile("localhost-dev.pfx", "Pa55w0rd!")));
+                (r) => r.ServerCertificate = LoadDevelopmentCertificate()));
 
         builder.UseEnvironment(Environments.Production);
 
@@ -119,6 +120,18 @@ public sealed class HttpServerFixture : WebApplicationFactory<Site.Program>, ITe
 
             _disposed = true;
         }
+    }
+
+    private static X509Certificate2 LoadDevelopmentCertificate()
+    {
+        var metadata = typeof(HttpServerFixture).Assembly
+            .GetCustomAttributes<AssemblyMetadataAttribute>()
+            .ToArray();
+
+        var fileName = metadata.First((p) => p.Key is "DevCertificateFileName").Value!;
+        var password = metadata.First((p) => p.Key is "DevCertificatePassword").Value;
+
+        return X509CertificateLoader.LoadPkcs12(File.ReadAllBytes(fileName), password);
     }
 
     private void EnsureServer()
