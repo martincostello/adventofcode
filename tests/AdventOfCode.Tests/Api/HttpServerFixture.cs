@@ -128,8 +128,8 @@ public sealed class HttpServerFixture : WebApplicationFactory<Site.Program>, ITe
             .GetCustomAttributes<AssemblyMetadataAttribute>()
             .ToArray();
 
-        var fileName = metadata.First((p) => p.Key is "DevCertificateFileName").Value!;
-        var password = metadata.First((p) => p.Key is "DevCertificatePassword").Value;
+        string fileName = metadata.First((p) => p.Key is "DevCertificateFileName").Value!;
+        string? password = metadata.First((p) => p.Key is "DevCertificatePassword").Value;
 
         return X509CertificateLoader.LoadPkcs12(File.ReadAllBytes(fileName), password);
     }
