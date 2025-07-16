@@ -23,7 +23,7 @@ public class ResourceTests(HttpServerFixture fixture, ITestOutputHelper outputHe
     public async Task Can_Load_Resource_As_Get(string requestUri, string contentType)
     {
         // Arrange
-        using var client = Fixture.CreateClient();
+        using var client = Fixture.CreateHttpClientForApp();
 
         // Act
         using var response = await client.GetAsync(requestUri, CancellationToken);

@@ -20,8 +20,7 @@ public abstract class IntegrationTest : IDisposable
     protected IntegrationTest(HttpServerFixture fixture, ITestOutputHelper outputHelper)
     {
         Fixture = fixture;
-        OutputHelper = outputHelper;
-        Fixture.SetOutputHelper(OutputHelper);
+        Fixture.OutputHelper = OutputHelper = outputHelper;
     }
 
     /// <summary>
@@ -65,9 +64,9 @@ public abstract class IntegrationTest : IDisposable
     {
         if (!_disposed)
         {
-            if (disposing)
+            if (disposing && Fixture is { })
             {
-                Fixture?.ClearOutputHelper();
+                Fixture.OutputHelper = null;
             }
 
             _disposed = true;
