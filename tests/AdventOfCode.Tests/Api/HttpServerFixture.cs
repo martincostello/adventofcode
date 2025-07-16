@@ -42,7 +42,7 @@ public sealed class HttpServerFixture : WebApplicationFactory<Site.Program>, ITe
     {
         get
         {
-            EnsureServer();
+            StartServer();
             return ClientOptions.BaseAddress;
         }
     }
@@ -52,23 +52,30 @@ public sealed class HttpServerFixture : WebApplicationFactory<Site.Program>, ITe
     {
         get
         {
-            EnsureServer();
+            StartServer();
             return _host!.Services!;
         }
     }
 
     /// <summary>
-    /// Clears the current <see cref="ITestOutputHelper"/>.
+    /// Creates an <see cref="HttpClient"/> for use with the application.
     /// </summary>
-    public void ClearOutputHelper()
-        => OutputHelper = null;
+    /// <returns>
+    /// An <see cref="HttpClient"/> configured for use with the application.
+    /// </returns>
+    public HttpClient CreateHttpClientForApp()
+    {
+        var handler = new HttpClientHandler()
+        {
+            CheckCertificateRevocationList = true,
+            ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator,
+        };
 
-    /// <summary>
-    /// Sets the <see cref="ITestOutputHelper"/> to use.
-    /// </summary>
-    /// <param name="value">The <see cref="ITestOutputHelper"/> to use.</param>
-    public void SetOutputHelper(ITestOutputHelper value)
-        => OutputHelper = value;
+        return new HttpClient(handler, disposeHandler: true)
+        {
+            BaseAddress = ServerAddress,
+        };
+    }
 
     /// <inheritdoc />
     protected override void ConfigureWebHost(IWebHostBuilder builder)
@@ -134,7 +141,7 @@ public sealed class HttpServerFixture : WebApplicationFactory<Site.Program>, ITe
         return X509CertificateLoader.LoadPkcs12(File.ReadAllBytes(fileName), password);
     }
 
-    private void EnsureServer()
+    private void StartServer()
     {
         if (_host is null)
         {

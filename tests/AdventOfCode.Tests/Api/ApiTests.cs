@@ -235,7 +235,7 @@ public class ApiTests(HttpServerFixture fixture, ITestOutputHelper outputHelper)
     public async Task Can_Solve_Puzzle(int year, int day, PuzzleDataAttribute testCase)
     {
         // Arrange
-        using var client = Fixture.CreateClient();
+        using var client = Fixture.CreateHttpClientForApp();
         client.Timeout = TimeSpan.FromMinutes(1);
 
         using var content = new MultipartFormDataContent();
@@ -298,7 +298,7 @@ public class ApiTests(HttpServerFixture fixture, ITestOutputHelper outputHelper)
     public async Task Can_Get_Puzzle_Metadata()
     {
         // Arrange
-        using var client = Fixture.CreateClient();
+        using var client = Fixture.CreateHttpClientForApp();
 
         // Act
         using var response = await client.GetAsync("/api/puzzles", CancellationToken);
@@ -328,7 +328,7 @@ public class ApiTests(HttpServerFixture fixture, ITestOutputHelper outputHelper)
     public async Task Api_Returns_404_If_Puzzle_Not_Found()
     {
         // Arrange
-        using var client = Fixture.CreateClient();
+        using var client = Fixture.CreateHttpClientForApp();
 
         using var content = new MultipartFormDataContent()
         {
@@ -351,7 +351,7 @@ public class ApiTests(HttpServerFixture fixture, ITestOutputHelper outputHelper)
     public async Task Api_Returns_415_If_Puzzle_Content_Incorrect()
     {
         // Arrange
-        using var client = Fixture.CreateClient();
+        using var client = Fixture.CreateHttpClientForApp();
         using var content = new StringContent("{}", Encoding.UTF8, "application/json");
 
         // Act
