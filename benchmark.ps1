@@ -96,3 +96,8 @@ if (-Not [string]::IsNullOrEmpty(${env:GITHUB_SHA})) {
     --configuration "Release" `
     -- `
     $additionalArgs
+
+if ($LASTEXITCODE -ne 0) {
+    Write-Error "Benchmarks failed with exit code $LASTEXITCODE."
+    exit $LASTEXITCODE
+}
