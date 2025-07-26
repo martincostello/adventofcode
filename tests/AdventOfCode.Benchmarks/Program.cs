@@ -4,4 +4,5 @@
 using BenchmarkDotNet.Running;
 using MartinCostello.AdventOfCode.Benchmarks;
 
-BenchmarkRunner.Run<PuzzleBenchmarks>(args: args);
+var summary = BenchmarkRunner.Run<PuzzleBenchmarks>(args: args);
+return summary.Reports.Any((p) => !p.Success) ? 1 : 0;
