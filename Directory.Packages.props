@@ -20,7 +20,7 @@
     <PackageVersion Include="Microsoft.Playwright" Version="1.54.0" />
     <PackageVersion Include="Microsoft.Toolkit.HighPerformance" Version="7.1.2" />
     <PackageVersion Include="Microsoft.TypeScript.MSBuild" Version="5.8.3" />
-    <PackageVersion Include="RazorSlices" Version="0.9.2" />
+    <PackageVersion Include="RazorSlices" Version="0.9.3" />
     <PackageVersion Include="Shouldly" Version="4.3.0" />
     <PackageVersion Include="Spectre.Console" Version="0.50.0" />
     <PackageVersion Include="xRetry" Version="1.9.0" />
