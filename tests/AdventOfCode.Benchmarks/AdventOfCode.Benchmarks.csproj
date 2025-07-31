@@ -5,7 +5,7 @@
     <NoWarn>$(NoWarn);CA1034;CA1056;CA1819;CA2007;SA1600</NoWarn>
     <OutputType>Exe</OutputType>
     <RootNamespace>MartinCostello.AdventOfCode.Benchmarks</RootNamespace>
-    <TargetFramework>net9.0</TargetFramework>
+    <TargetFramework>net10.0</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\src\AdventOfCode\AdventOfCode.csproj" />
