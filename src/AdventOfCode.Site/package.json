@@ -35,7 +35,7 @@
     "jest": "30.0.5",
     "linq-to-typescript": "10.0.0",
     "prettier": "3.6.2",
-    "ts-jest": "29.4.0",
+    "ts-jest": "29.4.1",
     "ts-loader": "9.5.2",
     "ts-md5": "2.0.1",
     "tsify": "5.0.4",
