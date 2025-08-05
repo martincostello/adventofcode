@@ -425,7 +425,7 @@ jobs:
         dotnet tool install --global Amazon.Lambda.Tools --version ${env:LAMBDA_TOOLS_VERSION}
 
     - name: Configure AWS credentials
-      uses: aws-actions/configure-aws-credentials@59b441846ad109fa4a1549b73ef4e149c4bfb53b # v4.3.0
+      uses: aws-actions/configure-aws-credentials@d0834ad3a60a024346910e522a81b0002bd37fea # v4.3.0
       with:
         role-to-assume: ${{ secrets.AWS_DEPLOYMENT_ROLE }}
         role-session-name: ${{ github.event.repository.name }}-${{ github.run_id }}-deploy
