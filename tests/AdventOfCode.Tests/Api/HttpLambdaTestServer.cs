@@ -44,12 +44,11 @@ internal sealed class HttpLambdaTestServer()
     public async ValueTask InitializeAsync()
         => await StartAsync(_cts.Token);
 
-    protected override IServer CreateServer(WebHostBuilder builder)
+    protected override IServer CreateServer(IWebHostBuilder builder)
     {
         _webHost = builder
-            .UseKestrel()
+            .UseKestrel((p) => p.Listen(System.Net.IPAddress.Loopback, 0))
             .ConfigureServices((services) => services.AddLogging((builder) => builder.AddXUnit(this)))
-            .UseUrls("http://127.0.0.1:0")
             .Build();
 
         _webHost.Start();

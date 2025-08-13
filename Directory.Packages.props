@@ -10,7 +10,7 @@
     <PackageVersion Include="BenchmarkDotNet" Version="0.15.2" />
     <PackageVersion Include="GitHubActionsTestLogger" Version="2.4.1" />
     <PackageVersion Include="MartinCostello.Logging.XUnit.v3" Version="0.6.0" />
-    <PackageVersion Include="MartinCostello.Testing.AwsLambdaTestServer" Version="0.9.0" />
+    <PackageVersion Include="MartinCostello.Testing.AwsLambdaTestServer" Version="0.10.0" />
     <PackageVersion Include="Microsoft.AspNetCore.Mvc.Testing" Version="9.0.8" />
     <PackageVersion Include="Microsoft.AspNetCore.OpenApi" Version="9.0.8" />
     <PackageVersion Include="Microsoft.Extensions.Caching.Memory" Version="9.0.8" />

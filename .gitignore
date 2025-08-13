@@ -34,3 +34,4 @@ UpgradeLog*.XML
 *.suo
 *.TMP
 *.user
+!.packages/*.nupkg
