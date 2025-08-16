@@ -1,14 +1,12 @@
 ﻿// Copyright (c) Martin Costello, 2015. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
+using System.Net;
 using System.Reflection;
 using System.Security.Cryptography.X509Certificates;
 using MartinCostello.Logging.XUnit;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Hosting.Server;
-using Microsoft.AspNetCore.Hosting.Server.Features;
 using Microsoft.AspNetCore.Mvc.Testing;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
@@ -19,17 +17,12 @@ namespace MartinCostello.AdventOfCode.Api;
 /// </summary>
 public sealed class HttpServerFixture : WebApplicationFactory<Site.Program>, ITestOutputHelperAccessor
 {
-    private IHost? _host;
-    private bool _disposed;
-
-    /// <summary>
-    /// Initializes a new instance of the <see cref="HttpServerFixture"/> class.
-    /// </summary>
     public HttpServerFixture()
-        : base()
     {
-        ClientOptions.AllowAutoRedirect = false;
-        ClientOptions.BaseAddress = new Uri("https://localhost");
+        UseKestrel(
+            (server) => server.Listen(
+                IPAddress.Loopback, 0, (listener) => listener.UseHttps(
+                    (https) => https.ServerCertificate = LoadDevelopmentCertificate())));
     }
 
     /// <inheritdoc />
@@ -44,16 +37,6 @@ public sealed class HttpServerFixture : WebApplicationFactory<Site.Program>, ITe
         {
             StartServer();
             return ClientOptions.BaseAddress;
-        }
-    }
-
-    /// <inheritdoc />
-    public override IServiceProvider Services
-    {
-        get
-        {
-            StartServer();
-            return _host!.Services!;
         }
     }
 
@@ -81,52 +64,7 @@ public sealed class HttpServerFixture : WebApplicationFactory<Site.Program>, ITe
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
         builder.ConfigureLogging((loggingBuilder) => loggingBuilder.ClearProviders().AddXUnit(this));
-
-        builder.ConfigureKestrel(
-            (p) => p.ConfigureHttpsDefaults(
-                (r) => r.ServerCertificate = LoadDevelopmentCertificate()));
-
         builder.UseEnvironment(Environments.Production);
-
-        // Configure the server address for the server to
-        // listen on for HTTPS requests on a dynamic port.
-        builder.UseUrls("https://127.0.0.1:0");
-    }
-
-    /// <inheritdoc />
-    protected override IHost CreateHost(IHostBuilder builder)
-    {
-        var testHost = builder.Build();
-
-        builder.ConfigureWebHost(webHostBuilder => webHostBuilder.UseKestrel());
-
-        _host = builder.Build();
-        _host.Start();
-
-        var server = _host.Services.GetRequiredService<IServer>();
-        var addresses = server.Features.Get<IServerAddressesFeature>();
-
-        ClientOptions.BaseAddress = addresses!.Addresses
-            .Select((p) => new Uri(p))
-            .Last();
-
-        return testHost;
-    }
-
-    /// <inheritdoc />
-    protected override void Dispose(bool disposing)
-    {
-        base.Dispose(disposing);
-
-        if (!_disposed)
-        {
-            if (disposing)
-            {
-                _host?.Dispose();
-            }
-
-            _disposed = true;
-        }
     }
 
     private static X509Certificate2 LoadDevelopmentCertificate()
@@ -139,15 +77,5 @@ public sealed class HttpServerFixture : WebApplicationFactory<Site.Program>, ITe
         string? password = metadata.First((p) => p.Key is "DevCertificatePassword").Value;
 
         return X509CertificateLoader.LoadPkcs12(File.ReadAllBytes(fileName), password);
-    }
-
-    private void StartServer()
-    {
-        if (_host is null)
-        {
-            using (CreateDefaultClient())
-            {
-            }
-        }
     }
 }
