@@ -9,7 +9,7 @@
       ]
     },
     "microsoft.crank.agent": {
-      "version": "0.2.0-alpha.25128.2",
+      "version": "0.2.0-alpha.25418.1",
       "commands": [
         "crank-agent"
       ],
