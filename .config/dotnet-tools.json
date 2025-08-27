@@ -9,21 +9,21 @@
       ]
     },
     "microsoft.crank.agent": {
-      "version": "0.2.0-alpha.25418.1",
+      "version": "0.2.0-alpha.25426.3",
       "commands": [
         "crank-agent"
       ],
       "rollForward": true
     },
     "microsoft.crank.controller": {
-      "version": "0.2.0-alpha.25418.1",
+      "version": "0.2.0-alpha.25426.3",
       "commands": [
         "crank"
       ],
       "rollForward": true
     },
     "microsoft.crank.pullrequestbot": {
-      "version": "0.2.0-alpha.25418.1",
+      "version": "0.2.0-alpha.25426.3",
       "commands": [
         "crank-pr"
       ],
