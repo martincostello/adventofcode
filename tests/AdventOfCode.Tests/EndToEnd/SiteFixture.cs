@@ -9,15 +9,13 @@ public sealed class SiteFixture
 {
     private const string WebsiteUrl = "WEBSITE_URL";
 
-    private readonly Uri? _serverAddress;
-
     public SiteFixture()
     {
         string url = Environment.GetEnvironmentVariable(WebsiteUrl) ?? string.Empty;
 
         if (Uri.TryCreate(url, UriKind.Absolute, out Uri? address))
         {
-            _serverAddress = address;
+            ServerAddress = address;
         }
     }
 
@@ -25,9 +23,10 @@ public sealed class SiteFixture
     {
         get
         {
-            Assert.SkipWhen(_serverAddress is null, $"The {WebsiteUrl} environment variable is not set or is not a valid absolute URI.");
-            return _serverAddress!;
+            Assert.SkipWhen(field is null, $"The {WebsiteUrl} environment variable is not set or is not a valid absolute URI.");
+            return field!;
         }
+        set;
     }
 
     public HttpClient CreateClient()
