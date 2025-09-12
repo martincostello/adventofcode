@@ -180,9 +180,7 @@ public abstract class Puzzle : IPuzzle
 
             using var reader = new StreamReader(Resource ?? ReadResource(), leaveOpen: Resource is not null);
 
-            string? value;
-
-            while ((value = await reader.ReadLineAsync(cancellationToken)) is not null)
+            while (await reader.ReadLineAsync(cancellationToken) is { } value)
             {
                 lines.Add(value);
             }
@@ -211,9 +209,7 @@ public abstract class Puzzle : IPuzzle
 
             using var reader = new StreamReader(Resource ?? ReadResource(), leaveOpen: Resource is not null);
 
-            string? value;
-
-            while ((value = await reader.ReadLineAsync(cancellationToken)) is not null)
+            while (await reader.ReadLineAsync(cancellationToken) is { } value)
             {
                 numbers.Add(T.Parse(value, NumberStyles.Integer, CultureInfo.InvariantCulture));
             }
