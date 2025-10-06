@@ -4,6 +4,4 @@
 namespace MartinCostello.AdventOfCode.Api;
 
 [CollectionDefinition(nameof(LambdaTestsCollection), DisableParallelization = true)]
-public sealed class LambdaTestsCollection
-{
-}
+public sealed class LambdaTestsCollection;
