@@ -22,7 +22,7 @@
     <PackageVersion Include="Microsoft.TypeScript.MSBuild" Version="5.9.3" />
     <PackageVersion Include="RazorSlices" Version="0.9.5" />
     <PackageVersion Include="Shouldly" Version="4.3.0" />
-    <PackageVersion Include="Spectre.Console" Version="0.52.0" />
+    <PackageVersion Include="Spectre.Console" Version="0.53.0" />
     <PackageVersion Include="xRetry" Version="1.9.0" />
     <PackageVersion Include="xunit.runner.visualstudio" Version="3.1.5" />
     <PackageVersion Include="xunit.v3" Version="3.1.0" />
