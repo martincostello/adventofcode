@@ -39,7 +39,7 @@ public sealed class Day25 : Puzzle
         {
             long value = 1;
 
-            for (int i = 1; i < int.MaxValue; i++)
+            foreach (int i in Enumerable.InfiniteSequence(1, 1))
             {
                 value = Transform(value, subjectNumber: 7);
 

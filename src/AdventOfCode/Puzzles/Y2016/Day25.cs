@@ -19,11 +19,11 @@ public sealed class Day25 : Puzzle
     {
         var instructions = await ReadResourceAsLinesAsync(cancellationToken);
 
-        for (int i = 1; i < int.MaxValue; i++)
+        foreach (int i in Enumerable.InfiniteSequence(1, 1))
         {
             bool isRepeating = false;
+            bool lastSignal = true;
 
-            int lastSignal = 1;
             int iterations = 0;
 
             bool Signal(int p)
@@ -31,19 +31,10 @@ public sealed class Day25 : Puzzle
                 // If the signal is not 0 or 1, then not of interest
                 bool stop = true;
 
-                if (p == 0)
-                {
-                    if (lastSignal == 1)
-                    {
-                        // Alternation continues
-                        lastSignal = 0;
-                        stop = false;
-                    }
-                }
-                else if (p == 1 && lastSignal == 0)
+                if ((p == 0 && lastSignal) || (p == 1 && !lastSignal))
                 {
                     // Alternation continues
-                    lastSignal = 1;
+                    lastSignal = !lastSignal;
                     stop = false;
                 }
 

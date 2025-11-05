@@ -40,7 +40,7 @@ public sealed class Day04 : Puzzle
         int fromInclusive = 1;
         int rangeSize = 10000;
 
-        var chunks = Enumerable.Chunk(Enumerable.Range(fromInclusive, int.MaxValue - 1), rangeSize);
+        var chunks = Enumerable.Chunk(Enumerable.InfiniteSequence(fromInclusive, 1), rangeSize);
         using var cts = new CancellationTokenSource();
 
         try
