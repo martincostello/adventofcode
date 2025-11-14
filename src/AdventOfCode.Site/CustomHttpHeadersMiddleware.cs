@@ -21,7 +21,7 @@ public sealed class CustomHttpHeadersMiddleware(RequestDelegate next)
         "style-src-elem 'self' 'nonce-{0}' cdnjs.cloudflare.com",
         "img-src 'self' data:",
         "font-src 'self' cdnjs.cloudflare.com",
-        "connect-src 'self'",
+        "connect-src 'self' cdnjs.cloudflare.com",
         "media-src 'none'",
         "object-src 'none'",
         "child-src 'self'",
