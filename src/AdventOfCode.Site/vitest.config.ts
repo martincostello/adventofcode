@@ -7,7 +7,7 @@ export default defineConfig({
             enabled: true,
             provider: 'v8',
             include: ['scripts/**/*.ts'],
-            reporter: ['text', 'json', 'html', 'lcov'],
+            reporter: ['html', 'json', 'lcov', 'text'],
         },
         reporters: ['default', 'github-actions'],
         testTimeout: 60000,
