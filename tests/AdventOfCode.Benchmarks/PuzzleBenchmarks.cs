@@ -62,6 +62,11 @@ public class PuzzleBenchmarks
         {
             yield return puzzle;
         }
+
+        foreach (object puzzle in Puzzles2025())
+        {
+            yield return puzzle;
+        }
     }
 
     public static IEnumerable<object> Puzzles2015()
@@ -144,6 +149,9 @@ public class PuzzleBenchmarks
     public static IEnumerable<object> Puzzles2024()
         => GetPuzzles(2024);
 
+    public static IEnumerable<object> Puzzles2025()
+        => GetPuzzles(2025);
+
     [Benchmark]
     [ArgumentsSource(nameof(Puzzles2015))]
     public async Task<PuzzleResult> Solve2015(PuzzleInput input)
@@ -192,6 +200,11 @@ public class PuzzleBenchmarks
     [Benchmark]
     [ArgumentsSource(nameof(Puzzles2024))]
     public async Task<PuzzleResult> Solve2024(PuzzleInput input)
+        => await input.SolveAsync();
+
+    [Benchmark]
+    [ArgumentsSource(nameof(Puzzles2025))]
+    public async Task<PuzzleResult> Solve2025(PuzzleInput input)
         => await input.SolveAsync();
 
     private static IEnumerable<object> GetPuzzles(
