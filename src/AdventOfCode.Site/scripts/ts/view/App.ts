@@ -27,6 +27,10 @@ export class App {
     }
 
     async initialize(): Promise<void> {
+        if (!this.elements.form) {
+            return;
+        }
+
         this.elements.years.addEventListener('change', () => {
             this.onYearChanged();
         });
