@@ -45,6 +45,7 @@ jobs:
             "microbenchmarks-2022": "Runs the 2022 microbenchmarks",
             "microbenchmarks-2023": "Runs the 2023 microbenchmarks",
             "microbenchmarks-2024": "Runs the 2024 microbenchmarks",
+            "microbenchmarks-2025": "Runs the 2025 microbenchmarks",
             "root": "Runs the root benchmark",
           };
 
