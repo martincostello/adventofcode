@@ -232,7 +232,7 @@ public class ApiTests(HttpServerFixture fixture, ITestOutputHelper outputHelper)
     [PuzzleData(2024, 23, -1, Skip = "Not implemented.")]
     [PuzzleData(2024, 24, -1, Skip = "Not implemented.")]
     [PuzzleData(2024, 25, 2835)]
-    [PuzzleData(2025, 1, 1102)]
+    [PuzzleData(2025, 1, 1102, 6175)]
     [PuzzleData(2025, 2, -1, Skip = "Not implemented.")]
     [PuzzleData(2025, 3, -1, Skip = "Not implemented.")]
     [PuzzleData(2025, 4, -1, Skip = "Not implemented.")]
@@ -419,7 +419,9 @@ public class ApiTests(HttpServerFixture fixture, ITestOutputHelper outputHelper)
 
         public override ValueTask<IReadOnlyCollection<ITheoryDataRow>> GetData(MethodInfo testMethod, DisposalTracker disposalTracker)
         {
+#pragma warning disable xUnit1046 // Avoid using TheoryDataRow arguments that are not serializable
             IReadOnlyCollection<ITheoryDataRow> rows = [new TheoryDataRow<int, int, PuzzleDataAttribute>(Year, Day, this)];
+#pragma warning restore xUnit1046 // Avoid using TheoryDataRow arguments that are not serializable
             return ValueTask.FromResult(rows);
         }
 

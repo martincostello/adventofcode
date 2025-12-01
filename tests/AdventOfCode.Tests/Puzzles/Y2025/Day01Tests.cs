@@ -5,8 +5,10 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2025;
 
 public sealed class Day01Tests(ITestOutputHelper outputHelper) : PuzzleTest(outputHelper)
 {
-    [Fact]
-    public void Y2025_Day01_GetPassword_Returns_Correct_Value()
+    [Theory]
+    [InlineData(false, 3)]
+    [InlineData(true, 6)]
+    public void Y2025_Day01_GetPassword_Returns_Correct_Value(bool useMethod0x434C49434B, int expected)
     {
         // Arrange
         string[] values =
@@ -24,10 +26,24 @@ public sealed class Day01Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         ];
 
         // Act
-        int password = Day01.GetPassword(values);
+        int password = Day01.GetPassword(values, useMethod0x434C49434B);
 
         // Assert
-        password.ShouldBe(3);
+        password.ShouldBe(expected);
+    }
+
+    [Theory]
+    [InlineData("L1000", 10)]
+    [InlineData("L1001", 10)]
+    [InlineData("R1000", 10)]
+    [InlineData("R1001", 10)]
+    public void Y2025_Day01_GetPassword_Returns_Correct_Value_After_Rotation(string rotation, int expected)
+    {
+        // Act
+        int password = Day01.GetPassword([rotation], useMethod0x434C49434B: true);
+
+        // Assert
+        password.ShouldBe(expected);
     }
 
     [Fact]
@@ -38,6 +54,7 @@ public sealed class Day01Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
 
         // Assert
         puzzle.ShouldNotBeNull();
-        puzzle.Password.ShouldBe(1102);
+        puzzle.Password1.ShouldBe(1102);
+        puzzle.Password2.ShouldBe(6175);
     }
 }
