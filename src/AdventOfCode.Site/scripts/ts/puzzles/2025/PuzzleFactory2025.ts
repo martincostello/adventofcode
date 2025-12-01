@@ -6,7 +6,7 @@ import * as thisYear from './index';
 
 export class PuzzleFactory2025 implements PuzzleFactory {
     create(year: number, day: number): Puzzle | null {
-        if (year !== 2024) {
+        if (year !== 2025) {
             return null;
         }
 
