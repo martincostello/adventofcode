@@ -42,6 +42,9 @@ benchmarks:
   microbenchmarks-2024:
     description: Microbenchmarks for 2024
     arguments: --config ./crank.yml --scenario microbenchmarks --variable filterArg=*2024*
+  microbenchmarks-2025:
+    description: Microbenchmarks for 2025
+    arguments: --config ./crank.yml --scenario microbenchmarks --variable filterArg=*2025*
   root:
     description: Root
     arguments: --config ./crank.yml --scenario root

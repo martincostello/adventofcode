@@ -11,6 +11,7 @@ import { PuzzleFactory2021 } from './2021/PuzzleFactory2021';
 import { PuzzleFactory2022 } from './2022/PuzzleFactory2022';
 import { PuzzleFactory2023 } from './2023/PuzzleFactory2023';
 import { PuzzleFactory2024 } from './2024/PuzzleFactory2024';
+import { PuzzleFactory2025 } from './2025/PuzzleFactory2025';
 import { Puzzle, PuzzleFactory } from './index';
 
 export class DefaultPuzzleFactory implements PuzzleFactory {
@@ -47,6 +48,9 @@ export class DefaultPuzzleFactory implements PuzzleFactory {
                 break;
             case 2024:
                 factory = new PuzzleFactory2024();
+                break;
+            case 2025:
+                factory = new PuzzleFactory2025();
                 break;
             default:
                 factory = null;
