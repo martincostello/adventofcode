@@ -20,7 +20,7 @@ public sealed class Day02 : Puzzle
     public long InvalidIdSumV2 { get; private set; }
 
     /// <summary>
-    /// Gets the sum of the invalid product IDs in the specifed ranges.
+    /// Gets the sum of the invalid product IDs in the specified ranges.
     /// </summary>
     /// <param name="productIds">The comma-separated list of product ID ranges.</param>
     /// <param name="anyRepeatingSequence">Whether to validate the product ID has no repeated sequence of digits.</param>
