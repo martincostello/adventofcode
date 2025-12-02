@@ -28,17 +28,17 @@ internal static class Maths
         const int MaxDigits = 11;
         byte[] buffer = new byte[MaxDigits];
 
-        int unit = Math.Abs(value);
+        value = Math.Abs(value);
         int index = buffer.Length;
 
-        while (unit != 0)
+        while (value != 0)
         {
-            (int div, int rem) = Math.DivRem(unit, 10);
+            (int div, int rem) = Math.DivRem(value, 10);
 
             index--;
 
             buffer[index] = (byte)rem;
-            unit = div;
+            value = div;
         }
 
         return [.. new ReadOnlySpan<byte>(buffer, index, MaxDigits - index)];
@@ -62,14 +62,14 @@ internal static class Maths
         byte[] buffer = new byte[MaxDigits];
 
         int index = buffer.Length;
-        long unit = Math.Abs(value);
+        value = Math.Abs(value);
 
-        while (unit != 0)
+        while (value != 0)
         {
-            (long div, long rem) = Math.DivRem(unit, 10);
+            (long div, long rem) = Math.DivRem(value, 10);
 
             buffer[--index] = (byte)rem;
-            unit = div;
+            value = div;
         }
 
         return new ReadOnlySpan<byte>(buffer, index, MaxDigits - index);
@@ -97,15 +97,14 @@ internal static class Maths
         int index = buffer.Length;
 
         T ten = T.CreateChecked(10);
-        T unit = T.Abs(value);
+        value = T.Abs(value);
 
-        while (!T.IsZero(unit))
+        while (!T.IsZero(value))
         {
-            T div = unit / ten;
-            T rem = unit % ten;
+            (T div, T rem) = T.DivRem(value, ten);
 
             buffer[--index] = byte.CreateChecked(rem);
-            unit = div;
+            value = div;
         }
 
         return new ReadOnlySpan<byte>(buffer, index, MaxDigits - index);
