@@ -76,6 +76,42 @@ internal static class Maths
     }
 
     /// <summary>
+    /// Returns the digits of the specified value in base 10.
+    /// </summary>
+    /// <typeparam name="T">The type of the number.</typeparam>
+    /// <param name="value">The value to get the digits for.</param>
+    /// <returns>
+    /// The digits of <paramref name="value"/> in base 10.
+    /// </returns>
+    internal static ReadOnlySpan<byte> Digits<T>(T value)
+        where T : IBinaryInteger<T>
+    {
+        if (T.IsZero(value))
+        {
+            return [0];
+        }
+
+        const int MaxDigits = 20;
+        byte[] buffer = new byte[MaxDigits];
+
+        int index = buffer.Length;
+
+        T ten = T.CreateChecked(10);
+        T unit = T.Abs(value);
+
+        while (!T.IsZero(unit))
+        {
+            T div = unit / ten;
+            T rem = unit % ten;
+
+            buffer[--index] = byte.CreateChecked(rem);
+            unit = div;
+        }
+
+        return new ReadOnlySpan<byte>(buffer, index, MaxDigits - index);
+    }
+
+    /// <summary>
     /// Returns the number represented by the specified digits.
     /// </summary>
     /// <typeparam name="T">The type of the number.</typeparam>
