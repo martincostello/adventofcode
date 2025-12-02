@@ -28,12 +28,12 @@ internal static class Maths
         const int MaxDigits = 11;
         byte[] buffer = new byte[MaxDigits];
 
-        uint unit = (uint)Math.Abs(value);
+        int unit = Math.Abs(value);
         int index = buffer.Length;
 
         while (unit != 0)
         {
-            (uint div, uint rem) = Math.DivRem(unit, 10);
+            (int div, int rem) = Math.DivRem(unit, 10);
 
             index--;
 
@@ -41,7 +41,7 @@ internal static class Maths
             unit = div;
         }
 
-        return [.. new ReadOnlySpan<byte>(buffer, index, 11 - index)];
+        return [.. new ReadOnlySpan<byte>(buffer, index, MaxDigits - index)];
     }
 
     /// <summary>
@@ -62,11 +62,11 @@ internal static class Maths
         byte[] buffer = new byte[MaxDigits];
 
         int index = buffer.Length;
-        ulong unit = (ulong)Math.Abs(value);
+        long unit = Math.Abs(value);
 
-        while (unit != 0UL)
+        while (unit != 0)
         {
-            (ulong div, ulong rem) = Math.DivRem(unit, 10);
+            (long div, long rem) = Math.DivRem(unit, 10);
 
             buffer[--index] = (byte)rem;
             unit = div;
