@@ -37,13 +37,10 @@ public sealed class Day02 : Puzzle
         {
             var range = productIds[span];
 
-            using var parts = range.Split('-');
+            range.Bifurcate('-', out var first, out var second);
 
-            parts.MoveNext();
-            long start = Parse<long>(range[parts.Current]);
-
-            parts.MoveNext();
-            long end = Parse<long>(range[parts.Current]);
+            long start = Parse<long>(first);
+            long end = Parse<long>(second);
 
             for (long i = start; i <= end; i++)
             {
