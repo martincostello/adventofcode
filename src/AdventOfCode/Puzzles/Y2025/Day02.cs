@@ -74,7 +74,7 @@ public sealed class Day02 : Puzzle
             return true;
         }
 
-        static bool IsValid(List<int> digits, int chunks)
+        static bool IsValid(List<byte> digits, int chunks)
         {
             if (digits.Count % chunks != 0)
             {

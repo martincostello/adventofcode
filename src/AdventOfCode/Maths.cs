@@ -18,7 +18,7 @@ internal static class Maths
     /// <returns>
     /// The digits of <paramref name="value"/> in base 10.
     /// </returns>
-    internal static List<int> Digits(int value)
+    internal static List<byte> Digits(int value)
     {
         if (value == 0)
         {
@@ -27,13 +27,13 @@ internal static class Maths
 
         value = Math.Abs(value);
 
-        var digits = new List<int>();
+        var digits = new List<byte>();
 
         while (value > 0)
         {
             (int div, int rem) = Math.DivRem(value, 10);
 
-            digits.Add(rem);
+            digits.Add((byte)rem);
             value = div;
         }
 
@@ -49,7 +49,7 @@ internal static class Maths
     /// <returns>
     /// The digits of <paramref name="value"/> in base 10.
     /// </returns>
-    internal static List<int> Digits(long value)
+    internal static List<byte> Digits(long value)
     {
         if (value == 0)
         {
@@ -58,13 +58,13 @@ internal static class Maths
 
         value = Math.Abs(value);
 
-        var digits = new List<int>();
+        var digits = new List<byte>();
 
         while (value > 0)
         {
             (long div, long rem) = Math.DivRem(value, 10);
 
-            digits.Add((int)rem);
+            digits.Add((byte)rem);
             value = div;
         }
 
