@@ -18,28 +18,30 @@ internal static class Maths
     /// <returns>
     /// The digits of <paramref name="value"/> in base 10.
     /// </returns>
-    internal static List<byte> Digits(int value)
+    internal static byte[] Digits(int value)
     {
         if (value == 0)
         {
             return [0];
         }
 
-        value = Math.Abs(value);
+        const int MaxDigits = 11;
+        byte[] buffer = new byte[MaxDigits];
 
-        var digits = new List<byte>();
+        uint unit = (uint)Math.Abs(value);
+        int index = buffer.Length;
 
-        while (value > 0)
+        while (unit != 0)
         {
-            (int div, int rem) = Math.DivRem(value, 10);
+            (uint div, uint rem) = Math.DivRem(unit, 10);
 
-            digits.Add((byte)rem);
-            value = div;
+            index--;
+
+            buffer[index] = (byte)rem;
+            unit = div;
         }
 
-        digits.Reverse();
-
-        return digits;
+        return [.. new ReadOnlySpan<byte>(buffer, index, 11 - index)];
     }
 
     /// <summary>
@@ -49,28 +51,28 @@ internal static class Maths
     /// <returns>
     /// The digits of <paramref name="value"/> in base 10.
     /// </returns>
-    internal static List<byte> Digits(long value)
+    internal static ReadOnlySpan<byte> Digits(long value)
     {
         if (value == 0)
         {
             return [0];
         }
 
-        value = Math.Abs(value);
+        const int MaxDigits = 20;
+        byte[] buffer = new byte[MaxDigits];
 
-        var digits = new List<byte>();
+        int index = buffer.Length;
+        ulong unit = (ulong)Math.Abs(value);
 
-        while (value > 0)
+        while (unit != 0UL)
         {
-            (long div, long rem) = Math.DivRem(value, 10);
+            (ulong div, ulong rem) = Math.DivRem(unit, 10);
 
-            digits.Add((byte)rem);
-            value = div;
+            buffer[--index] = (byte)rem;
+            unit = div;
         }
 
-        digits.Reverse();
-
-        return digits;
+        return new ReadOnlySpan<byte>(buffer, index, MaxDigits - index);
     }
 
     /// <summary>

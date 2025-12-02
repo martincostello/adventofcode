@@ -63,7 +63,7 @@ public sealed class Day02 : Puzzle
         {
             var digits = Maths.Digits(value);
 
-            foreach (int factor in Maths.GetFactorsUnordered(digits.Count))
+            foreach (int factor in Maths.GetFactorsUnordered(digits.Length))
             {
                 if (factor is not 1 && !IsValid(digits, factor))
                 {
@@ -74,14 +74,14 @@ public sealed class Day02 : Puzzle
             return true;
         }
 
-        static bool IsValid(List<byte> digits, int chunks)
+        static bool IsValid(ReadOnlySpan<byte> digits, int chunks)
         {
-            if (digits.Count % chunks != 0)
+            if (digits.Length % chunks != 0)
             {
                 return true;
             }
 
-            int length = digits.Count / chunks;
+            int length = digits.Length / chunks;
             var first = digits[0..length];
 
             for (int i = chunks - 1; i > 0; i--)
