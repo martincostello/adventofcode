@@ -18,28 +18,96 @@ internal static class Maths
     /// <returns>
     /// The digits of <paramref name="value"/> in base 10.
     /// </returns>
-    internal static IReadOnlyList<int> Digits(int value)
+    internal static byte[] Digits(int value)
     {
         if (value == 0)
         {
             return [0];
         }
 
+        const int MaxDigits = 11;
+        byte[] buffer = new byte[MaxDigits];
+
         value = Math.Abs(value);
+        int index = buffer.Length;
 
-        var digits = new List<int>();
-
-        while (value > 0)
+        while (value != 0)
         {
             (int div, int rem) = Math.DivRem(value, 10);
 
-            digits.Add(rem);
+            index--;
+
+            buffer[index] = (byte)rem;
             value = div;
         }
 
-        digits.Reverse();
+        return [.. new ReadOnlySpan<byte>(buffer, index, MaxDigits - index)];
+    }
 
-        return digits;
+    /// <summary>
+    /// Returns the digits of the specified value in base 10.
+    /// </summary>
+    /// <param name="value">The value to get the digits for.</param>
+    /// <returns>
+    /// The digits of <paramref name="value"/> in base 10.
+    /// </returns>
+    internal static ReadOnlySpan<byte> Digits(long value)
+    {
+        if (value == 0)
+        {
+            return [0];
+        }
+
+        const int MaxDigits = 20;
+        byte[] buffer = new byte[MaxDigits];
+
+        int index = buffer.Length;
+        value = Math.Abs(value);
+
+        while (value != 0)
+        {
+            (long div, long rem) = Math.DivRem(value, 10);
+
+            buffer[--index] = (byte)rem;
+            value = div;
+        }
+
+        return new ReadOnlySpan<byte>(buffer, index, MaxDigits - index);
+    }
+
+    /// <summary>
+    /// Returns the digits of the specified value in base 10.
+    /// </summary>
+    /// <typeparam name="T">The type of the number.</typeparam>
+    /// <param name="value">The value to get the digits for.</param>
+    /// <returns>
+    /// The digits of <paramref name="value"/> in base 10.
+    /// </returns>
+    internal static ReadOnlySpan<byte> Digits<T>(T value)
+        where T : IBinaryInteger<T>
+    {
+        if (T.IsZero(value))
+        {
+            return [0];
+        }
+
+        const int MaxDigits = 20;
+        byte[] buffer = new byte[MaxDigits];
+
+        int index = buffer.Length;
+
+        T ten = T.CreateChecked(10);
+        value = T.Abs(value);
+
+        while (!T.IsZero(value))
+        {
+            (T div, T rem) = T.DivRem(value, ten);
+
+            buffer[--index] = byte.CreateChecked(rem);
+            value = div;
+        }
+
+        return new ReadOnlySpan<byte>(buffer, index, MaxDigits - index);
     }
 
     /// <summary>
