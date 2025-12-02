@@ -10,20 +10,28 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2025;
 public sealed class Day02 : Puzzle
 {
     /// <summary>
-    /// Gets the sum of the invalid product IDs.
+    /// Gets the sum of the invalid product IDs for the first version of the validation rules.
     /// </summary>
-    public long InvalidIdSum { get; private set; }
+    public long InvalidIdSumV1 { get; private set; }
+
+    /// <summary>
+    /// Gets the sum of the invalid product IDs for the second version of the validation rules.
+    /// </summary>
+    public long InvalidIdSumV2 { get; private set; }
 
     /// <summary>
     /// Gets the sum of the invalid product IDs in the specifed ranges.
     /// </summary>
     /// <param name="productIds">The comma-separated list of product ID ranges.</param>
+    /// <param name="anyRepeatingSequence">Whether to validate the product ID has no repeated sequence of digits.</param>
     /// <returns>
     /// The sum of the invalid product IDs.
     /// </returns>
-    public static long Validate(ReadOnlySpan<char> productIds)
+    public static long Validate(ReadOnlySpan<char> productIds, bool anyRepeatingSequence)
     {
         long sum = 0;
+
+        Func<long, bool> validator = anyRepeatingSequence ? IsValidV2 : IsValidV1;
 
         foreach (var span in productIds.Split(','))
         {
@@ -39,23 +47,55 @@ public sealed class Day02 : Puzzle
 
             for (long i = start; i <= end; i++)
             {
-                var digits = Maths.Digits(i);
-
-                if (digits.Count % 2 == 0)
+                if (!validator(i))
                 {
-                    int midpoint = digits.Count / 2;
-                    var first = digits[0..midpoint];
-                    var last = digits[midpoint..];
-
-                    if (first.SequenceEqual(last))
-                    {
-                        sum += i;
-                    }
+                    sum += i;
                 }
             }
         }
 
         return sum;
+
+        static bool IsValidV1(long value)
+            => IsValid(Maths.Digits(value), chunks: 2);
+
+        static bool IsValidV2(long value)
+        {
+            var digits = Maths.Digits(value);
+
+            foreach (int factor in Maths.GetFactorsUnordered(digits.Count))
+            {
+                if (factor is not 1 && !IsValid(digits, factor))
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        static bool IsValid(List<int> digits, int chunks)
+        {
+            if (digits.Count % chunks != 0)
+            {
+                return true;
+            }
+
+            int length = digits.Count / chunks;
+            var first = digits[0..length];
+
+            for (int i = chunks - 1; i > 0; i--)
+            {
+                var next = digits.Slice(i * length, length);
+
+                if (!first.SequenceEqual(next))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
     }
 
     /// <inheritdoc />
@@ -65,13 +105,15 @@ public sealed class Day02 : Puzzle
 
         string productIds = await ReadResourceAsStringAsync(cancellationToken);
 
-        InvalidIdSum = Validate(productIds);
+        InvalidIdSumV1 = Validate(productIds, anyRepeatingSequence: false);
+        InvalidIdSumV2 = Validate(productIds, anyRepeatingSequence: true);
 
         if (Verbose)
         {
-            Logger.WriteLine("The sum of the invalid IDs is {0}", InvalidIdSum);
+            Logger.WriteLine("The sum of the invalid IDs with the first set of rules is {0}", InvalidIdSumV1);
+            Logger.WriteLine("The sum of the invalid IDs with the second set of rules is {0}", InvalidIdSumV2);
         }
 
-        return PuzzleResult.Create(InvalidIdSum);
+        return PuzzleResult.Create(InvalidIdSumV1, InvalidIdSumV2);
     }
 }
