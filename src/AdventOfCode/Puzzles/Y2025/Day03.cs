@@ -10,52 +10,56 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2025;
 public sealed class Day03 : Puzzle
 {
     /// <summary>
-    /// Gets the total output joltage.
+    /// Gets the total output joltage for two batteries.
     /// </summary>
-    public int TotalOutputJoltage { get; private set; }
+    public long TotalOutputJoltageFor2 { get; private set; }
+
+    /// <summary>
+    /// Gets the total output joltage for twelve batteries.
+    /// </summary>
+    public long TotalOutputJoltageFor12 { get; private set; }
 
     /// <summary>
     /// Gets the sum of the maximum joltage produced by the specified battery banks.
     /// </summary>
     /// <param name="batteryBanks">The battery banks to get the joltage for.</param>
+    /// <param name="batteries">The number of batteries to use from each bank.</param>
     /// <returns>
-    /// The sum of the invalid product IDs.
+    /// The total output joltage.
     /// </returns>
-    public static int GetJoltage(IReadOnlyList<string> batteryBanks)
+    public static long GetJoltage(IReadOnlyList<string> batteryBanks, int batteries)
     {
-        int total = 0;
+        long total = 0;
 
         foreach (ReadOnlySpan<char> bank in batteryBanks)
         {
-            char max = Max(bank);
-            int index = bank.LastIndexOf(max);
-
-            var prefix = bank[..index];
-            var suffix = bank[(index + 1)..];
-
-            int maxPrefix = Max(prefix);
-            int maxSuffix = Max(suffix);
-
-            (int Tens, int Units) digits =
-                maxSuffix is 0 || maxPrefix >= max ?
-                (maxPrefix, max) :
-                (max, maxSuffix);
-
-            total += (10 * (digits.Tens - '0')) + (digits.Units - '0');
+            total += FindMaximum(bank, batteries, start: 0);
         }
 
         return total;
 
-        static char Max(ReadOnlySpan<char> span)
+        static long FindMaximum(ReadOnlySpan<char> digits, int batteries, int start)
         {
-            int max = 0;
-
-            foreach (char c in span)
+            if (batteries is 0)
             {
-                max = Math.Max(c, max);
+                return 0;
             }
 
-            return (char)max;
+            long tens = batteries - 1;
+            long maximum = 0;
+
+            for (int i = start; i < digits.Length - batteries + 1; i++)
+            {
+                long current = (long)Math.Pow(10, tens) * (digits[i] - '0');
+
+                if (current >= maximum)
+                {
+                    current += FindMaximum(digits, batteries - 1, i + 1);
+                    maximum = Math.Max(current, maximum);
+                }
+            }
+
+            return maximum;
         }
     }
 
@@ -66,13 +70,15 @@ public sealed class Day03 : Puzzle
 
         var batteryBanks = await ReadResourceAsLinesAsync(cancellationToken);
 
-        TotalOutputJoltage = GetJoltage(batteryBanks);
+        TotalOutputJoltageFor2 = GetJoltage(batteryBanks, batteries: 2);
+        TotalOutputJoltageFor12 = GetJoltage(batteryBanks, batteries: 12);
 
         if (Verbose)
         {
-            Logger.WriteLine("The total output joltage is {0}", TotalOutputJoltage);
+            Logger.WriteLine("The total output joltage for 2 batteries is {0}", TotalOutputJoltageFor2);
+            Logger.WriteLine("The total output joltage for 12 batteries is {0}", TotalOutputJoltageFor12);
         }
 
-        return PuzzleResult.Create(TotalOutputJoltage);
+        return PuzzleResult.Create(TotalOutputJoltageFor2, TotalOutputJoltageFor12);
     }
 }
