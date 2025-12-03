@@ -179,7 +179,7 @@ public abstract class Puzzle : IPuzzle
         {
             var lines = new List<string>();
 
-            await foreach (string line in ReadResourceAsEnumerableLinesAsync(cancellationToken).WithCancellation(cancellationToken))
+            await foreach (string line in ReadResourceAsEnumerableLinesAsync().WithCancellation(cancellationToken))
             {
                 lines.Add(line);
             }
@@ -189,7 +189,7 @@ public abstract class Puzzle : IPuzzle
     }
 
     /// <summary>
-    /// Returns the lines associated with the resource for the puzzle as a <see cref="string"/>.
+    /// Returns the lines associated with the resource for the puzzle asynchronously.
     /// </summary>
     /// <param name="cancellationToken">The optional <see cref="CancellationToken"/> to use.</param>
     /// <returns>
@@ -225,7 +225,7 @@ public abstract class Puzzle : IPuzzle
         {
             var numbers = new List<T>();
 
-            await foreach (string value in ReadResourceAsEnumerableLinesAsync(cancellationToken).WithCancellation(cancellationToken))
+            await foreach (string value in ReadResourceAsEnumerableLinesAsync().WithCancellation(cancellationToken))
             {
                 numbers.Add(T.Parse(value, NumberStyles.Integer, CultureInfo.InvariantCulture));
             }
