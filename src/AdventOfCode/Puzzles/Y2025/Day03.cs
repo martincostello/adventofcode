@@ -33,33 +33,57 @@ public sealed class Day03 : Puzzle
 
         foreach (ReadOnlySpan<char> bank in batteryBanks)
         {
-            total += FindMaximum(bank, batteries, start: 0);
+            total += FindMaximum(bank, batteries);
         }
 
         return total;
 
-        static long FindMaximum(ReadOnlySpan<char> digits, int batteries, int start)
+        static long FindMaximum(ReadOnlySpan<char> digits, int batteries)
         {
             if (batteries is 0)
             {
                 return 0;
             }
 
-            long tens = batteries - 1;
-            long maximum = 0;
-
-            for (int i = start; i < digits.Length - batteries + 1; i++)
+            if (batteries >= digits.Length)
             {
-                long current = (long)Math.Pow(10, tens) * (digits[i] - '0');
-
-                if (current >= maximum)
-                {
-                    current += FindMaximum(digits, batteries - 1, i + 1);
-                    maximum = Math.Max(current, maximum);
-                }
+                return Joltage(digits);
             }
 
-            return maximum;
+            Span<char> span =
+                digits.Length <= 32 ?
+                stackalloc char[digits.Length] :
+                new char[digits.Length];
+
+            int remaining = digits.Length - batteries;
+            int index = 0;
+
+            for (int i = 0; i < digits.Length; i++)
+            {
+                char digit = digits[i];
+
+                while (index > 0 && remaining > 0 && span[index - 1] < digit)
+                {
+                    index--;
+                    remaining--;
+                }
+
+                span[index++] = digit;
+            }
+
+            return Joltage(span[..batteries]);
+
+            static long Joltage(ReadOnlySpan<char> span)
+            {
+                long joltage = 0;
+
+                for (int i = 0; i < span.Length; i++)
+                {
+                    joltage = (joltage * 10) + (span[i] - '0');
+                }
+
+                return joltage;
+            }
         }
     }
 
