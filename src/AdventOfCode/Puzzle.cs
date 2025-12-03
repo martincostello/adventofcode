@@ -3,6 +3,7 @@
 
 using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 
 namespace MartinCostello.AdventOfCode;
 
@@ -178,15 +179,32 @@ public abstract class Puzzle : IPuzzle
         {
             var lines = new List<string>();
 
-            using var reader = new StreamReader(Resource ?? ReadResource(), leaveOpen: Resource is not null);
-
-            while (await reader.ReadLineAsync(cancellationToken) is { } value)
+            await foreach (string line in ReadResourceAsEnumerableLinesAsync(cancellationToken).WithCancellation(cancellationToken))
             {
-                lines.Add(value);
+                lines.Add(line);
             }
 
             return lines;
         });
+    }
+
+    /// <summary>
+    /// Returns the lines associated with the resource for the puzzle as a <see cref="string"/>.
+    /// </summary>
+    /// <param name="cancellationToken">The optional <see cref="CancellationToken"/> to use.</param>
+    /// <returns>
+    /// A <see cref="IAsyncEnumerable{String}"/> that represents the asynchronous operation which
+    /// returns the lines of the resource associated with the puzzle.
+    /// </returns>
+    protected async IAsyncEnumerable<string> ReadResourceAsEnumerableLinesAsync(
+        [EnumeratorCancellation] CancellationToken cancellationToken = default)
+    {
+        using var reader = new StreamReader(Resource ?? ReadResource(), leaveOpen: Resource is not null);
+
+        while (await reader.ReadLineAsync(cancellationToken) is { } value)
+        {
+            yield return value;
+        }
     }
 
     /// <summary>
@@ -207,9 +225,7 @@ public abstract class Puzzle : IPuzzle
         {
             var numbers = new List<T>();
 
-            using var reader = new StreamReader(Resource ?? ReadResource(), leaveOpen: Resource is not null);
-
-            while (await reader.ReadLineAsync(cancellationToken) is { } value)
+            await foreach (string value in ReadResourceAsEnumerableLinesAsync(cancellationToken).WithCancellation(cancellationToken))
             {
                 numbers.Add(T.Parse(value, NumberStyles.Integer, CultureInfo.InvariantCulture));
             }
