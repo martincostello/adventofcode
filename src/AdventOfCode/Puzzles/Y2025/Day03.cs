@@ -36,16 +36,10 @@ public sealed class Day03 : Puzzle
             int maxPrefix = Max(prefix);
             int maxSuffix = Max(suffix);
 
-            (int Tens, int Units) digits;
-
-            if (maxSuffix is 0 || maxPrefix >= max)
-            {
-                digits = (maxPrefix, max);
-            }
-            else
-            {
-                digits = (max, maxSuffix);
-            }
+            (int Tens, int Units) digits =
+                maxSuffix is 0 || maxPrefix >= max ?
+                (maxPrefix, max) :
+                (max, maxSuffix);
 
             total += (10 * (digits.Tens - '0')) + (digits.Units - '0');
         }
