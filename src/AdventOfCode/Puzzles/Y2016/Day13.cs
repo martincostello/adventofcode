@@ -107,16 +107,13 @@ public sealed class Day13 : Puzzle
     {
         var maze = new Maze(width, height);
 
-        for (int i = 0; i < maze.Width; i++)
+        maze.Visit(seed, static (grid, location, seed) =>
         {
-            for (int j = 0; j < maze.Height; j++)
+            if (IsWall(seed, location.X, location.Y))
             {
-                if (IsWall(seed, i, j))
-                {
-                    maze.Borders.Add(new(i, j));
-                }
+                grid.Borders.Add(location);
             }
-        }
+        });
 
         return maze;
 

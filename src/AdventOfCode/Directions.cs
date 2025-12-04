@@ -31,7 +31,7 @@ internal static class Directions
     /// <summary>
     /// The sizes to move a point in each cardinal direction.
     /// </summary>
-    public static readonly IReadOnlyList<Size> All =
+    public static readonly ImmutableArray<Size> All =
     [
         Left,
         Right,

@@ -52,13 +52,7 @@ public class SquareGrid(Rectangle bounds) : IWeightedGraph<Point>
     /// <summary>
     /// Gets the valid vectors of movement around the grid.
     /// </summary>
-    protected virtual ImmutableArray<Size> Vectors { get; } =
-    [
-        new(0, 1),
-        new(1, 0),
-        new(0, -1),
-        new(-1, 0),
-    ];
+    protected virtual ImmutableArray<Size> Vectors => Directions.All;
 
     /// <inheritdoc/>
     public bool Equals(Point x, Point y) => x == y;
@@ -90,9 +84,11 @@ public class SquareGrid(Rectangle bounds) : IWeightedGraph<Point>
     /// <inheritdoc/>
     public virtual IEnumerable<Point> Neighbors(Point id)
     {
-        for (int i = 0; i < Vectors.Length; i++)
+        var vectors = Vectors;
+
+        for (int i = 0; i < vectors.Length; i++)
         {
-            Point next = id + Vectors[i];
+            Point next = id + vectors[i];
 
             if (InBounds(next) && IsPassable(next))
             {

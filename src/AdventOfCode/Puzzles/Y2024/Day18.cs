@@ -45,14 +45,7 @@ public sealed class Day18 : Puzzle
         }
 
         var grid = new SquareGrid(size, size);
-
-        for (int y = 0; y < size; y++)
-        {
-            for (int x = 0; x < size; x++)
-            {
-                grid.Locations.Add(new(x, y));
-            }
-        }
+        grid.Visit(static (grid, location) => grid.Locations.Add(location));
 
         for (int i = 0; i < ticks && i < bytes.Count; i++)
         {

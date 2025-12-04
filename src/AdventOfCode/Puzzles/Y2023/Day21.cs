@@ -22,30 +22,26 @@ public sealed class Day21 : Puzzle
     /// <returns>
     /// The number of plots the elf can reach in exactly <paramref name="steps"/> steps.
     /// </returns>
-    public static int Walk(IList<string> map, int steps)
+    public static int Walk(IReadOnlyList<string> map, int steps)
     {
         int height = map.Count;
         int width = map[0].Length;
 
-        var origin = Point.Empty;
         var grid = new SquareGrid(width, height);
 
-        for (int y = 0; y < height; y++)
+        var origin = grid.Visit(map, Point.Empty, static (grid, location, tile, origin) =>
         {
-            for (int x = 0; x < width; x++)
+            if (tile is '#')
             {
-                char tile = map[y][x];
-
-                if (tile is '#')
-                {
-                    grid.Borders.Add(new(x, y));
-                }
-                else if (tile is 'S')
-                {
-                    origin = new(x, y);
-                }
+                grid.Borders.Add(location);
             }
-        }
+            else if (tile is 'S')
+            {
+                origin = location;
+            }
+
+            return origin;
+        });
 
         var garden = new Garden(grid, steps);
 
@@ -85,7 +81,7 @@ public sealed class Day21 : Puzzle
 
             var vectors = Directions.All;
 
-            for (int i = 0; i < vectors.Count; i++)
+            for (int i = 0; i < vectors.Length; i++)
             {
                 Point next = id.Location + vectors[i];
 

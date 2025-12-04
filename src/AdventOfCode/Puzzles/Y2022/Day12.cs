@@ -34,7 +34,7 @@ public sealed class Day12 : Puzzle
     /// the starting position and from any location at ground level.
     /// </returns>
     public static (int MinimumStepsFromStart, int MinimumStepsFromGroundLevel) GetMinimumSteps(
-        IList<string> heightmap,
+        IReadOnlyList<string> heightmap,
         CancellationToken cancellationToken = default)
     {
         var map = BuildMap(heightmap);
@@ -58,39 +58,33 @@ public sealed class Day12 : Puzzle
 
         return (distances[map.Start], distances.Values.Min((p) => p));
 
-        static Map BuildMap(IList<string> heightmap)
+        static Map BuildMap(IReadOnlyList<string> heightmap)
         {
             int width = heightmap[0].Length;
             int height = heightmap.Count;
 
             var map = new Map(width, height);
 
-            for (int y = 0; y < map.Height; y++)
+            map.Visit(heightmap, static (map, location, tile) =>
             {
-                for (int x = 0; x < map.Width; x++)
+                map.Locations.Add(location);
+
+                map.Elevations[location] = tile switch
                 {
-                    var location = new Point(x, y);
-                    map.Locations.Add(location);
+                    'S' => 0,
+                    'E' => 'z' - 'a',
+                    _ => tile - 'a',
+                };
 
-                    char ch = heightmap[y][x];
-
-                    map.Elevations[location] = ch switch
-                    {
-                        'S' => 0,
-                        'E' => 'z' - 'a',
-                        _ => ch - 'a',
-                    };
-
-                    if (ch == 'S')
-                    {
-                        map.Start = location;
-                    }
-                    else if (ch == 'E')
-                    {
-                        map.End = location;
-                    }
+                if (tile is 'S')
+                {
+                    map.Start = location;
                 }
-            }
+                else if (tile is 'E')
+                {
+                    map.End = location;
+                }
+            });
 
             return map;
         }
