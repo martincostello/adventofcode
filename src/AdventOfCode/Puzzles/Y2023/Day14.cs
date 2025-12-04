@@ -30,34 +30,24 @@ public sealed class Day14 : Puzzle
     /// The total load on the northern support beams and a visualization of the rocks.
     /// </returns>
     public static (int Load, string Visualization) ComputeLoad(
-        IList<string> positions,
+        IReadOnlyList<string> positions,
         int rotations,
         ILogger? logger = null,
         CancellationToken cancellationToken = default)
     {
         var platform = new SquareGrid(positions[0].Length, positions.Count);
 
-        for (int y = 0; y < platform.Height; y++)
+        platform.VisitCells(positions, static (platform, location, contents) =>
         {
-            string row = positions[y];
-
-            for (int x = 0; x < platform.Width; x++)
+            if (contents is 'O')
             {
-                switch (row[x])
-                {
-                    case 'O':
-                        platform.Locations.Add(new(x, y));
-                        break;
-
-                    case '#':
-                        platform.Borders.Add(new(x, y));
-                        break;
-
-                    default:
-                        break;
-                }
+                platform.Locations.Add(location);
             }
-        }
+            else if (contents is '#')
+            {
+                platform.Borders.Add(location);
+            }
+        });
 
         var north = Directions.Up;
         var south = Directions.Down;

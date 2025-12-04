@@ -94,7 +94,7 @@ public sealed class Day17 : Puzzle
             var backwards = id.Direction * -1;
             var directions = Directions.All;
 
-            for (int i = 0; i < directions.Count; i++)
+            for (int i = 0; i < directions.Length; i++)
             {
                 var direction = directions[i];
 

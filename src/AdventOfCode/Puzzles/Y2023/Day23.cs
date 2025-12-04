@@ -22,45 +22,42 @@ public sealed class Day23 : Puzzle
     /// <returns>
     /// The number of steps for the longest walk through the hiking trail.
     /// </returns>
-    public static int Walk(IList<string> hikingTrail, CancellationToken cancellationToken)
+    public static int Walk(IReadOnlyList<string> hikingTrail, CancellationToken cancellationToken)
     {
         int height = hikingTrail.Count;
         int width = hikingTrail[0].Length;
 
         var trail = new HikingTrail(width, height);
 
-        for (int y = 0; y < height; y++)
+        trail.VisitCells(hikingTrail, static (trail, location, contents) =>
         {
-            for (int x = 0; x < width; x++)
+            switch (contents)
             {
-                switch (hikingTrail[y][x])
-                {
-                    case '#':
-                        trail.Borders.Add(new(x, y));
-                        break;
+                case '#':
+                    trail.Borders.Add(location);
+                    break;
 
-                    case '<':
-                        trail.Slopes[new(x, y)] = Directions.Left;
-                        break;
+                case '<':
+                    trail.Slopes[location] = Directions.Left;
+                    break;
 
-                    case '>':
-                        trail.Slopes[new(x, y)] = Directions.Right;
-                        break;
+                case '>':
+                    trail.Slopes[location] = Directions.Right;
+                    break;
 
-                    case '^':
-                        trail.Slopes[new(x, y)] = Directions.Up;
-                        break;
+                case '^':
+                    trail.Slopes[location] = Directions.Up;
+                    break;
 
-                    case 'v':
-                        trail.Slopes[new(x, y)] = Directions.Down;
-                        break;
+                case 'v':
+                    trail.Slopes[location] = Directions.Down;
+                    break;
 
-                    default:
-                        trail.Locations.Add(new(x, y));
-                        break;
-                }
+                default:
+                    trail.Locations.Add(location);
+                    break;
             }
-        }
+        });
 
         var start = new Point(1, 0);
         var goal = new Point(width - 2, height - 1);

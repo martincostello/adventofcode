@@ -26,51 +26,33 @@ public sealed class Day10 : Puzzle
     /// <returns>
     /// The sum of the trailhead scores and ratings for the specified map.
     /// </returns>
-    public static (int SumOfScores, int SumOfRatings) Explore(IList<string> map)
+    public static (int SumOfScores, int SumOfRatings) Explore(IReadOnlyList<string> map)
     {
         var grid = new TopographicMap(new(0, 0, map[0].Length, map.Count));
 
-        for (int y = 0; y < map.Count; y++)
+        grid.VisitCells(map, static (grid, point, tile) =>
         {
-            string row = map[y];
-
-            for (int x = 0; x < row.Length; x++)
+            if (char.IsDigit(tile))
             {
-                char tile = row[x];
-
-                if (!char.IsDigit(tile))
-                {
-                    continue;
-                }
-
-                grid.Heights[new(x, y)] = tile - '0';
+                grid.Heights[point] = tile - '0';
             }
-        }
+        });
 
-        int scoresSum = 0;
-        int ratingsSum = 0;
+        (int Summits, int Ratings) sums = (0, 0);
 
-        for (int y = 0; y < map.Count; y++)
+        return grid.VisitCells(sums, static (grid, origin, sums) =>
         {
-            string row = map[y];
-
-            for (int x = 0; x < row.Length; x++)
+            if (!grid.Heights.TryGetValue(origin, out int height) || height is not 0)
             {
-                var origin = new Point(x, y);
-
-                if (!grid.Heights.TryGetValue(origin, out int height) || height is not 0)
-                {
-                    continue;
-                }
-
-                var summits = new HashSet<Point>();
-
-                ratingsSum += Explore(grid, origin, 0, summits);
-                scoresSum += summits.Count;
+                return sums;
             }
-        }
 
-        return (scoresSum, ratingsSum);
+            var summits = new HashSet<Point>();
+
+            int ratings = Explore(grid, origin, 0, summits);
+
+            return (sums.Summits + summits.Count, sums.Ratings + ratings);
+        });
 
         static int Explore(TopographicMap grid, Point origin, int height, HashSet<Point> summits)
         {
