@@ -15,7 +15,7 @@ public sealed class Day07Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         ];
 
         // Act
-        int actual = Day05.Solve(values);
+        int actual = Day07.Solve(values);
 
         // Assert
         actual.ShouldBe(Puzzle.Unsolved);

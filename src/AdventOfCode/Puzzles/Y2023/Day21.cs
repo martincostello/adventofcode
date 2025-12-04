@@ -79,7 +79,7 @@ public sealed class Day21 : Puzzle
                 yield break;
             }
 
-            var vectors = Directions.AllCardinal;
+            var vectors = Directions.Cardinal;
 
             for (int i = 0; i < vectors.Length; i++)
             {

@@ -76,7 +76,7 @@ public sealed class Day10 : Puzzle
             {
                 int connections = 0;
 
-                foreach (var offset in Directions.AllCardinal)
+                foreach (var offset in Directions.Cardinal)
                 {
                     var neighbor = start + offset;
 

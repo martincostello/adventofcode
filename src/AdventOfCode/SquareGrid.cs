@@ -52,7 +52,7 @@ public class SquareGrid(Rectangle bounds) : IWeightedGraph<Point>
     /// <summary>
     /// Gets the valid vectors of movement around the grid.
     /// </summary>
-    protected virtual ImmutableArray<Size> Vectors => Directions.AllCardinal;
+    protected virtual ImmutableArray<Size> Vectors => Directions.Cardinal;
 
     /// <inheritdoc/>
     public bool Equals(Point x, Point y) => x == y;

@@ -220,7 +220,7 @@ public sealed class Day03 : Puzzle
 
             int sum = 0;
 
-            foreach (Size offset in Directions.AllCardinalWithDiagonals)
+            foreach (Size offset in Directions.All)
             {
                 sum += this.GetValueOrDefault(address + offset);
             }

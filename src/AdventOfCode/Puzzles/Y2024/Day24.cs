@@ -38,7 +38,7 @@ public sealed class Day24 : Puzzle
 
         if (Verbose)
         {
-            Logger.WriteLine("The solution is {0}", Solution);
+            Logger.WriteLine("The solution is {0}.", Solution);
         }
 
         return PuzzleResult.Create(Solution);

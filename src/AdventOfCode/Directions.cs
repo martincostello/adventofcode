@@ -31,7 +31,7 @@ internal static class Directions
     /// <summary>
     /// The sizes to move a point in each cardinal direction.
     /// </summary>
-    public static readonly ImmutableArray<Size> AllCardinal =
+    public static readonly ImmutableArray<Size> Cardinal =
     [
         Left,
         Right,
@@ -40,14 +40,18 @@ internal static class Directions
     ];
 
     /// <summary>
-    /// The sizes to move a point in each cardinal direction, including diagonal movement.
+    /// The sizes to move a point in each intercardinal direction.
     /// </summary>
-    public static readonly ImmutableArray<Size> AllCardinalWithDiagonals =
+    public static readonly ImmutableArray<Size> Intercardinal =
     [
-        .. AllCardinal,
         new(1, 1),
         new(1, -1),
         new(-1, 1),
         new(-1, -1),
     ];
+
+    /// <summary>
+    /// The sizes to move a point in each cardinal and intercardinal direction.
+    /// </summary>
+    public static readonly ImmutableArray<Size> All = [.. Cardinal, .. Intercardinal];
 }
