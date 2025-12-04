@@ -103,7 +103,7 @@ public sealed class Day05 : Puzzle
         ids.Sort();
 
         int previous = ids[0];
-        int mySeatId = -1;
+        int mySeatId = Unsolved;
 
         foreach (int id in ids[1..])
         {

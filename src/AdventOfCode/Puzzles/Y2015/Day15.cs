@@ -66,7 +66,7 @@ public sealed class Day15 : Puzzle
         }
 
         // Calculate the total score for each possible recipe
-        int bestScore = -1;
+        int bestScore = Unsolved;
 
         for (int i = 0; i < recipes.Count; i++)
         {

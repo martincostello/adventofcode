@@ -107,13 +107,6 @@ public sealed class Day04 : Puzzle
 
     private sealed class Warehouse(Rectangle bounds) : SquareGrid(bounds)
     {
-        protected override ImmutableArray<Size> Vectors { get; } =
-        [
-            .. Directions.All,
-            new(1, 1),
-            new(1, -1),
-            new(-1, 1),
-            new(-1, -1),
-        ];
+        protected override ImmutableArray<Size> Vectors { get; } = Directions.AllCardinalWithDiagonals;
     }
 }

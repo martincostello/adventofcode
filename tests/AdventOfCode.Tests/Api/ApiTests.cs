@@ -45,7 +45,7 @@ public class ApiTests(HttpServerFixture fixture, ITestOutputHelper outputHelper)
     [PuzzleData(2015, 22, ["hard"], 1289)]
     [PuzzleData(2015, 23, 1u, 170u)]
     [PuzzleData(2015, 23, ["1"], 1u, 247u, SendResource = true)]
-    [PuzzleData(2015, 24, 11266889531, 77387711, Skip = "Too slow.")]
+    [TooSlowPuzzleData(2015, 24, 11266889531, 77387711)]
     [PuzzleData(2015, 25, ["2947", "3029"], 19980801u)]
     [PuzzleData(2016, 01, 287, 133)]
     [PuzzleData(2016, 02, "14894", "26B96")]
@@ -57,10 +57,10 @@ public class ApiTests(HttpServerFixture fixture, ITestOutputHelper outputHelper)
     [PuzzleData(2016, 08, 121, "RURUCEOEIL", ExpectedVisualizations = 1)]
     [PuzzleData(2016, 09, 98135, 10964557606)]
     [PuzzleData(2016, 10, 141, 1209)]
-    [PuzzleData(2016, 11, 47, 71, Skip = "Not implemented.")]
+    [UnsolvedPuzzleData(2016, 11, 47, 71)]
     [PuzzleData(2016, 12, 318020, 9227674)]
     [PuzzleData(2016, 13, ["1362"], 82, 138)]
-    [PuzzleData(2016, 14, ["ihaygndm"], 15035, 19968, Skip = "Too slow.")]
+    [TooSlowPuzzleData(2016, 14, ["ihaygndm"], 15035, 19968)]
     [PuzzleData(2016, 15, 16824, 3543984)]
     [PuzzleData(2016, 16, ["10010000000110000", "272"], "10010110010011110")]
     [PuzzleData(2016, 16, ["10010000000110000", "35651584"], "01101011101100011")]
@@ -72,7 +72,7 @@ public class ApiTests(HttpServerFixture fixture, ITestOutputHelper outputHelper)
     [PuzzleData(2016, 21, ["abcdefgh"], "gcedfahb", SendResource = true)]
     [PuzzleData(2016, 21, ["fbgdceah", "true"], "hegbdcfa", SendResource = true)]
     [PuzzleData(2016, 22, 985, 179)]
-    [PuzzleData(2016, 23, 14346, 479010906, Skip = "Too slow.")]
+    [TooSlowPuzzleData(2016, 23, 14346, 479010906)]
     [PuzzleData(2016, 24, 502, 724)]
     [PuzzleData(2016, 25, 198)]
     [PuzzleData(2017, 01, 1034, 1356)]
@@ -171,17 +171,17 @@ public class ApiTests(HttpServerFixture fixture, ITestOutputHelper outputHelper)
     [PuzzleData(2022, 12, 408, 399)]
     [PuzzleData(2022, 13, 5252, 20592)]
     [PuzzleData(2022, 14, 832, 27601, ExpectedVisualizations = 2)]
-    [PuzzleData(2022, 15, -1, Skip = "Not implemented.")]
-    [PuzzleData(2022, 16, -1, Skip = "Not implemented.")]
-    [PuzzleData(2022, 17, 3135, Skip = "Not implemented.")]
+    [UnimplementedPuzzleData(2022, 15)]
+    [UnimplementedPuzzleData(2022, 16)]
+    [UnsolvedPuzzleData(2022, 17, 3135, Puzzle.Unsolved)]
     [PuzzleData(2022, 18, 4340, 2468)]
-    [PuzzleData(2022, 19, -1, Skip = "Not implemented.")]
-    [PuzzleData(2022, 20, -1, Skip = "Not implemented.")]
+    [UnimplementedPuzzleData(2022, 19)]
+    [UnimplementedPuzzleData(2022, 20)]
     [PuzzleData(2022, 21, 10037517593724, 3272260914328)]
-    [PuzzleData(2022, 22, -1, Skip = "Not implemented.")]
-    [PuzzleData(2022, 23, -1, Skip = "Not implemented.")]
-    [PuzzleData(2022, 24, -1, Skip = "Not implemented.")]
-    [PuzzleData(2022, 25, -1, Skip = "Not implemented.")]
+    [UnimplementedPuzzleData(2022, 22)]
+    [UnimplementedPuzzleData(2022, 23)]
+    [UnimplementedPuzzleData(2022, 24)]
+    [UnimplementedPuzzleData(2022, 25)]
     [PuzzleData(2023, 01, 54697, 54885)]
     [PuzzleData(2023, 02, 2156, 66909)]
     [PuzzleData(2023, 03, 535351, 87287096)]
@@ -193,20 +193,20 @@ public class ApiTests(HttpServerFixture fixture, ITestOutputHelper outputHelper)
     [PuzzleData(2023, 09, 1882395907, 1005)]
     [PuzzleData(2023, 10, 6870, 287)]
     [PuzzleData(2023, 11, 9605127, 458191688761)]
-    [PuzzleData(2023, 12, 7047, -1, Skip = "Unsolved.")]
+    [UnsolvedPuzzleData(2023, 12, 7047, Puzzle.Unsolved)]
     [PuzzleData(2023, 13, 35538, 30442)]
     [PuzzleData(2023, 14, 108641, 84328, ExpectedVisualizations = 2)]
     [PuzzleData(2023, 15, 511215, 236057)]
     [PuzzleData(2023, 16, 6906, 7330, ExpectedVisualizations = 2)]
-    [PuzzleData(2023, 17, 1013, Skip = "Unsolved.")]
+    [UnsolvedPuzzleData(2023, 17, 1013, Puzzle.Unsolved)]
     [PuzzleData(2023, 18, 47139, 173152345887206)]
-    [PuzzleData(2023, 19, 398527, -1, Skip = "Unsolved.")]
+    [UnsolvedPuzzleData(2023, 19, 398527, Puzzle.Unsolved)]
     [PuzzleData(2023, 20, 712543680, 238920142622879)]
     [PuzzleData(2023, 21, 3782)]
     [PuzzleData(2023, 22, 454, 74287)]
-    [PuzzleData(2023, 23, -1, Skip = "Unsolved.")]
-    [PuzzleData(2023, 24, -1, Skip = "Unsolved.")]
-    [PuzzleData(2023, 25, -1, Skip = "Not implemented.")]
+    [UnimplementedPuzzleData(2023, 23)]
+    [UnimplementedPuzzleData(2023, 24)]
+    [UnimplementedPuzzleData(2023, 25)]
     [PuzzleData(2024, 01, 1530215, 26800609)]
     [PuzzleData(2024, 02, 236, 308)]
     [PuzzleData(2024, 03, 165225049, 108830766)]
@@ -226,24 +226,24 @@ public class ApiTests(HttpServerFixture fixture, ITestOutputHelper outputHelper)
     [PuzzleData(2024, 17, "1,2,3,1,3,2,5,3,1", 105706277661082)]
     [PuzzleData(2024, 18, 308, "46,28")]
     [PuzzleData(2024, 19, 371, 650354687260341)]
-    [PuzzleData(2024, 20, -1, Skip = "Not implemented.")]
-    [PuzzleData(2024, 21, -1, Skip = "Not implemented.")]
+    [UnimplementedPuzzleData(2024, 20)]
+    [UnimplementedPuzzleData(2024, 21)]
     [PuzzleData(2024, 22, 14623556510L)]
-    [PuzzleData(2024, 23, -1, Skip = "Not implemented.")]
-    [PuzzleData(2024, 24, -1, Skip = "Not implemented.")]
+    [UnimplementedPuzzleData(2024, 23)]
+    [UnimplementedPuzzleData(2024, 24)]
     [PuzzleData(2024, 25, 2835)]
     [PuzzleData(2025, 1, 1102, 6175)]
     [PuzzleData(2025, 2, 21898734247, 28915664389)]
     [PuzzleData(2025, 3, 17524, 173848577117276)]
     [PuzzleData(2025, 4, 1587, 8946)]
-    [PuzzleData(2025, 5, -1, Skip = "Not implemented.")]
-    [PuzzleData(2025, 6, -1, Skip = "Not implemented.")]
-    [PuzzleData(2025, 7, -1, Skip = "Not implemented.")]
-    [PuzzleData(2025, 8, -1, Skip = "Not implemented.")]
-    [PuzzleData(2025, 9, -1, Skip = "Not implemented.")]
-    [PuzzleData(2025, 10, -1, Skip = "Not implemented.")]
-    [PuzzleData(2025, 11, -1, Skip = "Not implemented.")]
-    [PuzzleData(2025, 12, -1, Skip = "Not implemented.")]
+    [UnimplementedPuzzleData(2025, 5)]
+    [UnimplementedPuzzleData(2025, 6)]
+    [UnimplementedPuzzleData(2025, 7)]
+    [UnimplementedPuzzleData(2025, 8)]
+    [UnimplementedPuzzleData(2025, 9)]
+    [UnimplementedPuzzleData(2025, 10)]
+    [UnimplementedPuzzleData(2025, 11)]
+    [UnimplementedPuzzleData(2025, 12)]
     public async Task Can_Solve_Puzzle(int year, int day, PuzzleDataAttribute testCase)
     {
         // Arrange
@@ -383,43 +383,93 @@ public class ApiTests(HttpServerFixture fixture, ITestOutputHelper outputHelper)
         return reader.ReadToEnd();
     }
 
+    public sealed class UnsolvedPuzzleDataAttribute : PuzzleDataAttribute
+    {
+        public UnsolvedPuzzleDataAttribute(int year, int day, params object[] expectedSolutions)
+            : base(year, day, expectedSolutions)
+        {
+            Skip = "Unsolved.";
+        }
+
+        public UnsolvedPuzzleDataAttribute(int year, int day, string[] arguments, params object[] expectedSolutions)
+            : base(year, day, arguments, expectedSolutions)
+        {
+            Skip = "Unsolved.";
+        }
+    }
+
+    public sealed class TooSlowPuzzleDataAttribute : PuzzleDataAttribute
+    {
+        public TooSlowPuzzleDataAttribute(int year, int day, params object[] expectedSolutions)
+            : base(year, day, expectedSolutions)
+        {
+            Skip = "Too slow.";
+        }
+
+        public TooSlowPuzzleDataAttribute(int year, int day, string[] arguments, params object[] expectedSolutions)
+            : base(year, day, arguments, expectedSolutions)
+        {
+            Skip = "Too slow.";
+        }
+    }
+
+    public sealed class UnimplementedPuzzleDataAttribute : PuzzleDataAttribute
+    {
+        public UnimplementedPuzzleDataAttribute(int year, int day)
+            : base(year, day, [Puzzle.Unsolved, Puzzle.Unsolved])
+        {
+            Skip = "Not implemented.";
+        }
+
+        public UnimplementedPuzzleDataAttribute(int year, int day, string[] arguments)
+            : base(year, day, arguments, [Puzzle.Unsolved, Puzzle.Unsolved])
+        {
+            Skip = "Not implemented.";
+        }
+    }
+
 #pragma warning disable CA1019
 #pragma warning disable CA1034
-    public sealed class PuzzleDataAttribute : DataAttribute
+#pragma warning disable CA1813
+    public class PuzzleDataAttribute : DataAttribute
+#pragma warning restore CA1019
 #pragma warning restore CA1034
+#pragma warning restore CA1813
     {
-        public PuzzleDataAttribute(int year, int day, params object[] solutions)
+        public PuzzleDataAttribute(int year, int day, params object[] expectedSolutions)
         {
             Year = year;
             Day = day;
             SendResource = true;
-            ExpectedSolutions = solutions;
+            ExpectedSolutions = expectedSolutions;
         }
 
-        public PuzzleDataAttribute(int year, int day, string[] arguments, params object[] solutions)
+        public PuzzleDataAttribute(int year, int day, string[] arguments, params object[] expectedSolutions)
         {
             Year = year;
             Day = day;
             Arguments = arguments;
-            ExpectedSolutions = solutions;
+            ExpectedSolutions = expectedSolutions;
         }
 
-        public string[]? Arguments { get; init; }
+        public string[]? Arguments { get; }
 
         public int ExpectedVisualizations { get; init; } = default!;
 
         public bool SendResource { get; init; }
 
-        internal int Year { get; }
+        public int Year { get; }
 
-        internal int Day { get; }
+        public int Day { get; }
 
-        internal object[] ExpectedSolutions { get; }
+        public object[] ExpectedSolutions { get; }
 
         public override ValueTask<IReadOnlyCollection<ITheoryDataRow>> GetData(MethodInfo testMethod, DisposalTracker disposalTracker)
         {
 #pragma warning disable xUnit1046 // Avoid using TheoryDataRow arguments that are not serializable
-            IReadOnlyCollection<ITheoryDataRow> rows = [new TheoryDataRow<int, int, PuzzleDataAttribute>(Year, Day, this)];
+#pragma warning disable xUnit1047 // Avoid using TheoryDataRow arguments that might not be serializable
+            IReadOnlyCollection<ITheoryDataRow> rows = [new TheoryDataRow<int, int, PuzzleDataAttribute>(Year, Day, this) { Skip = Skip }];
+#pragma warning restore xUnit1047 // Avoid using TheoryDataRow arguments that might not be serializable
 #pragma warning restore xUnit1046 // Avoid using TheoryDataRow arguments that are not serializable
             return ValueTask.FromResult(rows);
         }

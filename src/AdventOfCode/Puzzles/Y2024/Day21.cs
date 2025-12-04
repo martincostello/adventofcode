@@ -6,18 +6,25 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2024;
 /// <summary>
 /// A class representing the puzzle for <c>https://adventofcode.com/2024/day/21</c>. This class cannot be inherited.
 /// </summary>
-[Puzzle(2024, 21, "Keypad Conundrum", RequiresData = true, IsHidden = true)]
+[Puzzle(2024, 21, "Keypad Conundrum", RequiresData = true, IsHidden = true, Unsolved = true)]
 public sealed class Day21 : Puzzle
 {
-#pragma warning disable IDE0022
-#pragma warning disable IDE0060
-#pragma warning disable SA1600
-
+    /// <summary>
+    /// Gets the solution.
+    /// </summary>
     public int Solution { get; private set; }
 
-    public static int Solve(IList<string> values)
+    /// <summary>
+    /// Solves the puzzle.
+    /// </summary>
+    /// <param name="values">The values to solve the puzzle from.</param>
+    /// <returns>
+    /// The solution.
+    /// </returns>
+    public static int Solve(IReadOnlyList<string> values)
     {
-        return -1;
+        ArgumentNullException.ThrowIfNull(values);
+        return Unsolved;
     }
 
     /// <inheritdoc />
@@ -31,7 +38,7 @@ public sealed class Day21 : Puzzle
 
         if (Verbose)
         {
-            Logger.WriteLine("{0}", Solution);
+            Logger.WriteLine("The solution is {0}.", Solution);
         }
 
         return PuzzleResult.Create(Solution);

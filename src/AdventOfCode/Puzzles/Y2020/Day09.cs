@@ -47,7 +47,7 @@ public sealed class Day09 : Puzzle
             }
         }
 
-        return -1;
+        return Unsolved;
     }
 
     /// <summary>
@@ -84,7 +84,7 @@ public sealed class Day09 : Puzzle
             sequence.Clear();
         }
 
-        return -1;
+        return Unsolved;
     }
 
     /// <inheritdoc />

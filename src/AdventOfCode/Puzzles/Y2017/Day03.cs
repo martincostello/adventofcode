@@ -195,21 +195,6 @@ public sealed class Day03 : Puzzle
     private sealed class Memory : Dictionary<Point, int>
     {
         /// <summary>
-        /// An array of offsets that may surround an address in the grid.
-        /// </summary>
-        private static readonly ImmutableArray<Size> Offsets =
-        [
-            new(0, 1),
-            new(1, 1),
-            new(1, 0),
-            new(1, -1),
-            new(0, -1),
-            new(-1, -1),
-            new(-1, 0),
-            new(-1, 1),
-        ];
-
-        /// <summary>
         /// Writes the value for the specified address to memory.
         /// </summary>
         /// <param name="address">The address to write the value of.</param>
@@ -235,7 +220,7 @@ public sealed class Day03 : Puzzle
 
             int sum = 0;
 
-            foreach (Size offset in Offsets)
+            foreach (Size offset in Directions.AllCardinalWithDiagonals)
             {
                 sum += this.GetValueOrDefault(address + offset);
             }

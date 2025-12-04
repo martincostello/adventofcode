@@ -122,7 +122,7 @@ public sealed class Day20 : Puzzle
         }
 
         int product = highPulses * lowPulses;
-        long cycles = -1;
+        long cycles = Unsolved;
 
         if (modules.TryGetValue(Activator, out var activator))
         {

@@ -92,7 +92,7 @@ public sealed class Day17 : Puzzle
         public IEnumerable<Move> Neighbors(Move id)
         {
             var backwards = id.Direction * -1;
-            var directions = Directions.All;
+            var directions = Directions.AllCardinal;
 
             for (int i = 0; i < directions.Length; i++)
             {

@@ -31,11 +31,23 @@ internal static class Directions
     /// <summary>
     /// The sizes to move a point in each cardinal direction.
     /// </summary>
-    public static readonly ImmutableArray<Size> All =
+    public static readonly ImmutableArray<Size> AllCardinal =
     [
         Left,
         Right,
         Up,
         Down,
+    ];
+
+    /// <summary>
+    /// The sizes to move a point in each cardinal direction, including diagonal movement.
+    /// </summary>
+    public static readonly ImmutableArray<Size> AllCardinalWithDiagonals =
+    [
+        .. AllCardinal,
+        new(1, 1),
+        new(1, -1),
+        new(-1, 1),
+        new(-1, -1),
     ];
 }

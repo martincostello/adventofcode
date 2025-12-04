@@ -6,7 +6,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2024;
 /// <summary>
 /// A class representing the puzzle for <c>https://adventofcode.com/2024/day/23</c>. This class cannot be inherited.
 /// </summary>
-[Puzzle(2024, 23, "LAN Party", RequiresData = true, IsHidden = true)]
+[Puzzle(2024, 23, "LAN Party", RequiresData = true, IsHidden = true, Unsolved = true)]
 public sealed class Day23 : Puzzle
 {
     /// <summary>
@@ -25,7 +25,7 @@ public sealed class Day23 : Puzzle
     public static int CountNetworks(IList<string> values)
     {
         ArgumentNullException.ThrowIfNull(values);
-        return -1;
+        return Unsolved;
     }
 
     /// <inheritdoc />

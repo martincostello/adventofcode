@@ -13,6 +13,11 @@ namespace MartinCostello.AdventOfCode;
 public abstract class Puzzle : IPuzzle
 {
     /// <summary>
+    /// Represents a value indicating that a solution to a puzzle is unsolved.
+    /// </summary>
+    public const int Unsolved = -1;
+
+    /// <summary>
     /// Gets or sets the optional resource stream associated with the puzzle.
     /// </summary>
     public Stream? Resource { get; set; }
