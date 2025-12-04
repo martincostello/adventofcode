@@ -29,7 +29,7 @@ public sealed class Day21 : Puzzle
 
         var grid = new SquareGrid(width, height);
 
-        var origin = grid.Visit(map, Point.Empty, static (grid, location, tile, origin) =>
+        var origin = grid.VisitCells(map, Point.Empty, static (grid, location, tile, origin) =>
         {
             if (tile is '#')
             {

@@ -15,9 +15,9 @@ public static class SquareGridExtensions
     /// <param name="grid">The grid to traverse.</param>
     /// <param name="layout">A list of strings representing the layout to traverse. Each string corresponds to a row in the grid.</param>
     /// <param name="visitor">An action to invoke for each cell in the grid.</param>
-    public static void Visit<T>(this T grid, IReadOnlyList<string> layout, Action<T, Point, char> visitor)
+    public static void VisitCells<T>(this T grid, IReadOnlyList<string> layout, Action<T, Point, char> visitor)
         where T : SquareGrid =>
-        Visit(grid, layout, visitor, static (grid, location, cell, visitor) =>
+        VisitCells(grid, layout, visitor, static (grid, location, cell, visitor) =>
         {
             visitor(grid, location, cell);
             return visitor;
@@ -33,7 +33,7 @@ public static class SquareGridExtensions
     /// <param name="state">The initial state value to be passed to the visitor function and optionally updated as each cell is visited.</param>
     /// <param name="visitor">An action to invoke for each cell in the grid.</param>
     /// <returns>The final state value after all cells in the grid have been visited.</returns>
-    public static TState Visit<TGrid, TState>(this TGrid grid, IReadOnlyList<string> layout, TState state, Func<TGrid, Point, char, TState, TState> visitor)
+    public static TState VisitCells<TGrid, TState>(this TGrid grid, IReadOnlyList<string> layout, TState state, Func<TGrid, Point, char, TState, TState> visitor)
         where TGrid : SquareGrid
     {
         for (int y = 0; y < layout.Count; y++)
@@ -55,9 +55,9 @@ public static class SquareGridExtensions
     /// <typeparam name="T">The type of the grid.</typeparam>
     /// <param name="grid">The grid to traverse.</param>
     /// <param name="visitor">An action to invoke for each cell in the grid.</param>
-    public static void Visit<T>(this T grid, Action<T, Point> visitor)
+    public static void VisitCells<T>(this T grid, Action<T, Point> visitor)
         where T : SquareGrid
-        => Visit(grid, visitor, static (grid, location, visitor) => visitor(grid, location));
+        => VisitCells(grid, visitor, static (grid, location, visitor) => visitor(grid, location));
 
     /// <summary>
     /// Iterates over each cell in the grid and invokes the specified visitor action for every position.
@@ -67,7 +67,7 @@ public static class SquareGridExtensions
     /// <param name="grid">The grid to traverse.</param>
     /// <param name="state">The state to pass to each invocation of the visitor action.</param>
     /// <param name="visitor">An action to invoke for each cell in the grid.</param>
-    public static void Visit<TGrid, TState>(this TGrid grid, TState state, Action<TGrid, Point, TState> visitor)
+    public static void VisitCells<TGrid, TState>(this TGrid grid, TState state, Action<TGrid, Point, TState> visitor)
         where TGrid : SquareGrid
     {
         var bounds = grid.Bounds;
@@ -90,7 +90,7 @@ public static class SquareGridExtensions
     /// <param name="state">The initial state value to be passed to the visitor function and optionally updated as each location is visited.</param>
     /// <param name="visitor">A function that is invoked for each location in the grid.</param>
     /// <returns>The final state value after all locations in the grid have been visited.</returns>
-    public static TState Visit<TGrid, TState>(this TGrid grid, TState state, Func<TGrid, Point, TState, TState> visitor)
+    public static TState VisitCells<TGrid, TState>(this TGrid grid, TState state, Func<TGrid, Point, TState, TState> visitor)
         where TGrid : SquareGrid
     {
         var bounds = grid.Bounds;

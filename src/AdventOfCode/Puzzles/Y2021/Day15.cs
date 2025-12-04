@@ -92,7 +92,7 @@ public sealed class Day15 : Puzzle
 
         var map = new RiskMap(width, height, risks);
 
-        map.Visit(risks.Keys, static (map, point, risks) => map.Locations.Add(point));
+        map.VisitCells(risks.Keys, static (map, point, risks) => map.Locations.Add(point));
 
         var start = Point.Empty;
         var goal = new Point(width - 1, height - 1);

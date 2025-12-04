@@ -30,7 +30,7 @@ public sealed class Day10 : Puzzle
     {
         var grid = new TopographicMap(new(0, 0, map[0].Length, map.Count));
 
-        grid.Visit(map, static (grid, point, tile) =>
+        grid.VisitCells(map, static (grid, point, tile) =>
         {
             if (char.IsDigit(tile))
             {
@@ -40,7 +40,7 @@ public sealed class Day10 : Puzzle
 
         (int Summits, int Ratings) sums = (0, 0);
 
-        return grid.Visit(sums, static (grid, origin, sums) =>
+        return grid.VisitCells(sums, static (grid, origin, sums) =>
         {
             if (!grid.Heights.TryGetValue(origin, out int height) || height is not 0)
             {

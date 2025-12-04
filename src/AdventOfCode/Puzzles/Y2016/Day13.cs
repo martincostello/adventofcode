@@ -107,7 +107,7 @@ public sealed class Day13 : Puzzle
     {
         var maze = new Maze(width, height);
 
-        maze.Visit(seed, static (grid, location, seed) =>
+        maze.VisitCells(seed, static (grid, location, seed) =>
         {
             if (IsWall(seed, location.X, location.Y))
             {

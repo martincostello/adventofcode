@@ -65,7 +65,7 @@ public sealed class Day12 : Puzzle
 
             var map = new Map(width, height);
 
-            map.Visit(heightmap, static (map, location, tile) =>
+            map.VisitCells(heightmap, static (map, location, tile) =>
             {
                 map.Locations.Add(location);
 

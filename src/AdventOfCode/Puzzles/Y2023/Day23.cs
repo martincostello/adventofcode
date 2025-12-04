@@ -29,7 +29,7 @@ public sealed class Day23 : Puzzle
 
         var trail = new HikingTrail(width, height);
 
-        trail.Visit(hikingTrail, static (trail, location, contents) =>
+        trail.VisitCells(hikingTrail, static (trail, location, contents) =>
         {
             switch (contents)
             {

@@ -26,14 +26,15 @@ public sealed class Day04 : Puzzle
     /// <param name="diagram">A diagram of the locations of the rolls of paper.</param>
     /// <param name="cancellationToken">The optional <see cref="CancellationToken"/> to use.</param>
     /// <returns>
-    /// The number of rolls of paper that can be accessed by a forklift.
+    /// The number of rolls of paper that can be initially accessed by a forklift and
+    /// the number of rolls of paper that were then removed by a forklift.
     /// </returns>
     public static (int Accessible, int Removed) ArrangeRolls(IReadOnlyList<string> diagram, CancellationToken cancellationToken = default)
     {
         var bounds = new Rectangle(0, 0, diagram[0].Length, diagram.Count);
         var warehouse = new Warehouse(bounds);
 
-        warehouse.Visit(diagram, static (grid, location, contents) =>
+        warehouse.VisitCells(diagram, static (grid, location, contents) =>
         {
             if (contents is '@')
             {

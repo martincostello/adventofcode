@@ -37,7 +37,7 @@ public sealed class Day14 : Puzzle
     {
         var platform = new SquareGrid(positions[0].Length, positions.Count);
 
-        platform.Visit(positions, static (platform, location, contents) =>
+        platform.VisitCells(positions, static (platform, location, contents) =>
         {
             if (contents is 'O')
             {
