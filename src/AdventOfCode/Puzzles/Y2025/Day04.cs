@@ -109,10 +109,7 @@ public sealed class Day04 : Puzzle
     {
         protected override ImmutableArray<Size> Vectors { get; } =
         [
-            new(0, 1),
-            new(1, 0),
-            new(0, -1),
-            new(-1, 0),
+            .. Directions.All,
             new(1, 1),
             new(1, -1),
             new(-1, 1),
