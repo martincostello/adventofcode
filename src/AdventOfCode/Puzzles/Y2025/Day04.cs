@@ -63,6 +63,7 @@ public sealed class Day04 : Puzzle
 
         static void FindAccessible(SquareGrid grid, Point location, HashSet<Point> accessible)
         {
+            const int MoveableLimit = 3;
             int neighbors = 0;
 
             foreach (var neighbor in grid.Neighbors(location))
@@ -71,9 +72,14 @@ public sealed class Day04 : Puzzle
                 {
                     neighbors++;
                 }
+
+                if (neighbors > MoveableLimit)
+                {
+                    return;
+                }
             }
 
-            if (neighbors < 4)
+            if (neighbors <= MoveableLimit)
             {
                 accessible.Add(location);
             }
