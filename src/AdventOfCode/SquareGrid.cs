@@ -14,17 +14,6 @@ namespace MartinCostello.AdventOfCode;
 public class SquareGrid(Rectangle bounds) : IWeightedGraph<Point>
 {
     /// <summary>
-    /// The valid vectors of movement around the grid.
-    /// </summary>
-    protected static readonly ImmutableArray<Size> Vectors =
-    [
-        new(0, 1),
-        new(1, 0),
-        new(0, -1),
-        new(-1, 0),
-    ];
-
-    /// <summary>
     /// Initializes a new instance of the <see cref="SquareGrid"/> class.
     /// </summary>
     /// <param name="width">The width of the grid.</param>
@@ -59,6 +48,17 @@ public class SquareGrid(Rectangle bounds) : IWeightedGraph<Point>
     /// Gets the borders within the grid.
     /// </summary>
     public HashSet<Point> Borders { get; } = [];
+
+    /// <summary>
+    /// Gets the valid vectors of movement around the grid.
+    /// </summary>
+    protected virtual ImmutableArray<Size> Vectors { get; } =
+    [
+        new(0, 1),
+        new(1, 0),
+        new(0, -1),
+        new(-1, 0),
+    ];
 
     /// <inheritdoc/>
     public bool Equals(Point x, Point y) => x == y;
