@@ -78,7 +78,7 @@ public sealed class Day14 : Puzzle
             }
         }
 
-        return -1;
+        return Unsolved;
     }
 
     /// <inheritdoc />

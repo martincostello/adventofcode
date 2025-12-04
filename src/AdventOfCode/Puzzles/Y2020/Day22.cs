@@ -58,7 +58,7 @@ public sealed class Day22 : Puzzle
 
                     if (previousHands1.Contains(hand1) || previousHands2.Contains(hand2))
                     {
-                        return -1;
+                        return Unsolved;
                     }
                     else
                     {

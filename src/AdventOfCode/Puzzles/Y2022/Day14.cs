@@ -174,7 +174,7 @@ public sealed class Day14 : Puzzle
                 return null;
             }
 
-            return -1;
+            return Unsolved;
         }
 
         static string Visualize(Dictionary<Point, Content> cave, Point origin)

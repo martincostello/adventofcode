@@ -49,7 +49,7 @@ public sealed class Day25 : Puzzle
                 }
             }
 
-            return -1;
+            return Unsolved;
         }
 
         static long Transform(long value, int subjectNumber)

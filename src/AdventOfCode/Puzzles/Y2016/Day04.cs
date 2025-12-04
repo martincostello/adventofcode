@@ -58,7 +58,7 @@ public sealed class Day04 : Puzzle
             }
         }
 
-        return -1;
+        return Unsolved;
     }
 
     /// <summary>

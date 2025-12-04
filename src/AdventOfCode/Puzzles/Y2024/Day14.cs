@@ -92,7 +92,7 @@ public sealed class Day14 : Puzzle
 
         if (findEasterEgg)
         {
-            return -1;
+            return Unsolved;
         }
 
         var quadrant = new Size(bounds.Width / 2, bounds.Height / 2);

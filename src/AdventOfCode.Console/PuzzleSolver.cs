@@ -98,7 +98,7 @@ public sealed class PuzzleSolver
         catch (PuzzleException ex)
         {
             logger.WriteLine(ex.Message);
-            return -1;
+            return Puzzle.Unsolved;
         }
 
         logger.WriteLine();
@@ -114,12 +114,12 @@ public sealed class PuzzleSolver
         catch (OperationCanceledException)
         {
             logger.WriteLine("Solution canceled.");
-            return -1;
+            return Puzzle.Unsolved;
         }
         catch (PuzzleException ex)
         {
             logger.WriteLine(ex.Message);
-            return -1;
+            return Puzzle.Unsolved;
         }
 
         long solved = timeProvider.GetTimestamp();

@@ -50,7 +50,7 @@ public sealed class Day05 : Puzzle
                 }
             }
 
-            return -1;
+            return Unsolved;
         }
 
         static List<Stack<char>> GetStacks(IList<string> instructions, int count)
