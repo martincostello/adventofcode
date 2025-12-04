@@ -24,10 +24,11 @@ public sealed class Day04Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         ];
 
         // Act
-        long actual = Day04.FindAccessible(diagram);
+        (long actualAccessible, int actualRemoved) = Day04.ArrangeRolls(diagram, TestContext.Current.CancellationToken);
 
         // Assert
-        actual.ShouldBe(13);
+        actualAccessible.ShouldBe(13);
+        actualRemoved.ShouldBe(43);
     }
 
     [Fact]
@@ -39,5 +40,6 @@ public sealed class Day04Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         // Assert
         puzzle.ShouldNotBeNull();
         puzzle.AccessibleRolls.ShouldBe(1587);
+        puzzle.RemovedRolls.ShouldBe(8946);
     }
 }

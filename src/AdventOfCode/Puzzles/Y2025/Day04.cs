@@ -10,19 +10,25 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2025;
 public sealed class Day04 : Puzzle
 {
     /// <summary>
-    /// Gets the number of rolls of paper that can be accessed by a forklift.
+    /// Gets the number of rolls of paper that can be initially accessed by a forklift.
     /// </summary>
     public int AccessibleRolls { get; private set; }
+
+    /// <summary>
+    /// Gets the number of rolls of paper that can be removed by a forklift.
+    /// </summary>
+    public int RemovedRolls { get; private set; }
 
     /// <summary>
     /// Gets the number of rolls of paper that can be accessed by a forklift
     /// as illustrated by the specified diagram.
     /// </summary>
     /// <param name="diagram">A diagram of the locations of the rolls of paper.</param>
+    /// <param name="cancellationToken">The optional <see cref="CancellationToken"/> to use.</param>
     /// <returns>
     /// The number of rolls of paper that can be accessed by a forklift.
     /// </returns>
-    public static int FindAccessible(IReadOnlyList<string> diagram)
+    public static (int Accessible, int Removed) ArrangeRolls(IReadOnlyList<string> diagram, CancellationToken cancellationToken = default)
     {
         var bounds = new Rectangle(0, 0, diagram[0].Length, diagram.Count);
         var warehouse = new Warehouse(bounds);
@@ -35,7 +41,32 @@ public sealed class Day04 : Puzzle
             }
         });
 
-        return warehouse.VisitLocations(0, static (grid, location, total) =>
+        var accessible = new HashSet<Point>();
+
+        warehouse.VisitLocations(accessible, FindAccessible);
+
+        int initial = accessible.Count;
+        int removed = 0;
+
+        while (accessible.Count > 0 && !cancellationToken.IsCancellationRequested)
+        {
+            foreach (var location in accessible)
+            {
+                if (warehouse.Locations.Remove(location))
+                {
+                    removed++;
+                }
+            }
+
+            accessible.Clear();
+            warehouse.VisitLocations(accessible, FindAccessible);
+        }
+
+        cancellationToken.ThrowIfCancellationRequested();
+
+        return (initial, removed);
+
+        static void FindAccessible(SquareGrid grid, Point location, HashSet<Point> accessible)
         {
             int neighbors = 0;
 
@@ -49,11 +80,9 @@ public sealed class Day04 : Puzzle
 
             if (neighbors < 4)
             {
-                total++;
+                accessible.Add(location);
             }
-
-            return total;
-        });
+        }
     }
 
     /// <inheritdoc />
@@ -63,14 +92,15 @@ public sealed class Day04 : Puzzle
 
         var diagram = await ReadResourceAsLinesAsync(cancellationToken);
 
-        AccessibleRolls = FindAccessible(diagram);
+        (AccessibleRolls, RemovedRolls) = ArrangeRolls(diagram, cancellationToken);
 
         if (Verbose)
         {
             Logger.WriteLine("{0} rolls of paper can be accessed by a forklift.", AccessibleRolls);
+            Logger.WriteLine("{0} rolls of paper can be removed by a forklift.", RemovedRolls);
         }
 
-        return PuzzleResult.Create(AccessibleRolls);
+        return PuzzleResult.Create(AccessibleRolls, RemovedRolls);
     }
 
     private sealed class Warehouse(Rectangle bounds) : SquareGrid(bounds)

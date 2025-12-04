@@ -107,6 +107,22 @@ public static class SquareGridExtensions
     }
 
     /// <summary>
+    /// Visits each location in the grid and applies the specified visitor function.
+    /// </summary>
+    /// <typeparam name="TGrid">The type of the grid.</typeparam>
+    /// <typeparam name="TState">The type of the state.</typeparam>
+    /// <param name="grid">The grid whose locations will be visited.</param>
+    /// <param name="state">The state value to be passed to the visitor function.</param>
+    /// <param name="visitor">A function that is invoked for each location in the grid.</param>
+    public static void VisitLocations<TGrid, TState>(this TGrid grid, TState state, Action<TGrid, Point, TState> visitor)
+        where TGrid : SquareGrid =>
+        VisitLocations(grid, (visitor, state), static (grid, location, state) =>
+        {
+            state.visitor(grid, location, state.state);
+            return state;
+        });
+
+    /// <summary>
     /// Visits each location in the grid and applies the specified visitor function, accumulating state across all locations.
     /// </summary>
     /// <typeparam name="TGrid">The type of the grid.</typeparam>
