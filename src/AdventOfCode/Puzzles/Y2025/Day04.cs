@@ -45,26 +45,21 @@ public sealed class Day04 : Puzzle
 
         warehouse.VisitLocations(accessible, FindAccessible);
 
-        int initial = accessible.Count;
-        int removed = 0;
+        int initialAccessible = accessible.Count;
+        int initialRolls = warehouse.Locations.Count;
 
         while (accessible.Count > 0 && !cancellationToken.IsCancellationRequested)
         {
-            foreach (var location in accessible)
-            {
-                if (warehouse.Locations.Remove(location))
-                {
-                    removed++;
-                }
-            }
-
+            warehouse.Locations.ExceptWith(accessible);
             accessible.Clear();
             warehouse.VisitLocations(accessible, FindAccessible);
         }
 
+        int removed = initialRolls - warehouse.Locations.Count;
+
         cancellationToken.ThrowIfCancellationRequested();
 
-        return (initial, removed);
+        return (initialAccessible, removed);
 
         static void FindAccessible(SquareGrid grid, Point location, HashSet<Point> accessible)
         {
