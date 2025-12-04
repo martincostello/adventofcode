@@ -24,29 +24,24 @@ public sealed class Day04 : Puzzle
     /// </returns>
     public static int FindAccessible(IReadOnlyList<string> diagram)
     {
-        int total = 0;
-
         var bounds = new Rectangle(0, 0, diagram[0].Length, diagram.Count);
         var warehouse = new Warehouse(bounds);
 
-        for (int y = 0; y < diagram.Count; y++)
+        warehouse.Visit(diagram, static (grid, location, contents) =>
         {
-            for (int x = 0; x < diagram[y].Length; x++)
+            if (contents is '@')
             {
-                if (diagram[y][x] is '@')
-                {
-                    warehouse.Locations.Add(new(x, y));
-                }
+                grid.Locations.Add(location);
             }
-        }
+        });
 
-        foreach (var location in warehouse.Locations)
+        return warehouse.VisitLocations(0, static (grid, location, total) =>
         {
             int neighbors = 0;
 
-            foreach (var neighbor in warehouse.Neighbors(location))
+            foreach (var neighbor in grid.Neighbors(location))
             {
-                if (warehouse.Locations.Contains(neighbor))
+                if (grid.Locations.Contains(neighbor))
                 {
                     neighbors++;
                 }
@@ -56,9 +51,9 @@ public sealed class Day04 : Puzzle
             {
                 total++;
             }
-        }
 
-        return total;
+            return total;
+        });
     }
 
     /// <inheritdoc />
