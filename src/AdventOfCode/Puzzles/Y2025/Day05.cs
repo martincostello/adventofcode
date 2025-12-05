@@ -68,19 +68,24 @@ public sealed class Day05 : Puzzle
             return x.End.CompareTo(y.End);
         });
 
-        var merged = new List<Range>() { ranges[0] };
+        var merged = new List<Range>();
 
-        foreach (var range in ranges[1..])
+        if (ranges.Count > 0)
         {
-            var (start, end) = merged[^1];
+            merged.Add(ranges[0]);
 
-            if (range.Start <= end + 1)
+            foreach (var range in ranges[1..])
             {
-                merged[^1] = (start, Math.Max(end, range.End));
-            }
-            else
-            {
-                merged.Add(range);
+                var (start, end) = merged[^1];
+
+                if (range.Start <= end + 1)
+                {
+                    merged[^1] = (start, Math.Max(end, range.End));
+                }
+                else
+                {
+                    merged.Add(range);
+                }
             }
         }
 
