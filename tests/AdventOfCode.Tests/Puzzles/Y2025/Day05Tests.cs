@@ -6,22 +6,33 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2025;
 public sealed class Day05Tests(ITestOutputHelper outputHelper) : PuzzleTest(outputHelper)
 {
     [Fact]
-    public void Y2025_Day05_Solve_Returns_Correct_Value()
+    public void Y2025_Day05_CountFreshIngredients_Returns_Correct_Value()
     {
         // Arrange
         string[] values =
         [
-            "_",
+            "3-5",
+            "10-14",
+            "16-20",
+            "12-18",
+            string.Empty,
+            "1",
+            "5",
+            "8",
+            "11",
+            "17",
+            "32",
         ];
 
         // Act
-        int actual = Day05.Solve(values);
+        (int actualAvailable, long actualTotal) = Day05.CountFreshIngredients(values);
 
         // Assert
-        actual.ShouldBe(Puzzle.Unsolved);
+        actualAvailable.ShouldBe(3);
+        actualTotal.ShouldBe(14);
     }
 
-    [Fact(Skip = "Not implemented.")]
+    [Fact]
     public async Task Y2025_Day05_Solve_Returns_Correct_Solution()
     {
         // Act
@@ -29,6 +40,7 @@ public sealed class Day05Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
 
         // Assert
         puzzle.ShouldNotBeNull();
-        puzzle.Solution.ShouldBe(Puzzle.Unsolved);
+        puzzle.AvailableFreshIngredientIds.ShouldBe(761);
+        puzzle.FreshIngredientIds.ShouldBe(345755049374932);
     }
 }
