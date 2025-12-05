@@ -6,25 +6,59 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2025;
 /// <summary>
 /// A class representing the puzzle for <c>https://adventofcode.com/2025/day/5</c>. This class cannot be inherited.
 /// </summary>
-[Puzzle(2025, 05, "", RequiresData = true, IsHidden = true, Unsolved = true)]
+[Puzzle(2025, 05, "Cafeteria", RequiresData = true, IsHidden = true, Unsolved = true)]
 public sealed class Day05 : Puzzle
 {
     /// <summary>
-    /// Gets the solution.
+    /// Gets the number of available ingredient IDs that are fresh.
     /// </summary>
-    public int Solution { get; private set; }
+    public int FreshIngredientIds { get; private set; }
 
     /// <summary>
-    /// Solves the puzzle.
+    /// Counts the number of fresh ingredients in the specified inventory database.
     /// </summary>
-    /// <param name="values">The values to solve the puzzle from.</param>
+    /// <param name="database">The inventory management system database to use.</param>
     /// <returns>
     /// The solution.
     /// </returns>
-    public static int Solve(IReadOnlyList<string> values)
+    public static int CountFreshIngredients(IReadOnlyList<string> database)
     {
-        ArgumentNullException.ThrowIfNull(values);
-        return Unsolved;
+        var ranges = new List<(long Start, long End)>();
+        var ids = new List<long>();
+
+        bool isRange = true;
+
+        for (int i = 0; i < database.Count; i++)
+        {
+            var value = database[i].AsSpan();
+
+            if (value.IsEmpty)
+            {
+                isRange = false;
+                continue;
+            }
+
+            if (isRange)
+            {
+                ranges.Add(value.AsNumberPair<long>('-'));
+            }
+            else
+            {
+                ids.Add(Parse<long>(value));
+            }
+        }
+
+        int fresh = 0;
+
+        foreach (long id in ids)
+        {
+            if (ranges.Any((p) => id >= p.Start && id <= p.End))
+            {
+                fresh++;
+            }
+        }
+
+        return fresh;
     }
 
     /// <inheritdoc />
@@ -34,13 +68,13 @@ public sealed class Day05 : Puzzle
 
         var values = await ReadResourceAsLinesAsync(cancellationToken);
 
-        Solution = Solve(values);
+        FreshIngredientIds = CountFreshIngredients(values);
 
         if (Verbose)
         {
-            Logger.WriteLine("The solution is {0}.", Solution);
+            Logger.WriteLine("{0} available ingredient IDs are fresh.", FreshIngredientIds);
         }
 
-        return PuzzleResult.Create(Solution);
+        return PuzzleResult.Create(FreshIngredientIds);
     }
 }
