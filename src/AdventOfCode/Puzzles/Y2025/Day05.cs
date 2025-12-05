@@ -55,6 +55,7 @@ public sealed class Day05 : Puzzle
             }
         }
 
+        // Merge overlapping ranges
         ranges.Sort((x, y) =>
         {
             int comparison = x.Start.CompareTo(y.Start);
@@ -67,7 +68,6 @@ public sealed class Day05 : Puzzle
             return x.End.CompareTo(y.End);
         });
 
-        // Merge overlapping ranges
         var merged = new List<Range>() { ranges[0] };
 
         foreach (var range in ranges[1..])
@@ -88,7 +88,7 @@ public sealed class Day05 : Puzzle
 
         foreach (long id in ids)
         {
-            if (ranges.Any((p) => id >= p.Start && id <= p.End))
+            if (merged.Any((p) => id >= p.Start && id <= p.End))
             {
                 fresh++;
             }
