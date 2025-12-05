@@ -25,10 +25,11 @@ public sealed class Day05Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         ];
 
         // Act
-        int actual = Day05.CountFreshIngredients(values);
+        (int actualAvailable, long actualTotal) = Day05.CountFreshIngredients(values);
 
         // Assert
-        actual.ShouldBe(3);
+        actualAvailable.ShouldBe(3);
+        actualTotal.ShouldBe(14);
     }
 
     [Fact]
@@ -39,6 +40,7 @@ public sealed class Day05Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
 
         // Assert
         puzzle.ShouldNotBeNull();
-        puzzle.FreshIngredientIds.ShouldBe(761);
+        puzzle.AvailableFreshIngredientIds.ShouldBe(761);
+        puzzle.FreshIngredientIds.ShouldBe(345755049374932);
     }
 }

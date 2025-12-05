@@ -1,6 +1,8 @@
 ﻿// Copyright (c) Martin Costello, 2015. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
+using Range = (long Start, long End);
+
 namespace MartinCostello.AdventOfCode.Puzzles.Y2025;
 
 /// <summary>
@@ -12,19 +14,24 @@ public sealed class Day05 : Puzzle
     /// <summary>
     /// Gets the number of available ingredient IDs that are fresh.
     /// </summary>
-    public int FreshIngredientIds { get; private set; }
+    public int AvailableFreshIngredientIds { get; private set; }
+
+    /// <summary>
+    /// Gets the total number of ingredient IDs that are fresh.
+    /// </summary>
+    public long FreshIngredientIds { get; private set; }
 
     /// <summary>
     /// Counts the number of fresh ingredients in the specified inventory database.
     /// </summary>
     /// <param name="database">The inventory management system database to use.</param>
     /// <returns>
-    /// The solution.
+    /// The number of available and total fresh ingredient IDs.
     /// </returns>
-    public static int CountFreshIngredients(IReadOnlyList<string> database)
+    public static (int Available, long Total) CountFreshIngredients(IReadOnlyList<string> database)
     {
-        var ranges = new List<(long Start, long End)>();
         var ids = new List<long>();
+        var ranges = new List<Range>();
 
         bool isRange = true;
 
@@ -48,6 +55,35 @@ public sealed class Day05 : Puzzle
             }
         }
 
+        ranges.Sort((x, y) =>
+        {
+            int comparison = x.Start.CompareTo(y.Start);
+
+            if (comparison != 0)
+            {
+                return comparison;
+            }
+
+            return x.End.CompareTo(y.End);
+        });
+
+        // Merge overlapping ranges
+        var merged = new List<Range>() { ranges[0] };
+
+        foreach (var range in ranges[1..])
+        {
+            var (start, end) = merged[^1];
+
+            if (range.Start <= end + 1)
+            {
+                merged[^1] = (start, Math.Max(end, range.End));
+            }
+            else
+            {
+                merged.Add(range);
+            }
+        }
+
         int fresh = 0;
 
         foreach (long id in ids)
@@ -58,7 +94,14 @@ public sealed class Day05 : Puzzle
             }
         }
 
-        return fresh;
+        long possible = 0;
+
+        foreach ((long start, long end) in merged)
+        {
+            possible += end - start + 1;
+        }
+
+        return (fresh, possible);
     }
 
     /// <inheritdoc />
@@ -68,13 +111,14 @@ public sealed class Day05 : Puzzle
 
         var values = await ReadResourceAsLinesAsync(cancellationToken);
 
-        FreshIngredientIds = CountFreshIngredients(values);
+        (AvailableFreshIngredientIds, FreshIngredientIds) = CountFreshIngredients(values);
 
         if (Verbose)
         {
-            Logger.WriteLine("{0} available ingredient IDs are fresh.", FreshIngredientIds);
+            Logger.WriteLine("{0} available ingredient IDs are fresh.", AvailableFreshIngredientIds);
+            Logger.WriteLine("{0} ingredient IDs are fresh.", FreshIngredientIds);
         }
 
-        return PuzzleResult.Create(FreshIngredientIds);
+        return PuzzleResult.Create(AvailableFreshIngredientIds, FreshIngredientIds);
     }
 }
