@@ -34,7 +34,7 @@ public sealed class Day06Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
 
         // Assert
         puzzle.ShouldNotBeNull();
-        puzzle.GrandTotalNormal.ShouldBe(5524274308182);
-        puzzle.GrandTotalCephalopod.ShouldBe(8843673199391);
+        puzzle.Solution1.ShouldBe(5524274308182);
+        puzzle.Solution2.ShouldBe(8843673199391);
     }
 }

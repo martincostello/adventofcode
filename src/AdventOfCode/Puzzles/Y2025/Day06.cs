@@ -7,18 +7,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2025;
 /// A class representing the puzzle for <c>https://adventofcode.com/2025/day/6</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2025, 06, "Trash Compactor", RequiresData = true)]
-public sealed class Day06 : Puzzle
+public sealed class Day06 : Puzzle<long, long>
 {
-    /// <summary>
-    /// Gets the grand total found by adding together all of the answers to the individual problems using normal maths.
-    /// </summary>
-    public long GrandTotalNormal { get; private set; }
-
-    /// <summary>
-    /// Gets the grand total found by adding together all of the answers to the individual problems using cephalopod maths.
-    /// </summary>
-    public long GrandTotalCephalopod { get; private set; }
-
     /// <summary>
     /// Solves the problems in the specified homework worksheet.
     /// </summary>
@@ -220,15 +210,15 @@ public sealed class Day06 : Puzzle
 
         var values = await ReadResourceAsLinesAsync(cancellationToken);
 
-        GrandTotalNormal = SolveWorksheet(values, useCephalopodMaths: false);
-        GrandTotalCephalopod = SolveWorksheet(values, useCephalopodMaths: true);
+        Solution1 = SolveWorksheet(values, useCephalopodMaths: false);
+        Solution2 = SolveWorksheet(values, useCephalopodMaths: true);
 
         if (Verbose)
         {
-            Logger.WriteLine("The grand total using normal maths is {0}.", GrandTotalNormal);
-            Logger.WriteLine("The grand total using cephalopod maths is {0}.", GrandTotalCephalopod);
+            Logger.WriteLine("The grand total using normal maths is {0}.", Solution1);
+            Logger.WriteLine("The grand total using cephalopod maths is {0}.", Solution2);
         }
 
-        return PuzzleResult.Create(GrandTotalNormal, GrandTotalCephalopod);
+        return Result();
     }
 }
