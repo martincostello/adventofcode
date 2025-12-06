@@ -7,7 +7,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2024;
 /// A class representing the puzzle for <c>https://adventofcode.com/2024/day/7</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2024, 07, "Bridge Repair", RequiresData = true)]
-public sealed class Day07 : Puzzle
+public sealed class Day07 : Puzzle<long, long>
 {
     /// <summary>
     /// Gets the first calibration result for the bridge.
@@ -122,6 +122,9 @@ public sealed class Day07 : Puzzle
             Logger.WriteLine("The total calibration result using concatenation is {0}.", CalibrationResult2);
         }
 
-        return PuzzleResult.Create(CalibrationResult1, CalibrationResult2);
+        Solution1 = CalibrationResult1;
+        Solution2 = CalibrationResult2;
+
+        return Result();
     }
 }

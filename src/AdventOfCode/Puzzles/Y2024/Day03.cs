@@ -9,7 +9,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2024;
 /// A class representing the puzzle for <c>https://adventofcode.com/2024/day/3</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2024, 03, "Mull It Over", RequiresData = true)]
-public sealed partial class Day03 : Puzzle
+public sealed partial class Day03 : Puzzle<int, int>
 {
     /// <summary>
     /// Gets the sum of the multiplications.
@@ -116,6 +116,9 @@ public sealed partial class Day03 : Puzzle
             Logger.WriteLine("The sum of the multiplications with more accuracy is {0}", AccurateSum);
         }
 
-        return PuzzleResult.Create(Sum, AccurateSum);
+        Solution1 = Sum;
+        Solution2 = AccurateSum;
+
+        return Result();
     }
 }

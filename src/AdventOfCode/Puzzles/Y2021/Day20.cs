@@ -7,7 +7,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2021;
 /// A class representing the puzzle for <c>https://adventofcode.com/2021/day/20</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2021, 20, "Trench Map", RequiresData = true, IsSlow = true)]
-public sealed class Day20 : Puzzle
+public sealed class Day20 : Puzzle<int, int>
 {
     /// <summary>
     /// Gets the number of lit pixels after the image is enhanced twice.
@@ -156,6 +156,9 @@ public sealed class Day20 : Puzzle
             Logger.WriteLine("There are {0:N0} lit pixels after fifty enhancements of the image.", LitPixelCount50);
         }
 
-        return PuzzleResult.Create(LitPixelCount2, LitPixelCount50);
+        Solution1 = LitPixelCount2;
+        Solution2 = LitPixelCount50;
+
+        return Result();
     }
 }

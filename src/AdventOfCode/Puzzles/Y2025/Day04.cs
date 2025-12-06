@@ -7,7 +7,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2025;
 /// A class representing the puzzle for <c>https://adventofcode.com/2025/day/4</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2025, 04, "Printing Department", RequiresData = true)]
-public sealed class Day04 : Puzzle
+public sealed class Day04 : Puzzle<int, int>
 {
     /// <summary>
     /// Gets the number of rolls of paper that can be initially accessed by a forklift.
@@ -102,7 +102,10 @@ public sealed class Day04 : Puzzle
             Logger.WriteLine("{0} rolls of paper can be removed by a forklift.", RemovedRolls);
         }
 
-        return PuzzleResult.Create(AccessibleRolls, RemovedRolls);
+        Solution1 = AccessibleRolls;
+        Solution2 = RemovedRolls;
+
+        return Result();
     }
 
     private sealed class Warehouse(Rectangle bounds) : SquareGrid(bounds)

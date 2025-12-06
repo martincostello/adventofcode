@@ -9,7 +9,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015;
 /// A class representing the puzzle for <c>https://adventofcode.com/2015/day/5</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2015, 05, "Doesn't He Have Intern-Elves For This?", RequiresData = true)]
-public sealed class Day05 : Puzzle
+public sealed class Day05 : Puzzle<int, int>
 {
     /// <summary>
     /// The sequences of characters that are not considered nice. This field is read-only.
@@ -160,6 +160,9 @@ public sealed class Day05 : Puzzle
             Logger.WriteLine("{0:N0} strings are nice using version 2 of the rules.", NiceStringCountV2);
         }
 
-        return PuzzleResult.Create(NiceStringCountV1, NiceStringCountV2);
+        Solution1 = NiceStringCountV1;
+        Solution2 = NiceStringCountV2;
+
+        return Result();
     }
 }

@@ -7,7 +7,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020;
 /// A class representing the puzzle for <c>https://adventofcode.com/2020/day/11</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2020, 11, "Seating System", RequiresData = true)]
-public sealed class Day11 : Puzzle
+public sealed class Day11 : Puzzle<int, int>
 {
     /// <summary>
     /// An empty chair.
@@ -80,12 +80,11 @@ public sealed class Day11 : Puzzle
             Logger.WriteLine("There are {0} occupied seats using the second set of rules.", OccupiedSeatsV2);
         }
 
-        var result = new PuzzleResult();
+        Solution1 = OccupiedSeatsV1;
+        Solution2 = OccupiedSeatsV2;
 
-        result.Solutions.Add(OccupiedSeatsV1);
+        var result = Result();
         result.Visualizations.Add(visualizationV1);
-
-        result.Solutions.Add(OccupiedSeatsV2);
         result.Visualizations.Add(visualizationV2);
 
         return result;

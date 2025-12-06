@@ -7,7 +7,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2024;
 /// A class representing the puzzle for <c>https://adventofcode.com/2024/day/1</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2024, 01, "Historian Hysteria", RequiresData = true)]
-public sealed class Day01 : Puzzle
+public sealed class Day01 : Puzzle<int, int>
 {
     /// <summary>
     /// Gets the total distance between the values in the list.
@@ -87,6 +87,9 @@ public sealed class Day01 : Puzzle
             Logger.WriteLine("The similarity score for the lists is {0}", SimilarityScore);
         }
 
-        return PuzzleResult.Create(TotalDistance, SimilarityScore);
+        Solution1 = TotalDistance;
+        Solution2 = SimilarityScore;
+
+        return Result();
     }
 }

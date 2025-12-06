@@ -7,7 +7,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2023;
 /// A class representing the puzzle for <c>https://adventofcode.com/2023/day/17</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2023, 17, "Clumsy Crucible", RequiresData = true, Unsolved = true)]
-public sealed class Day17 : Puzzle
+public sealed class Day17 : Puzzle<int, int>
 {
     /// <summary>
     /// Gets the minimum heat loss that can be incurred.
@@ -67,7 +67,10 @@ public sealed class Day17 : Puzzle
             Logger.WriteLine("The minimum heat loss that can be incurred is {0}.", MinimumHeatLoss);
         }
 
-        return PuzzleResult.Create(MinimumHeatLoss);
+        Solution1 = MinimumHeatLoss;
+        Solution2 = Unsolved;
+
+        return Result();
     }
 
     private readonly record struct Move(Point Location, Size Direction, int Steps) : IEquatable<Move>

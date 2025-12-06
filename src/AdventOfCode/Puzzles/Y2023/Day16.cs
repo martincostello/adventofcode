@@ -9,7 +9,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2023;
 /// A class representing the puzzle for <c>https://adventofcode.com/2023/day/16</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2023, 16, "The Floor Will Be Lava", RequiresData = true)]
-public sealed class Day16 : Puzzle
+public sealed class Day16 : Puzzle<int, int>
 {
     /// <summary>
     /// Gets how many tiles are energized starting the beam from <c>0,0</c>.
@@ -194,7 +194,10 @@ public sealed class Day16 : Puzzle
             Logger.WriteLine(optimized);
         }
 
-        var result = PuzzleResult.Create(EnergizedTiles00, EnergizedTilesOptimum);
+        Solution1 = EnergizedTiles00;
+        Solution2 = EnergizedTilesOptimum;
+
+        var result = Result();
 
         result.Visualizations.Add(energized);
         result.Visualizations.Add(optimized);

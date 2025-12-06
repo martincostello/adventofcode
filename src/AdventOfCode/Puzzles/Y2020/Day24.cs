@@ -7,7 +7,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020;
 /// A class representing the puzzle for <c>https://adventofcode.com/2020/day/24</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2020, 24, "Lobby Layout", RequiresData = true)]
-public sealed class Day24 : Puzzle
+public sealed class Day24 : Puzzle<int, int>
 {
     /// <summary>
     /// Gets the number of black tiles after 1 day.
@@ -133,7 +133,10 @@ public sealed class Day24 : Puzzle
             Logger.WriteLine("{0} tiles are left with the black side up after 100 days.", BlackTilesDay100);
         }
 
-        return PuzzleResult.Create(BlackTilesDay0, BlackTilesDay100);
+        Solution1 = BlackTilesDay0;
+        Solution2 = BlackTilesDay100;
+
+        return Result();
     }
 
     /// <summary>

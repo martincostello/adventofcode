@@ -7,7 +7,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2023;
 /// A class representing the puzzle for <c>https://adventofcode.com/2023/day/24</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2023, 24, "Never Tell Me The Odds", RequiresData = true, Unsolved = true)]
-public sealed class Day24 : Puzzle
+public sealed class Day24 : Puzzle<int, int>
 {
     /// <summary>
     /// Gets the number of hailstone intersections that occur within the test area.
@@ -92,7 +92,10 @@ public sealed class Day24 : Puzzle
             Logger.WriteLine("{0} intersections occur within the test area.", Intersections);
         }
 
-        return PuzzleResult.Create(Intersections);
+        Solution1 = Intersections;
+        Solution2 = Unsolved;
+
+        return Result();
     }
 
     private record struct Hailstone(Vector3 Position, Vector3 Velocity)

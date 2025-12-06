@@ -7,7 +7,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2024;
 /// A class representing the puzzle for <c>https://adventofcode.com/2024/day/19</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2024, 19, "Linen Layout", RequiresData = true)]
-public sealed class Day19 : Puzzle
+public sealed class Day19 : Puzzle<int, long>
 {
     /// <summary>
     /// Gets the number of possible towel designs that can be created.
@@ -107,6 +107,9 @@ public sealed class Day19 : Puzzle
             Logger.WriteLine("There are {0} different ways to make each design.", UniqueDesigns);
         }
 
-        return PuzzleResult.Create(PossibleDesigns, UniqueDesigns);
+        Solution1 = PossibleDesigns;
+        Solution2 = UniqueDesigns;
+
+        return Result();
     }
 }

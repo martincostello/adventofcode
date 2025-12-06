@@ -7,7 +7,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2024;
 /// A class representing the puzzle for <c>https://adventofcode.com/2024/day/12</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2024, 12, "Garden Groups", RequiresData = true)]
-public sealed class Day12 : Puzzle
+public sealed class Day12 : Puzzle<int, int>
 {
     /// <summary>
     /// Gets the total price for the fencing.
@@ -100,7 +100,10 @@ public sealed class Day12 : Puzzle
             Logger.WriteLine("The total price of fencing all regions of the map is {0}.", TotalPrice);
         }
 
-        return PuzzleResult.Create(TotalPrice);
+        Solution1 = TotalPrice;
+        Solution2 = Unsolved;
+
+        return Result();
     }
 
     private sealed class Garden(char plant, IList<string> plants, Rectangle bounds) : SquareGrid(bounds)

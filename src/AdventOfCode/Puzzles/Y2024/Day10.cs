@@ -7,7 +7,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2024;
 /// A class representing the puzzle for <c>https://adventofcode.com/2024/day/10</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2024, 10, "Hoof It", RequiresData = true)]
-public sealed class Day10 : Puzzle
+public sealed class Day10 : Puzzle<int, int>
 {
     /// <summary>
     /// Gets the sum of the trailhead scores.
@@ -93,7 +93,10 @@ public sealed class Day10 : Puzzle
             Logger.WriteLine("The sum of the ratings of all trailheads in the topographic map is {0}.", SumOfRatings);
         }
 
-        return PuzzleResult.Create(SumOfScores, SumOfRatings);
+        Solution1 = SumOfScores;
+        Solution2 = SumOfRatings;
+
+        return Result();
     }
 
     private sealed class TopographicMap(Rectangle bounds) : SquareGrid(bounds)

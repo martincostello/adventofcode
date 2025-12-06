@@ -7,7 +7,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2021;
 /// A class representing the puzzle for <c>https://adventofcode.com/2021/day/8</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2021, 08, "Seven Segment Search", RequiresData = true)]
-public sealed class Day08 : Puzzle
+public sealed class Day08 : Puzzle<int, int>
 {
     /// <summary>
     /// Gets the number of instances of digits that use a unique number of LED segments.
@@ -128,6 +128,9 @@ public sealed class Day08 : Puzzle
             Logger.WriteLine("The sum of the output values is {0:N0}.", Sum);
         }
 
-        return PuzzleResult.Create(Count, Sum);
+        Solution1 = Count;
+        Solution2 = Sum;
+
+        return Result();
     }
 }

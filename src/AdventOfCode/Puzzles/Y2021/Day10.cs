@@ -7,7 +7,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2021;
 /// A class representing the puzzle for <c>https://adventofcode.com/2021/day/10</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2021, 10, "Syntax Scoring", RequiresData = true)]
-public sealed class Day10 : Puzzle
+public sealed class Day10 : Puzzle<int, long>
 {
     /// <summary>
     /// Gets the syntax error score for the navigation subsystem.
@@ -137,6 +137,9 @@ public sealed class Day10 : Puzzle
             Logger.WriteLine("The middle auto-complete score is {0:N0}.", MiddleAutoCompleteScore);
         }
 
-        return PuzzleResult.Create(SyntaxErrorScore, MiddleAutoCompleteScore);
+        Solution1 = SyntaxErrorScore;
+        Solution2 = MiddleAutoCompleteScore;
+
+        return Result();
     }
 }

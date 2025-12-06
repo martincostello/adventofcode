@@ -7,7 +7,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2018;
 /// A class representing the puzzle for <c>https://adventofcode.com/2018/day/2</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2018, 02, "Inventory Management System", RequiresData = true)]
-public sealed class Day02 : Puzzle
+public sealed class Day02 : Puzzle<int, string>
 {
     /// <summary>
     /// Gets the checksum of the box Ids.
@@ -143,6 +143,9 @@ public sealed class Day02 : Puzzle
             Logger.WriteLine($"The common letters are {CommonLettersForBoxes}.");
         }
 
-        return PuzzleResult.Create(Checksum, CommonLettersForBoxes);
+        Solution1 = Checksum;
+        Solution2 = CommonLettersForBoxes;
+
+        return Result();
     }
 }

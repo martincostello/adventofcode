@@ -7,7 +7,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2023;
 /// A class representing the puzzle for <c>https://adventofcode.com/2023/day/13</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2023, 13, "Point of Incidence", RequiresData = true)]
-public sealed class Day13 : Puzzle
+public sealed class Day13 : Puzzle<int, int>
 {
     /// <summary>
     /// Gets the number after summarizing all of the notes.
@@ -140,6 +140,9 @@ public sealed class Day13 : Puzzle
             Logger.WriteLine("The number after summarizing all of the notes after cleaning the smudges is {0}.", SummaryWithSmudgesCleaned);
         }
 
-        return PuzzleResult.Create(Summary, SummaryWithSmudgesCleaned);
+        Solution1 = Summary;
+        Solution2 = SummaryWithSmudgesCleaned;
+
+        return Result();
     }
 }

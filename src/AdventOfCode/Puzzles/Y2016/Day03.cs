@@ -7,7 +7,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016;
 /// A class representing the puzzle for <c>https://adventofcode.com/2016/day/3</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2016, 03, "Squares With Three Sides", RequiresData = true)]
-public sealed class Day03 : Puzzle
+public sealed class Day03 : Puzzle<int, int>
 {
     /// <summary>
     /// Gets the number of possible triangles by columns.
@@ -64,7 +64,10 @@ public sealed class Day03 : Puzzle
             Logger.WriteLine("The number of possible triangles using columns is {0:N0}.", PossibleTrianglesByColumns);
         }
 
-        return PuzzleResult.Create(PossibleTrianglesByRows, PossibleTrianglesByColumns);
+        Solution1 = PossibleTrianglesByRows;
+        Solution2 = PossibleTrianglesByColumns;
+
+        return Result();
     }
 
     /// <summary>

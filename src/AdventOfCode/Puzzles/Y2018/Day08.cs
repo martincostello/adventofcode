@@ -7,7 +7,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2018;
 /// A class representing the puzzle for <c>https://adventofcode.com/2018/day/8</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2018, 08, "Memory Maneuver", RequiresData = true)]
-public sealed class Day08 : Puzzle
+public sealed class Day08 : Puzzle<long, long>
 {
     /// <summary>
     /// Gets the sum of the tree's metadata entries.
@@ -100,7 +100,10 @@ public sealed class Day08 : Puzzle
             Logger.WriteLine("The value the tree's root node is {0}.", RootNodeValue);
         }
 
-        return PuzzleResult.Create(SumOfMetadata, RootNodeValue);
+        Solution1 = SumOfMetadata;
+        Solution2 = RootNodeValue;
+
+        return Result();
     }
 
     private sealed class Node(int childCount, int metadataCount)

@@ -7,7 +7,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2021;
 /// A class representing the puzzle for <c>https://adventofcode.com/2021/day/7</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2021, 07, "The Treachery of Whales", RequiresData = true)]
-public sealed class Day07 : Puzzle
+public sealed class Day07 : Puzzle<long, long>
 {
     /// <summary>
     /// Gets the optimal units of fuel consumed to align the crab
@@ -88,6 +88,9 @@ public sealed class Day07 : Puzzle
                 FuelConsumedWithVariableBurnRate);
         }
 
-        return PuzzleResult.Create(FuelConsumedWithConstantBurnRate, FuelConsumedWithVariableBurnRate);
+        Solution1 = FuelConsumedWithConstantBurnRate;
+        Solution2 = FuelConsumedWithVariableBurnRate;
+
+        return Result();
     }
 }

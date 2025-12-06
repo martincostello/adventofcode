@@ -9,7 +9,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2023;
 /// A class representing the puzzle for <c>https://adventofcode.com/2023/day/03</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2023, 03, "Gear Ratios", RequiresData = true)]
-public sealed class Day03 : Puzzle
+public sealed class Day03 : Puzzle<int, int>
 {
     private static readonly SearchValues<char> Digits = SearchValues.Create("0123456789");
     private static readonly SearchValues<char> NotParts = SearchValues.Create("0123456789.");
@@ -190,6 +190,9 @@ public sealed class Day03 : Puzzle
             Logger.WriteLine("The sum of all of the gear ratios in the engine schematic is {0}.", SumOfGearRatios);
         }
 
-        return PuzzleResult.Create(SumOfPartNumbers, SumOfGearRatios);
+        Solution1 = SumOfPartNumbers;
+        Solution2 = SumOfGearRatios;
+
+        return Result();
     }
 }

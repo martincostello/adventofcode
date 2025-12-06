@@ -7,7 +7,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2021;
 /// A class representing the puzzle for <c>https://adventofcode.com/2021/day/22</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2021, 22, "Reactor Reboot", RequiresData = true, IsSlow = true)]
-public sealed class Day22 : Puzzle
+public sealed class Day22 : Puzzle<long, long>
 {
     /// <summary>
     /// Gets the number of cubes that are on once the reactor has been initialized.
@@ -140,7 +140,10 @@ public sealed class Day22 : Puzzle
             Logger.WriteLine("{0:N0} cubes in the reactor are on after reboot.", RebootedCubeCount);
         }
 
-        return PuzzleResult.Create(InitializedCubeCount, RebootedCubeCount);
+        Solution1 = InitializedCubeCount;
+        Solution2 = RebootedCubeCount;
+
+        return Result();
     }
 
     [System.Diagnostics.DebuggerDisplay("({Origin.X}, {Origin.Y}, {Origin.Z}), ({Length.X}, {Length.Y}, {Length.Z})")]

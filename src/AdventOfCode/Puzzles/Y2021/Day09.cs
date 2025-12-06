@@ -7,7 +7,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2021;
 /// A class representing the puzzle for <c>https://adventofcode.com/2021/day/9</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2021, 09, "Smoke Basin", RequiresData = true)]
-public sealed class Day09 : Puzzle
+public sealed class Day09 : Puzzle<int, int>
 {
     /// <summary>
     /// Gets the sum of the risk levels of all the low points in the heightmap.
@@ -122,6 +122,9 @@ public sealed class Day09 : Puzzle
             Logger.WriteLine("The area of the three largest basins in the heightmap is {0:N0}.", AreaOfThreeLargestBasins);
         }
 
-        return PuzzleResult.Create(SumOfRiskLevels, AreaOfThreeLargestBasins);
+        Solution1 = SumOfRiskLevels;
+        Solution2 = AreaOfThreeLargestBasins;
+
+        return Result();
     }
 }

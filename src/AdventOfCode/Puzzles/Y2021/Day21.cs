@@ -7,7 +7,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2021;
 /// A class representing the puzzle for <c>https://adventofcode.com/2021/day/21</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2021, 21, "Dirac Dice", RequiresData = true, IsSlow = true)]
-public sealed class Day21 : Puzzle
+public sealed class Day21 : Puzzle<int, long>
 {
     /// <summary>
     /// Gets the product of the score of the losing player and
@@ -186,7 +186,10 @@ public sealed class Day21 : Puzzle
                 WinningUniverses);
         }
 
-        return PuzzleResult.Create(PracticeOutcome, WinningUniverses);
+        Solution1 = PracticeOutcome;
+        Solution2 = WinningUniverses;
+
+        return Result();
     }
 
     private static Player Move(Player player, int roll)

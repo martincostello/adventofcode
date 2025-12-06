@@ -7,7 +7,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2023;
 /// A class representing the puzzle for <c>https://adventofcode.com/2023/day/22</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2023, 22, "Sand Slabs", RequiresData = true)]
-public sealed class Day22 : Puzzle
+public sealed class Day22 : Puzzle<int, int>
 {
     /// <summary>
     /// Gets the number of bricks that could be safely chosen to be disintegrated.
@@ -158,6 +158,9 @@ public sealed class Day22 : Puzzle
             Logger.WriteLine("The sum of the number of other bricks that would fall is {0}.", MaximumChainReaction);
         }
 
-        return PuzzleResult.Create(SafeBricks, MaximumChainReaction);
+        Solution1 = SafeBricks;
+        Solution2 = MaximumChainReaction;
+
+        return Result();
     }
 }

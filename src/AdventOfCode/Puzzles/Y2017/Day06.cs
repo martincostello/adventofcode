@@ -7,7 +7,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017;
 /// A class representing the puzzle for <c>https://adventofcode.com/2017/day/6</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2017, 06, "Memory Reallocation", RequiresData = true)]
-public sealed class Day06 : Puzzle
+public sealed class Day06 : Puzzle<int, int>
 {
     /// <summary>
     /// Gets the count of redistribution cycles performed before a distribution of memory re-occurs.
@@ -50,7 +50,10 @@ public sealed class Day06 : Puzzle
             Logger.WriteLine($"{LoopSize:N0} cycles are in the infinite loop that arises from the configuration in the input.");
         }
 
-        return PuzzleResult.Create(CycleCount, LoopSize);
+        Solution1 = CycleCount;
+        Solution2 = LoopSize;
+
+        return Result();
     }
 
     /// <summary>

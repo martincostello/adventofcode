@@ -7,7 +7,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016;
 /// A class representing the puzzle for <c>https://adventofcode.com/2016/day/24</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2016, 24, "Air Duct Spelunking", RequiresData = true)]
-public sealed class Day24 : Puzzle
+public sealed class Day24 : Puzzle<int, int>
 {
     /// <summary>
     /// Gets the fewest steps that can be taken to visit all of the locations.
@@ -104,7 +104,10 @@ public sealed class Day24 : Puzzle
                 FewestStepsToVisitAllLocationsAndReturn);
         }
 
-        return PuzzleResult.Create(FewestStepsToVisitAllLocations, FewestStepsToVisitAllLocationsAndReturn);
+        Solution1 = FewestStepsToVisitAllLocations;
+        Solution2 = FewestStepsToVisitAllLocationsAndReturn;
+
+        return Result();
     }
 
     /// <summary>

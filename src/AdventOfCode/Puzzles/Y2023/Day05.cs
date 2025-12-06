@@ -9,7 +9,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2023;
 /// A class representing the puzzle for <c>https://adventofcode.com/2023/day/05</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2023, 05, "If You Give A Seed A Fertilizer", RequiresData = true)]
-public sealed class Day05 : Puzzle
+public sealed class Day05 : Puzzle<long, long>
 {
     /// <summary>
     /// Gets the lowest location number that corresponds to any of the initial seed numbers.
@@ -157,6 +157,9 @@ public sealed class Day05 : Puzzle
             Logger.WriteLine("The lowest location number that corresponds to any of the initial seed numbers as pairs is {0}.", LocationMinimumWithRanges);
         }
 
-        return PuzzleResult.Create(LocationMinimum, LocationMinimumWithRanges);
+        Solution1 = LocationMinimum;
+        Solution2 = LocationMinimumWithRanges;
+
+        return Result();
     }
 }

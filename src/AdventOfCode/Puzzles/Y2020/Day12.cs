@@ -7,7 +7,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020;
 /// A class representing the puzzle for <c>https://adventofcode.com/2020/day/12</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2020, 12, "Rain Risk", RequiresData = true)]
-public sealed class Day12 : Puzzle
+public sealed class Day12 : Puzzle<int, int>
 {
     /// <summary>
     /// A dictionary of vectors keyed by headings. This field is read-only.
@@ -166,7 +166,10 @@ public sealed class Day12 : Puzzle
             Logger.WriteLine("The Manhattan distance travelled by the ship when using the waypoint is {0}.", ManhattanDistanceWithWaypoint);
         }
 
-        return PuzzleResult.Create(ManhattanDistance, ManhattanDistanceWithWaypoint);
+        Solution1 = ManhattanDistance;
+        Solution2 = ManhattanDistanceWithWaypoint;
+
+        return Result();
     }
 
     /// <summary>

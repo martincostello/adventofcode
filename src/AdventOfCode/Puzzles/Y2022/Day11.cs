@@ -9,7 +9,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2022;
 /// A class representing the puzzle for <c>https://adventofcode.com/2022/day/11</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2022, 11, "Monkey in the Middle", RequiresData = true)]
-public sealed class Day11 : Puzzle
+public sealed class Day11 : Puzzle<long, long>
 {
     /// <summary>
     /// Gets the level of monkey business after 20 rounds of
@@ -150,7 +150,10 @@ public sealed class Day11 : Puzzle
                 MonkeyBusiness10000);
         }
 
-        return PuzzleResult.Create(MonkeyBusiness20, MonkeyBusiness10000);
+        Solution1 = MonkeyBusiness20;
+        Solution2 = MonkeyBusiness10000;
+
+        return Result();
     }
 
     [DebuggerDisplay("{Number}")]

@@ -7,7 +7,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2021;
 /// A class representing the puzzle for <c>https://adventofcode.com/2021/day/2</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2021, 02, "Dive!", RequiresData = true)]
-public sealed class Day02 : Puzzle
+public sealed class Day02 : Puzzle<int, int>
 {
     /// <summary>
     /// Gets the product of the depth and horizontal
@@ -92,6 +92,9 @@ public sealed class Day02 : Puzzle
                 ProductOfFinalPositionWithAim);
         }
 
-        return PuzzleResult.Create(ProductOfFinalPosition, ProductOfFinalPositionWithAim);
+        Solution1 = ProductOfFinalPosition;
+        Solution2 = ProductOfFinalPositionWithAim;
+
+        return Result();
     }
 }

@@ -7,7 +7,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2021;
 /// A class representing the puzzle for <c>https://adventofcode.com/2021/day/1</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2021, 01, "Sonar Sweep", RequiresData = true)]
-public sealed class Day01 : Puzzle
+public sealed class Day01 : Puzzle<int, int>
 {
     /// <summary>
     /// Gets the number of times the recorded depth increases.
@@ -79,6 +79,9 @@ public sealed class Day01 : Puzzle
                 DepthIncreasesWithSlidingWindow);
         }
 
-        return PuzzleResult.Create(DepthIncreases, DepthIncreasesWithSlidingWindow);
+        Solution1 = DepthIncreases;
+        Solution2 = DepthIncreasesWithSlidingWindow;
+
+        return Result();
     }
 }

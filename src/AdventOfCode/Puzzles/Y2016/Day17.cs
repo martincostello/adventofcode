@@ -9,7 +9,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016;
 /// A class representing the puzzle for <c>https://adventofcode.com/2016/day/17</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2016, 17, "Two Steps Forward", MinimumArguments = 1)]
-public sealed class Day17 : Puzzle
+public sealed class Day17 : Puzzle<string, int>
 {
     /// <summary>
     /// Gets the shortest path to the vault.
@@ -126,6 +126,9 @@ public sealed class Day17 : Puzzle
             Logger.WriteLine("The longest path to the vault is {0}.", LongestPathToVault);
         }
 
-        return PuzzleResult.Create(ShortestPathToVault, LongestPathToVault);
+        Solution1 = ShortestPathToVault;
+        Solution2 = LongestPathToVault;
+
+        return Result();
     }
 }

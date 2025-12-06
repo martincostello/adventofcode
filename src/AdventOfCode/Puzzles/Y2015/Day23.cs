@@ -7,7 +7,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015;
 /// A class representing the puzzle for <c>https://adventofcode.com/2015/day/23</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2015, 23, "Opening the Turing Lock", RequiresData = true)]
-public sealed class Day23 : Puzzle
+public sealed class Day23 : Puzzle<uint, uint>
 {
     /// <summary>
     /// Gets the final value of the <c>a</c> register.
@@ -119,7 +119,10 @@ public sealed class Day23 : Puzzle
                 B);
         }
 
-        return PuzzleResult.Create(A, B);
+        Solution1 = A;
+        Solution2 = B;
+
+        return Result();
     }
 
     /// <summary>

@@ -7,7 +7,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2022;
 /// A class representing the puzzle for <c>https://adventofcode.com/2022/day/9</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2022, 09, "Rope Bridge", RequiresData = true)]
-public sealed class Day09 : Puzzle
+public sealed class Day09 : Puzzle<int, int>
 {
     /// <summary>
     /// Gets the number of positions that the tail of the rope with two knots visits at least once.
@@ -82,7 +82,10 @@ public sealed class Day09 : Puzzle
             Logger.WriteLine("The tail of the rope with ten knots visits {0} positions at least once.", PositionsVisited10);
         }
 
-        return PuzzleResult.Create(PositionsVisited2, PositionsVisited10);
+        Solution1 = PositionsVisited2;
+        Solution2 = PositionsVisited10;
+
+        return Result();
     }
 
     /// <summary>

@@ -7,7 +7,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2021;
 /// A class representing the puzzle for <c>https://adventofcode.com/2021/day/14</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2021, 14, "Extended Polymerization", RequiresData = true)]
-public sealed class Day14 : Puzzle
+public sealed class Day14 : Puzzle<long, long>
 {
     /// <summary>
     /// Gets the "score" of the polymer after being expanded 10 times,
@@ -101,6 +101,9 @@ public sealed class Day14 : Puzzle
             Logger.WriteLine("The \"score\" of the polymer after 40 steps of expansion is {0:N0}.", Score40);
         }
 
-        return PuzzleResult.Create(Score10, Score40);
+        Solution1 = Score10;
+        Solution2 = Score40;
+
+        return Result();
     }
 }

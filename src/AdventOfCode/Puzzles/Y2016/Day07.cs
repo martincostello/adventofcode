@@ -7,7 +7,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016;
 /// A class representing the puzzle for <c>https://adventofcode.com/2016/day/4</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2016, 07, "Internet Protocol Version 7", RequiresData = true)]
-public sealed class Day07 : Puzzle
+public sealed class Day07 : Puzzle<int, int>
 {
     /// <summary>
     /// Gets the number of IPv7 addresses that support SSL.
@@ -89,7 +89,10 @@ public sealed class Day07 : Puzzle
             Logger.WriteLine("{0:N0} IPv7 addresses support SSL.", IPAddressesSupportingSsl);
         }
 
-        return PuzzleResult.Create(IPAddressesSupportingTls, IPAddressesSupportingSsl);
+        Solution1 = IPAddressesSupportingTls;
+        Solution2 = IPAddressesSupportingSsl;
+
+        return Result();
     }
 
     /// <summary>

@@ -7,7 +7,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019;
 /// A class representing the puzzle for <c>https://adventofcode.com/2019/day/8</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2019, 08, "Space Image Format", RequiresData = true)]
-public sealed class Day08 : Puzzle
+public sealed class Day08 : Puzzle<int, string>
 {
     /// <summary>
     /// Gets the checksum of the image.
@@ -127,10 +127,10 @@ public sealed class Day08 : Puzzle
             Logger.WriteLine("The message in the image data is {0}.", Message);
         }
 
-        var result = new PuzzleResult();
+        Solution1 = Checksum;
+        Solution2 = Message;
 
-        result.Solutions.Add(Checksum);
-        result.Solutions.Add(Message);
+        var result = Result();
         result.Visualizations.Add(visualization);
 
         return result;

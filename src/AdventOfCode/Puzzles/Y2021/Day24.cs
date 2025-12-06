@@ -7,7 +7,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2021;
 /// A class representing the puzzle for <c>https://adventofcode.com/2021/day/24</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2021, 24, "Arithmetic Logic Unit", RequiresData = true)]
-public sealed class Day24 : Puzzle
+public sealed class Day24 : Puzzle<long, long>
 {
     /// <summary>
     /// Gets the largest valid 14 digit model number accepted by MONAD.
@@ -88,6 +88,9 @@ public sealed class Day24 : Puzzle
             Logger.WriteLine("The smallest model number accepted by MONAD is {0:N0}.", MinimumValidModelNumber);
         }
 
-        return PuzzleResult.Create(MaximumValidModelNumber, MinimumValidModelNumber);
+        Solution1 = MaximumValidModelNumber;
+        Solution2 = MinimumValidModelNumber;
+
+        return Result();
     }
 }

@@ -7,7 +7,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2022;
 /// A class representing the puzzle for <c>https://adventofcode.com/2022/day/13</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2022, 13, "Distress Signal", RequiresData = true)]
-public sealed class Day13 : Puzzle
+public sealed class Day13 : Puzzle<int, int>
 {
     /// <summary>
     /// Gets the sum of the indices of the already correctly sorted pairs.
@@ -135,7 +135,10 @@ public sealed class Day13 : Puzzle
             Logger.WriteLine("The decoder key for the distress signal is {0}.", DecoderKey);
         }
 
-        return PuzzleResult.Create(SumOfPresortedIndicies, DecoderKey);
+        Solution1 = SumOfPresortedIndicies;
+        Solution2 = DecoderKey;
+
+        return Result();
     }
 
     private sealed class Packet : IComparable<Packet>, IEquatable<Packet>

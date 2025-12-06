@@ -9,7 +9,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2024;
 /// A class representing the puzzle for <c>https://adventofcode.com/2024/day/15</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2024, 15, "Warehouse Woes", RequiresData = true)]
-public sealed class Day15 : Puzzle
+public sealed class Day15 : Puzzle<int, int>
 {
     private enum Square
     {
@@ -140,6 +140,9 @@ public sealed class Day15 : Puzzle
             Logger.WriteLine("The sum of all boxes' GPS coordinates is {0}.", GpsSum);
         }
 
-        return PuzzleResult.Create(GpsSum);
+        Solution1 = GpsSum;
+        Solution2 = Unsolved;
+
+        return Result();
     }
 }

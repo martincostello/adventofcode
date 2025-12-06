@@ -7,7 +7,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2023;
 /// A class representing the puzzle for <c>https://adventofcode.com/2023/day/25</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2023, 25, "Snowverload", RequiresData = true, IsHidden = true, Unsolved = true)]
-public sealed class Day25 : Puzzle
+public sealed class Day25 : Puzzle<int, int>
 {
     /// <summary>
     /// Gets the solution.
@@ -41,6 +41,9 @@ public sealed class Day25 : Puzzle
             Logger.WriteLine("The solution is {0}.", Solution);
         }
 
-        return PuzzleResult.Create(Solution);
+        Solution1 = Solution;
+        Solution2 = Unsolved;
+
+        return Result();
     }
 }

@@ -7,7 +7,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2023;
 /// A class representing the puzzle for <c>https://adventofcode.com/2023/day/07</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2023, 07, "Camel Cards", RequiresData = true)]
-public sealed class Day07 : Puzzle
+public sealed class Day07 : Puzzle<int, int>
 {
     private static readonly Dictionary<char, int> ScoreMap = new()
     {
@@ -149,6 +149,9 @@ public sealed class Day07 : Puzzle
             Logger.WriteLine("The total winnings are {0} with Jokers.", TotalWinningsWithJokers);
         }
 
-        return PuzzleResult.Create(TotalWinnings, TotalWinningsWithJokers);
+        Solution1 = TotalWinnings;
+        Solution2 = TotalWinningsWithJokers;
+
+        return Result();
     }
 }

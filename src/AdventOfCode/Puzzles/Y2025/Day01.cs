@@ -7,7 +7,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2025;
 /// A class representing the puzzle for <c>https://adventofcode.com/2025/day/1</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2025, 01, "Secret Entrance", RequiresData = true)]
-public sealed class Day01 : Puzzle
+public sealed class Day01 : Puzzle<int, int>
 {
     /// <summary>
     /// Gets the password to open the door.
@@ -77,6 +77,9 @@ public sealed class Day01 : Puzzle
             Logger.WriteLine("The password to open the door using method 0x434C49434B is {0}", Password2);
         }
 
-        return PuzzleResult.Create(Password1, Password2);
+        Solution1 = Password1;
+        Solution2 = Password2;
+
+        return Result();
     }
 }

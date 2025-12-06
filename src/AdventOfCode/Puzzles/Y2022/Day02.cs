@@ -7,7 +7,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2022;
 /// A class representing the puzzle for <c>https://adventofcode.com/2022/day/2</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2022, 02, "Rock Paper Scissors", RequiresData = true)]
-public sealed class Day02 : Puzzle
+public sealed class Day02 : Puzzle<int, int>
 {
     private enum Move
     {
@@ -123,6 +123,9 @@ public sealed class Day02 : Puzzle
                 TotalScoreForOutcomes);
         }
 
-        return PuzzleResult.Create(TotalScoreForMoves, TotalScoreForOutcomes);
+        Solution1 = TotalScoreForMoves;
+        Solution2 = TotalScoreForOutcomes;
+
+        return Result();
     }
 }

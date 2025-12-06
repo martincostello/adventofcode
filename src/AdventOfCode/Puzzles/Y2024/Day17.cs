@@ -10,7 +10,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2024;
 /// A class representing the puzzle for <c>https://adventofcode.com/2024/day/17</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2024, 17, "Chronospatial Computer", RequiresData = true)]
-public sealed class Day17 : Puzzle
+public sealed class Day17 : Puzzle<string, long>
 {
     /// <summary>
     /// Gets the output of the program.
@@ -132,7 +132,10 @@ public sealed class Day17 : Puzzle
             Logger.WriteLine("The lowest positive initial value for register A that causes the program to output a copy of itself is {0}.", RegisterA);
         }
 
-        return PuzzleResult.Create(Output, RegisterA);
+        Solution1 = Output;
+        Solution2 = RegisterA;
+
+        return Result();
     }
 
     private static List<int> Run(List<int> program, long a, long b, long c)

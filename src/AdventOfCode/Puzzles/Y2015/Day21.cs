@@ -7,7 +7,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015;
 /// A class representing the puzzle for <c>https://adventofcode.com/2015/day/21</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2015, 21, "RPG Simulator 20XX", RequiresData = true)]
-public sealed class Day21 : Puzzle
+public sealed class Day21 : Puzzle<int, int>
 {
     /// <summary>
     /// Gets the maximum cost of items that can be purchased for the human to lost to the boss.
@@ -154,7 +154,10 @@ public sealed class Day21 : Puzzle
                 MaximumCostToLose);
         }
 
-        return PuzzleResult.Create(MaximumCostToLose, MinimumCostToWin);
+        Solution1 = MaximumCostToLose;
+        Solution2 = MinimumCostToWin;
+
+        return Result();
     }
 
     /// <summary>

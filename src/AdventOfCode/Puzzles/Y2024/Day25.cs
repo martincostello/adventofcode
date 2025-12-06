@@ -7,7 +7,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2024;
 /// A class representing the puzzle for <c>https://adventofcode.com/2024/day/25</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2024, 25, "Code Chronicle", RequiresData = true)]
-public sealed class Day25 : Puzzle
+public sealed class Day25 : Puzzle<int, int>
 {
     /// <summary>
     /// Gets the number of unique lock/key pairs fit together without overlapping in any column.
@@ -102,6 +102,9 @@ public sealed class Day25 : Puzzle
             Logger.WriteLine("{0} unique lock/key pairs fit together without overlapping in any column.", UniquePairs);
         }
 
-        return PuzzleResult.Create(UniquePairs);
+        Solution1 = UniquePairs;
+        Solution2 = Unsolved;
+
+        return Result();
     }
 }

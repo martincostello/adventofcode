@@ -7,7 +7,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2023;
 /// A class representing the puzzle for <c>https://adventofcode.com/2023/day/14</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2023, 14, "Parabolic Reflector Dish", RequiresData = true)]
-public sealed class Day14 : Puzzle
+public sealed class Day14 : Puzzle<int, int>
 {
     /// <summary>
     /// Gets the total load on the northern support beams.
@@ -208,7 +208,10 @@ public sealed class Day14 : Puzzle
             Logger.WriteLine("The total load on the north support beams after 1,000,000,000 spins is {0}.", TotalLoad, TotalLoadWithSpinCycle);
         }
 
-        var result = PuzzleResult.Create(TotalLoad, TotalLoadWithSpinCycle);
+        Solution1 = TotalLoad;
+        Solution2 = TotalLoadWithSpinCycle;
+
+        var result = Result();
 
         result.Visualizations.Add(visualizationNorth);
         result.Visualizations.Add(visualizationCycles);

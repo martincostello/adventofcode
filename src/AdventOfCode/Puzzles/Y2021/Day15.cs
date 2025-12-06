@@ -7,7 +7,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2021;
 /// A class representing the puzzle for <c>https://adventofcode.com/2021/day/15</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2021, 15, "Chiton", RequiresData = true)]
-public sealed class Day15 : Puzzle
+public sealed class Day15 : Puzzle<int, int>
 {
     /// <summary>
     /// Gets the path through the cave with the lowest total risk using the small map.
@@ -119,7 +119,10 @@ public sealed class Day15 : Puzzle
                 RiskLevelLarge);
         }
 
-        return PuzzleResult.Create(RiskLevelSmall, RiskLevelLarge);
+        Solution1 = RiskLevelSmall;
+        Solution2 = RiskLevelLarge;
+
+        return Result();
     }
 
     private sealed class RiskMap(int width, int height, Dictionary<Point, int> risks) : SquareGrid(width, height)

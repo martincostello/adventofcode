@@ -9,7 +9,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2023;
 /// A class representing the puzzle for <c>https://adventofcode.com/2023/day/20</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2023, 20, "Pulse Propagation", RequiresData = true)]
-public sealed class Day20 : Puzzle
+public sealed class Day20 : Puzzle<int, long>
 {
     private const string Activator = "rx";
     private const string Broadcaster = "broadcaster";
@@ -244,7 +244,10 @@ public sealed class Day20 : Puzzle
             Logger.WriteLine("The fewest number of button presses required to deliver a single low pulse to the module named rx is {0}.", ActivationCycles);
         }
 
-        return PuzzleResult.Create(PulsesProduct, ActivationCycles);
+        Solution1 = PulsesProduct;
+        Solution2 = ActivationCycles;
+
+        return Result();
     }
 
     private sealed class PulseReceivedEventArgs(Pulse pulse, Module sender, Module receiver) : EventArgs

@@ -7,7 +7,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016;
 /// A class representing the puzzle for <c>https://adventofcode.com/2016/day/18</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2016, 18, "Like a Rogue", RequiresData = true, IsSlow = true)]
-public sealed class Day18 : Puzzle
+public sealed class Day18 : Puzzle<int, int>
 {
     /// <summary>
     /// Gets the number of safe tiles in the puzzle input for 40 rows.
@@ -85,10 +85,10 @@ public sealed class Day18 : Puzzle
             Logger.WriteLine($"The number of safe tiles with 400,000 rows is {SafeTileCount400000:N0}.");
         }
 
-        var result = new PuzzleResult();
+        Solution1 = SafeTileCount40;
+        Solution2 = SafeTileCount400000;
 
-        result.Solutions.Add(SafeTileCount40);
-        result.Solutions.Add(SafeTileCount400000);
+        var result = Result();
         result.Visualizations.Add(visualization);
 
         return result;

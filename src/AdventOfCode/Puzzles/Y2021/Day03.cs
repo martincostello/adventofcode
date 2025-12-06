@@ -7,7 +7,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2021;
 /// A class representing the puzzle for <c>https://adventofcode.com/2021/day/3</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2021, 03, "Binary Diagnostic", RequiresData = true)]
-public sealed class Day03 : Puzzle
+public sealed class Day03 : Puzzle<int, int>
 {
     private const char Zero = '0';
     private const char One = '1';
@@ -115,7 +115,10 @@ public sealed class Day03 : Puzzle
                 LifeSupportRating);
         }
 
-        return PuzzleResult.Create(PowerConsumption, LifeSupportRating);
+        Solution1 = PowerConsumption;
+        Solution2 = LifeSupportRating;
+
+        return Result();
     }
 
     private static (int Zeroes, int Ones) CountBits(IEnumerable<string> values, int bit)

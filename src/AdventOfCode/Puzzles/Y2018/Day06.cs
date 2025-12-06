@@ -7,7 +7,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2018;
 /// A class representing the puzzle for <c>https://adventofcode.com/2018/day/6</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2018, 06, "Chronal Coordinates", RequiresData = true, IsSlow = true)]
-public sealed class Day06 : Puzzle
+public sealed class Day06 : Puzzle<int, int>
 {
     /// <summary>
     /// Gets the largest non-infinite area between coordinates.
@@ -128,6 +128,9 @@ public sealed class Day06 : Puzzle
                 AreaOfRegion);
         }
 
-        return PuzzleResult.Create(LargestNonInfiniteArea, AreaOfRegion);
+        Solution1 = LargestNonInfiniteArea;
+        Solution2 = AreaOfRegion;
+
+        return Result();
     }
 }

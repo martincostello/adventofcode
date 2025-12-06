@@ -7,7 +7,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2022;
 /// A class representing the puzzle for <c>https://adventofcode.com/2022/day/21</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2022, 21, "Monkey Math", RequiresData = true)]
-public sealed class Day21 : Puzzle
+public sealed class Day21 : Puzzle<long, long>
 {
     /// <summary>
     /// Gets the number that the monkey named <c>root</c> will yell.
@@ -151,7 +151,10 @@ public sealed class Day21 : Puzzle
             Logger.WriteLine("You must yell {0} for the monkey named root to pass their equality test.", HumanNumber);
         }
 
-        return PuzzleResult.Create(RootMonkeyNumber, HumanNumber);
+        Solution1 = RootMonkeyNumber;
+        Solution2 = HumanNumber;
+
+        return Result();
     }
 
     private sealed record Monkey(string Name)

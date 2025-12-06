@@ -9,7 +9,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2024;
 /// A class representing the puzzle for <c>https://adventofcode.com/2024/day/4</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2024, 04, "Ceres Search", RequiresData = true)]
-public sealed class Day04 : Puzzle
+public sealed class Day04 : Puzzle<int, int>
 {
     /// <summary>
     /// The target string to search for <c>XMAS</c>.
@@ -58,7 +58,10 @@ public sealed class Day04 : Puzzle
             Logger.WriteLine("MAS appears crossed {0} times.", CrossCount);
         }
 
-        return PuzzleResult.Create(SimpleCount, CrossCount);
+        Solution1 = SimpleCount;
+        Solution2 = CrossCount;
+
+        return Result();
     }
 
     private static int CountXmas(IList<string> grid)

@@ -7,7 +7,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2024;
 /// A class representing the puzzle for <c>https://adventofcode.com/2024/day/18</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2024, 18, "RAM Run", RequiresData = true)]
-public sealed class Day18 : Puzzle
+public sealed class Day18 : Puzzle<int, string>
 {
     /// <summary>
     /// Gets the minimum number of steps needed to reach the exit.
@@ -94,6 +94,9 @@ public sealed class Day18 : Puzzle
             Logger.WriteLine("The coordinates of the first byte that will prevent the exit from being reachable is {0}.", BlockingByte);
         }
 
-        return PuzzleResult.Create(MinimumSteps, BlockingByte);
+        Solution1 = MinimumSteps;
+        Solution2 = BlockingByte;
+
+        return Result();
     }
 }

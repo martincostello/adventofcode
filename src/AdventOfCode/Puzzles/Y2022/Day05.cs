@@ -7,7 +7,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2022;
 /// A class representing the puzzle for <c>https://adventofcode.com/2022/day/5</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2022, 05, "Supply Stacks", RequiresData = true)]
-public sealed class Day05 : Puzzle
+public sealed class Day05 : Puzzle<string, string>
 {
     /// <summary>
     /// Gets a string containing the IDs of the crates at
@@ -156,6 +156,9 @@ public sealed class Day05 : Puzzle
             Logger.WriteLine("The crates on the top of each stack with the CraneMover 9001 are: {0}.", TopCratesOfStacks9001);
         }
 
-        return PuzzleResult.Create(TopCratesOfStacks9000, TopCratesOfStacks9001);
+        Solution1 = TopCratesOfStacks9000;
+        Solution2 = TopCratesOfStacks9001;
+
+        return Result();
     }
 }

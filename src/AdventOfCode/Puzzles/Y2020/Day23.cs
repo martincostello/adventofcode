@@ -7,7 +7,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020;
 /// A class representing the puzzle for <c>https://adventofcode.com/2020/day/23</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2020, 23, "Crab Cups", MinimumArguments = 1, IsSlow = true)]
-public sealed class Day23 : Puzzle
+public sealed class Day23 : Puzzle<string, long>
 {
     /// <summary>
     /// Gets the labels of the cups after cup 1 after 100 moves.
@@ -115,6 +115,9 @@ public sealed class Day23 : Puzzle
             Logger.WriteLine("The product of the labels on the first two cups after cup 1 after 10,000,000 moves is {0}.", ProductOfLabelsAfterCup1);
         }
 
-        return PuzzleResult.Create(LabelsAfterCup1, ProductOfLabelsAfterCup1);
+        Solution1 = LabelsAfterCup1;
+        Solution2 = ProductOfLabelsAfterCup1;
+
+        return Result();
     }
 }

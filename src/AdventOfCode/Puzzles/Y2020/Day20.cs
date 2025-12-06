@@ -7,7 +7,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020;
 /// A class representing the puzzle for <c>https://adventofcode.com/2020/day/20</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2020, 20, "Jurassic Jigsaw", RequiresData = true)]
-public sealed class Day20 : Puzzle
+public sealed class Day20 : Puzzle<long, int>
 {
     /// <summary>
     /// Gets the product of Ids of the corner tiles.
@@ -473,10 +473,10 @@ public sealed class Day20 : Puzzle
             Logger.WriteLine("The roughness of the water is {0}.", WaterRoughness);
         }
 
-        var result = new PuzzleResult();
+        Solution1 = ProductOfCornerTiles;
+        Solution2 = WaterRoughness;
 
-        result.Solutions.Add(ProductOfCornerTiles);
-        result.Solutions.Add(WaterRoughness);
+        var result = Result();
         result.Visualizations.Add(image);
 
         return result;

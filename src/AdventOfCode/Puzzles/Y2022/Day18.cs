@@ -7,7 +7,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2022;
 /// A class representing the puzzle for <c>https://adventofcode.com/2022/day/18</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2022, 18, "Boiling Boulders", RequiresData = true)]
-public sealed class Day18 : Puzzle
+public sealed class Day18 : Puzzle<int, int>
 {
     /// <summary>
     /// Gets the total surface area of the scanned lava droplet.
@@ -105,6 +105,9 @@ public sealed class Day18 : Puzzle
             Logger.WriteLine("The external surface area of the scanned lava droplet is {0}.", ExternalDropletSurfaceArea);
         }
 
-        return PuzzleResult.Create(TotalDropletSurfaceArea, ExternalDropletSurfaceArea);
+        Solution1 = TotalDropletSurfaceArea;
+        Solution2 = ExternalDropletSurfaceArea;
+
+        return Result();
     }
 }

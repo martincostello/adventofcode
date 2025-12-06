@@ -7,7 +7,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2024;
 /// A class representing the puzzle for <c>https://adventofcode.com/2024/day/5</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2024, 05, "Print Queue", RequiresData = true)]
-public sealed class Day05 : Puzzle
+public sealed class Day05 : Puzzle<int, int>
 {
     /// <summary>
     /// Gets the sum of the middle page numbers for correctly-ordered updates.
@@ -85,6 +85,9 @@ public sealed class Day05 : Puzzle
             Logger.WriteLine("The sum of the middle page numbers after correctly ordering incorrectly-ordered updates is {0}.", MiddlePageSumIncorrect);
         }
 
-        return PuzzleResult.Create(MiddlePageSumCorrect, MiddlePageSumIncorrect);
+        Solution1 = MiddlePageSumCorrect;
+        Solution2 = MiddlePageSumIncorrect;
+
+        return Result();
     }
 }

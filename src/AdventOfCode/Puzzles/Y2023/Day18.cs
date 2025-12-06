@@ -7,7 +7,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2023;
 /// A class representing the puzzle for <c>https://adventofcode.com/2023/day/18</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2023, 18, "Lavaduct Lagoon", RequiresData = true)]
-public sealed class Day18 : Puzzle
+public sealed class Day18 : Puzzle<long, long>
 {
     /// <summary>
     /// Gets the volume of lava the lagoon can hold.
@@ -83,6 +83,9 @@ public sealed class Day18 : Puzzle
             Logger.WriteLine("The lagoon can hold {0} cubic meters of lava using the fixed plan.", VolumeWithFix);
         }
 
-        return PuzzleResult.Create(Volume, VolumeWithFix);
+        Solution1 = Volume;
+        Solution2 = VolumeWithFix;
+
+        return Result();
     }
 }

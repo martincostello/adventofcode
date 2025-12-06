@@ -7,7 +7,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020;
 /// A class representing the puzzle for <c>https://adventofcode.com/2020/day/7</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2020, 07, "Handy Haversacks", MinimumArguments = 1, RequiresData = true)]
-public sealed class Day07 : Puzzle
+public sealed class Day07 : Puzzle<int, int>
 {
     /// <summary>
     /// Gets the number of bag colors that can eventually contain at least one bag of the given color.
@@ -145,7 +145,10 @@ public sealed class Day07 : Puzzle
             Logger.WriteLine("The number of bags contained in a {0} bag is {1}.", color, BagsInsideBag);
         }
 
-        return PuzzleResult.Create(BagColorsThatCanContainColor, BagsInsideBag);
+        Solution1 = BagColorsThatCanContainColor;
+        Solution2 = BagsInsideBag;
+
+        return Result();
     }
 
     /// <summary>

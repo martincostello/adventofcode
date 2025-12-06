@@ -7,7 +7,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2021;
 /// A class representing the puzzle for <c>https://adventofcode.com/2021/day/25</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2021, 25, "Sea Cucumber", RequiresData = true)]
-public sealed class Day25 : Puzzle
+public sealed class Day25 : Puzzle<int, int>
 {
     /// <summary>
     /// Gets the number of sea cucumber moves after which no further moves are made.
@@ -133,6 +133,9 @@ public sealed class Day25 : Puzzle
             Logger.WriteLine("The first step on which no sea cucumbers move is {0:N0}.", FirstStepWithNoMoves);
         }
 
-        return PuzzleResult.Create(FirstStepWithNoMoves);
+        Solution1 = FirstStepWithNoMoves;
+        Solution2 = Unsolved;
+
+        return Result();
     }
 }

@@ -7,7 +7,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2023;
 /// A class representing the puzzle for <c>https://adventofcode.com/2023/day/11</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2023, 11, "Cosmic Expansion", RequiresData = true)]
-public sealed class Day11 : Puzzle
+public sealed class Day11 : Puzzle<long, long>
 {
     private const char Empty = '.';
     private const char Galaxy = '#';
@@ -154,6 +154,9 @@ public sealed class Day11 : Puzzle
             Logger.WriteLine("The sum of the shortest path between each galaxy with an expansion of 1,000,000 is {0}.", SumOfLengthsLarge);
         }
 
-        return PuzzleResult.Create(SumOfLengthsSmall, SumOfLengthsLarge);
+        Solution1 = SumOfLengthsSmall;
+        Solution2 = SumOfLengthsLarge;
+
+        return Result();
     }
 }

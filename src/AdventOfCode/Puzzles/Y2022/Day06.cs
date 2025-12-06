@@ -7,7 +7,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2022;
 /// A class representing the puzzle for <c>https://adventofcode.com/2022/day/6</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2022, 06, "Tuning Trouble", RequiresData = true)]
-public sealed class Day06 : Puzzle
+public sealed class Day06 : Puzzle<int, int>
 {
     /// <summary>
     /// Gets the index of the first start-of-packet marker.
@@ -69,6 +69,9 @@ public sealed class Day06 : Puzzle
                 IndexOfFirstStartOfMessageMarker);
         }
 
-        return PuzzleResult.Create(IndexOfFirstStartOfPacketMarker, IndexOfFirstStartOfMessageMarker);
+        Solution1 = IndexOfFirstStartOfPacketMarker;
+        Solution2 = IndexOfFirstStartOfMessageMarker;
+
+        return Result();
     }
 }

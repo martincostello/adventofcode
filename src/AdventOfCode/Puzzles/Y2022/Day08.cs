@@ -7,7 +7,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2022;
 /// A class representing the puzzle for <c>https://adventofcode.com/2022/day/8</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2022, 08, "Treetop Tree House", RequiresData = true)]
-public sealed class Day08 : Puzzle
+public sealed class Day08 : Puzzle<int, int>
 {
     /// <summary>
     /// Gets how many trees are visible from outside the grid.
@@ -173,7 +173,10 @@ public sealed class Day08 : Puzzle
             Logger.WriteLine("The highest scenic score is {0}.", MaximumScenicScore);
         }
 
-        return PuzzleResult.Create(VisibleTrees, MaximumScenicScore);
+        Solution1 = VisibleTrees;
+        Solution2 = MaximumScenicScore;
+
+        return Result();
     }
 
     private sealed record Tree(Point Location, int Height)

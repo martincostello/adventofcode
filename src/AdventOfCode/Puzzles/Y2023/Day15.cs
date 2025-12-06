@@ -10,7 +10,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2023;
 /// A class representing the puzzle for <c>https://adventofcode.com/2023/day/15</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2023, 15, "Lens Library", RequiresData = true)]
-public sealed class Day15 : Puzzle
+public sealed class Day15 : Puzzle<int, int>
 {
     private const int Boxes = 256;
 
@@ -145,7 +145,10 @@ public sealed class Day15 : Puzzle
             Logger.WriteLine("The focusing power of the lens configuration is {0}.", FocusingPower);
         }
 
-        return PuzzleResult.Create(HashSum, FocusingPower);
+        Solution1 = HashSum;
+        Solution2 = FocusingPower;
+
+        return Result();
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]

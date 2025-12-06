@@ -7,7 +7,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2023;
 /// A class representing the puzzle for <c>https://adventofcode.com/2023/day/02</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2023, 02, "Cube Conundrum", RequiresData = true)]
-public sealed class Day02 : Puzzle
+public sealed class Day02 : Puzzle<int, int>
 {
     /// <summary>
     /// Gets the sum of the IDs of the games that are possible.
@@ -98,6 +98,9 @@ public sealed class Day02 : Puzzle
             Logger.WriteLine("The sum of the powers of the cubes in the games is {0}.", SumOfPowers);
         }
 
-        return PuzzleResult.Create(SumOfPossibleSolutions, SumOfPowers);
+        Solution1 = SumOfPossibleSolutions;
+        Solution2 = SumOfPowers;
+
+        return Result();
     }
 }

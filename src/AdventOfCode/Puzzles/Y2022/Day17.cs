@@ -7,7 +7,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2022;
 /// A class representing the puzzle for <c>https://adventofcode.com/2022/day/17</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2022, 17, "Pyroclastic Flow", RequiresData = true, IsHidden = true)]
-public sealed class Day17 : Puzzle
+public sealed class Day17 : Puzzle<long, long>
 {
     /// <summary>
     /// Gets how many units tall will the tower of rocks
@@ -88,7 +88,10 @@ public sealed class Day17 : Puzzle
             Logger.WriteLine("The tower of rocks is {0} units tall after 1,000,000,000,000 rocks have stopped falling.", HeightTrillion);
         }
 
-        return PuzzleResult.Create(Height2022, HeightTrillion);
+        Solution1 = Height2022;
+        Solution2 = HeightTrillion;
+
+        return Result();
     }
 
     private sealed class Rock

@@ -9,7 +9,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2024;
 /// A class representing the puzzle for <c>https://adventofcode.com/2024/day/13</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2024, 13, "Claw Contraption", RequiresData = true)]
-public sealed class Day13 : Puzzle
+public sealed class Day13 : Puzzle<long, long>
 {
     /// <summary>
     /// Gets the fewest tokens needed to be spent to win all possible prizes.
@@ -85,7 +85,10 @@ public sealed class Day13 : Puzzle
             Logger.WriteLine("The fewest tokens you would have to spend to win all possible prizes with the correct offset is {0}.", FewestTokensFixed);
         }
 
-        return PuzzleResult.Create(FewestTokens, FewestTokensFixed);
+        Solution1 = FewestTokens;
+        Solution2 = FewestTokensFixed;
+
+        return Result();
     }
 
     private sealed record ClawMachine(Point A, Point B, Point Prize)

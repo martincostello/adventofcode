@@ -7,7 +7,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2022;
 /// A class representing the puzzle for <c>https://adventofcode.com/2022/day/14</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2022, 14, "Regolith Reservoir", RequiresData = true)]
-public sealed class Day14 : Puzzle
+public sealed class Day14 : Puzzle<int, int>
 {
     private static readonly Size Down = Directions.Down;
     private static readonly Size Left = new(-1, 1);
@@ -230,11 +230,10 @@ public sealed class Day14 : Puzzle
             Logger.WriteLine(visualization2);
         }
 
-        var result = new PuzzleResult();
+        Solution1 = GrainsOfSandWithVoid;
+        Solution2 = GrainsOfSandWithFloor;
 
-        result.Solutions.Add(GrainsOfSandWithVoid);
-        result.Solutions.Add(GrainsOfSandWithFloor);
-
+        var result = Result();
         result.Visualizations.Add(visualization1);
         result.Visualizations.Add(visualization2);
 

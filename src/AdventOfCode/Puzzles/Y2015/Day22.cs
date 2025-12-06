@@ -10,7 +10,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015;
 /// A class representing the puzzle for <c>https://adventofcode.com/2015/day/22</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2015, 22, "Wizard Simulator 20XX", MinimumArguments = 1, IsSlow = true)]
-public sealed class Day22 : Puzzle
+public sealed class Day22 : Puzzle<int, int>
 {
     /// <summary>
     /// Gets the minimum amount of mana that can be spent to win.
@@ -110,7 +110,10 @@ public sealed class Day22 : Puzzle
                 MinimumCostToWin);
         }
 
-        return PuzzleResult.Create(MinimumCostToWin);
+        Solution1 = MinimumCostToWin;
+        Solution2 = Unsolved;
+
+        return Result();
     }
 
     /// <summary>
