@@ -7,7 +7,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017;
 /// A class representing the puzzle for <c>https://adventofcode.com/2017/day/11</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2017, 11, "Hex Ed", RequiresData = true)]
-public sealed class Day11 : Puzzle
+public sealed class Day11 : Puzzle<int, int>
 {
     /// <summary>
     /// A move north. This field is read-only.
@@ -94,7 +94,10 @@ public sealed class Day11 : Puzzle
             Logger.WriteLine($"The maximum distance reached by the child process was {MaximumDistance:N0}.");
         }
 
-        return PuzzleResult.Create(MinimumSteps, MaximumDistance);
+        Solution1 = MinimumSteps;
+        Solution2 = MaximumDistance;
+
+        return Result();
     }
 
     /// <summary>

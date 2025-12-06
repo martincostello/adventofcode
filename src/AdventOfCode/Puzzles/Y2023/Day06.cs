@@ -7,7 +7,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2023;
 /// A class representing the puzzle for <c>https://adventofcode.com/2023/day/06</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2023, 06, "Wait For It", RequiresData = true)]
-public sealed class Day06 : Puzzle
+public sealed class Day06 : Puzzle<long, long>
 {
     /// <summary>
     /// Gets the product of the number of combinations of ways to beat the record.
@@ -114,6 +114,9 @@ public sealed class Day06 : Puzzle
             Logger.WriteLine("The product of the number of ways to beat the record with the kerning fixed is {0}.", CombinationsProductWithFix);
         }
 
-        return PuzzleResult.Create(CombinationsProduct, CombinationsProductWithFix);
+        Solution1 = CombinationsProduct;
+        Solution2 = CombinationsProductWithFix;
+
+        return Result();
     }
 }

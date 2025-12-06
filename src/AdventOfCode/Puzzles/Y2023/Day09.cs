@@ -7,7 +7,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2023;
 /// A class representing the puzzle for <c>https://adventofcode.com/2023/day/09</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2023, 09, "Mirage Maintenance", RequiresData = true)]
-public sealed class Day09 : Puzzle
+public sealed class Day09 : Puzzle<int, int>
 {
     /// <summary>
     /// Gets the sum of the extrapolated next values.
@@ -89,6 +89,9 @@ public sealed class Day09 : Puzzle
             Logger.WriteLine("The sum of the extrapolated previous values is {0}.", SumPrevious);
         }
 
-        return PuzzleResult.Create(SumNext, SumPrevious);
+        Solution1 = SumNext;
+        Solution2 = SumPrevious;
+
+        return Result();
     }
 }

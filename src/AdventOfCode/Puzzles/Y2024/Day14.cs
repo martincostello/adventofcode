@@ -7,7 +7,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2024;
 /// A class representing the puzzle for <c>https://adventofcode.com/2024/day/14</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2024, 14, "Restroom Redoubt", RequiresData = true)]
-public sealed class Day14 : Puzzle
+public sealed class Day14 : Puzzle<int, int>
 {
     /// <summary>
     /// Gets the safety factor after 100 seconds.
@@ -129,7 +129,10 @@ public sealed class Day14 : Puzzle
             Logger.WriteLine("The robots first display the Easter egg after {0} seconds.", EasterEggSeconds);
         }
 
-        return PuzzleResult.Create(SafetyFactor, EasterEggSeconds);
+        Solution1 = SafetyFactor;
+        Solution2 = EasterEggSeconds;
+
+        return Result();
     }
 
     private record Robot(Point Origin, Size Velocity, Rectangle Bounds)

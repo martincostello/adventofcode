@@ -7,7 +7,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2024;
 /// A class representing the puzzle for <c>https://adventofcode.com/2024/day/2</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2024, 02, "Red-Nosed Reports", RequiresData = true)]
-public sealed class Day02 : Puzzle
+public sealed class Day02 : Puzzle<int, int>
 {
     /// <summary>
     /// Gets the number of safe reports.
@@ -99,6 +99,9 @@ public sealed class Day02 : Puzzle
             Logger.WriteLine("{0} reports are safe with the Problem Dampener.", SafeReportsWithDampener);
         }
 
-        return PuzzleResult.Create(SafeReports, SafeReportsWithDampener);
+        Solution1 = SafeReports;
+        Solution2 = SafeReportsWithDampener;
+
+        return Result();
     }
 }

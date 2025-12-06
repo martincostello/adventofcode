@@ -7,7 +7,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2021;
 /// A class representing the puzzle for <c>https://adventofcode.com/2021/day/4</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2021, 04, "Giant Squid", RequiresData = true)]
-public sealed class Day04 : Puzzle
+public sealed class Day04 : Puzzle<int, int>
 {
     /// <summary>
     /// Gets the score of the first winning card from playing Bingo.
@@ -65,7 +65,10 @@ public sealed class Day04 : Puzzle
             Logger.WriteLine("The score of the last winning Bingo card is {0:N0}.", LastWinningScore);
         }
 
-        return PuzzleResult.Create(FirstWinningScore, LastWinningScore);
+        Solution1 = FirstWinningScore;
+        Solution2 = LastWinningScore;
+
+        return Result();
     }
 
     private static List<BingoCard> ParseCards(IEnumerable<string> game)

@@ -7,7 +7,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2018;
 /// A class representing the puzzle for <c>https://adventofcode.com/2018/day/7</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2018, 07, "The Sum of Its Parts", RequiresData = true)]
-public sealed class Day07 : Puzzle
+public sealed class Day07 : Puzzle<string, int>
 {
     /// <summary>
     /// Gets the order in which the parts of the sleigh should be assembled.
@@ -114,6 +114,9 @@ public sealed class Day07 : Puzzle
             Logger.WriteLine("The time to assemble the sleigh with 5 workers is {0}.", TimeToAssemble);
         }
 
-        return PuzzleResult.Create(OrderOfAssembly, TimeToAssemble);
+        Solution1 = OrderOfAssembly;
+        Solution2 = TimeToAssemble;
+
+        return Result();
     }
 }

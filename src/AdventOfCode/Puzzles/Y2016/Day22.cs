@@ -7,7 +7,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016;
 /// A class representing the puzzle for <c>https://adventofcode.com/2016/day/22</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2016, 22, "Grid Computing", RequiresData = true)]
-public sealed class Day22 : Puzzle
+public sealed class Day22 : Puzzle<int, int>
 {
     /// <summary>
     /// Gets the number of viable nodes found from processing the input.
@@ -173,7 +173,10 @@ public sealed class Day22 : Puzzle
             Logger.WriteLine("The fewest number of steps required to extract the goal data is {0:N0}.", MinimumStepsToExtract);
         }
 
-        return PuzzleResult.Create(ViableNodePairs, MinimumStepsToExtract);
+        Solution1 = ViableNodePairs;
+        Solution2 = MinimumStepsToExtract;
+
+        return Result();
     }
 
     /// <summary>

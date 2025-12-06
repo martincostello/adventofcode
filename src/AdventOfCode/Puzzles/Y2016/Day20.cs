@@ -7,7 +7,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016;
 /// A class representing the puzzle for <c>https://adventofcode.com/2016/day/20</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2016, 20, "Firewall Rules", RequiresData = true)]
-public sealed class Day20 : Puzzle
+public sealed class Day20 : Puzzle<uint, uint>
 {
     /// <summary>
     /// Gets the number of IP addresses that are not blocked.
@@ -126,6 +126,9 @@ public sealed class Day20 : Puzzle
             Logger.WriteLine($"The number of IP addresses allowed is {AllowedIPCount:N0}.");
         }
 
-        return PuzzleResult.Create(LowestNonblockedIP, AllowedIPCount);
+        Solution1 = LowestNonblockedIP;
+        Solution2 = AllowedIPCount;
+
+        return Result();
     }
 }

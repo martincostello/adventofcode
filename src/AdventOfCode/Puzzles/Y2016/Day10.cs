@@ -7,7 +7,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016;
 /// A class representing the puzzle for <c>https://adventofcode.com/2016/day/10</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2016, 10, "Balance Bots", RequiresData = true)]
-public sealed class Day10 : Puzzle
+public sealed class Day10 : Puzzle<int, int>
 {
     /// <summary>
     /// Gets the number of the bot that compares value-61 and value-17 microchips.
@@ -90,7 +90,10 @@ public sealed class Day10 : Puzzle
             Logger.WriteLine($"The product of the microchips in output bins 0, 1 and 2 is {ProductOfMicrochipsInBins012:N0}.");
         }
 
-        return PuzzleResult.Create(BotThatCompares61And17Microchips, ProductOfMicrochipsInBins012);
+        Solution1 = BotThatCompares61And17Microchips;
+        Solution2 = ProductOfMicrochipsInBins012;
+
+        return Result();
     }
 
     /// <summary>

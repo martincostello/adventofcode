@@ -7,7 +7,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019;
 /// A class representing the puzzle for <c>https://adventofcode.com/2019/day/3</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2019, 03, "Crossed Wires", RequiresData = true)]
-public sealed class Day03 : Puzzle
+public sealed class Day03 : Puzzle<int, int>
 {
     /// <summary>
     /// Represents the wires passing through a grid square.
@@ -130,7 +130,10 @@ public sealed class Day03 : Puzzle
             Logger.WriteLine("The minimum number of combined steps to get to an intersection is {0}.", MinimumSteps);
         }
 
-        return PuzzleResult.Create(ManhattanDistance, MinimumSteps);
+        Solution1 = ManhattanDistance;
+        Solution2 = MinimumSteps;
+
+        return Result();
     }
 
     /// <summary>

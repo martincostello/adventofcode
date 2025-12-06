@@ -7,7 +7,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016;
 /// A class representing the puzzle for <c>https://adventofcode.com/2016/day/8</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2016, 08, "Two-Factor Authentication", RequiresData = true)]
-public sealed class Day08 : Puzzle
+public sealed class Day08 : Puzzle<int, string>
 {
     /// <summary>
     /// Gets the number of pixels that are be lit.
@@ -82,10 +82,10 @@ public sealed class Day08 : Puzzle
             Logger.WriteLine($"The code displayed is {Code}.");
         }
 
-        var result = new PuzzleResult();
+        Solution1 = PixelsLit;
+        Solution2 = Code;
 
-        result.Solutions.Add(PixelsLit);
-        result.Solutions.Add(Code);
+        var result = Result();
         result.Visualizations.Add(visualization);
 
         return result;

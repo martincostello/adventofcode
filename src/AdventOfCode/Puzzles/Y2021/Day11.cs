@@ -7,7 +7,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2021;
 /// A class representing the puzzle for <c>https://adventofcode.com/2021/day/11</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2021, 11, "Dumbo Octopus", RequiresData = true)]
-public sealed class Day11 : Puzzle
+public sealed class Day11 : Puzzle<int, int>
 {
     /// <summary>
     /// Gets the number of flashes after 100 steps.
@@ -160,6 +160,9 @@ public sealed class Day11 : Puzzle
             Logger.WriteLine("The octopuses all flash for the first time after {0:N0} steps.", StepOfFirstSynchronizedFlash);
         }
 
-        return PuzzleResult.Create(Flashes100, StepOfFirstSynchronizedFlash);
+        Solution1 = Flashes100;
+        Solution2 = StepOfFirstSynchronizedFlash;
+
+        return Result();
     }
 }

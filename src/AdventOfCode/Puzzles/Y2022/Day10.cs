@@ -7,7 +7,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2022;
 /// A class representing the puzzle for <c>https://adventofcode.com/2022/day/10</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2022, 10, "Cathode-Ray Tube", RequiresData = true)]
-public sealed class Day10 : Puzzle
+public sealed class Day10 : Puzzle<int, string>
 {
     /// <summary>
     /// Gets the sum of the signal strengths for the 20th,
@@ -129,10 +129,10 @@ public sealed class Day10 : Puzzle
             Logger.WriteLine("The message output to the CRT is '{0}'.", Message);
         }
 
-        var result = new PuzzleResult();
+        Solution1 = SumOfSignalStrengths;
+        Solution2 = Message;
 
-        result.Solutions.Add(SumOfSignalStrengths);
-        result.Solutions.Add(Message);
+        var result = Result();
         result.Visualizations.Add(visualization);
 
         return result;

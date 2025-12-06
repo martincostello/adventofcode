@@ -7,7 +7,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020;
 /// A class representing the puzzle for <c>https://adventofcode.com/2020/day/17</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2020, 17, "Conway Cubes", RequiresData = true, IsSlow = true)]
-public sealed class Day17 : Puzzle
+public sealed class Day17 : Puzzle<int, int>
 {
     /// <summary>
     /// An active cube.
@@ -72,12 +72,11 @@ public sealed class Day17 : Puzzle
             Logger.WriteLine("There are {0} active cubes after {1} cycles in 4 dimensions.", ActiveCubes4D, cycles);
         }
 
-        var result = new PuzzleResult();
+        Solution1 = ActiveCubes3D;
+        Solution2 = ActiveCubes4D;
 
-        result.Solutions.Add(ActiveCubes3D);
+        var result = Result();
         result.Visualizations.Add(visualization3D);
-
-        result.Solutions.Add(ActiveCubes4D);
         result.Visualizations.Add(visualization4D);
 
         return result;

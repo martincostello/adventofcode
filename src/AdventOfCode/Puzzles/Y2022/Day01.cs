@@ -7,7 +7,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2022;
 /// A class representing the puzzle for <c>https://adventofcode.com/2022/day/1</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2022, 01, "Calorie Counting", RequiresData = true)]
-public sealed class Day01 : Puzzle
+public sealed class Day01 : Puzzle<int, int>
 {
     /// <summary>
     /// Gets the number of calories carried by the elf with the most calorific inventory.
@@ -71,6 +71,9 @@ public sealed class Day01 : Puzzle
             Logger.WriteLine("The elves carrying the largest three inventories have {0:N0} Calories.", MaximumCaloriesForTop3);
         }
 
-        return PuzzleResult.Create(MaximumCalories, MaximumCaloriesForTop3);
+        Solution1 = MaximumCalories;
+        Solution2 = MaximumCaloriesForTop3;
+
+        return Result();
     }
 }

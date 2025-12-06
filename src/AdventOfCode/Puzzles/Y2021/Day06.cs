@@ -7,7 +7,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2021;
 /// A class representing the puzzle for <c>https://adventofcode.com/2021/day/6</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2021, 06, "Lanternfish", RequiresData = true)]
-public sealed class Day06 : Puzzle
+public sealed class Day06 : Puzzle<long, long>
 {
     /// <summary>
     /// Gets the number of lantern fish present after 80 days.
@@ -90,6 +90,9 @@ public sealed class Day06 : Puzzle
             Logger.WriteLine("There are {0:N0} lanternfish after 256 days.", FishCount256);
         }
 
-        return PuzzleResult.Create(FishCount80, FishCount256);
+        Solution1 = FishCount80;
+        Solution2 = FishCount256;
+
+        return Result();
     }
 }

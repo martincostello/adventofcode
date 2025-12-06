@@ -7,7 +7,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2018;
 /// A class representing the puzzle for <c>https://adventofcode.com/2018/day/4</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2018, 04, "Repose Record", RequiresData = true)]
-public sealed class Day04 : Puzzle
+public sealed class Day04 : Puzzle<int, int>
 {
     /// <summary>
     /// Gets the product of the Id of the guard who slept the most and the minute they were asleep the most.
@@ -155,7 +155,10 @@ public sealed class Day04 : Puzzle
             Logger.WriteLine($"The most common minute a guard was asleep in multiplied by the guard's ID is {SleepiestMinuteGuard:N0}.");
         }
 
-        return PuzzleResult.Create(SleepiestGuardMinute, SleepiestMinuteGuard);
+        Solution1 = SleepiestGuardMinute;
+        Solution2 = SleepiestMinuteGuard;
+
+        return Result();
     }
 
     /// <summary>

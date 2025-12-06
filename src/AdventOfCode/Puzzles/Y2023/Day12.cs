@@ -7,7 +7,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2023;
 /// A class representing the puzzle for <c>https://adventofcode.com/2023/day/12</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2023, 12, "Hot Springs", RequiresData = true, Unsolved = true)]
-public sealed class Day12 : Puzzle
+public sealed class Day12 : Puzzle<int, int>
 {
     private const char Damaged = '#';
     private const char Unknown = '?';
@@ -79,7 +79,10 @@ public sealed class Day12 : Puzzle
             Logger.WriteLine("The sum of the counts of spring arrangements when unfolded is {0}.", SumOfCountsUnfolded);
         }
 
-        return PuzzleResult.Create(SumOfCountsFolded, SumOfCountsUnfolded);
+        Solution1 = SumOfCountsFolded;
+        Solution2 = SumOfCountsUnfolded;
+
+        return Result();
     }
 
     private record struct State(string Values, int[] Counts, int Actual, int Desired)

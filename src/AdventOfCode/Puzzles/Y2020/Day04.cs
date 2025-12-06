@@ -9,7 +9,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020;
 /// A class representing the puzzle for <c>https://adventofcode.com/2020/day/4</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2020, 04, "Passport Processing", RequiresData = true)]
-public sealed partial class Day04 : Puzzle
+public sealed partial class Day04 : Puzzle<int, int>
 {
     /// <summary>
     /// The required keys for passports. This field is read-only.
@@ -98,7 +98,10 @@ public sealed partial class Day04 : Puzzle
             Logger.WriteLine("There are {0} verified passports.", VerifiedPassports);
         }
 
-        return PuzzleResult.Create(ValidPassports, VerifiedPassports);
+        Solution1 = ValidPassports;
+        Solution2 = VerifiedPassports;
+
+        return Result();
     }
 
     /// <summary>

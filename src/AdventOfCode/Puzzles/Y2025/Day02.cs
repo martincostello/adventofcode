@@ -7,7 +7,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2025;
 /// A class representing the puzzle for <c>https://adventofcode.com/2025/day/2</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2025, 02, "Gift Shop", RequiresData = true)]
-public sealed class Day02 : Puzzle
+public sealed class Day02 : Puzzle<long, long>
 {
     /// <summary>
     /// Gets the sum of the invalid product IDs for the first version of the validation rules.
@@ -111,6 +111,9 @@ public sealed class Day02 : Puzzle
             Logger.WriteLine("The sum of the invalid IDs with the second set of rules is {0}", InvalidIdSumV2);
         }
 
-        return PuzzleResult.Create(InvalidIdSumV1, InvalidIdSumV2);
+        Solution1 = InvalidIdSumV1;
+        Solution2 = InvalidIdSumV2;
+
+        return Result();
     }
 }

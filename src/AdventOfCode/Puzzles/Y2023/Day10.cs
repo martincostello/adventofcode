@@ -9,7 +9,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2023;
 /// A class representing the puzzle for <c>https://adventofcode.com/2023/day/10</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2023, 10, "Pipe Maze", RequiresData = true)]
-public sealed class Day10 : Puzzle
+public sealed class Day10 : Puzzle<int, int>
 {
     private const char Empty = '.';
     private const char Start = 'S';
@@ -235,6 +235,9 @@ public sealed class Day10 : Puzzle
             Logger.WriteLine("{0} tiles are enclosed by the loop.", Tiles);
         }
 
-        return PuzzleResult.Create(Steps, Tiles);
+        Solution1 = Steps;
+        Solution2 = Tiles;
+
+        return Result();
     }
 }

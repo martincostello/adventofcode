@@ -7,7 +7,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2021;
 /// A class representing the puzzle for <c>https://adventofcode.com/2021/day/19</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2021, 19, "Beacon Scanner", RequiresData = true, IsSlow = true)]
-public sealed class Day19 : Puzzle
+public sealed class Day19 : Puzzle<int, int>
 {
     /// <summary>
     /// Gets the number of beacons.
@@ -237,7 +237,10 @@ public sealed class Day19 : Puzzle
             Logger.WriteLine("There largest Manhattan distance between two scanners is {0:N0}.", LargestScannerDistance);
         }
 
-        return PuzzleResult.Create(BeaconCount, LargestScannerDistance);
+        Solution1 = BeaconCount;
+        Solution2 = LargestScannerDistance;
+
+        return Result();
     }
 
     private sealed class Scanner : HashSet<Vector3>

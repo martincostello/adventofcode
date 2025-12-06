@@ -9,7 +9,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2023;
 /// A class representing the puzzle for <c>https://adventofcode.com/2023/day/01</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2023, 01, "Trebuchet?!", RequiresData = true)]
-public sealed class Day01 : Puzzle
+public sealed class Day01 : Puzzle<int, int>
 {
     private static readonly SearchValues<char> Digits = SearchValues.Create("123456789");
 
@@ -118,6 +118,9 @@ public sealed class Day01 : Puzzle
             Logger.WriteLine("The sum of all of the calibration values is {0} using words and digits.", SumOfCalibrationsWordsAndDigits);
         }
 
-        return PuzzleResult.Create(SumOfCalibrationsDigits, SumOfCalibrationsWordsAndDigits);
+        Solution1 = SumOfCalibrationsDigits;
+        Solution2 = SumOfCalibrationsWordsAndDigits;
+
+        return Result();
     }
 }

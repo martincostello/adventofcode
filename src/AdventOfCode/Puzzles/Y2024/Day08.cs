@@ -7,7 +7,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2024;
 /// A class representing the puzzle for <c>https://adventofcode.com/2024/day/8</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2024, 08, "Resonant Collinearity", RequiresData = true)]
-public sealed class Day08 : Puzzle
+public sealed class Day08 : Puzzle<int, int>
 {
     /// <summary>
     /// Gets the number of unique locations within the bounds of the map that contain an antinode.
@@ -139,6 +139,9 @@ public sealed class Day08 : Puzzle
             Logger.WriteLine("{0} unique locations within the bounds of the map contain an antinode using resonant harmonics.", UniqueAntinodesWithResonance);
         }
 
-        return PuzzleResult.Create(UniqueAntinodes, UniqueAntinodesWithResonance);
+        Solution1 = UniqueAntinodes;
+        Solution2 = UniqueAntinodesWithResonance;
+
+        return Result();
     }
 }

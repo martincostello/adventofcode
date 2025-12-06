@@ -7,7 +7,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020;
 /// A class representing the puzzle for <c>https://adventofcode.com/2020/day/21</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2020, 21, "Allergen Assessment", RequiresData = true)]
-public sealed class Day21 : Puzzle
+public sealed class Day21 : Puzzle<int, string>
 {
     /// <summary>
     /// Gets the canonical list of ingredients that are allergens.
@@ -128,6 +128,9 @@ public sealed class Day21 : Puzzle
             Logger.WriteLine("The canonical allergens are: {0}.", CanonicalAllergens);
         }
 
-        return PuzzleResult.Create(IngredientsWithNoAllergens, CanonicalAllergens);
+        Solution1 = IngredientsWithNoAllergens;
+        Solution2 = CanonicalAllergens;
+
+        return Result();
     }
 }

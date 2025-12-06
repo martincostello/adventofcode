@@ -7,7 +7,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017;
 /// A class representing the puzzle for <c>https://adventofcode.com/2017/day/3</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2017, 03, "Spiral Memory", MinimumArguments = 1)]
-public sealed class Day03 : Puzzle
+public sealed class Day03 : Puzzle<int, int>
 {
     private static readonly Size Left = Directions.Left;
 
@@ -168,7 +168,10 @@ public sealed class Day03 : Puzzle
             Logger.WriteLine($"The first value written that is larger than square {square:N0} is {FirstStorageLargerThanInput:N0}.");
         }
 
-        return PuzzleResult.Create(Steps, FirstStorageLargerThanInput);
+        Solution1 = Steps;
+        Solution2 = FirstStorageLargerThanInput;
+
+        return Result();
     }
 
     /// <summary>

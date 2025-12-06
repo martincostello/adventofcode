@@ -7,7 +7,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2024;
 /// A class representing the puzzle for <c>https://adventofcode.com/2024/day/6</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2024, 06, "Guard Gallivant", RequiresData = true)]
-public sealed class Day06 : Puzzle
+public sealed class Day06 : Puzzle<int, int>
 {
     /// <summary>
     /// Gets the number of distinct positions visited by the guard.
@@ -69,7 +69,10 @@ public sealed class Day06 : Puzzle
             Logger.WriteLine("{0} distinct positions can be chosen for an obstruction to create a loop.", DistinctObstructions);
         }
 
-        return PuzzleResult.Create(DistinctPositions, DistinctObstructions);
+        Solution1 = DistinctPositions;
+        Solution2 = DistinctObstructions;
+
+        return Result();
     }
 
     private static (Dictionary<Point, bool> Lab, Point Origin) ParseMap(IList<string> map)

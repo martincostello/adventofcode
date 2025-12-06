@@ -7,7 +7,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020;
 /// A class representing the puzzle for <c>https://adventofcode.com/2020/day/14</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2020, 14, "Docking Data", RequiresData = true)]
-public sealed class Day14 : Puzzle
+public sealed class Day14 : Puzzle<long, long>
 {
     /// <summary>
     /// Gets the sum of all values left in memory after processing completes using version 1.
@@ -136,6 +136,9 @@ public sealed class Day14 : Puzzle
             Logger.WriteLine("The sum of all values left in memory using version 2 is {0}.", SumOfRemainingValuesV2);
         }
 
-        return PuzzleResult.Create(SumOfRemainingValuesV1, SumOfRemainingValuesV2);
+        Solution1 = SumOfRemainingValuesV1;
+        Solution2 = SumOfRemainingValuesV2;
+
+        return Result();
     }
 }

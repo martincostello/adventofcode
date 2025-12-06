@@ -9,7 +9,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2021;
 /// A class representing the puzzle for <c>https://adventofcode.com/2021/day/16</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2021, 16, "Packet Decoder", RequiresData = true)]
-public sealed class Day16 : Puzzle
+public sealed class Day16 : Puzzle<long, long>
 {
     /// <summary>
     /// Gets the sum of the packet version numbers.
@@ -202,6 +202,9 @@ public sealed class Day16 : Puzzle
             Logger.WriteLine("The result of evaluating the transmission is {0:N0}.", Value);
         }
 
-        return PuzzleResult.Create(VersionNumberSum, Value);
+        Solution1 = VersionNumberSum;
+        Solution2 = Value;
+
+        return Result();
     }
 }

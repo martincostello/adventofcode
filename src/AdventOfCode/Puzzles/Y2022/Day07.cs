@@ -9,7 +9,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2022;
 /// A class representing the puzzle for <c>https://adventofcode.com/2022/day/7</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2022, 07, "No Space Left On Device", RequiresData = true)]
-public sealed class Day07 : Puzzle
+public sealed class Day07 : Puzzle<long, long>
 {
     /// <summary>
     /// Gets the total size of all directories with a total size of at least 100,000.
@@ -151,7 +151,10 @@ public sealed class Day07 : Puzzle
                 SizeOfSmallestDirectoryToDelete);
         }
 
-        return PuzzleResult.Create(TotalSizeOfDirectoriesLargerThanLimit, SizeOfSmallestDirectoryToDelete);
+        Solution1 = TotalSizeOfDirectoriesLargerThanLimit;
+        Solution2 = SizeOfSmallestDirectoryToDelete;
+
+        return Result();
     }
 
     private abstract record FileSystemEntry(string Name, FileSystemEntry? Container)

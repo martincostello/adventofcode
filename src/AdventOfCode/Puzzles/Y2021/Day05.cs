@@ -7,7 +7,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2021;
 /// A class representing the puzzle for <c>https://adventofcode.com/2021/day/5</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2021, 05, "Hydrothermal Venture", RequiresData = true)]
-public sealed class Day05 : Puzzle
+public sealed class Day05 : Puzzle<int, int>
 {
     /// <summary>
     /// Gets the number of positions with more than one vent.
@@ -80,6 +80,9 @@ public sealed class Day05 : Puzzle
                 OverlappingVentsWithDiagonals);
         }
 
-        return PuzzleResult.Create(OverlappingVents, OverlappingVentsWithDiagonals);
+        Solution1 = OverlappingVents;
+        Solution2 = OverlappingVentsWithDiagonals;
+
+        return Result();
     }
 }

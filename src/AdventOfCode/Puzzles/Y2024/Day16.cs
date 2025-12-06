@@ -11,7 +11,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2024;
 /// A class representing the puzzle for <c>https://adventofcode.com/2024/day/16</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2024, 16, "Reindeer Maze", RequiresData = true)]
-public sealed class Day16 : Puzzle
+public sealed class Day16 : Puzzle<int, int>
 {
     /// <summary>
     /// Gets the winning score.
@@ -79,7 +79,10 @@ public sealed class Day16 : Puzzle
             Logger.WriteLine("The lowest score a Reindeer could possibly get is {0}.", WinningScore);
         }
 
-        return PuzzleResult.Create(WinningScore);
+        Solution1 = WinningScore;
+        Solution2 = Unsolved;
+
+        return Result();
     }
 
     private sealed class RaceCourse(int width, int height) : IWeightedGraph<Move>

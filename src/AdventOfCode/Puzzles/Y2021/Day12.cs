@@ -7,7 +7,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2021;
 /// A class representing the puzzle for <c>https://adventofcode.com/2021/day/12</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2021, 12, "Passage Pathing", RequiresData = true)]
-public sealed class Day12 : Puzzle
+public sealed class Day12 : Puzzle<int, int>
 {
     /// <summary>
     /// Gets the number of paths through the cave system that visit one small cave once.
@@ -62,7 +62,10 @@ public sealed class Day12 : Puzzle
                 Count2);
         }
 
-        return PuzzleResult.Create(Count1, Count2);
+        Solution1 = Count1;
+        Solution2 = Count2;
+
+        return Result();
     }
 
     private static int CountPaths(Graph<string> graph, int smallCaveVisitLimit)

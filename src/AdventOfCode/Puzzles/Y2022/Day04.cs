@@ -7,7 +7,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2022;
 /// A class representing the puzzle for <c>https://adventofcode.com/2022/day/4</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2022, 04, "Camp Cleanup", RequiresData = true)]
-public sealed class Day04 : Puzzle
+public sealed class Day04 : Puzzle<int, int>
 {
     /// <summary>
     /// Gets the number of assignment pairs where one range fully contains the other.
@@ -88,6 +88,9 @@ public sealed class Day04 : Puzzle
                 PartiallyOverlappingAssignments);
         }
 
-        return PuzzleResult.Create(FullyOverlappingAssignments, PartiallyOverlappingAssignments);
+        Solution1 = FullyOverlappingAssignments;
+        Solution2 = PartiallyOverlappingAssignments;
+
+        return Result();
     }
 }

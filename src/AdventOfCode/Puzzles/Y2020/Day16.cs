@@ -7,7 +7,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020;
 /// A class representing the puzzle for <c>https://adventofcode.com/2020/day/16</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2020, 16, "Ticket Translation", RequiresData = true)]
-public sealed class Day16 : Puzzle
+public sealed class Day16 : Puzzle<int, long>
 {
     /// <summary>
     /// Gets the ticket scanning error rate.
@@ -188,6 +188,9 @@ public sealed class Day16 : Puzzle
             Logger.WriteLine("The product of the ticket fields starting with 'departure' is {0}.", DepartureProduct);
         }
 
-        return PuzzleResult.Create(ScanningErrorRate, DepartureProduct);
+        Solution1 = ScanningErrorRate;
+        Solution2 = DepartureProduct;
+
+        return Result();
     }
 }

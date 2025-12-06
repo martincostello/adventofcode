@@ -7,7 +7,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2021;
 /// A class representing the puzzle for <c>https://adventofcode.com/2021/day/13</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2021, 13, "Transparent Origami", RequiresData = true)]
-public sealed class Day13 : Puzzle
+public sealed class Day13 : Puzzle<int, string>
 {
     /// <summary>
     /// Gets the number of dots that are visible after completing the first fold.
@@ -151,10 +151,10 @@ public sealed class Day13 : Puzzle
                 ActivationCode!);
         }
 
-        var result = new PuzzleResult();
+        Solution1 = DotCountAfterFold1;
+        Solution2 = ActivationCode!;
 
-        result.Solutions.Add(DotCountAfterFold1);
-        result.Solutions.Add(ActivationCode!);
+        var result = Result();
         result.Visualizations.Add(visualization!);
 
         return result;

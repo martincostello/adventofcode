@@ -7,7 +7,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2018;
 /// A class representing the puzzle for <c>https://adventofcode.com/2018/day/1</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2018, 01, "Chronal Calibration", RequiresData = true, IsSlow = true)]
-public sealed class Day01 : Puzzle
+public sealed class Day01 : Puzzle<int, int>
 {
     /// <summary>
     /// Gets the frequency of the device calculated from the sequence.
@@ -87,7 +87,10 @@ public sealed class Day01 : Puzzle
             Logger.WriteLine($"The first repeated frequency is {FirstRepeatedFrequency:N0}.");
         }
 
-        return PuzzleResult.Create(Frequency, FirstRepeatedFrequency);
+        Solution1 = Frequency;
+        Solution2 = FirstRepeatedFrequency;
+
+        return Result();
     }
 
     /// <summary>

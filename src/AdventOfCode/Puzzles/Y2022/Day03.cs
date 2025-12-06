@@ -7,7 +7,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2022;
 /// A class representing the puzzle for <c>https://adventofcode.com/2022/day/3</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2022, 03, "Rucksack Reorganization", RequiresData = true)]
-public sealed class Day03 : Puzzle
+public sealed class Day03 : Puzzle<int, int>
 {
     /// <summary>
     /// Gets the sum of the priorities for the item type
@@ -94,6 +94,9 @@ public sealed class Day03 : Puzzle
                 SumOfPrioritiesOfGroups);
         }
 
-        return PuzzleResult.Create(SumOfPriorities, SumOfPrioritiesOfGroups);
+        Solution1 = SumOfPriorities;
+        Solution2 = SumOfPrioritiesOfGroups;
+
+        return Result();
     }
 }

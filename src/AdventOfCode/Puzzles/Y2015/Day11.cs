@@ -7,7 +7,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015;
 /// A class representing the puzzle for <c>https://adventofcode.com/2015/day/11</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2015, 11, "Corporate Policy", MinimumArguments = 1)]
-public sealed class Day11 : Puzzle
+public sealed class Day11 : Puzzle<string, string>
 {
     /// <summary>
     /// Gets the first next password.
@@ -109,7 +109,10 @@ public sealed class Day11 : Puzzle
             Logger.WriteLine("Santa's second new password should be '{0}'.", SecondPassword);
         }
 
-        return PuzzleResult.Create(FirstPassword, SecondPassword);
+        Solution1 = FirstPassword;
+        Solution2 = SecondPassword;
+
+        return Result();
     }
 
     /// <summary>

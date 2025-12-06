@@ -7,7 +7,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2024;
 /// A class representing the puzzle for <c>https://adventofcode.com/2024/day/23</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2024, 23, "LAN Party", RequiresData = true, IsHidden = true, Unsolved = true)]
-public sealed class Day23 : Puzzle
+public sealed class Day23 : Puzzle<int, int>
 {
     /// <summary>
     /// Gets the number of networks that contain at least one computer with a name that starts with <c>t</c>.
@@ -42,6 +42,9 @@ public sealed class Day23 : Puzzle
             Logger.WriteLine("{0} networks contain at least one computer with a name that starts with t.", TNetworkCount);
         }
 
-        return PuzzleResult.Create(TNetworkCount);
+        Solution1 = TNetworkCount;
+        Solution2 = Unsolved;
+
+        return Result();
     }
 }

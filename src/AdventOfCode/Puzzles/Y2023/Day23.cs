@@ -7,7 +7,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2023;
 /// A class representing the puzzle for <c>https://adventofcode.com/2023/day/23</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2023, 23, "A Long Walk", RequiresData = true, Unsolved = true)]
-public sealed class Day23 : Puzzle
+public sealed class Day23 : Puzzle<int, int>
 {
     /// <summary>
     /// Gets the number of steps for the longest walk through the hiking trail.
@@ -79,7 +79,10 @@ public sealed class Day23 : Puzzle
             Logger.WriteLine("The longest hike is {0} steps.", MaximumSteps);
         }
 
-        return PuzzleResult.Create(MaximumSteps);
+        Solution1 = MaximumSteps;
+        Solution2 = Unsolved;
+
+        return Result();
     }
 
     private sealed class HikingTrail(int width, int height) : SquareGrid(width, height)

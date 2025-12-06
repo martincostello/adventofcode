@@ -7,7 +7,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2023;
 /// A class representing the puzzle for <c>https://adventofcode.com/2023/day/04</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2023, 04, "Scratchcards", RequiresData = true)]
-public sealed class Day04 : Puzzle
+public sealed class Day04 : Puzzle<int, int>
 {
     /// <summary>
     /// Gets the total number of points the scratchcards are worth.
@@ -100,6 +100,9 @@ public sealed class Day04 : Puzzle
             Logger.WriteLine("The total number of scratchcards in the end is {0}.", TotalScratchcards);
         }
 
-        return PuzzleResult.Create(TotalPoints, TotalScratchcards);
+        Solution1 = TotalPoints;
+        Solution2 = TotalScratchcards;
+
+        return Result();
     }
 }

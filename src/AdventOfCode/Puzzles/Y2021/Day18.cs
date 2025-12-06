@@ -9,7 +9,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2021;
 /// A class representing the puzzle for <c>https://adventofcode.com/2021/day/18</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2021, 18, "Snailfish", RequiresData = true, IsSlow = true)]
-public sealed class Day18 : Puzzle
+public sealed class Day18 : Puzzle<int, int>
 {
     /// <summary>
     /// Gets the magnitude of the sum of the snail numbers.
@@ -121,7 +121,10 @@ public sealed class Day18 : Puzzle
             Logger.WriteLine("The largest magnitude of any sum of two numbers is {0:N0}.", LargestSumMagnitude);
         }
 
-        return PuzzleResult.Create(MagnitudeOfSum, LargestSumMagnitude);
+        Solution1 = MagnitudeOfSum;
+        Solution2 = LargestSumMagnitude;
+
+        return Result();
     }
 
     private static List<SnailPair> ParseRaw(IList<string> numbers)

@@ -7,7 +7,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2021;
 /// A class representing the puzzle for <c>https://adventofcode.com/2021/day/17</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2021, 17, "Trick Shot", RequiresData = true)]
-public sealed class Day17 : Puzzle
+public sealed class Day17 : Puzzle<int, int>
 {
     /// <summary>
     /// Gets the highest apogee reached by a velocity that is within the target area.
@@ -133,6 +133,9 @@ public sealed class Day17 : Puzzle
                 Count);
         }
 
-        return PuzzleResult.Create(MaxApogee, Count);
+        Solution1 = MaxApogee;
+        Solution2 = Count;
+
+        return Result();
     }
 }

@@ -7,7 +7,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2024;
 /// A class representing the puzzle for <c>https://adventofcode.com/2024/day/11</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2024, 11, "Plutonian Pebbles", RequiresData = true)]
-public sealed class Day11 : Puzzle
+public sealed class Day11 : Puzzle<long, long>
 {
     /// <summary>
     /// Gets the number of stones after 25 blinks.
@@ -101,6 +101,9 @@ public sealed class Day11 : Puzzle
             Logger.WriteLine("There are {0} stones after blinking 75 times", Count75);
         }
 
-        return PuzzleResult.Create(Count25, Count75);
+        Solution1 = Count25;
+        Solution2 = Count75;
+
+        return Result();
     }
 }

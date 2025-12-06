@@ -7,7 +7,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020;
 /// A class representing the puzzle for <c>https://adventofcode.com/2020/day/5</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2020, 05, "Binary Boarding", RequiresData = true)]
-public sealed class Day05 : Puzzle
+public sealed class Day05 : Puzzle<int, int>
 {
     /// <summary>
     /// Gets the highest seat Id of the scanned boarding passes.
@@ -88,7 +88,10 @@ public sealed class Day05 : Puzzle
             Logger.WriteLine("My seat Id is {0}.", MySeatId);
         }
 
-        return PuzzleResult.Create(HighestSeatId, MySeatId);
+        Solution1 = HighestSeatId;
+        Solution2 = MySeatId;
+
+        return Result();
     }
 
     private static (int MySetId, int HighestSeatId) Process(List<string> boardingPasses)

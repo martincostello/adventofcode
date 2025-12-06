@@ -7,7 +7,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2023;
 /// A class representing the puzzle for <c>https://adventofcode.com/2023/day/21</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2023, 21, "Step Counter", RequiresData = true, Unsolved = true)]
-public sealed class Day21 : Puzzle
+public sealed class Day21 : Puzzle<int, int>
 {
     /// <summary>
     /// Gets the number of plots the elf can reach in exactly 64 steps.
@@ -63,7 +63,10 @@ public sealed class Day21 : Puzzle
             Logger.WriteLine("The elf could reach {0} plots in exactly 64 steps.", Plots64);
         }
 
-        return PuzzleResult.Create(Plots64);
+        Solution1 = Plots64;
+        Solution2 = Unsolved;
+
+        return Result();
     }
 
     private sealed record Step(Point Location, int Steps);

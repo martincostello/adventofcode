@@ -7,7 +7,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015;
 /// A class representing the puzzle for <c>https://adventofcode.com/2015/day/2</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2015, 02, "I Was Told There Would Be No Math", RequiresData = true)]
-public sealed class Day02 : Puzzle
+public sealed class Day02 : Puzzle<int, int>
 {
     /// <summary>
     /// Gets the total amount of wrapping paper required in square feet.
@@ -58,7 +58,10 @@ public sealed class Day02 : Puzzle
                 TotalLengthOfRibbon);
         }
 
-        return PuzzleResult.Create(TotalAreaOfPaper, TotalLengthOfRibbon);
+        Solution1 = TotalAreaOfPaper;
+        Solution2 = TotalLengthOfRibbon;
+
+        return Result();
     }
 
     /// <summary>

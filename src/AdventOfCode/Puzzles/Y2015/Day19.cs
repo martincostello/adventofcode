@@ -9,7 +9,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015;
 /// A class representing the puzzle for <c>https://adventofcode.com/2015/day/19</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2015, 19, "Medicine for Rudolph", RequiresData = true)]
-public sealed partial class Day19 : Puzzle
+public sealed partial class Day19 : Puzzle<int, int>
 {
     /// <summary>
     /// Gets the solution for calibration.
@@ -166,7 +166,10 @@ public sealed partial class Day19 : Puzzle
             Logger.WriteLine($"The target molecule can be made in a minimum of {CalibrationSolution:N0} steps.");
         }
 
-        return PuzzleResult.Create(CalibrationSolution, FabricationSolution);
+        Solution1 = CalibrationSolution;
+        Solution2 = FabricationSolution;
+
+        return Result();
     }
 
     [GeneratedRegex("Ar|Rn")]

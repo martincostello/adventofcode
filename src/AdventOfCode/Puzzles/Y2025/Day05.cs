@@ -9,7 +9,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2025;
 /// A class representing the puzzle for <c>https://adventofcode.com/2025/day/5</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2025, 05, "Cafeteria", RequiresData = true)]
-public sealed class Day05 : Puzzle
+public sealed class Day05 : Puzzle<int, long>
 {
     /// <summary>
     /// Gets the number of available ingredient IDs that are fresh.
@@ -124,6 +124,9 @@ public sealed class Day05 : Puzzle
             Logger.WriteLine("{0} ingredient IDs are fresh.", FreshIngredientIds);
         }
 
-        return PuzzleResult.Create(AvailableFreshIngredientIds, FreshIngredientIds);
+        Solution1 = AvailableFreshIngredientIds;
+        Solution2 = FreshIngredientIds;
+
+        return Result();
     }
 }

@@ -7,7 +7,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2025;
 /// A class representing the puzzle for <c>https://adventofcode.com/2025/day/3</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2025, 03, "Lobby", RequiresData = true)]
-public sealed class Day03 : Puzzle
+public sealed class Day03 : Puzzle<long, long>
 {
     /// <summary>
     /// Gets the total output joltage for two batteries.
@@ -103,6 +103,9 @@ public sealed class Day03 : Puzzle
             Logger.WriteLine("The total output joltage for 12 batteries is {0}", TotalOutputJoltageFor12);
         }
 
-        return PuzzleResult.Create(TotalOutputJoltageFor2, TotalOutputJoltageFor12);
+        Solution1 = TotalOutputJoltageFor2;
+        Solution2 = TotalOutputJoltageFor12;
+
+        return Result();
     }
 }
