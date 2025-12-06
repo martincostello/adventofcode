@@ -10,16 +10,6 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2021;
 public sealed class Day09 : Puzzle<int, int>
 {
     /// <summary>
-    /// Gets the sum of the risk levels of all the low points in the heightmap.
-    /// </summary>
-    public int SumOfRiskLevels { get; private set; }
-
-    /// <summary>
-    /// Gets the total area of the three largest basins in the heightmap.
-    /// </summary>
-    public int AreaOfThreeLargestBasins { get; private set; }
-
-    /// <summary>
     /// Determines the level of risk of the low points in the specified heightmap.
     /// </summary>
     /// <param name="heightmap">The heightmap to analyze.</param>
@@ -114,16 +104,13 @@ public sealed class Day09 : Puzzle<int, int>
     {
         var heightmap = await ReadResourceAsLinesAsync(cancellationToken);
 
-        (SumOfRiskLevels, AreaOfThreeLargestBasins) = AnalyzeRisk(heightmap, cancellationToken);
+        (Solution1, Solution2) = AnalyzeRisk(heightmap, cancellationToken);
 
         if (Verbose)
         {
-            Logger.WriteLine("The sum of the risk levels of all low points on the heightmap is {0:N0}.", SumOfRiskLevels);
-            Logger.WriteLine("The area of the three largest basins in the heightmap is {0:N0}.", AreaOfThreeLargestBasins);
+            Logger.WriteLine("The sum of the risk levels of all low points on the heightmap is {0:N0}.", Solution1);
+            Logger.WriteLine("The area of the three largest basins in the heightmap is {0:N0}.", Solution2);
         }
-
-        Solution1 = SumOfRiskLevels;
-        Solution2 = AreaOfThreeLargestBasins;
 
         return Result();
     }

@@ -27,8 +27,7 @@ public sealed class Day17Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         var puzzle = await SolvePuzzleAsync<Day17>();
 
         // Assert
-        puzzle.ShouldNotBeNull();
-        puzzle.Height2022.ShouldBe(3135);
-        puzzle.HeightTrillion.ShouldBe(-1);
+        puzzle.Solution1.ShouldBe(3135);
+        puzzle.Solution2.ShouldBe(Puzzle.Unsolved);
     }
 }

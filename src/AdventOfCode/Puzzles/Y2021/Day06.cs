@@ -10,16 +10,6 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2021;
 public sealed class Day06 : Puzzle<long, long>
 {
     /// <summary>
-    /// Gets the number of lantern fish present after 80 days.
-    /// </summary>
-    public long FishCount80 { get; private set; }
-
-    /// <summary>
-    /// Gets the number of lantern fish present after 256 days.
-    /// </summary>
-    public long FishCount256 { get; private set; }
-
-    /// <summary>
     /// Counts the number of fish present after the specified number of days.
     /// </summary>
     /// <param name="fish">The initial fish states.</param>
@@ -81,17 +71,14 @@ public sealed class Day06 : Puzzle<long, long>
     {
         var fish = (await ReadResourceAsStringAsync(cancellationToken)).AsNumbers<int>();
 
-        FishCount80 = CountFish(fish, days: 80);
-        FishCount256 = CountFish(fish, days: 256);
+        Solution1 = CountFish(fish, days: 80);
+        Solution2 = CountFish(fish, days: 256);
 
         if (Verbose)
         {
-            Logger.WriteLine("There are {0:N0} lanternfish after 80 days.", FishCount80);
-            Logger.WriteLine("There are {0:N0} lanternfish after 256 days.", FishCount256);
+            Logger.WriteLine("There are {0:N0} lanternfish after 80 days.", Solution1);
+            Logger.WriteLine("There are {0:N0} lanternfish after 256 days.", Solution2);
         }
-
-        Solution1 = FishCount80;
-        Solution2 = FishCount256;
 
         return Result();
     }

@@ -36,7 +36,7 @@ public sealed class Day02Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         var puzzle = await SolvePuzzleAsync<Day02>();
 
         // Assert
-        puzzle.BathroomCodeDigitKeypad.ShouldBe("14894");
-        puzzle.BathroomCodeAlphanumericKeypad.ShouldBe("26B96");
+        puzzle.Solution1.ShouldBe("14894");
+        puzzle.Solution2.ShouldBe("26B96");
     }
 }

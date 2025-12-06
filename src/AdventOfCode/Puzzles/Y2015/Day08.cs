@@ -7,18 +7,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015;
 /// A class representing the puzzle for <c>https://adventofcode.com/2015/day/8</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2015, 08, "Matchsticks", RequiresData = true)]
-public sealed class Day08 : Puzzle
+public sealed class Day08 : Puzzle<int, int>
 {
-    /// <summary>
-    /// Gets the value for the first solution.
-    /// </summary>
-    internal int FirstSolution { get; private set; }
-
-    /// <summary>
-    /// Gets the value for the second solution.
-    /// </summary>
-    internal int SecondSolution { get; private set; }
-
     /// <summary>
     /// Returns the number of characters in the specified collection of <see cref="string"/> if literals are encoded.
     /// </summary>
@@ -140,20 +130,20 @@ public sealed class Day08 : Puzzle
         int countInMemory = GetLiteralCharacterCount(input);
         int countEncoded = GetEncodedCharacterCount(input);
 
-        FirstSolution = countForCode - countInMemory;
-        SecondSolution = countEncoded - countForCode;
+        Solution1 = countForCode - countInMemory;
+        Solution2 = countEncoded - countForCode;
 
         if (Verbose)
         {
             Logger.WriteLine(
                 "The number of characters of code for string literals minus the number of characters in memory for the values of the strings is {0:N0}.",
-                FirstSolution);
+                Solution1);
 
             Logger.WriteLine(
                 "The total number of characters to represent the newly encoded strings minus the number of characters of code in each original string literal is {0:N0}.",
-                SecondSolution);
+                Solution2);
         }
 
-        return PuzzleResult.Create(FirstSolution, SecondSolution);
+        return Result();
     }
 }

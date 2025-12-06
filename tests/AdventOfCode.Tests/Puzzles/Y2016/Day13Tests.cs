@@ -27,7 +27,7 @@ public sealed class Day13Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         var puzzle = await SolvePuzzleAsync<Day13>("1362");
 
         // Assert
-        puzzle.FewestStepsToReach31X39Y.ShouldBe(82);
-        puzzle.LocationsWithin50.ShouldBe(138);
+        puzzle.Solution1.ShouldBe(82);
+        puzzle.Solution2.ShouldBe(138);
     }
 }

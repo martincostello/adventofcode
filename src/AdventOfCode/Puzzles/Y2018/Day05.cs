@@ -7,18 +7,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2018;
 /// A class representing the puzzle for <c>https://adventofcode.com/2018/day/5</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2018, 05, "Alchemical Reduction", RequiresData = true, IsSlow = true)]
-public sealed class Day05 : Puzzle
+public sealed class Day05 : Puzzle<int, int>
 {
-    /// <summary>
-    /// Gets the number of remaining polymer units after the reduction.
-    /// </summary>
-    public int RemainingUnits { get; private set; }
-
-    /// <summary>
-    /// Gets the number of remaining polymer units after the reduction using optimization.
-    /// </summary>
-    public int RemainingUnitsOptimized { get; private set; }
-
     /// <summary>
     /// Reduces the specified polymer.
     /// </summary>
@@ -77,16 +67,16 @@ public sealed class Day05 : Puzzle
     {
         string polymer = (await ReadResourceAsStringAsync(cancellationToken)).Trim('\r', '\n');
 
-        RemainingUnits = Reduce(polymer).Length;
-        RemainingUnitsOptimized = ReduceWithOptimization(polymer).Length;
+        Solution1 = Reduce(polymer).Length;
+        Solution2 = ReduceWithOptimization(polymer).Length;
 
         if (Verbose)
         {
-            Logger.WriteLine($"The number of units that remain after fully reacting the polymer is {RemainingUnits:N0}.");
-            Logger.WriteLine($"The number of units that remain after fully reacting the polymer with optimization is {RemainingUnitsOptimized:N0}.");
+            Logger.WriteLine($"The number of units that remain after fully reacting the polymer is {Solution1:N0}.");
+            Logger.WriteLine($"The number of units that remain after fully reacting the polymer with optimization is {Solution2:N0}.");
         }
 
-        return PuzzleResult.Create(RemainingUnits, RemainingUnitsOptimized);
+        return Result();
     }
 
     /// <summary>

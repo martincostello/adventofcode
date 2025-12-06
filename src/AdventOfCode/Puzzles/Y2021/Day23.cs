@@ -12,16 +12,6 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2021;
 public sealed class Day23 : Puzzle<int, int>
 {
     /// <summary>
-    /// Gets the least energy required to organize the amphipods with the diagram folded.
-    /// </summary>
-    public int MinimumEnergyFolded { get; private set; }
-
-    /// <summary>
-    /// Gets the least energy required to organize the amphipods with the diagram unfolded.
-    /// </summary>
-    public int MinimumEnergyUnfolded { get; private set; }
-
-    /// <summary>
     /// Organizes the specified amphipods into the correct burrows.
     /// </summary>
     /// <param name="diagram">The diagram of the burrows occupied by the amphipods.</param>
@@ -62,17 +52,14 @@ public sealed class Day23 : Puzzle<int, int>
     {
         var diagram = await ReadResourceAsLinesAsync(cancellationToken);
 
-        MinimumEnergyFolded = Organize(diagram, unfoldDiagram: false, cancellationToken);
-        MinimumEnergyUnfolded = Organize(diagram, unfoldDiagram: true, cancellationToken);
+        Solution1 = Organize(diagram, unfoldDiagram: false, cancellationToken);
+        Solution2 = Organize(diagram, unfoldDiagram: true, cancellationToken);
 
         if (Verbose)
         {
-            Logger.WriteLine("The least energy required to organize the amphipods with the diagram folded is {0:N0}.", MinimumEnergyFolded);
-            Logger.WriteLine("The least energy required to organize the amphipods with the diagram unfolded is {0:N0}.", MinimumEnergyUnfolded);
+            Logger.WriteLine("The least energy required to organize the amphipods with the diagram folded is {0:N0}.", Solution1);
+            Logger.WriteLine("The least energy required to organize the amphipods with the diagram unfolded is {0:N0}.", Solution2);
         }
-
-        Solution1 = MinimumEnergyFolded;
-        Solution2 = MinimumEnergyUnfolded;
 
         return Result();
     }

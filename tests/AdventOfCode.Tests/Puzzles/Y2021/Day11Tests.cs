@@ -82,7 +82,7 @@ public sealed class Day11Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         var puzzle = await SolvePuzzleAsync<Day11>();
 
         // Assert
-        puzzle.Flashes100.ShouldBe(1739);
-        puzzle.StepOfFirstSynchronizedFlash.ShouldBe(324);
+        puzzle.Solution1.ShouldBe(1739);
+        puzzle.Solution2.ShouldBe(324);
     }
 }

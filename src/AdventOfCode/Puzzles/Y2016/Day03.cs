@@ -10,16 +10,6 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016;
 public sealed class Day03 : Puzzle<int, int>
 {
     /// <summary>
-    /// Gets the number of possible triangles by columns.
-    /// </summary>
-    public int PossibleTrianglesByColumns { get; private set; }
-
-    /// <summary>
-    /// Gets the number of possible triangles by rows.
-    /// </summary>
-    public int PossibleTrianglesByRows { get; private set; }
-
-    /// <summary>
     /// Returns the number of valid triangles from the specified triangle instructions.
     /// </summary>
     /// <param name="dimensions">A collection of strings containing the dimensions of possible triangles.</param>
@@ -55,17 +45,14 @@ public sealed class Day03 : Puzzle<int, int>
     {
         var dimensions = await ReadResourceAsLinesAsync(cancellationToken);
 
-        PossibleTrianglesByRows = GetPossibleTriangleCount(dimensions, readAsColumns: false);
-        PossibleTrianglesByColumns = GetPossibleTriangleCount(dimensions, readAsColumns: true);
+        Solution1 = GetPossibleTriangleCount(dimensions, readAsColumns: false);
+        Solution2 = GetPossibleTriangleCount(dimensions, readAsColumns: true);
 
         if (Verbose)
         {
-            Logger.WriteLine("The number of possible triangles using rows is {0:N0}.", PossibleTrianglesByRows);
-            Logger.WriteLine("The number of possible triangles using columns is {0:N0}.", PossibleTrianglesByColumns);
+            Logger.WriteLine("The number of possible triangles using rows is {0:N0}.", Solution1);
+            Logger.WriteLine("The number of possible triangles using columns is {0:N0}.", Solution2);
         }
-
-        Solution1 = PossibleTrianglesByRows;
-        Solution2 = PossibleTrianglesByColumns;
 
         return Result();
     }

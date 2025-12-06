@@ -7,19 +7,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015;
 /// A class representing the puzzle for <c>https://adventofcode.com/2015/day/20</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2015, 20, "Infinite Elves and Infinite Houses", MinimumArguments = 1, IsSlow = true)]
-public sealed class Day20 : Puzzle
+public sealed class Day20 : Puzzle<int, int>
 {
-    /// <summary>
-    /// Gets the lowest house number that gets at least the specified number of presents.
-    /// </summary>
-    public int LowestHouseNumber { get; private set; }
-
-    /// <summary>
-    /// Gets the lowest house number that gets at least the specified number of presents
-    /// with a cap of 50 presents being delivered by each elf.
-    /// </summary>
-    public int LowestHouseNumberWithCap { get; private set; }
-
     /// <summary>
     /// Returns the lowest house number that gets the specified number of presents.
     /// </summary>
@@ -78,22 +67,22 @@ public sealed class Day20 : Puzzle
     {
         int target = Parse<int>(args[0]);
 
-        LowestHouseNumber = GetLowestHouseNumber(target, maximumVisits: null);
-        LowestHouseNumberWithCap = GetLowestHouseNumber(target, maximumVisits: 50);
+        Solution1 = GetLowestHouseNumber(target, maximumVisits: null);
+        Solution2 = GetLowestHouseNumber(target, maximumVisits: 50);
 
         if (Verbose)
         {
             Logger.WriteLine(
                 "The first house to receive at least {0:N0} presents is house number {1:N0}.",
                 target,
-                LowestHouseNumber);
+                Solution1);
 
             Logger.WriteLine(
                 "The first house to receive at least {0:N0} presents is house number {1:N0} when there is a 50 present cap per elf.",
                 target,
-                LowestHouseNumberWithCap);
+                Solution2);
         }
 
-        return PuzzleResult.Create(LowestHouseNumber, LowestHouseNumberWithCap);
+        return Result();
     }
 }

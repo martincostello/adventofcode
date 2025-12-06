@@ -7,23 +7,12 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016;
 /// A class representing the puzzle for <c>https://adventofcode.com/2016/day/15</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2016, 15, "Timing is Everything", RequiresData = true, IsSlow = true)]
-public sealed class Day15 : Puzzle
+public sealed class Day15 : Puzzle<int, int>
 {
     /// <summary>
     /// The delimiters used when parsing the input. This field is read-only.
     /// </summary>
     private static readonly char[] Separators = [' ', ',', '.'];
-
-    /// <summary>
-    /// Gets the value of T where the button can first be pressed to get a capsule.
-    /// </summary>
-    public int TimeOfFirstButtonPress { get; private set; }
-
-    /// <summary>
-    /// Gets the value of T where the button can first be pressed to get a capsule
-    /// when an additional disc with 11 positions is present at the bottom of the sculpture.
-    /// </summary>
-    public int TimeOfFirstButtonPressWithExtraDisc { get; private set; }
 
     /// <summary>
     /// Finds the value of T when the discs described by the specified input are
@@ -57,16 +46,16 @@ public sealed class Day15 : Puzzle
 
         string extraDisc = $"Disc #{input.Count + 1} has 11 positions; at time=0, it is at position 0.";
 
-        TimeOfFirstButtonPress = FindTimeForCapsuleRelease(input);
-        TimeOfFirstButtonPressWithExtraDisc = FindTimeForCapsuleRelease(input.Append(extraDisc));
+        Solution1 = FindTimeForCapsuleRelease(input);
+        Solution2 = FindTimeForCapsuleRelease(input.Append(extraDisc));
 
         if (Verbose)
         {
-            Logger.WriteLine($"The first time the button can be pressed to get a capsule is {TimeOfFirstButtonPress:N0}.");
-            Logger.WriteLine($"The first time the button can be pressed to get a capsule with the extra disc present is {TimeOfFirstButtonPressWithExtraDisc:N0}.");
+            Logger.WriteLine($"The first time the button can be pressed to get a capsule is {Solution1:N0}.");
+            Logger.WriteLine($"The first time the button can be pressed to get a capsule with the extra disc present is {Solution2:N0}.");
         }
 
-        return PuzzleResult.Create(TimeOfFirstButtonPress, TimeOfFirstButtonPressWithExtraDisc);
+        return Result();
     }
 
     /// <summary>

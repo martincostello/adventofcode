@@ -7,18 +7,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020;
 /// A class representing the puzzle for <c>https://adventofcode.com/2020/day/1</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2020, 01, "Report Repair", RequiresData = true)]
-public sealed class Day01 : Puzzle
+public sealed class Day01 : Puzzle<int, int>
 {
-    /// <summary>
-    /// Gets the product of the two input values that sum to a value of 2020.
-    /// </summary>
-    public int ProductOf2020SumFrom2 { get; private set; }
-
-    /// <summary>
-    /// Gets the product of the three input values that sum to a value of 2020.
-    /// </summary>
-    public int ProductOf2020SumFrom3 { get; private set; }
-
     /// <summary>
     /// Gets the product of a number of values from the specified set of values
     /// that which when added together equal 2020.
@@ -58,15 +48,15 @@ public sealed class Day01 : Puzzle
     {
         var values = await ReadResourceAsNumbersAsync<int>(cancellationToken);
 
-        ProductOf2020SumFrom2 = Get2020Product(values, 2);
-        ProductOf2020SumFrom3 = Get2020Product(values, 3);
+        Solution1 = Get2020Product(values, 2);
+        Solution2 = Get2020Product(values, 3);
 
         if (Verbose)
         {
-            Logger.WriteLine("The product of the two entries that sum to 2020 is {0}.", ProductOf2020SumFrom2);
-            Logger.WriteLine("The product of the three entries that sum to 2020 is {0}.", ProductOf2020SumFrom3);
+            Logger.WriteLine("The product of the two entries that sum to 2020 is {0}.", Solution1);
+            Logger.WriteLine("The product of the three entries that sum to 2020 is {0}.", Solution2);
         }
 
-        return PuzzleResult.Create(ProductOf2020SumFrom2, ProductOf2020SumFrom3);
+        return Result();
     }
 }

@@ -51,8 +51,7 @@ public sealed class Day13Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         var puzzle = await SolvePuzzleAsync<Day13>();
 
         // Assert
-        puzzle.ShouldNotBeNull();
-        puzzle.SumOfPresortedIndicies.ShouldBe(5252);
-        puzzle.DecoderKey.ShouldBe(20592);
+        puzzle.Solution1.ShouldBe(5252);
+        puzzle.Solution2.ShouldBe(20592);
     }
 }

@@ -10,16 +10,6 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2018;
 public sealed class Day01 : Puzzle<int, int>
 {
     /// <summary>
-    /// Gets the frequency of the device calculated from the sequence.
-    /// </summary>
-    public int Frequency { get; private set; }
-
-    /// <summary>
-    /// Gets the frequency of the device calculated from the sequence that is repeated first.
-    /// </summary>
-    public int FirstRepeatedFrequency { get; private set; }
-
-    /// <summary>
     /// Calculates the resulting frequency after applying the specified sequence.
     /// </summary>
     /// <param name="sequence">A sequence of frequency shifts to apply.</param>
@@ -79,16 +69,13 @@ public sealed class Day01 : Puzzle<int, int>
     {
         var sequence = await ReadResourceAsNumbersAsync<int>(cancellationToken);
 
-        (Frequency, FirstRepeatedFrequency) = CalculateFrequencyWithRepetition(sequence);
+        (Solution1, Solution2) = CalculateFrequencyWithRepetition(sequence);
 
         if (Verbose)
         {
-            Logger.WriteLine($"The resulting frequency is {Frequency:N0}.");
-            Logger.WriteLine($"The first repeated frequency is {FirstRepeatedFrequency:N0}.");
+            Logger.WriteLine($"The resulting frequency is {Solution1:N0}.");
+            Logger.WriteLine($"The first repeated frequency is {Solution2:N0}.");
         }
-
-        Solution1 = Frequency;
-        Solution2 = FirstRepeatedFrequency;
 
         return Result();
     }

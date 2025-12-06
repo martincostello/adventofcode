@@ -1,6 +1,8 @@
 ﻿// Copyright (c) Martin Costello, 2015. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
+using Shouldly;
+
 namespace MartinCostello.AdventOfCode.Puzzles.Y2017;
 
 public sealed class Day10Tests(ITestOutputHelper outputHelper) : PuzzleTest(outputHelper)
@@ -40,7 +42,7 @@ public sealed class Day10Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         var puzzle = await SolvePuzzleAsync<Day10>();
 
         // Assert
-        puzzle.ProductOfFirstTwoElements.ShouldBe(11413);
-        puzzle.DenseHash.ShouldBe("7adfd64c2a03a4968cf708d1b7fd418d");
+        puzzle.Solution1.ShouldBe(11413);
+        puzzle.Solution2.ShouldBe("7adfd64c2a03a4968cf708d1b7fd418d");
     }
 }

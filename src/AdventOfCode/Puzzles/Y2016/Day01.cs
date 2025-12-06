@@ -7,7 +7,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016;
 /// A class representing the puzzle for <c>https://adventofcode.com/2016/day/1</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2016, 01, "No Time for a Taxicab", RequiresData = true)]
-public sealed class Day01 : Puzzle
+public sealed class Day01 : Puzzle<int, int>
 {
     private static readonly char[] Separators = [',', ' '];
 
@@ -26,16 +26,6 @@ public sealed class Day01 : Puzzle
         /// </summary>
         Right,
     }
-
-    /// <summary>
-    /// Gets the number of blocks to the Easter Bunny's headquarters.
-    /// </summary>
-    public int BlocksToEasterBunnyHQ { get; private set; }
-
-    /// <summary>
-    /// Gets the number of blocks to the Easter Bunny's headquarters ignoring duplicates.
-    /// </summary>
-    public int BlocksToEasterBunnyHQIgnoringDuplicates { get; private set; }
 
     /// <summary>
     /// Calculate the distance, in blocks, by following the specified instructions.
@@ -90,21 +80,21 @@ public sealed class Day01 : Puzzle
     {
         string instructions = await ReadResourceAsStringAsync(cancellationToken);
 
-        BlocksToEasterBunnyHQIgnoringDuplicates = CalculateDistance(instructions, ignoreDuplicates: true);
-        BlocksToEasterBunnyHQ = CalculateDistance(instructions, ignoreDuplicates: false);
+        Solution1 = CalculateDistance(instructions, ignoreDuplicates: true);
+        Solution2 = CalculateDistance(instructions, ignoreDuplicates: false);
 
         if (Verbose)
         {
             Logger.WriteLine(
                 "The Easter Bunny's headquarters are {0:N0} blocks away.",
-                BlocksToEasterBunnyHQIgnoringDuplicates);
+                Solution1);
 
             Logger.WriteLine(
                 "The Easter Bunny's headquarters are {0:N0} blocks away if it is the first location visited twice.",
-                BlocksToEasterBunnyHQ);
+                Solution2);
         }
 
-        return PuzzleResult.Create(BlocksToEasterBunnyHQIgnoringDuplicates, BlocksToEasterBunnyHQ);
+        return Result();
     }
 
     /// <summary>

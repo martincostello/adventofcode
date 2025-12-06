@@ -10,16 +10,6 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2021;
 public sealed class Day10 : Puzzle<int, long>
 {
     /// <summary>
-    /// Gets the syntax error score for the navigation subsystem.
-    /// </summary>
-    public int SyntaxErrorScore { get; private set; }
-
-    /// <summary>
-    /// Gets the middle auto-complete score for the navigation subsystem.
-    /// </summary>
-    public long MiddleAutoCompleteScore { get; private set; }
-
-    /// <summary>
     /// Compiles the specified lines of the navigation subsystem.
     /// </summary>
     /// <param name="lines">The lines of chunks to compile.</param>
@@ -129,16 +119,13 @@ public sealed class Day10 : Puzzle<int, long>
     {
         var lines = await ReadResourceAsLinesAsync(cancellationToken);
 
-        (SyntaxErrorScore, MiddleAutoCompleteScore) = Compile(lines);
+        (Solution1, Solution2) = Compile(lines);
 
         if (Verbose)
         {
-            Logger.WriteLine("The total syntax error score is {0:N0}.", SyntaxErrorScore);
-            Logger.WriteLine("The middle auto-complete score is {0:N0}.", MiddleAutoCompleteScore);
+            Logger.WriteLine("The total syntax error score is {0:N0}.", Solution1);
+            Logger.WriteLine("The middle auto-complete score is {0:N0}.", Solution2);
         }
-
-        Solution1 = SyntaxErrorScore;
-        Solution2 = MiddleAutoCompleteScore;
 
         return Result();
     }

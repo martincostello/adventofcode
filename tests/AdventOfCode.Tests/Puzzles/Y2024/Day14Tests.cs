@@ -44,8 +44,7 @@ public sealed class Day14Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         var puzzle = await SolvePuzzleAsync<Day14>();
 
         // Assert
-        puzzle.ShouldNotBeNull();
-        puzzle.SafetyFactor.ShouldBe(231782040);
-        puzzle.EasterEggSeconds.ShouldBe(6475);
+        puzzle.Solution1.ShouldBe(231782040);
+        puzzle.Solution2.ShouldBe(6475);
     }
 }

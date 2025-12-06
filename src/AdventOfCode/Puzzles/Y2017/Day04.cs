@@ -7,18 +7,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017;
 /// A class representing the puzzle for <c>https://adventofcode.com/2017/day/4</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2017, 04, "High-Entropy Passphrases", RequiresData = true)]
-public sealed class Day04 : Puzzle
+public sealed class Day04 : Puzzle<int, int>
 {
-    /// <summary>
-    /// Gets the number of valid passphrases in the input using version 1 of the passphrase policy.
-    /// </summary>
-    public int ValidPassphraseCountV1 { get; private set; }
-
-    /// <summary>
-    /// Gets the number of valid passphrases in the input using version 2 of the passphrase policy.
-    /// </summary>
-    public int ValidPassphraseCountV2 { get; private set; }
-
     /// <summary>
     /// Returns whether the specified passphrase is valid.
     /// </summary>
@@ -53,15 +43,18 @@ public sealed class Day04 : Puzzle
     {
         var passphrases = await ReadResourceAsLinesAsync(cancellationToken);
 
-        ValidPassphraseCountV1 = passphrases.Count((p) => IsPassphraseValid(p, 1));
-        ValidPassphraseCountV2 = passphrases.Count((p) => IsPassphraseValid(p, 2));
+        Solution1 = Count(passphrases, version: 1);
+        Solution2 = Count(passphrases, version: 2);
 
         if (Verbose)
         {
-            Logger.WriteLine($"There are {ValidPassphraseCountV1:N0} valid passphrases using version 1 of the policy.");
-            Logger.WriteLine($"There are {ValidPassphraseCountV2:N0} valid passphrases using version 2 of the policy.");
+            Logger.WriteLine($"There are {Solution1:N0} valid passphrases using version 1 of the policy.");
+            Logger.WriteLine($"There are {Solution2:N0} valid passphrases using version 2 of the policy.");
         }
 
-        return PuzzleResult.Create(ValidPassphraseCountV1, ValidPassphraseCountV2);
+        return Result();
+
+        static int Count(List<string> passphrases, int version)
+            => passphrases.Count((p) => IsPassphraseValid(p, version));
     }
 }

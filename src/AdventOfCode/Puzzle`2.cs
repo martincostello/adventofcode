@@ -29,4 +29,23 @@ public abstract class Puzzle<T1, T2> : Puzzle
     /// A <see cref="PuzzleResult"/> for <see cref="Solution1"/> and <see cref="Solution2"/>.
     /// </returns>
     protected PuzzleResult Result() => PuzzleResult.Create(Solution1, Solution2);
+
+    /// <summary>
+    /// Executes the specified solver using the input lines from the resource and returns the result.
+    /// </summary>
+    /// <param name="solver">A delegate to a method that solves the puzzle.</param>
+    /// <param name="cancellationToken">The <see cref="CancellationToken"/> to use.</param>
+    /// <returns>
+    /// A <see cref="PuzzleResult"/> containing the solutions returned by <paramref name="solver"/>.
+    /// </returns>
+    protected async Task<PuzzleResult> SolveWithLinesAsync(
+        Func<List<string>, ILogger?, CancellationToken, Task<(T1 Solution1, T2 Solution2)>> solver,
+        CancellationToken cancellationToken)
+    {
+        var values = await ReadResourceAsLinesAsync(cancellationToken);
+
+        (Solution1, Solution2) = await solver(values, Verbose ? Logger : null, cancellationToken);
+
+        return PuzzleResult.Create(Solution1, Solution2);
+    }
 }

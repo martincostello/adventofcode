@@ -9,7 +9,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2024;
 /// A class representing the puzzle for <c>https://adventofcode.com/2024/day/15</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2024, 15, "Warehouse Woes", RequiresData = true)]
-public sealed class Day15 : Puzzle<int, int>
+public sealed class Day15 : Puzzle<int>
 {
     private enum Square
     {
@@ -18,11 +18,6 @@ public sealed class Day15 : Puzzle<int, int>
         Robot,
         Wall,
     }
-
-    /// <summary>
-    /// Gets the sum of the GPS coordinates of the boxes in the warehouse.
-    /// </summary>
-    public int GpsSum { get; private set; }
 
     /// <summary>
     /// Moves the boxes in the warehouse around using the specified instructions.
@@ -129,20 +124,18 @@ public sealed class Day15 : Puzzle<int, int>
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        ArgumentNullException.ThrowIfNull(args);
+        return await SolveWithLinesAsync(
+            static (values, logger, cancellationToken) =>
+            {
+                int solution = Move(values);
 
-        var values = await ReadResourceAsLinesAsync(cancellationToken);
+                if (logger is { })
+                {
+                    logger.WriteLine("The sum of all boxes' GPS coordinates is {0}.", solution);
+                }
 
-        GpsSum = Move(values);
-
-        if (Verbose)
-        {
-            Logger.WriteLine("The sum of all boxes' GPS coordinates is {0}.", GpsSum);
-        }
-
-        Solution1 = GpsSum;
-        Solution2 = Unsolved;
-
-        return Result();
+                return solution;
+            },
+            cancellationToken);
     }
 }

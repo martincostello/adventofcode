@@ -34,7 +34,7 @@ public sealed class Day06Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         var puzzle = await SolvePuzzleAsync<Day06>();
 
         // Assert
-        puzzle.LargestNonInfiniteArea.ShouldBe(5626);
-        puzzle.AreaOfRegion.ShouldBe(46554);
+        puzzle.Solution1.ShouldBe(5626);
+        puzzle.Solution2.ShouldBe(46554);
     }
 }

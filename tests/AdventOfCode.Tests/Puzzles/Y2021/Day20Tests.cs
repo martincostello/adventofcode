@@ -49,7 +49,7 @@ public sealed class Day20Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         var puzzle = await SolvePuzzleAsync<Day20>();
 
         // Assert
-        puzzle.LitPixelCount2.ShouldBe(5437);
-        puzzle.LitPixelCount50.ShouldBe(19340);
+        puzzle.Solution1.ShouldBe(5437);
+        puzzle.Solution2.ShouldBe(19340);
     }
 }

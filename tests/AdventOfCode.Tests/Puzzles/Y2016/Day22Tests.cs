@@ -12,7 +12,7 @@ public sealed class Day22Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         var puzzle = await SolvePuzzleAsync<Day22>();
 
         // Assert
-        puzzle.ViableNodePairs.ShouldBe(985);
-        puzzle.MinimumStepsToExtract.ShouldBe(179);
+        puzzle.Solution1.ShouldBe(985);
+        puzzle.Solution2.ShouldBe(179);
     }
 }

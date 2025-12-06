@@ -76,7 +76,7 @@ public sealed class Day05Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         var puzzle = await SolvePuzzleAsync<Day05>();
 
         // Assert
-        puzzle.NiceStringCountV1.ShouldBe(236);
-        puzzle.NiceStringCountV2.ShouldBe(51);
+        puzzle.Solution1.ShouldBe(236);
+        puzzle.Solution2.ShouldBe(51);
     }
 }

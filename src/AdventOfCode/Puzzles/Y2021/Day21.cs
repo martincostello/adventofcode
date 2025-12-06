@@ -10,19 +10,6 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2021;
 public sealed class Day21 : Puzzle<int, long>
 {
     /// <summary>
-    /// Gets the product of the score of the losing player and
-    /// the number of times the die was rolled during the game
-    /// for the practice game with the deterministic die.
-    /// </summary>
-    public int PracticeOutcome { get; private set; }
-
-    /// <summary>
-    /// Gets the number of universes in which the winning
-    /// player wins for the real game using the Dirac die.
-    /// </summary>
-    public long WinningUniverses { get; private set; }
-
-    /// <summary>
     /// Plays a practice game of Dirac Dice.
     /// </summary>
     /// <param name="players">The initial starting tiles of the players.</param>
@@ -172,22 +159,19 @@ public sealed class Day21 : Puzzle<int, long>
     {
         var players = await ReadResourceAsLinesAsync(cancellationToken);
 
-        PracticeOutcome = PlayPractice(players);
-        WinningUniverses = Play(players);
+        Solution1 = PlayPractice(players);
+        Solution2 = Play(players);
 
         if (Verbose)
         {
             Logger.WriteLine(
                 "The product of the score of the losing player and the number of times the die was rolled during the game is {0:N0}.",
-                PracticeOutcome);
+                Solution1);
 
             Logger.WriteLine(
                 "The winning player wins in {0:N0} universes during the real game.",
-                WinningUniverses);
+                Solution2);
         }
-
-        Solution1 = PracticeOutcome;
-        Solution2 = WinningUniverses;
 
         return Result();
     }

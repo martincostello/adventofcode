@@ -12,16 +12,6 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2025;
 public sealed class Day05 : Puzzle<int, long>
 {
     /// <summary>
-    /// Gets the number of available ingredient IDs that are fresh.
-    /// </summary>
-    public int AvailableFreshIngredientIds { get; private set; }
-
-    /// <summary>
-    /// Gets the total number of ingredient IDs that are fresh.
-    /// </summary>
-    public long FreshIngredientIds { get; private set; }
-
-    /// <summary>
     /// Counts the number of fresh ingredients in the specified inventory database.
     /// </summary>
     /// <param name="database">The inventory management system database to use.</param>
@@ -116,16 +106,13 @@ public sealed class Day05 : Puzzle<int, long>
 
         var values = await ReadResourceAsLinesAsync(cancellationToken);
 
-        (AvailableFreshIngredientIds, FreshIngredientIds) = CountFreshIngredients(values);
+        (Solution1, Solution2) = CountFreshIngredients(values);
 
         if (Verbose)
         {
-            Logger.WriteLine("{0} available ingredient IDs are fresh.", AvailableFreshIngredientIds);
-            Logger.WriteLine("{0} ingredient IDs are fresh.", FreshIngredientIds);
+            Logger.WriteLine("{0} available ingredient IDs are fresh.", Solution1);
+            Logger.WriteLine("{0} ingredient IDs are fresh.", Solution2);
         }
-
-        Solution1 = AvailableFreshIngredientIds;
-        Solution2 = FreshIngredientIds;
 
         return Result();
     }

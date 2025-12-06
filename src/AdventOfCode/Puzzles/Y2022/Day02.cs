@@ -24,16 +24,6 @@ public sealed class Day02 : Puzzle<int, int>
     }
 
     /// <summary>
-    /// Gets the total score from following the encrypted strategy guide as a series of moves.
-    /// </summary>
-    public int TotalScoreForMoves { get; private set; }
-
-    /// <summary>
-    /// Gets the total score from following the encrypted strategy guide as a series of desired outcomes.
-    /// </summary>
-    public int TotalScoreForOutcomes { get; private set; }
-
-    /// <summary>
     /// Gets the total score from following the encrypted strategy guide.
     /// </summary>
     /// <param name="moves">The moves to follow.</param>
@@ -109,22 +99,19 @@ public sealed class Day02 : Puzzle<int, int>
     {
         var moves = await ReadResourceAsLinesAsync(cancellationToken);
 
-        TotalScoreForMoves = GetTotalScore(moves, containsDesiredOutcome: false);
-        TotalScoreForOutcomes = GetTotalScore(moves, containsDesiredOutcome: true);
+        Solution1 = GetTotalScore(moves, containsDesiredOutcome: false);
+        Solution2 = GetTotalScore(moves, containsDesiredOutcome: true);
 
         if (Verbose)
         {
             Logger.WriteLine(
                 "The total score from following the encrypted strategy guide of moves would be {0:N0}.",
-                TotalScoreForMoves);
+                Solution1);
 
             Logger.WriteLine(
                 "The total score from following the encrypted strategy guide of desired outcomes would be {0:N0}.",
-                TotalScoreForOutcomes);
+                Solution2);
         }
-
-        Solution1 = TotalScoreForMoves;
-        Solution2 = TotalScoreForOutcomes;
 
         return Result();
     }

@@ -10,16 +10,6 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2023;
 public sealed class Day14 : Puzzle<int, int>
 {
     /// <summary>
-    /// Gets the total load on the northern support beams.
-    /// </summary>
-    public int TotalLoad { get; private set; }
-
-    /// <summary>
-    /// Gets the total load on the northern support beams after 1 billion rotations of the spin cycle.
-    /// </summary>
-    public int TotalLoadWithSpinCycle { get; private set; }
-
-    /// <summary>
     /// Computes the total load on the northern support beams.
     /// </summary>
     /// <param name="positions">The positions of the rocks.</param>
@@ -199,17 +189,14 @@ public sealed class Day14 : Puzzle<int, int>
 
         var positions = await ReadResourceAsLinesAsync(cancellationToken);
 
-        (TotalLoad, string visualizationNorth) = ComputeLoad(positions, rotations: 0, Logger, cancellationToken);
-        (TotalLoadWithSpinCycle, string visualizationCycles) = ComputeLoad(positions, rotations: 1_000_000_000, Logger, cancellationToken);
+        (Solution1, string visualizationNorth) = ComputeLoad(positions, rotations: 0, Logger, cancellationToken);
+        (Solution2, string visualizationCycles) = ComputeLoad(positions, rotations: 1_000_000_000, Logger, cancellationToken);
 
         if (Verbose)
         {
-            Logger.WriteLine("The total load on the north support beams is {0}.", TotalLoad);
-            Logger.WriteLine("The total load on the north support beams after 1,000,000,000 spins is {0}.", TotalLoad, TotalLoadWithSpinCycle);
+            Logger.WriteLine("The total load on the north support beams is {0}.", Solution1);
+            Logger.WriteLine("The total load on the north support beams after 1,000,000,000 spins is {0}.", Solution1, Solution2);
         }
-
-        Solution1 = TotalLoad;
-        Solution2 = TotalLoadWithSpinCycle;
 
         var result = Result();
 

@@ -10,16 +10,6 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2024;
 public sealed class Day18 : Puzzle<int, string>
 {
     /// <summary>
-    /// Gets the minimum number of steps needed to reach the exit.
-    /// </summary>
-    public int MinimumSteps { get; private set; }
-
-    /// <summary>
-    /// Gets the coordinate of the byte that blocks the exit.
-    /// </summary>
-    public string BlockingByte { get; private set; } = string.Empty;
-
-    /// <summary>
     /// Simulates RAM falling into the specified region for the specified period of time.
     /// </summary>
     /// <param name="coordinates">The coordinates of the bytes that will fall into the region.</param>
@@ -86,16 +76,13 @@ public sealed class Day18 : Puzzle<int, string>
 
         var values = await ReadResourceAsLinesAsync(cancellationToken);
 
-        (MinimumSteps, BlockingByte) = Simulate(values, size: 71, ticks: 1024, cancellationToken);
+        (Solution1, Solution2) = Simulate(values, size: 71, ticks: 1024, cancellationToken);
 
         if (Verbose)
         {
-            Logger.WriteLine("The minimum number of steps needed to reach the exit is {0}.", MinimumSteps);
-            Logger.WriteLine("The coordinates of the first byte that will prevent the exit from being reachable is {0}.", BlockingByte);
+            Logger.WriteLine("The minimum number of steps needed to reach the exit is {0}.", Solution1);
+            Logger.WriteLine("The coordinates of the first byte that will prevent the exit from being reachable is {0}.", Solution2);
         }
-
-        Solution1 = MinimumSteps;
-        Solution2 = BlockingByte;
 
         return Result();
     }

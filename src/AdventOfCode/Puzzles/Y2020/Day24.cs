@@ -10,16 +10,6 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020;
 public sealed class Day24 : Puzzle<int, int>
 {
     /// <summary>
-    /// Gets the number of black tiles after 1 day.
-    /// </summary>
-    public int BlackTilesDay0 { get; private set; }
-
-    /// <summary>
-    /// Gets the number of black tiles after 100 days.
-    /// </summary>
-    public int BlackTilesDay100 { get; private set; }
-
-    /// <summary>
     /// Applies the tiling pattern to the floor using the specified instructions.
     /// </summary>
     /// <param name="instructions">The instructions of how to flip the tiles on the floor.</param>
@@ -124,17 +114,14 @@ public sealed class Day24 : Puzzle<int, int>
     {
         var instructions = await ReadResourceAsLinesAsync(cancellationToken);
 
-        BlackTilesDay0 = TileFloor(instructions, days: 0);
-        BlackTilesDay100 = TileFloor(instructions, days: 100);
+        Solution1 = TileFloor(instructions, days: 0);
+        Solution2 = TileFloor(instructions, days: 100);
 
         if (Verbose)
         {
-            Logger.WriteLine("{0} tiles are left with the black side up initially.", BlackTilesDay0);
-            Logger.WriteLine("{0} tiles are left with the black side up after 100 days.", BlackTilesDay100);
+            Logger.WriteLine("{0} tiles are left with the black side up initially.", Solution1);
+            Logger.WriteLine("{0} tiles are left with the black side up after 100 days.", Solution2);
         }
-
-        Solution1 = BlackTilesDay0;
-        Solution2 = BlackTilesDay100;
 
         return Result();
     }

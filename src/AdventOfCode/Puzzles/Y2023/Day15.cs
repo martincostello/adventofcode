@@ -15,16 +15,6 @@ public sealed class Day15 : Puzzle<int, int>
     private const int Boxes = 256;
 
     /// <summary>
-    /// Gets the sum of the hash values of the initialization sequence.
-    /// </summary>
-    public int HashSum { get; private set; }
-
-    /// <summary>
-    /// Gets the focusing power of the lens configuration.
-    /// </summary>
-    public int FocusingPower { get; private set; }
-
-    /// <summary>
     /// Computes the hash of the specified initialization sequence.
     /// </summary>
     /// <param name="sequence">The sequence to hash.</param>
@@ -136,17 +126,14 @@ public sealed class Day15 : Puzzle<int, int>
         string initializationSequence = await ReadResourceAsStringAsync(cancellationToken);
         initializationSequence = initializationSequence.ReplaceLineEndings(string.Empty);
 
-        HashSum = HashSequence(initializationSequence);
-        FocusingPower = Initialize(initializationSequence);
+        Solution1 = HashSequence(initializationSequence);
+        Solution2 = Initialize(initializationSequence);
 
         if (Verbose)
         {
-            Logger.WriteLine("The sum of the hash values of the initialization sequence is {0}.", HashSum);
-            Logger.WriteLine("The focusing power of the lens configuration is {0}.", FocusingPower);
+            Logger.WriteLine("The sum of the hash values of the initialization sequence is {0}.", Solution1);
+            Logger.WriteLine("The focusing power of the lens configuration is {0}.", Solution2);
         }
-
-        Solution1 = HashSum;
-        Solution2 = FocusingPower;
 
         return Result();
     }

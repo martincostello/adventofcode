@@ -12,16 +12,6 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2024;
 public sealed class Day13 : Puzzle<long, long>
 {
     /// <summary>
-    /// Gets the fewest tokens needed to be spent to win all possible prizes.
-    /// </summary>
-    public long FewestTokens { get; private set; }
-
-    /// <summary>
-    /// Gets the fewest tokens needed to be spent to win all possible prizes with the correct offset.
-    /// </summary>
-    public long FewestTokensFixed { get; private set; }
-
-    /// <summary>
     /// Plays the specified claw machines.
     /// </summary>
     /// <param name="machines">The specification of the claw machines to play.</param>
@@ -76,17 +66,14 @@ public sealed class Day13 : Puzzle<long, long>
 
         var values = await ReadResourceAsLinesAsync(cancellationToken);
 
-        FewestTokens = Play(values, offset: 0, limit: 100);
-        FewestTokensFixed = Play(values, offset: 10_000_000_000_000, limit: long.MaxValue);
+        Solution1 = Play(values, offset: 0, limit: 100);
+        Solution2 = Play(values, offset: 10_000_000_000_000, limit: long.MaxValue);
 
         if (Verbose)
         {
-            Logger.WriteLine("The fewest tokens you would have to spend to win all possible prizes is {0}.", FewestTokens);
-            Logger.WriteLine("The fewest tokens you would have to spend to win all possible prizes with the correct offset is {0}.", FewestTokensFixed);
+            Logger.WriteLine("The fewest tokens you would have to spend to win all possible prizes is {0}.", Solution1);
+            Logger.WriteLine("The fewest tokens you would have to spend to win all possible prizes with the correct offset is {0}.", Solution2);
         }
-
-        Solution1 = FewestTokens;
-        Solution2 = FewestTokensFixed;
 
         return Result();
     }

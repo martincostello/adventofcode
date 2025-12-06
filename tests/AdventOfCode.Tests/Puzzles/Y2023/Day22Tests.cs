@@ -35,8 +35,7 @@ public sealed class Day22Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         var puzzle = await SolvePuzzleAsync<Day22>();
 
         // Assert
-        puzzle.ShouldNotBeNull();
-        puzzle.SafeBricks.ShouldBe(454);
-        puzzle.MaximumChainReaction.ShouldBe(74287);
+        puzzle.Solution1.ShouldBe(454);
+        puzzle.Solution2.ShouldBe(74287);
     }
 }

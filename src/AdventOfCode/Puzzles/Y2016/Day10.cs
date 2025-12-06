@@ -10,16 +10,6 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016;
 public sealed class Day10 : Puzzle<int, int>
 {
     /// <summary>
-    /// Gets the number of the bot that compares value-61 and value-17 microchips.
-    /// </summary>
-    public int BotThatCompares61And17Microchips { get; private set; }
-
-    /// <summary>
-    /// Gets the product of the value of the microchips in output bins 0, 1 and 2.
-    /// </summary>
-    public int ProductOfMicrochipsInBins012 { get; private set; }
-
-    /// <summary>
     /// Returns the value of the bot that compares microchips with the specified values.
     /// </summary>
     /// <param name="instructions">The instructions to process.</param>
@@ -82,16 +72,13 @@ public sealed class Day10 : Puzzle<int, int>
         var instructions = await ReadResourceAsLinesAsync(cancellationToken);
         int[] binsOfInterest = [0, 1, 2];
 
-        (BotThatCompares61And17Microchips, ProductOfMicrochipsInBins012) = GetBotNumber(instructions, 61, 17, binsOfInterest);
+        (Solution1, Solution2) = GetBotNumber(instructions, 61, 17, binsOfInterest);
 
         if (Verbose)
         {
-            Logger.WriteLine($"The number of the bot that compares value-61 and value-17 microchips is {BotThatCompares61And17Microchips:N0}.");
-            Logger.WriteLine($"The product of the microchips in output bins 0, 1 and 2 is {ProductOfMicrochipsInBins012:N0}.");
+            Logger.WriteLine($"The number of the bot that compares value-61 and value-17 microchips is {Solution1:N0}.");
+            Logger.WriteLine($"The product of the microchips in output bins 0, 1 and 2 is {Solution2:N0}.");
         }
-
-        Solution1 = BotThatCompares61And17Microchips;
-        Solution2 = ProductOfMicrochipsInBins012;
 
         return Result();
     }

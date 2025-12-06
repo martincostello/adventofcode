@@ -10,16 +10,6 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2025;
 public sealed class Day02 : Puzzle<long, long>
 {
     /// <summary>
-    /// Gets the sum of the invalid product IDs for the first version of the validation rules.
-    /// </summary>
-    public long InvalidIdSumV1 { get; private set; }
-
-    /// <summary>
-    /// Gets the sum of the invalid product IDs for the second version of the validation rules.
-    /// </summary>
-    public long InvalidIdSumV2 { get; private set; }
-
-    /// <summary>
     /// Gets the sum of the invalid product IDs in the specified ranges.
     /// </summary>
     /// <param name="productIds">The comma-separated list of product ID ranges.</param>
@@ -102,17 +92,14 @@ public sealed class Day02 : Puzzle<long, long>
 
         string productIds = await ReadResourceAsStringAsync(cancellationToken);
 
-        InvalidIdSumV1 = Validate(productIds, anyRepeatingSequence: false);
-        InvalidIdSumV2 = Validate(productIds, anyRepeatingSequence: true);
+        Solution1 = Validate(productIds, anyRepeatingSequence: false);
+        Solution2 = Validate(productIds, anyRepeatingSequence: true);
 
         if (Verbose)
         {
-            Logger.WriteLine("The sum of the invalid IDs with the first set of rules is {0}", InvalidIdSumV1);
-            Logger.WriteLine("The sum of the invalid IDs with the second set of rules is {0}", InvalidIdSumV2);
+            Logger.WriteLine("The sum of the invalid IDs with the first set of rules is {0}", Solution1);
+            Logger.WriteLine("The sum of the invalid IDs with the second set of rules is {0}", Solution2);
         }
-
-        Solution1 = InvalidIdSumV1;
-        Solution2 = InvalidIdSumV2;
 
         return Result();
     }

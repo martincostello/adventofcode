@@ -38,16 +38,6 @@ public sealed class Day07 : Puzzle<int, int>
     }
 
     /// <summary>
-    /// Gets the total winnings.
-    /// </summary>
-    public int TotalWinnings { get; private set; }
-
-    /// <summary>
-    /// Gets the total winnings using Jokers.
-    /// </summary>
-    public int TotalWinningsWithJokers { get; private set; }
-
-    /// <summary>
     /// Plays the specified hands of Camel Cards.
     /// </summary>
     /// <param name="handsAndBids">The hands to play.</param>
@@ -140,17 +130,14 @@ public sealed class Day07 : Puzzle<int, int>
 
         var hands = await ReadResourceAsLinesAsync(cancellationToken);
 
-        TotalWinnings = Play(hands, useJokers: false);
-        TotalWinningsWithJokers = Play(hands, useJokers: true);
+        Solution1 = Play(hands, useJokers: false);
+        Solution2 = Play(hands, useJokers: true);
 
         if (Verbose)
         {
-            Logger.WriteLine("The total winnings are {0}.", TotalWinnings);
-            Logger.WriteLine("The total winnings are {0} with Jokers.", TotalWinningsWithJokers);
+            Logger.WriteLine("The total winnings are {0}.", Solution1);
+            Logger.WriteLine("The total winnings are {0} with Jokers.", Solution2);
         }
-
-        Solution1 = TotalWinnings;
-        Solution2 = TotalWinningsWithJokers;
 
         return Result();
     }

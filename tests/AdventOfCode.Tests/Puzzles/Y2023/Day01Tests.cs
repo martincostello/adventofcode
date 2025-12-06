@@ -53,8 +53,7 @@ public sealed class Day01Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         var puzzle = await SolvePuzzleAsync<Day01>();
 
         // Assert
-        puzzle.ShouldNotBeNull();
-        puzzle.SumOfCalibrationsDigits.ShouldBe(54697);
-        puzzle.SumOfCalibrationsWordsAndDigits.ShouldBe(54885);
+        puzzle.Solution1.ShouldBe(54697);
+        puzzle.Solution2.ShouldBe(54885);
     }
 }

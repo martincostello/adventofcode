@@ -7,22 +7,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015;
 /// A class representing the puzzle for <c>https://adventofcode.com/2015/day/24</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2015, 24, "It Hangs in the Balance", RequiresData = true, IsHidden = true)]
-public sealed class Day24 : Puzzle
+public sealed class Day24 : Puzzle<long, long>
 {
-    /// <summary>
-    /// Gets the quantum entanglement of the first group
-    /// of packages of the optimum package configuration
-    /// when there are 3 compartments in the sleigh.
-    /// </summary>
-    internal long QuantumEntanglementFor3 { get; private set; }
-
-    /// <summary>
-    /// Gets the quantum entanglement of the first group
-    /// of packages of the optimum package configuration
-    /// when there are 4 compartments in the sleigh.
-    /// </summary>
-    internal long QuantumEntanglementFor4 { get; private set; }
-
     /// <summary>
     /// Gets the quantum entanglement of the first group of packages of
     /// the ideal configuration for the specified packages and their weights.
@@ -104,22 +90,22 @@ public sealed class Day24 : Puzzle
     {
         var weights = await ReadResourceAsNumbersAsync<long>(cancellationToken);
 
-        QuantumEntanglementFor3 = GetQuantumEntanglementOfIdealConfiguration(compartments: 3, weights);
-        QuantumEntanglementFor4 = GetQuantumEntanglementOfIdealConfiguration(compartments: 4, weights);
+        Solution1 = GetQuantumEntanglementOfIdealConfiguration(compartments: 3, weights);
+        Solution2 = GetQuantumEntanglementOfIdealConfiguration(compartments: 4, weights);
 
         if (Verbose)
         {
             Logger.WriteLine(
                 "The quantum entanglement of the ideal configuration of {0:N0} packages in 3 compartments is {1:N0}.",
                 weights.Count,
-                QuantumEntanglementFor3);
+                Solution1);
 
             Logger.WriteLine(
                 "The quantum entanglement of the ideal configuration of {0:N0} packages in 4 compartments is {1:N0}.",
                 weights.Count,
-                QuantumEntanglementFor4);
+                Solution2);
         }
 
-        return PuzzleResult.Create(QuantumEntanglementFor3);
+        return Result();
     }
 }

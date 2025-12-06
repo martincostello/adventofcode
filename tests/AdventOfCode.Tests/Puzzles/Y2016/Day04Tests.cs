@@ -48,7 +48,7 @@ public sealed class Day04Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         var puzzle = await SolvePuzzleAsync<Day04>();
 
         // Assert
-        puzzle.SumOfSectorIdsOfRealRooms.ShouldBe(137896);
-        puzzle.SectorIdOfNorthPoleObjectsRoom.ShouldBe(501);
+        puzzle.Solution1.ShouldBe(137896);
+        puzzle.Solution2.ShouldBe(501);
     }
 }

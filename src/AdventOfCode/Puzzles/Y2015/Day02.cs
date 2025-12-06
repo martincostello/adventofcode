@@ -10,16 +10,6 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015;
 public sealed class Day02 : Puzzle<int, int>
 {
     /// <summary>
-    /// Gets the total amount of wrapping paper required in square feet.
-    /// </summary>
-    internal int TotalAreaOfPaper { get; private set; }
-
-    /// <summary>
-    /// Gets the total length of ribbon required in feet.
-    /// </summary>
-    internal int TotalLengthOfRibbon { get; private set; }
-
-    /// <summary>
     /// Gets the total area of wrapping paper and length of ribbon required to
     /// wrap the presents of the specified dimensions.
     /// </summary>
@@ -47,19 +37,16 @@ public sealed class Day02 : Puzzle<int, int>
     {
         var dimensions = await ReadResourceAsLinesAsync(cancellationToken);
 
-        (TotalAreaOfPaper, TotalLengthOfRibbon) = GetTotalWrappingPaperAreaAndRibbonLength(dimensions);
+        (Solution1, Solution2) = GetTotalWrappingPaperAreaAndRibbonLength(dimensions);
 
         if (Verbose)
         {
             Logger.WriteLine(
                 "The elves should order {0:N0} square feet of wrapping paper.{1}They also need {2:N0} feet of ribbon.",
-                TotalAreaOfPaper,
+                Solution1,
                 Environment.NewLine,
-                TotalLengthOfRibbon);
+                Solution2);
         }
-
-        Solution1 = TotalAreaOfPaper;
-        Solution2 = TotalLengthOfRibbon;
 
         return Result();
     }

@@ -10,16 +10,6 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2021;
 public sealed class Day17 : Puzzle<int, int>
 {
     /// <summary>
-    /// Gets the highest apogee reached by a velocity that is within the target area.
-    /// </summary>
-    public int MaxApogee { get; private set; }
-
-    /// <summary>
-    /// Gets the number of initial velocities that will hit the target area.
-    /// </summary>
-    public int Count { get; private set; }
-
-    /// <summary>
     /// Calculates a ballistic trajectory that lands the probe within the specified target area.
     /// </summary>
     /// <param name="target">The target area to land the probe within.</param>
@@ -120,21 +110,18 @@ public sealed class Day17 : Puzzle<int, int>
     {
         string target = (await ReadResourceAsStringAsync(cancellationToken)).Trim();
 
-        (MaxApogee, Count) = Calculate(target);
+        (Solution1, Solution2) = Calculate(target);
 
         if (Verbose)
         {
             Logger.WriteLine(
                 "The highest y position reached on a trajectory that lands in the target area is {0:N0}.",
-                MaxApogee);
+                Solution1);
 
             Logger.WriteLine(
                 "{0:N0} distinct initial velocity values cause the probe to land within the target area.",
-                Count);
+                Solution2);
         }
-
-        Solution1 = MaxApogee;
-        Solution2 = Count;
 
         return Result();
     }

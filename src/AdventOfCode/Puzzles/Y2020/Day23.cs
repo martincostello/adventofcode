@@ -10,16 +10,6 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020;
 public sealed class Day23 : Puzzle<string, long>
 {
     /// <summary>
-    /// Gets the labels of the cups after cup 1 after 100 moves.
-    /// </summary>
-    public string LabelsAfterCup1 { get; private set; } = string.Empty;
-
-    /// <summary>
-    /// Gets the product of the labels of the two cups after cup 1 after 10,000,000 moves.
-    /// </summary>
-    public long ProductOfLabelsAfterCup1 { get; private set; }
-
-    /// <summary>
     /// Plays a game of cups using the specified arrangement of cups for a number of moves.
     /// </summary>
     /// <param name="arrangement">The starting arrangement of the cups.</param>
@@ -96,7 +86,7 @@ public sealed class Day23 : Puzzle<string, long>
         var final = string.Join(string.Empty, circle).AsSpan();
         int index = final.IndexOf('1');
 
-        LabelsAfterCup1 = string.Concat(final[(index + 1)..], final[..index]);
+        Solution1 = string.Concat(final[(index + 1)..], final[..index]);
 
         arrangement = arrangement.Concat(Enumerable.Range(10, 999_991));
 
@@ -104,19 +94,16 @@ public sealed class Day23 : Puzzle<string, long>
 
         var item1 = circle.Find(1);
 
-        ProductOfLabelsAfterCup1 =
+        Solution2 =
             1L *
             item1!.Next!.Value *
             item1.Next.Next!.Value;
 
         if (Verbose)
         {
-            Logger.WriteLine("The labels on the cups after 100 moves is {0}.", LabelsAfterCup1);
-            Logger.WriteLine("The product of the labels on the first two cups after cup 1 after 10,000,000 moves is {0}.", ProductOfLabelsAfterCup1);
+            Logger.WriteLine("The labels on the cups after 100 moves is {0}.", Solution1);
+            Logger.WriteLine("The product of the labels on the first two cups after cup 1 after 10,000,000 moves is {0}.", Solution2);
         }
-
-        Solution1 = LabelsAfterCup1;
-        Solution2 = ProductOfLabelsAfterCup1;
 
         return Result();
     }

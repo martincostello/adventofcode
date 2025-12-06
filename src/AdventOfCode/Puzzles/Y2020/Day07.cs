@@ -10,16 +10,6 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020;
 public sealed class Day07 : Puzzle<int, int>
 {
     /// <summary>
-    /// Gets the number of bag colors that can eventually contain at least one bag of the given color.
-    /// </summary>
-    public int BagColorsThatCanContainColor { get; private set; }
-
-    /// <summary>
-    /// Gets the number of bags required inside the specified top-level bag to allow it be carried.
-    /// </summary>
-    public int BagsInsideBag { get; private set; }
-
-    /// <summary>
     /// Gets the number of bag colors that can eventually contain at least one bag of the specified colors.
     /// </summary>
     /// <param name="rules">A collection of bag-colour relationship rules.</param>
@@ -136,17 +126,14 @@ public sealed class Day07 : Puzzle<int, int>
 
         var rules = await ReadResourceAsLinesAsync(cancellationToken);
 
-        BagColorsThatCanContainColor = GetBagColorsThatCouldContainColor(rules, color);
-        BagsInsideBag = GetInsideBagCount(rules, color);
+        Solution1 = GetBagColorsThatCouldContainColor(rules, color);
+        Solution2 = GetInsideBagCount(rules, color);
 
         if (Verbose)
         {
-            Logger.WriteLine("The number of bags that can contain a {0} bag is {1}.", color, BagColorsThatCanContainColor);
-            Logger.WriteLine("The number of bags contained in a {0} bag is {1}.", color, BagsInsideBag);
+            Logger.WriteLine("The number of bags that can contain a {0} bag is {1}.", color, Solution1);
+            Logger.WriteLine("The number of bags contained in a {0} bag is {1}.", color, Solution2);
         }
-
-        Solution1 = BagColorsThatCanContainColor;
-        Solution2 = BagsInsideBag;
 
         return Result();
     }

@@ -7,18 +7,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017;
 /// A class representing the puzzle for <c>https://adventofcode.com/2017/day/12</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2017, 12, "Digital Plumber", RequiresData = true)]
-public sealed class Day12 : Puzzle
+public sealed class Day12 : Puzzle<int, int>
 {
-    /// <summary>
-    /// Gets the number of programs in the group that contains program zero.
-    /// </summary>
-    public int ProgramsInGroupOfProgram0 { get; private set; }
-
-    /// <summary>
-    /// Gets the number of groups of programs.
-    /// </summary>
-    public int NumberOfGroups { get; private set; }
-
     /// <summary>
     /// Gets the number of groups in the specified network of pipes.
     /// </summary>
@@ -66,16 +56,16 @@ public sealed class Day12 : Puzzle
     {
         var pipes = await ReadResourceAsLinesAsync(cancellationToken);
 
-        ProgramsInGroupOfProgram0 = GetProgramsInGroup(0, pipes);
-        NumberOfGroups = GetGroupsInNetwork(pipes);
+        Solution1 = GetProgramsInGroup(0, pipes);
+        Solution2 = GetGroupsInNetwork(pipes);
 
         if (Verbose)
         {
-            Logger.WriteLine($"There are {ProgramsInGroupOfProgram0:N0} programs in the group that contains program ID 0.");
-            Logger.WriteLine($"There are {NumberOfGroups:N0} groups in the network of pipes.");
+            Logger.WriteLine($"There are {Solution1:N0} programs in the group that contains program ID 0.");
+            Logger.WriteLine($"There are {Solution2:N0} groups in the network of pipes.");
         }
 
-        return PuzzleResult.Create(ProgramsInGroupOfProgram0, NumberOfGroups);
+        return Result();
     }
 
     /// <summary>

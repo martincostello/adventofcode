@@ -13,17 +13,6 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2024;
 public sealed class Day17 : Puzzle<string, long>
 {
     /// <summary>
-    /// Gets the output of the program.
-    /// </summary>
-    public string Output { get; private set; } = string.Empty;
-
-    /// <summary>
-    /// Gets the lowest positive initial value for register A
-    /// that causes the program to output a copy of itself.
-    /// </summary>
-    public long RegisterA { get; private set; }
-
-    /// <summary>
     /// Runs the specified 7-bit program.
     /// </summary>
     /// <param name="values">The program to run.</param>
@@ -123,17 +112,14 @@ public sealed class Day17 : Puzzle<string, long>
 
         var values = await ReadResourceAsLinesAsync(cancellationToken);
 
-        (Output, _) = Run(values, fix: false, cancellationToken);
-        (_, RegisterA) = Run(values, fix: true, cancellationToken);
+        (Solution1, _) = Run(values, fix: false, cancellationToken);
+        (_, Solution2) = Run(values, fix: true, cancellationToken);
 
         if (Verbose)
         {
-            Logger.WriteLine("The output of the program is {0}.", Output);
-            Logger.WriteLine("The lowest positive initial value for register A that causes the program to output a copy of itself is {0}.", RegisterA);
+            Logger.WriteLine("The output of the program is {0}.", Solution1);
+            Logger.WriteLine("The lowest positive initial value for register A that causes the program to output a copy of itself is {0}.", Solution2);
         }
-
-        Solution1 = Output;
-        Solution2 = RegisterA;
 
         return Result();
     }

@@ -10,19 +10,6 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2021;
 public sealed class Day02 : Puzzle<int, int>
 {
     /// <summary>
-    /// Gets the product of the depth and horizontal
-    /// position of the submarine at the end of its course.
-    /// </summary>
-    public int ProductOfFinalPosition { get; private set; }
-
-    /// <summary>
-    /// Gets the product of the depth and horizontal position
-    /// of the submarine at the end of its course when the aim
-    /// of the submarine is accounted for.
-    /// </summary>
-    public int ProductOfFinalPositionWithAim { get; private set; }
-
-    /// <summary>
     /// Navigates the submarine through the specified course.
     /// </summary>
     /// <param name="course">The course to navigate.</param>
@@ -78,22 +65,19 @@ public sealed class Day02 : Puzzle<int, int>
     {
         var course = await ReadResourceAsLinesAsync(cancellationToken);
 
-        ProductOfFinalPosition = NavigateCourse(course, useAim: false);
-        ProductOfFinalPositionWithAim = NavigateCourse(course, useAim: true);
+        Solution1 = NavigateCourse(course, useAim: false);
+        Solution2 = NavigateCourse(course, useAim: true);
 
         if (Verbose)
         {
             Logger.WriteLine(
                 "The product of the submarine's final depth and forward position is {0:N0}.",
-                ProductOfFinalPosition);
+                Solution1);
 
             Logger.WriteLine(
                 "The product of the submarine's final depth and forward position is {0:N0} when accounting for aim.",
-                ProductOfFinalPositionWithAim);
+                Solution2);
         }
-
-        Solution1 = ProductOfFinalPosition;
-        Solution2 = ProductOfFinalPositionWithAim;
 
         return Result();
     }

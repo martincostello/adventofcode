@@ -10,17 +10,6 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2024;
 public sealed class Day08 : Puzzle<int, int>
 {
     /// <summary>
-    /// Gets the number of unique locations within the bounds of the map that contain an antinode.
-    /// </summary>
-    public int UniqueAntinodes { get; private set; }
-
-    /// <summary>
-    /// Gets the number of unique locations within the bounds of the map that contain an antinode
-    /// when resonant harmonics are applied.
-    /// </summary>
-    public int UniqueAntinodesWithResonance { get; private set; }
-
-    /// <summary>
     /// Solves the puzzle for the specified map.
     /// </summary>
     /// <param name="map">The map of antennae.</param>
@@ -130,17 +119,14 @@ public sealed class Day08 : Puzzle<int, int>
 
         var values = await ReadResourceAsLinesAsync(cancellationToken);
 
-        UniqueAntinodes = FindAntinodes(values, resonantHarmonics: false);
-        UniqueAntinodesWithResonance = FindAntinodes(values, resonantHarmonics: true);
+        Solution1 = FindAntinodes(values, resonantHarmonics: false);
+        Solution2 = FindAntinodes(values, resonantHarmonics: true);
 
         if (Verbose)
         {
-            Logger.WriteLine("{0} unique locations within the bounds of the map contain an antinode.", UniqueAntinodes);
-            Logger.WriteLine("{0} unique locations within the bounds of the map contain an antinode using resonant harmonics.", UniqueAntinodesWithResonance);
+            Logger.WriteLine("{0} unique locations within the bounds of the map contain an antinode.", Solution1);
+            Logger.WriteLine("{0} unique locations within the bounds of the map contain an antinode using resonant harmonics.", Solution2);
         }
-
-        Solution1 = UniqueAntinodes;
-        Solution2 = UniqueAntinodesWithResonance;
 
         return Result();
     }

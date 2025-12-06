@@ -10,16 +10,6 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2025;
 public sealed class Day04 : Puzzle<int, int>
 {
     /// <summary>
-    /// Gets the number of rolls of paper that can be initially accessed by a forklift.
-    /// </summary>
-    public int AccessibleRolls { get; private set; }
-
-    /// <summary>
-    /// Gets the number of rolls of paper that can be removed by a forklift.
-    /// </summary>
-    public int RemovedRolls { get; private set; }
-
-    /// <summary>
     /// Gets the number of rolls of paper that can be accessed by a forklift
     /// as illustrated by the specified diagram.
     /// </summary>
@@ -94,16 +84,13 @@ public sealed class Day04 : Puzzle<int, int>
 
         var diagram = await ReadResourceAsLinesAsync(cancellationToken);
 
-        (AccessibleRolls, RemovedRolls) = ArrangeRolls(diagram, cancellationToken);
+        (Solution1, Solution2) = ArrangeRolls(diagram, cancellationToken);
 
         if (Verbose)
         {
-            Logger.WriteLine("{0} rolls of paper can be accessed by a forklift.", AccessibleRolls);
-            Logger.WriteLine("{0} rolls of paper can be removed by a forklift.", RemovedRolls);
+            Logger.WriteLine("{0} rolls of paper can be accessed by a forklift.", Solution1);
+            Logger.WriteLine("{0} rolls of paper can be removed by a forklift.", Solution2);
         }
-
-        Solution1 = AccessibleRolls;
-        Solution2 = RemovedRolls;
 
         return Result();
     }

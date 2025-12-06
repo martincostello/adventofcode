@@ -10,16 +10,6 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2024;
 public sealed class Day02 : Puzzle<int, int>
 {
     /// <summary>
-    /// Gets the number of safe reports.
-    /// </summary>
-    public int SafeReports { get; private set; }
-
-    /// <summary>
-    /// Gets the number of safe reports with the Problem Dampener in use.
-    /// </summary>
-    public int SafeReportsWithDampener { get; private set; }
-
-    /// <summary>
     /// Counts the number of reports that are safe.
     /// </summary>
     /// <param name="reports">The reports to check for safety.</param>
@@ -90,17 +80,14 @@ public sealed class Day02 : Puzzle<int, int>
 
         var values = await ReadResourceAsLinesAsync(cancellationToken);
 
-        SafeReports = CountSafeReports(values, useProblemDampener: false);
-        SafeReportsWithDampener = CountSafeReports(values, useProblemDampener: true);
+        Solution1 = CountSafeReports(values, useProblemDampener: false);
+        Solution2 = CountSafeReports(values, useProblemDampener: true);
 
         if (Verbose)
         {
-            Logger.WriteLine("{0} reports are safe.", SafeReports);
-            Logger.WriteLine("{0} reports are safe with the Problem Dampener.", SafeReportsWithDampener);
+            Logger.WriteLine("{0} reports are safe.", Solution1);
+            Logger.WriteLine("{0} reports are safe with the Problem Dampener.", Solution2);
         }
-
-        Solution1 = SafeReports;
-        Solution2 = SafeReportsWithDampener;
 
         return Result();
     }

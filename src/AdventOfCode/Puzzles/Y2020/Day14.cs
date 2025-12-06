@@ -10,16 +10,6 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020;
 public sealed class Day14 : Puzzle<long, long>
 {
     /// <summary>
-    /// Gets the sum of all values left in memory after processing completes using version 1.
-    /// </summary>
-    public long SumOfRemainingValuesV1 { get; private set; }
-
-    /// <summary>
-    /// Gets the sum of all values left in memory after processing completes using version 2.
-    /// </summary>
-    public long SumOfRemainingValuesV2 { get; private set; }
-
-    /// <summary>
     /// Runs the specified program.
     /// </summary>
     /// <param name="program">The instructions of the program to run.</param>
@@ -127,17 +117,14 @@ public sealed class Day14 : Puzzle<long, long>
     {
         var values = await ReadResourceAsLinesAsync(cancellationToken);
 
-        SumOfRemainingValuesV1 = RunProgram(values, version: 1);
-        SumOfRemainingValuesV2 = RunProgram(values, version: 2);
+        Solution1 = RunProgram(values, version: 1);
+        Solution2 = RunProgram(values, version: 2);
 
         if (Verbose)
         {
-            Logger.WriteLine("The sum of all values left in memory using version 1 is {0}.", SumOfRemainingValuesV1);
-            Logger.WriteLine("The sum of all values left in memory using version 2 is {0}.", SumOfRemainingValuesV2);
+            Logger.WriteLine("The sum of all values left in memory using version 1 is {0}.", Solution1);
+            Logger.WriteLine("The sum of all values left in memory using version 2 is {0}.", Solution2);
         }
-
-        Solution1 = SumOfRemainingValuesV1;
-        Solution2 = SumOfRemainingValuesV2;
 
         return Result();
     }

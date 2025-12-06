@@ -10,16 +10,6 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2018;
 public sealed class Day03 : Puzzle<int, string>
 {
     /// <summary>
-    /// Gets the area, in square inches, of fabric with two or more claims.
-    /// </summary>
-    public int Area { get; private set; }
-
-    /// <summary>
-    /// Gets the Id of the claim with a unique area.
-    /// </summary>
-    public string? IdOfUniqueClaim { get; private set; }
-
-    /// <summary>
     /// Calculates the number of square inches of fabric with two or more overlapping claims.
     /// </summary>
     /// <param name="claims">The claimed areas of the fabric.</param>
@@ -56,11 +46,11 @@ public sealed class Day03 : Puzzle<int, string>
     /// <returns>
     /// The Id of the claim specified by <paramref name="claims"/> that is not overlapped by any others.
     /// </returns>
-    public static string? GetClaimWithNoOverlappingClaims(IEnumerable<string> claims)
+    public static string GetClaimWithNoOverlappingClaims(IEnumerable<string> claims)
     {
         (Square[,] fabric, IList<Claim> fabricClaims) = ParseFabric(claims);
 
-        string? result = null;
+        string result = string.Empty;
 
         foreach (var claim in fabricClaims)
         {
@@ -93,17 +83,14 @@ public sealed class Day03 : Puzzle<int, string>
     {
         var claims = await ReadResourceAsLinesAsync(cancellationToken);
 
-        Area = GetAreaWithTwoOrMoreOverlappingClaims(claims);
-        IdOfUniqueClaim = GetClaimWithNoOverlappingClaims(claims);
+        Solution1 = GetAreaWithTwoOrMoreOverlappingClaims(claims);
+        Solution2 = GetClaimWithNoOverlappingClaims(claims);
 
         if (Verbose)
         {
-            Logger.WriteLine($"{Area:N0} square inches of fabric are within two or more claims.");
-            Logger.WriteLine($"The Id of the claim with no overlapping claims is {IdOfUniqueClaim}.");
+            Logger.WriteLine($"{Solution1:N0} square inches of fabric are within two or more claims.");
+            Logger.WriteLine($"The Id of the claim with no overlapping claims is {Solution2}.");
         }
-
-        Solution1 = Area;
-        Solution2 = IdOfUniqueClaim!;
 
         return Result();
     }

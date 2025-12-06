@@ -10,16 +10,6 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2024;
 public sealed class Day06 : Puzzle<int, int>
 {
     /// <summary>
-    /// Gets the number of distinct positions visited by the guard.
-    /// </summary>
-    public int DistinctPositions { get; private set; }
-
-    /// <summary>
-    /// Gets the number of distinct positions where an obstruction can be placed to cause the guard to patrol in a loop.
-    /// </summary>
-    public int DistinctObstructions { get; private set; }
-
-    /// <summary>
     /// Patrol the lab defined by the specified map.
     /// </summary>
     /// <param name="map">The map of the lab to patrol.</param>
@@ -61,16 +51,13 @@ public sealed class Day06 : Puzzle<int, int>
 
         var values = await ReadResourceAsLinesAsync(cancellationToken);
 
-        (DistinctPositions, DistinctObstructions) = Patrol(values, cancellationToken);
+        (Solution1, Solution2) = Patrol(values, cancellationToken);
 
         if (Verbose)
         {
-            Logger.WriteLine("{0} distinct positions are visited by the guard before leaving the mapped area.", DistinctPositions);
-            Logger.WriteLine("{0} distinct positions can be chosen for an obstruction to create a loop.", DistinctObstructions);
+            Logger.WriteLine("{0} distinct positions are visited by the guard before leaving the mapped area.", Solution1);
+            Logger.WriteLine("{0} distinct positions can be chosen for an obstruction to create a loop.", Solution2);
         }
-
-        Solution1 = DistinctPositions;
-        Solution2 = DistinctObstructions;
 
         return Result();
     }

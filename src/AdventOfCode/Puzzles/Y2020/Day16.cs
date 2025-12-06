@@ -10,16 +10,6 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020;
 public sealed class Day16 : Puzzle<int, long>
 {
     /// <summary>
-    /// Gets the ticket scanning error rate.
-    /// </summary>
-    public int ScanningErrorRate { get; private set; }
-
-    /// <summary>
-    /// Gets the product of the departure fields on your ticket.
-    /// </summary>
-    public long DepartureProduct { get; private set; }
-
-    /// <summary>
     /// Scans the tickets associated with the specified notes.
     /// </summary>
     /// <param name="notes">The notes containing the ticket information.</param>
@@ -175,21 +165,18 @@ public sealed class Day16 : Puzzle<int, long>
 
         (int scanningErrorRate, var ticket) = ScanTickets(values);
 
-        ScanningErrorRate = scanningErrorRate;
+        Solution1 = scanningErrorRate;
 
-        DepartureProduct = ticket
+        Solution2 = ticket
             .Where((p) => p.Key.AsSpan().StartsWith("departure"))
             .Select((p) => (long)p.Value)
             .Product();
 
         if (Verbose)
         {
-            Logger.WriteLine("The ticket scanning error rate is {0}.", ScanningErrorRate);
-            Logger.WriteLine("The product of the ticket fields starting with 'departure' is {0}.", DepartureProduct);
+            Logger.WriteLine("The ticket scanning error rate is {0}.", Solution1);
+            Logger.WriteLine("The product of the ticket fields starting with 'departure' is {0}.", Solution2);
         }
-
-        Solution1 = ScanningErrorRate;
-        Solution2 = DepartureProduct;
 
         return Result();
     }

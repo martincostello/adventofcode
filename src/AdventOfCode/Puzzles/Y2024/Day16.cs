@@ -11,13 +11,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2024;
 /// A class representing the puzzle for <c>https://adventofcode.com/2024/day/16</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2024, 16, "Reindeer Maze", RequiresData = true)]
-public sealed class Day16 : Puzzle<int, int>
+public sealed class Day16 : Puzzle<int>
 {
-    /// <summary>
-    /// Gets the winning score.
-    /// </summary>
-    public int WinningScore { get; private set; }
-
     /// <summary>
     /// Races the reindeer through the maze and returns the winning score.
     /// </summary>
@@ -68,21 +63,19 @@ public sealed class Day16 : Puzzle<int, int>
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        ArgumentNullException.ThrowIfNull(args);
+        return await SolveWithLinesAsync(
+            static (values, logger, cancellationToken) =>
+            {
+                int winningScore = Race(values, cancellationToken);
 
-        var values = await ReadResourceAsLinesAsync(cancellationToken);
+                if (logger is { })
+                {
+                    logger.WriteLine("The lowest score a Reindeer could possibly get is {0}.", winningScore);
+                }
 
-        WinningScore = Race(values, cancellationToken);
-
-        if (Verbose)
-        {
-            Logger.WriteLine("The lowest score a Reindeer could possibly get is {0}.", WinningScore);
-        }
-
-        Solution1 = WinningScore;
-        Solution2 = Unsolved;
-
-        return Result();
+                return winningScore;
+            },
+            cancellationToken);
     }
 
     private sealed class RaceCourse(int width, int height) : IWeightedGraph<Move>

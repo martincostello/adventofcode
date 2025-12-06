@@ -10,16 +10,6 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2021;
 public sealed class Day13 : Puzzle<int, string>
 {
     /// <summary>
-    /// Gets the number of dots that are visible after completing the first fold.
-    /// </summary>
-    public int DotCountAfterFold1 { get; private set; }
-
-    /// <summary>
-    /// Gets the activation code for the infrared thermal imaging camera system.
-    /// </summary>
-    public string? ActivationCode { get; private set; }
-
-    /// <summary>
     /// Folds the transparent paper the specified number of times.
     /// </summary>
     /// <param name="instructions">The instructions to follow.</param>
@@ -30,7 +20,7 @@ public sealed class Day13 : Puzzle<int, string>
     /// and the activation code on the paper if <paramref name="folds"/> is <see langword="null"/>,
     /// and a visualization of the paper if <paramref name="folds"/> is <see langword="null"/>.
     /// </returns>
-    public static (int DotCount, string? ActivationCode, string? Visualization) Fold(
+    public static (int DotCount, string ActivationCode, string? Visualization) Fold(
         IList<string> instructions,
         int? folds,
         ILogger? logger = null)
@@ -100,7 +90,7 @@ public sealed class Day13 : Puzzle<int, string>
             }
         }
 
-        string? activationCode = null;
+        string activationCode = string.Empty;
         string? visualization = null;
 
         if (folds is null)
@@ -137,22 +127,19 @@ public sealed class Day13 : Puzzle<int, string>
     {
         var instructions = await ReadResourceAsLinesAsync(cancellationToken);
 
-        (DotCountAfterFold1, _, _) = Fold(instructions, folds: 1);
-        (_, ActivationCode, string? visualization) = Fold(instructions, folds: null, Logger);
+        (Solution1, _, _) = Fold(instructions, folds: 1);
+        (_, Solution2, string? visualization) = Fold(instructions, folds: null, Logger);
 
         if (Verbose)
         {
             Logger.WriteLine(
                 "{0:N0} dots are visible after completing the first fold.",
-                DotCountAfterFold1);
+                Solution1);
 
             Logger.WriteLine(
                 "The code to activate the infrared thermal imaging camera system is {0}.",
-                ActivationCode!);
+                Solution2!);
         }
-
-        Solution1 = DotCountAfterFold1;
-        Solution2 = ActivationCode!;
 
         var result = Result();
         result.Visualizations.Add(visualization!);

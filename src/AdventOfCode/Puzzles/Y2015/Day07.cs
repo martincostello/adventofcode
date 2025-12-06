@@ -7,18 +7,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015;
 /// A class representing the puzzle for <c>https://adventofcode.com/2015/day/7</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2015, 07, "Some Assembly Required", RequiresData = true)]
-public sealed class Day07 : Puzzle
+public sealed class Day07 : Puzzle<int, int>
 {
-    /// <summary>
-    /// Gets the first signal value.
-    /// </summary>
-    internal int FirstSignal { get; private set; }
-
-    /// <summary>
-    /// Gets the second signal value.
-    /// </summary>
-    internal int SecondSignal { get; private set; }
-
     /// <summary>
     /// Gets the wire values for the specified instructions.
     /// </summary>
@@ -107,27 +97,27 @@ public sealed class Day07 : Puzzle
         // Get the wire values for the initial instructions
         Dictionary<string, ushort> values = GetWireValues(instructions);
 
-        FirstSignal = values["a"];
+        Solution1 = values["a"];
 
         if (Verbose)
         {
-            Logger.WriteLine("The signal for wire a is {0:N0}.", FirstSignal);
+            Logger.WriteLine("The signal for wire a is {0:N0}.", Solution1);
         }
 
         // Replace the input value for b with the value for a, then re-calculate
         int indexForB = instructions.IndexOf("44430 -> b");
-        instructions[indexForB] = Format("{0} -> b", FirstSignal);
+        instructions[indexForB] = Format("{0} -> b", Solution1);
 
         values = GetWireValues(instructions);
 
-        SecondSignal = values["a"];
+        Solution2 = values["a"];
 
         if (Verbose)
         {
-            Logger.WriteLine("The new signal for wire a is {0:N0}.", SecondSignal);
+            Logger.WriteLine("The new signal for wire a is {0:N0}.", Solution2);
         }
 
-        return PuzzleResult.Create(FirstSignal, SecondSignal);
+        return Result();
     }
 
     /// <summary>

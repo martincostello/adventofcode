@@ -32,7 +32,7 @@ public sealed class Day05Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         var puzzle = await SolvePuzzleAsync<Day05>();
 
         // Assert
-        puzzle.HighestSeatId.ShouldBe(878);
-        puzzle.MySeatId.ShouldBe(504);
+        puzzle.Solution1.ShouldBe(878);
+        puzzle.Solution2.ShouldBe(504);
     }
 }

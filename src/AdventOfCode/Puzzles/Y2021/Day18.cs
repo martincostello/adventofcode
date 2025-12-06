@@ -12,16 +12,6 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2021;
 public sealed class Day18 : Puzzle<int, int>
 {
     /// <summary>
-    /// Gets the magnitude of the sum of the snail numbers.
-    /// </summary>
-    public int MagnitudeOfSum { get; private set; }
-
-    /// <summary>
-    /// Gets the largest magnitude of the sum of any two of the snail numbers.
-    /// </summary>
-    public int LargestSumMagnitude { get; private set; }
-
-    /// <summary>
     /// Calculates the sum of the specified snail numbers.
     /// </summary>
     /// <param name="numbers">The snail numbers to sum.</param>
@@ -113,16 +103,13 @@ public sealed class Day18 : Puzzle<int, int>
     {
         var numbers = await ReadResourceAsLinesAsync(cancellationToken);
 
-        (MagnitudeOfSum, LargestSumMagnitude) = Sum(numbers);
+        (Solution1, Solution2) = Sum(numbers);
 
         if (Verbose)
         {
-            Logger.WriteLine("The magnitude of the final sum is {0:N0}.", MagnitudeOfSum);
-            Logger.WriteLine("The largest magnitude of any sum of two numbers is {0:N0}.", LargestSumMagnitude);
+            Logger.WriteLine("The magnitude of the final sum is {0:N0}.", Solution1);
+            Logger.WriteLine("The largest magnitude of any sum of two numbers is {0:N0}.", Solution2);
         }
-
-        Solution1 = MagnitudeOfSum;
-        Solution2 = LargestSumMagnitude;
 
         return Result();
     }

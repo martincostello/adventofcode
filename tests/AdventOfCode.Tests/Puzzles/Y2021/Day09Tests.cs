@@ -33,7 +33,7 @@ public sealed class Day09Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         var puzzle = await SolvePuzzleAsync<Day09>();
 
         // Assert
-        puzzle.SumOfRiskLevels.ShouldBe(607);
-        puzzle.AreaOfThreeLargestBasins.ShouldBe(900864);
+        puzzle.Solution1.ShouldBe(607);
+        puzzle.Solution2.ShouldBe(900864);
     }
 }

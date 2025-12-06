@@ -10,16 +10,6 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2025;
 public sealed class Day01 : Puzzle<int, int>
 {
     /// <summary>
-    /// Gets the password to open the door.
-    /// </summary>
-    public int Password1 { get; private set; }
-
-    /// <summary>
-    /// Gets the password to open the door using method <c>0x434C49434B</c>.
-    /// </summary>
-    public int Password2 { get; private set; }
-
-    /// <summary>
     /// Gets the password to open the door from the specified list of rotations.
     /// </summary>
     /// <param name="rotations">The rotations to perform on the dial to derive the password.</param>
@@ -68,17 +58,14 @@ public sealed class Day01 : Puzzle<int, int>
 
         var values = await ReadResourceAsLinesAsync(cancellationToken);
 
-        Password1 = GetPassword(values, useMethod0x434C49434B: false);
-        Password2 = GetPassword(values, useMethod0x434C49434B: true);
+        Solution1 = GetPassword(values, useMethod0x434C49434B: false);
+        Solution2 = GetPassword(values, useMethod0x434C49434B: true);
 
         if (Verbose)
         {
-            Logger.WriteLine("The password to open the door is {0}", Password1);
-            Logger.WriteLine("The password to open the door using method 0x434C49434B is {0}", Password2);
+            Logger.WriteLine("The password to open the door is {0}", Solution1);
+            Logger.WriteLine("The password to open the door using method 0x434C49434B is {0}", Solution2);
         }
-
-        Solution1 = Password1;
-        Solution2 = Password2;
 
         return Result();
     }

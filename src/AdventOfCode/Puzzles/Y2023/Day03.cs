@@ -15,16 +15,6 @@ public sealed class Day03 : Puzzle<int, int>
     private static readonly SearchValues<char> NotParts = SearchValues.Create("0123456789.");
 
     /// <summary>
-    /// Gets the sum of all of the part numbers in the engine schematic.
-    /// </summary>
-    public int SumOfPartNumbers { get; private set; }
-
-    /// <summary>
-    /// Gets the sum of all of the gear ratios in the engine schematic.
-    /// </summary>
-    public int SumOfGearRatios { get; private set; }
-
-    /// <summary>
     /// Gets the sum of all of the part numbers and gear ratios in the engine schematic.
     /// </summary>
     /// <param name="schematic">The lines of the engine schematic.</param>
@@ -182,16 +172,13 @@ public sealed class Day03 : Puzzle<int, int>
 
         var values = await ReadResourceAsLinesAsync(cancellationToken);
 
-        (SumOfPartNumbers, SumOfGearRatios) = Solve(values);
+        (Solution1, Solution2) = Solve(values);
 
         if (Verbose)
         {
-            Logger.WriteLine("The sum of all of the part numbers in the engine schematic is {0}.", SumOfPartNumbers);
-            Logger.WriteLine("The sum of all of the gear ratios in the engine schematic is {0}.", SumOfGearRatios);
+            Logger.WriteLine("The sum of all of the part numbers in the engine schematic is {0}.", Solution1);
+            Logger.WriteLine("The sum of all of the gear ratios in the engine schematic is {0}.", Solution2);
         }
-
-        Solution1 = SumOfPartNumbers;
-        Solution2 = SumOfGearRatios;
 
         return Result();
     }

@@ -27,7 +27,7 @@ public sealed class Day07Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         var puzzle = await SolvePuzzleAsync<Day07>();
 
         // Assert
-        puzzle.FuelConsumedWithConstantBurnRate.ShouldBe(335271);
-        puzzle.FuelConsumedWithVariableBurnRate.ShouldBe(95851339);
+        puzzle.Solution1.ShouldBe(335271);
+        puzzle.Solution2.ShouldBe(95851339);
     }
 }

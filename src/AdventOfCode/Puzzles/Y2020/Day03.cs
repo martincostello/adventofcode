@@ -7,18 +7,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020;
 /// A class representing the puzzle for <c>https://adventofcode.com/2020/day/3</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2020, 03, "Toboggan Trajectory", RequiresData = true)]
-public sealed class Day03 : Puzzle
+public sealed class Day03 : Puzzle<long, long>
 {
-    /// <summary>
-    /// Gets the number of trees collided with when traversing the grid.
-    /// </summary>
-    public long TreeCollisions { get; private set; }
-
-    /// <summary>
-    /// Gets the product of the number of trees collided with when traversing the grids.
-    /// </summary>
-    public long ProductOfTreeCollisions { get; private set; }
-
     /// <summary>
     /// Gets the number of trees that would be collided with by
     /// traversing the specified grid in the specified direction.
@@ -88,9 +78,9 @@ public sealed class Day03 : Puzzle
             new Point(1, 2),
         };
 
-        TreeCollisions = GetTreeCollisionCount(grid, 3, 1);
+        Solution1 = GetTreeCollisionCount(grid, 3, 1);
 
-        long product = TreeCollisions;
+        long product = Solution1;
 
         for (int i = 0; i < slopes.Length; i++)
         {
@@ -98,14 +88,14 @@ public sealed class Day03 : Puzzle
             product *= GetTreeCollisionCount(grid, slope.X, slope.Y);
         }
 
-        ProductOfTreeCollisions = product;
+        Solution2 = product;
 
         if (Verbose)
         {
-            Logger.WriteLine("{0} trees would be encountered using a right-3/down-1 slope.", TreeCollisions);
-            Logger.WriteLine("The product of the collisions from traversing the slopes is {0}.", ProductOfTreeCollisions);
+            Logger.WriteLine("{0} trees would be encountered using a right-3/down-1 slope.", Solution1);
+            Logger.WriteLine("The product of the collisions from traversing the slopes is {0}.", Solution2);
         }
 
-        return PuzzleResult.Create(TreeCollisions, ProductOfTreeCollisions);
+        return Result();
     }
 }

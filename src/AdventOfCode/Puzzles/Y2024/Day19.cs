@@ -10,16 +10,6 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2024;
 public sealed class Day19 : Puzzle<int, long>
 {
     /// <summary>
-    /// Gets the number of possible towel designs that can be created.
-    /// </summary>
-    public int PossibleDesigns { get; private set; }
-
-    /// <summary>
-    /// Gets the number of unique towel designs that can be created.
-    /// </summary>
-    public long UniqueDesigns { get; private set; }
-
-    /// <summary>
     /// Counts the number of possible towel designs that can be created from the specified values.
     /// </summary>
     /// <param name="values">The possible towels and desired patterns.</param>
@@ -99,16 +89,13 @@ public sealed class Day19 : Puzzle<int, long>
 
         var values = await ReadResourceAsLinesAsync(cancellationToken);
 
-        (PossibleDesigns, UniqueDesigns) = CountPossibilities(values);
+        (Solution1, Solution2) = CountPossibilities(values);
 
         if (Verbose)
         {
-            Logger.WriteLine("{0} designs are possible.", PossibleDesigns);
-            Logger.WriteLine("There are {0} different ways to make each design.", UniqueDesigns);
+            Logger.WriteLine("{0} designs are possible.", Solution1);
+            Logger.WriteLine("There are {0} different ways to make each design.", Solution2);
         }
-
-        Solution1 = PossibleDesigns;
-        Solution2 = UniqueDesigns;
 
         return Result();
     }

@@ -7,13 +7,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016;
 /// A class representing the puzzle for <c>https://adventofcode.com/2016/day/16</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2016, 16, "Dragon Checksum", MinimumArguments = 2)]
-public sealed class Day16 : Puzzle
+public sealed class Day16 : Puzzle<string>
 {
-    /// <summary>
-    /// Gets the value of the checksum for the disk.
-    /// </summary>
-    public string? Checksum { get; private set; }
-
     /// <summary>
     /// Returns the checksum for random disk data generated for the
     /// specified initial state and disk size.
@@ -33,17 +28,23 @@ public sealed class Day16 : Puzzle
     /// <inheritdoc />
     protected override Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        string initial = args[0];
-        int size = Parse<int>(args[1]);
+        return SolveWithArguments(
+            args,
+            static (arguments, logger, _) =>
+            {
+                string initial = arguments[0];
+                int size = Parse<int>(arguments[1]);
 
-        Checksum = GetDiskChecksum(initial, size);
+                string checksum = GetDiskChecksum(initial, size);
 
-        if (Verbose)
-        {
-            Logger.WriteLine($"The checksum for the generated disk data is '{Checksum}'.");
-        }
+                if (logger is { })
+                {
+                    logger.WriteLine($"The checksum for the generated disk data is '{checksum}'.");
+                }
 
-        return PuzzleResult.Create(Checksum);
+                return checksum;
+            },
+            cancellationToken);
     }
 
     /// <summary>

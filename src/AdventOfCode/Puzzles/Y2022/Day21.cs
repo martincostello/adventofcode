@@ -10,17 +10,6 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2022;
 public sealed class Day21 : Puzzle<long, long>
 {
     /// <summary>
-    /// Gets the number that the monkey named <c>root</c> will yell.
-    /// </summary>
-    public long RootMonkeyNumber { get; private set; }
-
-    /// <summary>
-    /// Gets the number that the human should yell to get the
-    /// monkey named <c>root</c> to receive two equal values.
-    /// </summary>
-    public long HumanNumber { get; private set; }
-
-    /// <summary>
     /// Gets the number that the monkey named <c>root</c> will yell given the specified monkey jobs.
     /// </summary>
     /// <param name="jobs">The jobs of each monkey.</param>
@@ -142,17 +131,14 @@ public sealed class Day21 : Puzzle<long, long>
     {
         var values = await ReadResourceAsLinesAsync(cancellationToken);
 
-        RootMonkeyNumber = GetRootNumber(values, withEquality: false, cancellationToken);
-        HumanNumber = GetRootNumber(values, withEquality: true, cancellationToken);
+        Solution1 = GetRootNumber(values, withEquality: false, cancellationToken);
+        Solution2 = GetRootNumber(values, withEquality: true, cancellationToken);
 
         if (Verbose)
         {
-            Logger.WriteLine("The monkey named root will yell {0}.", RootMonkeyNumber);
-            Logger.WriteLine("You must yell {0} for the monkey named root to pass their equality test.", HumanNumber);
+            Logger.WriteLine("The monkey named root will yell {0}.", Solution1);
+            Logger.WriteLine("You must yell {0} for the monkey named root to pass their equality test.", Solution2);
         }
-
-        Solution1 = RootMonkeyNumber;
-        Solution2 = HumanNumber;
 
         return Result();
     }

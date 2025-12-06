@@ -38,7 +38,7 @@ public sealed class Day03Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         var puzzle = await SolvePuzzleAsync<Day03>();
 
         // Assert
-        puzzle.TreeCollisions.ShouldBe(216);
-        puzzle.ProductOfTreeCollisions.ShouldBe(6708199680L);
+        puzzle.Solution1.ShouldBe(216);
+        puzzle.Solution2.ShouldBe(6708199680);
     }
 }

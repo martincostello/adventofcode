@@ -10,16 +10,6 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2021;
 public sealed class Day19 : Puzzle<int, int>
 {
     /// <summary>
-    /// Gets the number of beacons.
-    /// </summary>
-    public int BeaconCount { get; private set; }
-
-    /// <summary>
-    /// Gets the largest Manhattan distance between any two scanners.
-    /// </summary>
-    public int LargestScannerDistance { get; private set; }
-
-    /// <summary>
     /// Finds the beacons from the specified scanner results.
     /// </summary>
     /// <param name="data">The scanner data to use to find the beacons.</param>
@@ -229,16 +219,13 @@ public sealed class Day19 : Puzzle<int, int>
     {
         var target = await ReadResourceAsLinesAsync(cancellationToken);
 
-        (BeaconCount, LargestScannerDistance) = FindBeacons(target, cancellationToken);
+        (Solution1, Solution2) = FindBeacons(target, cancellationToken);
 
         if (Verbose)
         {
-            Logger.WriteLine("There are {0:N0} beacons.", BeaconCount);
-            Logger.WriteLine("There largest Manhattan distance between two scanners is {0:N0}.", LargestScannerDistance);
+            Logger.WriteLine("There are {0:N0} beacons.", Solution1);
+            Logger.WriteLine("There largest Manhattan distance between two scanners is {0:N0}.", Solution2);
         }
-
-        Solution1 = BeaconCount;
-        Solution2 = LargestScannerDistance;
 
         return Result();
     }

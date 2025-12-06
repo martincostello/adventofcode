@@ -1,6 +1,8 @@
 ﻿// Copyright (c) Martin Costello, 2015. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
+using Shouldly;
+
 namespace MartinCostello.AdventOfCode.Puzzles.Y2020;
 
 public sealed class Day16Tests(ITestOutputHelper outputHelper) : PuzzleTest(outputHelper)
@@ -68,7 +70,7 @@ public sealed class Day16Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         var puzzle = await SolvePuzzleAsync<Day16>();
 
         // Assert
-        puzzle.ScanningErrorRate.ShouldBe(21071);
-        puzzle.DepartureProduct.ShouldBe(3429967441937L);
+        puzzle.Solution1.ShouldBe(21071);
+        puzzle.Solution2.ShouldBe(3429967441937);
     }
 }

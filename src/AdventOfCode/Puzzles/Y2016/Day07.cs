@@ -10,16 +10,6 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016;
 public sealed class Day07 : Puzzle<int, int>
 {
     /// <summary>
-    /// Gets the number of IPv7 addresses that support SSL.
-    /// </summary>
-    public int IPAddressesSupportingSsl { get; private set; }
-
-    /// <summary>
-    /// Gets the number of IPv7 addresses that support TLS.
-    /// </summary>
-    public int IPAddressesSupportingTls { get; private set; }
-
-    /// <summary>
     /// Returns whether the specified IPv7 address supports SSL.
     /// </summary>
     /// <param name="address">The IPv7 address to test for SSL.</param>
@@ -80,17 +70,14 @@ public sealed class Day07 : Puzzle<int, int>
     {
         var addresses = await ReadResourceAsLinesAsync(cancellationToken);
 
-        IPAddressesSupportingTls = addresses.Count(DoesIPAddressSupportTls);
-        IPAddressesSupportingSsl = addresses.Count(DoesIPAddressSupportSsl);
+        Solution1 = addresses.Count(DoesIPAddressSupportTls);
+        Solution2 = addresses.Count(DoesIPAddressSupportSsl);
 
         if (Verbose)
         {
-            Logger.WriteLine("{0:N0} IPv7 addresses support TLS.", IPAddressesSupportingTls);
-            Logger.WriteLine("{0:N0} IPv7 addresses support SSL.", IPAddressesSupportingSsl);
+            Logger.WriteLine("{0:N0} IPv7 addresses support TLS.", Solution1);
+            Logger.WriteLine("{0:N0} IPv7 addresses support SSL.", Solution2);
         }
-
-        Solution1 = IPAddressesSupportingTls;
-        Solution2 = IPAddressesSupportingSsl;
 
         return Result();
     }

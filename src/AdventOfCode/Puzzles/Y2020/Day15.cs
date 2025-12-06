@@ -7,18 +7,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020;
 /// A class representing the puzzle for <c>https://adventofcode.com/2020/day/15</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2020, 15, "Rambunctious Recitation", MinimumArguments = 1, IsSlow = true)]
-public sealed class Day15 : Puzzle
+public sealed class Day15 : Puzzle<int, int>
 {
-    /// <summary>
-    /// Gets the 2020th number spoken.
-    /// </summary>
-    public int Number2020 { get; private set; }
-
-    /// <summary>
-    /// Gets the 30,000,000th number spoken.
-    /// </summary>
-    public int Number30000000 { get; private set; }
-
     /// <summary>
     /// Gets the value of the specified number to be spoken.
     /// </summary>
@@ -59,15 +49,15 @@ public sealed class Day15 : Puzzle
     {
         var startingNumbers = args[0].AsNumbers<int>();
 
-        Number2020 = GetSpokenNumber(startingNumbers, 2020);
-        Number30000000 = GetSpokenNumber(startingNumbers, 30000000);
+        Solution1 = GetSpokenNumber(startingNumbers, 2020);
+        Solution2 = GetSpokenNumber(startingNumbers, 30000000);
 
         if (Verbose)
         {
-            Logger.WriteLine("The 2020th number spoken is {0}.", Number2020);
-            Logger.WriteLine("The 30000000th number spoken is {0}.", Number30000000);
+            Logger.WriteLine("The 2020th number spoken is {0}.", Solution1);
+            Logger.WriteLine("The 30000000th number spoken is {0}.", Solution2);
         }
 
-        return PuzzleResult.Create(Number2020, Number30000000);
+        return Result();
     }
 }

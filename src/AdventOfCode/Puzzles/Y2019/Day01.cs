@@ -7,18 +7,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019;
 /// A class representing the puzzle for <c>https://adventofcode.com/2019/day/1</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2019, 01, "The Tyranny of the Rocket Equation", RequiresData = true)]
-public sealed class Day01 : Puzzle
+public sealed class Day01 : Puzzle<int, int>
 {
-    /// <summary>
-    /// Gets the total fuel requirement for the modules.
-    /// </summary>
-    public int TotalFuelRequiredForModules { get; private set; }
-
-    /// <summary>
-    /// Gets the total fuel requirement for the rocket, including the fuel's own mass.
-    /// </summary>
-    public int TotalFuelRequiredForRocket { get; private set; }
-
     /// <summary>
     /// Gets the fuel requirements for the specified mass, optionally including the fuel itself.
     /// </summary>
@@ -47,15 +37,15 @@ public sealed class Day01 : Puzzle
     {
         var masses = await ReadResourceAsNumbersAsync<int>(cancellationToken);
 
-        TotalFuelRequiredForModules = masses.Sum((p) => GetFuelRequirementsForMass(p, includeFuel: false));
-        TotalFuelRequiredForRocket = masses.Sum((p) => GetFuelRequirementsForMass(p, includeFuel: true));
+        Solution1 = masses.Sum((p) => GetFuelRequirementsForMass(p, includeFuel: false));
+        Solution2 = masses.Sum((p) => GetFuelRequirementsForMass(p, includeFuel: true));
 
         if (Verbose)
         {
-            Logger.WriteLine("{0} fuel is required for the modules.", TotalFuelRequiredForModules);
-            Logger.WriteLine("{0} fuel is required for the fully-fuelled rocket.", TotalFuelRequiredForRocket);
+            Logger.WriteLine("{0} fuel is required for the modules.", Solution1);
+            Logger.WriteLine("{0} fuel is required for the fully-fuelled rocket.", Solution2);
         }
 
-        return PuzzleResult.Create(TotalFuelRequiredForModules, TotalFuelRequiredForRocket);
+        return Result();
     }
 }

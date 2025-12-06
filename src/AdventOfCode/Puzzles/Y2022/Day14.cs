@@ -22,18 +22,6 @@ public sealed class Day14 : Puzzle<int, int>
     }
 
     /// <summary>
-    /// Gets the number of grains of sand that come to rest
-    /// before sand starts flowing into the abyss below.
-    /// </summary>
-    public int GrainsOfSandWithVoid { get; private set; }
-
-    /// <summary>
-    /// Gets the number of grains of sand that come to rest
-    /// before the source of the sand becomes blocked.
-    /// </summary>
-    public int GrainsOfSandWithFloor { get; private set; }
-
-    /// <summary>
     /// Simulates the flow of sand through the specified cave.
     /// </summary>
     /// <param name="paths">The path of each solid rock structure of the cave to simulate sand flow through.</param>
@@ -218,20 +206,17 @@ public sealed class Day14 : Puzzle<int, int>
     {
         var paths = await ReadResourceAsLinesAsync(cancellationToken);
 
-        (GrainsOfSandWithVoid, string visualization1) = Simulate(paths, hasFloor: false, cancellationToken);
-        (GrainsOfSandWithFloor, string visualization2) = Simulate(paths, hasFloor: true, cancellationToken);
+        (Solution1, string visualization1) = Simulate(paths, hasFloor: false, cancellationToken);
+        (Solution2, string visualization2) = Simulate(paths, hasFloor: true, cancellationToken);
 
         if (Verbose)
         {
-            Logger.WriteLine("{0} grains of sand come to rest before sand starts flowing into the abyss below.", GrainsOfSandWithVoid);
+            Logger.WriteLine("{0} grains of sand come to rest before sand starts flowing into the abyss below.", Solution1);
             Logger.WriteLine(visualization1);
 
-            Logger.WriteLine("{0} grains of sand come to rest before sand blocks the source.", GrainsOfSandWithFloor);
+            Logger.WriteLine("{0} grains of sand come to rest before sand blocks the source.", Solution2);
             Logger.WriteLine(visualization2);
         }
-
-        Solution1 = GrainsOfSandWithVoid;
-        Solution2 = GrainsOfSandWithFloor;
 
         var result = Result();
         result.Visualizations.Add(visualization1);

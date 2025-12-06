@@ -7,18 +7,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020;
 /// A class representing the puzzle for <c>https://adventofcode.com/2020/day/13</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2020, 13, "Shuttle Search", RequiresData = true)]
-public sealed class Day13 : Puzzle
+public sealed class Day13 : Puzzle<int, long>
 {
-    /// <summary>
-    /// Gets the product of the ID of the earliest bus and the number of minutes to wait for it.
-    /// </summary>
-    public int BusWaitProduct { get; private set; }
-
-    /// <summary>
-    /// Gets the earliest timestamp where all bus IDs depart at offsets matching their positions in the input.
-    /// </summary>
-    public long EarliestTimestamp { get; private set; }
-
     /// <summary>
     /// Gets the product of the earliest bus and the number of minutes to wait for it.
     /// </summary>
@@ -100,15 +90,15 @@ public sealed class Day13 : Puzzle
     {
         var notes = await ReadResourceAsLinesAsync(cancellationToken);
 
-        BusWaitProduct = GetEarliestBusWaitProduct(notes);
-        EarliestTimestamp = GetEarliestTimestamp(notes);
+        Solution1 = GetEarliestBusWaitProduct(notes);
+        Solution2 = GetEarliestTimestamp(notes);
 
         if (Verbose)
         {
-            Logger.WriteLine("The product of the ID of the earliest and the number of minutes to wait is {0}.", BusWaitProduct);
-            Logger.WriteLine("The earliest timestamp where all bus IDs depart at the specified offsets is {0}.", EarliestTimestamp);
+            Logger.WriteLine("The product of the ID of the earliest and the number of minutes to wait is {0}.", Solution1);
+            Logger.WriteLine("The earliest timestamp where all bus IDs depart at the specified offsets is {0}.", Solution2);
         }
 
-        return PuzzleResult.Create(BusWaitProduct, EarliestTimestamp);
+        return Result();
     }
 }

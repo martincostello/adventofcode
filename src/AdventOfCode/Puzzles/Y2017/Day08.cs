@@ -7,18 +7,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017;
 /// A class representing the puzzle for <c>https://adventofcode.com/2017/day/8</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2017, 08, "I Heard You Like Registers", RequiresData = true)]
-public sealed class Day08 : Puzzle
+public sealed class Day08 : Puzzle<int, int>
 {
-    /// <summary>
-    /// Gets the highest value in any register once the program has run.
-    /// </summary>
-    public int HighestRegisterValueAtEnd { get; private set; }
-
-    /// <summary>
-    /// Gets the highest value in any register while the program was running.
-    /// </summary>
-    public int HighestRegisterValueDuring { get; private set; }
-
     /// <summary>
     /// Finds the highest value in any register once the specified program has run.
     /// </summary>
@@ -50,16 +40,16 @@ public sealed class Day08 : Puzzle
     {
         var instructions = await ReadResourceAsLinesAsync(cancellationToken);
 
-        HighestRegisterValueAtEnd = FindHighestRegisterValueAtEnd(instructions);
-        HighestRegisterValueDuring = FindHighestRegisterValueDuring(instructions);
+        Solution1 = FindHighestRegisterValueAtEnd(instructions);
+        Solution2 = FindHighestRegisterValueDuring(instructions);
 
         if (Verbose)
         {
-            Logger.WriteLine($"The largest value in any register after executing the input is {HighestRegisterValueAtEnd:N0}.");
-            Logger.WriteLine($"The largest value in any register at any point while executing the input was {HighestRegisterValueDuring:N0}.");
+            Logger.WriteLine($"The largest value in any register after executing the input is {Solution1:N0}.");
+            Logger.WriteLine($"The largest value in any register at any point while executing the input was {Solution2:N0}.");
         }
 
-        return PuzzleResult.Create(HighestRegisterValueAtEnd, HighestRegisterValueDuring);
+        return Result();
     }
 
     /// <summary>

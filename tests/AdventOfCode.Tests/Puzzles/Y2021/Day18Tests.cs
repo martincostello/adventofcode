@@ -240,7 +240,7 @@ public sealed class Day18Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         var puzzle = await SolvePuzzleAsync<Day18>();
 
         // Assert
-        puzzle.MagnitudeOfSum.ShouldBe(4323);
-        puzzle.LargestSumMagnitude.ShouldBe(4749);
+        puzzle.Solution1.ShouldBe(4323);
+        puzzle.Solution2.ShouldBe(4749);
     }
 }

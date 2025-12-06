@@ -34,8 +34,7 @@ public sealed class Day18Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         var puzzle = await SolvePuzzleAsync<Day18>();
 
         // Assert
-        puzzle.ShouldNotBeNull();
-        puzzle.TotalDropletSurfaceArea.ShouldBe(4340);
-        puzzle.ExternalDropletSurfaceArea.ShouldBe(2468);
+        puzzle.Solution1.ShouldBe(4340);
+        puzzle.Solution2.ShouldBe(2468);
     }
 }

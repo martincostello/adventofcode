@@ -10,16 +10,6 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016;
 public sealed class Day18 : Puzzle<int, int>
 {
     /// <summary>
-    /// Gets the number of safe tiles in the puzzle input for 40 rows.
-    /// </summary>
-    public int SafeTileCount40 { get; private set; }
-
-    /// <summary>
-    /// Gets the number of safe tiles in the puzzle input for 400,000 rows.
-    /// </summary>
-    public int SafeTileCount400000 { get; private set; }
-
-    /// <summary>
     /// Finds the number of safe tiles from the specified map.
     /// </summary>
     /// <param name="firstRowTiles">The map of tiles in the first row.</param>
@@ -76,17 +66,14 @@ public sealed class Day18 : Puzzle<int, int>
     {
         string firstRowTiles = (await ReadResourceAsStringAsync(cancellationToken)).TrimEnd();
 
-        (SafeTileCount40, string visualization) = FindSafeTileCount(firstRowTiles, rows: 40, Logger);
-        (SafeTileCount400000, _) = FindSafeTileCount(firstRowTiles, rows: 400_000, Logger);
+        (Solution1, string visualization) = FindSafeTileCount(firstRowTiles, rows: 40, Logger);
+        (Solution2, _) = FindSafeTileCount(firstRowTiles, rows: 400_000, Logger);
 
         if (Verbose)
         {
-            Logger.WriteLine($"The number of safe tiles with 40 rows is {SafeTileCount40:N0}.");
-            Logger.WriteLine($"The number of safe tiles with 400,000 rows is {SafeTileCount400000:N0}.");
+            Logger.WriteLine($"The number of safe tiles with 40 rows is {Solution1:N0}.");
+            Logger.WriteLine($"The number of safe tiles with 400,000 rows is {Solution2:N0}.");
         }
-
-        Solution1 = SafeTileCount40;
-        Solution2 = SafeTileCount400000;
 
         var result = Result();
         result.Visualizations.Add(visualization);

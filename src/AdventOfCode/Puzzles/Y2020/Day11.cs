@@ -20,16 +20,6 @@ public sealed class Day11 : Puzzle<int, int>
     private const char Occupied = '#';
 
     /// <summary>
-    /// Gets the number of occupied seats using version 1 of the rules.
-    /// </summary>
-    public int OccupiedSeatsV1 { get; private set; }
-
-    /// <summary>
-    /// Gets the number of occupied seats using version 2 of the rules.
-    /// </summary>
-    public int OccupiedSeatsV2 { get; private set; }
-
-    /// <summary>
     /// Gets the number of occupied seats for the specified layout.
     /// </summary>
     /// <param name="layout">The seat layout.</param>
@@ -71,17 +61,14 @@ public sealed class Day11 : Puzzle<int, int>
         (int occupiedSeatsV1, string visualizationV1) = GetOccupiedSeats(layout, version: 1);
         (int occupiedSeatsV2, string visualizationV2) = GetOccupiedSeats(layout, version: 2);
 
-        OccupiedSeatsV1 = occupiedSeatsV1;
-        OccupiedSeatsV2 = occupiedSeatsV2;
+        Solution1 = occupiedSeatsV1;
+        Solution2 = occupiedSeatsV2;
 
         if (Verbose)
         {
-            Logger.WriteLine("There are {0} occupied seats using the first set of rules.", OccupiedSeatsV1);
-            Logger.WriteLine("There are {0} occupied seats using the second set of rules.", OccupiedSeatsV2);
+            Logger.WriteLine("There are {0} occupied seats using the first set of rules.", Solution1);
+            Logger.WriteLine("There are {0} occupied seats using the second set of rules.", Solution2);
         }
-
-        Solution1 = OccupiedSeatsV1;
-        Solution2 = OccupiedSeatsV2;
 
         var result = Result();
         result.Visualizations.Add(visualizationV1);

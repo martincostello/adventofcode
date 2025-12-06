@@ -10,16 +10,6 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016;
 public sealed class Day22 : Puzzle<int, int>
 {
     /// <summary>
-    /// Gets the number of viable nodes found from processing the input.
-    /// </summary>
-    public int ViableNodePairs { get; private set; }
-
-    /// <summary>
-    /// Gets the minimum number of steps required to extract the data.
-    /// </summary>
-    public int MinimumStepsToExtract { get; private set; }
-
-    /// <summary>
     /// Counts the number of viable node pairs.
     /// </summary>
     /// <param name="output">The output from a <c>df</c> command.</param>
@@ -165,16 +155,13 @@ public sealed class Day22 : Puzzle<int, int>
     {
         var output = await ReadResourceAsLinesAsync(cancellationToken);
 
-        (ViableNodePairs, MinimumStepsToExtract) = CountViableNodePairs(output, Logger);
+        (Solution1, Solution2) = CountViableNodePairs(output, Logger);
 
         if (Verbose)
         {
-            Logger.WriteLine("The number of viable pairs of nodes is {0:N0}.", ViableNodePairs);
-            Logger.WriteLine("The fewest number of steps required to extract the goal data is {0:N0}.", MinimumStepsToExtract);
+            Logger.WriteLine("The number of viable pairs of nodes is {0:N0}.", Solution1);
+            Logger.WriteLine("The fewest number of steps required to extract the goal data is {0:N0}.", Solution2);
         }
-
-        Solution1 = ViableNodePairs;
-        Solution2 = MinimumStepsToExtract;
 
         return Result();
     }

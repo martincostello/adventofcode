@@ -20,16 +20,6 @@ public sealed class Day03 : Puzzle<int, int>
     private static readonly Size[] Bounds = [Left, Down, Right];
 
     /// <summary>
-    /// Gets the number steps that are required to carry the data from the input value to the access port.
-    /// </summary>
-    public int Steps { get; private set; }
-
-    /// <summary>
-    /// Gets the first value written that is larger than the input value.
-    /// </summary>
-    public int FirstStorageLargerThanInput { get; private set; }
-
-    /// <summary>
     /// Computes how many steps are required to carry the data from the specified square identified all the way to the access port.
     /// </summary>
     /// <param name="square">The number of the square to get the number of steps to retrieve data from.</param>
@@ -159,17 +149,14 @@ public sealed class Day03 : Puzzle<int, int>
     {
         int square = Parse<int>(args[0]);
 
-        Steps = ComputeSteps(square);
-        FirstStorageLargerThanInput = ComputeFirstLargestWrittenValue(square);
+        Solution1 = ComputeSteps(square);
+        Solution2 = ComputeFirstLargestWrittenValue(square);
 
         if (Verbose)
         {
-            Logger.WriteLine($"The number of steps required to carry the data from square {square:N0} all the way to the access port is {Steps:N0}.");
-            Logger.WriteLine($"The first value written that is larger than square {square:N0} is {FirstStorageLargerThanInput:N0}.");
+            Logger.WriteLine($"The number of steps required to carry the data from square {square:N0} all the way to the access port is {Solution1:N0}.");
+            Logger.WriteLine($"The first value written that is larger than square {square:N0} is {Solution2:N0}.");
         }
-
-        Solution1 = Steps;
-        Solution2 = FirstStorageLargerThanInput;
 
         return Result();
     }

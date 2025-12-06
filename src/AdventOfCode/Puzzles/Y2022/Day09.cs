@@ -10,16 +10,6 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2022;
 public sealed class Day09 : Puzzle<int, int>
 {
     /// <summary>
-    /// Gets the number of positions that the tail of the rope with two knots visits at least once.
-    /// </summary>
-    public int PositionsVisited2 { get; private set; }
-
-    /// <summary>
-    /// Gets the number of positions that the tail of the rope with ten knots visits at least once.
-    /// </summary>
-    public int PositionsVisited10 { get; private set; }
-
-    /// <summary>
     /// Moves a rope using the specified moves and returns the
     /// number of positions that the tail of the rope visits at least once.
     /// </summary>
@@ -73,17 +63,14 @@ public sealed class Day09 : Puzzle<int, int>
     {
         var moves = await ReadResourceAsLinesAsync(cancellationToken);
 
-        PositionsVisited2 = Move(moves, knots: 2);
-        PositionsVisited10 = Move(moves, knots: 10);
+        Solution1 = Move(moves, knots: 2);
+        Solution2 = Move(moves, knots: 10);
 
         if (Verbose)
         {
-            Logger.WriteLine("The tail of the rope with two knots visits {0} positions at least once.", PositionsVisited2);
-            Logger.WriteLine("The tail of the rope with ten knots visits {0} positions at least once.", PositionsVisited10);
+            Logger.WriteLine("The tail of the rope with two knots visits {0} positions at least once.", Solution1);
+            Logger.WriteLine("The tail of the rope with ten knots visits {0} positions at least once.", Solution2);
         }
-
-        Solution1 = PositionsVisited2;
-        Solution2 = PositionsVisited10;
 
         return Result();
     }

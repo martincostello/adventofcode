@@ -22,16 +22,6 @@ public sealed class Day04 : Puzzle<int, int>
     private static readonly SearchValues<string> XmasNeedle = SearchValues.Create([XmasTarget], StringComparison.Ordinal);
 
     /// <summary>
-    /// Gets the count of the number of occurrences of <c>XMAS</c> in the grid.
-    /// </summary>
-    public int SimpleCount { get; private set; }
-
-    /// <summary>
-    /// Gets the count of the number of occurrences of <c>MAS</c>-crossed in the grid.
-    /// </summary>
-    public int CrossCount { get; private set; }
-
-    /// <summary>
     /// Searches for the number of occurrences of a value in the specified grid.
     /// </summary>
     /// <param name="grid">The word grid to search.</param>
@@ -49,17 +39,14 @@ public sealed class Day04 : Puzzle<int, int>
 
         var values = await ReadResourceAsLinesAsync(cancellationToken);
 
-        SimpleCount = Search(values, crossCount: false);
-        CrossCount = Search(values, crossCount: true);
+        Solution1 = Search(values, crossCount: false);
+        Solution2 = Search(values, crossCount: true);
 
         if (Verbose)
         {
-            Logger.WriteLine("XMAS appears {0} times.", SimpleCount);
-            Logger.WriteLine("MAS appears crossed {0} times.", CrossCount);
+            Logger.WriteLine("XMAS appears {0} times.", Solution1);
+            Logger.WriteLine("MAS appears crossed {0} times.", Solution2);
         }
-
-        Solution1 = SimpleCount;
-        Solution2 = CrossCount;
 
         return Result();
     }

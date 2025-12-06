@@ -7,18 +7,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017;
 /// A class representing the puzzle for <c>https://adventofcode.com/2017/day/2</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2017, 02, "Corruption Checksum", RequiresData = true)]
-public sealed class Day02 : Puzzle
+public sealed class Day02 : Puzzle<int, int>
 {
-    /// <summary>
-    /// Gets the checksum of the spreadsheet using the difference between the minimum and maximum.
-    /// </summary>
-    public int ChecksumForDifference { get; private set; }
-
-    /// <summary>
-    /// Gets the checksum of the spreadsheet using the evenly divisible values.
-    /// </summary>
-    public int ChecksumForEvenlyDivisible { get; private set; }
-
     /// <summary>
     /// Calculates the checksum of the spreadsheet encoded in the specified string.
     /// </summary>
@@ -100,16 +90,16 @@ public sealed class Day02 : Puzzle
         var lines = await ReadResourceAsLinesAsync(cancellationToken);
         var spreadsheet = ParseSpreadsheet(lines);
 
-        ChecksumForDifference = CalculateChecksum(spreadsheet, forEvenlyDivisible: false);
-        ChecksumForEvenlyDivisible = CalculateChecksum(spreadsheet, forEvenlyDivisible: true);
+        Solution1 = CalculateChecksum(spreadsheet, forEvenlyDivisible: false);
+        Solution2 = CalculateChecksum(spreadsheet, forEvenlyDivisible: true);
 
         if (Verbose)
         {
-            Logger.WriteLine($"The checksum for the spreadsheet using differences is {ChecksumForDifference:N0}.");
-            Logger.WriteLine($"The checksum for the spreadsheet using even division is {ChecksumForEvenlyDivisible:N0}.");
+            Logger.WriteLine($"The checksum for the spreadsheet using differences is {Solution1:N0}.");
+            Logger.WriteLine($"The checksum for the spreadsheet using even division is {Solution2:N0}.");
         }
 
-        return PuzzleResult.Create(ChecksumForDifference, ChecksumForEvenlyDivisible);
+        return Result();
     }
 
     /// <summary>

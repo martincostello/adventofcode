@@ -10,16 +10,6 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2021;
 public sealed class Day04 : Puzzle<int, int>
 {
     /// <summary>
-    /// Gets the score of the first winning card from playing Bingo.
-    /// </summary>
-    public int FirstWinningScore { get; private set; }
-
-    /// <summary>
-    /// Gets the score of the last winning card from playing Bingo.
-    /// </summary>
-    public int LastWinningScore { get; private set; }
-
-    /// <summary>
     /// Plays the specified game of Bingo.
     /// </summary>
     /// <param name="game">The lines containing the definition of the game.</param>
@@ -57,16 +47,13 @@ public sealed class Day04 : Puzzle<int, int>
     {
         var game = await ReadResourceAsLinesAsync(cancellationToken);
 
-        (FirstWinningScore, LastWinningScore) = PlayBingo(game);
+        (Solution1, Solution2) = PlayBingo(game);
 
         if (Verbose)
         {
-            Logger.WriteLine("The score of the first winning Bingo card is {0:N0}.", FirstWinningScore);
-            Logger.WriteLine("The score of the last winning Bingo card is {0:N0}.", LastWinningScore);
+            Logger.WriteLine("The score of the first winning Bingo card is {0:N0}.", Solution1);
+            Logger.WriteLine("The score of the last winning Bingo card is {0:N0}.", Solution2);
         }
-
-        Solution1 = FirstWinningScore;
-        Solution2 = LastWinningScore;
 
         return Result();
     }

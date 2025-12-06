@@ -29,7 +29,7 @@ public sealed class Day03Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         var puzzle = await SolvePuzzleAsync<Day03>();
 
         // Assert
-        puzzle.ManhattanDistance.ShouldBe(855);
-        puzzle.MinimumSteps.ShouldBe(11238);
+        puzzle.Solution1.ShouldBe(855);
+        puzzle.Solution2.ShouldBe(11238);
     }
 }

@@ -10,16 +10,6 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2022;
 public sealed class Day18 : Puzzle<int, int>
 {
     /// <summary>
-    /// Gets the total surface area of the scanned lava droplet.
-    /// </summary>
-    public int TotalDropletSurfaceArea { get; private set; }
-
-    /// <summary>
-    /// Gets the external surface area of the scanned lava droplet.
-    /// </summary>
-    public int ExternalDropletSurfaceArea { get; private set; }
-
-    /// <summary>
     /// Gets the total surface area of the lava droplet described by the specified cubes.
     /// </summary>
     /// <param name="cubes">The cubes that make up the lava droplet.</param>
@@ -96,17 +86,14 @@ public sealed class Day18 : Puzzle<int, int>
     {
         var cubes = await ReadResourceAsLinesAsync(cancellationToken);
 
-        TotalDropletSurfaceArea = GetSurfaceArea(cubes, excludeInterior: false, cancellationToken);
-        ExternalDropletSurfaceArea = GetSurfaceArea(cubes, excludeInterior: true, cancellationToken);
+        Solution1 = GetSurfaceArea(cubes, excludeInterior: false, cancellationToken);
+        Solution2 = GetSurfaceArea(cubes, excludeInterior: true, cancellationToken);
 
         if (Verbose)
         {
-            Logger.WriteLine("The total surface area of the scanned lava droplet is {0}.", TotalDropletSurfaceArea);
-            Logger.WriteLine("The external surface area of the scanned lava droplet is {0}.", ExternalDropletSurfaceArea);
+            Logger.WriteLine("The total surface area of the scanned lava droplet is {0}.", Solution1);
+            Logger.WriteLine("The external surface area of the scanned lava droplet is {0}.", Solution2);
         }
-
-        Solution1 = TotalDropletSurfaceArea;
-        Solution2 = ExternalDropletSurfaceArea;
 
         return Result();
     }

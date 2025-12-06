@@ -12,18 +12,6 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2022;
 public sealed class Day11 : Puzzle<long, long>
 {
     /// <summary>
-    /// Gets the level of monkey business after 20 rounds of
-    /// stuff-slinging simian shenanigans with baseline anxiety.
-    /// </summary>
-    public long MonkeyBusiness20 { get; private set; }
-
-    /// <summary>
-    /// Gets the level of monkey business after 10,000 rounds of
-    /// stuff-slinging simian shenanigans wth higher anxiety.
-    /// </summary>
-    public long MonkeyBusiness10000 { get; private set; }
-
-    /// <summary>
     /// Returns the level of monkey business after a number of rounds of stuff-slinging simian shenanigans.
     /// </summary>
     /// <param name="observations">The observations for the monkey's behavior.</param>
@@ -136,22 +124,19 @@ public sealed class Day11 : Puzzle<long, long>
     {
         var observations = await ReadResourceAsLinesAsync(cancellationToken);
 
-        MonkeyBusiness20 = GetMonkeyBusiness(observations, rounds: 20, highAnxiety: false);
-        MonkeyBusiness10000 = GetMonkeyBusiness(observations, rounds: 10_000, highAnxiety: true);
+        Solution1 = GetMonkeyBusiness(observations, rounds: 20, highAnxiety: false);
+        Solution2 = GetMonkeyBusiness(observations, rounds: 10_000, highAnxiety: true);
 
         if (Verbose)
         {
             Logger.WriteLine(
                 "The level of monkey business after 20 rounds of stuff-slinging simian shenanigans is {0}.",
-                MonkeyBusiness20);
+                Solution1);
 
             Logger.WriteLine(
                 "The level of monkey business after 10,000 rounds of stuff-slinging simian shenanigans is {0}.",
-                MonkeyBusiness10000);
+                Solution2);
         }
-
-        Solution1 = MonkeyBusiness20;
-        Solution2 = MonkeyBusiness10000;
 
         return Result();
     }

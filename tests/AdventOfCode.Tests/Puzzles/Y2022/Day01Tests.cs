@@ -42,8 +42,7 @@ public sealed class Day01Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         var puzzle = await SolvePuzzleAsync<Day01>();
 
         // Assert
-        puzzle.ShouldNotBeNull();
-        puzzle.MaximumCalories.ShouldBe(68775);
-        puzzle.MaximumCaloriesForTop3.ShouldBe(202585);
+        puzzle.Solution1.ShouldBe(68775);
+        puzzle.Solution2.ShouldBe(202585);
     }
 }

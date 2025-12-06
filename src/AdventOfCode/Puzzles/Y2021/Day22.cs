@@ -10,16 +10,6 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2021;
 public sealed class Day22 : Puzzle<long, long>
 {
     /// <summary>
-    /// Gets the number of cubes that are on once the reactor has been initialized.
-    /// </summary>
-    public long InitializedCubeCount { get; private set; }
-
-    /// <summary>
-    /// Gets the number of cubes that are on once the reactor has been rebooted.
-    /// </summary>
-    public long RebootedCubeCount { get; private set; }
-
-    /// <summary>
     /// Reboots the reactor.
     /// </summary>
     /// <param name="instructions">The instructions to follow to reboot the reactor.</param>
@@ -131,17 +121,14 @@ public sealed class Day22 : Puzzle<long, long>
     {
         var instructions = await ReadResourceAsLinesAsync(cancellationToken);
 
-        InitializedCubeCount = Reboot(instructions, initialize: true);
-        RebootedCubeCount = Reboot(instructions, initialize: false);
+        Solution1 = Reboot(instructions, initialize: true);
+        Solution2 = Reboot(instructions, initialize: false);
 
         if (Verbose)
         {
-            Logger.WriteLine("{0:N0} cubes in the reactor are on after initialization.", InitializedCubeCount);
-            Logger.WriteLine("{0:N0} cubes in the reactor are on after reboot.", RebootedCubeCount);
+            Logger.WriteLine("{0:N0} cubes in the reactor are on after initialization.", Solution1);
+            Logger.WriteLine("{0:N0} cubes in the reactor are on after reboot.", Solution2);
         }
-
-        Solution1 = InitializedCubeCount;
-        Solution2 = RebootedCubeCount;
 
         return Result();
     }

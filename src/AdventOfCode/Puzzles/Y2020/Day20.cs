@@ -10,16 +10,6 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020;
 public sealed class Day20 : Puzzle<long, int>
 {
     /// <summary>
-    /// Gets the product of Ids of the corner tiles.
-    /// </summary>
-    public long ProductOfCornerTiles { get; private set; }
-
-    /// <summary>
-    /// Gets the roughness of the waters.
-    /// </summary>
-    public int WaterRoughness { get; private set; }
-
-    /// <summary>
     /// Gets the product of the four corner tiles of an image
     /// when they are assembled in the correct order.
     /// </summary>
@@ -462,19 +452,16 @@ public sealed class Day20 : Puzzle<long, int>
 
         (long productOfCornerTiles, int waterRoughness, string image) = GetCornerTileIdProduct(tiles, Logger, cancellationToken);
 
-        ProductOfCornerTiles = productOfCornerTiles;
-        WaterRoughness = waterRoughness;
+        Solution1 = productOfCornerTiles;
+        Solution2 = waterRoughness;
 
         Logger.WriteLine(image);
 
         if (Verbose)
         {
-            Logger.WriteLine("The product of the Ids of the four corner tiles is {0}.", ProductOfCornerTiles);
-            Logger.WriteLine("The roughness of the water is {0}.", WaterRoughness);
+            Logger.WriteLine("The product of the Ids of the four corner tiles is {0}.", Solution1);
+            Logger.WriteLine("The roughness of the water is {0}.", Solution2);
         }
-
-        Solution1 = ProductOfCornerTiles;
-        Solution2 = WaterRoughness;
 
         var result = Result();
         result.Visualizations.Add(image);

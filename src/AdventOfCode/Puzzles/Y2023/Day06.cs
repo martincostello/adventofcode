@@ -10,16 +10,6 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2023;
 public sealed class Day06 : Puzzle<long, long>
 {
     /// <summary>
-    /// Gets the product of the number of combinations of ways to beat the record.
-    /// </summary>
-    public long CombinationsProduct { get; private set; }
-
-    /// <summary>
-    /// Gets the product of the number of combinations of ways to beat the record with the kerning fixed.
-    /// </summary>
-    public long CombinationsProductWithFix { get; private set; }
-
-    /// <summary>
     /// Races the specified boats.
     /// </summary>
     /// <param name="values">The time and distance records.</param>
@@ -105,17 +95,14 @@ public sealed class Day06 : Puzzle<long, long>
 
         var values = await ReadResourceAsLinesAsync(cancellationToken);
 
-        CombinationsProduct = Race(values, fixKerning: false);
-        CombinationsProductWithFix = Race(values, fixKerning: true);
+        Solution1 = Race(values, fixKerning: false);
+        Solution2 = Race(values, fixKerning: true);
 
         if (Verbose)
         {
-            Logger.WriteLine("The product of the number of ways to beat the record is {0}.", CombinationsProduct);
-            Logger.WriteLine("The product of the number of ways to beat the record with the kerning fixed is {0}.", CombinationsProductWithFix);
+            Logger.WriteLine("The product of the number of ways to beat the record is {0}.", Solution1);
+            Logger.WriteLine("The product of the number of ways to beat the record with the kerning fixed is {0}.", Solution2);
         }
-
-        Solution1 = CombinationsProduct;
-        Solution2 = CombinationsProductWithFix;
 
         return Result();
     }

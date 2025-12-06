@@ -7,18 +7,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020;
 /// A class representing the puzzle for <c>https://adventofcode.com/2020/day/2</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2020, 02, "Password Philosophy", RequiresData = true)]
-public sealed class Day02 : Puzzle
+public sealed class Day02 : Puzzle<int, int>
 {
-    /// <summary>
-    /// Gets the number of valid passwords using policy version 1.
-    /// </summary>
-    public int ValidPasswordsV1 { get; private set; }
-
-    /// <summary>
-    /// Gets the number of valid passwords using policy version 2.
-    /// </summary>
-    public int ValidPasswordsV2 { get; private set; }
-
     /// <summary>
     /// Gets whether the specified password is valid as determined by its criteria.
     /// </summary>
@@ -67,15 +57,15 @@ public sealed class Day02 : Puzzle
     {
         var values = await ReadResourceAsLinesAsync(cancellationToken);
 
-        ValidPasswordsV1 = GetValidPasswordCount(values, policyVersion: 1);
-        ValidPasswordsV2 = GetValidPasswordCount(values, policyVersion: 2);
+        Solution1 = GetValidPasswordCount(values, policyVersion: 1);
+        Solution2 = GetValidPasswordCount(values, policyVersion: 2);
 
         if (Verbose)
         {
-            Logger.WriteLine("There are {0} valid passwords using policy version 1.", ValidPasswordsV1);
-            Logger.WriteLine("There are {0} valid passwords using policy version 2.", ValidPasswordsV2);
+            Logger.WriteLine("There are {0} valid passwords using policy version 1.", Solution1);
+            Logger.WriteLine("There are {0} valid passwords using policy version 2.", Solution2);
         }
 
-        return PuzzleResult.Create(ValidPasswordsV1, ValidPasswordsV2);
+        return Result();
     }
 }

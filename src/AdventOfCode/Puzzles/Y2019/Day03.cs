@@ -32,16 +32,6 @@ public sealed class Day03 : Puzzle<int, int>
     }
 
     /// <summary>
-    /// Gets the Manhattan distance of the central port to the closest intersection.
-    /// </summary>
-    public int ManhattanDistance { get; private set; }
-
-    /// <summary>
-    /// Gets the intersection that is reached in the minimum number of steps.
-    /// </summary>
-    public int MinimumSteps { get; private set; }
-
-    /// <summary>
     /// Gets the Manhattan distance of the central port to the closest intersection for the specified wires.
     /// </summary>
     /// <param name="wires">The wires to compute the intersection distance for.</param>
@@ -122,16 +112,13 @@ public sealed class Day03 : Puzzle<int, int>
     {
         var wires = await ReadResourceAsLinesAsync(cancellationToken);
 
-        (ManhattanDistance, MinimumSteps) = GetManhattanDistanceOfClosesIntersection(wires);
+        (Solution1, Solution2) = GetManhattanDistanceOfClosesIntersection(wires);
 
         if (Verbose)
         {
-            Logger.WriteLine("The Manhattan distance from the central port to the closest intersection is {0}.", ManhattanDistance);
-            Logger.WriteLine("The minimum number of combined steps to get to an intersection is {0}.", MinimumSteps);
+            Logger.WriteLine("The Manhattan distance from the central port to the closest intersection is {0}.", Solution1);
+            Logger.WriteLine("The minimum number of combined steps to get to an intersection is {0}.", Solution2);
         }
-
-        Solution1 = ManhattanDistance;
-        Solution2 = MinimumSteps;
 
         return Result();
     }

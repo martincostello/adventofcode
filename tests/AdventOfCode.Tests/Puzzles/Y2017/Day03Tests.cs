@@ -10,14 +10,13 @@ public sealed class Day03Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
     [InlineData("12", 3)]
     [InlineData("23", 2)]
     [InlineData("1024", 31)]
-    [InlineData("312051", 430)]
     public async Task Y2017_Day03_Solve_Returns_Correct_Solution_For_Steps(string square, int expected)
     {
         // Act
         var puzzle = await SolvePuzzleAsync<Day03>(square);
 
         // Assert
-        puzzle.Steps.ShouldBe(expected);
+        puzzle.Solution1.ShouldBe(expected);
     }
 
     [Fact]
@@ -27,7 +26,7 @@ public sealed class Day03Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         var puzzle = await SolvePuzzleAsync<Day03>("312051");
 
         // Assert
-        puzzle.Steps.ShouldBe(430);
-        puzzle.FirstStorageLargerThanInput.ShouldBe(312453);
+        puzzle.Solution1.ShouldBe(430);
+        puzzle.Solution2.ShouldBe(312453);
     }
 }

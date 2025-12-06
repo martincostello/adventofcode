@@ -7,18 +7,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015;
 /// A class representing the puzzle for <c>https://adventofcode.com/2015/day/14</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2015, 14, "Reindeer Olympics", MinimumArguments = 1, RequiresData = true)]
-public sealed class Day14 : Puzzle
+public sealed class Day14 : Puzzle<int, int>
 {
-    /// <summary>
-    /// Gets the maximum distance travelled by the winning reindeer at the given point in time, in kilometers.
-    /// </summary>
-    internal int MaximumReindeerDistance { get; private set; }
-
-    /// <summary>
-    /// Gets the maximum number of points for the winning reindeer at the given point in time.
-    /// </summary>
-    internal int MaximumReindeerPoints { get; private set; }
-
     /// <summary>
     /// Gets the maximum distance travelled by the specified reindeer at the specified time index.
     /// </summary>
@@ -82,21 +72,21 @@ public sealed class Day14 : Puzzle
 
         var flightData = await ReadResourceAsLinesAsync(cancellationToken);
 
-        MaximumReindeerDistance = GetMaximumDistanceOfFastestReindeer(flightData, timeIndex);
+        Solution1 = GetMaximumDistanceOfFastestReindeer(flightData, timeIndex);
 
         if (Verbose)
         {
-            Logger.WriteLine("After {0:N0} seconds, the furthest reindeer is {1:N0} km away.", timeIndex, MaximumReindeerDistance);
+            Logger.WriteLine("After {0:N0} seconds, the furthest reindeer is {1:N0} km away.", timeIndex, Solution1);
         }
 
-        MaximumReindeerPoints = GetMaximumPointsOfFastestReindeer(flightData, timeIndex);
+        Solution2 = GetMaximumPointsOfFastestReindeer(flightData, timeIndex);
 
         if (Verbose)
         {
-            Logger.WriteLine("After {0:N0} seconds, the reindeer in the lead has {1:N0} points.", timeIndex, MaximumReindeerPoints);
+            Logger.WriteLine("After {0:N0} seconds, the reindeer in the lead has {1:N0} points.", timeIndex, Solution2);
         }
 
-        return PuzzleResult.Create(MaximumReindeerDistance, MaximumReindeerPoints);
+        return Result();
     }
 
     /// <summary>

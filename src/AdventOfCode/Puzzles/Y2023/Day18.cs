@@ -10,16 +10,6 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2023;
 public sealed class Day18 : Puzzle<long, long>
 {
     /// <summary>
-    /// Gets the volume of lava the lagoon can hold.
-    /// </summary>
-    public long Volume { get; private set; }
-
-    /// <summary>
-    /// Gets the volume of lava the lagoon can hold using the fixed plan.
-    /// </summary>
-    public long VolumeWithFix { get; private set; }
-
-    /// <summary>
     /// Digs out the lagoon specified in the plan and returns its volume.
     /// </summary>
     /// <param name="plan">The plan to dig the perimeter of the lagoon.</param>
@@ -74,17 +64,14 @@ public sealed class Day18 : Puzzle<long, long>
 
         var plan = await ReadResourceAsLinesAsync(cancellationToken);
 
-        Volume = Dig(plan, fix: false);
-        VolumeWithFix = Dig(plan, fix: true);
+        Solution1 = Dig(plan, fix: false);
+        Solution2 = Dig(plan, fix: true);
 
         if (Verbose)
         {
-            Logger.WriteLine("The lagoon can hold {0} cubic meters of lava.", Volume);
-            Logger.WriteLine("The lagoon can hold {0} cubic meters of lava using the fixed plan.", VolumeWithFix);
+            Logger.WriteLine("The lagoon can hold {0} cubic meters of lava.", Solution1);
+            Logger.WriteLine("The lagoon can hold {0} cubic meters of lava using the fixed plan.", Solution2);
         }
-
-        Solution1 = Volume;
-        Solution2 = VolumeWithFix;
 
         return Result();
     }

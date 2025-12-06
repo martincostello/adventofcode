@@ -50,7 +50,7 @@ public sealed class Day14Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         var puzzle = await SolvePuzzleAsync<Day14>();
 
         // Assert
-        puzzle.SumOfRemainingValuesV1.ShouldBe(9967721333886L);
-        puzzle.SumOfRemainingValuesV2.ShouldBe(4355897790573L);
+        puzzle.Solution1.ShouldBe(9967721333886);
+        puzzle.Solution2.ShouldBe(4355897790573);
     }
 }

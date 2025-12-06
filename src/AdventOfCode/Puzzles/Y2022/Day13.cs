@@ -10,16 +10,6 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2022;
 public sealed class Day13 : Puzzle<int, int>
 {
     /// <summary>
-    /// Gets the sum of the indices of the already correctly sorted pairs.
-    /// </summary>
-    public int SumOfPresortedIndicies { get; private set; }
-
-    /// <summary>
-    /// Gets the decoder key for the distress signal.
-    /// </summary>
-    public int DecoderKey { get; private set; }
-
-    /// <summary>
     /// Returns the sum of the indices of the correctly sorted packet pairs.
     /// </summary>
     /// <param name="packets">The packets to analyze.</param>
@@ -127,16 +117,13 @@ public sealed class Day13 : Puzzle<int, int>
     {
         var packets = await ReadResourceAsLinesAsync(cancellationToken);
 
-        (SumOfPresortedIndicies, DecoderKey) = DecodePackets(packets);
+        (Solution1, Solution2) = DecodePackets(packets);
 
         if (Verbose)
         {
-            Logger.WriteLine("The sum of the indices of the pairs of packets already in the right order is {0}.", SumOfPresortedIndicies);
-            Logger.WriteLine("The decoder key for the distress signal is {0}.", DecoderKey);
+            Logger.WriteLine("The sum of the indices of the pairs of packets already in the right order is {0}.", Solution1);
+            Logger.WriteLine("The decoder key for the distress signal is {0}.", Solution2);
         }
-
-        Solution1 = SumOfPresortedIndicies;
-        Solution2 = DecoderKey;
 
         return Result();
     }

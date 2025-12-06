@@ -10,18 +10,6 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2022;
 public sealed class Day05 : Puzzle<string, string>
 {
     /// <summary>
-    /// Gets a string containing the IDs of the crates at
-    /// the top of each stack using a CraneMover 9000.
-    /// </summary>
-    public string TopCratesOfStacks9000 { get; private set; } = string.Empty;
-
-    /// <summary>
-    /// Gets a string containing the IDs of the crates at
-    /// the top of each stack using a CraneMover 9001.
-    /// </summary>
-    public string TopCratesOfStacks9001 { get; private set; } = string.Empty;
-
-    /// <summary>
     /// Rearranges the crates specified by the puzzle input.
     /// </summary>
     /// <param name="instructions">The instructions of how to rearrange the crates.</param>
@@ -147,17 +135,14 @@ public sealed class Day05 : Puzzle<string, string>
     {
         var instructions = await ReadResourceAsLinesAsync(cancellationToken);
 
-        TopCratesOfStacks9000 = RearrangeCrates(instructions, canMoveMultipleCrates: false);
-        TopCratesOfStacks9001 = RearrangeCrates(instructions, canMoveMultipleCrates: true);
+        Solution1 = RearrangeCrates(instructions, canMoveMultipleCrates: false);
+        Solution2 = RearrangeCrates(instructions, canMoveMultipleCrates: true);
 
         if (Verbose)
         {
-            Logger.WriteLine("The crates on the top of each stack with the CraneMover 9000 are: {0}.", TopCratesOfStacks9000);
-            Logger.WriteLine("The crates on the top of each stack with the CraneMover 9001 are: {0}.", TopCratesOfStacks9001);
+            Logger.WriteLine("The crates on the top of each stack with the CraneMover 9000 are: {0}.", Solution1);
+            Logger.WriteLine("The crates on the top of each stack with the CraneMover 9001 are: {0}.", Solution2);
         }
-
-        Solution1 = TopCratesOfStacks9000;
-        Solution2 = TopCratesOfStacks9001;
 
         return Result();
     }

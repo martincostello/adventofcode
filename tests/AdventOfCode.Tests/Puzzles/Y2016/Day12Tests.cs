@@ -65,7 +65,7 @@ public sealed class Day12Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         var puzzle = await SolvePuzzleAsync<Day12>();
 
         // Assert
-        puzzle.ValueInRegisterA.ShouldBe(318020);
-        puzzle.ValueInRegisterAWhenInitializedWithIgnitionKey.ShouldBe(9227674);
+        puzzle.Solution1.ShouldBe(318020);
+        puzzle.Solution2.ShouldBe(9227674);
     }
 }

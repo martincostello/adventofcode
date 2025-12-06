@@ -23,7 +23,7 @@ public sealed class Day03Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         var puzzle = await SolvePuzzleAsync<Day03>();
 
         // Assert
-        puzzle.PossibleTrianglesByRows.ShouldBe(983);
-        puzzle.PossibleTrianglesByColumns.ShouldBe(1836);
+        puzzle.Solution1.ShouldBe(983);
+        puzzle.Solution2.ShouldBe(1836);
     }
 }

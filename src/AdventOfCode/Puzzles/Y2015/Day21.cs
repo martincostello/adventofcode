@@ -10,16 +10,6 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015;
 public sealed class Day21 : Puzzle<int, int>
 {
     /// <summary>
-    /// Gets the maximum cost of items that can be purchased for the human to lost to the boss.
-    /// </summary>
-    internal int MaximumCostToLose { get; private set; }
-
-    /// <summary>
-    /// Gets the minimum cost of items that can be purchased for the human to beat the boss.
-    /// </summary>
-    internal int MinimumCostToWin { get; private set; }
-
-    /// <summary>
     /// Simulates a fight between the player and the boss using the specified upgrades.
     /// </summary>
     /// <param name="weapon">The weapon to purchase.</param>
@@ -140,22 +130,14 @@ public sealed class Day21 : Puzzle<int, int>
             }
         }
 
-        MaximumCostToLose = costsToLose.Max();
-        MinimumCostToWin = costsToWin.Min();
+        Solution1 = costsToLose.Max();
+        Solution2 = costsToWin.Min();
 
         if (Verbose)
         {
-            Logger.WriteLine(
-                "The minimum amount of gold spent for the human to beat the boss is {0:N0}.",
-                MinimumCostToWin);
-
-            Logger.WriteLine(
-                "The maximum amount of gold spent for the human to lose to the boss is {0:N0}.",
-                MaximumCostToLose);
+            Logger.WriteLine("The minimum amount of gold spent for the human to beat the boss is {0:N0}.", Solution1);
+            Logger.WriteLine("The maximum amount of gold spent for the human to lose to the boss is {0:N0}.", Solution2);
         }
-
-        Solution1 = MaximumCostToLose;
-        Solution2 = MinimumCostToWin;
 
         return Result();
     }

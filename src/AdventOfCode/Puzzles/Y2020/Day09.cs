@@ -7,18 +7,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020;
 /// A class representing the puzzle for <c>https://adventofcode.com/2020/day/9</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2020, 09, "Encoding Error", RequiresData = true)]
-public sealed class Day09 : Puzzle
+public sealed class Day09 : Puzzle<long, long>
 {
-    /// <summary>
-    /// Gets the first weak number in the signal.
-    /// </summary>
-    public long WeakNumber { get; private set; }
-
-    /// <summary>
-    /// Gets the encryption weakness.
-    /// </summary>
-    public long Weakness { get; private set; }
-
     /// <summary>
     /// Gets the first weak number from the specified XMAS signal.
     /// </summary>
@@ -92,15 +82,15 @@ public sealed class Day09 : Puzzle
     {
         long[] values = [.. await ReadResourceAsNumbersAsync<long>(cancellationToken)];
 
-        WeakNumber = GetWeakNumber(values, 25);
-        Weakness = GetWeakness(values, WeakNumber);
+        Solution1 = GetWeakNumber(values, 25);
+        Solution2 = GetWeakness(values, Solution1);
 
         if (Verbose)
         {
-            Logger.WriteLine("The first weak number in the XMAS sequence is {0}.", WeakNumber);
-            Logger.WriteLine("The encryption weakness of the XMAS sequence is {0}.", Weakness);
+            Logger.WriteLine("The first weak number in the XMAS sequence is {0}.", Solution1);
+            Logger.WriteLine("The encryption weakness of the XMAS sequence is {0}.", Solution2);
         }
 
-        return PuzzleResult.Create(WeakNumber, Weakness);
+        return Result();
     }
 }

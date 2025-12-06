@@ -7,13 +7,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2023;
 /// A class representing the puzzle for <c>https://adventofcode.com/2023/day/21</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2023, 21, "Step Counter", RequiresData = true, Unsolved = true)]
-public sealed class Day21 : Puzzle<int, int>
+public sealed class Day21 : Puzzle<int>
 {
-    /// <summary>
-    /// Gets the number of plots the elf can reach in exactly 64 steps.
-    /// </summary>
-    public int Plots64 { get; private set; }
-
     /// <summary>
     /// Finds the number of plots the elf can reach in the specified number of steps.
     /// </summary>
@@ -52,21 +47,19 @@ public sealed class Day21 : Puzzle<int, int>
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        ArgumentNullException.ThrowIfNull(args);
+        return await SolveWithLinesAsync(
+            static (map, logger, cancellationToken) =>
+            {
+                int plots64 = Walk(map, steps: 64);
 
-        var map = await ReadResourceAsLinesAsync(cancellationToken);
+                if (logger is { })
+                {
+                    logger.WriteLine("The elf could reach {0} plots in exactly 64 steps.", plots64);
+                }
 
-        Plots64 = Walk(map, steps: 64);
-
-        if (Verbose)
-        {
-            Logger.WriteLine("The elf could reach {0} plots in exactly 64 steps.", Plots64);
-        }
-
-        Solution1 = Plots64;
-        Solution2 = Unsolved;
-
-        return Result();
+                return plots64;
+            },
+            cancellationToken);
     }
 
     private sealed record Step(Point Location, int Steps);

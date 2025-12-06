@@ -7,18 +7,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015;
 /// A class representing the puzzle for <c>https://adventofcode.com/2015/day/6</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2015, 06, "Probably a Fire Hazard", RequiresData = true, IsSlow = true)]
-public sealed class Day06 : Puzzle
+public sealed class Day06 : Puzzle<int, int>
 {
-    /// <summary>
-    /// Gets the number of lights illuminated using the version 1 parser.
-    /// </summary>
-    public int LightsIlluminated { get; private set; }
-
-    /// <summary>
-    /// Gets the total brightness of the grid using the version 2 parser.
-    /// </summary>
-    public int TotalBrightness { get; private set; }
-
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
@@ -42,16 +32,16 @@ public sealed class Day06 : Puzzle
             instruction.Act(gridV2);
         }
 
-        LightsIlluminated = gridV1.Count;
-        TotalBrightness = gridV2.Brightness;
+        Solution1 = gridV1.Count;
+        Solution2 = gridV2.Brightness;
 
         if (Verbose)
         {
-            Logger.WriteLine("{0:N0} lights are illuminated with the version 1 grid.", LightsIlluminated);
-            Logger.WriteLine("The total brightness of the version 2 grid is {0:N0}.", TotalBrightness);
+            Logger.WriteLine("{0:N0} lights are illuminated with the version 1 grid.", Solution1);
+            Logger.WriteLine("The total brightness of the version 2 grid is {0:N0}.", Solution2);
         }
 
-        return PuzzleResult.Create(LightsIlluminated, TotalBrightness);
+        return Result();
     }
 
     /// <summary>

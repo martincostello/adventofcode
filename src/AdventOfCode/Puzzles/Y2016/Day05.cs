@@ -9,18 +9,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016;
 /// A class representing the puzzle for <c>https://adventofcode.com/2016/day/5</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2016, 05, "How About a Nice Game of Chess?", MinimumArguments = 1, IsSlow = true)]
-public sealed class Day05 : Puzzle
+public sealed class Day05 : Puzzle<string, string>
 {
-    /// <summary>
-    /// Gets the password for the door.
-    /// </summary>
-    public string? Password { get; private set; }
-
-    /// <summary>
-    /// Gets the password for the door when the hash indicates the position of password characters.
-    /// </summary>
-    public string? PasswordWhenPositionIsIndicated { get; private set; }
-
     /// <summary>
     /// Generates the password for the door with the specified Id.
     /// </summary>
@@ -77,16 +67,16 @@ public sealed class Day05 : Puzzle
     {
         string doorId = args[0];
 
-        Password = GeneratePassword(doorId, isPositionSpecifiedByHash: false);
-        PasswordWhenPositionIsIndicated = GeneratePassword(doorId, isPositionSpecifiedByHash: true);
+        Solution1 = GeneratePassword(doorId, isPositionSpecifiedByHash: false);
+        Solution2 = GeneratePassword(doorId, isPositionSpecifiedByHash: true);
 
         if (Verbose)
         {
-            Logger.WriteLine($"The password for door '{doorId}' is '{Password}'.");
-            Logger.WriteLine($"The password for door '{doorId}' is '{PasswordWhenPositionIsIndicated}' when the position is specified in the hash.");
+            Logger.WriteLine($"The password for door '{doorId}' is '{Solution1}'.");
+            Logger.WriteLine($"The password for door '{doorId}' is '{Solution2}' when the position is specified in the hash.");
         }
 
-        return PuzzleResult.Create(Password, PasswordWhenPositionIsIndicated);
+        return Result();
     }
 
     /// <summary>

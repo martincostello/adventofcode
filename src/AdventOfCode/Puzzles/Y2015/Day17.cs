@@ -7,18 +7,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015;
 /// A class representing the puzzle for <c>https://adventofcode.com/2015/day/17</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2015, 17, "No Such Thing as Too Much", MinimumArguments = 1, RequiresData = true)]
-public sealed class Day17 : Puzzle
+public sealed class Day17 : Puzzle<int, int>
 {
-    /// <summary>
-    /// Gets the number of combinations of containers that can be used.
-    /// </summary>
-    internal int Combinations { get; private set; }
-
-    /// <summary>
-    /// Gets the number of combinations of the minimum number of containers that can be used.
-    /// </summary>
-    internal int CombinationsWithMinimumContainers { get; private set; }
-
     /// <summary>
     /// Returns the combinations of containers that can be used to completely fill
     /// one or more containers completely with the specified total volume of eggnog.
@@ -51,23 +41,23 @@ public sealed class Day17 : Puzzle
             .OrderBy((p) => p.Key)
             .First();
 
-        Combinations = combinations.Count;
-        CombinationsWithMinimumContainers = combinationsWithLeastContainers.Value;
+        Solution1 = combinations.Count;
+        Solution2 = combinationsWithLeastContainers.Value;
 
         if (Verbose)
         {
             Logger.WriteLine(
                 "There are {0:N0} combinations of containers that can store {1:0} liters of eggnog.",
-                Combinations,
+                Solution1,
                 volume);
 
             Logger.WriteLine(
                 "There are {0:N0} combinations of containers that can store {1:0} liters of eggnog using {2} containers.",
-                CombinationsWithMinimumContainers,
+                Solution2,
                 volume,
                 combinationsWithLeastContainers.Key);
         }
 
-        return PuzzleResult.Create(Combinations, CombinationsWithMinimumContainers);
+        return Result();
     }
 }

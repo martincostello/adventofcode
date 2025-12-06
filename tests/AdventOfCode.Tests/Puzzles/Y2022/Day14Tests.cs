@@ -31,8 +31,7 @@ public sealed class Day14Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         var puzzle = await SolvePuzzleAsync<Day14>();
 
         // Assert
-        puzzle.ShouldNotBeNull();
-        puzzle.GrainsOfSandWithVoid.ShouldBe(832);
-        puzzle.GrainsOfSandWithFloor.ShouldBe(27601);
+        puzzle.Solution1.ShouldBe(832);
+        puzzle.Solution2.ShouldBe(27601);
     }
 }

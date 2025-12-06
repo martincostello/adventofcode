@@ -1,6 +1,8 @@
 ﻿// Copyright (c) Martin Costello, 2015. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
+using Shouldly;
+
 namespace MartinCostello.AdventOfCode.Puzzles.Y2016;
 
 public sealed class Day17Tests(ITestOutputHelper outputHelper) : PuzzleTest(outputHelper)
@@ -30,7 +32,7 @@ public sealed class Day17Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         var puzzle = await SolvePuzzleAsync<Day17>("pvhmgsws");
 
         // Assert
-        puzzle.ShortestPathToVault.ShouldBe("DRRDRLDURD");
-        puzzle.LongestPathToVault.ShouldBe(618);
+        puzzle.Solution1.ShouldBe("DRRDRLDURD");
+        puzzle.Solution2.ShouldBe(618);
     }
 }

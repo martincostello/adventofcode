@@ -10,16 +10,6 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2021;
 public sealed class Day12 : Puzzle<int, int>
 {
     /// <summary>
-    /// Gets the number of paths through the cave system that visit one small cave once.
-    /// </summary>
-    public int Count1 { get; private set; }
-
-    /// <summary>
-    /// Gets the number of paths through the cave system that visit one small cave twice.
-    /// </summary>
-    public int Count2 { get; private set; }
-
-    /// <summary>
     /// Navigates the specified cave system.
     /// </summary>
     /// <param name="nodes">The nodes of the cave system.</param>
@@ -48,22 +38,19 @@ public sealed class Day12 : Puzzle<int, int>
     {
         var nodes = await ReadResourceAsLinesAsync(cancellationToken);
 
-        Count1 = Navigate(nodes, smallCaveVisitLimit: 1);
-        Count2 = Navigate(nodes, smallCaveVisitLimit: 2);
+        Solution1 = Navigate(nodes, smallCaveVisitLimit: 1);
+        Solution2 = Navigate(nodes, smallCaveVisitLimit: 2);
 
         if (Verbose)
         {
             Logger.WriteLine(
                 "There are {0:N0} paths through the cave system that visit one small cave once at most.",
-                Count1);
+                Solution1);
 
             Logger.WriteLine(
                 "There are {0:N0} paths through the cave system that visit one small cave twice at most.",
-                Count2);
+                Solution2);
         }
-
-        Solution1 = Count1;
-        Solution2 = Count2;
 
         return Result();
     }

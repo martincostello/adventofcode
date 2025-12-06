@@ -9,13 +9,36 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015;
 /// <summary>
 /// A class representing the puzzle for <c>https://adventofcode.com/2015/day/22</c>. This class cannot be inherited.
 /// </summary>
-[Puzzle(2015, 22, "Wizard Simulator 20XX", MinimumArguments = 1, IsSlow = true)]
+[Puzzle(2015, 22, "Wizard Simulator 20XX", IsSlow = true)]
 public sealed class Day22 : Puzzle<int, int>
 {
     /// <summary>
-    /// Gets the minimum amount of mana that can be spent to win.
+    /// Simulates a fight between the wizard and the boss.
     /// </summary>
-    internal int MinimumCostToWin { get; private set; }
+    /// <param name="difficulty">The difficulty to play with.</param>
+    /// <returns>
+    /// The minimum amount of mana that can be spent for the wizard to win.
+    /// </returns>
+    public static int Fight(string difficulty)
+    {
+        // Play the game 100,000 times with random choices of spells
+        const int Iterations = 100_000;
+
+        var solutions = new List<(bool DidWizardWin, int ManaSpent)>(Iterations);
+
+        while (solutions.Count < Iterations)
+        {
+            var result = Fight(SpellSelector, difficulty);
+            solutions.Add(result);
+        }
+
+        return solutions
+            .Where((p) => p.DidWizardWin)
+            .Min((p) => p.ManaSpent);
+
+        static string SpellSelector(Wizard wizard, List<string> spells)
+            => spells.ElementAt(RandomNumberGenerator.GetInt32(0, spells.Count));
+    }
 
     /// <summary>
     /// Simulates a fight between the wizard and the boss.
@@ -85,33 +108,14 @@ public sealed class Day22 : Puzzle<int, int>
     /// <inheritdoc />
     protected override Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        string difficulty = args.Length == 1 ? args[0] : "easy";
-
-        // Play the game 100,000 times with random choices of spells
-        const int Iterations = 100_000;
-
-        var solutions = new List<(bool DidWizardWin, int ManaSpent)>(Iterations);
-
-        while (solutions.Count < Iterations)
-        {
-            var result = Fight((wizard, spells) => spells.ElementAt(RandomNumberGenerator.GetInt32(0, spells.Count)), difficulty);
-            solutions.Add(result);
-        }
-
-        MinimumCostToWin = solutions
-            .Where((p) => p.DidWizardWin)
-            .Min((p) => p.ManaSpent);
+        Solution1 = Fight("easy");
+        Solution2 = Fight("hard");
 
         if (Verbose)
         {
-            Logger.WriteLine(
-                "The minimum amount of mana that can be spent to win on {0} difficulty is {1:N0}.",
-                difficulty,
-                MinimumCostToWin);
+            Logger.WriteLine("The minimum amount of mana that can be spent to win on easy difficulty is {0:N0}.", Solution1);
+            Logger.WriteLine("The minimum amount of mana that can be spent to win on hard difficulty is {0:N0}.", Solution2);
         }
-
-        Solution1 = MinimumCostToWin;
-        Solution2 = Unsolved;
 
         return Result();
     }

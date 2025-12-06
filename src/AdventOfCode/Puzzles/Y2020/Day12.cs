@@ -21,16 +21,6 @@ public sealed class Day12 : Puzzle<int, int>
     }.ToFrozenDictionary();
 
     /// <summary>
-    /// Gets the Manhattan distance the ship has travelled.
-    /// </summary>
-    public int ManhattanDistance { get; private set; }
-
-    /// <summary>
-    /// Gets the Manhattan distance the ship has travelled when the waypoint is used.
-    /// </summary>
-    public int ManhattanDistanceWithWaypoint { get; private set; }
-
-    /// <summary>
     /// Gets the Manhattan distance travelled by the ship navigating the specified instructions.
     /// </summary>
     /// <param name="instructions">The navigation instructions for the ship.</param>
@@ -157,17 +147,14 @@ public sealed class Day12 : Puzzle<int, int>
     {
         var instructions = await ReadResourceAsLinesAsync(cancellationToken);
 
-        ManhattanDistance = GetDistanceTravelled(instructions);
-        ManhattanDistanceWithWaypoint = GetDistanceTravelledWithWaypoint(instructions);
+        Solution1 = GetDistanceTravelled(instructions);
+        Solution2 = GetDistanceTravelledWithWaypoint(instructions);
 
         if (Verbose)
         {
-            Logger.WriteLine("The Manhattan distance travelled by the ship is {0}.", ManhattanDistance);
-            Logger.WriteLine("The Manhattan distance travelled by the ship when using the waypoint is {0}.", ManhattanDistanceWithWaypoint);
+            Logger.WriteLine("The Manhattan distance travelled by the ship is {0}.", Solution1);
+            Logger.WriteLine("The Manhattan distance travelled by the ship when using the waypoint is {0}.", Solution2);
         }
-
-        Solution1 = ManhattanDistance;
-        Solution2 = ManhattanDistanceWithWaypoint;
 
         return Result();
     }

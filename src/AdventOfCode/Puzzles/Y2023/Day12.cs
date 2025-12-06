@@ -13,16 +13,6 @@ public sealed class Day12 : Puzzle<int, int>
     private const char Unknown = '?';
 
     /// <summary>
-    /// Gets the sum of the counts of the possible spring arrangements when folded.
-    /// </summary>
-    public int SumOfCountsFolded { get; private set; }
-
-    /// <summary>
-    /// Gets the sum of the counts of the possible spring arrangements when unfolded.
-    /// </summary>
-    public int SumOfCountsUnfolded { get; private set; }
-
-    /// <summary>
     /// Analyzes the specified spring arrangement.
     /// </summary>
     /// <param name="record">The spring arrangement to analyze.</param>
@@ -70,17 +60,14 @@ public sealed class Day12 : Puzzle<int, int>
 
         var records = await ReadResourceAsLinesAsync(cancellationToken);
 
-        SumOfCountsFolded = Analyze(records, unfold: false, cancellationToken);
-        SumOfCountsUnfolded = Analyze(records, unfold: true, cancellationToken);
+        Solution1 = Analyze(records, unfold: false, cancellationToken);
+        Solution2 = Analyze(records, unfold: true, cancellationToken);
 
         if (Verbose)
         {
-            Logger.WriteLine("The sum of the counts of spring arrangements is {0}.", SumOfCountsFolded);
-            Logger.WriteLine("The sum of the counts of spring arrangements when unfolded is {0}.", SumOfCountsUnfolded);
+            Logger.WriteLine("The sum of the counts of spring arrangements is {0}.", Solution1);
+            Logger.WriteLine("The sum of the counts of spring arrangements when unfolded is {0}.", Solution2);
         }
-
-        Solution1 = SumOfCountsFolded;
-        Solution2 = SumOfCountsUnfolded;
 
         return Result();
     }

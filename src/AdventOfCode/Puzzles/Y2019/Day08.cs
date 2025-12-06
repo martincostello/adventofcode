@@ -10,16 +10,6 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019;
 public sealed class Day08 : Puzzle<int, string>
 {
     /// <summary>
-    /// Gets the checksum of the image.
-    /// </summary>
-    public int Checksum { get; private set; }
-
-    /// <summary>
-    /// Gets the message.
-    /// </summary>
-    public string Message { get; private set; } = string.Empty;
-
-    /// <summary>
     /// Gets the checksum for the specified image.
     /// </summary>
     /// <param name="image">The image data to get the checksum for.</param>
@@ -119,16 +109,13 @@ public sealed class Day08 : Puzzle<int, string>
     {
         string image = (await ReadResourceAsStringAsync(cancellationToken)).TrimEnd('\n');
 
-        (Checksum, Message, string visualization) = GetImageChecksum(image, 6, 25, Logger);
+        (Solution1, Solution2, string visualization) = GetImageChecksum(image, 6, 25, Logger);
 
         if (Verbose)
         {
-            Logger.WriteLine("The checksum of the image data is {0}.", Checksum);
-            Logger.WriteLine("The message in the image data is {0}.", Message);
+            Logger.WriteLine("The checksum of the image data is {0}.", Solution1);
+            Logger.WriteLine("The message in the image data is {0}.", Solution2);
         }
-
-        Solution1 = Checksum;
-        Solution2 = Message;
 
         var result = Result();
         result.Visualizations.Add(visualization);

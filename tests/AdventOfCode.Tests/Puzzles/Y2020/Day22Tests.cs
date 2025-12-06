@@ -42,7 +42,7 @@ public sealed class Day22Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         var puzzle = await SolvePuzzleAsync<Day22>();
 
         // Assert
-        puzzle.WinningScore.ShouldBe(33694);
-        puzzle.WinningScoreRecursive.ShouldBe(31835);
+        puzzle.Solution1.ShouldBe(33694);
+        puzzle.Solution2.ShouldBe(31835);
     }
 }

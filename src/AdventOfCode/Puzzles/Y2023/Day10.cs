@@ -15,16 +15,6 @@ public sealed class Day10 : Puzzle<int, int>
     private const char Start = 'S';
 
     /// <summary>
-    /// Gets the number of steps to the furthest position in the pipe from the starting location.
-    /// </summary>
-    public int Steps { get; private set; }
-
-    /// <summary>
-    /// Gets the number of tiles enclosed by the loop of pipe containing the animal.
-    /// </summary>
-    public int Tiles { get; private set; }
-
-    /// <summary>
     /// Walks the pipe maze and returns the number of steps to
     /// the furthest position from the starting location.
     /// </summary>
@@ -227,16 +217,13 @@ public sealed class Day10 : Puzzle<int, int>
 
         var values = await ReadResourceAsLinesAsync(cancellationToken);
 
-        (Steps, Tiles) = Walk(values);
+        (Solution1, Solution2) = Walk(values);
 
         if (Verbose)
         {
-            Logger.WriteLine("It takes {0} steps to get to the point furthest from the starting position.", Steps);
-            Logger.WriteLine("{0} tiles are enclosed by the loop.", Tiles);
+            Logger.WriteLine("It takes {0} steps to get to the point furthest from the starting position.", Solution1);
+            Logger.WriteLine("{0} tiles are enclosed by the loop.", Solution2);
         }
-
-        Solution1 = Steps;
-        Solution2 = Tiles;
 
         return Result();
     }

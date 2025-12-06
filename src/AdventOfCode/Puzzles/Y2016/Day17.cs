@@ -12,16 +12,6 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016;
 public sealed class Day17 : Puzzle<string, int>
 {
     /// <summary>
-    /// Gets the shortest path to the vault.
-    /// </summary>
-    public string ShortestPathToVault { get; private set; } = string.Empty;
-
-    /// <summary>
-    /// Gets the longest path to the vault.
-    /// </summary>
-    public int LongestPathToVault { get; private set; }
-
-    /// <summary>
     /// Determines the shortest path to reach the vault.
     /// </summary>
     /// <param name="passcode">The passcode to use.</param>
@@ -118,16 +108,13 @@ public sealed class Day17 : Puzzle<string, int>
     {
         string passcode = args[0];
 
-        (ShortestPathToVault, LongestPathToVault) = GetPathsToVault(passcode);
+        (Solution1, Solution2) = GetPathsToVault(passcode);
 
         if (Verbose)
         {
-            Logger.WriteLine("The shortest path to the vault is {0}.", ShortestPathToVault);
-            Logger.WriteLine("The longest path to the vault is {0}.", LongestPathToVault);
+            Logger.WriteLine("The shortest path to the vault is {0}.", Solution1);
+            Logger.WriteLine("The longest path to the vault is {0}.", Solution2);
         }
-
-        Solution1 = ShortestPathToVault;
-        Solution2 = LongestPathToVault;
 
         return Result();
     }

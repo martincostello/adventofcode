@@ -10,16 +10,6 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2024;
 public sealed class Day11 : Puzzle<long, long>
 {
     /// <summary>
-    /// Gets the number of stones after 25 blinks.
-    /// </summary>
-    public long Count25 { get; private set; }
-
-    /// <summary>
-    /// Gets the number of stones after 75 blinks.
-    /// </summary>
-    public long Count75 { get; private set; }
-
-    /// <summary>
     /// Counts the number of stones after the specified number of blinks.
     /// </summary>
     /// <param name="sequence">The current arrangement of the stones.</param>
@@ -92,17 +82,14 @@ public sealed class Day11 : Puzzle<long, long>
 
         string stones = await ReadResourceAsStringAsync(cancellationToken);
 
-        Count25 = Blink(stones, blinks: 25);
-        Count75 = Blink(stones, blinks: 75);
+        Solution1 = Blink(stones, blinks: 25);
+        Solution2 = Blink(stones, blinks: 75);
 
         if (Verbose)
         {
-            Logger.WriteLine("There are {0} stones after blinking 25 times", Count25);
-            Logger.WriteLine("There are {0} stones after blinking 75 times", Count75);
+            Logger.WriteLine("There are {0} stones after blinking 25 times", Solution1);
+            Logger.WriteLine("There are {0} stones after blinking 75 times", Solution2);
         }
-
-        Solution1 = Count25;
-        Solution2 = Count75;
 
         return Result();
     }

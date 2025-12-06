@@ -10,16 +10,6 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2018;
 public sealed class Day04 : Puzzle<int, int>
 {
     /// <summary>
-    /// Gets the product of the Id of the guard who slept the most and the minute they were asleep the most.
-    /// </summary>
-    public int SleepiestGuardMinute { get; private set; }
-
-    /// <summary>
-    /// Gets the product of the minute a guard was most asleep and the Id of the guard most asleep in that minute.
-    /// </summary>
-    public int SleepiestMinuteGuard { get; private set; }
-
-    /// <summary>
     /// Calculates the product of the guard who slept the most and the minute they were asleep the most from the specified log.
     /// </summary>
     /// <param name="log">The log of guard activity.</param>
@@ -147,16 +137,13 @@ public sealed class Day04 : Puzzle<int, int>
     {
         var log = await ReadResourceAsLinesAsync(cancellationToken);
 
-        (SleepiestGuardMinute, SleepiestMinuteGuard) = GetSleepiestGuardsMinutes(log);
+        (Solution1, Solution2) = GetSleepiestGuardsMinutes(log);
 
         if (Verbose)
         {
-            Logger.WriteLine($"The ID of the sleepiest guard multiplied by the most common minute is {SleepiestGuardMinute:N0}.");
-            Logger.WriteLine($"The most common minute a guard was asleep in multiplied by the guard's ID is {SleepiestMinuteGuard:N0}.");
+            Logger.WriteLine($"The ID of the sleepiest guard multiplied by the most common minute is {Solution1:N0}.");
+            Logger.WriteLine($"The most common minute a guard was asleep in multiplied by the guard's ID is {Solution2:N0}.");
         }
-
-        Solution1 = SleepiestGuardMinute;
-        Solution2 = SleepiestMinuteGuard;
 
         return Result();
     }

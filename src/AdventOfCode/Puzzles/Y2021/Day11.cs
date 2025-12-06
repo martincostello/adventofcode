@@ -10,16 +10,6 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2021;
 public sealed class Day11 : Puzzle<int, int>
 {
     /// <summary>
-    /// Gets the number of flashes after 100 steps.
-    /// </summary>
-    public int Flashes100 { get; private set; }
-
-    /// <summary>
-    /// Gets the number of the first step where all the octopuses flash.
-    /// </summary>
-    public int StepOfFirstSynchronizedFlash { get; private set; }
-
-    /// <summary>
     /// Simulates the energy levels of the specified octopuses.
     /// </summary>
     /// <param name="grid">The grid of octopus energy levels.</param>
@@ -151,17 +141,14 @@ public sealed class Day11 : Puzzle<int, int>
     {
         var lines = await ReadResourceAsLinesAsync(cancellationToken);
 
-        (Flashes100, _) = Simulate(lines, steps: 100);
-        (_, StepOfFirstSynchronizedFlash) = Simulate(lines, steps: int.MaxValue);
+        (Solution1, _) = Simulate(lines, steps: 100);
+        (_, Solution2) = Simulate(lines, steps: int.MaxValue);
 
         if (Verbose)
         {
-            Logger.WriteLine("After 100 steps there are {0:N0} flashes.", Flashes100);
-            Logger.WriteLine("The octopuses all flash for the first time after {0:N0} steps.", StepOfFirstSynchronizedFlash);
+            Logger.WriteLine("After 100 steps there are {0:N0} flashes.", Solution1);
+            Logger.WriteLine("The octopuses all flash for the first time after {0:N0} steps.", Solution2);
         }
-
-        Solution1 = Flashes100;
-        Solution2 = StepOfFirstSynchronizedFlash;
 
         return Result();
     }

@@ -7,18 +7,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016;
 /// A class representing the puzzle for <c>https://adventofcode.com/2016/day/4</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2016, 04, "Security Through Obscurity", RequiresData = true)]
-public sealed class Day04 : Puzzle
+public sealed class Day04 : Puzzle<int, int>
 {
-    /// <summary>
-    /// Gets the sector Id of the room where North Pole objects are stored.
-    /// </summary>
-    public int SectorIdOfNorthPoleObjectsRoom { get; private set; }
-
-    /// <summary>
-    /// Gets the sum of the sector Ids of all real rooms.
-    /// </summary>
-    public int SumOfSectorIdsOfRealRooms { get; private set; }
-
     /// <summary>
     /// Decrypts the name of the specified room.
     /// </summary>
@@ -88,16 +78,16 @@ public sealed class Day04 : Puzzle
     {
         var names = await ReadResourceAsLinesAsync(cancellationToken);
 
-        SumOfSectorIdsOfRealRooms = SumOfRealRoomSectorIds(names);
-        SectorIdOfNorthPoleObjectsRoom = GetSectorIdOfNorthPoleObjectsRoom(names);
+        Solution1 = SumOfRealRoomSectorIds(names);
+        Solution2 = GetSectorIdOfNorthPoleObjectsRoom(names);
 
         if (Verbose)
         {
-            Logger.WriteLine("The sum of the sector Ids of the real rooms is {0:N0}.", SumOfSectorIdsOfRealRooms);
-            Logger.WriteLine("The sector ID of the room where North Pole objects are stored is {0:N0}.", SectorIdOfNorthPoleObjectsRoom);
+            Logger.WriteLine("The sum of the sector Ids of the real rooms is {0:N0}.", Solution1);
+            Logger.WriteLine("The sector ID of the room where North Pole objects are stored is {0:N0}.", Solution2);
         }
 
-        return PuzzleResult.Create(SumOfSectorIdsOfRealRooms, SectorIdOfNorthPoleObjectsRoom);
+        return Result();
     }
 
     /// <summary>

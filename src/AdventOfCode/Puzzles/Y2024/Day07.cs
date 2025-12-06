@@ -10,16 +10,6 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2024;
 public sealed class Day07 : Puzzle<long, long>
 {
     /// <summary>
-    /// Gets the first calibration result for the bridge.
-    /// </summary>
-    public long CalibrationResult1 { get; private set; }
-
-    /// <summary>
-    /// Gets the second calibration result for the bridge.
-    /// </summary>
-    public long CalibrationResult2 { get; private set; }
-
-    /// <summary>
     /// Calibrates the bridge using the specified equations.
     /// </summary>
     /// <param name="equations">The equations to use to calibrate the bridge.</param>
@@ -113,17 +103,14 @@ public sealed class Day07 : Puzzle<long, long>
 
         var equations = await ReadResourceAsLinesAsync(cancellationToken);
 
-        CalibrationResult1 = Calibrate(equations, useConcatenation: false);
-        CalibrationResult2 = Calibrate(equations, useConcatenation: true);
+        Solution1 = Calibrate(equations, useConcatenation: false);
+        Solution2 = Calibrate(equations, useConcatenation: true);
 
         if (Verbose)
         {
-            Logger.WriteLine("The total calibration result is {0}.", CalibrationResult1);
-            Logger.WriteLine("The total calibration result using concatenation is {0}.", CalibrationResult2);
+            Logger.WriteLine("The total calibration result is {0}.", Solution1);
+            Logger.WriteLine("The total calibration result using concatenation is {0}.", Solution2);
         }
-
-        Solution1 = CalibrationResult1;
-        Solution2 = CalibrationResult2;
 
         return Result();
     }

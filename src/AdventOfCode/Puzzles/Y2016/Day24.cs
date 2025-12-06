@@ -10,16 +10,6 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016;
 public sealed class Day24 : Puzzle<int, int>
 {
     /// <summary>
-    /// Gets the fewest steps that can be taken to visit all of the locations.
-    /// </summary>
-    public int FewestStepsToVisitAllLocations { get; private set; }
-
-    /// <summary>
-    /// Gets the fewest steps that can be taken to visit all of the locations and return to the origin.
-    /// </summary>
-    public int FewestStepsToVisitAllLocationsAndReturn { get; private set; }
-
-    /// <summary>
     /// Returns the minimum number of steps required to visit all of the locations in the maze.
     /// </summary>
     /// <param name="layout">The layout of the maze.</param>
@@ -90,22 +80,19 @@ public sealed class Day24 : Puzzle<int, int>
     {
         var layout = await ReadResourceAsLinesAsync(cancellationToken);
 
-        FewestStepsToVisitAllLocations = GetMinimumStepsToVisitLocations(layout, returnToOrigin: false, cancellationToken);
-        FewestStepsToVisitAllLocationsAndReturn = GetMinimumStepsToVisitLocations(layout, returnToOrigin: true, cancellationToken);
+        Solution1 = GetMinimumStepsToVisitLocations(layout, returnToOrigin: false, cancellationToken);
+        Solution2 = GetMinimumStepsToVisitLocations(layout, returnToOrigin: true, cancellationToken);
 
         if (Verbose)
         {
             Logger.WriteLine(
                 "The fewest number of steps required to visit every location is {0}.",
-                FewestStepsToVisitAllLocations);
+                Solution1);
 
             Logger.WriteLine(
                 "The fewest number of steps required to visit every location and return to the origin is {0}.",
-                FewestStepsToVisitAllLocationsAndReturn);
+                Solution2);
         }
-
-        Solution1 = FewestStepsToVisitAllLocations;
-        Solution2 = FewestStepsToVisitAllLocationsAndReturn;
 
         return Result();
     }

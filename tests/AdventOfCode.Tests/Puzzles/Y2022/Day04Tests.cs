@@ -35,8 +35,7 @@ public sealed class Day04Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         var puzzle = await SolvePuzzleAsync<Day04>();
 
         // Assert
-        puzzle.ShouldNotBeNull();
-        puzzle.FullyOverlappingAssignments.ShouldBe(526);
-        puzzle.PartiallyOverlappingAssignments.ShouldBe(886);
+        puzzle.Solution1.ShouldBe(526);
+        puzzle.Solution2.ShouldBe(886);
     }
 }

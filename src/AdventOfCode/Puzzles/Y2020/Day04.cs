@@ -16,16 +16,6 @@ public sealed partial class Day04 : Puzzle<int, int>
     /// </summary>
     private static readonly ImmutableArray<string> RequiredKeys = ["byr", "ecl", "eyr", "hcl", "hgt", "iyr", "pid"];
 
-    /// <summary>
-    /// Gets the number of valid passports.
-    /// </summary>
-    public int ValidPassports { get; private set; }
-
-    /// <summary>
-    /// Gets the number of verified passports.
-    /// </summary>
-    public int VerifiedPassports { get; private set; }
-
     [GeneratedRegex("#[0-9a-f]{6}", RegexOptions.IgnoreCase)]
     private static partial Regex HexColor { get; }
 
@@ -90,16 +80,13 @@ public sealed partial class Day04 : Puzzle<int, int>
     {
         var batch = await ReadResourceAsLinesAsync(cancellationToken);
 
-        (ValidPassports, VerifiedPassports) = VerifyPassports(batch);
+        (Solution1, Solution2) = VerifyPassports(batch);
 
         if (Verbose)
         {
-            Logger.WriteLine("There are {0} valid passports.", ValidPassports);
-            Logger.WriteLine("There are {0} verified passports.", VerifiedPassports);
+            Logger.WriteLine("There are {0} valid passports.", Solution1);
+            Logger.WriteLine("There are {0} verified passports.", Solution2);
         }
-
-        Solution1 = ValidPassports;
-        Solution2 = VerifiedPassports;
 
         return Result();
     }

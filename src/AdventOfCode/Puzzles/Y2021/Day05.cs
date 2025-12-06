@@ -10,17 +10,6 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2021;
 public sealed class Day05 : Puzzle<int, int>
 {
     /// <summary>
-    /// Gets the number of positions with more than one vent.
-    /// </summary>
-    public int OverlappingVents { get; private set; }
-
-    /// <summary>
-    /// Gets the number of positions with more than one vent
-    /// with line segments that are diagonal considered.
-    /// </summary>
-    public int OverlappingVentsWithDiagonals { get; private set; }
-
-    /// <summary>
     /// Gets the number of positions with more than one vent from
     /// navigating the field of vents specified by the line segments.
     /// </summary>
@@ -66,22 +55,19 @@ public sealed class Day05 : Puzzle<int, int>
     {
         var lineSegments = await ReadResourceAsLinesAsync(cancellationToken);
 
-        OverlappingVents = NavigateVents(lineSegments, useDiagonals: false);
-        OverlappingVentsWithDiagonals = NavigateVents(lineSegments, useDiagonals: true);
+        Solution1 = NavigateVents(lineSegments, useDiagonals: false);
+        Solution2 = NavigateVents(lineSegments, useDiagonals: true);
 
         if (Verbose)
         {
             Logger.WriteLine(
                 "There are overlapping vents at {0:N0} points without considering diagonals.",
-                OverlappingVents);
+                Solution1);
 
             Logger.WriteLine(
                 "There are overlapping vents at {0:N0} points considering diagonals.",
-                OverlappingVentsWithDiagonals);
+                Solution2);
         }
-
-        Solution1 = OverlappingVents;
-        Solution2 = OverlappingVentsWithDiagonals;
 
         return Result();
     }

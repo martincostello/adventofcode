@@ -10,18 +10,6 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2021;
 public sealed class Day07 : Puzzle<long, long>
 {
     /// <summary>
-    /// Gets the optimal units of fuel consumed to align the crab
-    /// submarines when the fuel has a constant burn rate.
-    /// </summary>
-    public long FuelConsumedWithConstantBurnRate { get; private set; }
-
-    /// <summary>
-    /// Gets the optimal units of fuel consumed to align the crab
-    /// submarines when the fuel has a variable burn rate.
-    /// </summary>
-    public long FuelConsumedWithVariableBurnRate { get; private set; }
-
-    /// <summary>
     /// Determines the optimal units of fuel consumed to align the specified crab submarines.
     /// </summary>
     /// <param name="submarines">The initial positions of the submarines.</param>
@@ -74,22 +62,19 @@ public sealed class Day07 : Puzzle<long, long>
     {
         var submarines = (await ReadResourceAsStringAsync(cancellationToken)).AsNumbers<int>();
 
-        FuelConsumedWithConstantBurnRate = AlignSubmarines(submarines, withVariableBurnRate: false);
-        FuelConsumedWithVariableBurnRate = AlignSubmarines(submarines, withVariableBurnRate: true);
+        Solution1 = AlignSubmarines(submarines, withVariableBurnRate: false);
+        Solution2 = AlignSubmarines(submarines, withVariableBurnRate: true);
 
         if (Verbose)
         {
             Logger.WriteLine(
                 "The least fuel consumed to align the crabs' submarines with a constant burn rate is {0:N0}.",
-                FuelConsumedWithConstantBurnRate);
+                Solution1);
 
             Logger.WriteLine(
                 "The least fuel consumed to align the crabs' submarines with a variable burn rate is {0:N0}.",
-                FuelConsumedWithVariableBurnRate);
+                Solution2);
         }
-
-        Solution1 = FuelConsumedWithConstantBurnRate;
-        Solution2 = FuelConsumedWithVariableBurnRate;
 
         return Result();
     }

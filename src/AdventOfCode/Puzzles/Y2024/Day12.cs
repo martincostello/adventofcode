@@ -7,13 +7,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2024;
 /// A class representing the puzzle for <c>https://adventofcode.com/2024/day/12</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2024, 12, "Garden Groups", RequiresData = true)]
-public sealed class Day12 : Puzzle<int, int>
+public sealed class Day12 : Puzzle<int>
 {
-    /// <summary>
-    /// Gets the total price for the fencing.
-    /// </summary>
-    public int TotalPrice { get; private set; }
-
     /// <summary>
     /// Computes the price of adding fencing to separate the regions of the specified map.
     /// </summary>
@@ -89,21 +84,19 @@ public sealed class Day12 : Puzzle<int, int>
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        ArgumentNullException.ThrowIfNull(args);
+        return await SolveWithLinesAsync(
+            static (values, logger, cancellationToken) =>
+            {
+                int totalPrice = Compute(values, cancellationToken);
 
-        var values = await ReadResourceAsLinesAsync(cancellationToken);
+                if (logger is { })
+                {
+                    logger.WriteLine("The total price of fencing all regions of the map is {0}.", totalPrice);
+                }
 
-        TotalPrice = Compute(values, cancellationToken);
-
-        if (Verbose)
-        {
-            Logger.WriteLine("The total price of fencing all regions of the map is {0}.", TotalPrice);
-        }
-
-        Solution1 = TotalPrice;
-        Solution2 = Unsolved;
-
-        return Result();
+                return totalPrice;
+            },
+            cancellationToken);
     }
 
     private sealed class Garden(char plant, IList<string> plants, Rectangle bounds) : SquareGrid(bounds)

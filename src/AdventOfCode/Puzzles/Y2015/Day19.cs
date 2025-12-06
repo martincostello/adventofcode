@@ -12,16 +12,6 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015;
 public sealed partial class Day19 : Puzzle<int, int>
 {
     /// <summary>
-    /// Gets the solution for calibration.
-    /// </summary>
-    public int CalibrationSolution { get; private set; }
-
-    /// <summary>
-    /// Gets the solution for fabrication.
-    /// </summary>
-    public int FabricationSolution { get; private set; }
-
-    /// <summary>
     /// Gets the possible molecules that can be created from single step transformations of a molecule.
     /// </summary>
     /// <param name="molecule">The input molecule.</param>
@@ -154,20 +144,17 @@ public sealed partial class Day19 : Puzzle<int, int>
             .Select((p) => (p[0], p[1]))
             .ToList();
 
-        CalibrationSolution = GetPossibleMolecules(molecule, replacements, cancellationToken);
+        Solution1 = GetPossibleMolecules(molecule, replacements, cancellationToken);
 
         // See https://www.reddit.com/r/adventofcode/comments/3xflz8/comment/cy4h7ji/.
         // For some reason, it doesn't work on the test inputs (off by one) but does on the real input.
-        FabricationSolution = molecule.Count(char.IsUpper) - ArgonOrRadon().Count(molecule) - (2 * molecule.Count((p) => p is 'Y')) - 1;
+        Solution2 = molecule.Count(char.IsUpper) - ArgonOrRadon().Count(molecule) - (2 * molecule.Count((p) => p is 'Y')) - 1;
 
         if (Verbose)
         {
-            Logger.WriteLine($"{CalibrationSolution:N0} distinct molecules can be created from {FabricationSolution:N0} possible replacements.");
-            Logger.WriteLine($"The target molecule can be made in a minimum of {CalibrationSolution:N0} steps.");
+            Logger.WriteLine($"{Solution1:N0} distinct molecules can be created from {Solution2:N0} possible replacements.");
+            Logger.WriteLine($"The target molecule can be made in a minimum of {Solution1:N0} steps.");
         }
-
-        Solution1 = CalibrationSolution;
-        Solution2 = FabricationSolution;
 
         return Result();
     }

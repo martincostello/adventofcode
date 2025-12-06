@@ -20,16 +20,6 @@ public sealed class Day17 : Puzzle<int, int>
     private const char Inactive = '.';
 
     /// <summary>
-    /// Gets the number of active cubes in three dimensions after the specified number of cycles.
-    /// </summary>
-    public int ActiveCubes3D { get; private set; }
-
-    /// <summary>
-    /// Gets the number of active cubes in four dimensions after the specified number of cycles.
-    /// </summary>
-    public int ActiveCubes4D { get; private set; }
-
-    /// <summary>
     /// Gets the number of active cubes for the specified initial states.
     /// </summary>
     /// <param name="initialStates">The initial cube states.</param>
@@ -60,20 +50,14 @@ public sealed class Day17 : Puzzle<int, int>
 
         int cycles = 6;
 
-        (int activeCubes3D, string visualization3D) = GetActiveCubes(layout, cycles, dimensions: 3);
-        (int activeCubes4D, string visualization4D) = GetActiveCubes(layout, cycles, dimensions: 4);
-
-        ActiveCubes3D = activeCubes3D;
-        ActiveCubes4D = activeCubes4D;
+        (Solution1, string visualization3D) = GetActiveCubes(layout, cycles, dimensions: 3);
+        (Solution2, string visualization4D) = GetActiveCubes(layout, cycles, dimensions: 4);
 
         if (Verbose)
         {
-            Logger.WriteLine("There are {0} active cubes after {1} cycles in 3 dimensions.", ActiveCubes3D, cycles);
-            Logger.WriteLine("There are {0} active cubes after {1} cycles in 4 dimensions.", ActiveCubes4D, cycles);
+            Logger.WriteLine("There are {0} active cubes after {1} cycles in 3 dimensions.", Solution1, cycles);
+            Logger.WriteLine("There are {0} active cubes after {1} cycles in 4 dimensions.", Solution2, cycles);
         }
-
-        Solution1 = ActiveCubes3D;
-        Solution2 = ActiveCubes4D;
 
         var result = Result();
         result.Visualizations.Add(visualization3D);

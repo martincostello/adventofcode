@@ -10,16 +10,6 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2025;
 public sealed class Day03 : Puzzle<long, long>
 {
     /// <summary>
-    /// Gets the total output joltage for two batteries.
-    /// </summary>
-    public long TotalOutputJoltageFor2 { get; private set; }
-
-    /// <summary>
-    /// Gets the total output joltage for twelve batteries.
-    /// </summary>
-    public long TotalOutputJoltageFor12 { get; private set; }
-
-    /// <summary>
     /// Gets the sum of the maximum joltage produced by the specified battery banks.
     /// </summary>
     /// <param name="batteryBanks">The battery banks to get the joltage for.</param>
@@ -94,17 +84,14 @@ public sealed class Day03 : Puzzle<long, long>
 
         var batteryBanks = await ReadResourceAsLinesAsync(cancellationToken);
 
-        TotalOutputJoltageFor2 = GetJoltage(batteryBanks, batteries: 2);
-        TotalOutputJoltageFor12 = GetJoltage(batteryBanks, batteries: 12);
+        Solution1 = GetJoltage(batteryBanks, batteries: 2);
+        Solution2 = GetJoltage(batteryBanks, batteries: 12);
 
         if (Verbose)
         {
-            Logger.WriteLine("The total output joltage for 2 batteries is {0}", TotalOutputJoltageFor2);
-            Logger.WriteLine("The total output joltage for 12 batteries is {0}", TotalOutputJoltageFor12);
+            Logger.WriteLine("The total output joltage for 2 batteries is {0}", Solution1);
+            Logger.WriteLine("The total output joltage for 12 batteries is {0}", Solution2);
         }
-
-        Solution1 = TotalOutputJoltageFor2;
-        Solution2 = TotalOutputJoltageFor12;
 
         return Result();
     }

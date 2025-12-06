@@ -27,7 +27,7 @@ public sealed class Day04Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         var puzzle = await SolvePuzzleAsync<Day04>(secretKey);
 
         // Assert
-        puzzle.LowestZeroHash5.ShouldBe(346386);
-        puzzle.LowestZeroHash6.ShouldBe(9958218);
+        puzzle.Solution1.ShouldBe(346386);
+        puzzle.Solution2.ShouldBe(9958218);
     }
 }

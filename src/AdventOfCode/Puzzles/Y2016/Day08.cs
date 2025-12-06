@@ -10,16 +10,6 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016;
 public sealed class Day08 : Puzzle<int, string>
 {
     /// <summary>
-    /// Gets the number of pixels that are be lit.
-    /// </summary>
-    public int PixelsLit { get; private set; }
-
-    /// <summary>
-    /// Gets the code displayed on the screen.
-    /// </summary>
-    public string Code { get; private set; } = string.Empty;
-
-    /// <summary>
     /// Gets the number of pixels lit in the specified grid after following the specified instructions.
     /// </summary>
     /// <param name="instructions">The instructions to use to manipulate the grid of lights.</param>
@@ -74,16 +64,13 @@ public sealed class Day08 : Puzzle<int, string>
     {
         var instructions = await ReadResourceAsLinesAsync(cancellationToken);
 
-        (PixelsLit, Code, string visualization) = GetPixelsLit(instructions, width: 50, height: 6, Logger);
+        (Solution1, Solution2, string visualization) = GetPixelsLit(instructions, width: 50, height: 6, Logger);
 
         if (Verbose)
         {
-            Logger.WriteLine($"There are {PixelsLit:N0} pixels lit.");
-            Logger.WriteLine($"The code displayed is {Code}.");
+            Logger.WriteLine($"There are {Solution1:N0} pixels lit.");
+            Logger.WriteLine($"The code displayed is {Solution2}.");
         }
-
-        Solution1 = PixelsLit;
-        Solution2 = Code;
 
         var result = Result();
         result.Visualizations.Add(visualization);

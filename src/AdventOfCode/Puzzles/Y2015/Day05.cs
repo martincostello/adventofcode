@@ -17,16 +17,6 @@ public sealed class Day05 : Puzzle<int, int>
     private static readonly SearchValues<string> NotNiceSequences = SearchValues.Create(["ab", "cd", "pq", "xy"], StringComparison.Ordinal);
 
     /// <summary>
-    /// Gets the number of 'nice' strings using version 1 of the rules.
-    /// </summary>
-    public int NiceStringCountV1 { get; private set; }
-
-    /// <summary>
-    /// Gets the number of 'nice' strings using version 2 of the rules.
-    /// </summary>
-    public int NiceStringCountV2 { get; private set; }
-
-    /// <summary>
     /// Returns whether the specified string is 'nice' using the first set of criteria.
     /// </summary>
     /// <param name="value">The string to test for niceness.</param>
@@ -87,12 +77,9 @@ public sealed class Day05 : Puzzle<int, int>
     /// <returns>
     /// <see langword="true"/> if <paramref name="value"/> is 'nice'; otherwise <see langword="false"/>.
     /// </returns>
-    public static bool IsNiceV2(string value)
-    {
-        return
-            HasLetterThatIsTheBreadOfALetterSandwich(value) &&
-            HasPairOfLettersWithMoreThanOneOccurrence(value);
-    }
+    public static bool IsNiceV2(ReadOnlySpan<char> value) =>
+        HasLetterThatIsTheBreadOfALetterSandwich(value) &&
+        HasPairOfLettersWithMoreThanOneOccurrence(value);
 
     /// <summary>
     /// Tests whether a string contains a pair of any two letters that
@@ -151,18 +138,18 @@ public sealed class Day05 : Puzzle<int, int>
     {
         var values = await ReadResourceAsLinesAsync(cancellationToken);
 
-        NiceStringCountV1 = values.Count((p) => IsNiceV1(p));
-        NiceStringCountV2 = values.Count(IsNiceV2);
+        Solution1 = values.Count(IsNiceV1);
+        Solution2 = values.Count(IsNiceV2);
 
         if (Verbose)
         {
-            Logger.WriteLine("{0:N0} strings are nice using version 1 of the rules.", NiceStringCountV1);
-            Logger.WriteLine("{0:N0} strings are nice using version 2 of the rules.", NiceStringCountV2);
+            Logger.WriteLine("{0:N0} strings are nice using version 1 of the rules.", Solution1);
+            Logger.WriteLine("{0:N0} strings are nice using version 2 of the rules.", Solution2);
         }
 
-        Solution1 = NiceStringCountV1;
-        Solution2 = NiceStringCountV2;
-
         return Result();
+
+        static bool IsNiceV1(string s) => Day05.IsNiceV1(s);
+        static bool IsNiceV2(string s) => Day05.IsNiceV2(s);
     }
 }

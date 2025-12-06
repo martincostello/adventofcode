@@ -98,7 +98,7 @@ public sealed class Day12Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         var puzzle = await SolvePuzzleAsync<Day12>();
 
         // Assert
-        puzzle.Count1.ShouldBe(4413);
-        puzzle.Count2.ShouldBe(118803);
+        puzzle.Solution1.ShouldBe(4413);
+        puzzle.Solution2.ShouldBe(118803);
     }
 }

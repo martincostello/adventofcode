@@ -38,7 +38,6 @@ public sealed class Day09Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         var puzzle = await SolvePuzzleAsync<Day09>();
 
         // Assert
-        puzzle.ShouldNotBeNull();
-        puzzle.Checksum.ShouldBe(6395800119709);
+        puzzle.Solution.ShouldBe(6395800119709);
     }
 }

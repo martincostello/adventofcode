@@ -7,18 +7,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015;
 /// A class representing the puzzle for <c>https://adventofcode.com/2015/day/15</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2015, 15, "Science for Hungry People", RequiresData = true, IsSlow = true)]
-public sealed class Day15 : Puzzle
+public sealed class Day15 : Puzzle<int, int>
 {
-    /// <summary>
-    /// Gets the highest total cookie score.
-    /// </summary>
-    internal int HighestTotalCookieScore { get; private set; }
-
-    /// <summary>
-    /// Gets the highest total cookie score that has exactly 500 calories.
-    /// </summary>
-    internal int HighestTotalCookieScoreWith500Calories { get; private set; }
-
     /// <summary>
     /// Returns the highest total cookie score for the specified ingredients.
     /// </summary>
@@ -86,16 +76,16 @@ public sealed class Day15 : Puzzle
     {
         var ingredients = await ReadResourceAsLinesAsync(cancellationToken);
 
-        HighestTotalCookieScore = GetHighestTotalCookieScore(ingredients);
-        HighestTotalCookieScoreWith500Calories = GetHighestTotalCookieScore(ingredients, 500);
+        Solution1 = GetHighestTotalCookieScore(ingredients);
+        Solution2 = GetHighestTotalCookieScore(ingredients, 500);
 
         if (Verbose)
         {
-            Logger.WriteLine("The highest total cookie score is {0:N0}.", HighestTotalCookieScore);
-            Logger.WriteLine("The highest total cookie score for a cookie with 500 calories is {0:N0}.", HighestTotalCookieScoreWith500Calories);
+            Logger.WriteLine("The highest total cookie score is {0:N0}.", Solution1);
+            Logger.WriteLine("The highest total cookie score for a cookie with 500 calories is {0:N0}.", Solution2);
         }
 
-        return PuzzleResult.Create(HighestTotalCookieScore, HighestTotalCookieScoreWith500Calories);
+        return Result();
     }
 
     /// <summary>

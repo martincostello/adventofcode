@@ -26,7 +26,7 @@ public sealed class Day11Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         var puzzle = await SolvePuzzleAsync<Day11>();
 
         // Assert
-        puzzle.MinimumSteps.ShouldBe(796);
-        puzzle.MaximumDistance.ShouldBe(1585);
+        puzzle.Solution1.ShouldBe(796);
+        puzzle.Solution2.ShouldBe(1585);
     }
 }

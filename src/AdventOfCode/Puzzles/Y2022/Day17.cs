@@ -10,18 +10,6 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2022;
 public sealed class Day17 : Puzzle<long, long>
 {
     /// <summary>
-    /// Gets how many units tall will the tower of rocks
-    /// will be after 2022 rocks have stopped falling.
-    /// </summary>
-    public long Height2022 { get; private set; }
-
-    /// <summary>
-    /// Gets how many units tall will the tower of rocks
-    /// will be after 1,000,000,000,000 rocks have stopped falling.
-    /// </summary>
-    public long HeightTrillion { get; private set; }
-
-    /// <summary>
     /// Gets the height of the tower of rocks after
     /// the specified number of rocks have stopped falling.
     /// </summary>
@@ -79,17 +67,14 @@ public sealed class Day17 : Puzzle<long, long>
     {
         string jets = (await ReadResourceAsStringAsync(cancellationToken)).Trim();
 
-        Height2022 = GetHeightOfTower(jets.Trim(), count: 2022, cancellationToken);
-        HeightTrillion = GetHeightOfTower(jets.Trim(), count: 1_000_000_000_000, cancellationToken);
+        Solution1 = GetHeightOfTower(jets.Trim(), count: 2022, cancellationToken);
+        Solution2 = GetHeightOfTower(jets.Trim(), count: 1_000_000_000_000, cancellationToken);
 
         if (Verbose)
         {
-            Logger.WriteLine("The tower of rocks is {0} units tall after 2022 rocks have stopped falling.", Height2022);
-            Logger.WriteLine("The tower of rocks is {0} units tall after 1,000,000,000,000 rocks have stopped falling.", HeightTrillion);
+            Logger.WriteLine("The tower of rocks is {0} units tall after 2022 rocks have stopped falling.", Solution1);
+            Logger.WriteLine("The tower of rocks is {0} units tall after 1,000,000,000,000 rocks have stopped falling.", Solution2);
         }
-
-        Solution1 = Height2022;
-        Solution2 = HeightTrillion;
 
         return Result();
     }

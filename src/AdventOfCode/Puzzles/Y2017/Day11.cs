@@ -40,16 +40,6 @@ public sealed class Day11 : Puzzle<int, int>
     private static readonly Vector2 SouthWest = -Vector2.UnitY + -Vector2.UnitX;
 
     /// <summary>
-    /// Gets the maximum distance the child process reached from its origin.
-    /// </summary>
-    public int MaximumDistance { get; private set; }
-
-    /// <summary>
-    /// Gets the minimum number of steps required to reach the child process.
-    /// </summary>
-    public int MinimumSteps { get; private set; }
-
-    /// <summary>
     /// Finds the minimum number of steps required to traverse the specified path and
     /// the maximum number of steps taken from the origin.
     /// </summary>
@@ -86,16 +76,13 @@ public sealed class Day11 : Puzzle<int, int>
     {
         string path = (await ReadResourceAsStringAsync(cancellationToken)).Trim();
 
-        (MinimumSteps, MaximumDistance) = FindStepRange(path);
+        (Solution1, Solution2) = FindStepRange(path);
 
         if (Verbose)
         {
-            Logger.WriteLine($"The minimum number of steps required to reach the child process is {MinimumSteps:N0}.");
-            Logger.WriteLine($"The maximum distance reached by the child process was {MaximumDistance:N0}.");
+            Logger.WriteLine($"The minimum number of steps required to reach the child process is {Solution1:N0}.");
+            Logger.WriteLine($"The maximum distance reached by the child process was {Solution2:N0}.");
         }
-
-        Solution1 = MinimumSteps;
-        Solution2 = MaximumDistance;
 
         return Result();
     }

@@ -10,16 +10,6 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2021;
 public sealed class Day20 : Puzzle<int, int>
 {
     /// <summary>
-    /// Gets the number of lit pixels after the image is enhanced twice.
-    /// </summary>
-    public int LitPixelCount2 { get; private set; }
-
-    /// <summary>
-    /// Gets the number of lit pixels after the image is enhanced fifty times.
-    /// </summary>
-    public int LitPixelCount50 { get; private set; }
-
-    /// <summary>
     /// Enhances an image the specified number of times.
     /// </summary>
     /// <param name="imageData">The image data to enhance.</param>
@@ -147,17 +137,14 @@ public sealed class Day20 : Puzzle<int, int>
     {
         var imageData = await ReadResourceAsLinesAsync(cancellationToken);
 
-        (LitPixelCount2, _) = Enhance(imageData, enhancements: 2);
-        (LitPixelCount50, _) = Enhance(imageData, enhancements: 50);
+        (Solution1, _) = Enhance(imageData, enhancements: 2);
+        (Solution2, _) = Enhance(imageData, enhancements: 50);
 
         if (Verbose)
         {
-            Logger.WriteLine("There are {0:N0} lit pixels after two enhancements of the image.", LitPixelCount2);
-            Logger.WriteLine("There are {0:N0} lit pixels after fifty enhancements of the image.", LitPixelCount50);
+            Logger.WriteLine("There are {0:N0} lit pixels after two enhancements of the image.", Solution1);
+            Logger.WriteLine("There are {0:N0} lit pixels after fifty enhancements of the image.", Solution2);
         }
-
-        Solution1 = LitPixelCount2;
-        Solution2 = LitPixelCount50;
 
         return Result();
     }

@@ -10,16 +10,6 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2022;
 public sealed class Day06 : Puzzle<int, int>
 {
     /// <summary>
-    /// Gets the index of the first start-of-packet marker.
-    /// </summary>
-    public int IndexOfFirstStartOfPacketMarker { get; private set; }
-
-    /// <summary>
-    /// Gets the index of the first start-of-message marker.
-    /// </summary>
-    public int IndexOfFirstStartOfMessageMarker { get; private set; }
-
-    /// <summary>
     /// Finds the index of the first start-of-packet marker in the datastream.
     /// </summary>
     /// <param name="datastream">The datastream to find the index of the first start-of-packet marker.</param>
@@ -55,22 +45,19 @@ public sealed class Day06 : Puzzle<int, int>
     {
         string datastream = await ReadResourceAsStringAsync(cancellationToken);
 
-        IndexOfFirstStartOfPacketMarker = FindFirstPacket(datastream, 4);
-        IndexOfFirstStartOfMessageMarker = FindFirstPacket(datastream, 14);
+        Solution1 = FindFirstPacket(datastream, 4);
+        Solution2 = FindFirstPacket(datastream, 14);
 
         if (Verbose)
         {
             Logger.WriteLine(
                 "{0} characters need to be processed before the first start-of-packet marker is detected.",
-                IndexOfFirstStartOfPacketMarker);
+                Solution1);
 
             Logger.WriteLine(
                 "{0} characters need to be processed before the first start-of-message marker is detected.",
-                IndexOfFirstStartOfMessageMarker);
+                Solution2);
         }
-
-        Solution1 = IndexOfFirstStartOfPacketMarker;
-        Solution2 = IndexOfFirstStartOfMessageMarker;
 
         return Result();
     }

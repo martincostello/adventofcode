@@ -32,7 +32,7 @@ public sealed class Day09Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         var puzzle = await SolvePuzzleAsync<Day09>();
 
         // Assert
-        puzzle.DecompressedLengthVersion1.ShouldBe(98135);
-        puzzle.DecompressedLengthVersion2.ShouldBe(10964557606);
+        puzzle.Solution1.ShouldBe(98135);
+        puzzle.Solution2.ShouldBe(10964557606);
     }
 }

@@ -12,16 +12,6 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2024;
 public sealed partial class Day03 : Puzzle<int, int>
 {
     /// <summary>
-    /// Gets the sum of the multiplications.
-    /// </summary>
-    public int Sum { get; private set; }
-
-    /// <summary>
-    /// Gets the sum of the multiplications with enhanced accuracy.
-    /// </summary>
-    public int AccurateSum { get; private set; }
-
-    /// <summary>
     /// A regular expression that finds <c>mul</c> instructions.
     /// </summary>
     [GeneratedRegex(@"mul\([0-9]+\,[0-9]+\)")]
@@ -107,17 +97,14 @@ public sealed partial class Day03 : Puzzle<int, int>
 
         string memory = await ReadResourceAsStringAsync(cancellationToken);
 
-        Sum = Scan(memory, enhancedAccuracy: false, cancellationToken);
-        AccurateSum = Scan(memory, enhancedAccuracy: true, cancellationToken);
+        Solution1 = Scan(memory, enhancedAccuracy: false, cancellationToken);
+        Solution2 = Scan(memory, enhancedAccuracy: true, cancellationToken);
 
         if (Verbose)
         {
-            Logger.WriteLine("The sum of the multiplications is {0}", Sum);
-            Logger.WriteLine("The sum of the multiplications with more accuracy is {0}", AccurateSum);
+            Logger.WriteLine("The sum of the multiplications is {0}", Solution1);
+            Logger.WriteLine("The sum of the multiplications with more accuracy is {0}", Solution2);
         }
-
-        Solution1 = Sum;
-        Solution2 = AccurateSum;
 
         return Result();
     }

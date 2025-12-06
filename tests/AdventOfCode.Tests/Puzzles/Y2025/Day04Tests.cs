@@ -38,8 +38,7 @@ public sealed class Day04Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         var puzzle = await SolvePuzzleAsync<Day04>();
 
         // Assert
-        puzzle.ShouldNotBeNull();
-        puzzle.AccessibleRolls.ShouldBe(1587);
-        puzzle.RemovedRolls.ShouldBe(8946);
+        puzzle.Solution1.ShouldBe(1587);
+        puzzle.Solution2.ShouldBe(8946);
     }
 }

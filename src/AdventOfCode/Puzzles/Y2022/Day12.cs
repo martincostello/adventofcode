@@ -10,18 +10,6 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2022;
 public sealed class Day12 : Puzzle<int, int>
 {
     /// <summary>
-    /// Gets the fewest steps required to move from your current
-    /// position to the location that should get the best signal.
-    /// </summary>
-    public int MinimumStepsFromStart { get; private set; }
-
-    /// <summary>
-    /// Gets the fewest steps required to move from any position at
-    /// ground level to the location that should get the best signal.
-    /// </summary>
-    public int MinimumStepsFromGroundLevel { get; private set; }
-
-    /// <summary>
     /// Returns the minimum number of steps required to go to the
     /// highest point in the specified heightmap from the starting
     /// position and from any location at ground level.
@@ -95,21 +83,18 @@ public sealed class Day12 : Puzzle<int, int>
     {
         var heightmap = await ReadResourceAsLinesAsync(cancellationToken);
 
-        (MinimumStepsFromStart, MinimumStepsFromGroundLevel) = GetMinimumSteps(heightmap, cancellationToken);
+        (Solution1, Solution2) = GetMinimumSteps(heightmap, cancellationToken);
 
         if (Verbose)
         {
             Logger.WriteLine(
                 "The fewest steps required to move from your current position to the location that should get the best signal is {0}.",
-                MinimumStepsFromStart);
+                Solution1);
 
             Logger.WriteLine(
                 "The fewest steps required to move from any position at ground level to the location that should get the best signal is {0}.",
-                MinimumStepsFromGroundLevel);
+                Solution2);
         }
-
-        Solution1 = MinimumStepsFromStart;
-        Solution2 = MinimumStepsFromGroundLevel;
 
         return Result();
     }

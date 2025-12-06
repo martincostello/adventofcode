@@ -10,18 +10,6 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2022;
 public sealed class Day03 : Puzzle<int, int>
 {
     /// <summary>
-    /// Gets the sum of the priorities for the item type
-    /// which appears in both compartments of each rucksack.
-    /// </summary>
-    public int SumOfPriorities { get; private set; }
-
-    /// <summary>
-    /// Gets the sum of the priorities for the item type
-    /// which appears in all three rucksacks of each group of elves.
-    /// </summary>
-    public int SumOfPrioritiesOfGroups { get; private set; }
-
-    /// <summary>
     /// Gets the sum of the priorities for the item type which is common to each rucksack.
     /// </summary>
     /// <param name="inventories">The inventories for each rucksack.</param>
@@ -80,22 +68,19 @@ public sealed class Day03 : Puzzle<int, int>
     {
         var inventories = await ReadResourceAsLinesAsync(cancellationToken);
 
-        SumOfPriorities = GetSumOfCommonItemTypes(inventories, useGroups: false);
-        SumOfPrioritiesOfGroups = GetSumOfCommonItemTypes(inventories, useGroups: true);
+        Solution1 = GetSumOfCommonItemTypes(inventories, useGroups: false);
+        Solution2 = GetSumOfCommonItemTypes(inventories, useGroups: true);
 
         if (Verbose)
         {
             Logger.WriteLine(
                 "The sum of the priorities of the item types which appear in both compartments is {0:N0}.",
-                SumOfPriorities);
+                Solution1);
 
             Logger.WriteLine(
                 "The sum of the priorities of the item types which appear in all three rucksacks of each group of elves is {0:N0}.",
-                SumOfPrioritiesOfGroups);
+                Solution2);
         }
-
-        Solution1 = SumOfPriorities;
-        Solution2 = SumOfPrioritiesOfGroups;
 
         return Result();
     }

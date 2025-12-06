@@ -9,18 +9,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020;
 /// A class representing the puzzle for <c>https://adventofcode.com/2020/day/19</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2020, 19, "Monster Messages", RequiresData = true)]
-public sealed class Day19 : Puzzle
+public sealed class Day19 : Puzzle<int, int>
 {
-    /// <summary>
-    /// Gets the number of messages that completely match rule zero.
-    /// </summary>
-    public int MatchesRule0 { get; private set; }
-
-    /// <summary>
-    /// Gets the number of messages that completely match rule zero with the fix applied.
-    /// </summary>
-    public int MatchesRule0WithFix { get; private set; }
-
     /// <summary>
     /// Gets the count of the number of messages that completely match rule 0.
     /// </summary>
@@ -124,15 +114,15 @@ public sealed class Day19 : Puzzle
     {
         var input = await ReadResourceAsLinesAsync(cancellationToken);
 
-        MatchesRule0 = GetMatchCount(input, applyFix: false);
-        MatchesRule0WithFix = GetMatchCount(input, applyFix: true);
+        Solution1 = GetMatchCount(input, applyFix: false);
+        Solution2 = GetMatchCount(input, applyFix: true);
 
         if (Verbose)
         {
-            Logger.WriteLine("The number of messages that completely match rule 0 is {0} without the fix.", MatchesRule0);
-            Logger.WriteLine("The number of messages that completely match rule 0 is {0} with the fix.", MatchesRule0WithFix);
+            Logger.WriteLine("The number of messages that completely match rule 0 is {0} without the fix.", Solution1);
+            Logger.WriteLine("The number of messages that completely match rule 0 is {0} with the fix.", Solution2);
         }
 
-        return PuzzleResult.Create(MatchesRule0, MatchesRule0WithFix);
+        return Result();
     }
 }

@@ -10,16 +10,6 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015;
 public sealed class Day23 : Puzzle<uint, uint>
 {
     /// <summary>
-    /// Gets the final value of the <c>a</c> register.
-    /// </summary>
-    internal uint A { get; private set; }
-
-    /// <summary>
-    /// Gets the final value of the <c>b</c> register.
-    /// </summary>
-    internal uint B { get; private set; }
-
-    /// <summary>
     /// Processes the specified instructions and returns the values of registers a and b.
     /// </summary>
     /// <param name="instructions">The instructions to process.</param>
@@ -108,19 +98,16 @@ public sealed class Day23 : Puzzle<uint, uint>
         var instructions = await ReadResourceAsLinesAsync(cancellationToken);
         uint initialValue = args.Length == 1 ? Parse<uint>(args[0]) : 0;
 
-        (A, B) = ProcessInstructions(instructions, initialValue, Logger);
+        (Solution1, Solution2) = ProcessInstructions(instructions, initialValue, Logger);
 
         if (Verbose)
         {
             Logger.WriteLine(
                 "After processing {0:N0} instructions, the value of a is {1:N0} and the value of b is {2:N0}.",
                 instructions.Count,
-                A,
-                B);
+                Solution1,
+                Solution2);
         }
-
-        Solution1 = A;
-        Solution2 = B;
 
         return Result();
     }

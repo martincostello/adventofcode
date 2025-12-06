@@ -10,16 +10,6 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016;
 public sealed class Day20 : Puzzle<uint, uint>
 {
     /// <summary>
-    /// Gets the number of IP addresses that are not blocked.
-    /// </summary>
-    public uint AllowedIPCount { get; private set; }
-
-    /// <summary>
-    /// Gets the value of the lowest IP address that is not blocked.
-    /// </summary>
-    public uint LowestNonblockedIP { get; private set; }
-
-    /// <summary>
     /// Returns the value of the lowest IP address that is not
     /// blocked by the specified IP address range deny-list.
     /// </summary>
@@ -117,17 +107,14 @@ public sealed class Day20 : Puzzle<uint, uint>
     {
         var ranges = await ReadResourceAsLinesAsync(cancellationToken);
 
-        LowestNonblockedIP = GetLowestNonblockedIP(uint.MaxValue, ranges, out uint count);
-        AllowedIPCount = count;
+        Solution1 = GetLowestNonblockedIP(uint.MaxValue, ranges, out uint count);
+        Solution2 = count;
 
         if (Verbose)
         {
-            Logger.WriteLine($"The lowest-valued IP that is not blocked is {LowestNonblockedIP}.");
-            Logger.WriteLine($"The number of IP addresses allowed is {AllowedIPCount:N0}.");
+            Logger.WriteLine($"The lowest-valued IP that is not blocked is {Solution1}.");
+            Logger.WriteLine($"The number of IP addresses allowed is {2:N0}.");
         }
-
-        Solution1 = LowestNonblockedIP;
-        Solution2 = AllowedIPCount;
 
         return Result();
     }

@@ -35,7 +35,7 @@ public sealed class Day02Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         var puzzle = await SolvePuzzleAsync<Day02>();
 
         // Assert
-        puzzle.ProductOfFinalPosition.ShouldBe(2150351);
-        puzzle.ProductOfFinalPositionWithAim.ShouldBe(1842742223);
+        puzzle.Solution1.ShouldBe(2150351);
+        puzzle.Solution2.ShouldBe(1842742223);
     }
 }

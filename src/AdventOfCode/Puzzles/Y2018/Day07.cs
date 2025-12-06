@@ -10,16 +10,6 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2018;
 public sealed class Day07 : Puzzle<string, int>
 {
     /// <summary>
-    /// Gets the order in which the parts of the sleigh should be assembled.
-    /// </summary>
-    public string OrderOfAssembly { get; private set; } = string.Empty;
-
-    /// <summary>
-    /// Gets the time, in seconds, it takes to assemble the sleigh.
-    /// </summary>
-    public int TimeToAssemble { get; private set; }
-
-    /// <summary>
     /// Assembles the sleigh from the specified instructions.
     /// </summary>
     /// <param name="instructions">The assembly instructions.</param>
@@ -105,17 +95,14 @@ public sealed class Day07 : Puzzle<string, int>
 
         const int OneMinute = 60;
 
-        (OrderOfAssembly, _) = Assemble(instructions, workers: 1, partDuration: OneMinute);
-        (_, TimeToAssemble) = Assemble(instructions, workers: 5, partDuration: OneMinute);
+        (Solution1, _) = Assemble(instructions, workers: 1, partDuration: OneMinute);
+        (_, Solution2) = Assemble(instructions, workers: 5, partDuration: OneMinute);
 
         if (Verbose)
         {
-            Logger.WriteLine("The order of assembly for the sleigh with one worker is {0}.", OrderOfAssembly);
-            Logger.WriteLine("The time to assemble the sleigh with 5 workers is {0}.", TimeToAssemble);
+            Logger.WriteLine("The order of assembly for the sleigh with one worker is {0}.", Solution1);
+            Logger.WriteLine("The time to assemble the sleigh with 5 workers is {0}.", Solution2);
         }
-
-        Solution1 = OrderOfAssembly;
-        Solution2 = TimeToAssemble;
 
         return Result();
     }

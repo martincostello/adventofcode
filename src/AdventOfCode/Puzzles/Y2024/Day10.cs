@@ -10,16 +10,6 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2024;
 public sealed class Day10 : Puzzle<int, int>
 {
     /// <summary>
-    /// Gets the sum of the trailhead scores.
-    /// </summary>
-    public int SumOfScores { get; private set; }
-
-    /// <summary>
-    /// Gets the sum of the trailhead ratings.
-    /// </summary>
-    public int SumOfRatings { get; private set; }
-
-    /// <summary>
     /// Explores the specified map of trails.
     /// </summary>
     /// <param name="map">The topographic map of trails.</param>
@@ -85,16 +75,13 @@ public sealed class Day10 : Puzzle<int, int>
 
         var values = await ReadResourceAsLinesAsync(cancellationToken);
 
-        (SumOfScores, SumOfRatings) = Explore(values);
+        (Solution1, Solution2) = Explore(values);
 
         if (Verbose)
         {
-            Logger.WriteLine("The sum of the scores of all trailheads in the topographic map is {0}.", SumOfScores);
-            Logger.WriteLine("The sum of the ratings of all trailheads in the topographic map is {0}.", SumOfRatings);
+            Logger.WriteLine("The sum of the scores of all trailheads in the topographic map is {0}.", Solution1);
+            Logger.WriteLine("The sum of the ratings of all trailheads in the topographic map is {0}.", Solution2);
         }
-
-        Solution1 = SumOfScores;
-        Solution2 = SumOfRatings;
 
         return Result();
     }

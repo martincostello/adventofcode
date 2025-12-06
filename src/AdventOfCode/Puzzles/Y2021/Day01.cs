@@ -10,16 +10,6 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2021;
 public sealed class Day01 : Puzzle<int, int>
 {
     /// <summary>
-    /// Gets the number of times the recorded depth increases.
-    /// </summary>
-    public int DepthIncreases { get; private set; }
-
-    /// <summary>
-    /// Gets the number of times the recorded depth increases over a sliding window.
-    /// </summary>
-    public int DepthIncreasesWithSlidingWindow { get; private set; }
-
-    /// <summary>
     /// Gets the number of times the depth increases in the specified sequence of depth measurements.
     /// </summary>
     /// <param name="depthMeasurements">The depth measurements to count the increases in.</param>
@@ -65,22 +55,19 @@ public sealed class Day01 : Puzzle<int, int>
     {
         var values = await ReadResourceAsNumbersAsync<int>(cancellationToken);
 
-        DepthIncreases = GetDepthMeasurementIncreases(values, useSlidingWindow: false);
-        DepthIncreasesWithSlidingWindow = GetDepthMeasurementIncreases(values, useSlidingWindow: true);
+        Solution1 = GetDepthMeasurementIncreases(values, useSlidingWindow: false);
+        Solution2 = GetDepthMeasurementIncreases(values, useSlidingWindow: true);
 
         if (Verbose)
         {
             Logger.WriteLine(
                 "The depth measurement increases {0:N0} times.",
-                DepthIncreases);
+                Solution1);
 
             Logger.WriteLine(
                 "The depth measurement increases {0:N0} times when using a sliding window of 3 measurements.",
-                DepthIncreasesWithSlidingWindow);
+                Solution2);
         }
-
-        Solution1 = DepthIncreases;
-        Solution2 = DepthIncreasesWithSlidingWindow;
 
         return Result();
     }

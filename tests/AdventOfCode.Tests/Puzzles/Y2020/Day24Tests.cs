@@ -67,7 +67,7 @@ public sealed class Day24Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         var puzzle = await SolvePuzzleAsync<Day24>();
 
         // Assert
-        puzzle.BlackTilesDay0.ShouldBe(289);
-        puzzle.BlackTilesDay100.ShouldBe(3551);
+        puzzle.Solution1.ShouldBe(289);
+        puzzle.Solution2.ShouldBe(3551);
     }
 }

@@ -12,16 +12,6 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2021;
 public sealed class Day16 : Puzzle<long, long>
 {
     /// <summary>
-    /// Gets the sum of the packet version numbers.
-    /// </summary>
-    public long VersionNumberSum { get; private set; }
-
-    /// <summary>
-    /// Gets the evaluated value of the transmission.
-    /// </summary>
-    public long Value { get; private set; }
-
-    /// <summary>
     /// Decodes the packets in the specified transmission.
     /// </summary>
     /// <param name="transmission">The transmission to decode.</param>
@@ -194,16 +184,13 @@ public sealed class Day16 : Puzzle<long, long>
     {
         string transmission = (await ReadResourceAsStringAsync(cancellationToken)).Trim();
 
-        (VersionNumberSum, Value) = Decode(transmission);
+        (Solution1, Solution2) = Decode(transmission);
 
         if (Verbose)
         {
-            Logger.WriteLine("The sum of the version numbers in all packets is {0:N0}.", VersionNumberSum);
-            Logger.WriteLine("The result of evaluating the transmission is {0:N0}.", Value);
+            Logger.WriteLine("The sum of the version numbers in all packets is {0:N0}.", Solution1);
+            Logger.WriteLine("The result of evaluating the transmission is {0:N0}.", Solution2);
         }
-
-        Solution1 = VersionNumberSum;
-        Solution2 = Value;
 
         return Result();
     }

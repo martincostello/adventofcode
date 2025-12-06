@@ -31,6 +31,6 @@ public sealed class Day11Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         var puzzle = await SolvePuzzleAsync<Day11>();
 
         // Assert
-        puzzle.MinimumStepsForAssembly.ShouldBe(47);
+        puzzle.Solution.ShouldBe(47);
     }
 }

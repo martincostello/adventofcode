@@ -80,7 +80,7 @@ public sealed class Day08Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         var puzzle = await SolvePuzzleAsync<Day08>();
 
         // Assert
-        puzzle.FirstSolution.ShouldBe(1342);
-        puzzle.SecondSolution.ShouldBe(2074);
+        puzzle.Solution1.ShouldBe(1342);
+        puzzle.Solution2.ShouldBe(2074);
     }
 }

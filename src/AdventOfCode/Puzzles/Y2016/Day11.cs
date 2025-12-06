@@ -7,13 +7,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016;
 /// A class representing the puzzle for <c>https://adventofcode.com/2016/day/11</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2016, 11, "Radioisotope Thermoelectric Generators", RequiresData = true, IsHidden = true, Unsolved = true)]
-public sealed class Day11 : Puzzle
+public sealed class Day11 : Puzzle<int>
 {
-    /// <summary>
-    /// Gets the minimum number of steps required to assemble all the generators.
-    /// </summary>
-    public int MinimumStepsForAssembly { get; private set; }
-
     /// <summary>
     /// Returns the minimum number of steps required to assemble all the generators
     /// on the fourth floor of the building given the specified initial state.
@@ -57,18 +52,21 @@ public sealed class Day11 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        var initialState = await ReadResourceAsLinesAsync(cancellationToken);
+        return await SolveWithLinesAsync(
+            static (initialState, logger, cancellationToken) =>
+            {
+                int minimumStepsForAssembly = GetMinimumStepsForAssembly(initialState);
 
-        MinimumStepsForAssembly = GetMinimumStepsForAssembly(initialState);
+                if (logger is { })
+                {
+                    logger.WriteLine(
+                        $"The minimum number of steps required to bring all of the objects to the fourth floor is {0:N0}.",
+                        minimumStepsForAssembly);
+                }
 
-        if (Verbose)
-        {
-            Logger.WriteLine(
-                $"The minimum number of steps required to bring all of the objects to the fourth floor is {0:N0}.",
-                MinimumStepsForAssembly);
-        }
-
-        return PuzzleResult.Create(MinimumStepsForAssembly);
+                return minimumStepsForAssembly;
+            },
+            cancellationToken);
     }
 
     /// <summary>

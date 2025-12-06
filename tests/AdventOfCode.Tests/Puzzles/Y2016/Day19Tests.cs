@@ -29,7 +29,7 @@ public sealed class Day19Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         var puzzle = await SolvePuzzleAsync<Day19>(args);
 
         // Assert
-        puzzle.ElfWithAllPresentsV1.ShouldBe(expectedV1);
-        puzzle.ElfWithAllPresentsV2.ShouldBe(expectedV2);
+        puzzle.Solution1.ShouldBe(expectedV1);
+        puzzle.Solution2.ShouldBe(expectedV2);
     }
 }

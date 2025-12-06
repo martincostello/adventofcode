@@ -12,16 +12,6 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2023;
 public sealed class Day16 : Puzzle<int, int>
 {
     /// <summary>
-    /// Gets how many tiles are energized starting the beam from <c>0,0</c>.
-    /// </summary>
-    public int EnergizedTiles00 { get; private set; }
-
-    /// <summary>
-    /// Gets how many tiles are energized starting the beam from the optimum position.
-    /// </summary>
-    public int EnergizedTilesOptimum { get; private set; }
-
-    /// <summary>
     /// Determines how many tiles are energized in the specified contraption.
     /// </summary>
     /// <param name="layout">The layout of the contraption.</param>
@@ -182,20 +172,17 @@ public sealed class Day16 : Puzzle<int, int>
 
         var layout = await ReadResourceAsLinesAsync(cancellationToken);
 
-        (EnergizedTiles00, string energized) = Energize(layout, optimize: false);
-        (EnergizedTilesOptimum, string optimized) = Energize(layout, optimize: true);
+        (Solution1, string energized) = Energize(layout, optimize: false);
+        (Solution2, string optimized) = Energize(layout, optimize: true);
 
         if (Verbose)
         {
-            Logger.WriteLine("{0} tiles are energized starting at 0,0.", EnergizedTiles00);
+            Logger.WriteLine("{0} tiles are energized starting at 0,0.", Solution1);
             Logger.WriteLine(energized);
 
-            Logger.WriteLine("{0} tiles are energized starting at the optimum position.", EnergizedTilesOptimum);
+            Logger.WriteLine("{0} tiles are energized starting at the optimum position.", Solution2);
             Logger.WriteLine(optimized);
         }
-
-        Solution1 = EnergizedTiles00;
-        Solution2 = EnergizedTilesOptimum;
 
         var result = Result();
 

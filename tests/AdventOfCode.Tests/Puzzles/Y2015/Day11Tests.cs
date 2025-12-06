@@ -40,7 +40,7 @@ public sealed class Day11Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         var puzzle = await SolvePuzzleAsync<Day11>(input);
 
         // Assert
-        puzzle.FirstPassword.ShouldBe("cqjxxyzz");
-        puzzle.SecondPassword.ShouldBe("cqkaabcc");
+        puzzle.Solution1.ShouldBe("cqjxxyzz");
+        puzzle.Solution2.ShouldBe("cqkaabcc");
     }
 }

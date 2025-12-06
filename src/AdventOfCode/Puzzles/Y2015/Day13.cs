@@ -7,18 +7,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015;
 /// A class representing the puzzle for <c>https://adventofcode.com/2015/day/13</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2015, 13, "Knights of the Dinner Table", RequiresData = true, IsSlow = true)]
-public sealed class Day13 : Puzzle
+public sealed class Day13 : Puzzle<int, int>
 {
-    /// <summary>
-    /// Gets the maximum total change in happiness.
-    /// </summary>
-    internal int MaximumTotalChangeInHappiness { get; private set; }
-
-    /// <summary>
-    /// Gets the maximum total change in happiness with the current user also seated.
-    /// </summary>
-    internal int MaximumTotalChangeInHappinessWithCurrentUser { get; private set; }
-
     /// <summary>
     /// Gets the maximum total change in happiness for the specified potential happiness of the guests.
     /// </summary>
@@ -55,11 +45,11 @@ public sealed class Day13 : Puzzle
     {
         var potentialHappiness = await ReadResourceAsLinesAsync(cancellationToken);
 
-        MaximumTotalChangeInHappiness = GetMaximumTotalChangeInHappiness(potentialHappiness);
+        Solution1 = GetMaximumTotalChangeInHappiness(potentialHappiness);
 
         if (Verbose)
         {
-            Logger.WriteLine("The total change in happiness is {0:N0}.", MaximumTotalChangeInHappiness);
+            Logger.WriteLine("The total change in happiness is {0:N0}.", Solution1);
         }
 
         // Create a new guest list which is the same as the previous one but with the current user added
@@ -81,14 +71,14 @@ public sealed class Day13 : Puzzle
             potentialHappinessWithCurrentUser.Add(Format(AmbivalentFormat, currentUser, guest));
         }
 
-        MaximumTotalChangeInHappinessWithCurrentUser = GetMaximumTotalChangeInHappiness(potentialHappinessWithCurrentUser);
+        Solution2 = GetMaximumTotalChangeInHappiness(potentialHappinessWithCurrentUser);
 
         if (Verbose)
         {
-            Logger.WriteLine("The total change in happiness with the current user seated is {0:N0}.", MaximumTotalChangeInHappinessWithCurrentUser);
+            Logger.WriteLine("The total change in happiness with the current user seated is {0:N0}.", Solution2);
         }
 
-        return PuzzleResult.Create(MaximumTotalChangeInHappiness, MaximumTotalChangeInHappinessWithCurrentUser);
+        return Result();
     }
 
     /// <summary>

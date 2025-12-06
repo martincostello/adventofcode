@@ -10,16 +10,6 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2018;
 public sealed class Day08 : Puzzle<long, long>
 {
     /// <summary>
-    /// Gets the sum of the tree's metadata entries.
-    /// </summary>
-    public long SumOfMetadata { get; private set; }
-
-    /// <summary>
-    /// Gets the value of the tree's root node.
-    /// </summary>
-    public long RootNodeValue { get; private set; }
-
-    /// <summary>
     /// Parses the specified tree of nodes.
     /// </summary>
     /// <param name="data">The raw node data for the tree.</param>
@@ -92,16 +82,13 @@ public sealed class Day08 : Puzzle<long, long>
     {
         var data = (await ReadResourceAsStringAsync(cancellationToken)).AsNumbers<int>(' ');
 
-        (SumOfMetadata, RootNodeValue) = ParseTree(data);
+        (Solution1, Solution2) = ParseTree(data);
 
         if (Verbose)
         {
-            Logger.WriteLine("The sum of the tree's metadata entries is {0}.", SumOfMetadata);
-            Logger.WriteLine("The value the tree's root node is {0}.", RootNodeValue);
+            Logger.WriteLine("The sum of the tree's metadata entries is {0}.", Solution1);
+            Logger.WriteLine("The value the tree's root node is {0}.", Solution2);
         }
-
-        Solution1 = SumOfMetadata;
-        Solution2 = RootNodeValue;
 
         return Result();
     }

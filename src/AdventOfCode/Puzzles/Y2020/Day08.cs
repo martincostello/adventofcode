@@ -31,16 +31,6 @@ public sealed class Day08 : Puzzle<int, int>
     }
 
     /// <summary>
-    /// Gets the value of the accumulator after one iteration of the program has been completed.
-    /// </summary>
-    public int Accumulator { get; private set; }
-
-    /// <summary>
-    /// Gets the value of the accumulator when the fixed program has terminated.
-    /// </summary>
-    public int AccumulatorWithFix { get; private set; }
-
-    /// <summary>
     /// Runs the specified program and returns the value of the accumulator.
     /// </summary>
     /// <param name="program">The program to run.</param>
@@ -92,17 +82,14 @@ public sealed class Day08 : Puzzle<int, int>
     {
         var program = await ReadResourceAsLinesAsync(cancellationToken);
 
-        Accumulator = RunProgram(program, fix: false);
-        AccumulatorWithFix = RunProgram(program, fix: true);
+        Solution1 = RunProgram(program, fix: false);
+        Solution2 = RunProgram(program, fix: true);
 
         if (Verbose)
         {
-            Logger.WriteLine("The value of the accumulator after one iteration is {0}.", Accumulator);
-            Logger.WriteLine("The value of the accumulator when the fixed program completes is {0}.", AccumulatorWithFix);
+            Logger.WriteLine("The value of the accumulator after one iteration is {0}.", Solution1);
+            Logger.WriteLine("The value of the accumulator when the fixed program completes is {0}.", Solution2);
         }
-
-        Solution1 = Accumulator;
-        Solution2 = AccumulatorWithFix;
 
         return Result();
     }

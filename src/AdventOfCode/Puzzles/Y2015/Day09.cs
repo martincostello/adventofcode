@@ -7,18 +7,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015;
 /// A class representing the puzzle for <c>https://adventofcode.com/2015/day/9</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2015, 09, "All in a Single Night", RequiresData = true, IsSlow = true)]
-public sealed class Day09 : Puzzle
+public sealed class Day09 : Puzzle<int, int>
 {
-    /// <summary>
-    /// Gets the shortest distance.
-    /// </summary>
-    public int ShortestDistance { get; private set; }
-
-    /// <summary>
-    /// Gets the longest distance.
-    /// </summary>
-    public int LongestDistance { get; private set; }
-
     /// <summary>
     /// Gets the distance to visit all of the specified locations exactly
     /// once and starting and ending at distinct separate points.
@@ -69,16 +59,16 @@ public sealed class Day09 : Puzzle
     {
         var collection = await ReadResourceAsLinesAsync(cancellationToken);
 
-        ShortestDistance = GetDistanceBetweenPoints(collection, findLongest: false);
-        LongestDistance = GetDistanceBetweenPoints(collection, findLongest: true);
+        Solution1 = GetDistanceBetweenPoints(collection, findLongest: false);
+        Solution2 = GetDistanceBetweenPoints(collection, findLongest: true);
 
         if (Verbose)
         {
-            Logger.WriteLine("The distance of the shortest route is {0:N0}.", ShortestDistance);
-            Logger.WriteLine("The distance of the longest route is {0:N0}.", LongestDistance);
+            Logger.WriteLine("The distance of the shortest route is {0:N0}.", Solution1);
+            Logger.WriteLine("The distance of the longest route is {0:N0}.", Solution2);
         }
 
-        return PuzzleResult.Create(ShortestDistance, LongestDistance);
+        return Result();
     }
 
     private static IList<int> GetRouteDistances(Map map, string start)

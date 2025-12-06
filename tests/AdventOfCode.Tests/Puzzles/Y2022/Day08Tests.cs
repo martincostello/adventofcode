@@ -33,8 +33,7 @@ public sealed class Day08Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         var puzzle = await SolvePuzzleAsync<Day08>();
 
         // Assert
-        puzzle.ShouldNotBeNull();
-        puzzle.VisibleTrees.ShouldBe(1763);
-        puzzle.MaximumScenicScore.ShouldBe(671160);
+        puzzle.Solution1.ShouldBe(1763);
+        puzzle.Solution2.ShouldBe(671160);
     }
 }

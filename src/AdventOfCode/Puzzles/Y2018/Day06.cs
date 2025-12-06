@@ -10,16 +10,6 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2018;
 public sealed class Day06 : Puzzle<int, int>
 {
     /// <summary>
-    /// Gets the largest non-infinite area between coordinates.
-    /// </summary>
-    public int LargestNonInfiniteArea { get; private set; }
-
-    /// <summary>
-    /// Gets the size of the area within the region defined by the distance limit.
-    /// </summary>
-    public int AreaOfRegion { get; private set; }
-
-    /// <summary>
     /// Returns the largest non-infinite area between a set of coordinates.
     /// </summary>
     /// <param name="coordinates">The coordinates to find the largest non-infinite area between.</param>
@@ -116,20 +106,17 @@ public sealed class Day06 : Puzzle<int, int>
 
         const int DistanceLimit = 10_000;
 
-        (LargestNonInfiniteArea, AreaOfRegion) = GetLargestArea(coordinates, DistanceLimit);
+        (Solution1, Solution2) = GetLargestArea(coordinates, DistanceLimit);
 
         if (Verbose)
         {
-            Logger.WriteLine("The largest non-infinite area is {0:N0}.", LargestNonInfiniteArea);
+            Logger.WriteLine("The largest non-infinite area is {0:N0}.", Solution1);
 
             Logger.WriteLine(
                 "The size of the region containing all locations which have a total distance to all given coordinates of less than {0:N0} is {1:N0}.",
                 DistanceLimit,
-                AreaOfRegion);
+                Solution2);
         }
-
-        Solution1 = LargestNonInfiniteArea;
-        Solution2 = AreaOfRegion;
 
         return Result();
     }

@@ -27,7 +27,7 @@ public sealed class Day17Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         var puzzle = await SolvePuzzleAsync<Day17>("150");
 
         // Assert
-        puzzle.Combinations.ShouldBe(1304);
-        puzzle.CombinationsWithMinimumContainers.ShouldBe(18);
+        puzzle.Solution1.ShouldBe(1304);
+        puzzle.Solution2.ShouldBe(18);
     }
 }

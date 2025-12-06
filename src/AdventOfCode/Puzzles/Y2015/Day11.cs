@@ -10,16 +10,6 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015;
 public sealed class Day11 : Puzzle<string, string>
 {
     /// <summary>
-    /// Gets the first next password.
-    /// </summary>
-    public string FirstPassword { get; private set; } = string.Empty;
-
-    /// <summary>
-    /// Gets the second next password.
-    /// </summary>
-    public string SecondPassword { get; private set; } = string.Empty;
-
-    /// <summary>
     /// Generates the next password that should be used based on a current password value.
     /// </summary>
     /// <param name="current">The current password.</param>
@@ -100,17 +90,14 @@ public sealed class Day11 : Puzzle<string, string>
     {
         string current = args[0];
 
-        FirstPassword = GenerateNextPassword(current);
-        SecondPassword = GenerateNextPassword(FirstPassword);
+        Solution1 = GenerateNextPassword(current);
+        Solution2 = GenerateNextPassword(Solution1);
 
         if (Verbose)
         {
-            Logger.WriteLine("Santa's first new password should be '{0}'.", FirstPassword);
-            Logger.WriteLine("Santa's second new password should be '{0}'.", SecondPassword);
+            Logger.WriteLine("Santa's first new password should be '{0}'.", Solution1);
+            Logger.WriteLine("Santa's second new password should be '{0}'.", Solution2);
         }
-
-        Solution1 = FirstPassword;
-        Solution2 = SecondPassword;
 
         return Result();
     }

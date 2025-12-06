@@ -7,7 +7,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015;
 /// A class representing the puzzle for <c>https://adventofcode.com/2015/day/18</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2015, 18, "Like a GIF For Your Yard", RequiresData = true, IsSlow = true)]
-public sealed class Day18 : Puzzle
+public sealed class Day18 : Puzzle<int, int>
 {
     /// <summary>
     /// The character that signifies that a light is on.
@@ -18,16 +18,6 @@ public sealed class Day18 : Puzzle
     /// The character that signifies that a light is on.
     /// </summary>
     private const char On = '#';
-
-    /// <summary>
-    /// Gets the number of lights that are illuminated without the stuck lights.
-    /// </summary>
-    public int LightsIlluminated { get; private set; }
-
-    /// <summary>
-    /// Gets the number of lights that are illuminated with the stuck lights.
-    /// </summary>
-    public int LightsIlluminatedWithStuckLights { get; private set; }
 
     /// <summary>
     /// Returns the light configuration for the specified initial state after the specified number of steps.
@@ -81,23 +71,23 @@ public sealed class Day18 : Puzzle
         string[] finalUnstuck = GetGridConfigurationAfterSteps(initial, steps, areCornerLightsBroken: false);
         string[] finalStuck = GetGridConfigurationAfterSteps(initial, steps, areCornerLightsBroken: true);
 
-        LightsIlluminated = finalUnstuck.Sum((p) => p.Count(On));
-        LightsIlluminatedWithStuckLights = finalStuck.Sum((p) => System.MemoryExtensions.Count(p.AsSpan(), On));
+        Solution1 = finalUnstuck.Sum((p) => p.Count(On));
+        Solution2 = finalStuck.Sum((p) => System.MemoryExtensions.Count(p.AsSpan(), On));
 
         if (Verbose)
         {
             Logger.WriteLine(
                 "There are {0:N0} lights illuminated after {1:N0} steps.",
-                LightsIlluminated,
+                Solution1,
                 steps);
 
             Logger.WriteLine(
                 "There are {0:N0} lights illuminated after {1:N0} steps with the corner lights stuck on.",
-                LightsIlluminatedWithStuckLights,
+                Solution2,
                 steps);
         }
 
-        return PuzzleResult.Create(LightsIlluminated, LightsIlluminatedWithStuckLights);
+        return Result();
     }
 
     /// <summary>

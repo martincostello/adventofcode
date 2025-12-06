@@ -7,7 +7,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017;
 /// A class representing the puzzle for <c>https://adventofcode.com/2017/day/10</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2017, 10, "Knot Hash", RequiresData = true)]
-public sealed class Day10 : Puzzle
+public sealed class Day10 : Puzzle<int, string>
 {
     /// <summary>
     /// The default sequence length to use.
@@ -18,16 +18,6 @@ public sealed class Day10 : Puzzle
     /// The suffix for all hash operations.
     /// </summary>
     private static readonly ImmutableArray<int> Suffix = [17, 31, 73, 47, 23];
-
-    /// <summary>
-    /// Gets the product of multiplying the first two elements after the hash is applied to the input.
-    /// </summary>
-    public int ProductOfFirstTwoElements { get; private set; }
-
-    /// <summary>
-    /// Gets the hexadecimal representation of the dense hash of the input.
-    /// </summary>
-    public string? DenseHash { get; private set; }
 
     /// <summary>
     /// Computes the hash of the specified sequence of ASCII-encoded bytes.
@@ -85,16 +75,16 @@ public sealed class Day10 : Puzzle
 
         var lengths = rawLengths.AsNumbers<int>();
 
-        ProductOfFirstTwoElements = FindProductOfFirstTwoHashElements(SequenceLength, lengths);
-        DenseHash = ComputeHash(rawLengths);
+        Solution1 = FindProductOfFirstTwoHashElements(SequenceLength, lengths);
+        Solution2 = ComputeHash(rawLengths);
 
         if (Verbose)
         {
-            Logger.WriteLine($"The product of the first two elements of the hash is {ProductOfFirstTwoElements:N0}.");
-            Logger.WriteLine($"The hexadecimal dense hash of the input is {DenseHash}.");
+            Logger.WriteLine($"The product of the first two elements of the hash is {Solution1:N0}.");
+            Logger.WriteLine($"The hexadecimal dense hash of the input is {Solution2}.");
         }
 
-        return PuzzleResult.Create(ProductOfFirstTwoElements, DenseHash);
+        return Result();
     }
 
     /// <summary>

@@ -10,16 +10,6 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017;
 public sealed class Day09 : Puzzle<int, int>
 {
     /// <summary>
-    /// Gets the total score for all groups in the stream.
-    /// </summary>
-    public int TotalScore { get; private set; }
-
-    /// <summary>
-    /// Gets the number of garbage characters in the stream.
-    /// </summary>
-    public int GarbageCount { get; private set; }
-
-    /// <summary>
     /// Computes the total score for all the groups in the specified stream.
     /// </summary>
     /// <param name="stream">The stream to get the score for.</param>
@@ -103,16 +93,13 @@ public sealed class Day09 : Puzzle<int, int>
     {
         string stream = (await ReadResourceAsStringAsync(cancellationToken)).Trim();
 
-        (TotalScore, GarbageCount) = ParseStream(stream);
+        (Solution1, Solution2) = ParseStream(stream);
 
         if (Verbose)
         {
-            Logger.WriteLine($"The total score for all the groups is {TotalScore:N0}.");
-            Logger.WriteLine($"There are {GarbageCount:N0} non-canceled characters within the garbage.");
+            Logger.WriteLine($"The total score for all the groups is {Solution1:N0}.");
+            Logger.WriteLine($"There are {Solution2:N0} non-canceled characters within the garbage.");
         }
-
-        Solution1 = TotalScore;
-        Solution2 = GarbageCount;
 
         return Result();
     }

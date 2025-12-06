@@ -7,14 +7,9 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019;
 /// A class representing the puzzle for <c>https://adventofcode.com/2019/day/2</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2019, 02, "1202 Program Alarm", RequiresData = true)]
-public sealed class Day02 : Puzzle
+public sealed class Day02 : Puzzle<long>
 {
     private static readonly long[] Seed = [0];
-
-    /// <summary>
-    /// Gets the output of the program.
-    /// </summary>
-    public IReadOnlyList<long> Output { get; private set; } = [];
 
     /// <summary>
     /// Runs the specified Intcode program.
@@ -54,15 +49,18 @@ public sealed class Day02 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        string program = await ReadResourceAsStringAsync(cancellationToken);
+        return await SolveWithStringAsync(
+            static async (program, logger, cancellationToken) =>
+            {
+                var output = await RunProgramAsync(program, adjust: true, cancellationToken);
 
-        Output = await RunProgramAsync(program, adjust: true, cancellationToken);
+                if (logger is { })
+                {
+                    logger.WriteLine("The value at position 0 after the program halts is {0}.", output);
+                }
 
-        if (Verbose)
-        {
-            Logger.WriteLine("The value at position 0 after the program halts is {0}.", Output[0]);
-        }
-
-        return PuzzleResult.Create(Output[0]);
+                return output[0];
+            },
+            cancellationToken);
     }
 }

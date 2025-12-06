@@ -9,18 +9,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019;
 /// A class representing the puzzle for <c>https://adventofcode.com/2019/day/7</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2019, 07, "Amplification Circuit", RequiresData = true)]
-public sealed class Day07 : Puzzle
+public sealed class Day07 : Puzzle<long, long>
 {
-    /// <summary>
-    /// Gets the highest signal that can be sent to the thrusters.
-    /// </summary>
-    public long HighestSignal { get; private set; }
-
-    /// <summary>
-    /// Gets the highest signal that can be sent to the thrusters using a feedback loop.
-    /// </summary>
-    public long HighestSignalUsingFeedback { get; private set; }
-
     /// <summary>
     /// Runs the specified Intcode program.
     /// </summary>
@@ -107,15 +97,15 @@ public sealed class Day07 : Puzzle
     {
         string program = await ReadResourceAsStringAsync(cancellationToken);
 
-        HighestSignal = await RunProgramAsync(program, useFeedback: false, cancellationToken);
-        HighestSignalUsingFeedback = await RunProgramAsync(program, useFeedback: true, cancellationToken);
+        Solution1 = await RunProgramAsync(program, useFeedback: false, cancellationToken);
+        Solution2 = await RunProgramAsync(program, useFeedback: true, cancellationToken);
 
         if (Verbose)
         {
-            Logger.WriteLine("The highest signal that can be sent to the thrusters is {0}.", HighestSignal);
-            Logger.WriteLine("The highest signal that can be sent to the thrusters using a feedback loop is {0}.", HighestSignalUsingFeedback);
+            Logger.WriteLine("The highest signal that can be sent to the thrusters is {0}.", Solution1);
+            Logger.WriteLine("The highest signal that can be sent to the thrusters using a feedback loop is {0}.", Solution2);
         }
 
-        return PuzzleResult.Create(HighestSignal, HighestSignalUsingFeedback);
+        return Result();
     }
 }

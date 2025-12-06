@@ -7,18 +7,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017;
 /// A class representing the puzzle for <c>https://adventofcode.com/2017/day/7</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2017, 07, "Recursive Circus", RequiresData = true)]
-public sealed class Day07 : Puzzle
+public sealed class Day07 : Puzzle<string, int>
 {
-    /// <summary>
-    /// Gets the name of the bottom program.
-    /// </summary>
-    public string? BottomProgramName { get; private set; }
-
-    /// <summary>
-    /// Gets the weight that the disc that unbalances the structure should be to balance it.
-    /// </summary>
-    public int DesiredWeightOfUnbalancedDisc { get; private set; }
-
     /// <summary>
     /// Finds the name of the program at the bottom of the specified structure.
     /// </summary>
@@ -54,16 +44,16 @@ public sealed class Day07 : Puzzle
     {
         var structure = await ReadResourceAsLinesAsync(cancellationToken);
 
-        BottomProgramName = FindBottomProgramName(structure);
-        DesiredWeightOfUnbalancedDisc = FindDesiredWeightOfUnbalancedDisc(structure);
+        Solution1 = FindBottomProgramName(structure);
+        Solution2 = FindDesiredWeightOfUnbalancedDisc(structure);
 
         if (Verbose)
         {
-            Logger.WriteLine($"The name of the bottom program is '{BottomProgramName}'.");
-            Logger.WriteLine($"The desired weight of the program to balance the structure is {DesiredWeightOfUnbalancedDisc:N0}.");
+            Logger.WriteLine($"The name of the bottom program is '{Solution1}'.");
+            Logger.WriteLine($"The desired weight of the program to balance the structure is {Solution2:N0}.");
         }
 
-        return PuzzleResult.Create(BottomProgramName, DesiredWeightOfUnbalancedDisc);
+        return Result();
     }
 
     /// <summary>

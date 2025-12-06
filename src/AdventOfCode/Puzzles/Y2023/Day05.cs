@@ -12,16 +12,6 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2023;
 public sealed class Day05 : Puzzle<long, long>
 {
     /// <summary>
-    /// Gets the lowest location number that corresponds to any of the initial seed numbers.
-    /// </summary>
-    public long LocationMinimum { get; private set; }
-
-    /// <summary>
-    /// Gets the lowest location number that corresponds to any of the initial seed numbers when using ranges.
-    /// </summary>
-    public long LocationMinimumWithRanges { get; private set; }
-
-    /// <summary>
     /// Parses the specified almanac and returns the lowest location number
     /// that corresponds to any of the initial seed numbers.
     /// </summary>
@@ -148,17 +138,14 @@ public sealed class Day05 : Puzzle<long, long>
 
         var almanac = await ReadResourceAsLinesAsync(cancellationToken);
 
-        LocationMinimum = Parse(almanac, useRanges: false, cancellationToken);
-        LocationMinimumWithRanges = Parse(almanac, useRanges: true, cancellationToken);
+        Solution1 = Parse(almanac, useRanges: false, cancellationToken);
+        Solution2 = Parse(almanac, useRanges: true, cancellationToken);
 
         if (Verbose)
         {
-            Logger.WriteLine("The lowest location number that corresponds to any of the initial seed numbers is {0}.", LocationMinimum);
-            Logger.WriteLine("The lowest location number that corresponds to any of the initial seed numbers as pairs is {0}.", LocationMinimumWithRanges);
+            Logger.WriteLine("The lowest location number that corresponds to any of the initial seed numbers is {0}.", Solution1);
+            Logger.WriteLine("The lowest location number that corresponds to any of the initial seed numbers as pairs is {0}.", Solution2);
         }
-
-        Solution1 = LocationMinimum;
-        Solution2 = LocationMinimumWithRanges;
 
         return Result();
     }

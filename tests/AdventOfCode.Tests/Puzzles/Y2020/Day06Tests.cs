@@ -46,7 +46,7 @@ public sealed class Day06Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         var puzzle = await SolvePuzzleAsync<Day06>();
 
         // Assert
-        puzzle.SumOfQuestionsAnyoneYes.ShouldBe(6542);
-        puzzle.SumOfQuestionsEveryoneYes.ShouldBe(3299);
+        puzzle.Solution1.ShouldBe(6542);
+        puzzle.Solution2.ShouldBe(3299);
     }
 }

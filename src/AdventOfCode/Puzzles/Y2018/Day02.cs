@@ -10,16 +10,6 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2018;
 public sealed class Day02 : Puzzle<int, string>
 {
     /// <summary>
-    /// Gets the checksum of the box Ids.
-    /// </summary>
-    public int Checksum { get; private set; }
-
-    /// <summary>
-    /// Gets the common letters between the two similar box Ids.
-    /// </summary>
-    public string? CommonLettersForBoxes { get; private set; }
-
-    /// <summary>
     /// Calculates the checksum for the specified box Ids.
     /// </summary>
     /// <param name="boxIds">The box Ids to calculate the checksum for.</param>
@@ -134,17 +124,14 @@ public sealed class Day02 : Puzzle<int, string>
     {
         var ids = await ReadResourceAsLinesAsync(cancellationToken);
 
-        Checksum = CalculateChecksum(ids);
-        CommonLettersForBoxes = GetCommonLetters(ids);
+        Solution1 = CalculateChecksum(ids);
+        Solution2 = GetCommonLetters(ids);
 
         if (Verbose)
         {
-            Logger.WriteLine($"The checksum is {Checksum:N0}.");
-            Logger.WriteLine($"The common letters are {CommonLettersForBoxes}.");
+            Logger.WriteLine($"The checksum is {Solution1:N0}.");
+            Logger.WriteLine($"The common letters are {Solution2}.");
         }
-
-        Solution1 = Checksum;
-        Solution2 = CommonLettersForBoxes;
 
         return Result();
     }

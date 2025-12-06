@@ -10,16 +10,6 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020;
 public sealed class Day05 : Puzzle<int, int>
 {
     /// <summary>
-    /// Gets the highest seat Id of the scanned boarding passes.
-    /// </summary>
-    public int HighestSeatId { get; private set; }
-
-    /// <summary>
-    /// Gets my seat Id from the scanned boarding passes.
-    /// </summary>
-    public int MySeatId { get; private set; }
-
-    /// <summary>
     /// Scans the specified boarding pass to get the seat information.
     /// </summary>
     /// <param name="boardingPass">The boarding pass to scan.</param>
@@ -80,16 +70,13 @@ public sealed class Day05 : Puzzle<int, int>
     {
         var boardingPasses = await ReadResourceAsLinesAsync(cancellationToken);
 
-        (MySeatId, HighestSeatId) = Process(boardingPasses);
+        (Solution2, Solution1) = Process(boardingPasses);
 
         if (Verbose)
         {
-            Logger.WriteLine("The highest seat Id from a boarding pass is {0}.", HighestSeatId);
-            Logger.WriteLine("My seat Id is {0}.", MySeatId);
+            Logger.WriteLine("The highest seat Id from a boarding pass is {0}.", Solution1);
+            Logger.WriteLine("My seat Id is {0}.", Solution2);
         }
-
-        Solution1 = HighestSeatId;
-        Solution2 = MySeatId;
 
         return Result();
     }

@@ -10,20 +10,6 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2021;
 public sealed class Day14 : Puzzle<long, long>
 {
     /// <summary>
-    /// Gets the "score" of the polymer after being expanded 10 times,
-    /// which is the quantity of the most common element subtracted by
-    /// the quantity of the least common element.
-    /// </summary>
-    public long Score10 { get; private set; }
-
-    /// <summary>
-    /// Gets the "score" of the polymer after being expanded 40 times,
-    /// which is the quantity of the most common element subtracted by
-    /// the quantity of the least common element.
-    /// </summary>
-    public long Score40 { get; private set; }
-
-    /// <summary>
     /// Expands the polymer template as specified by the instructions.
     /// </summary>
     /// <param name="instructions">The instructions to expand a polymer from.</param>
@@ -92,17 +78,14 @@ public sealed class Day14 : Puzzle<long, long>
     {
         var instructions = await ReadResourceAsLinesAsync(cancellationToken);
 
-        Score10 = Expand(instructions, steps: 10);
-        Score40 = Expand(instructions, steps: 40);
+        Solution1 = Expand(instructions, steps: 10);
+        Solution2 = Expand(instructions, steps: 40);
 
         if (Verbose)
         {
-            Logger.WriteLine("The \"score\" of the polymer after 10 steps of expansion is {0:N0}.", Score10);
-            Logger.WriteLine("The \"score\" of the polymer after 40 steps of expansion is {0:N0}.", Score40);
+            Logger.WriteLine("The \"score\" of the polymer after 10 steps of expansion is {0:N0}.", Solution1);
+            Logger.WriteLine("The \"score\" of the polymer after 40 steps of expansion is {0:N0}.", Solution2);
         }
-
-        Solution1 = Score10;
-        Solution2 = Score40;
 
         return Result();
     }

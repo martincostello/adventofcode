@@ -52,7 +52,7 @@ public sealed class Day08Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         var puzzle = await SolvePuzzleAsync<Day08>();
 
         // Assert
-        puzzle.Count.ShouldBe(294);
-        puzzle.Sum.ShouldBe(973292);
+        puzzle.Solution1.ShouldBe(294);
+        puzzle.Solution2.ShouldBe(973292);
     }
 }

@@ -13,16 +13,6 @@ public sealed class Day03 : Puzzle<int, int>
     private const char One = '1';
 
     /// <summary>
-    /// Gets the power consumption of the submarine.
-    /// </summary>
-    public int PowerConsumption { get; private set; }
-
-    /// <summary>
-    /// Gets the life support rating of the submarine.
-    /// </summary>
-    public int LifeSupportRating { get; private set; }
-
-    /// <summary>
     /// Gets the power consumption of the submarine computed from the diagnostic report.
     /// </summary>
     /// <param name="diagnosticReport">The submarine's diagnostic report.</param>
@@ -101,22 +91,19 @@ public sealed class Day03 : Puzzle<int, int>
     {
         var diagnosticReport = await ReadResourceAsLinesAsync(cancellationToken);
 
-        PowerConsumption = GetPowerConsumption(diagnosticReport);
-        LifeSupportRating = GetLifeSupportRating(diagnosticReport);
+        Solution1 = GetPowerConsumption(diagnosticReport);
+        Solution2 = GetLifeSupportRating(diagnosticReport);
 
         if (Verbose)
         {
             Logger.WriteLine(
                 "The power consumption of the submarine is {0:N0}.",
-                PowerConsumption);
+                Solution1);
 
             Logger.WriteLine(
                 "The life support rating of the submarine is {0:N0}.",
-                LifeSupportRating);
+                Solution2);
         }
-
-        Solution1 = PowerConsumption;
-        Solution2 = LifeSupportRating;
 
         return Result();
     }

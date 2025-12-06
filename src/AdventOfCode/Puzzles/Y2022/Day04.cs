@@ -10,16 +10,6 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2022;
 public sealed class Day04 : Puzzle<int, int>
 {
     /// <summary>
-    /// Gets the number of assignment pairs where one range fully contains the other.
-    /// </summary>
-    public int FullyOverlappingAssignments { get; private set; }
-
-    /// <summary>
-    /// Gets the number of assignment pairs where one range partially contains the other.
-    /// </summary>
-    public int PartiallyOverlappingAssignments { get; private set; }
-
-    /// <summary>
     /// Gets the number of assignment pairs where one range fully or partially contains the other.
     /// </summary>
     /// <param name="assignments">The section assignments.</param>
@@ -74,22 +64,19 @@ public sealed class Day04 : Puzzle<int, int>
     {
         var assignments = await ReadResourceAsLinesAsync(cancellationToken);
 
-        FullyOverlappingAssignments = GetOverlappingAssignments(assignments, false);
-        PartiallyOverlappingAssignments = GetOverlappingAssignments(assignments, true);
+        Solution1 = GetOverlappingAssignments(assignments, false);
+        Solution2 = GetOverlappingAssignments(assignments, true);
 
         if (Verbose)
         {
             Logger.WriteLine(
                 "There are {0:N0} assignment pairs where one range is entirely contained within the other.",
-                FullyOverlappingAssignments);
+                Solution1);
 
             Logger.WriteLine(
                 "There are {0:N0} assignment pairs where one range overlaps with the other.",
-                PartiallyOverlappingAssignments);
+                Solution2);
         }
-
-        Solution1 = FullyOverlappingAssignments;
-        Solution2 = PartiallyOverlappingAssignments;
 
         return Result();
     }

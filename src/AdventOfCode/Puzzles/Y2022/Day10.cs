@@ -10,17 +10,6 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2022;
 public sealed class Day10 : Puzzle<int, string>
 {
     /// <summary>
-    /// Gets the sum of the signal strengths for the 20th,
-    /// 60th, 100th, 140th, 180th and 220th cycles.
-    /// </summary>
-    public int SumOfSignalStrengths { get; private set; }
-
-    /// <summary>
-    /// Gets the message output by the CRT display.
-    /// </summary>
-    public string Message { get; private set; } = string.Empty;
-
-    /// <summary>
     /// Gets displayed message from executing the specified instructions.
     /// </summary>
     /// <param name="program">The program instructions to execute.</param>
@@ -121,16 +110,13 @@ public sealed class Day10 : Puzzle<int, string>
     {
         var program = await ReadResourceAsLinesAsync(cancellationToken);
 
-        (Message, string visualization, SumOfSignalStrengths) = GetMessage(program);
+        (Solution2, string visualization, Solution1) = GetMessage(program);
 
         if (Verbose)
         {
-            Logger.WriteLine("The sum of the six signal strengths is {0}.", SumOfSignalStrengths);
-            Logger.WriteLine("The message output to the CRT is '{0}'.", Message);
+            Logger.WriteLine("The sum of the six signal strengths is {0}.", Solution1);
+            Logger.WriteLine("The message output to the CRT is '{0}'.", Solution2);
         }
-
-        Solution1 = SumOfSignalStrengths;
-        Solution2 = Message;
 
         var result = Result();
         result.Visualizations.Add(visualization);

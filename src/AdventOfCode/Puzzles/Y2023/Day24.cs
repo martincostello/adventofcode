@@ -7,13 +7,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2023;
 /// A class representing the puzzle for <c>https://adventofcode.com/2023/day/24</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2023, 24, "Never Tell Me The Odds", RequiresData = true, Unsolved = true)]
-public sealed class Day24 : Puzzle<int, int>
+public sealed class Day24 : Puzzle<int>
 {
-    /// <summary>
-    /// Gets the number of hailstone intersections that occur within the test area.
-    /// </summary>
-    public int Intersections { get; private set; }
-
     /// <summary>
     /// Predicts the number of hailstone intersections that occur within the test area.
     /// </summary>
@@ -81,21 +76,19 @@ public sealed class Day24 : Puzzle<int, int>
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        ArgumentNullException.ThrowIfNull(args);
+        return await SolveWithLinesAsync(
+            static (hailstones, logger, cancellationToken) =>
+            {
+                int intersections = Predict(hailstones, 200_000_000_000_000, 400_000_000_000_000);
 
-        var hailstones = await ReadResourceAsLinesAsync(cancellationToken);
+                if (logger is { })
+                {
+                    logger.WriteLine("{0} intersections occur within the test area.", intersections);
+                }
 
-        Intersections = Predict(hailstones, 200_000_000_000_000, 400_000_000_000_000);
-
-        if (Verbose)
-        {
-            Logger.WriteLine("{0} intersections occur within the test area.", Intersections);
-        }
-
-        Solution1 = Intersections;
-        Solution2 = Unsolved;
-
-        return Result();
+                return intersections;
+            },
+            cancellationToken);
     }
 
     private record struct Hailstone(Vector3 Position, Vector3 Velocity)

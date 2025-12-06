@@ -10,16 +10,6 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2022;
 public sealed class Day01 : Puzzle<int, int>
 {
     /// <summary>
-    /// Gets the number of calories carried by the elf with the most calorific inventory.
-    /// </summary>
-    public int MaximumCalories { get; private set; }
-
-    /// <summary>
-    /// Gets the number of calories carried by the three elves with the most calorific inventories.
-    /// </summary>
-    public int MaximumCaloriesForTop3 { get; private set; }
-
-    /// <summary>
     /// Returns the number of calories carried by each elf in the specified inventories.
     /// </summary>
     /// <param name="inventories">The lines of the inventory.</param>
@@ -62,17 +52,14 @@ public sealed class Day01 : Puzzle<int, int>
 
         var calories = GetCalorieInventories(inventories);
 
-        MaximumCalories = calories.Max();
-        MaximumCaloriesForTop3 = calories.OrderDescending().Take(3).Sum();
+        Solution1 = calories.Max();
+        Solution2 = calories.OrderDescending().Take(3).Sum();
 
         if (Verbose)
         {
-            Logger.WriteLine("The elf carrying the largest inventory has {0:N0} Calories.", MaximumCalories);
-            Logger.WriteLine("The elves carrying the largest three inventories have {0:N0} Calories.", MaximumCaloriesForTop3);
+            Logger.WriteLine("The elf carrying the largest inventory has {0:N0} Calories.", Solution1);
+            Logger.WriteLine("The elves carrying the largest three inventories have {0:N0} Calories.", Solution2);
         }
-
-        Solution1 = MaximumCalories;
-        Solution2 = MaximumCaloriesForTop3;
 
         return Result();
     }

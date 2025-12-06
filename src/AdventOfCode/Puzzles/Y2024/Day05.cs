@@ -10,16 +10,6 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2024;
 public sealed class Day05 : Puzzle<int, int>
 {
     /// <summary>
-    /// Gets the sum of the middle page numbers for correctly-ordered updates.
-    /// </summary>
-    public int MiddlePageSumCorrect { get; private set; }
-
-    /// <summary>
-    /// Gets the sum of the middle page numbers for incorrectly-ordered updates once fixed.
-    /// </summary>
-    public int MiddlePageSumIncorrect { get; private set; }
-
-    /// <summary>
     /// Sorts the rules and returns the sum of the middle page numbers for page updates.
     /// </summary>
     /// <param name="pageOrderingRulesAndUpdates">The page ordering rules to use and the updates.</param>
@@ -76,17 +66,14 @@ public sealed class Day05 : Puzzle<int, int>
 
         var values = await ReadResourceAsLinesAsync(cancellationToken);
 
-        MiddlePageSumCorrect = Sort(values, fix: false);
-        MiddlePageSumIncorrect = Sort(values, fix: true);
+        Solution1 = Sort(values, fix: false);
+        Solution2 = Sort(values, fix: true);
 
         if (Verbose)
         {
-            Logger.WriteLine("The sum of the middle page numbers from correctly-ordered updates is {0}.", MiddlePageSumCorrect);
-            Logger.WriteLine("The sum of the middle page numbers after correctly ordering incorrectly-ordered updates is {0}.", MiddlePageSumIncorrect);
+            Logger.WriteLine("The sum of the middle page numbers from correctly-ordered updates is {0}.", Solution1);
+            Logger.WriteLine("The sum of the middle page numbers after correctly ordering incorrectly-ordered updates is {0}.", Solution2);
         }
-
-        Solution1 = MiddlePageSumCorrect;
-        Solution2 = MiddlePageSumIncorrect;
 
         return Result();
     }

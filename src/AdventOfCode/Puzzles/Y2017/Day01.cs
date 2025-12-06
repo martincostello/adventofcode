@@ -7,18 +7,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017;
 /// A class representing the puzzle for <c>https://adventofcode.com/2017/day/1</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2017, 01, "Inverse Captcha", RequiresData = true)]
-public sealed class Day01 : Puzzle
+public sealed class Day01 : Puzzle<int, int>
 {
-    /// <summary>
-    /// Gets the solution to the captcha using the next number.
-    /// </summary>
-    public int CaptchaSolutionNext { get; private set; }
-
-    /// <summary>
-    /// Gets the solution to the captcha using the "opposite" number.
-    /// </summary>
-    public int CaptchaSolutionOpposite { get; private set; }
-
     /// <summary>
     /// Calculates the sum of all digits that match either the next or "opposite" digit in the specified string.
     /// </summary>
@@ -58,15 +48,15 @@ public sealed class Day01 : Puzzle
     {
         string digits = (await ReadResourceAsStringAsync(cancellationToken)).TrimEnd();
 
-        CaptchaSolutionNext = CalculateSum(digits, useOppositeDigit: false);
-        CaptchaSolutionOpposite = CalculateSum(digits, useOppositeDigit: true);
+        Solution1 = CalculateSum(digits, useOppositeDigit: false);
+        Solution2 = CalculateSum(digits, useOppositeDigit: true);
 
         if (Verbose)
         {
-            Logger.WriteLine($"The solution to the first captcha is {CaptchaSolutionNext:N0}.");
-            Logger.WriteLine($"The solution to the second captcha is {CaptchaSolutionOpposite:N0}.");
+            Logger.WriteLine($"The solution to the first captcha is {Solution1:N0}.");
+            Logger.WriteLine($"The solution to the second captcha is {Solution2:N0}.");
         }
 
-        return PuzzleResult.Create(CaptchaSolutionNext, CaptchaSolutionOpposite);
+        return Result();
     }
 }

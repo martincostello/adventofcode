@@ -10,16 +10,6 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2021;
 public sealed class Day24 : Puzzle<long, long>
 {
     /// <summary>
-    /// Gets the largest valid 14 digit model number accepted by MONAD.
-    /// </summary>
-    public long MaximumValidModelNumber { get; private set; }
-
-    /// <summary>
-    /// Gets the smallest valid 14 digit model number accepted by MONAD.
-    /// </summary>
-    public long MinimumValidModelNumber { get; private set; }
-
-    /// <summary>
     /// Executes the specified MONAD instructions using the Arithmetic Logic Unit (ALU)
     /// to find the largest or smallest valid 14 digit model number accepted by MONAD.
     /// </summary>
@@ -79,17 +69,14 @@ public sealed class Day24 : Puzzle<long, long>
     {
         var instructions = await ReadResourceAsLinesAsync(cancellationToken);
 
-        MaximumValidModelNumber = Execute(instructions, maximumValue: true);
-        MinimumValidModelNumber = Execute(instructions, maximumValue: false);
+        Solution1 = Execute(instructions, maximumValue: true);
+        Solution2 = Execute(instructions, maximumValue: false);
 
         if (Verbose)
         {
-            Logger.WriteLine("The largest model number accepted by MONAD is {0:N0}.", MaximumValidModelNumber);
-            Logger.WriteLine("The smallest model number accepted by MONAD is {0:N0}.", MinimumValidModelNumber);
+            Logger.WriteLine("The largest model number accepted by MONAD is {0:N0}.", Solution1);
+            Logger.WriteLine("The smallest model number accepted by MONAD is {0:N0}.", Solution2);
         }
-
-        Solution1 = MaximumValidModelNumber;
-        Solution2 = MinimumValidModelNumber;
 
         return Result();
     }

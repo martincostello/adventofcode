@@ -10,16 +10,6 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020;
 public sealed class Day21 : Puzzle<int, string>
 {
     /// <summary>
-    /// Gets the canonical list of ingredients that are allergens.
-    /// </summary>
-    public string CanonicalAllergens { get; private set; } = string.Empty;
-
-    /// <summary>
-    /// Gets the number of times ingredients with no allergens appear.
-    /// </summary>
-    public int IngredientsWithNoAllergens { get; private set; }
-
-    /// <summary>
     /// Gets the number of times ingredients with no allergens appear in the specified foods
     /// and the list of ingredients which are the allergens.
     /// </summary>
@@ -120,16 +110,13 @@ public sealed class Day21 : Puzzle<int, string>
     {
         var recipes = await ReadResourceAsLinesAsync(cancellationToken);
 
-        (IngredientsWithNoAllergens, CanonicalAllergens) = GetIngredientsWithNoAllergens(recipes, cancellationToken);
+        (Solution1, Solution2) = GetIngredientsWithNoAllergens(recipes, cancellationToken);
 
         if (Verbose)
         {
-            Logger.WriteLine("Ingredients with no allergens appear {0} times.", IngredientsWithNoAllergens);
-            Logger.WriteLine("The canonical allergens are: {0}.", CanonicalAllergens);
+            Logger.WriteLine("Ingredients with no allergens appear {0} times.", Solution1);
+            Logger.WriteLine("The canonical allergens are: {0}.", Solution2);
         }
-
-        Solution1 = IngredientsWithNoAllergens;
-        Solution2 = CanonicalAllergens;
 
         return Result();
     }

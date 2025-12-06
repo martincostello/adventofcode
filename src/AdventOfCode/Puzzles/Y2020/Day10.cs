@@ -7,18 +7,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020;
 /// A class representing the puzzle for <c>https://adventofcode.com/2020/day/10</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2020, 10, "Adapter Array", RequiresData = true)]
-public sealed class Day10 : Puzzle
+public sealed class Day10 : Puzzle<int, long>
 {
-    /// <summary>
-    /// Gets the product of the 1-jolt and 3-jolt differences of the specified adapters.
-    /// </summary>
-    public int JoltageProduct { get; private set; }
-
-    /// <summary>
-    /// Gets the number of distinct valid arrangements of adapters.
-    /// </summary>
-    public long ValidArrangements { get; private set; }
-
     /// <summary>
     /// Gets the product of the 1-jolt and 3-jolt differences when the adapters
     /// with the specified joltage ratings are linked together in series.
@@ -144,15 +134,15 @@ public sealed class Day10 : Puzzle
     {
         var joltages = await ReadResourceAsNumbersAsync<int>(cancellationToken);
 
-        JoltageProduct = GetJoltageProduct(joltages);
-        ValidArrangements = GetValidArrangements(joltages);
+        Solution1 = GetJoltageProduct(joltages);
+        Solution2 = GetValidArrangements(joltages);
 
         if (Verbose)
         {
-            Logger.WriteLine("The product of the 1-jolt differences and 3-jolt differences is {0}.", JoltageProduct);
-            Logger.WriteLine("The total number of distinct ways to arrange the adapters is {0}.", ValidArrangements);
+            Logger.WriteLine("The product of the 1-jolt differences and 3-jolt differences is {0}.", Solution1);
+            Logger.WriteLine("The total number of distinct ways to arrange the adapters is {0}.", Solution2);
         }
 
-        return PuzzleResult.Create(JoltageProduct, ValidArrangements);
+        return Result();
     }
 }

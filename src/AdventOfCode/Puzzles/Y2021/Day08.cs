@@ -10,16 +10,6 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2021;
 public sealed class Day08 : Puzzle<int, int>
 {
     /// <summary>
-    /// Gets the number of instances of digits that use a unique number of LED segments.
-    /// </summary>
-    public int Count { get; private set; }
-
-    /// <summary>
-    /// Gets the sum of the decoded output values.
-    /// </summary>
-    public int Sum { get; private set; }
-
-    /// <summary>
     /// Returns the number of instances of digits that use a unique number of LED segments
     /// for the specified entries detailing how the LED segments are lit.
     /// </summary>
@@ -120,16 +110,13 @@ public sealed class Day08 : Puzzle<int, int>
     {
         var entries = await ReadResourceAsLinesAsync(cancellationToken);
 
-        (Count, Sum) = DecodeDigits(entries);
+        (Solution1, Solution2) = DecodeDigits(entries);
 
         if (Verbose)
         {
-            Logger.WriteLine("There are {0:N0} instances of digits that use a unique number of LED segments.", Count);
-            Logger.WriteLine("The sum of the output values is {0:N0}.", Sum);
+            Logger.WriteLine("There are {0:N0} instances of digits that use a unique number of LED segments.", Solution1);
+            Logger.WriteLine("The sum of the output values is {0:N0}.", Solution2);
         }
-
-        Solution1 = Count;
-        Solution2 = Sum;
 
         return Result();
     }
