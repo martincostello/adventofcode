@@ -102,7 +102,10 @@ public sealed class Day03 : Puzzle<int, string>
             Logger.WriteLine($"The Id of the claim with no overlapping claims is {IdOfUniqueClaim}.");
         }
 
-        return PuzzleResult.Create(Area, IdOfUniqueClaim!);
+        Solution1 = Area;
+        Solution2 = IdOfUniqueClaim!;
+
+        return Result();
     }
 
     /// <summary>
