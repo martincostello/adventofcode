@@ -121,16 +121,16 @@ internal static class Maths
     internal static T FromDigits<T>(IList<byte> collection)
         where T : INumber<T>
     {
-        double result = 0;
+        T result = T.Zero;
+        T ten = T.CreateChecked(10);
 
-        for (int i = 0; i < collection.Count - 1; i++)
+        for (int i = 0; i < collection.Count; i++)
         {
-            result += collection[i] * Math.Pow(10, collection.Count - i - 1);
+            result *= ten;
+            result += T.CreateChecked(collection[i]);
         }
 
-        result += collection[collection.Count - 1];
-
-        return T.CreateChecked(result);
+        return result;
     }
 
     /// <summary>
@@ -144,16 +144,16 @@ internal static class Maths
     internal static T FromDigits<T>(IList<int> collection)
         where T : INumber<T>
     {
-        double result = 0;
+        T result = T.Zero;
+        T ten = T.CreateChecked(10);
 
-        for (int i = 0; i < collection.Count - 1; i++)
+        for (int i = 0; i < collection.Count; i++)
         {
-            result += collection[i] * Math.Pow(10, collection.Count - i - 1);
+            result *= ten;
+            result += T.CreateChecked(collection[i]);
         }
 
-        result += collection[collection.Count - 1];
-
-        return T.CreateChecked(result);
+        return result;
     }
 
     /// <summary>
