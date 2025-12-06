@@ -53,11 +53,11 @@ public sealed class Day08 : Puzzle
 
         static int Decode(string[] signals, string[] numbers)
         {
-            var digits = new Dictionary<int, HashSet<char>>(10);
+            var digits = new Dictionary<byte, HashSet<char>>(10);
 
             foreach (string signal in signals)
             {
-                int? key = signal.Length switch
+                byte? key = signal.Length switch
                 {
                     // A signal with these numbers of elements must be a specific digit
                     2 => 1,
@@ -104,7 +104,7 @@ public sealed class Day08 : Puzzle
                 .Where((p) => p.Length == 5)
                 .Single((p) => !digits.Any((r) => r.Value.SetEquals(p)))];
 
-            int[] output = new int[numbers.Length];
+            byte[] output = new byte[numbers.Length];
 
             for (int i = 0; i < numbers.Length; i++)
             {
