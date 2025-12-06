@@ -6,25 +6,73 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2025;
 /// <summary>
 /// A class representing the puzzle for <c>https://adventofcode.com/2025/day/6</c>. This class cannot be inherited.
 /// </summary>
-[Puzzle(2025, 06, "", RequiresData = true, IsHidden = true, Unsolved = true)]
+[Puzzle(2025, 06, "Trash Compactor", RequiresData = true)]
 public sealed class Day06 : Puzzle
 {
     /// <summary>
-    /// Gets the solution.
+    /// Gets the grand total found by adding together all of the answers to the individual problems.
     /// </summary>
-    public int Solution { get; private set; }
+    public long GrandTotal { get; private set; }
 
     /// <summary>
-    /// Solves the puzzle.
+    /// Solves the problems in the specified homework worksheet.
     /// </summary>
-    /// <param name="values">The values to solve the puzzle from.</param>
+    /// <param name="worksheet">The worksheet to solve.</param>
     /// <returns>
-    /// The solution.
+    /// The grand total found by adding together all of the answers to the individual problems.
     /// </returns>
-    public static int Solve(IReadOnlyList<string> values)
+    public static long SolveWorksheet(IReadOnlyList<string> worksheet)
     {
-        ArgumentNullException.ThrowIfNull(values);
-        return Unsolved;
+        var groups = new List<List<long>>();
+        var operations = new List<char>();
+
+        foreach (string operation in worksheet[^1].Split(' ', StringSplitOptions.RemoveEmptyEntries))
+        {
+            operations.Add(operation[0]);
+        }
+
+        foreach (string row in worksheet.Take(worksheet.Count - 1))
+        {
+            var numbers = row
+                .Split(' ', StringSplitOptions.RemoveEmptyEntries)
+                .Select(Parse<long>)
+                .ToList();
+
+            for (int i = 0; i < numbers.Count; i++)
+            {
+                List<long> group;
+
+                if (groups.Count == i)
+                {
+                    groups.Add(group = []);
+                }
+                else
+                {
+                    group = groups[i];
+                }
+
+                group.Add(numbers[i]);
+            }
+        }
+
+        long result = 0;
+
+        for (int i = 0; i < groups.Count; i++)
+        {
+            Func<long, long, long> aggregator = operations[i] switch
+            {
+                '+' => Sum,
+                '*' => Product,
+                _ => throw new System.Diagnostics.UnreachableException(),
+            };
+
+            result += groups[i].Aggregate(aggregator);
+        }
+
+        return result;
+
+        static long Product(long a, long b) => a * b;
+        static long Sum(long a, long b) => a + b;
     }
 
     /// <inheritdoc />
@@ -34,13 +82,13 @@ public sealed class Day06 : Puzzle
 
         var values = await ReadResourceAsLinesAsync(cancellationToken);
 
-        Solution = Solve(values);
+        GrandTotal = SolveWorksheet(values);
 
         if (Verbose)
         {
-            Logger.WriteLine("The solution is {0}.", Solution);
+            Logger.WriteLine("The solution is {0}.", GrandTotal);
         }
 
-        return PuzzleResult.Create(Solution);
+        return PuzzleResult.Create(GrandTotal);
     }
 }
