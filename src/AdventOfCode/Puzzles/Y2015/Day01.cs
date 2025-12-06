@@ -7,7 +7,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015;
 /// A class representing the puzzle for <c>https://adventofcode.com/2015/day/1</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2015, 01, "Not Quite Lisp", RequiresData = true)]
-public sealed class Day01 : Puzzle
+public sealed class Day01 : Puzzle<int, int>
 {
     /// <summary>
     /// Gets the final floor reached by the instructions.
@@ -74,6 +74,9 @@ public sealed class Day01 : Puzzle
             Logger.WriteLine("Santa first enters the basement after following instruction {0:N0}.", FirstBasementInstruction);
         }
 
-        return PuzzleResult.Create(FinalFloor, FirstBasementInstruction);
+        Solution1 = FinalFloor;
+        Solution2 = FirstBasementInstruction;
+
+        return Result();
     }
 }
