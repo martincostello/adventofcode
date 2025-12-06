@@ -5,8 +5,10 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2025;
 
 public sealed class Day06Tests(ITestOutputHelper outputHelper) : PuzzleTest(outputHelper)
 {
-    [Fact]
-    public void Y2025_Day06_SolveWorksheet_Returns_Correct_Value()
+    [Theory]
+    [InlineData(false, 4277556)]
+    [InlineData(true, 3263827)]
+    public void Y2025_Day06_SolveWorksheet_Returns_Correct_Value(bool useCephalopodMaths, long expected)
     {
         // Arrange
         string[] values =
@@ -18,10 +20,10 @@ public sealed class Day06Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         ];
 
         // Act
-        long actual = Day06.SolveWorksheet(values);
+        long actual = Day06.SolveWorksheet(values, useCephalopodMaths);
 
         // Assert
-        actual.ShouldBe(4277556);
+        actual.ShouldBe(expected);
     }
 
     [Fact]
@@ -32,6 +34,7 @@ public sealed class Day06Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
 
         // Assert
         puzzle.ShouldNotBeNull();
-        puzzle.GrandTotal.ShouldBe(5524274308182);
+        puzzle.GrandTotalNormal.ShouldBe(5524274308182);
+        puzzle.GrandTotalCephalopod.ShouldBe(8843673199391);
     }
 }

@@ -118,6 +118,29 @@ internal static class Maths
     /// <returns>
     /// The <typeparamref name="T"/> represented by the digits in <paramref name="collection"/>.
     /// </returns>
+    internal static T FromDigits<T>(IList<byte> collection)
+        where T : INumber<T>
+    {
+        double result = 0;
+
+        for (int i = 0; i < collection.Count - 1; i++)
+        {
+            result += collection[i] * Math.Pow(10, collection.Count - i - 1);
+        }
+
+        result += collection[collection.Count - 1];
+
+        return T.CreateChecked(result);
+    }
+
+    /// <summary>
+    /// Returns the number represented by the specified digits.
+    /// </summary>
+    /// <typeparam name="T">The type of the number.</typeparam>
+    /// <param name="collection">The digits of the number.</param>
+    /// <returns>
+    /// The <typeparamref name="T"/> represented by the digits in <paramref name="collection"/>.
+    /// </returns>
     internal static T FromDigits<T>(IList<int> collection)
         where T : INumber<T>
     {
