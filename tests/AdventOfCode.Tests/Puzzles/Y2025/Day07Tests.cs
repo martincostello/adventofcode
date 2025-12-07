@@ -30,10 +30,11 @@ public sealed class Day07Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         ];
 
         // Act
-        int actual = Day07.Simulate(values, TestContext.Current.CancellationToken);
+        (int actualSplits, long actualTimelines) = Day07.Simulate(values, TestContext.Current.CancellationToken);
 
         // Assert
-        actual.ShouldBe(21);
+        actualSplits.ShouldBe(21);
+        actualTimelines.ShouldBe(40);
     }
 
     [Fact]
@@ -45,5 +46,6 @@ public sealed class Day07Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         // Assert
         puzzle.ShouldNotBeNull();
         puzzle.Solution1.ShouldBe(1566);
+        puzzle.Solution2.ShouldBe(Puzzle.Unsolved);
     }
 }
