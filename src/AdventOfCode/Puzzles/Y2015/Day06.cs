@@ -12,36 +12,39 @@ public sealed class Day06 : Puzzle<int, int>
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        var lines = await ReadResourceAsLinesAsync(cancellationToken);
+        return await SolveWithLinesAsync(
+            static async (lines, logger, _) =>
+            {
+                var instructionsV1 = lines.Select(InstructionV1.Parse).ToArray();
+                var instructionsV2 = lines.Select(InstructionV2.Parse).ToArray();
 
-        var instructionsV1 = lines.Select(InstructionV1.Parse).ToArray();
-        var instructionsV2 = lines.Select(InstructionV2.Parse).ToArray();
+                const int Length = 1_000;
 
-        const int Length = 1_000;
+                var gridV1 = new LightGrid(Length, Length);
+                var gridV2 = new LightGrid(Length, Length);
 
-        var gridV1 = new LightGrid(Length, Length);
-        var gridV2 = new LightGrid(Length, Length);
+                foreach (var instruction in instructionsV1)
+                {
+                    instruction.Act(gridV1);
+                }
 
-        foreach (var instruction in instructionsV1)
-        {
-            instruction.Act(gridV1);
-        }
+                foreach (var instruction in instructionsV2)
+                {
+                    instruction.Act(gridV2);
+                }
 
-        foreach (var instruction in instructionsV2)
-        {
-            instruction.Act(gridV2);
-        }
+                int lightsIlluminated = gridV1.Count;
+                int totalBrightness = gridV2.Brightness;
 
-        Solution1 = gridV1.Count;
-        Solution2 = gridV2.Brightness;
+                if (logger is { })
+                {
+                    logger.WriteLine("{0:N0} lights are illuminated with the version 1 grid.", lightsIlluminated);
+                    logger.WriteLine("The total brightness of the version 2 grid is {0:N0}.", totalBrightness);
+                }
 
-        if (Verbose)
-        {
-            Logger.WriteLine("{0:N0} lights are illuminated with the version 1 grid.", Solution1);
-            Logger.WriteLine("The total brightness of the version 2 grid is {0:N0}.", Solution2);
-        }
-
-        return Result();
+                return (lightsIlluminated, totalBrightness);
+            },
+            cancellationToken);
     }
 
     /// <summary>

@@ -119,18 +119,24 @@ public sealed class Day04 : Puzzle<int, int>
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        string secretKey = args[0];
+        return await SolveWithArgumentsAsync(
+            args,
+            static async (arguments, logger, _) =>
+            {
+                string secretKey = arguments[0];
 
-        Solution1 = await GetLowestPositiveNumberWithStartingZeroesAsync(secretKey, zeroes: 5);
-        Solution2 = await GetLowestPositiveNumberWithStartingZeroesAsync(secretKey, zeroes: 6);
+                int lowestZeroHash5 = await GetLowestPositiveNumberWithStartingZeroesAsync(secretKey, zeroes: 5);
+                int lowestZeroHash6 = await GetLowestPositiveNumberWithStartingZeroesAsync(secretKey, zeroes: 6);
 
-        if (Verbose)
-        {
-            Logger.WriteLine("The lowest positive number for a hash starting with 5 zeroes is {0:N0}.", Solution1);
-            Logger.WriteLine("The lowest positive number for a hash starting with 6 zeroes is {0:N0}.", Solution2);
-        }
+                if (logger is { })
+                {
+                    logger.WriteLine("The lowest positive number for a hash starting with 5 zeroes is {0:N0}.", lowestZeroHash5);
+                    logger.WriteLine("The lowest positive number for a hash starting with 6 zeroes is {0:N0}.", lowestZeroHash6);
+                }
 
-        return Result();
+                return (lowestZeroHash5, lowestZeroHash6);
+            },
+            cancellationToken);
     }
 
     /// <summary>

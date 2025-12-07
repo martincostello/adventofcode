@@ -136,18 +136,21 @@ public sealed class Day05 : Puzzle<int, int>
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        var values = await ReadResourceAsLinesAsync(cancellationToken);
+        return await SolveWithLinesAsync(
+            static (values, logger, _) =>
+            {
+                int niceStringCountV1 = values.Count(IsNiceV1);
+                int niceStringCountV2 = values.Count(IsNiceV2);
 
-        Solution1 = values.Count(IsNiceV1);
-        Solution2 = values.Count(IsNiceV2);
+                if (logger is { })
+                {
+                    logger.WriteLine("{0:N0} strings are nice using version 1 of the rules.", niceStringCountV1);
+                    logger.WriteLine("{0:N0} strings are nice using version 2 of the rules.", niceStringCountV2);
+                }
 
-        if (Verbose)
-        {
-            Logger.WriteLine("{0:N0} strings are nice using version 1 of the rules.", Solution1);
-            Logger.WriteLine("{0:N0} strings are nice using version 2 of the rules.", Solution2);
-        }
-
-        return Result();
+                return (niceStringCountV1, niceStringCountV2);
+            },
+            cancellationToken);
 
         static bool IsNiceV1(string s) => Day05.IsNiceV1(s);
         static bool IsNiceV2(string s) => Day05.IsNiceV2(s);

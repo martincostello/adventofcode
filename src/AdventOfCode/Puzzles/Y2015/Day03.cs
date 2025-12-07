@@ -63,23 +63,26 @@ public class Day03 : Puzzle<int, int>
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        string instructions = await ReadResourceAsStringAsync(cancellationToken);
+        return await SolveWithStringAsync(
+            static (instructions, logger, _) =>
+            {
+                int housesWithPresentsFromSanta = GetUniqueHousesVisitedBySanta(instructions);
+                int housesWithPresentsFromSantaAndRoboSanta = GetUniqueHousesVisitedBySantaAndRoboSanta(instructions);
 
-        Solution1 = GetUniqueHousesVisitedBySanta(instructions);
-        Solution2 = GetUniqueHousesVisitedBySantaAndRoboSanta(instructions);
+                if (logger is { })
+                {
+                    logger.WriteLine(
+                        "In 2015, Santa delivered presents to {0:N0} houses.",
+                        housesWithPresentsFromSanta);
 
-        if (Verbose)
-        {
-            Logger.WriteLine(
-                "In 2015, Santa delivered presents to {0:N0} houses.",
-                Solution1);
+                    logger.WriteLine(
+                        "In 2016, Santa and Robo-Santa delivered presents to {0:N0} houses.",
+                        housesWithPresentsFromSantaAndRoboSanta);
+                }
 
-            Logger.WriteLine(
-                "In 2016, Santa and Robo-Santa delivered presents to {0:N0} houses.",
-                Solution2);
-        }
-
-        return Result();
+                return (housesWithPresentsFromSanta, housesWithPresentsFromSantaAndRoboSanta);
+            },
+            cancellationToken);
     }
 
     /// <summary>

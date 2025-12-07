@@ -54,16 +54,19 @@ public sealed class Day01 : Puzzle<int, int>
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        string value = await ReadResourceAsStringAsync(cancellationToken);
+        return await SolveWithStringAsync(
+            static (value, logger, _) =>
+            {
+                (int finalFloor, int firstBasementInstruction) = GetFinalFloorAndFirstInstructionBasementReached(value);
 
-        (Solution1, Solution2) = GetFinalFloorAndFirstInstructionBasementReached(value);
+                if (logger is { })
+                {
+                    logger.WriteLine("Santa should go to floor {0}.", finalFloor);
+                    logger.WriteLine("Santa first enters the basement after following instruction {0:N0}.", firstBasementInstruction);
+                }
 
-        if (Verbose)
-        {
-            Logger.WriteLine("Santa should go to floor {0}.", Solution1);
-            Logger.WriteLine("Santa first enters the basement after following instruction {0:N0}.", Solution2);
-        }
-
-        return Result();
+                return (finalFloor, firstBasementInstruction);
+            },
+            cancellationToken);
     }
 }

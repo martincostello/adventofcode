@@ -92,32 +92,31 @@ public sealed class Day07 : Puzzle<int, int>
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        var instructions = await ReadResourceAsLinesAsync(cancellationToken);
+        return await SolveWithLinesAsync(
+            static (instructions, logger, _) =>
+            {
+                // Get the wire values for the initial instructions
+                Dictionary<string, ushort> values = GetWireValues(instructions);
 
-        // Get the wire values for the initial instructions
-        Dictionary<string, ushort> values = GetWireValues(instructions);
+                int firstSignal = values["a"];
 
-        Solution1 = values["a"];
+                // Replace the input value for b with the value for a, then re-calculate
+                int indexForB = instructions.IndexOf("44430 -> b");
+                instructions[indexForB] = Format("{0} -> b", firstSignal);
 
-        if (Verbose)
-        {
-            Logger.WriteLine("The signal for wire a is {0:N0}.", Solution1);
-        }
+                values = GetWireValues(instructions);
 
-        // Replace the input value for b with the value for a, then re-calculate
-        int indexForB = instructions.IndexOf("44430 -> b");
-        instructions[indexForB] = Format("{0} -> b", Solution1);
+                int secondSignal = values["a"];
 
-        values = GetWireValues(instructions);
+                if (logger is { })
+                {
+                    logger.WriteLine("The signal for wire a is {0:N0}.", firstSignal);
+                    logger.WriteLine("The new signal for wire a is {0:N0}.", secondSignal);
+                }
 
-        Solution2 = values["a"];
-
-        if (Verbose)
-        {
-            Logger.WriteLine("The new signal for wire a is {0:N0}.", Solution2);
-        }
-
-        return Result();
+                return (firstSignal, secondSignal);
+            },
+            cancellationToken);
     }
 
     /// <summary>

@@ -35,20 +35,23 @@ public sealed class Day02 : Puzzle<int, int>
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        var dimensions = await ReadResourceAsLinesAsync(cancellationToken);
+        return await SolveWithLinesAsync(
+            (dimensions, logger, _) =>
+            {
+                (int totalAreaOfPaper, int totalLengthOfRibbon) = GetTotalWrappingPaperAreaAndRibbonLength(dimensions);
 
-        (Solution1, Solution2) = GetTotalWrappingPaperAreaAndRibbonLength(dimensions);
+                if (Verbose)
+                {
+                    Logger.WriteLine(
+                        "The elves should order {0:N0} square feet of wrapping paper.{1}They also need {2:N0} feet of ribbon.",
+                        totalAreaOfPaper,
+                        Environment.NewLine,
+                        totalLengthOfRibbon);
+                }
 
-        if (Verbose)
-        {
-            Logger.WriteLine(
-                "The elves should order {0:N0} square feet of wrapping paper.{1}They also need {2:N0} feet of ribbon.",
-                Solution1,
-                Environment.NewLine,
-                Solution2);
-        }
-
-        return Result();
+                return (totalAreaOfPaper, totalLengthOfRibbon);
+            },
+            cancellationToken);
     }
 
     /// <summary>
