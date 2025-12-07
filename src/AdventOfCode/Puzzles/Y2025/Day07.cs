@@ -39,35 +39,37 @@ public sealed class Day07 : Puzzle<int, long>
             return origin;
         });
 
-        var splits = new HashSet<Point>();
+        var splitters = new Dictionary<Point, long>(grid.Locations.Count);
 
-        Trace(grid, origin, splits, cancellationToken);
+        long timelines = Trace(grid, origin, splitters, cancellationToken);
 
         cancellationToken.ThrowIfCancellationRequested();
 
-        return (splits.Count, Unsolved);
+        return (splitters.Count, timelines);
 
-        static void Trace(SquareGrid grid, Point origin, HashSet<Point> splits, CancellationToken cancellationToken)
+        static long Trace(SquareGrid grid, Point origin, Dictionary<Point, long> splitters, CancellationToken cancellationToken)
         {
             while (grid.InBounds(origin) && !cancellationToken.IsCancellationRequested)
             {
                 origin -= Directions.Up;
 
-                if (splits.Contains(origin))
+                if (splitters.TryGetValue(origin, out long timelines))
                 {
-                    return;
+                    return timelines;
                 }
 
                 if (grid.Locations.Contains(origin))
                 {
-                    splits.Add(origin);
+                    timelines = Trace(grid, origin + new Size(-1, 1), splitters, cancellationToken);
+                    timelines += Trace(grid, origin + new Size(1, 1), splitters, cancellationToken);
 
-                    Trace(grid, origin + new Size(-1, 1), splits, cancellationToken);
-                    Trace(grid, origin + new Size(1, 1), splits, cancellationToken);
+                    splitters[origin] = timelines;
 
-                    return;
+                    return timelines;
                 }
             }
+
+            return 1;
         }
     }
 

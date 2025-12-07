@@ -46,6 +46,6 @@ public sealed class Day07Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         // Assert
         puzzle.ShouldNotBeNull();
         puzzle.Solution1.ShouldBe(1566);
-        puzzle.Solution2.ShouldBe(Puzzle.Unsolved);
+        puzzle.Solution2.ShouldBe(5921061943075);
     }
 }
