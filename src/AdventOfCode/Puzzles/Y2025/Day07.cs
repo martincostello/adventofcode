@@ -6,41 +6,83 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2025;
 /// <summary>
 /// A class representing the puzzle for <c>https://adventofcode.com/2025/day/7</c>. This class cannot be inherited.
 /// </summary>
-[Puzzle(2025, 07, "", RequiresData = true, IsHidden = true, Unsolved = true)]
-public sealed class Day07 : Puzzle
+[Puzzle(2025, 07, "Laboratories", RequiresData = true)]
+public sealed class Day07 : Puzzle<int, int>
 {
     /// <summary>
-    /// Gets the solution.
+    /// Finds the number of times the beam splits in the specified tachyon
+    /// manifold by simulating the path of the beam from the origin in the diagram.
     /// </summary>
-    public int Solution { get; private set; }
-
-    /// <summary>
-    /// Solves the puzzle.
-    /// </summary>
-    /// <param name="values">The values to solve the puzzle from.</param>
+    /// <param name="diagram">The diagram of the tachyon manifold.</param>
+    /// <param name="cancellationToken">The <see cref="CancellationToken"/> to use.</param>
     /// <returns>
-    /// The solution.
+    /// The number of times the beam splits.
     /// </returns>
-    public static int Solve(IReadOnlyList<string> values)
+    public static int Simulate(IReadOnlyList<string> diagram, CancellationToken cancellationToken)
     {
-        ArgumentNullException.ThrowIfNull(values);
-        return Unsolved;
+        int width = diagram[0].Length;
+        int height = diagram.Count;
+
+        var grid = new SquareGrid(width, height);
+
+        var origin = grid.VisitCells(diagram, Point.Empty, (grid, point, cell, origin) =>
+        {
+            if (cell is '^')
+            {
+                grid.Locations.Add(point);
+            }
+            else if (cell is 'S')
+            {
+                origin = point;
+            }
+
+            return origin;
+        });
+
+        var splits = new HashSet<Point>();
+
+        Trace(grid, origin, splits, cancellationToken);
+
+        cancellationToken.ThrowIfCancellationRequested();
+
+        return splits.Count;
+
+        static void Trace(SquareGrid grid, Point origin, HashSet<Point> splits, CancellationToken cancellationToken)
+        {
+            while (grid.InBounds(origin) && !cancellationToken.IsCancellationRequested)
+            {
+                origin -= Directions.Up;
+
+                if (splits.Contains(origin))
+                {
+                    return;
+                }
+
+                if (grid.Locations.Contains(origin))
+                {
+                    splits.Add(origin);
+
+                    Trace(grid, origin + new Size(-1, 1), splits, cancellationToken);
+                    Trace(grid, origin + new Size(1, 1), splits, cancellationToken);
+
+                    return;
+                }
+            }
+        }
     }
 
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        ArgumentNullException.ThrowIfNull(args);
+        var diagram = await ReadResourceAsLinesAsync(cancellationToken);
 
-        var values = await ReadResourceAsLinesAsync(cancellationToken);
-
-        Solution = Solve(values);
+        Solution1 = Simulate(diagram, cancellationToken);
 
         if (Verbose)
         {
-            Logger.WriteLine("The solution is {0}.", Solution);
+            Logger.WriteLine("The beam splits {0} times.", Solution1);
         }
 
-        return PuzzleResult.Create(Solution);
+        return PuzzleResult.Create(Solution1);
     }
 }

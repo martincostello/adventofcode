@@ -6,22 +6,37 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2025;
 public sealed class Day07Tests(ITestOutputHelper outputHelper) : PuzzleTest(outputHelper)
 {
     [Fact]
-    public void Y2025_Day07_Solve_Returns_Correct_Value()
+    public void Y2025_Day07_Simulate_Returns_Correct_Value()
     {
         // Arrange
         string[] values =
         [
-            "_",
+            ".......S.......",
+            "...............",
+            ".......^.......",
+            "...............",
+            "......^.^......",
+            "...............",
+            ".....^.^.^.....",
+            "...............",
+            "....^.^...^....",
+            "...............",
+            "...^.^...^.^...",
+            "...............",
+            "..^...^.....^..",
+            "...............",
+            ".^.^.^.^.^...^.",
+            "...............",
         ];
 
         // Act
-        int actual = Day07.Solve(values);
+        int actual = Day07.Simulate(values, TestContext.Current.CancellationToken);
 
         // Assert
-        actual.ShouldBe(Puzzle.Unsolved);
+        actual.ShouldBe(21);
     }
 
-    [Fact(Skip = "Not implemented.")]
+    [Fact]
     public async Task Y2025_Day07_Solve_Returns_Correct_Solution()
     {
         // Act
@@ -29,6 +44,6 @@ public sealed class Day07Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
 
         // Assert
         puzzle.ShouldNotBeNull();
-        puzzle.Solution.ShouldBe(Puzzle.Unsolved);
+        puzzle.Solution1.ShouldBe(1566);
     }
 }
