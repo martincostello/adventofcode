@@ -23,21 +23,21 @@ public sealed class Day19 : Puzzle<int, int>
         FindElfThatGetsAllPresentsV1(count);
 
     /// <inheritdoc />
-    protected override Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
+    protected override Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken) => SolveWithArgument(args, static (value, logger) =>
     {
-        int count = Parse<int>(args[0]);
+        int count = Parse<int>(value);
 
-        Solution1 = FindElfThatGetsAllPresents(count, version: 1);
-        Solution2 = FindElfThatGetsAllPresents(count, version: 2);
+        int elfWithAllPresentsV1 = FindElfThatGetsAllPresents(count, version: 1);
+        int elfWithAllPresentsV2 = FindElfThatGetsAllPresents(count, version: 2);
 
-        if (Verbose)
+        if (logger is { })
         {
-            Logger.WriteLine($"The elf that gets all the presents using version 1 of the rules is {Solution1:N0}.");
-            Logger.WriteLine($"The elf that gets all the presents using version 2 of the rules is {Solution2:N0}.");
+            logger.WriteLine($"The elf that gets all the presents using version 1 of the rules is {elfWithAllPresentsV1:N0}.");
+            logger.WriteLine($"The elf that gets all the presents using version 2 of the rules is {elfWithAllPresentsV2:N0}.");
         }
 
-        return Result();
-    }
+        return (elfWithAllPresentsV1, elfWithAllPresentsV2);
+    });
 
     /// <summary>
     /// Finds the elf that receives all of the presents using version 1 of the rules.

@@ -105,17 +105,20 @@ public sealed class Day20 : Puzzle<uint, uint>
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        var ranges = await ReadResourceAsLinesAsync(cancellationToken);
+        return await SolveWithLinesAsync(
+            static (ranges, logger, _) =>
+            {
+                uint allowedIPCount = GetLowestNonblockedIP(uint.MaxValue, ranges, out uint count);
+                uint lowestNonblockedIP = count;
 
-        Solution1 = GetLowestNonblockedIP(uint.MaxValue, ranges, out uint count);
-        Solution2 = count;
+                if (logger is { })
+                {
+                    logger.WriteLine($"The lowest-valued IP that is not blocked is {allowedIPCount}.");
+                    logger.WriteLine($"The number of IP addresses allowed is {lowestNonblockedIP:N0}.");
+                }
 
-        if (Verbose)
-        {
-            Logger.WriteLine($"The lowest-valued IP that is not blocked is {Solution1}.");
-            Logger.WriteLine($"The number of IP addresses allowed is {2:N0}.");
-        }
-
-        return Result();
+                return (allowedIPCount, lowestNonblockedIP);
+            },
+            cancellationToken);
     }
 }

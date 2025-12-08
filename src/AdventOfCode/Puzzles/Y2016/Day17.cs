@@ -104,18 +104,16 @@ public sealed class Day17 : Puzzle<string, int>
     }
 
     /// <inheritdoc />
-    protected override Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
+    protected override Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken) => SolveWithArgument(args, static (passcode, logger) =>
     {
-        string passcode = args[0];
+        (string shortestPathToVault, int longestPathToVault) = GetPathsToVault(passcode);
 
-        (Solution1, Solution2) = GetPathsToVault(passcode);
-
-        if (Verbose)
+        if (logger is { })
         {
-            Logger.WriteLine("The shortest path to the vault is {0}.", Solution1);
-            Logger.WriteLine("The longest path to the vault is {0}.", Solution2);
+            logger.WriteLine("The shortest path to the vault is {0}.", shortestPathToVault);
+            logger.WriteLine("The longest path to the vault is {0}.", longestPathToVault);
         }
 
-        return Result();
-    }
+        return (shortestPathToVault, longestPathToVault);
+    });
 }

@@ -43,18 +43,21 @@ public sealed class Day03 : Puzzle<int, int>
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        var dimensions = await ReadResourceAsLinesAsync(cancellationToken);
+        return await SolveWithLinesAsync(
+            static (dimensions, logger, _) =>
+            {
+                int possibleTrianglesByColumns = GetPossibleTriangleCount(dimensions, readAsColumns: false);
+                int possibleTrianglesByRows = GetPossibleTriangleCount(dimensions, readAsColumns: true);
 
-        Solution1 = GetPossibleTriangleCount(dimensions, readAsColumns: false);
-        Solution2 = GetPossibleTriangleCount(dimensions, readAsColumns: true);
+                if (logger is { })
+                {
+                    logger.WriteLine("The number of possible triangles using rows is {0:N0}.", possibleTrianglesByColumns);
+                    logger.WriteLine("The number of possible triangles using columns is {0:N0}.", possibleTrianglesByRows);
+                }
 
-        if (Verbose)
-        {
-            Logger.WriteLine("The number of possible triangles using rows is {0:N0}.", Solution1);
-            Logger.WriteLine("The number of possible triangles using columns is {0:N0}.", Solution2);
-        }
-
-        return Result();
+                return (possibleTrianglesByColumns, possibleTrianglesByRows);
+            },
+            cancellationToken);
     }
 
     /// <summary>

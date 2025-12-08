@@ -23,18 +23,21 @@ public sealed class Day09 : Puzzle<long, long>
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        string data = await ReadResourceAsStringAsync(cancellationToken);
+        return await SolveWithStringAsync(
+            static (data, logger, _) =>
+            {
+                long decompressedLengthVersion1 = GetDecompressedLength(data, version: 1);
+                long decompressedLengthVersion2 = GetDecompressedLength(data, version: 2);
 
-        Solution1 = GetDecompressedLength(data, version: 1);
-        Solution2 = GetDecompressedLength(data, version: 2);
+                if (logger is { })
+                {
+                    logger.WriteLine($"The decompressed length of the data using version 1 of the algorithm is {decompressedLengthVersion1:N0}.");
+                    logger.WriteLine($"The decompressed length of the data using version 2 of the algorithm is {decompressedLengthVersion2:N0}.");
+                }
 
-        if (Verbose)
-        {
-            Logger.WriteLine($"The decompressed length of the data using version 1 of the algorithm is {Solution1:N0}.");
-            Logger.WriteLine($"The decompressed length of the data using version 2 of the algorithm is {Solution2:N0}.");
-        }
-
-        return Result();
+                return (decompressedLengthVersion1, decompressedLengthVersion2);
+            },
+            cancellationToken);
     }
 
     /// <summary>

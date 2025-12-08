@@ -76,18 +76,21 @@ public sealed class Day04 : Puzzle<int, int>
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        var names = await ReadResourceAsLinesAsync(cancellationToken);
+        return await SolveWithLinesAsync(
+            static (names, logger, _) =>
+            {
+                int sectorIdOfNorthPoleObjectsRoom = SumOfRealRoomSectorIds(names);
+                int sumOfSectorIdsOfRealRooms = GetSectorIdOfNorthPoleObjectsRoom(names);
 
-        Solution1 = SumOfRealRoomSectorIds(names);
-        Solution2 = GetSectorIdOfNorthPoleObjectsRoom(names);
+                if (logger is { })
+                {
+                    logger.WriteLine("The sum of the sector Ids of the real rooms is {0:N0}.", sectorIdOfNorthPoleObjectsRoom);
+                    logger.WriteLine("The sector ID of the room where North Pole objects are stored is {0:N0}.", sumOfSectorIdsOfRealRooms);
+                }
 
-        if (Verbose)
-        {
-            Logger.WriteLine("The sum of the sector Ids of the real rooms is {0:N0}.", Solution1);
-            Logger.WriteLine("The sector ID of the room where North Pole objects are stored is {0:N0}.", Solution2);
-        }
-
-        return Result();
+                return (sectorIdOfNorthPoleObjectsRoom, sumOfSectorIdsOfRealRooms);
+            },
+            cancellationToken);
     }
 
     /// <summary>

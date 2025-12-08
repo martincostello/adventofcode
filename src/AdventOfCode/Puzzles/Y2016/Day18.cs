@@ -21,7 +21,7 @@ public sealed class Day18 : Puzzle<int, int>
     internal static (int SafeTileCount, string Visualization) FindSafeTileCount(
         string firstRowTiles,
         int rows,
-        ILogger logger)
+        ILogger? logger)
     {
         int width = firstRowTiles.Length;
 
@@ -53,7 +53,7 @@ public sealed class Day18 : Puzzle<int, int>
 
         string visualization = string.Empty;
 
-        if (rows <= 75)
+        if (rows <= 75 && logger is { })
         {
             visualization = logger.WriteGrid(tiles, '.', '^');
         }
@@ -64,18 +64,26 @@ public sealed class Day18 : Puzzle<int, int>
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        string firstRowTiles = (await ReadResourceAsStringAsync(cancellationToken)).TrimEnd();
+        string visualization = string.Empty;
 
-        (Solution1, string visualization) = FindSafeTileCount(firstRowTiles, rows: 40, Logger);
-        (Solution2, _) = FindSafeTileCount(firstRowTiles, rows: 400_000, Logger);
+        var result = await SolveWithStringAsync(
+            (value, logger) =>
+            {
+                string firstRowTiles = value.TrimEnd();
 
-        if (Verbose)
-        {
-            Logger.WriteLine($"The number of safe tiles with 40 rows is {Solution1:N0}.");
-            Logger.WriteLine($"The number of safe tiles with 400,000 rows is {Solution2:N0}.");
-        }
+                (int safeTileCount40, visualization) = FindSafeTileCount(firstRowTiles, rows: 40, logger);
+                (int safeTileCount400000, _) = FindSafeTileCount(firstRowTiles, rows: 400_000, logger);
 
-        var result = Result();
+                if (logger is { })
+                {
+                    logger.WriteLine($"The number of safe tiles with 40 rows is {safeTileCount40:N0}.");
+                    logger.WriteLine($"The number of safe tiles with 400,000 rows is {safeTileCount400000:N0}.");
+                }
+
+                return (safeTileCount40, safeTileCount400000);
+            },
+            cancellationToken);
+
         result.Visualizations.Add(visualization);
 
         return result;

@@ -78,23 +78,26 @@ public sealed class Day24 : Puzzle<int, int>
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        var layout = await ReadResourceAsLinesAsync(cancellationToken);
+        return await SolveWithLinesAsync(
+            static async (layout, logger, cancellationToken) =>
+            {
+                int fewestStepsToVisitAllLocations = GetMinimumStepsToVisitLocations(layout, returnToOrigin: false, cancellationToken);
+                int fewestStepsToVisitAllLocationsAndReturn = GetMinimumStepsToVisitLocations(layout, returnToOrigin: true, cancellationToken);
 
-        Solution1 = GetMinimumStepsToVisitLocations(layout, returnToOrigin: false, cancellationToken);
-        Solution2 = GetMinimumStepsToVisitLocations(layout, returnToOrigin: true, cancellationToken);
+                if (logger is { })
+                {
+                    logger.WriteLine(
+                        "The fewest number of steps required to visit every location is {0}.",
+                        fewestStepsToVisitAllLocations);
 
-        if (Verbose)
-        {
-            Logger.WriteLine(
-                "The fewest number of steps required to visit every location is {0}.",
-                Solution1);
+                    logger.WriteLine(
+                        "The fewest number of steps required to visit every location and return to the origin is {0}.",
+                        fewestStepsToVisitAllLocationsAndReturn);
+                }
 
-            Logger.WriteLine(
-                "The fewest number of steps required to visit every location and return to the origin is {0}.",
-                Solution2);
-        }
-
-        return Result();
+                return (fewestStepsToVisitAllLocations, fewestStepsToVisitAllLocationsAndReturn);
+            },
+            cancellationToken);
     }
 
     /// <summary>

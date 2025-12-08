@@ -45,17 +45,20 @@ public sealed class Day06 : Puzzle<string, string>
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        var messages = await ReadResourceAsLinesAsync(cancellationToken);
+        return await SolveWithLinesAsync(
+            static (messages, logger, _) =>
+            {
+                string errorCorrectedMessage = DecryptMessage(messages, leastLikely: false);
+                string modifiedErrorCorrectedMessage = DecryptMessage(messages, leastLikely: true);
 
-        Solution1 = DecryptMessage(messages, leastLikely: false);
-        Solution2 = DecryptMessage(messages, leastLikely: true);
+                if (logger is { })
+                {
+                    logger.WriteLine($"The error-corrected message using the most likely letters is: {errorCorrectedMessage}.");
+                    logger.WriteLine($"The error-corrected message using the least likely letters is: {modifiedErrorCorrectedMessage}.");
+                }
 
-        if (Verbose)
-        {
-            Logger.WriteLine($"The error-corrected message using the most likely letters is: {Solution1}.");
-            Logger.WriteLine($"The error-corrected message using the least likely letters is: {Solution2}.");
-        }
-
-        return Result();
+                return (errorCorrectedMessage, modifiedErrorCorrectedMessage);
+            },
+            cancellationToken);
     }
 }

@@ -110,23 +110,26 @@ public sealed class Day02 : Puzzle<string, string>
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        var instructions = await ReadResourceAsLinesAsync(cancellationToken);
+        return await SolveWithLinesAsync(
+            static (instructions, logger, _) =>
+            {
+                string bathroomCodeAlphanumericKeypad = GetBathroomCode(instructions, DigitGrid);
+                string bathroomCodeDigitKeypad = GetBathroomCode(instructions, AlphanumericGrid);
 
-        Solution1 = GetBathroomCode(instructions, DigitGrid);
-        Solution2 = GetBathroomCode(instructions, AlphanumericGrid);
+                if (logger is { })
+                {
+                    logger.WriteLine(
+                        "The code for the bathroom with a digit keypad is {0}.",
+                        bathroomCodeAlphanumericKeypad);
 
-        if (Verbose)
-        {
-            Logger.WriteLine(
-                "The code for the bathroom with a digit keypad is {0}.",
-                Solution1);
+                    logger.WriteLine(
+                        "The code for the bathroom with an alphanumeric keypad is {0}.",
+                        bathroomCodeDigitKeypad);
+                }
 
-            Logger.WriteLine(
-                "The code for the bathroom with an alphanumeric keypad is {0}.",
-                Solution2);
-        }
-
-        return Result();
+                return (bathroomCodeAlphanumericKeypad, bathroomCodeDigitKeypad);
+            },
+            cancellationToken);
     }
 
     /// <summary>

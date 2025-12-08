@@ -71,20 +71,24 @@ public sealed class Day14 : Puzzle<int, int>
     }
 
     /// <inheritdoc />
-    protected override Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
+    protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        string salt = args[0];
+        return SolveWithArgument(
+            args,
+            static (salt, logger, cancellationToken) =>
+            {
+                int indexOfKey64 = GetOneTimePadKeyIndex(salt, 64, useKeyStretching: false, cancellationToken);
+                int indexOfKey64WithStretching = GetOneTimePadKeyIndex(salt, 64, useKeyStretching: true, cancellationToken);
 
-        Solution1 = GetOneTimePadKeyIndex(salt, 64, useKeyStretching: false, cancellationToken);
-        Solution2 = GetOneTimePadKeyIndex(salt, 64, useKeyStretching: true, cancellationToken);
+                if (logger is { })
+                {
+                    logger.WriteLine($"The index that produces the 64th one-time pad key is {indexOfKey64:N0}.");
+                    logger.WriteLine($"The index that produces the 64th one-time pad key when using key stretching is {indexOfKey64WithStretching:N0}.");
+                }
 
-        if (Verbose)
-        {
-            Logger.WriteLine($"The index that produces the 64th one-time pad key is {Solution1:N0}.");
-            Logger.WriteLine($"The index that produces the 64th one-time pad key when using key stretching is {Solution2:N0}.");
-        }
-
-        return Result();
+                return (indexOfKey64, indexOfKey64WithStretching);
+            },
+            cancellationToken);
     }
 
     /// <summary>

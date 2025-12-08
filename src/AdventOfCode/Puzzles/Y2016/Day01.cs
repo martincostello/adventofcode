@@ -78,23 +78,26 @@ public sealed class Day01 : Puzzle<int, int>
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        string instructions = await ReadResourceAsStringAsync(cancellationToken);
+        return await SolveWithStringAsync(
+            static (instructions, logger) =>
+            {
+                int blocksToEasterBunnyHQ = CalculateDistance(instructions, ignoreDuplicates: true);
+                int blocksToEasterBunnyHQIgnoringDuplicates = CalculateDistance(instructions, ignoreDuplicates: false);
 
-        Solution1 = CalculateDistance(instructions, ignoreDuplicates: true);
-        Solution2 = CalculateDistance(instructions, ignoreDuplicates: false);
+                if (logger is { })
+                {
+                    logger.WriteLine(
+                        "The Easter Bunny's headquarters are {0:N0} blocks away.",
+                        blocksToEasterBunnyHQ);
 
-        if (Verbose)
-        {
-            Logger.WriteLine(
-                "The Easter Bunny's headquarters are {0:N0} blocks away.",
-                Solution1);
+                    logger.WriteLine(
+                        "The Easter Bunny's headquarters are {0:N0} blocks away if it is the first location visited twice.",
+                        blocksToEasterBunnyHQIgnoringDuplicates);
+                }
 
-            Logger.WriteLine(
-                "The Easter Bunny's headquarters are {0:N0} blocks away if it is the first location visited twice.",
-                Solution2);
-        }
-
-        return Result();
+                return (blocksToEasterBunnyHQ, blocksToEasterBunnyHQIgnoringDuplicates);
+            },
+            cancellationToken);
     }
 
     /// <summary>

@@ -63,21 +63,19 @@ public sealed class Day05 : Puzzle<string, string>
     }
 
     /// <inheritdoc />
-    protected override Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
+    protected override Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken) => SolveWithArgument(args, static (doorId, logger) =>
     {
-        string doorId = args[0];
+        string password = GeneratePassword(doorId, isPositionSpecifiedByHash: false);
+        string passwordWhenPositionIsIndicated = GeneratePassword(doorId, isPositionSpecifiedByHash: true);
 
-        Solution1 = GeneratePassword(doorId, isPositionSpecifiedByHash: false);
-        Solution2 = GeneratePassword(doorId, isPositionSpecifiedByHash: true);
-
-        if (Verbose)
+        if (logger is { })
         {
-            Logger.WriteLine($"The password for door '{doorId}' is '{Solution1}'.");
-            Logger.WriteLine($"The password for door '{doorId}' is '{Solution2}' when the position is specified in the hash.");
+            logger.WriteLine($"The password for door '{doorId}' is '{password}'.");
+            logger.WriteLine($"The password for door '{doorId}' is '{passwordWhenPositionIsIndicated}' when the position is specified in the hash.");
         }
 
-        return Result();
-    }
+        return (password, passwordWhenPositionIsIndicated);
+    });
 
     /// <summary>
     /// Generates the hash bytes for the specified door Id and index.

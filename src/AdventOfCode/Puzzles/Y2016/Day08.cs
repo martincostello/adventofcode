@@ -62,17 +62,23 @@ public sealed class Day08 : Puzzle<int, string>
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        var instructions = await ReadResourceAsLinesAsync(cancellationToken);
+        string visualization = string.Empty;
 
-        (Solution1, Solution2, string visualization) = GetPixelsLit(instructions, width: 50, height: 6, Logger);
+        var result = await SolveWithLinesAsync(
+            (instructions, logger, _) =>
+            {
+                (int pixelsLit, string code, visualization) = GetPixelsLit(instructions, width: 50, height: 6, Logger);
 
-        if (Verbose)
-        {
-            Logger.WriteLine($"There are {Solution1:N0} pixels lit.");
-            Logger.WriteLine($"The code displayed is {Solution2}.");
-        }
+                if (Verbose)
+                {
+                    Logger.WriteLine($"There are {pixelsLit:N0} pixels lit.");
+                    Logger.WriteLine($"The code displayed is {code}.");
+                }
 
-        var result = Result();
+                return (pixelsLit, code);
+            },
+            cancellationToken);
+
         result.Visualizations.Add(visualization);
 
         return result;

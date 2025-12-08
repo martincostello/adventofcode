@@ -68,18 +68,21 @@ public sealed class Day07 : Puzzle<int, int>
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        var addresses = await ReadResourceAsLinesAsync(cancellationToken);
+        return await SolveWithLinesAsync(
+            static (addresses, logger, _) =>
+            {
+                int ipAddressesSupportingSsl = addresses.Count(DoesIPAddressSupportTls);
+                int ipAddressesSupportingTls = addresses.Count(DoesIPAddressSupportSsl);
 
-        Solution1 = addresses.Count(DoesIPAddressSupportTls);
-        Solution2 = addresses.Count(DoesIPAddressSupportSsl);
+                if (logger is { })
+                {
+                    logger.WriteLine("{0:N0} IPv7 addresses support TLS.", ipAddressesSupportingSsl);
+                    logger.WriteLine("{0:N0} IPv7 addresses support SSL.", ipAddressesSupportingTls);
+                }
 
-        if (Verbose)
-        {
-            Logger.WriteLine("{0:N0} IPv7 addresses support TLS.", Solution1);
-            Logger.WriteLine("{0:N0} IPv7 addresses support SSL.", Solution2);
-        }
-
-        return Result();
+                return (ipAddressesSupportingSsl, ipAddressesSupportingTls);
+            },
+            cancellationToken);
     }
 
     /// <summary>

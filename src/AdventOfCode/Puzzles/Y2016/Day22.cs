@@ -153,17 +153,20 @@ public sealed class Day22 : Puzzle<int, int>
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        var output = await ReadResourceAsLinesAsync(cancellationToken);
+        return await SolveWithLinesAsync(
+            static (output, logger, _) =>
+            {
+                (int viableNodePairs, int minimumStepsToExtract) = CountViableNodePairs(output, logger);
 
-        (Solution1, Solution2) = CountViableNodePairs(output, Logger);
+                if (logger is { })
+                {
+                    logger.WriteLine("The number of viable pairs of nodes is {0:N0}.", viableNodePairs);
+                    logger.WriteLine("The fewest number of steps required to extract the goal data is {0:N0}.", minimumStepsToExtract);
+                }
 
-        if (Verbose)
-        {
-            Logger.WriteLine("The number of viable pairs of nodes is {0:N0}.", Solution1);
-            Logger.WriteLine("The fewest number of steps required to extract the goal data is {0:N0}.", Solution2);
-        }
-
-        return Result();
+                return (viableNodePairs, minimumStepsToExtract);
+            },
+            cancellationToken);
     }
 
     /// <summary>

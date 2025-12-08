@@ -69,18 +69,22 @@ public sealed class Day10 : Puzzle<int, int>
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        var instructions = await ReadResourceAsLinesAsync(cancellationToken);
-        int[] binsOfInterest = [0, 1, 2];
+        return await SolveWithLinesAsync(
+            static (instructions, logger, _) =>
+            {
+                int[] binsOfInterest = [0, 1, 2];
 
-        (Solution1, Solution2) = GetBotNumber(instructions, 61, 17, binsOfInterest);
+                (int botThatCompares61And17Microchips, int productOfMicrochipsInBins012) = GetBotNumber(instructions, 61, 17, binsOfInterest);
 
-        if (Verbose)
-        {
-            Logger.WriteLine($"The number of the bot that compares value-61 and value-17 microchips is {Solution1:N0}.");
-            Logger.WriteLine($"The product of the microchips in output bins 0, 1 and 2 is {Solution2:N0}.");
-        }
+                if (logger is { })
+                {
+                    logger.WriteLine($"The number of the bot that compares value-61 and value-17 microchips is {botThatCompares61And17Microchips:N0}.");
+                    logger.WriteLine($"The product of the microchips in output bins 0, 1 and 2 is {productOfMicrochipsInBins012:N0}.");
+                }
 
-        return Result();
+                return (botThatCompares61And17Microchips, productOfMicrochipsInBins012);
+            },
+            cancellationToken);
     }
 
     /// <summary>

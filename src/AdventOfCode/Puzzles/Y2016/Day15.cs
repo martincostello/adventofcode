@@ -42,20 +42,23 @@ public sealed class Day15 : Puzzle<int, int>
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        var input = await ReadResourceAsLinesAsync(cancellationToken);
+        return await SolveWithLinesAsync(
+            static (input, logger, _) =>
+            {
+                string extraDisc = $"Disc #{input.Count + 1} has 11 positions; at time=0, it is at position 0.";
 
-        string extraDisc = $"Disc #{input.Count + 1} has 11 positions; at time=0, it is at position 0.";
+                int timeOfFirstButtonPress = FindTimeForCapsuleRelease(input);
+                int timeOfFirstButtonPressWithExtraDisc = FindTimeForCapsuleRelease(input.Append(extraDisc));
 
-        Solution1 = FindTimeForCapsuleRelease(input);
-        Solution2 = FindTimeForCapsuleRelease(input.Append(extraDisc));
+                if (logger is { })
+                {
+                    logger.WriteLine($"The first time the button can be pressed to get a capsule is {timeOfFirstButtonPress:N0}.");
+                    logger.WriteLine($"The first time the button can be pressed to get a capsule with the extra disc present is {timeOfFirstButtonPressWithExtraDisc:N0}.");
+                }
 
-        if (Verbose)
-        {
-            Logger.WriteLine($"The first time the button can be pressed to get a capsule is {Solution1:N0}.");
-            Logger.WriteLine($"The first time the button can be pressed to get a capsule with the extra disc present is {Solution2:N0}.");
-        }
-
-        return Result();
+                return (timeOfFirstButtonPress, timeOfFirstButtonPressWithExtraDisc);
+            },
+            cancellationToken);
     }
 
     /// <summary>

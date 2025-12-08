@@ -47,6 +47,24 @@ public abstract class Puzzle<T1, T2> : Puzzle
     }
 
     /// <summary>
+    /// Executes the specified solver using a single value from the specified arguments and returns the result.
+    /// </summary>
+    /// <param name="arguments">The arguments to pass to the solver.</param>
+    /// <param name="solver">A delegate to a method that solves the puzzle.</param>
+    /// <param name="cancellationToken">The <see cref="CancellationToken"/> to use.</param>
+    /// <returns>
+    /// A <see cref="PuzzleResult"/> containing the solutions returned by <paramref name="solver"/>.
+    /// </returns>
+    protected PuzzleResult SolveWithArgument(
+        IReadOnlyList<string> arguments,
+        Func<string, ILogger?, CancellationToken, (T1 Solution1, T2 Solution2)> solver,
+        CancellationToken cancellationToken)
+    {
+        (Solution1, Solution2) = solver(arguments[0], Verbose ? Logger : null, cancellationToken);
+        return PuzzleResult.Create(Solution1, Solution2);
+    }
+
+    /// <summary>
     /// Executes the specified solver using the specified arguments and returns the result.
     /// </summary>
     /// <param name="arguments">The arguments to pass to the solver.</param>
@@ -250,6 +268,25 @@ public abstract class Puzzle<T1, T2> : Puzzle
         var values = await ReadResourceAsNumbersAsync<T>(cancellationToken);
 
         (Solution1, Solution2) = solver(values, Verbose ? Logger : null, cancellationToken);
+
+        return PuzzleResult.Create(Solution1, Solution2);
+    }
+
+    /// <summary>
+    /// Executes the specified solver using the input string from the resource and returns the result.
+    /// </summary>
+    /// <param name="solver">A delegate to a method that solves the puzzle.</param>
+    /// <param name="cancellationToken">The <see cref="CancellationToken"/> to use.</param>
+    /// <returns>
+    /// A <see cref="PuzzleResult"/> containing the solutions returned by <paramref name="solver"/>.
+    /// </returns>
+    protected async Task<PuzzleResult> SolveWithStringAsync(
+        Func<string, ILogger?, (T1 Solution1, T2 Solution2)> solver,
+        CancellationToken cancellationToken)
+    {
+        string value = await ReadResourceAsStringAsync(cancellationToken);
+
+        (Solution1, Solution2) = solver(value, Verbose ? Logger : null);
 
         return PuzzleResult.Create(Solution1, Solution2);
     }

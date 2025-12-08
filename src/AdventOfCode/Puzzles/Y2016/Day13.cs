@@ -36,18 +36,24 @@ public sealed class Day13 : Puzzle<int, int>
     /// <inheritdoc />
     protected override Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        int favoriteNumber = Parse<int>(args[0]);
+        return SolveWithArgument(
+            args,
+            static (input, logger, cancellationToken) =>
+            {
+                int favoriteNumber = Parse<int>(input);
 
-        Solution1 = GetMinimumStepsToReachCoordinate(favoriteNumber, 31, 39, cancellationToken);
-        Solution2 = CountLocationsWithin50Steps(favoriteNumber, cancellationToken);
+                int fewestStepsToReach31X39Y = GetMinimumStepsToReachCoordinate(favoriteNumber, 31, 39, cancellationToken);
+                int locationsWithin50 = CountLocationsWithin50Steps(favoriteNumber, cancellationToken);
 
-        if (Verbose)
-        {
-            Logger.WriteLine("The fewest number of steps required to reach 31,39 is {0}.", Solution1);
-            Logger.WriteLine("The number of locations within 50 steps of the origin is {0}.", Solution2);
-        }
+                if (logger is { })
+                {
+                    logger.WriteLine("The fewest number of steps required to reach 31,39 is {0}.", fewestStepsToReach31X39Y);
+                    logger.WriteLine("The number of locations within 50 steps of the origin is {0}.", locationsWithin50);
+                }
 
-        return Result();
+                return (fewestStepsToReach31X39Y, locationsWithin50);
+            },
+            cancellationToken);
     }
 
     /// <summary>

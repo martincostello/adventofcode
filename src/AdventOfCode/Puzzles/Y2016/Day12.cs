@@ -136,20 +136,23 @@ public sealed class Day12 : Puzzle<int, int>
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        var instructions = await ReadResourceAsLinesAsync(cancellationToken);
+        return await SolveWithLinesAsync(
+            static (instructions, logger, cancellationToken) =>
+            {
+                var registers = Process(instructions, initialValueOfC: 0, cancellationToken: cancellationToken);
+                int valueInRegisterA = registers['a'];
 
-        var registers = Process(instructions, initialValueOfC: 0, cancellationToken: cancellationToken);
-        Solution1 = registers['a'];
+                registers = Process(instructions, initialValueOfC: 1, cancellationToken: cancellationToken);
+                int valueInRegisterAWhenInitializedWithIgnitionKey = registers['a'];
 
-        registers = Process(instructions, initialValueOfC: 1, cancellationToken: cancellationToken);
-        Solution2 = registers['a'];
+                if (logger is { })
+                {
+                    logger.WriteLine($"The value left in register a is {valueInRegisterA:N0}.");
+                    logger.WriteLine($"The value left in register a if c is initialized to 1 is {valueInRegisterAWhenInitializedWithIgnitionKey:N0}.");
+                }
 
-        if (Verbose)
-        {
-            Logger.WriteLine($"The value left in register a is {Solution1:N0}.");
-            Logger.WriteLine($"The value left in register a if c is initialized to 1 is {Solution2:N0}.");
-        }
-
-        return Result();
+                return (valueInRegisterA, valueInRegisterAWhenInitializedWithIgnitionKey);
+            },
+            cancellationToken);
     }
 }
