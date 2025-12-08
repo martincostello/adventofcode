@@ -42,18 +42,21 @@ public sealed class Day07 : Puzzle<string, int>
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        var structure = await ReadResourceAsLinesAsync(cancellationToken);
+        return await SolveWithLinesAsync(
+            static (structure, logger, _) =>
+            {
+                string bottomProgramName = FindBottomProgramName(structure);
+                int desiredWeightOfUnbalancedDisc = FindDesiredWeightOfUnbalancedDisc(structure);
 
-        Solution1 = FindBottomProgramName(structure);
-        Solution2 = FindDesiredWeightOfUnbalancedDisc(structure);
+                if (logger is { })
+                {
+                    logger.WriteLine($"The name of the bottom program is '{bottomProgramName}'.");
+                    logger.WriteLine($"The desired weight of the program to balance the structure is {desiredWeightOfUnbalancedDisc:N0}.");
+                }
 
-        if (Verbose)
-        {
-            Logger.WriteLine($"The name of the bottom program is '{Solution1}'.");
-            Logger.WriteLine($"The desired weight of the program to balance the structure is {Solution2:N0}.");
-        }
-
-        return Result();
+                return (bottomProgramName, desiredWeightOfUnbalancedDisc);
+            },
+            cancellationToken);
     }
 
     /// <summary>

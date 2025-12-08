@@ -71,20 +71,25 @@ public sealed class Day10 : Puzzle<int, string>
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        string rawLengths = (await ReadResourceAsStringAsync(cancellationToken)).Trim();
+        return await SolveWithStringAsync(
+            static (rawLength, logger, _) =>
+            {
+                rawLength = rawLength.Trim();
 
-        var lengths = rawLengths.AsNumbers<int>();
+                var lengths = rawLength.AsNumbers<int>();
 
-        Solution1 = FindProductOfFirstTwoHashElements(SequenceLength, lengths);
-        Solution2 = ComputeHash(rawLengths);
+                int productOfFirstTwoElements = FindProductOfFirstTwoHashElements(SequenceLength, lengths);
+                string denseHash = ComputeHash(rawLength);
 
-        if (Verbose)
-        {
-            Logger.WriteLine($"The product of the first two elements of the hash is {Solution1:N0}.");
-            Logger.WriteLine($"The hexadecimal dense hash of the input is {Solution2}.");
-        }
+                if (logger is { })
+                {
+                    logger.WriteLine($"The product of the first two elements of the hash is {productOfFirstTwoElements:N0}.");
+                    logger.WriteLine($"The hexadecimal dense hash of the input is {denseHash}.");
+                }
 
-        return Result();
+                return (productOfFirstTwoElements, denseHash);
+            },
+            cancellationToken);
     }
 
     /// <summary>

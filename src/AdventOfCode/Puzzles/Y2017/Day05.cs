@@ -40,17 +40,20 @@ public sealed class Day05 : Puzzle<int, int>
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        var program = await ReadResourceAsNumbersAsync<int>(cancellationToken);
+        return await SolveWithNumbersAsync<int>(
+            static (program, logger, _) =>
+            {
+                int stepsToExitV1 = Execute(program, version: 1);
+                int stepsToExitV2 = Execute(program, version: 2);
 
-        Solution1 = Execute(program, version: 1);
-        Solution2 = Execute(program, version: 2);
+                if (logger is { })
+                {
+                    logger.WriteLine($"It takes {stepsToExitV1:N0} to reach the exit using version 1.");
+                    logger.WriteLine($"It takes {stepsToExitV2:N0} to reach the exit using version 2.");
+                }
 
-        if (Verbose)
-        {
-            Logger.WriteLine($"It takes {Solution1:N0} to reach the exit using version 1.");
-            Logger.WriteLine($"It takes {Solution2:N0} to reach the exit using version 2.");
-        }
-
-        return Result();
+                return (stepsToExitV1, stepsToExitV2);
+            },
+            cancellationToken);
     }
 }

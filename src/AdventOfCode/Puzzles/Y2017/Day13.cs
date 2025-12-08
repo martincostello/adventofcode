@@ -92,17 +92,20 @@ public sealed class Day13 : Puzzle<int, int>
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        var depthRanges = await ReadResourceAsLinesAsync(cancellationToken);
+        return await SolveWithLinesAsync(
+            static (depthRanges, logger, _) =>
+            {
+                int severity = GetSeverityOfTrip(depthRanges);
+                int shortestDelay = GetShortestDelayForNeverCaught(depthRanges);
 
-        Solution1 = GetSeverityOfTrip(depthRanges);
-        Solution2 = GetShortestDelayForNeverCaught(depthRanges);
+                if (logger is { })
+                {
+                    logger.WriteLine($"The severity of the trip through the firewall is {severity:N0}.");
+                    logger.WriteLine($"The fewest number of picoseconds that the packet needs to be delayed by to pass through the firewall without being caught is {shortestDelay:N0}.");
+                }
 
-        if (Verbose)
-        {
-            Logger.WriteLine($"The severity of the trip through the firewall is {Solution1:N0}.");
-            Logger.WriteLine($"The fewest number of picoseconds that the packet needs to be delayed by to pass through the firewall without being caught is {Solution2:N0}.");
-        }
-
-        return Result();
+                return (severity, shortestDelay);
+            },
+            cancellationToken);
     }
 }

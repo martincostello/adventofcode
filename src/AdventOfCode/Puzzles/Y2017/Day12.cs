@@ -54,18 +54,21 @@ public sealed class Day12 : Puzzle<int, int>
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        var pipes = await ReadResourceAsLinesAsync(cancellationToken);
+        return await SolveWithLinesAsync(
+            static (pipes, logger, _) =>
+            {
+                int programsInGroupOfProgram0 = GetProgramsInGroup(0, pipes);
+                int numberOfGroups = GetGroupsInNetwork(pipes);
 
-        Solution1 = GetProgramsInGroup(0, pipes);
-        Solution2 = GetGroupsInNetwork(pipes);
+                if (logger is { })
+                {
+                    logger.WriteLine($"There are {programsInGroupOfProgram0:N0} programs in the group that contains program ID 0.");
+                    logger.WriteLine($"There are {numberOfGroups:N0} groups in the network of pipes.");
+                }
 
-        if (Verbose)
-        {
-            Logger.WriteLine($"There are {Solution1:N0} programs in the group that contains program ID 0.");
-            Logger.WriteLine($"There are {Solution2:N0} groups in the network of pipes.");
-        }
-
-        return Result();
+                return (programsInGroupOfProgram0, numberOfGroups);
+            },
+            cancellationToken);
     }
 
     /// <summary>

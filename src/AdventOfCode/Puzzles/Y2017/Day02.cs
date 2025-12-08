@@ -87,19 +87,23 @@ public sealed class Day02 : Puzzle<int, int>
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        var lines = await ReadResourceAsLinesAsync(cancellationToken);
-        var spreadsheet = ParseSpreadsheet(lines);
+        return await SolveWithLinesAsync(
+            static (lines, logger, _) =>
+            {
+                var spreadsheet = ParseSpreadsheet(lines);
 
-        Solution1 = CalculateChecksum(spreadsheet, forEvenlyDivisible: false);
-        Solution2 = CalculateChecksum(spreadsheet, forEvenlyDivisible: true);
+                int checksumForDifference = CalculateChecksum(spreadsheet, forEvenlyDivisible: false);
+                int checksumForEvenlyDivisible = CalculateChecksum(spreadsheet, forEvenlyDivisible: true);
 
-        if (Verbose)
-        {
-            Logger.WriteLine($"The checksum for the spreadsheet using differences is {Solution1:N0}.");
-            Logger.WriteLine($"The checksum for the spreadsheet using even division is {Solution2:N0}.");
-        }
+                if (logger is { })
+                {
+                    logger.WriteLine($"The checksum for the spreadsheet using differences is {checksumForDifference:N0}.");
+                    logger.WriteLine($"The checksum for the spreadsheet using even division is {checksumForEvenlyDivisible:N0}.");
+                }
 
-        return Result();
+                return (checksumForDifference, checksumForEvenlyDivisible);
+            },
+            cancellationToken);
     }
 
     /// <summary>

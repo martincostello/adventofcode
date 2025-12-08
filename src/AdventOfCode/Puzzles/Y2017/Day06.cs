@@ -30,17 +30,22 @@ public sealed class Day06 : Puzzle<int, int>
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        var memory = (await ReadResourceAsStringAsync(cancellationToken)).Trim().AsNumbers<int>('\t');
+        return await SolveWithStringAsync(
+            static (input, logger) =>
+            {
+                var memory = input.Trim().AsNumbers<int>('\t');
 
-        (Solution1, Solution2) = Debug(memory);
+                (int cycleCount, int loopSize) = Debug(memory);
 
-        if (Verbose)
-        {
-            Logger.WriteLine($"{Solution1:N0} redistribution cycles must be completed before a configuration is produced that has been seen before.");
-            Logger.WriteLine($"{Solution2:N0} cycles are in the infinite loop that arises from the configuration in the input.");
-        }
+                if (logger is { })
+                {
+                    logger.WriteLine($"{cycleCount:N0} redistribution cycles must be completed before a configuration is produced that has been seen before.");
+                    logger.WriteLine($"{loopSize:N0} cycles are in the infinite loop that arises from the configuration in the input.");
+                }
 
-        return Result();
+                return (cycleCount, loopSize);
+            },
+            cancellationToken);
     }
 
     /// <summary>

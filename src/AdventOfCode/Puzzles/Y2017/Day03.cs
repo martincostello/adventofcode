@@ -145,21 +145,21 @@ public sealed class Day03 : Puzzle<int, int>
     }
 
     /// <inheritdoc />
-    protected override Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
+    protected override Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken) => SolveWithArgument(args, static (value, logger) =>
     {
-        int square = Parse<int>(args[0]);
+        int square = Parse<int>(value);
 
-        Solution1 = ComputeSteps(square);
-        Solution2 = ComputeFirstLargestWrittenValue(square);
+        int steps = ComputeSteps(square);
+        int firstStorageLargerThanInput = ComputeFirstLargestWrittenValue(square);
 
-        if (Verbose)
+        if (logger is { })
         {
-            Logger.WriteLine($"The number of steps required to carry the data from square {square:N0} all the way to the access port is {Solution1:N0}.");
-            Logger.WriteLine($"The first value written that is larger than square {square:N0} is {Solution2:N0}.");
+            logger.WriteLine($"The number of steps required to carry the data from square {square:N0} all the way to the access port is {steps:N0}.");
+            logger.WriteLine($"The first value written that is larger than square {square:N0} is {firstStorageLargerThanInput:N0}.");
         }
 
-        return Result();
-    }
+        return (steps, firstStorageLargerThanInput);
+    });
 
     /// <summary>
     /// Gets the length of the specified ring number.

@@ -91,16 +91,21 @@ public sealed class Day09 : Puzzle<int, int>
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        string stream = (await ReadResourceAsStringAsync(cancellationToken)).Trim();
+        return await SolveWithStringAsync(
+            static (stream, logger, _) =>
+            {
+                stream = stream.Trim();
 
-        (Solution1, Solution2) = ParseStream(stream);
+                (int totalScore, int garbageCount) = ParseStream(stream);
 
-        if (Verbose)
-        {
-            Logger.WriteLine($"The total score for all the groups is {Solution1:N0}.");
-            Logger.WriteLine($"There are {Solution2:N0} non-canceled characters within the garbage.");
-        }
+                if (logger is { })
+                {
+                    logger.WriteLine($"The total score for all the groups is {totalScore:N0}.");
+                    logger.WriteLine($"There are {garbageCount:N0} non-canceled characters within the garbage.");
+                }
 
-        return Result();
+                return (totalScore, garbageCount);
+            },
+            cancellationToken);
     }
 }

@@ -96,17 +96,20 @@ public sealed class Day15 : Puzzle<int, int>
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        var input = await ReadResourceAsLinesAsync(cancellationToken);
+        return await SolveWithLinesAsync(
+            static (input, logger, _) =>
+            {
+                int finalCountV1 = GetMatchingPairs(input, version: 1);
+                int finalCountV2 = GetMatchingPairs(input, version: 2);
 
-        Solution1 = GetMatchingPairs(input, version: 1);
-        Solution2 = GetMatchingPairs(input, version: 2);
+                if (logger is { })
+                {
+                    logger.WriteLine($"The judge's final count using version 1 is {finalCountV1:N0}.");
+                    logger.WriteLine($"The judge's final count using version 2 is {finalCountV2:N0}.");
+                }
 
-        if (Verbose)
-        {
-            Logger.WriteLine($"The judge's final count using version 1 is {Solution1:N0}.");
-            Logger.WriteLine($"The judge's final count using version 2 is {Solution2:N0}.");
-        }
-
-        return Result();
+                return (finalCountV1, finalCountV2);
+            },
+            cancellationToken);
     }
 }

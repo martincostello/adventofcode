@@ -38,18 +38,21 @@ public sealed class Day08 : Puzzle<int, int>
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        var instructions = await ReadResourceAsLinesAsync(cancellationToken);
+        return await SolveWithLinesAsync(
+            static (instructions, logger, _) =>
+            {
+                int highestRegisterValueAtEnd = FindHighestRegisterValueAtEnd(instructions);
+                int highestRegisterValueDuring = FindHighestRegisterValueDuring(instructions);
 
-        Solution1 = FindHighestRegisterValueAtEnd(instructions);
-        Solution2 = FindHighestRegisterValueDuring(instructions);
+                if (logger is { })
+                {
+                    logger.WriteLine($"The largest value in any register after executing the input is {highestRegisterValueAtEnd:N0}.");
+                    logger.WriteLine($"The largest value in any register at any point while executing the input was {highestRegisterValueDuring:N0}.");
+                }
 
-        if (Verbose)
-        {
-            Logger.WriteLine($"The largest value in any register after executing the input is {Solution1:N0}.");
-            Logger.WriteLine($"The largest value in any register at any point while executing the input was {Solution2:N0}.");
-        }
-
-        return Result();
+                return (highestRegisterValueAtEnd, highestRegisterValueDuring);
+            },
+            cancellationToken);
     }
 
     /// <summary>

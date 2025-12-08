@@ -41,20 +41,23 @@ public sealed class Day04 : Puzzle<int, int>
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        var passphrases = await ReadResourceAsLinesAsync(cancellationToken);
+        return await SolveWithLinesAsync(
+            static (passphrases, logger, _) =>
+            {
+                int validPassphraseCountV1 = Count(passphrases, version: 1);
+                int validPassphraseCountV2 = Count(passphrases, version: 2);
 
-        Solution1 = Count(passphrases, version: 1);
-        Solution2 = Count(passphrases, version: 2);
+                if (logger is { })
+                {
+                    logger.WriteLine($"There are {validPassphraseCountV1:N0} valid passphrases using version 1 of the policy.");
+                    logger.WriteLine($"There are {validPassphraseCountV2:N0} valid passphrases using version 2 of the policy.");
+                }
 
-        if (Verbose)
-        {
-            Logger.WriteLine($"There are {Solution1:N0} valid passphrases using version 1 of the policy.");
-            Logger.WriteLine($"There are {Solution2:N0} valid passphrases using version 2 of the policy.");
-        }
+                return (validPassphraseCountV1, validPassphraseCountV2);
 
-        return Result();
-
-        static int Count(List<string> passphrases, int version)
-            => passphrases.Count((p) => IsPassphraseValid(p, version));
+                static int Count(List<string> passphrases, int version)
+                    => passphrases.Count((p) => IsPassphraseValid(p, version));
+            },
+            cancellationToken);
     }
 }

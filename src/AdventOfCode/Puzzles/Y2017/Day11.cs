@@ -74,17 +74,20 @@ public sealed class Day11 : Puzzle<int, int>
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        string path = (await ReadResourceAsStringAsync(cancellationToken)).Trim();
+        return await SolveWithStringAsync(
+            static (path, logger) =>
+            {
+                (int maximumDistance, int minimumSteps) = FindStepRange(path.Trim());
 
-        (Solution1, Solution2) = FindStepRange(path);
+                if (logger is { })
+                {
+                    logger.WriteLine($"The minimum number of steps required to reach the child process is {maximumDistance:N0}.");
+                    logger.WriteLine($"The maximum distance reached by the child process was {minimumSteps:N0}.");
+                }
 
-        if (Verbose)
-        {
-            Logger.WriteLine($"The minimum number of steps required to reach the child process is {Solution1:N0}.");
-            Logger.WriteLine($"The maximum distance reached by the child process was {Solution2:N0}.");
-        }
-
-        return Result();
+                return (maximumDistance, minimumSteps);
+            },
+            cancellationToken);
     }
 
     /// <summary>
