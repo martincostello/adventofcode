@@ -63,26 +63,26 @@ public sealed class Day20 : Puzzle<int, int>
     }
 
     /// <inheritdoc />
-    protected override Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
+    protected override Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken) => SolveWithArgument(args, static (argument, logger) =>
     {
-        int target = Parse<int>(args[0]);
+        int target = Parse<int>(argument);
 
-        Solution1 = GetLowestHouseNumber(target, maximumVisits: null);
-        Solution2 = GetLowestHouseNumber(target, maximumVisits: 50);
+        int lowestHouseNumber = GetLowestHouseNumber(target, maximumVisits: null);
+        int lowestHouseNumberWithCap = GetLowestHouseNumber(target, maximumVisits: 50);
 
-        if (Verbose)
+        if (logger is { })
         {
-            Logger.WriteLine(
+            logger.WriteLine(
                 "The first house to receive at least {0:N0} presents is house number {1:N0}.",
                 target,
-                Solution1);
+                lowestHouseNumber);
 
-            Logger.WriteLine(
+            logger.WriteLine(
                 "The first house to receive at least {0:N0} presents is house number {1:N0} when there is a 50 present cap per elf.",
                 target,
-                Solution2);
+                lowestHouseNumberWithCap);
         }
 
-        return Result();
-    }
+        return (lowestHouseNumber, lowestHouseNumberWithCap);
+    });
 }

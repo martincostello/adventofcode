@@ -18,7 +18,7 @@ public sealed class Day17 : Puzzle<int, int>
     /// <returns>
     /// The combinations of containers that can store the volume specified by <paramref name="volume"/>.
     /// </returns>
-    internal static IList<ICollection<int>> GetContainerCombinations(int volume, IList<int> containerVolumes)
+    internal static IList<ICollection<int>> GetContainerCombinations(int volume, List<int> containerVolumes)
     {
         var containers = containerVolumes
             .OrderDescending()
@@ -30,34 +30,38 @@ public sealed class Day17 : Puzzle<int, int>
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        var containerVolumes = await ReadResourceAsNumbersAsync<int>(cancellationToken);
+        return await SolveWithNumbersAsync<int>(
+            args,
+            static (arguments, containerVolumes, logger, _) =>
+            {
+                int volume = Parse<int>(arguments[0]);
 
-        int volume = Parse<int>(args[0]);
+                var allCombinations = GetContainerCombinations(volume, containerVolumes);
 
-        var combinations = GetContainerCombinations(volume, containerVolumes);
+                var combinationsWithLeastContainers = allCombinations
+                    .CountBy((p) => p.Count)
+                    .OrderBy((p) => p.Key)
+                    .First();
 
-        var combinationsWithLeastContainers = combinations
-            .CountBy((p) => p.Count)
-            .OrderBy((p) => p.Key)
-            .First();
+                int combinations = allCombinations.Count;
+                int combinationsWithMinimumContainers = combinationsWithLeastContainers.Value;
 
-        Solution1 = combinations.Count;
-        Solution2 = combinationsWithLeastContainers.Value;
+                if (logger is { })
+                {
+                    logger.WriteLine(
+                        "There are {0:N0} combinations of containers that can store {1:0} liters of eggnog.",
+                        combinations,
+                        volume);
 
-        if (Verbose)
-        {
-            Logger.WriteLine(
-                "There are {0:N0} combinations of containers that can store {1:0} liters of eggnog.",
-                Solution1,
-                volume);
+                    logger.WriteLine(
+                        "There are {0:N0} combinations of containers that can store {1:0} liters of eggnog using {2} containers.",
+                        combinationsWithMinimumContainers,
+                        volume,
+                        combinationsWithLeastContainers.Key);
+                }
 
-            Logger.WriteLine(
-                "There are {0:N0} combinations of containers that can store {1:0} liters of eggnog using {2} containers.",
-                Solution2,
-                volume,
-                combinationsWithLeastContainers.Key);
-        }
-
-        return Result();
+                return (combinations, combinationsWithMinimumContainers);
+            },
+            cancellationToken);
     }
 }

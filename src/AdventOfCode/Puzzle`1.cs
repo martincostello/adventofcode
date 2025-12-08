@@ -20,13 +20,29 @@ public abstract class Puzzle<T> : Puzzle
     /// </summary>
     /// <param name="arguments">The arguments to pass to the solver.</param>
     /// <param name="solver">A delegate to a method that solves the puzzle.</param>
+    /// <returns>
+    /// A <see cref="PuzzleResult"/> containing the solutions returned by <paramref name="solver"/>.
+    /// </returns>
+    protected PuzzleResult SolveWithArguments(
+        IReadOnlyList<string> arguments,
+        Func<IReadOnlyList<string>, ILogger?, T> solver)
+    {
+        Solution = solver(arguments, Verbose ? Logger : null);
+        return PuzzleResult.Create(Solution);
+    }
+
+    /// <summary>
+    /// Executes the specified solver using the specified arguments and returns the result.
+    /// </summary>
+    /// <param name="arguments">The arguments to pass to the solver.</param>
+    /// <param name="solver">A delegate to a method that solves the puzzle.</param>
     /// <param name="cancellationToken">The <see cref="CancellationToken"/> to use.</param>
     /// <returns>
     /// A <see cref="PuzzleResult"/> containing the solutions returned by <paramref name="solver"/>.
     /// </returns>
     protected PuzzleResult SolveWithArguments(
-        string[] arguments,
-        Func<string[], ILogger?, CancellationToken, T> solver,
+        IReadOnlyList<string> arguments,
+        Func<IReadOnlyList<string>, ILogger?, CancellationToken, T> solver,
         CancellationToken cancellationToken)
     {
         Solution = solver(arguments, Verbose ? Logger : null, cancellationToken);
@@ -43,8 +59,8 @@ public abstract class Puzzle<T> : Puzzle
     /// A <see cref="PuzzleResult"/> containing the solutions returned by <paramref name="solver"/>.
     /// </returns>
     protected async Task<PuzzleResult> SolveWithLinesAsync(
-        string[] arguments,
-        Func<string[], List<string>, ILogger?, CancellationToken, T> solver,
+        IReadOnlyList<string> arguments,
+        Func<IReadOnlyList<string>, List<string>, ILogger?, CancellationToken, T> solver,
         CancellationToken cancellationToken)
     {
         var values = await ReadResourceAsLinesAsync(cancellationToken);

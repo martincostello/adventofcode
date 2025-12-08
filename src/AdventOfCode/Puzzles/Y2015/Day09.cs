@@ -57,18 +57,21 @@ public sealed class Day09 : Puzzle<int, int>
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        var collection = await ReadResourceAsLinesAsync(cancellationToken);
+        return await SolveWithLinesAsync(
+            static (values, logger, _) =>
+            {
+                int shortestDistance = GetDistanceBetweenPoints(values, findLongest: false);
+                int longestDistance = GetDistanceBetweenPoints(values, findLongest: true);
 
-        Solution1 = GetDistanceBetweenPoints(collection, findLongest: false);
-        Solution2 = GetDistanceBetweenPoints(collection, findLongest: true);
+                if (logger is { })
+                {
+                    logger.WriteLine("The distance of the shortest route is {0:N0}.", shortestDistance);
+                    logger.WriteLine("The distance of the longest route is {0:N0}.", longestDistance);
+                }
 
-        if (Verbose)
-        {
-            Logger.WriteLine("The distance of the shortest route is {0:N0}.", Solution1);
-            Logger.WriteLine("The distance of the longest route is {0:N0}.", Solution2);
-        }
-
-        return Result();
+                return (shortestDistance, longestDistance);
+            },
+            cancellationToken);
     }
 
     private static IList<int> GetRouteDistances(Map map, string start)

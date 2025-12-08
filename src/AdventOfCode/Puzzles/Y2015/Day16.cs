@@ -94,20 +94,23 @@ public sealed class Day16 : Puzzle<int, int>
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        var auntSueMetadata = await ReadResourceAsLinesAsync(cancellationToken);
+        return await SolveWithLinesAsync(
+            static (metadata, logger, _) =>
+            {
+                int auntSueNumber = WhichAuntSueSentTheGift(metadata);
+                int realAuntSueNumber = WhichAuntSueSentTheGift(metadata, compensateForRetroEncabulator: true);
 
-        Solution1 = WhichAuntSueSentTheGift(auntSueMetadata);
-        Solution2 = WhichAuntSueSentTheGift(auntSueMetadata, compensateForRetroEncabulator: true);
+                if (logger is { })
+                {
+                    logger.WriteLine(
+                        "The number of the Aunt Sue that got me the gift was originally thought to be {0}, but it was actually {1}.",
+                        auntSueNumber,
+                        realAuntSueNumber);
+                }
 
-        if (Verbose)
-        {
-            Logger.WriteLine(
-                "The number of the Aunt Sue that got me the gift was originally thought to be {0}, but it was actually {1}.",
-                Solution1,
-                Solution2);
-        }
-
-        return Result();
+                return (auntSueNumber, realAuntSueNumber);
+            },
+            cancellationToken);
     }
 
     /// <summary>

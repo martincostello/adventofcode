@@ -21,7 +21,7 @@ public sealed class Day23 : Puzzle<uint, uint>
     internal static (uint A, uint B) ProcessInstructions(
         IList<string> instructions,
         uint initialValue,
-        ILogger logger)
+        ILogger? logger)
     {
         var a = new Register()
         {
@@ -76,13 +76,13 @@ public sealed class Day23 : Puzzle<uint, uint>
                     break;
 
                 default:
-                    logger.WriteLine($"Instruction '{operation}' is not defined.");
+                    logger?.WriteLine($"Instruction '{operation}' is not defined.");
                     return (uint.MaxValue, uint.MaxValue);
             }
 
             if (next == i)
             {
-                logger.WriteLine($"Instruction at line {i + 1:N0} creates an infinite loop.");
+                logger?.WriteLine($"Instruction at line {i + 1:N0} creates an infinite loop.");
                 break;
             }
 
@@ -95,21 +95,26 @@ public sealed class Day23 : Puzzle<uint, uint>
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        var instructions = await ReadResourceAsLinesAsync(cancellationToken);
-        uint initialValue = args.Length == 1 ? Parse<uint>(args[0]) : 0;
+        return await SolveWithLinesAsync(
+            args,
+            static (arguments, instructions, logger, _) =>
+            {
+                uint initialValue = arguments.Count == 1 ? Parse<uint>(arguments[0]) : 0;
 
-        (Solution1, Solution2) = ProcessInstructions(instructions, initialValue, Logger);
+                (uint a, uint b) = ProcessInstructions(instructions, initialValue, logger);
 
-        if (Verbose)
-        {
-            Logger.WriteLine(
-                "After processing {0:N0} instructions, the value of a is {1:N0} and the value of b is {2:N0}.",
-                instructions.Count,
-                Solution1,
-                Solution2);
-        }
+                if (logger is { })
+                {
+                    logger.WriteLine(
+                        "After processing {0:N0} instructions, the value of a is {1:N0} and the value of b is {2:N0}.",
+                        instructions.Count,
+                        a,
+                        b);
+                }
 
-        return Result();
+                return (a, b);
+            },
+            cancellationToken);
     }
 
     /// <summary>

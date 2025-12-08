@@ -13,7 +13,7 @@ public sealed class Day06 : Puzzle<int, int>
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
         return await SolveWithLinesAsync(
-            static async (lines, logger, _) =>
+            static (lines, logger, _) =>
             {
                 var instructionsV1 = lines.Select(InstructionV1.Parse).ToArray();
                 var instructionsV2 = lines.Select(InstructionV2.Parse).ToArray();

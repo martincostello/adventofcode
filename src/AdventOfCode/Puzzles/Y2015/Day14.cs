@@ -63,30 +63,29 @@ public sealed class Day14 : Puzzle<int, int>
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        int timeIndex = Parse<int>(args[0], NumberStyles.Integer & ~NumberStyles.AllowLeadingSign);
+        return await SolveWithLinesAsync(
+            args,
+            static async (arguments, flightData, logger, _) =>
+            {
+                int timeIndex = Parse<int>(arguments[0], NumberStyles.Integer & ~NumberStyles.AllowLeadingSign);
 
-        if (timeIndex < 0)
-        {
-            throw new PuzzleException("The time index specified is invalid.");
-        }
+                if (timeIndex < 0)
+                {
+                    throw new PuzzleException("The time index specified is invalid.");
+                }
 
-        var flightData = await ReadResourceAsLinesAsync(cancellationToken);
+                int maximumReindeerDistance = GetMaximumDistanceOfFastestReindeer(flightData, timeIndex);
+                int maximumReindeerPoints = GetMaximumPointsOfFastestReindeer(flightData, timeIndex);
 
-        Solution1 = GetMaximumDistanceOfFastestReindeer(flightData, timeIndex);
+                if (logger is { })
+                {
+                    logger.WriteLine("After {0:N0} seconds, the furthest reindeer is {1:N0} km away.", timeIndex, maximumReindeerDistance);
+                    logger.WriteLine("After {0:N0} seconds, the reindeer in the lead has {1:N0} points.", timeIndex, maximumReindeerPoints);
+                }
 
-        if (Verbose)
-        {
-            Logger.WriteLine("After {0:N0} seconds, the furthest reindeer is {1:N0} km away.", timeIndex, Solution1);
-        }
-
-        Solution2 = GetMaximumPointsOfFastestReindeer(flightData, timeIndex);
-
-        if (Verbose)
-        {
-            Logger.WriteLine("After {0:N0} seconds, the reindeer in the lead has {1:N0} points.", timeIndex, Solution2);
-        }
-
-        return Result();
+                return (maximumReindeerDistance, maximumReindeerPoints);
+            },
+            cancellationToken);
     }
 
     /// <summary>

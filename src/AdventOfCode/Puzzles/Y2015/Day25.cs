@@ -60,26 +60,23 @@ public sealed class Day25 : Puzzle<ulong>
     /// <inheritdoc />
     protected override Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        return SolveWithArguments(
-            args,
-            static (arguments, logger, _) =>
+        return SolveWithArguments(args, static (arguments, logger) =>
+        {
+            int row = Parse<int>(arguments[0]);
+            int column = Parse<int>(arguments[1]);
+
+            ulong code = GetCodeForWeatherMachine(row, column);
+
+            if (logger is { })
             {
-                int row = Parse<int>(arguments[0]);
-                int column = Parse<int>(arguments[1]);
+                logger.WriteLine(
+                    "The code for row {0:N0} and column {1:N0} is {2:N0}.",
+                    row,
+                    column,
+                    code);
+            }
 
-                ulong code = GetCodeForWeatherMachine(row, column);
-
-                if (logger is { })
-                {
-                    logger.WriteLine(
-                        "The code for row {0:N0} and column {1:N0} is {2:N0}.",
-                        row,
-                        column,
-                        code);
-                }
-
-                return code;
-            },
-            cancellationToken);
+            return code;
+        });
     }
 }

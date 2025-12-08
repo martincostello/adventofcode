@@ -74,18 +74,23 @@ public sealed class Day15 : Puzzle<int, int>
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        var ingredients = await ReadResourceAsLinesAsync(cancellationToken);
+        return await SolveWithLinesAsync(
+            static (ingredients, logger, _) =>
+            {
+                const int CalorieTarget = 500;
 
-        Solution1 = GetHighestTotalCookieScore(ingredients);
-        Solution2 = GetHighestTotalCookieScore(ingredients, 500);
+                int highestTotalCookieScore = GetHighestTotalCookieScore(ingredients);
+                int highestTotalCookieScoreWith500Calories = GetHighestTotalCookieScore(ingredients, calorieCount: CalorieTarget);
 
-        if (Verbose)
-        {
-            Logger.WriteLine("The highest total cookie score is {0:N0}.", Solution1);
-            Logger.WriteLine("The highest total cookie score for a cookie with 500 calories is {0:N0}.", Solution2);
-        }
+                if (logger is { })
+                {
+                    logger.WriteLine("The highest total cookie score is {0:N0}.", highestTotalCookieScore);
+                    logger.WriteLine("The highest total cookie score for a cookie with {0} calories is {1:N0}.", CalorieTarget, highestTotalCookieScoreWith500Calories);
+                }
 
-        return Result();
+                return (highestTotalCookieScore, highestTotalCookieScoreWith500Calories);
+            },
+            cancellationToken);
     }
 
     /// <summary>

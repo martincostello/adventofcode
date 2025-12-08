@@ -45,29 +45,32 @@ public sealed class Day10 : Puzzle<int, int>
     /// <inheritdoc />
     protected override Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        string value = args[0];
-        string result = value;
-
-        for (int i = 0; i < 40; i++)
+        return SolveWithArguments(args, static (arguments, logger) =>
         {
-            result = AsLookAndSay(result);
-        }
+            string value = arguments[0];
+            string result = value;
 
-        Solution1 = result.Length;
+            for (int i = 0; i < 40; i++)
+            {
+                result = AsLookAndSay(result);
+            }
 
-        for (int i = 0; i < 10; i++)
-        {
-            result = AsLookAndSay(result);
-        }
+            int solution40 = result.Length;
 
-        Solution2 = result.Length;
+            for (int i = 0; i < 10; i++)
+            {
+                result = AsLookAndSay(result);
+            }
 
-        if (Verbose)
-        {
-            Logger.WriteLine("The length of the result for input '{0}' after 40 iterations is {1:N0}.", value, Solution1);
-            Logger.WriteLine("The length of the result for input '{0}' after 50 iterations is {1:N0}.", value, Solution2);
-        }
+            int solution50 = result.Length;
 
-        return Result();
+            if (logger is { })
+            {
+                logger.WriteLine("The length of the result for input '{0}' after 40 iterations is {1:N0}.", value, solution40);
+                logger.WriteLine("The length of the result for input '{0}' after 50 iterations is {1:N0}.", value, solution50);
+            }
+
+            return (solution40, solution50);
+        });
     }
 }

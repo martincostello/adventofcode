@@ -64,30 +64,33 @@ public sealed class Day18 : Puzzle<int, int>
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        var initial = await ReadResourceAsLinesAsync(cancellationToken);
+        return await SolveWithLinesAsync(
+            static (initial, logger, _) =>
+            {
+                const int Steps = 100;
 
-        int steps = 100;
+                string[] finalUnstuck = GetGridConfigurationAfterSteps(initial, Steps, areCornerLightsBroken: false);
+                string[] finalStuck = GetGridConfigurationAfterSteps(initial, Steps, areCornerLightsBroken: true);
 
-        string[] finalUnstuck = GetGridConfigurationAfterSteps(initial, steps, areCornerLightsBroken: false);
-        string[] finalStuck = GetGridConfigurationAfterSteps(initial, steps, areCornerLightsBroken: true);
+                int lightsIlluminated = finalUnstuck.Sum((p) => p.Count(On));
+                int lightsIlluminatedWithStuckLights = finalStuck.Sum((p) => System.MemoryExtensions.Count(p.AsSpan(), On));
 
-        Solution1 = finalUnstuck.Sum((p) => p.Count(On));
-        Solution2 = finalStuck.Sum((p) => System.MemoryExtensions.Count(p.AsSpan(), On));
+                if (logger is { })
+                {
+                    logger.WriteLine(
+                        "There are {0:N0} lights illuminated after {1:N0} steps.",
+                        lightsIlluminated,
+                        Steps);
 
-        if (Verbose)
-        {
-            Logger.WriteLine(
-                "There are {0:N0} lights illuminated after {1:N0} steps.",
-                Solution1,
-                steps);
+                    logger.WriteLine(
+                        "There are {0:N0} lights illuminated after {1:N0} steps with the corner lights stuck on.",
+                        lightsIlluminatedWithStuckLights,
+                        Steps);
+                }
 
-            Logger.WriteLine(
-                "There are {0:N0} lights illuminated after {1:N0} steps with the corner lights stuck on.",
-                Solution2,
-                steps);
-        }
-
-        return Result();
+                return (lightsIlluminated, lightsIlluminatedWithStuckLights);
+            },
+            cancellationToken);
     }
 
     /// <summary>

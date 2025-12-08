@@ -88,24 +88,27 @@ public sealed class Day24 : Puzzle<long, long>
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        var weights = await ReadResourceAsNumbersAsync<long>(cancellationToken);
+        return await SolveWithNumbersAsync<long>(
+            static (weights, logger, _) =>
+            {
+                long quantumEntanglementFor3 = GetQuantumEntanglementOfIdealConfiguration(compartments: 3, weights);
+                long quantumEntanglementFor4 = GetQuantumEntanglementOfIdealConfiguration(compartments: 4, weights);
 
-        Solution1 = GetQuantumEntanglementOfIdealConfiguration(compartments: 3, weights);
-        Solution2 = GetQuantumEntanglementOfIdealConfiguration(compartments: 4, weights);
+                if (logger is { })
+                {
+                    logger.WriteLine(
+                        "The quantum entanglement of the ideal configuration of {0:N0} packages in 3 compartments is {1:N0}.",
+                        weights.Count,
+                        quantumEntanglementFor3);
 
-        if (Verbose)
-        {
-            Logger.WriteLine(
-                "The quantum entanglement of the ideal configuration of {0:N0} packages in 3 compartments is {1:N0}.",
-                weights.Count,
-                Solution1);
+                    logger.WriteLine(
+                        "The quantum entanglement of the ideal configuration of {0:N0} packages in 4 compartments is {1:N0}.",
+                        weights.Count,
+                        quantumEntanglementFor4);
+                }
 
-            Logger.WriteLine(
-                "The quantum entanglement of the ideal configuration of {0:N0} packages in 4 compartments is {1:N0}.",
-                weights.Count,
-                Solution2);
-        }
-
-        return Result();
+                return (quantumEntanglementFor3, quantumEntanglementFor4);
+            },
+            cancellationToken);
     }
 }

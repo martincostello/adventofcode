@@ -102,7 +102,7 @@ public sealed class Day21 : Puzzle<string>
             static (arguments, instructions, logger, cancellationToken) =>
             {
                 string text = arguments[0];
-                bool reverse = arguments.Length > 1 && string.Equals(arguments[1], bool.TrueString, StringComparison.OrdinalIgnoreCase);
+                bool reverse = arguments.Count > 1 && string.Equals(arguments[1], bool.TrueString, StringComparison.OrdinalIgnoreCase);
 
                 string scrambledResult = Scramble(text, instructions, reverse);
 

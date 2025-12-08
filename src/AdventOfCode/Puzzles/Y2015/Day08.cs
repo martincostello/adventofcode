@@ -124,26 +124,29 @@ public sealed class Day08 : Puzzle<int, int>
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        var input = await ReadResourceAsLinesAsync(cancellationToken);
+        return await SolveWithLinesAsync(
+            static (values, logger, _) =>
+            {
+                int countForCode = values.Sum((p) => p.Length);
+                int countInMemory = GetLiteralCharacterCount(values);
+                int countEncoded = GetEncodedCharacterCount(values);
 
-        int countForCode = input.Sum((p) => p.Length);
-        int countInMemory = GetLiteralCharacterCount(input);
-        int countEncoded = GetEncodedCharacterCount(input);
+                int first = countForCode - countInMemory;
+                int second = countEncoded - countForCode;
 
-        Solution1 = countForCode - countInMemory;
-        Solution2 = countEncoded - countForCode;
+                if (logger is { })
+                {
+                    logger.WriteLine(
+                        "The number of characters of code for string literals minus the number of characters in memory for the values of the strings is {0:N0}.",
+                        first);
 
-        if (Verbose)
-        {
-            Logger.WriteLine(
-                "The number of characters of code for string literals minus the number of characters in memory for the values of the strings is {0:N0}.",
-                Solution1);
+                    logger.WriteLine(
+                        "The total number of characters to represent the newly encoded strings minus the number of characters of code in each original string literal is {0:N0}.",
+                        second);
+                }
 
-            Logger.WriteLine(
-                "The total number of characters to represent the newly encoded strings minus the number of characters of code in each original string literal is {0:N0}.",
-                Solution2);
-        }
-
-        return Result();
+                return (first, second);
+            },
+            cancellationToken);
     }
 }

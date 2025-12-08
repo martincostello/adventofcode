@@ -117,7 +117,7 @@ public sealed class Day22 : Puzzle<int, int>
             Logger.WriteLine("The minimum amount of mana that can be spent to win on hard difficulty is {0:N0}.", Solution2);
         }
 
-        return Result();
+        return PuzzleResult.Create(Solution1, Solution2);
     }
 
     /// <summary>

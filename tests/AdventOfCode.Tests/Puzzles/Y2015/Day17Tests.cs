@@ -10,7 +10,7 @@ public sealed class Day17Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
     {
         // Arrange
         int volume = 25;
-        int[] containerVolumes = [20, 15, 10, 5, 5];
+        List<int> containerVolumes = [20, 15, 10, 5, 5];
 
         // Act
         var result = Day17.GetContainerCombinations(volume, containerVolumes);

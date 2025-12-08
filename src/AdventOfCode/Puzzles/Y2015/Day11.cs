@@ -88,18 +88,19 @@ public sealed class Day11 : Puzzle<string, string>
     /// <inheritdoc />
     protected override Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        string current = args[0];
-
-        Solution1 = GenerateNextPassword(current);
-        Solution2 = GenerateNextPassword(Solution1);
-
-        if (Verbose)
+        return SolveWithArgument(args, static (current, logger) =>
         {
-            Logger.WriteLine("Santa's first new password should be '{0}'.", Solution1);
-            Logger.WriteLine("Santa's second new password should be '{0}'.", Solution2);
-        }
+            string firstPassword = GenerateNextPassword(current);
+            string secondPassword = GenerateNextPassword(firstPassword);
 
-        return Result();
+            if (logger is { })
+            {
+                logger.WriteLine("Santa's first new password should be '{0}'.", firstPassword);
+                logger.WriteLine("Santa's second new password should be '{0}'.", secondPassword);
+            }
+
+            return (firstPassword, secondPassword);
+        });
     }
 
     /// <summary>

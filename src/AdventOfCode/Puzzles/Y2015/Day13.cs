@@ -43,42 +43,41 @@ public sealed class Day13 : Puzzle<int, int>
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        var potentialHappiness = await ReadResourceAsLinesAsync(cancellationToken);
+        return await SolveWithLinesAsync(
+            static (potentialHappiness, logger, _) =>
+            {
+                int maximumTotalChangeInHappiness = GetMaximumTotalChangeInHappiness(potentialHappiness);
 
-        Solution1 = GetMaximumTotalChangeInHappiness(potentialHappiness);
+                // Create a new guest list which is the same as the previous one but with the current user added
+                var potentialHappinessWithCurrentUser = new List<string>(potentialHappiness);
 
-        if (Verbose)
-        {
-            Logger.WriteLine("The total change in happiness is {0:N0}.", Solution1);
-        }
+                var existingGuestNames = potentialHappiness
+                    .Select((p) => p.Split(' ')[0])
+                    .Distinct()
+                    .ToList();
 
-        // Create a new guest list which is the same as the previous one but with the current user added
-        var potentialHappinessWithCurrentUser = new List<string>(potentialHappiness);
+                // Add the current user to the guest list where everyone is neutral to them
+                string currentUser = "You";
 
-        var existingGuestNames = potentialHappiness
-            .Select((p) => p.Split(' ')[0])
-            .Distinct()
-            .ToList();
+                const string AmbivalentFormat = "{0} would gain 0 happiness units by sitting next to {1}.";
 
-        // Add the current user to the guest list where everyone is neutral to them
-        string currentUser = "You";
+                foreach (string guest in existingGuestNames)
+                {
+                    potentialHappinessWithCurrentUser.Add(Format(AmbivalentFormat, guest, currentUser));
+                    potentialHappinessWithCurrentUser.Add(Format(AmbivalentFormat, currentUser, guest));
+                }
 
-        const string AmbivalentFormat = "{0} would gain 0 happiness units by sitting next to {1}.";
+                int maximumTotalChangeInHappinessWithCurrentUser = GetMaximumTotalChangeInHappiness(potentialHappinessWithCurrentUser);
 
-        foreach (string guest in existingGuestNames)
-        {
-            potentialHappinessWithCurrentUser.Add(Format(AmbivalentFormat, guest, currentUser));
-            potentialHappinessWithCurrentUser.Add(Format(AmbivalentFormat, currentUser, guest));
-        }
+                if (logger is { })
+                {
+                    logger.WriteLine("The total change in happiness is {0:N0}.", maximumTotalChangeInHappiness);
+                    logger.WriteLine("The total change in happiness with the current user seated is {0:N0}.", maximumTotalChangeInHappinessWithCurrentUser);
+                }
 
-        Solution2 = GetMaximumTotalChangeInHappiness(potentialHappinessWithCurrentUser);
-
-        if (Verbose)
-        {
-            Logger.WriteLine("The total change in happiness with the current user seated is {0:N0}.", Solution2);
-        }
-
-        return Result();
+                return (maximumTotalChangeInHappiness, maximumTotalChangeInHappinessWithCurrentUser);
+            },
+            cancellationToken);
     }
 
     /// <summary>
