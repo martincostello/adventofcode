@@ -135,17 +135,20 @@ public sealed class Day04 : Puzzle<int, int>
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        var log = await ReadResourceAsLinesAsync(cancellationToken);
+        return await SolveWithLinesAsync(
+            static (log, logger, _) =>
+            {
+                (int sleepiestGuardMinute, int sleepiestMinuteGuard) = GetSleepiestGuardsMinutes(log);
 
-        (Solution1, Solution2) = GetSleepiestGuardsMinutes(log);
+                if (logger is { })
+                {
+                    logger.WriteLine($"The ID of the sleepiest guard multiplied by the most common minute is {sleepiestGuardMinute:N0}.");
+                    logger.WriteLine($"The most common minute a guard was asleep in multiplied by the guard's ID is {sleepiestMinuteGuard:N0}.");
+                }
 
-        if (Verbose)
-        {
-            Logger.WriteLine($"The ID of the sleepiest guard multiplied by the most common minute is {Solution1:N0}.");
-            Logger.WriteLine($"The most common minute a guard was asleep in multiplied by the guard's ID is {Solution2:N0}.");
-        }
-
-        return Result();
+                return (sleepiestGuardMinute, sleepiestMinuteGuard);
+            },
+            cancellationToken);
     }
 
     /// <summary>

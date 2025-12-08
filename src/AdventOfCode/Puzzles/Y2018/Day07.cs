@@ -91,19 +91,22 @@ public sealed class Day07 : Puzzle<string, int>
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        var instructions = await ReadResourceAsLinesAsync(cancellationToken);
+        return await SolveWithLinesAsync(
+            static (instructions, logger, cancellationToken) =>
+            {
+                const int OneMinute = 60;
 
-        const int OneMinute = 60;
+                (string orderOfAssembly, _) = Assemble(instructions, workers: 1, partDuration: OneMinute);
+                (_, int timeToAssemble) = Assemble(instructions, workers: 5, partDuration: OneMinute);
 
-        (Solution1, _) = Assemble(instructions, workers: 1, partDuration: OneMinute);
-        (_, Solution2) = Assemble(instructions, workers: 5, partDuration: OneMinute);
+                if (logger is { })
+                {
+                    logger.WriteLine("The order of assembly for the sleigh with one worker is {0}.", orderOfAssembly);
+                    logger.WriteLine("The time to assemble the sleigh with 5 workers is {0}.", timeToAssemble);
+                }
 
-        if (Verbose)
-        {
-            Logger.WriteLine("The order of assembly for the sleigh with one worker is {0}.", Solution1);
-            Logger.WriteLine("The time to assemble the sleigh with 5 workers is {0}.", Solution2);
-        }
-
-        return Result();
+                return (orderOfAssembly, timeToAssemble);
+            },
+            cancellationToken);
     }
 }

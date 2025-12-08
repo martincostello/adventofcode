@@ -81,18 +81,21 @@ public sealed class Day03 : Puzzle<int, string>
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        var claims = await ReadResourceAsLinesAsync(cancellationToken);
+        return await SolveWithLinesAsync(
+            static (claims, logger, _) =>
+            {
+                int area = GetAreaWithTwoOrMoreOverlappingClaims(claims);
+                string idOfUniqueClaim = GetClaimWithNoOverlappingClaims(claims);
 
-        Solution1 = GetAreaWithTwoOrMoreOverlappingClaims(claims);
-        Solution2 = GetClaimWithNoOverlappingClaims(claims);
+                if (logger is { })
+                {
+                    logger.WriteLine($"{area:N0} square inches of fabric are within two or more claims.");
+                    logger.WriteLine($"The Id of the claim with no overlapping claims is {idOfUniqueClaim}.");
+                }
 
-        if (Verbose)
-        {
-            Logger.WriteLine($"{Solution1:N0} square inches of fabric are within two or more claims.");
-            Logger.WriteLine($"The Id of the claim with no overlapping claims is {Solution2}.");
-        }
-
-        return Result();
+                return (area, idOfUniqueClaim);
+            },
+            cancellationToken);
     }
 
     /// <summary>

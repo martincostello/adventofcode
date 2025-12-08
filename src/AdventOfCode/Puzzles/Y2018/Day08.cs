@@ -80,17 +80,22 @@ public sealed class Day08 : Puzzle<long, long>
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        var data = (await ReadResourceAsStringAsync(cancellationToken)).AsNumbers<int>(' ');
+        return await SolveWithStringAsync(
+            static (value, logger) =>
+            {
+                var data = value.AsNumbers<int>(' ');
 
-        (Solution1, Solution2) = ParseTree(data);
+                (long sumOfMetadata, long rootNodeValue) = ParseTree(data);
 
-        if (Verbose)
-        {
-            Logger.WriteLine("The sum of the tree's metadata entries is {0}.", Solution1);
-            Logger.WriteLine("The value the tree's root node is {0}.", Solution2);
-        }
+                if (logger is { })
+                {
+                    logger.WriteLine("The sum of the tree's metadata entries is {0}.", sumOfMetadata);
+                    logger.WriteLine("The value the tree's root node is {0}.", rootNodeValue);
+                }
 
-        return Result();
+                return (sumOfMetadata, rootNodeValue);
+            },
+            cancellationToken);
     }
 
     private sealed class Node(int childCount, int metadataCount)

@@ -65,18 +65,23 @@ public sealed class Day05 : Puzzle<int, int>
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        string polymer = (await ReadResourceAsStringAsync(cancellationToken)).Trim('\r', '\n');
+        return await SolveWithStringAsync(
+            static (polymer, logger, _) =>
+            {
+                polymer = polymer.Trim('\r', '\n');
 
-        Solution1 = Reduce(polymer).Length;
-        Solution2 = ReduceWithOptimization(polymer).Length;
+                int remainingUnits = Reduce(polymer).Length;
+                int remainingUnitsOptimized = ReduceWithOptimization(polymer).Length;
 
-        if (Verbose)
-        {
-            Logger.WriteLine($"The number of units that remain after fully reacting the polymer is {Solution1:N0}.");
-            Logger.WriteLine($"The number of units that remain after fully reacting the polymer with optimization is {Solution2:N0}.");
-        }
+                if (logger is { })
+                {
+                    logger.WriteLine($"The number of units that remain after fully reacting the polymer is {remainingUnits:N0}.");
+                    logger.WriteLine($"The number of units that remain after fully reacting the polymer with optimization is {remainingUnitsOptimized:N0}.");
+                }
 
-        return Result();
+                return (remainingUnits, remainingUnitsOptimized);
+            },
+            cancellationToken);
     }
 
     /// <summary>

@@ -122,17 +122,20 @@ public sealed class Day02 : Puzzle<int, string>
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        var ids = await ReadResourceAsLinesAsync(cancellationToken);
+        return await SolveWithLinesAsync(
+            static (ids, logger, _) =>
+            {
+                int checksum = CalculateChecksum(ids);
+                string commonLettersForBoxes = GetCommonLetters(ids);
 
-        Solution1 = CalculateChecksum(ids);
-        Solution2 = GetCommonLetters(ids);
+                if (logger is { })
+                {
+                    logger.WriteLine($"The checksum is {checksum:N0}.");
+                    logger.WriteLine($"The common letters are {commonLettersForBoxes}.");
+                }
 
-        if (Verbose)
-        {
-            Logger.WriteLine($"The checksum is {Solution1:N0}.");
-            Logger.WriteLine($"The common letters are {Solution2}.");
-        }
-
-        return Result();
+                return (checksum, commonLettersForBoxes);
+            },
+            cancellationToken);
     }
 }

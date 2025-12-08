@@ -67,17 +67,20 @@ public sealed class Day01 : Puzzle<int, int>
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        var sequence = await ReadResourceAsNumbersAsync<int>(cancellationToken);
+        return await SolveWithNumbersAsync<int>(
+            static (sequence, logger, _) =>
+            {
+                (int frequency, int firstRepeatedFrequency) = CalculateFrequencyWithRepetition(sequence);
 
-        (Solution1, Solution2) = CalculateFrequencyWithRepetition(sequence);
+                if (logger is { })
+                {
+                    logger.WriteLine($"The resulting frequency is {frequency:N0}.");
+                    logger.WriteLine($"The first repeated frequency is {firstRepeatedFrequency:N0}.");
+                }
 
-        if (Verbose)
-        {
-            Logger.WriteLine($"The resulting frequency is {Solution1:N0}.");
-            Logger.WriteLine($"The first repeated frequency is {Solution2:N0}.");
-        }
-
-        return Result();
+                return (frequency, firstRepeatedFrequency);
+            },
+            cancellationToken);
     }
 
     /// <summary>

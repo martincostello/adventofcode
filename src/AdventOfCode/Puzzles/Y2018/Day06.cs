@@ -102,22 +102,25 @@ public sealed class Day06 : Puzzle<int, int>
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        var coordinates = await ReadResourceAsLinesAsync(cancellationToken);
+        return await SolveWithLinesAsync(
+            static (coordinates, logger, _) =>
+            {
+                const int DistanceLimit = 10_000;
 
-        const int DistanceLimit = 10_000;
+                (int largestNonInfiniteArea, int areaOfRegion) = GetLargestArea(coordinates, DistanceLimit);
 
-        (Solution1, Solution2) = GetLargestArea(coordinates, DistanceLimit);
+                if (logger is { })
+                {
+                    logger.WriteLine("The largest non-infinite area is {0:N0}.", largestNonInfiniteArea);
 
-        if (Verbose)
-        {
-            Logger.WriteLine("The largest non-infinite area is {0:N0}.", Solution1);
+                    logger.WriteLine(
+                        "The size of the region containing all locations which have a total distance to all given coordinates of less than {0:N0} is {1:N0}.",
+                        DistanceLimit,
+                        areaOfRegion);
+                }
 
-            Logger.WriteLine(
-                "The size of the region containing all locations which have a total distance to all given coordinates of less than {0:N0} is {1:N0}.",
-                DistanceLimit,
-                Solution2);
-        }
-
-        return Result();
+                return (largestNonInfiniteArea, areaOfRegion);
+            },
+            cancellationToken);
     }
 }
