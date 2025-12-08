@@ -35,17 +35,20 @@ public sealed class Day01 : Puzzle<int, int>
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        var masses = await ReadResourceAsNumbersAsync<int>(cancellationToken);
+        return await SolveWithNumbersAsync<int>(
+            static (masses, logger, _) =>
+            {
+                int totalFuelRequiredForModules = masses.Sum((p) => GetFuelRequirementsForMass(p, includeFuel: false));
+                int totalFuelRequiredForRocket = masses.Sum((p) => GetFuelRequirementsForMass(p, includeFuel: true));
 
-        Solution1 = masses.Sum((p) => GetFuelRequirementsForMass(p, includeFuel: false));
-        Solution2 = masses.Sum((p) => GetFuelRequirementsForMass(p, includeFuel: true));
+                if (logger is { })
+                {
+                    logger.WriteLine("{0} fuel is required for the modules.", totalFuelRequiredForModules);
+                    logger.WriteLine("{0} fuel is required for the fully-fuelled rocket.", totalFuelRequiredForRocket);
+                }
 
-        if (Verbose)
-        {
-            Logger.WriteLine("{0} fuel is required for the modules.", Solution1);
-            Logger.WriteLine("{0} fuel is required for the fully-fuelled rocket.", Solution2);
-        }
-
-        return Result();
+                return (totalFuelRequiredForModules, totalFuelRequiredForRocket);
+            },
+            cancellationToken);
     }
 }

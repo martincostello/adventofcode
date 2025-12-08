@@ -52,17 +52,20 @@ public sealed class Day09 : Puzzle<long, long>
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        string program = await ReadResourceAsStringAsync(cancellationToken);
+        return await SolveWithStringAsync(
+            static async (program, logger, cancellationToken) =>
+            {
+                long keycode1 = (await RunProgramAsync(program, input: 1, cancellationToken))[0];
+                long keycode2 = (await RunProgramAsync(program, input: 2, cancellationToken))[0];
 
-        Solution1 = (await RunProgramAsync(program, input: 1, cancellationToken))[0];
-        Solution2 = (await RunProgramAsync(program, input: 2, cancellationToken))[0];
+                if (logger is { })
+                {
+                    logger.WriteLine("The program produces BOOST keycode {0} for an input of 1.", keycode1);
+                    logger.WriteLine("The program produces BOOST keycode {0} for an input of 2.", keycode2);
+                }
 
-        if (Verbose)
-        {
-            Logger.WriteLine("The program produces BOOST keycode {0} for an input of 1.", Solution1);
-            Logger.WriteLine("The program produces BOOST keycode {0} for an input of 2.", Solution2);
-        }
-
-        return Result();
+                return (keycode1, keycode2);
+            },
+            cancellationToken);
     }
 }

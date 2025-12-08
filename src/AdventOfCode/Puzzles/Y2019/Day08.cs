@@ -107,17 +107,25 @@ public sealed class Day08 : Puzzle<int, string>
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        string image = (await ReadResourceAsStringAsync(cancellationToken)).TrimEnd('\n');
+        string visualization = string.Empty;
 
-        (Solution1, Solution2, string visualization) = GetImageChecksum(image, 6, 25, Logger);
+        var result = await SolveWithStringAsync(
+            (image, logger, _) =>
+            {
+                image = image.TrimEnd('\n');
 
-        if (Verbose)
-        {
-            Logger.WriteLine("The checksum of the image data is {0}.", Solution1);
-            Logger.WriteLine("The message in the image data is {0}.", Solution2);
-        }
+                (int checksum, string message, visualization) = GetImageChecksum(image, 6, 25, logger);
 
-        var result = Result();
+                if (logger is { })
+                {
+                    logger.WriteLine("The checksum of the image data is {0}.", checksum);
+                    logger.WriteLine("The message in the image data is {0}.", message);
+                }
+
+                return (checksum, message);
+            },
+            cancellationToken);
+
         result.Visualizations.Add(visualization);
 
         return result;

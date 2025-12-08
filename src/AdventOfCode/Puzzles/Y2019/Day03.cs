@@ -110,17 +110,20 @@ public sealed class Day03 : Puzzle<int, int>
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        var wires = await ReadResourceAsLinesAsync(cancellationToken);
+        return await SolveWithLinesAsync(
+            static (wires, logger, _) =>
+            {
+                (int manhattanDistance, int minimumSteps) = GetManhattanDistanceOfClosesIntersection(wires);
 
-        (Solution1, Solution2) = GetManhattanDistanceOfClosesIntersection(wires);
+                if (logger is { })
+                {
+                    logger.WriteLine("The Manhattan distance from the central port to the closest intersection is {0}.", manhattanDistance);
+                    logger.WriteLine("The minimum number of combined steps to get to an intersection is {0}.", minimumSteps);
+                }
 
-        if (Verbose)
-        {
-            Logger.WriteLine("The Manhattan distance from the central port to the closest intersection is {0}.", Solution1);
-            Logger.WriteLine("The minimum number of combined steps to get to an intersection is {0}.", Solution2);
-        }
-
-        return Result();
+                return (manhattanDistance, minimumSteps);
+            },
+            cancellationToken);
     }
 
     /// <summary>

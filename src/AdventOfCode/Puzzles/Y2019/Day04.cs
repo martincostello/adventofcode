@@ -98,17 +98,17 @@ public sealed class Day04 : Puzzle<int, int>
     }
 
     /// <inheritdoc />
-    protected override Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
+    protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken) => SolveWithArgument(args, static (input, logger) =>
     {
-        Solution1 = GetPasswordsInRange(args[0], rulesVersion: 1);
-        Solution2 = GetPasswordsInRange(args[0], rulesVersion: 2);
+        int countV1 = GetPasswordsInRange(input, rulesVersion: 1);
+        int countV2 = GetPasswordsInRange(input, rulesVersion: 2);
 
-        if (Verbose)
+        if (logger is { })
         {
-            Logger.WriteLine("{0} different passwords within the range meet the criteria for version 1.", Solution1);
-            Logger.WriteLine("{0} different passwords within the range meet the criteria for version 2.", Solution2);
+            logger.WriteLine("{0} different passwords within the range meet the criteria for version 1.", countV1);
+            logger.WriteLine("{0} different passwords within the range meet the criteria for version 2.", countV2);
         }
 
-        return Result();
-    }
+        return (countV1, countV2);
+    });
 }

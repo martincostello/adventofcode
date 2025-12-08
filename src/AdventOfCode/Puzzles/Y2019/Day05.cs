@@ -42,17 +42,20 @@ public sealed class Day05 : Puzzle<long, long>
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        string program = await ReadResourceAsStringAsync(cancellationToken);
+        return await SolveWithStringAsync(
+            async static (program, logger, cancellationToken) =>
+            {
+                long diagnosticCode1 = await RunProgramAsync(program, input: 1, cancellationToken);
+                long diagnosticCode5 = await RunProgramAsync(program, input: 5, cancellationToken);
 
-        Solution1 = await RunProgramAsync(program, input: 1, cancellationToken);
-        Solution2 = await RunProgramAsync(program, input: 5, cancellationToken);
+                if (logger is { })
+                {
+                    logger.WriteLine("The program produces diagnostic code {0} for an input of 1.", diagnosticCode1);
+                    logger.WriteLine("The program produces diagnostic code {0} for an input of 5.", diagnosticCode5);
+                }
 
-        if (Verbose)
-        {
-            Logger.WriteLine("The program produces diagnostic code {0} for an input of 1.", Solution1);
-            Logger.WriteLine("The program produces diagnostic code {0} for an input of 5.", Solution2);
-        }
-
-        return Result();
+                return (diagnosticCode1, diagnosticCode5);
+            },
+            cancellationToken);
     }
 }

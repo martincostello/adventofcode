@@ -95,17 +95,20 @@ public sealed class Day07 : Puzzle<long, long>
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        string program = await ReadResourceAsStringAsync(cancellationToken);
+        return await SolveWithStringAsync(
+            static async (program, logger, cancellationToken) =>
+            {
+                long highestSignal = await RunProgramAsync(program, useFeedback: false, cancellationToken);
+                long highestSignalUsingFeedback = await RunProgramAsync(program, useFeedback: true, cancellationToken);
 
-        Solution1 = await RunProgramAsync(program, useFeedback: false, cancellationToken);
-        Solution2 = await RunProgramAsync(program, useFeedback: true, cancellationToken);
+                if (logger is { })
+                {
+                    logger.WriteLine("The highest signal that can be sent to the thrusters is {0}.", highestSignal);
+                    logger.WriteLine("The highest signal that can be sent to the thrusters using a feedback loop is {0}.", highestSignalUsingFeedback);
+                }
 
-        if (Verbose)
-        {
-            Logger.WriteLine("The highest signal that can be sent to the thrusters is {0}.", Solution1);
-            Logger.WriteLine("The highest signal that can be sent to the thrusters using a feedback loop is {0}.", Solution2);
-        }
-
-        return Result();
+                return (highestSignal, highestSignalUsingFeedback);
+            },
+            cancellationToken);
     }
 }
