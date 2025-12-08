@@ -6,20 +6,32 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2025;
 /// <summary>
 /// A class representing the puzzle for <c>https://adventofcode.com/2025/day/8</c>. This class cannot be inherited.
 /// </summary>
-[Puzzle(2025, 08, "Playground", RequiresData = true, IsHidden = true, Unsolved = true)]
 public sealed class Day08 : Puzzle<int>
 {
     /// <summary>
-    /// Solves the puzzle.
+    /// Connects the specified function boxes together as distinct circuits.
     /// </summary>
     /// <param name="values">The values to solve the puzzle from.</param>
     /// <returns>
-    /// The solution.
+    /// The product of the sizes of the three largest circuits.
     /// </returns>
-    public static int Solve(IReadOnlyList<string> values)
+    public static int Connect(IReadOnlyList<string> values)
     {
-        ArgumentNullException.ThrowIfNull(values);
-        return Unsolved;
+        var all = new List<Vector3>();
+
+        foreach (string item in values)
+        {
+            (string x, string y, string z) = item.Trifurcate(',');
+            all.Add(new(Parse<float>(x), Parse<float>(y), Parse<float>(z)));
+        }
+
+        var circuits = new List<HashSet<Vector3>>();
+
+        // TODO
+        return circuits
+            .OrderByDescending((p) => p.Count)
+            .Take(3)
+            .Aggregate(1, (x, y) => x * y.Count);
     }
 
     /// <inheritdoc />
@@ -28,14 +40,14 @@ public sealed class Day08 : Puzzle<int>
         return await SolveWithLinesAsync(
             static (values, logger, _) =>
             {
-                int solution = Solve(values);
+                int product = Connect(values);
 
                 if (logger is { })
                 {
-                    logger.WriteLine("The solution is {0}.", solution);
+                    logger.WriteLine("The product of the sizes of the three largest circuits is {0}.", product);
                 }
 
-                return solution;
+                return product;
             },
             cancellationToken);
     }
