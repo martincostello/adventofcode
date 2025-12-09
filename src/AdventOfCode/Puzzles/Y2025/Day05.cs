@@ -105,15 +105,15 @@ public sealed class Day05 : Puzzle<int, long>
         return await SolveWithLinesAsync(
             static (values, logger, _) =>
             {
-                (int fresh, long total) = CountFreshIngredients(values);
+                (int availableFreshIngredientIds, long freshIngredientIds) = CountFreshIngredients(values);
 
                 if (logger is { })
                 {
-                    logger.WriteLine("{0} available ingredient IDs are fresh.", fresh);
-                    logger.WriteLine("{0} ingredient IDs are fresh.", total);
+                    logger.WriteLine("{0} available ingredient IDs are fresh.", availableFreshIngredientIds);
+                    logger.WriteLine("{0} ingredient IDs are fresh.", freshIngredientIds);
                 }
 
-                return (fresh, total);
+                return (availableFreshIngredientIds, freshIngredientIds);
             },
             cancellationToken);
     }

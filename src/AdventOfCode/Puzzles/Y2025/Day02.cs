@@ -91,16 +91,16 @@ public sealed class Day02 : Puzzle<long, long>
         return await SolveWithStringAsync(
             static (productIds, logger) =>
             {
-                long sum1 = Validate(productIds, anyRepeatingSequence: false);
-                long sum2 = Validate(productIds, anyRepeatingSequence: true);
+                long invalidIdSumV1 = Validate(productIds, anyRepeatingSequence: false);
+                long invalidIdSumV2 = Validate(productIds, anyRepeatingSequence: true);
 
                 if (logger is { })
                 {
-                    logger.WriteLine("The sum of the invalid IDs with the first set of rules is {0}.", sum1);
-                    logger.WriteLine("The sum of the invalid IDs with the second set of rules is {0}.", sum2);
+                    logger.WriteLine("The sum of the invalid IDs with the first set of rules is {0}.", invalidIdSumV1);
+                    logger.WriteLine("The sum of the invalid IDs with the second set of rules is {0}.", invalidIdSumV2);
                 }
 
-                return (sum1, sum2);
+                return (invalidIdSumV1, invalidIdSumV2);
             },
             cancellationToken);
     }

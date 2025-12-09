@@ -83,16 +83,16 @@ public sealed class Day03 : Puzzle<long, long>
         return await SolveWithLinesAsync(
             static (batteryBanks, logger, _) =>
             {
-                long joltageFor2 = GetJoltage(batteryBanks, batteries: 2);
-                long joltageFor12 = GetJoltage(batteryBanks, batteries: 12);
+                long totalOutputJoltageFor2 = GetJoltage(batteryBanks, batteries: 2);
+                long totalOutputJoltageFor12 = GetJoltage(batteryBanks, batteries: 12);
 
                 if (logger is { })
                 {
-                    logger.WriteLine("The total output joltage for 2 batteries is {0}.", joltageFor2);
-                    logger.WriteLine("The total output joltage for 12 batteries is {0}.", joltageFor12);
+                    logger.WriteLine("The total output joltage for 2 batteries is {0}.", totalOutputJoltageFor2);
+                    logger.WriteLine("The total output joltage for 12 batteries is {0}.", totalOutputJoltageFor12);
                 }
 
-                return (joltageFor2, joltageFor12);
+                return (totalOutputJoltageFor2, totalOutputJoltageFor12);
             },
             cancellationToken);
     }

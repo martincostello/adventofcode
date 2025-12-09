@@ -83,15 +83,15 @@ public sealed class Day04 : Puzzle<int, int>
         return await SolveWithLinesAsync(
             static (diagram, logger, cancellationToken) =>
             {
-                (int accessible, int removed) = ArrangeRolls(diagram, cancellationToken);
+                (int accessibleRolls, int removedRolls) = ArrangeRolls(diagram, cancellationToken);
 
                 if (logger is { })
                 {
-                    logger.WriteLine("{0} rolls of paper can be accessed by a forklift.", accessible);
-                    logger.WriteLine("{0} rolls of paper can be removed by a forklift.", removed);
+                    logger.WriteLine("{0} rolls of paper can be accessed by a forklift.", accessibleRolls);
+                    logger.WriteLine("{0} rolls of paper can be removed by a forklift.", removedRolls);
                 }
 
-                return (accessible, removed);
+                return (accessibleRolls, removedRolls);
             },
             cancellationToken);
     }
