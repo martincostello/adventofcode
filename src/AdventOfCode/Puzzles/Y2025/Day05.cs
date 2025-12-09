@@ -102,18 +102,19 @@ public sealed class Day05 : Puzzle<int, long>
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        ArgumentNullException.ThrowIfNull(args);
+        return await SolveWithLinesAsync(
+            static (values, logger, _) =>
+            {
+                (int fresh, long total) = CountFreshIngredients(values);
 
-        var values = await ReadResourceAsLinesAsync(cancellationToken);
+                if (logger is { })
+                {
+                    logger.WriteLine("{0} available ingredient IDs are fresh.", fresh);
+                    logger.WriteLine("{0} ingredient IDs are fresh.", total);
+                }
 
-        (Solution1, Solution2) = CountFreshIngredients(values);
-
-        if (Verbose)
-        {
-            Logger.WriteLine("{0} available ingredient IDs are fresh.", Solution1);
-            Logger.WriteLine("{0} ingredient IDs are fresh.", Solution2);
-        }
-
-        return Result();
+                return (fresh, total);
+            },
+            cancellationToken);
     }
 }

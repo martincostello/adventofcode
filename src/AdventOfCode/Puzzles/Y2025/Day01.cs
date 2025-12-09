@@ -54,19 +54,20 @@ public sealed class Day01 : Puzzle<int, int>
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        ArgumentNullException.ThrowIfNull(args);
+        return await SolveWithLinesAsync(
+            static (values, logger, _) =>
+            {
+                int password1 = GetPassword(values, useMethod0x434C49434B: false);
+                int password2 = GetPassword(values, useMethod0x434C49434B: true);
 
-        var values = await ReadResourceAsLinesAsync(cancellationToken);
+                if (logger is { })
+                {
+                    logger.WriteLine("The password to open the door is {0}.", password1);
+                    logger.WriteLine("The password to open the door using method 0x434C49434B is {0}.", password2);
+                }
 
-        Solution1 = GetPassword(values, useMethod0x434C49434B: false);
-        Solution2 = GetPassword(values, useMethod0x434C49434B: true);
-
-        if (Verbose)
-        {
-            Logger.WriteLine("The password to open the door is {0}", Solution1);
-            Logger.WriteLine("The password to open the door using method 0x434C49434B is {0}", Solution2);
-        }
-
-        return Result();
+                return (password1, password2);
+            },
+            cancellationToken);
     }
 }

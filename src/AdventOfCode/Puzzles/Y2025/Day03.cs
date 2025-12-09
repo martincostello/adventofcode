@@ -80,19 +80,20 @@ public sealed class Day03 : Puzzle<long, long>
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        ArgumentNullException.ThrowIfNull(args);
+        return await SolveWithLinesAsync(
+            static (batteryBanks, logger, _) =>
+            {
+                long joltageFor2 = GetJoltage(batteryBanks, batteries: 2);
+                long joltageFor12 = GetJoltage(batteryBanks, batteries: 12);
 
-        var batteryBanks = await ReadResourceAsLinesAsync(cancellationToken);
+                if (logger is { })
+                {
+                    logger.WriteLine("The total output joltage for 2 batteries is {0}.", joltageFor2);
+                    logger.WriteLine("The total output joltage for 12 batteries is {0}.", joltageFor12);
+                }
 
-        Solution1 = GetJoltage(batteryBanks, batteries: 2);
-        Solution2 = GetJoltage(batteryBanks, batteries: 12);
-
-        if (Verbose)
-        {
-            Logger.WriteLine("The total output joltage for 2 batteries is {0}", Solution1);
-            Logger.WriteLine("The total output joltage for 12 batteries is {0}", Solution2);
-        }
-
-        return Result();
+                return (joltageFor2, joltageFor12);
+            },
+            cancellationToken);
     }
 }

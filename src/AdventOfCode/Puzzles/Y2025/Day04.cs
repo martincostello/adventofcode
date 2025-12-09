@@ -80,19 +80,20 @@ public sealed class Day04 : Puzzle<int, int>
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        ArgumentNullException.ThrowIfNull(args);
+        return await SolveWithLinesAsync(
+            static (diagram, logger, cancellationToken) =>
+            {
+                (int accessible, int removed) = ArrangeRolls(diagram, cancellationToken);
 
-        var diagram = await ReadResourceAsLinesAsync(cancellationToken);
+                if (logger is { })
+                {
+                    logger.WriteLine("{0} rolls of paper can be accessed by a forklift.", accessible);
+                    logger.WriteLine("{0} rolls of paper can be removed by a forklift.", removed);
+                }
 
-        (Solution1, Solution2) = ArrangeRolls(diagram, cancellationToken);
-
-        if (Verbose)
-        {
-            Logger.WriteLine("{0} rolls of paper can be accessed by a forklift.", Solution1);
-            Logger.WriteLine("{0} rolls of paper can be removed by a forklift.", Solution2);
-        }
-
-        return Result();
+                return (accessible, removed);
+            },
+            cancellationToken);
     }
 
     private sealed class Warehouse(Rectangle bounds) : SquareGrid(bounds)

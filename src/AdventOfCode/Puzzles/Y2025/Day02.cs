@@ -88,19 +88,20 @@ public sealed class Day02 : Puzzle<long, long>
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        ArgumentNullException.ThrowIfNull(args);
+        return await SolveWithStringAsync(
+            static (productIds, logger) =>
+            {
+                long sum1 = Validate(productIds, anyRepeatingSequence: false);
+                long sum2 = Validate(productIds, anyRepeatingSequence: true);
 
-        string productIds = await ReadResourceAsStringAsync(cancellationToken);
+                if (logger is { })
+                {
+                    logger.WriteLine("The sum of the invalid IDs with the first set of rules is {0}.", sum1);
+                    logger.WriteLine("The sum of the invalid IDs with the second set of rules is {0}.", sum2);
+                }
 
-        Solution1 = Validate(productIds, anyRepeatingSequence: false);
-        Solution2 = Validate(productIds, anyRepeatingSequence: true);
-
-        if (Verbose)
-        {
-            Logger.WriteLine("The sum of the invalid IDs with the first set of rules is {0}", Solution1);
-            Logger.WriteLine("The sum of the invalid IDs with the second set of rules is {0}", Solution2);
-        }
-
-        return Result();
+                return (sum1, sum2);
+            },
+            cancellationToken);
     }
 }
