@@ -16,10 +16,45 @@ public sealed class Day09 : Puzzle<int>
     /// <returns>
     /// The solution.
     /// </returns>
-    public static int Solve(IReadOnlyList<string> values)
+    public static long FindLargestRectangle(IReadOnlyList<string> values)
     {
-        ArgumentNullException.ThrowIfNull(values);
-        return Unsolved;
+        var points = new List<Point>();
+
+        foreach (string value in values)
+        {
+            (string x, string y) = value.Bifurcate(',');
+            points.Add(new(Parse<int>(x), Parse<int>(y)));
+        }
+
+        var pairs = new List<(Point A, Point B)>();
+
+        for (int i = 0; i < points.Count; i++)
+        {
+            var left = points[i];
+
+            for (int j = 0; j < points.Count; j++)
+            {
+                if (i != j)
+                {
+                    pairs.Add((left, points[j]));
+                }
+            }
+        }
+
+        long area = 0;
+
+        foreach ((var a, var b) in pairs)
+        {
+            var bounds = new Rectangle(
+                Math.Min(a.X, b.X),
+                Math.Min(a.Y, b.Y),
+                Math.Abs(a.X - b.X) + 1,
+                Math.Abs(a.Y - b.Y) + 1);
+
+            area = Math.Max((long)bounds.Width * bounds.Height, area);
+        }
+
+        return area;
     }
 
     /// <inheritdoc />
@@ -28,11 +63,11 @@ public sealed class Day09 : Puzzle<int>
         return await SolveWithLinesAsync(
             static (values, logger, _) =>
             {
-                int solution = Solve(values);
+                int solution = FindLargestRectangle(values);
 
                 if (logger is { })
                 {
-                    logger.WriteLine("The solution is {0}.", solution);
+                    logger.WriteLine("The largest area of any rectangle is {0}.", solution);
                 }
 
                 return solution;
