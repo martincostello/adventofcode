@@ -1,6 +1,8 @@
 ﻿// Copyright (c) Martin Costello, 2015. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
+using System.Data;
+
 namespace MartinCostello.AdventOfCode.Puzzles.Y2025;
 
 /// <summary>
@@ -17,15 +19,65 @@ public sealed class Day08 : Puzzle<int>
     /// </returns>
     public static int Connect(IReadOnlyList<string> values)
     {
-        var all = new List<Vector3>();
+        var boxes = new List<Vector3>();
 
         foreach (string item in values)
         {
             (string x, string y, string z) = item.Trifurcate(',');
-            all.Add(new(Parse<float>(x), Parse<float>(y), Parse<float>(z)));
+            boxes.Add(new(Parse<float>(x), Parse<float>(y), Parse<float>(z)));
         }
 
+        var distances = new HashSet<(Vector3 Left, Vector3 Right, float Distance)>();
+
+        for (int i = 0; i < boxes.Count; i++)
+        {
+            var left = boxes[i];
+
+            for (int j = 0; j < boxes.Count; j++)
+            {
+                if (i == j)
+                {
+                    continue;
+                }
+
+                var right = boxes[j];
+
+                float distance = Vector3.Distance(left, right);
+
+                distances.Add((left, right, distance));
+                distances.Add((right, right, distance));
+            }
+        }
+
+        var d = distances.OrderBy((p) => p.Distance).ToList();
+
         var circuits = new List<HashSet<Vector3>>();
+
+        for (int i = 0; i < d.Count; i++)
+        {
+            (var first, var second, _) = d[i];
+
+            if (circuits.Any((p) => p.Contains(first) && p.Contains(second)))
+            {
+                continue;
+            }
+
+            var circuit =
+                circuits.FirstOrDefault((p) => p.Contains(first) && !p.Contains(second)) ??
+                circuits.FirstOrDefault((p) => !p.Contains(first) && p.Contains(second));
+
+            if (circuit is null)
+            {
+                circuits.Add([first, second]);
+            }
+            else
+            {
+                circuit.Add(second);
+            }
+
+            boxes.Remove(first);
+            boxes.Remove(second);
+        }
 
         // TODO
         return circuits

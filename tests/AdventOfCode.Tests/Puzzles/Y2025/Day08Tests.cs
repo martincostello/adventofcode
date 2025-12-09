@@ -6,7 +6,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2025;
 public sealed class Day08Tests(ITestOutputHelper outputHelper) : PuzzleTest(outputHelper)
 {
     [Fact]
-    public void Y2025_Day08_Solve_Returns_Correct_Value()
+    public void Y2025_Day08_Connect_Returns_Correct_Value()
     {
         // Arrange
         string[] values =
