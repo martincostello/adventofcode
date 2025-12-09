@@ -79,7 +79,7 @@ public sealed class Day05 : Puzzle<int, int>
                     logger.WriteLine("My seat Id is {0}.", mySeatId);
                 }
 
-                return (mySeatId, highestSeatId);
+                return (highestSeatId, mySeatId);
             },
             cancellationToken);
     }
