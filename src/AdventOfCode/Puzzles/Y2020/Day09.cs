@@ -80,17 +80,22 @@ public sealed class Day09 : Puzzle<long, long>
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        long[] values = [.. await ReadResourceAsNumbersAsync<long>(cancellationToken)];
+        return await SolveWithNumbersAsync<long>(
+            static (numbers, logger, _) =>
+            {
+                long[] values = [.. numbers];
 
-        Solution1 = GetWeakNumber(values, 25);
-        Solution2 = GetWeakness(values, Solution1);
+                long weakNumber = GetWeakNumber(values, 25);
+                long weakness = GetWeakness(values, weakNumber);
 
-        if (Verbose)
-        {
-            Logger.WriteLine("The first weak number in the XMAS sequence is {0}.", Solution1);
-            Logger.WriteLine("The encryption weakness of the XMAS sequence is {0}.", Solution2);
-        }
+                if (logger is { })
+                {
+                    logger.WriteLine("The first weak number in the XMAS sequence is {0}.", weakNumber);
+                    logger.WriteLine("The encryption weakness of the XMAS sequence is {0}.", weakness);
+                }
 
-        return Result();
+                return (weakNumber, weakness);
+            },
+            cancellationToken);
     }
 }

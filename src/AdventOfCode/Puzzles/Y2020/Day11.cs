@@ -56,21 +56,25 @@ public sealed class Day11 : Puzzle<int, int>
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        var layout = await ReadResourceAsLinesAsync(cancellationToken);
+        string visualizationV1 = string.Empty;
+        string visualizationV2 = string.Empty;
 
-        (int occupiedSeatsV1, string visualizationV1) = GetOccupiedSeats(layout, version: 1);
-        (int occupiedSeatsV2, string visualizationV2) = GetOccupiedSeats(layout, version: 2);
+        var result = await SolveWithLinesAsync(
+            static (layout, logger, _) =>
+            {
+                (int occupiedSeatsV1, string visualizationV1) = GetOccupiedSeats(layout, version: 1);
+                (int occupiedSeatsV2, string visualizationV2) = GetOccupiedSeats(layout, version: 2);
 
-        Solution1 = occupiedSeatsV1;
-        Solution2 = occupiedSeatsV2;
+                if (logger is { })
+                {
+                    logger.WriteLine("There are {0} occupied seats using the first set of rules.", occupiedSeatsV1);
+                    logger.WriteLine("There are {0} occupied seats using the second set of rules.", occupiedSeatsV2);
+                }
 
-        if (Verbose)
-        {
-            Logger.WriteLine("There are {0} occupied seats using the first set of rules.", Solution1);
-            Logger.WriteLine("There are {0} occupied seats using the second set of rules.", Solution2);
-        }
+                return (occupiedSeatsV1, occupiedSeatsV2);
+            },
+            cancellationToken);
 
-        var result = Result();
         result.Visualizations.Add(visualizationV1);
         result.Visualizations.Add(visualizationV2);
 

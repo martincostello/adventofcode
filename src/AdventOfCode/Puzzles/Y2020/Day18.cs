@@ -133,17 +133,20 @@ public sealed class Day18 : Puzzle<long, long>
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        var expressions = await ReadResourceAsLinesAsync(cancellationToken);
+        return await SolveWithLinesAsync(
+            static (expressions, logger, _) =>
+            {
+                long sumV1 = Evaluate(expressions, version: 1);
+                long sumV2 = Evaluate(expressions, version: 2);
 
-        Solution1 = Evaluate(expressions, version: 1);
-        Solution2 = Evaluate(expressions, version: 2);
+                if (logger is { })
+                {
+                    logger.WriteLine("The sum of the evaluated expressions with the first precedence rules is {0}.", sumV1);
+                    logger.WriteLine("The sum of the evaluated expressions with the second precedence rules is {0}.", sumV2);
+                }
 
-        if (Verbose)
-        {
-            Logger.WriteLine("The sum of the evaluated expressions with the first precedence rules is {0}.", Solution1);
-            Logger.WriteLine("The sum of the evaluated expressions with the second precedence rules is {0}.", Solution2);
-        }
-
-        return Result();
+                return (sumV1, sumV2);
+            },
+            cancellationToken);
     }
 }

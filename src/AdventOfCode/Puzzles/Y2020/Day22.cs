@@ -110,17 +110,20 @@ public sealed class Day22 : Puzzle<int, int>
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        var values = await ReadResourceAsLinesAsync(cancellationToken);
+        return await SolveWithLinesAsync(
+            static (values, logger, _) =>
+            {
+                int winningScore = PlayCombat(values, recursive: false);
+                int winningScoreRecursive = PlayCombat(values, recursive: true);
 
-        Solution1 = PlayCombat(values, recursive: false);
-        Solution2 = PlayCombat(values, recursive: true);
+                if (logger is { })
+                {
+                    logger.WriteLine("The winning player's score with normal rules is {0}.", winningScore);
+                    logger.WriteLine("The winning player's score with recursive rules is {0}.", winningScoreRecursive);
+                }
 
-        if (Verbose)
-        {
-            Logger.WriteLine("The winning player's score with normal rules is {0}.", Solution1);
-            Logger.WriteLine("The winning player's score with recursive rules is {0}.", Solution2);
-        }
-
-        return Result();
+                return (winningScore, winningScoreRecursive);
+            },
+            cancellationToken);
     }
 }

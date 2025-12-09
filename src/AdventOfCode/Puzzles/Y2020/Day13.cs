@@ -88,17 +88,20 @@ public sealed class Day13 : Puzzle<int, long>
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        var notes = await ReadResourceAsLinesAsync(cancellationToken);
+        return await SolveWithLinesAsync(
+            static (notes, logger, _) =>
+            {
+                int busWaitProduct = GetEarliestBusWaitProduct(notes);
+                long earliestTimestamp = GetEarliestTimestamp(notes);
 
-        Solution1 = GetEarliestBusWaitProduct(notes);
-        Solution2 = GetEarliestTimestamp(notes);
+                if (logger is { })
+                {
+                    logger.WriteLine("The product of the ID of the earliest and the number of minutes to wait is {0}.", busWaitProduct);
+                    logger.WriteLine("The earliest timestamp where all bus IDs depart at the specified offsets is {0}.", earliestTimestamp);
+                }
 
-        if (Verbose)
-        {
-            Logger.WriteLine("The product of the ID of the earliest and the number of minutes to wait is {0}.", Solution1);
-            Logger.WriteLine("The earliest timestamp where all bus IDs depart at the specified offsets is {0}.", Solution2);
-        }
-
-        return Result();
+                return (busWaitProduct, earliestTimestamp);
+            },
+            cancellationToken);
     }
 }

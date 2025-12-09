@@ -132,17 +132,20 @@ public sealed class Day10 : Puzzle<int, long>
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        var joltages = await ReadResourceAsNumbersAsync<int>(cancellationToken);
+        return await SolveWithNumbersAsync<int>(
+            static (joltages, logger, _) =>
+            {
+                int joltageProduct = GetJoltageProduct(joltages);
+                long validArrangements = GetValidArrangements(joltages);
 
-        Solution1 = GetJoltageProduct(joltages);
-        Solution2 = GetValidArrangements(joltages);
+                if (logger is { })
+                {
+                    logger.WriteLine("The product of the 1-jolt differences and 3-jolt differences is {0}.", joltageProduct);
+                    logger.WriteLine("The total number of distinct ways to arrange the adapters is {0}.", validArrangements);
+                }
 
-        if (Verbose)
-        {
-            Logger.WriteLine("The product of the 1-jolt differences and 3-jolt differences is {0}.", Solution1);
-            Logger.WriteLine("The total number of distinct ways to arrange the adapters is {0}.", Solution2);
-        }
-
-        return Result();
+                return (joltageProduct, validArrangements);
+            },
+            cancellationToken);
     }
 }

@@ -145,18 +145,21 @@ public sealed class Day12 : Puzzle<int, int>
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        var instructions = await ReadResourceAsLinesAsync(cancellationToken);
+        return await SolveWithLinesAsync(
+            static (instructions, logger, _) =>
+            {
+                int manhattanDistance = GetDistanceTravelled(instructions);
+                int manhattanDistanceWithWaypoint = GetDistanceTravelledWithWaypoint(instructions);
 
-        Solution1 = GetDistanceTravelled(instructions);
-        Solution2 = GetDistanceTravelledWithWaypoint(instructions);
+                if (logger is { })
+                {
+                    logger.WriteLine("The Manhattan distance travelled by the ship is {0}.", manhattanDistance);
+                    logger.WriteLine("The Manhattan distance travelled by the ship when using the waypoint is {0}.", manhattanDistanceWithWaypoint);
+                }
 
-        if (Verbose)
-        {
-            Logger.WriteLine("The Manhattan distance travelled by the ship is {0}.", Solution1);
-            Logger.WriteLine("The Manhattan distance travelled by the ship when using the waypoint is {0}.", Solution2);
-        }
-
-        return Result();
+                return (manhattanDistance, manhattanDistanceWithWaypoint);
+            },
+            cancellationToken);
     }
 
     /// <summary>

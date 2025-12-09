@@ -68,34 +68,37 @@ public sealed class Day03 : Puzzle<long, long>
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        var grid = await ReadResourceAsLinesAsync(cancellationToken);
+        return await SolveWithLinesAsync(
+            static (grid, logger, _) =>
+            {
+                Point[] slopes =
+                [
+                    new(1, 1),
+                    new(5, 1),
+                    new(7, 1),
+                    new(1, 2),
+                ];
 
-        var slopes = new[]
-        {
-            new Point(1, 1),
-            new Point(5, 1),
-            new Point(7, 1),
-            new Point(1, 2),
-        };
+                long treeCollisions = GetTreeCollisionCount(grid, 3, 1);
 
-        Solution1 = GetTreeCollisionCount(grid, 3, 1);
+                long product = treeCollisions;
 
-        long product = Solution1;
+                for (int i = 0; i < slopes.Length; i++)
+                {
+                    var slope = slopes[i];
+                    product *= GetTreeCollisionCount(grid, slope.X, slope.Y);
+                }
 
-        for (int i = 0; i < slopes.Length; i++)
-        {
-            var slope = slopes[i];
-            product *= GetTreeCollisionCount(grid, slope.X, slope.Y);
-        }
+                long productOfTreeCollisions = product;
 
-        Solution2 = product;
+                if (logger is { })
+                {
+                    logger.WriteLine("{0} trees would be encountered using a right-3/down-1 slope.", treeCollisions);
+                    logger.WriteLine("The product of the collisions from traversing the slopes is {0}.", productOfTreeCollisions);
+                }
 
-        if (Verbose)
-        {
-            Logger.WriteLine("{0} trees would be encountered using a right-3/down-1 slope.", Solution1);
-            Logger.WriteLine("The product of the collisions from traversing the slopes is {0}.", Solution2);
-        }
-
-        return Result();
+                return (treeCollisions, productOfTreeCollisions);
+            },
+            cancellationToken);
     }
 }

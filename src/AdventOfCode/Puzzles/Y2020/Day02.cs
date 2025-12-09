@@ -55,17 +55,20 @@ public sealed class Day02 : Puzzle<int, int>
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        var values = await ReadResourceAsLinesAsync(cancellationToken);
+        return await SolveWithLinesAsync(
+            static (values, logger, _) =>
+            {
+                int validPasswordsV1 = GetValidPasswordCount(values, policyVersion: 1);
+                int validPasswordsV2 = GetValidPasswordCount(values, policyVersion: 2);
 
-        Solution1 = GetValidPasswordCount(values, policyVersion: 1);
-        Solution2 = GetValidPasswordCount(values, policyVersion: 2);
+                if (logger is { })
+                {
+                    logger.WriteLine("There are {0} valid passwords using policy version 1.", validPasswordsV1);
+                    logger.WriteLine("There are {0} valid passwords using policy version 2.", validPasswordsV2);
+                }
 
-        if (Verbose)
-        {
-            Logger.WriteLine("There are {0} valid passwords using policy version 1.", Solution1);
-            Logger.WriteLine("There are {0} valid passwords using policy version 2.", Solution2);
-        }
-
-        return Result();
+                return (validPasswordsV1, validPasswordsV2);
+            },
+            cancellationToken);
     }
 }

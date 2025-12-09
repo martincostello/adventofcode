@@ -112,17 +112,20 @@ public sealed class Day19 : Puzzle<int, int>
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        var input = await ReadResourceAsLinesAsync(cancellationToken);
+        return await SolveWithLinesAsync(
+            static (input, logger, _) =>
+            {
+                int matchesRule0 = GetMatchCount(input, applyFix: false);
+                int matchesRule0WithFix = GetMatchCount(input, applyFix: true);
 
-        Solution1 = GetMatchCount(input, applyFix: false);
-        Solution2 = GetMatchCount(input, applyFix: true);
+                if (logger is { })
+                {
+                    logger.WriteLine("The number of messages that completely match rule 0 is {0} without the fix.", matchesRule0);
+                    logger.WriteLine("The number of messages that completely match rule 0 is {0} with the fix.", matchesRule0WithFix);
+                }
 
-        if (Verbose)
-        {
-            Logger.WriteLine("The number of messages that completely match rule 0 is {0} without the fix.", Solution1);
-            Logger.WriteLine("The number of messages that completely match rule 0 is {0} with the fix.", Solution2);
-        }
-
-        return Result();
+                return (matchesRule0, matchesRule0WithFix);
+            },
+            cancellationToken);
     }
 }

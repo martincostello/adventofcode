@@ -56,17 +56,20 @@ public sealed class Day06 : Puzzle<int, int>
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        var values = await ReadResourceAsLinesAsync(cancellationToken);
+        return await SolveWithLinesAsync(
+            static (values, logger, _) =>
+            {
+                int sumOfQuestionsAnyoneYes = GetSumOfQuestionsWithYesAnswers(values, byEveryone: false);
+                int sumOfQuestionsEveryoneYes = GetSumOfQuestionsWithYesAnswers(values, byEveryone: true);
 
-        Solution1 = GetSumOfQuestionsWithYesAnswers(values, byEveryone: false);
-        Solution2 = GetSumOfQuestionsWithYesAnswers(values, byEveryone: true);
+                if (logger is { })
+                {
+                    logger.WriteLine("The sum of the questions answered \"yes\" by anyone in the groups is {0}.", sumOfQuestionsAnyoneYes);
+                    logger.WriteLine("The sum of the questions answered \"yes\" by everyone in the groups is {0}.", sumOfQuestionsEveryoneYes);
+                }
 
-        if (Verbose)
-        {
-            Logger.WriteLine("The sum of the questions answered \"yes\" by anyone in the groups is {0}.", Solution1);
-            Logger.WriteLine("The sum of the questions answered \"yes\" by everyone in the groups is {0}.", Solution2);
-        }
-
-        return Result();
+                return (sumOfQuestionsAnyoneYes, sumOfQuestionsEveryoneYes);
+            },
+            cancellationToken);
     }
 }

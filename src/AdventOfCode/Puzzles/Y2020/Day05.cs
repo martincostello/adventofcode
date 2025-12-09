@@ -68,20 +68,23 @@ public sealed class Day05 : Puzzle<int, int>
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        var boardingPasses = await ReadResourceAsLinesAsync(cancellationToken);
+        return await SolveWithLinesAsync(
+            static (boardingPasses, logger, _) =>
+            {
+                (int mySeatId, int highestSeatId) = Process(boardingPasses);
 
-        (Solution2, Solution1) = Process(boardingPasses);
+                if (logger is { })
+                {
+                    logger.WriteLine("The highest seat Id from a boarding pass is {0}.", highestSeatId);
+                    logger.WriteLine("My seat Id is {0}.", mySeatId);
+                }
 
-        if (Verbose)
-        {
-            Logger.WriteLine("The highest seat Id from a boarding pass is {0}.", Solution1);
-            Logger.WriteLine("My seat Id is {0}.", Solution2);
-        }
-
-        return Result();
+                return (mySeatId, highestSeatId);
+            },
+            cancellationToken);
     }
 
-    private static (int MySetId, int HighestSeatId) Process(List<string> boardingPasses)
+    private static (int MySeatId, int HighestSeatId) Process(List<string> boardingPasses)
     {
         Span<int> ids = new int[boardingPasses.Count];
 

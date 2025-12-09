@@ -79,32 +79,37 @@ public sealed class Day23 : Puzzle<string, long>
     /// <inheritdoc />
     protected override Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        IEnumerable<int> arrangement = args[0].Select((p) => p - '0');
+        return SolveWithArgument(
+            args,
+            static (argument, logger) =>
+            {
+                var arrangement = argument.Select((p) => p - '0');
 
-        var circle = Play(arrangement, moves: 100);
+                var circle = Play(arrangement, moves: 100);
 
-        var final = string.Join(string.Empty, circle).AsSpan();
-        int index = final.IndexOf('1');
+                var final = string.Join(string.Empty, circle).AsSpan();
+                int index = final.IndexOf('1');
 
-        Solution1 = string.Concat(final[(index + 1)..], final[..index]);
+                string labelsAfterCup1 = string.Concat(final[(index + 1)..], final[..index]);
 
-        arrangement = arrangement.Concat(Enumerable.Range(10, 999_991));
+                arrangement = arrangement.Concat(Enumerable.Range(10, 999_991));
 
-        circle = Play(arrangement, 10_000_000);
+                circle = Play(arrangement, 10_000_000);
 
-        var item1 = circle.Find(1);
+                var item1 = circle.Find(1);
 
-        Solution2 =
-            1L *
-            item1!.Next!.Value *
-            item1.Next.Next!.Value;
+                long productOfLabelsAfterCup1 =
+                    1L *
+                    item1!.Next!.Value *
+                    item1.Next.Next!.Value;
 
-        if (Verbose)
-        {
-            Logger.WriteLine("The labels on the cups after 100 moves is {0}.", Solution1);
-            Logger.WriteLine("The product of the labels on the first two cups after cup 1 after 10,000,000 moves is {0}.", Solution2);
-        }
+                if (logger is { })
+                {
+                    logger.WriteLine("The labels on the cups after 100 moves is {0}.", labelsAfterCup1);
+                    logger.WriteLine("The product of the labels on the first two cups after cup 1 after 10,000,000 moves is {0}.", productOfLabelsAfterCup1);
+                }
 
-        return Result();
+                return (labelsAfterCup1, productOfLabelsAfterCup1);
+            });
     }
 }

@@ -122,20 +122,24 @@ public sealed class Day07 : Puzzle<int, int>
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        string color = args[0];
+        return await SolveWithLinesAsync(
+            args,
+            static (arguments, rules, logger, _) =>
+            {
+                string color = arguments[0];
 
-        var rules = await ReadResourceAsLinesAsync(cancellationToken);
+                int bagColorsThatCanContainColor = GetBagColorsThatCouldContainColor(rules, color);
+                int bagsInsideBag = GetInsideBagCount(rules, color);
 
-        Solution1 = GetBagColorsThatCouldContainColor(rules, color);
-        Solution2 = GetInsideBagCount(rules, color);
+                if (logger is { })
+                {
+                    logger.WriteLine("The number of bags that can contain a {0} bag is {1}.", color, bagColorsThatCanContainColor);
+                    logger.WriteLine("The number of bags contained in a {0} bag is {1}.", color, bagsInsideBag);
+                }
 
-        if (Verbose)
-        {
-            Logger.WriteLine("The number of bags that can contain a {0} bag is {1}.", color, Solution1);
-            Logger.WriteLine("The number of bags contained in a {0} bag is {1}.", color, Solution2);
-        }
-
-        return Result();
+                return (bagColorsThatCanContainColor, bagsInsideBag);
+            },
+            cancellationToken);
     }
 
     /// <summary>

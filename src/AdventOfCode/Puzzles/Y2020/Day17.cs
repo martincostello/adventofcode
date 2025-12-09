@@ -46,20 +46,27 @@ public sealed class Day17 : Puzzle<int, int>
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        var layout = await ReadResourceAsLinesAsync(cancellationToken);
+        string visualization3D = string.Empty;
+        string visualization4D = string.Empty;
 
-        int cycles = 6;
+        var result = await SolveWithLinesAsync(
+            (layout, logger, _) =>
+            {
+                const int Cycles = 6;
 
-        (Solution1, string visualization3D) = GetActiveCubes(layout, cycles, dimensions: 3);
-        (Solution2, string visualization4D) = GetActiveCubes(layout, cycles, dimensions: 4);
+                (int activeCubes3D, visualization3D) = GetActiveCubes(layout, Cycles, dimensions: 3);
+                (int activeCubes4D, visualization4D) = GetActiveCubes(layout, Cycles, dimensions: 4);
 
-        if (Verbose)
-        {
-            Logger.WriteLine("There are {0} active cubes after {1} cycles in 3 dimensions.", Solution1, cycles);
-            Logger.WriteLine("There are {0} active cubes after {1} cycles in 4 dimensions.", Solution2, cycles);
-        }
+                if (logger is { })
+                {
+                    logger.WriteLine("There are {0} active cubes after {1} cycles in 3 dimensions.", activeCubes3D, Cycles);
+                    logger.WriteLine("There are {0} active cubes after {1} cycles in 4 dimensions.", activeCubes4D, Cycles);
+                }
 
-        var result = Result();
+                return (activeCubes3D, activeCubes4D);
+            },
+            cancellationToken);
+
         result.Visualizations.Add(visualization3D);
         result.Visualizations.Add(visualization4D);
 

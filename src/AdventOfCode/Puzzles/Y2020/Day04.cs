@@ -78,17 +78,20 @@ public sealed partial class Day04 : Puzzle<int, int>
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        var batch = await ReadResourceAsLinesAsync(cancellationToken);
+        return await SolveWithLinesAsync(
+            static (batch, logger, _) =>
+            {
+                (int validPassports, int verifiedPassports) = VerifyPassports(batch);
 
-        (Solution1, Solution2) = VerifyPassports(batch);
+                if (logger is { })
+                {
+                    logger.WriteLine("There are {0} valid passports.", validPassports);
+                    logger.WriteLine("There are {0} verified passports.", verifiedPassports);
+                }
 
-        if (Verbose)
-        {
-            Logger.WriteLine("There are {0} valid passports.", Solution1);
-            Logger.WriteLine("There are {0} verified passports.", Solution2);
-        }
-
-        return Result();
+                return (validPassports, verifiedPassports);
+            },
+            cancellationToken);
     }
 
     /// <summary>

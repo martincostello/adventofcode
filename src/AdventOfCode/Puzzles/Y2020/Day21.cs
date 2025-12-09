@@ -108,16 +108,19 @@ public sealed class Day21 : Puzzle<int, string>
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        var recipes = await ReadResourceAsLinesAsync(cancellationToken);
+        return await SolveWithLinesAsync(
+            static (recipes, logger, cancellationToken) =>
+            {
+                (int ingredientsWithNoAllergens, string canonicalAllergens) = GetIngredientsWithNoAllergens(recipes, cancellationToken);
 
-        (Solution1, Solution2) = GetIngredientsWithNoAllergens(recipes, cancellationToken);
+                if (logger is { })
+                {
+                    logger.WriteLine("Ingredients with no allergens appear {0} times.", ingredientsWithNoAllergens);
+                    logger.WriteLine("The canonical allergens are: {0}.", canonicalAllergens);
+                }
 
-        if (Verbose)
-        {
-            Logger.WriteLine("Ingredients with no allergens appear {0} times.", Solution1);
-            Logger.WriteLine("The canonical allergens are: {0}.", Solution2);
-        }
-
-        return Result();
+                return (ingredientsWithNoAllergens, canonicalAllergens);
+            },
+            cancellationToken);
     }
 }

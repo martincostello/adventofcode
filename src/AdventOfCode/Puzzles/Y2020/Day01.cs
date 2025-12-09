@@ -46,17 +46,20 @@ public sealed class Day01 : Puzzle<int, int>
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        var values = await ReadResourceAsNumbersAsync<int>(cancellationToken);
+        return await SolveWithNumbersAsync<int>(
+            static (values, logger, _) =>
+            {
+                int productOf2020SumFrom2 = Get2020Product(values, 2);
+                int productOf2020SumFrom3 = Get2020Product(values, 3);
 
-        Solution1 = Get2020Product(values, 2);
-        Solution2 = Get2020Product(values, 3);
+                if (logger is { })
+                {
+                    logger.WriteLine("The product of the two entries that sum to 2020 is {0}.", productOf2020SumFrom2);
+                    logger.WriteLine("The product of the three entries that sum to 2020 is {0}.", productOf2020SumFrom3);
+                }
 
-        if (Verbose)
-        {
-            Logger.WriteLine("The product of the two entries that sum to 2020 is {0}.", Solution1);
-            Logger.WriteLine("The product of the three entries that sum to 2020 is {0}.", Solution2);
-        }
-
-        return Result();
+                return (productOf2020SumFrom2, productOf2020SumFrom3);
+            },
+            cancellationToken);
     }
 }

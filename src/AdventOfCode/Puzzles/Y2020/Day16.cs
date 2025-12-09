@@ -161,23 +161,24 @@ public sealed class Day16 : Puzzle<int, long>
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        var values = await ReadResourceAsLinesAsync(cancellationToken);
+        return await SolveWithLinesAsync(
+            static (values, logger, _) =>
+            {
+                (int scanningErrorRate, var ticket) = ScanTickets(values);
 
-        (int scanningErrorRate, var ticket) = ScanTickets(values);
+                long departureProduct = ticket
+                    .Where((p) => p.Key.AsSpan().StartsWith("departure"))
+                    .Select((p) => (long)p.Value)
+                    .Product();
 
-        Solution1 = scanningErrorRate;
+                if (logger is { })
+                {
+                    logger.WriteLine("The ticket scanning error rate is {0}.", scanningErrorRate);
+                    logger.WriteLine("The product of the ticket fields starting with 'departure' is {0}.", departureProduct);
+                }
 
-        Solution2 = ticket
-            .Where((p) => p.Key.AsSpan().StartsWith("departure"))
-            .Select((p) => (long)p.Value)
-            .Product();
-
-        if (Verbose)
-        {
-            Logger.WriteLine("The ticket scanning error rate is {0}.", Solution1);
-            Logger.WriteLine("The product of the ticket fields starting with 'departure' is {0}.", Solution2);
-        }
-
-        return Result();
+                return (scanningErrorRate, departureProduct);
+            },
+            cancellationToken);
     }
 }

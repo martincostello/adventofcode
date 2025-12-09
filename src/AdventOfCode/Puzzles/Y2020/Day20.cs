@@ -21,7 +21,7 @@ public sealed class Day20 : Puzzle<long, int>
     /// </returns>
     public static (long CornerIdProduct, int Roughness, string Visualization) GetCornerTileIdProduct(
         IList<string> input,
-        ILogger logger,
+        ILogger? logger,
         CancellationToken cancellationToken)
     {
         var tiles = ParseTiles(input);
@@ -130,7 +130,7 @@ public sealed class Day20 : Puzzle<long, int>
 
         FindMonsters(finalImage, highlightMonsters: true);
 
-        string visualization = logger.WriteGrid(finalImage);
+        string visualization = logger?.WriteGrid(finalImage) ?? string.Empty;
 
         int roughness = hashes - (seaMonsters * seaMonster.Length);
 
@@ -448,22 +448,24 @@ public sealed class Day20 : Puzzle<long, int>
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        var tiles = await ReadResourceAsLinesAsync(cancellationToken);
+        string image = string.Empty;
 
-        (long productOfCornerTiles, int waterRoughness, string image) = GetCornerTileIdProduct(tiles, Logger, cancellationToken);
+        var result = await SolveWithLinesAsync(
+            (tiles, logger, cancellationToken) =>
+            {
+                (long productOfCornerTiles, int waterRoughness, image) = GetCornerTileIdProduct(tiles, logger, cancellationToken);
 
-        Solution1 = productOfCornerTiles;
-        Solution2 = waterRoughness;
+                if (logger is { })
+                {
+                    logger.WriteLine(image);
+                    logger.WriteLine("The product of the Ids of the four corner tiles is {0}.", productOfCornerTiles);
+                    logger.WriteLine("The roughness of the water is {0}.", waterRoughness);
+                }
 
-        Logger.WriteLine(image);
+                return (productOfCornerTiles, waterRoughness);
+            },
+            cancellationToken);
 
-        if (Verbose)
-        {
-            Logger.WriteLine("The product of the Ids of the four corner tiles is {0}.", Solution1);
-            Logger.WriteLine("The roughness of the water is {0}.", Solution2);
-        }
-
-        var result = Result();
         result.Visualizations.Add(image);
 
         return result;

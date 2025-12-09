@@ -115,17 +115,20 @@ public sealed class Day14 : Puzzle<long, long>
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        var values = await ReadResourceAsLinesAsync(cancellationToken);
+        return await SolveWithLinesAsync(
+            static (values, logger, _) =>
+            {
+                long sumOfRemainingValuesV1 = RunProgram(values, version: 1);
+                long sumOfRemainingValuesV2 = RunProgram(values, version: 2);
 
-        Solution1 = RunProgram(values, version: 1);
-        Solution2 = RunProgram(values, version: 2);
+                if (logger is { })
+                {
+                    logger.WriteLine("The sum of all values left in memory using version 1 is {0}.", sumOfRemainingValuesV1);
+                    logger.WriteLine("The sum of all values left in memory using version 2 is {0}.", sumOfRemainingValuesV2);
+                }
 
-        if (Verbose)
-        {
-            Logger.WriteLine("The sum of all values left in memory using version 1 is {0}.", Solution1);
-            Logger.WriteLine("The sum of all values left in memory using version 2 is {0}.", Solution2);
-        }
-
-        return Result();
+                return (sumOfRemainingValuesV1, sumOfRemainingValuesV2);
+            },
+            cancellationToken);
     }
 }

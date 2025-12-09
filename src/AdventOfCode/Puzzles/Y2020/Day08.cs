@@ -80,18 +80,21 @@ public sealed class Day08 : Puzzle<int, int>
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        var program = await ReadResourceAsLinesAsync(cancellationToken);
+        return await SolveWithLinesAsync(
+            static (program, logger, _) =>
+            {
+                int accumulator = RunProgram(program, fix: false);
+                int accumulatorWithFix = RunProgram(program, fix: true);
 
-        Solution1 = RunProgram(program, fix: false);
-        Solution2 = RunProgram(program, fix: true);
+                if (logger is { })
+                {
+                    logger.WriteLine("The value of the accumulator after one iteration is {0}.", accumulator);
+                    logger.WriteLine("The value of the accumulator when the fixed program completes is {0}.", accumulatorWithFix);
+                }
 
-        if (Verbose)
-        {
-            Logger.WriteLine("The value of the accumulator after one iteration is {0}.", Solution1);
-            Logger.WriteLine("The value of the accumulator when the fixed program completes is {0}.", Solution2);
-        }
-
-        return Result();
+                return (accumulator, accumulatorWithFix);
+            },
+            cancellationToken);
     }
 
     /// <summary>

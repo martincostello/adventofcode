@@ -112,18 +112,21 @@ public sealed class Day24 : Puzzle<int, int>
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        var instructions = await ReadResourceAsLinesAsync(cancellationToken);
+        return await SolveWithLinesAsync(
+            static (instructions, logger, _) =>
+            {
+                int blackTilesDay0 = TileFloor(instructions, days: 0);
+                int blackTilesDay100 = TileFloor(instructions, days: 100);
 
-        Solution1 = TileFloor(instructions, days: 0);
-        Solution2 = TileFloor(instructions, days: 100);
+                if (logger is { })
+                {
+                    logger.WriteLine("{0} tiles are left with the black side up initially.", blackTilesDay0);
+                    logger.WriteLine("{0} tiles are left with the black side up after 100 days.", blackTilesDay100);
+                }
 
-        if (Verbose)
-        {
-            Logger.WriteLine("{0} tiles are left with the black side up initially.", Solution1);
-            Logger.WriteLine("{0} tiles are left with the black side up after 100 days.", Solution2);
-        }
-
-        return Result();
+                return (blackTilesDay0, blackTilesDay100);
+            },
+            cancellationToken);
     }
 
     /// <summary>

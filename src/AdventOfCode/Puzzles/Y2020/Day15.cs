@@ -45,19 +45,19 @@ public sealed class Day15 : Puzzle<int, int>
     }
 
     /// <inheritdoc />
-    protected override Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
+    protected override Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken) => SolveWithArgument(args, static (argument, logger) =>
     {
-        var startingNumbers = args[0].AsNumbers<int>();
+        var startingNumbers = argument.AsNumbers<int>();
 
-        Solution1 = GetSpokenNumber(startingNumbers, 2020);
-        Solution2 = GetSpokenNumber(startingNumbers, 30000000);
+        int number2020 = GetSpokenNumber(startingNumbers, 2020);
+        int number30000000 = GetSpokenNumber(startingNumbers, 30000000);
 
-        if (Verbose)
+        if (logger is { })
         {
-            Logger.WriteLine("The 2020th number spoken is {0}.", Solution1);
-            Logger.WriteLine("The 30000000th number spoken is {0}.", Solution2);
+            logger.WriteLine("The 2020th number spoken is {0}.", number2020);
+            logger.WriteLine("The 30000000th number spoken is {0}.", number30000000);
         }
 
-        return Result();
-    }
+        return (number2020, number30000000);
+    });
 }
