@@ -1,6 +1,7 @@
 ﻿// Copyright (c) Martin Costello, 2015. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2025;
@@ -29,13 +30,8 @@ public sealed class Day10 : Puzzle<int, int>
 
         foreach ((_, int desired, var buttons, _) in machines)
         {
-            int minimum = int.MaxValue;
-
-            MinimumStepsToTurnOn(0, desired, [], CollectionsMarshal.AsSpan(buttons), ref minimum, cancellationToken);
-
-            cancellationToken.ThrowIfCancellationRequested();
-
-            indicatorSum += minimum;
+            var machine = new MachineIndicator(buttons);
+            indicatorSum += (int)PathFinding.AStar(machine, 0, desired, cancellationToken: cancellationToken);
         }
 
         int joltageSum = 0;
@@ -54,40 +50,6 @@ public sealed class Day10 : Puzzle<int, int>
         }
 
         return (indicatorSum, joltageSum);
-
-        static void MinimumStepsToTurnOn(
-            int current,
-            int desired,
-            Stack<int> path,
-            ReadOnlySpan<int> buttons,
-            ref int minimum,
-            CancellationToken cancellationToken)
-        {
-            if (path.Count >= minimum - 1)
-            {
-                return;
-            }
-
-            for (int i = 0; i < buttons.Length && !cancellationToken.IsCancellationRequested; i++)
-            {
-                int next = current ^ buttons[i];
-
-                if (next == desired)
-                {
-                    minimum = Math.Min(minimum, path.Count + 1);
-                    continue;
-                }
-
-                if (!path.Contains(next))
-                {
-                    path.Push(next);
-
-                    MinimumStepsToTurnOn(next, desired, path, buttons, ref minimum, cancellationToken);
-
-                    path.Pop();
-                }
-            }
-        }
 
         static void MinimumStepsToPower(
             int count,
@@ -266,5 +228,24 @@ public sealed class Day10 : Puzzle<int, int>
                 return (minimumIndicator, minimumJoltage);
             },
             cancellationToken);
+    }
+
+    private readonly struct MachineIndicator(List<int> buttons) : IWeightedGraph<int>
+    {
+        private readonly List<int> _buttons = buttons;
+
+        public readonly long Cost(int a, int b) => 1;
+
+        public readonly bool Equals(int x, int y) => x == y;
+
+        public readonly int GetHashCode([DisallowNull] int obj) => obj;
+
+        public readonly IEnumerable<int> Neighbors(int id)
+        {
+            foreach (int button in _buttons)
+            {
+                yield return id ^ button;
+            }
+        }
     }
 }
