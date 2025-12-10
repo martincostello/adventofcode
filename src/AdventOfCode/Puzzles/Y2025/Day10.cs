@@ -2,7 +2,6 @@
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 using System.Diagnostics.CodeAnalysis;
-using System.Runtime.InteropServices;
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2025;
 
@@ -38,92 +37,15 @@ public sealed class Day10 : Puzzle<int, int>
 
         foreach ((int count, _, var buttons, var joltage) in machines)
         {
-            int minimum = int.MaxValue;
+            var machine = new JoltageIndicator(count, buttons, joltage);
 
-            int[] current = new int[count];
+            var start = new JoltageState(new int[count]);
+            var goal = new JoltageState([.. joltage]);
 
-            MinimumStepsToPower(count, current, CollectionsMarshal.AsSpan(joltage), [], CollectionsMarshal.AsSpan(buttons), ref minimum, cancellationToken);
-
-            cancellationToken.ThrowIfCancellationRequested();
-
-            joltageSum += minimum;
+            joltageSum += (int)PathFinding.AStar(machine, start, goal, cancellationToken: cancellationToken);
         }
 
         return (indicatorSum, joltageSum);
-
-        static void MinimumStepsToPower(
-            int count,
-            ReadOnlySpan<int> current,
-            ReadOnlySpan<int> desired,
-            Stack<int> path,
-            ReadOnlySpan<int> buttons,
-            ref int minimum,
-            CancellationToken cancellationToken)
-        {
-            if (path.Count >= minimum - 1)
-            {
-                return;
-            }
-
-            for (int i = 0; i < buttons.Length && !cancellationToken.IsCancellationRequested; i++)
-            {
-                int mask = buttons[i];
-
-                Span<int> next = [.. current];
-
-                bool bust = false;
-
-                for (int j = 0; j < count && !bust; j++)
-                {
-                    if ((mask & (1 << j)) != 0)
-                    {
-                        int value = next[j];
-
-                        if (value >= desired[j])
-                        {
-                            bust = true;
-                            break;
-                        }
-
-                        next[j] = value + 1;
-                    }
-                }
-
-                if (bust)
-                {
-                    continue;
-                }
-
-                if (next.SequenceEqual(desired))
-                {
-                    minimum = Math.Min(minimum, path.Count + 1);
-                    continue;
-                }
-
-                int hash = Hash(next);
-
-                if (!path.Contains(hash))
-                {
-                    path.Push(hash);
-
-                    MinimumStepsToPower(count, next, desired, path, buttons, ref minimum, cancellationToken);
-
-                    path.Pop();
-                }
-            }
-
-            static int Hash(ReadOnlySpan<int> values)
-            {
-                HashCode builder = default;
-
-                foreach (int value in values)
-                {
-                    builder.Add(value);
-                }
-
-                return builder.ToHashCode();
-            }
-        }
 
         static List<(int Count, int Indicator, List<int> Buttons, List<int> Joltage)> ParseManual(IReadOnlyList<string> manual)
         {
@@ -248,4 +170,56 @@ public sealed class Day10 : Puzzle<int, int>
             }
         }
     }
+
+    private readonly struct JoltageIndicator(int length, IReadOnlyList<int> buttons, IReadOnlyList<int> desired) : IWeightedGraph<JoltageState>
+    {
+        public readonly long Cost(JoltageState a, JoltageState b) => 1;
+
+        public readonly bool Equals(JoltageState? x, JoltageState? y) => x!.Counters.SequenceEqual(y!.Counters);
+
+        public readonly int GetHashCode([DisallowNull] JoltageState obj)
+        {
+            HashCode builder = default;
+
+            foreach (int counter in obj.Counters)
+            {
+                builder.Add(counter);
+            }
+
+            return builder.ToHashCode();
+        }
+
+        public readonly IEnumerable<JoltageState> Neighbors(JoltageState id)
+        {
+            foreach (int mask in buttons)
+            {
+                Span<int> next = [.. id.Counters];
+
+                bool bust = false;
+
+                for (int j = 0; j < length && !bust; j++)
+                {
+                    if ((mask & (1 << j)) != 0)
+                    {
+                        int value = next[j];
+
+                        if (value >= desired[j])
+                        {
+                            bust = true;
+                            break;
+                        }
+
+                        next[j] = value + 1;
+                    }
+                }
+
+                if (!bust)
+                {
+                    yield return new JoltageState([.. next]);
+                }
+            }
+        }
+    }
+
+    private sealed record JoltageState(int[] Counters);
 }
