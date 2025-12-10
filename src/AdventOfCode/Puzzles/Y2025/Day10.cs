@@ -19,7 +19,7 @@ public sealed class Day10 : Puzzle<int, int>
     /// <param name="cancellationToken">The <see cref="CancellationToken"/> to use.</param>
     /// <returns>
     /// The sum of minimum number of presses required for all machines to both
-    /// to configure the indicator lights and to configure the required joltage.
+    /// configure the indicator lights and configure the required joltage.
     /// </returns>
     public static (int Indicator, int Joltage) GetMinimumButtonPresses(IReadOnlyList<string> manual, CancellationToken cancellationToken)
     {
@@ -37,9 +37,9 @@ public sealed class Day10 : Puzzle<int, int>
 
         foreach ((int count, _, var buttons, var joltage) in machines)
         {
-            var machine = new JoltageIndicator(count, buttons, joltage);
+            var machine = new JoltageIndicator(count, [.. buttons], [.. joltage]);
 
-            var start = new JoltageState(new int[count]);
+            var start = new JoltageState([.. Enumerable.Repeat(0, count)]);
             var goal = new JoltageState([.. joltage]);
 
             joltageSum += (int)PathFinding.AStar(machine, start, goal, cancellationToken: cancellationToken);
@@ -171,7 +171,7 @@ public sealed class Day10 : Puzzle<int, int>
         }
     }
 
-    private readonly struct JoltageIndicator(int length, IReadOnlyList<int> buttons, IReadOnlyList<int> desired) : IWeightedGraph<JoltageState>
+    private readonly struct JoltageIndicator(int length, ImmutableArray<int> buttons, ImmutableArray<int> desired) : IWeightedGraph<JoltageState>
     {
         public readonly long Cost(JoltageState a, JoltageState b) => 1;
 
@@ -221,5 +221,5 @@ public sealed class Day10 : Puzzle<int, int>
         }
     }
 
-    private sealed record JoltageState(int[] Counters);
+    private sealed record JoltageState(ImmutableArray<int> Counters);
 }
