@@ -3,6 +3,7 @@
 
 using System.Diagnostics;
 using System.Reflection;
+using Microsoft.Extensions.Caching.Memory;
 using Spectre.Console;
 
 namespace MartinCostello.AdventOfCode.Console;
@@ -61,7 +62,7 @@ public sealed class PuzzleSolver
     public async Task<int> SolveAsync(CancellationToken cancellationToken)
     {
         ILogger logger = _day.HasValue ? _console : new NullLogger();
-        var factory = new PuzzleFactory(NullCache.Instance, logger);
+        var factory = new PuzzleFactory(InMemoryCache.Instance, logger);
 
         if (_day is { } day)
         {
@@ -76,7 +77,7 @@ public sealed class PuzzleSolver
         }
         else
         {
-            return await RunYearAsyc(_year, factory, cancellationToken);
+            return await RunYearAsync(_year, factory, _console, cancellationToken);
         }
     }
 
@@ -132,7 +133,7 @@ public sealed class PuzzleSolver
         return 0;
     }
 
-    private static async Task<int> RunYearAsyc(int year, PuzzleFactory factory, CancellationToken cancellationToken)
+    private static async Task<int> RunYearAsync(int year, PuzzleFactory factory, ConsoleLogger logger, CancellationToken cancellationToken)
     {
         var puzzles = new List<(int Day, Puzzle Puzzle)>();
         var durations = new List<TimeSpan>();
@@ -161,32 +162,46 @@ public sealed class PuzzleSolver
         AnsiConsole.WriteLine($"Advent of Code {year} - {puzzles.Count} Days");
         AnsiConsole.WriteLine();
 
-        var timeProvider = TimeProvider.System;
-
-        foreach ((_, var puzzle) in puzzles)
+        try
         {
-            durations.Add(await RunPuzzleAsync(puzzle, timeProvider, cancellationToken));
+            // Prime the cache of inputs
+            foreach ((_, var puzzle) in puzzles)
+            {
+                _ = await puzzle.SolveAsync([], cancellationToken);
+            }
+
+            var timeProvider = TimeProvider.System;
+
+            foreach ((_, var puzzle) in puzzles)
+            {
+                durations.Add(await RunPuzzleAsync(puzzle, timeProvider, cancellationToken));
+            }
+
+            var table = new Table();
+
+            table.AddColumn("Day");
+            table.AddColumn(new TableColumn("Duration").RightAligned());
+
+            var results = puzzles.Zip(durations).Select((p) => (p.First.Day, p.First.Puzzle, p.Second));
+
+            foreach ((int day, var puzzle, TimeSpan duration) in results)
+            {
+                table.AddRow(day.ToString("00", CultureInfo.InvariantCulture), Format(duration));
+            }
+
+            AnsiConsole.Write(table);
+            AnsiConsole.WriteLine();
+
+            AnsiConsole.WriteLine($"Total runtime: {Format(durations.Aggregate(TimeSpan.Zero, (x, y) => x + y))}");
+            AnsiConsole.WriteLine();
+
+            return 0;
         }
-
-        var table = new Table();
-
-        table.AddColumn("Day");
-        table.AddColumn(new TableColumn("Duration").RightAligned());
-
-        var results = puzzles.Zip(durations).Select((p) => (p.First.Day, p.First.Puzzle, p.Second));
-
-        foreach ((int day, var puzzle, TimeSpan duration) in results)
+        catch (OperationCanceledException)
         {
-            table.AddRow(day.ToString("00", CultureInfo.InvariantCulture), Format(duration));
+            logger.WriteLine("Solution canceled.");
+            return Puzzle.Unsolved;
         }
-
-        AnsiConsole.Write(table);
-        AnsiConsole.WriteLine();
-
-        AnsiConsole.WriteLine($"Total runtime: {Format(durations.Aggregate(TimeSpan.Zero, (x, y) => x + y))}");
-        AnsiConsole.WriteLine();
-
-        return 0;
     }
 
     private static async Task<TimeSpan> RunPuzzleAsync(
@@ -242,5 +257,19 @@ public sealed class PuzzleSolver
         {
             // No-op
         }
+    }
+
+    private sealed class InMemoryCache : ICache, IDisposable
+    {
+        internal static readonly InMemoryCache Instance = new();
+        private readonly MemoryCache _cache = new(new MemoryCacheOptions());
+
+        public async Task<TItem> GetOrCreateAsync<TItem>(object key, Func<Task<TItem>> factory)
+        {
+            var result = await _cache.GetOrCreateAsync(key, (_) => factory());
+            return result!;
+        }
+
+        public void Dispose() => _cache.Dispose();
     }
 }
