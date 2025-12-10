@@ -98,11 +98,8 @@ public sealed class Day10 : Puzzle<int>
         {
             if (current == desired)
             {
-                List<int> completed = [.. path];
-                ways.Add(completed);
-
-                best = Math.Min(best, completed.Count);
-
+                ways.Add([.. path]);
+                best = Math.Min(best, path.Count);
                 return;
             }
 
@@ -113,13 +110,7 @@ public sealed class Day10 : Puzzle<int>
 
             for (int i = 0; i < buttons.Length; i++)
             {
-                int mask = buttons[i];
-                int candidate = current ^ mask;
-
-                if (candidate == current)
-                {
-                    continue;
-                }
+                int candidate = current ^ buttons[i];
 
                 if (path.Contains(candidate))
                 {
