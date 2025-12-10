@@ -17,7 +17,7 @@ public sealed class Day10Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         ];
 
         // Act
-        int actual = Day10.GetMinimumButtonPresses(values);
+        int actual = Day10.GetMinimumButtonPresses(values, TestContext.Current.CancellationToken);
 
         // Assert
         actual.ShouldBe(7);

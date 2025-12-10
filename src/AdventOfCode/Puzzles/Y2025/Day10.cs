@@ -16,10 +16,11 @@ public sealed class Day10 : Puzzle<int>
     /// the indicator lights on all of the machines.
     /// </summary>
     /// <param name="manual">The values to solve the puzzle from.</param>
+    /// <param name="cancellationToken">The <see cref="CancellationToken"/> to use.</param>
     /// <returns>
     /// The solution.
     /// </returns>
-    public static int GetMinimumButtonPresses(IReadOnlyList<string> manual)
+    public static int GetMinimumButtonPresses(IReadOnlyList<string> manual, CancellationToken cancellationToken)
     {
         var machines = new List<(int Desired, List<int> Buttons)>(manual.Count);
 
@@ -76,14 +77,13 @@ public sealed class Day10 : Puzzle<int>
 
         foreach ((int desired, var buttons) in machines)
         {
-            int best = int.MaxValue;
+            int minimum = int.MaxValue;
 
-            var path = new Stack<int>();
-            var ways = new List<List<int>>();
+            MinimumStepsToTurnOn(0, desired, [], CollectionsMarshal.AsSpan(buttons), ref minimum, cancellationToken);
 
-            MinimumStepsToTurnOn(0, desired, path, CollectionsMarshal.AsSpan(buttons), ways, ref best);
+            cancellationToken.ThrowIfCancellationRequested();
 
-            sum += ways.Min((p) => p.Count);
+            sum += minimum;
         }
 
         return sum;
@@ -93,35 +93,32 @@ public sealed class Day10 : Puzzle<int>
             int desired,
             Stack<int> path,
             ReadOnlySpan<int> buttons,
-            List<List<int>> ways,
-            ref int best)
+            ref int minimum,
+            CancellationToken cancellationToken)
         {
-            if (current == desired)
-            {
-                ways.Add([.. path]);
-                best = Math.Min(best, path.Count);
-                return;
-            }
-
-            if (best != int.MaxValue && path.Count >= best)
+            if (path.Count >= minimum)
             {
                 return;
             }
 
-            for (int i = 0; i < buttons.Length; i++)
+            for (int i = 0; i < buttons.Length && !cancellationToken.IsCancellationRequested; i++)
             {
-                int candidate = current ^ buttons[i];
+                int next = current ^ buttons[i];
 
-                if (path.Contains(candidate))
+                if (next == desired)
                 {
+                    minimum = Math.Min(minimum, path.Count + 1);
                     continue;
                 }
 
-                path.Push(candidate);
+                if (!path.Contains(next))
+                {
+                    path.Push(next);
 
-                MinimumStepsToTurnOn(candidate, desired, path, buttons, ways, ref best);
+                    MinimumStepsToTurnOn(next, desired, path, buttons, ref minimum, cancellationToken);
 
-                path.Pop();
+                    path.Pop();
+                }
             }
         }
     }
@@ -130,9 +127,9 @@ public sealed class Day10 : Puzzle<int>
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
         return await SolveWithLinesAsync(
-            static (manual, logger, _) =>
+            static (manual, logger, cancellationToken) =>
             {
-                int minimum = GetMinimumButtonPresses(manual);
+                int minimum = GetMinimumButtonPresses(manual, cancellationToken);
 
                 if (logger is { })
                 {
