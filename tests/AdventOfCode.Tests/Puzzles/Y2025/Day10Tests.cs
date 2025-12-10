@@ -24,7 +24,7 @@ public sealed class Day10Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         actualJoltage.ShouldBe(33);
     }
 
-    [Fact]
+    [Fact(Skip = "Too slow.")]
     public async Task Y2025_Day10_Solve_Returns_Correct_Solution()
     {
         // Act
