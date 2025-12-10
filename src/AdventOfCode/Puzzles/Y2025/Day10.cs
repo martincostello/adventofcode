@@ -8,7 +8,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2025;
 /// <summary>
 /// A class representing the puzzle for <c>https://adventofcode.com/2025/day/10</c>. This class cannot be inherited.
 /// </summary>
-[Puzzle(2025, 10, "Factory", RequiresData = true, IsHidden = true, IsSlow = true)]
+[Puzzle(2025, 10, "Factory", RequiresData = true, IsHidden = true)]
 public sealed class Day10 : Puzzle<int>
 {
     /// <summary>
@@ -47,7 +47,7 @@ public sealed class Day10 : Puzzle<int>
             ref int minimum,
             CancellationToken cancellationToken)
         {
-            if (path.Count >= minimum)
+            if (path.Count >= minimum - 1)
             {
                 return;
             }
