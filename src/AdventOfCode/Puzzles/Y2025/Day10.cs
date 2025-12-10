@@ -8,25 +8,26 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2025;
 /// <summary>
 /// A class representing the puzzle for <c>https://adventofcode.com/2025/day/10</c>. This class cannot be inherited.
 /// </summary>
-[Puzzle(2025, 10, "Factory", RequiresData = true, IsHidden = true)]
-public sealed class Day10 : Puzzle<int>
+[Puzzle(2025, 10, "Factory", RequiresData = true, IsHidden = true, IsSlow = true)]
+public sealed class Day10 : Puzzle<int, int>
 {
     /// <summary>
     /// Gets the fewest button presses required to correctly configure
-    /// the indicator lights on all of the machines.
+    /// the indicator lights and the required joltage on all of the machines.
     /// </summary>
     /// <param name="manual">The values to solve the puzzle from.</param>
     /// <param name="cancellationToken">The <see cref="CancellationToken"/> to use.</param>
     /// <returns>
-    /// The solution.
+    /// The sum of minimum number of presses required for all machines to both
+    /// to configure the indicator lights and to configure the required joltage.
     /// </returns>
-    public static int GetMinimumButtonPresses(IReadOnlyList<string> manual, CancellationToken cancellationToken)
+    public static (int Indicator, int Joltage) GetMinimumButtonPresses(IReadOnlyList<string> manual, CancellationToken cancellationToken)
     {
         var machines = ParseManual(manual);
 
-        int sum = 0;
+        int indicatorSum = 0;
 
-        foreach ((int desired, var buttons, _) in machines)
+        foreach ((_, int desired, var buttons, _) in machines)
         {
             int minimum = int.MaxValue;
 
@@ -34,10 +35,25 @@ public sealed class Day10 : Puzzle<int>
 
             cancellationToken.ThrowIfCancellationRequested();
 
-            sum += minimum;
+            indicatorSum += minimum;
         }
 
-        return sum;
+        int joltageSum = 0;
+
+        foreach ((int count, _, var buttons, var joltage) in machines)
+        {
+            int minimum = int.MaxValue;
+
+            int[] current = new int[count];
+
+            MinimumStepsToPower(count, current, CollectionsMarshal.AsSpan(joltage), [], CollectionsMarshal.AsSpan(buttons), ref minimum, cancellationToken);
+
+            cancellationToken.ThrowIfCancellationRequested();
+
+            joltageSum += minimum;
+        }
+
+        return (indicatorSum, joltageSum);
 
         static void MinimumStepsToTurnOn(
             int current,
@@ -73,9 +89,83 @@ public sealed class Day10 : Puzzle<int>
             }
         }
 
-        static List<(int Indicator, List<int> Buttons, List<int> Joltage)> ParseManual(IReadOnlyList<string> manual)
+        static void MinimumStepsToPower(
+            int count,
+            ReadOnlySpan<int> current,
+            ReadOnlySpan<int> desired,
+            Stack<int> path,
+            ReadOnlySpan<int> buttons,
+            ref int minimum,
+            CancellationToken cancellationToken)
         {
-            var machines = new List<(int Indicator, List<int> Buttons, List<int> Joltage)>(manual.Count);
+            if (path.Count >= minimum - 1)
+            {
+                return;
+            }
+
+            for (int i = 0; i < buttons.Length && !cancellationToken.IsCancellationRequested; i++)
+            {
+                int mask = buttons[i];
+
+                Span<int> next = [.. current];
+
+                bool bust = false;
+
+                for (int j = 0; j < count && !bust; j++)
+                {
+                    if ((mask & (1 << j)) != 0)
+                    {
+                        int value = next[j];
+
+                        if (value >= desired[j])
+                        {
+                            bust = true;
+                            break;
+                        }
+
+                        next[j] = value + 1;
+                    }
+                }
+
+                if (bust)
+                {
+                    continue;
+                }
+
+                if (next.SequenceEqual(desired))
+                {
+                    minimum = Math.Min(minimum, path.Count + 1);
+                    continue;
+                }
+
+                int hash = Hash(next);
+
+                if (!path.Contains(hash))
+                {
+                    path.Push(hash);
+
+                    MinimumStepsToPower(count, next, desired, path, buttons, ref minimum, cancellationToken);
+
+                    path.Pop();
+                }
+            }
+
+            static int Hash(ReadOnlySpan<int> values)
+            {
+                HashCode builder = default;
+
+                foreach (int value in values)
+                {
+                    builder.Add(value);
+                }
+
+                return builder.ToHashCode();
+            }
+        }
+
+        static List<(int Count, int Indicator, List<int> Buttons, List<int> Joltage)> ParseManual(IReadOnlyList<string> manual)
+        {
+            var machines = new List<(int Count, int Indicator, List<int> Buttons, List<int> Joltage)>(manual.Count);
 
             foreach (string line in manual)
             {
@@ -88,7 +178,10 @@ public sealed class Day10 : Puzzle<int>
 
                 index = remaining.IndexOf(']');
 
-                int indicator = ParseIndicator(remaining[1..index]);
+                var indicators = remaining[1..index];
+
+                int count = indicators.Length;
+                int indicator = ParseIndicator(indicators);
 
                 var buttons = new List<int>();
 
@@ -112,7 +205,7 @@ public sealed class Day10 : Puzzle<int>
                     remaining = remaining[(index + 1)..];
                 }
 
-                machines.Add((indicator, buttons, joltage));
+                machines.Add((count, indicator, buttons, joltage));
             }
 
             return machines;
@@ -162,14 +255,15 @@ public sealed class Day10 : Puzzle<int>
         return await SolveWithLinesAsync(
             static (manual, logger, cancellationToken) =>
             {
-                int minimum = GetMinimumButtonPresses(manual, cancellationToken);
+                (int minimumIndicator, int minimumJoltage) = GetMinimumButtonPresses(manual, cancellationToken);
 
                 if (logger is { })
                 {
-                    logger.WriteLine("The fewest button presses required to correctly configure the indicator lights on all of the machines is {0}.", minimum);
+                    logger.WriteLine("The fewest button presses required to correctly configure the indicator lights on all of the machines is {0}.", minimumIndicator);
+                    logger.WriteLine("The fewest button presses required to correctly configure the joltage level counters on all of the machines is {0}.", minimumJoltage);
                 }
 
-                return minimum;
+                return (minimumIndicator, minimumJoltage);
             },
             cancellationToken);
     }

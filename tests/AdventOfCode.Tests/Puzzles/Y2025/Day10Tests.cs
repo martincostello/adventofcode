@@ -17,10 +17,11 @@ public sealed class Day10Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         ];
 
         // Act
-        int actual = Day10.GetMinimumButtonPresses(values, TestContext.Current.CancellationToken);
+        (int actualIndicator, long actualJoltage) = Day10.GetMinimumButtonPresses(values, TestContext.Current.CancellationToken);
 
         // Assert
-        actual.ShouldBe(7);
+        actualIndicator.ShouldBe(7);
+        actualJoltage.ShouldBe(33);
     }
 
     [Fact]
@@ -31,6 +32,7 @@ public sealed class Day10Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
 
         // Assert
         puzzle.ShouldNotBeNull();
-        puzzle.Solution.ShouldBe(524);
+        puzzle.Solution1.ShouldBe(524);
+        puzzle.Solution2.ShouldBe(Puzzle.Unsolved);
     }
 }
