@@ -26,7 +26,7 @@ public sealed class Day12 : Puzzle<int>
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
         return await SolveWithLinesAsync(
-            static (values, logger, cancellationToken) =>
+            static (values, logger, _) =>
             {
                 int solution = Solve(values);
 

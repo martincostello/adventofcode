@@ -6,7 +6,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2025;
 /// <summary>
 /// A class representing the puzzle for <c>https://adventofcode.com/2025/day/8</c>. This class cannot be inherited.
 /// </summary>
-[Puzzle(2025, 08, "", RequiresData = true, IsHidden = true, Unsolved = true)]
+[Puzzle(2025, 08, "Playground", RequiresData = true, IsHidden = true, Unsolved = true)]
 public sealed class Day08 : Puzzle<int>
 {
     /// <summary>
@@ -26,7 +26,7 @@ public sealed class Day08 : Puzzle<int>
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
         return await SolveWithLinesAsync(
-            static (values, logger, cancellationToken) =>
+            static (values, logger, _) =>
             {
                 int solution = Solve(values);
 
