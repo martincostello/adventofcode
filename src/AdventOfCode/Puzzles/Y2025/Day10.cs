@@ -22,60 +22,11 @@ public sealed class Day10 : Puzzle<int>
     /// </returns>
     public static int GetMinimumButtonPresses(IReadOnlyList<string> manual, CancellationToken cancellationToken)
     {
-        var machines = new List<(int Desired, List<int> Buttons)>(manual.Count);
-
-        foreach (string line in manual)
-        {
-            var remaining = line.AsSpan();
-            int index = remaining.IndexOf('{');
-
-            remaining = remaining[0..(index - 1)];
-
-            index = remaining.IndexOf(']');
-
-            var desired = remaining[1..index];
-
-            int state = 0;
-
-            for (int i = 0; i < desired.Length; i++)
-            {
-                state |= (desired[i] == '#' ? 1 : 0) << i;
-            }
-
-            var buttons = new List<int>();
-
-            remaining = remaining[(index + 1)..];
-
-            while (!remaining.IsEmpty)
-            {
-                index = remaining.IndexOf('(');
-
-                if (index < 0)
-                {
-                    break;
-                }
-
-                remaining = remaining[(index + 1)..];
-                index = remaining.IndexOf(')');
-
-                int buttonState = 0;
-
-                foreach (var range in remaining[..index].Split(','))
-                {
-                    int button = remaining[range.Start] - '0';
-                    buttonState |= 1 << button;
-                }
-
-                buttons.Add(buttonState);
-                remaining = remaining[(index + 1)..];
-            }
-
-            machines.Add((state, buttons));
-        }
+        var machines = ParseManual(manual);
 
         int sum = 0;
 
-        foreach ((int desired, var buttons) in machines)
+        foreach ((int desired, var buttons, _) in machines)
         {
             int minimum = int.MaxValue;
 
@@ -119,6 +70,88 @@ public sealed class Day10 : Puzzle<int>
 
                     path.Pop();
                 }
+            }
+        }
+
+        static List<(int Indicator, List<int> Buttons, List<int> Joltage)> ParseManual(IReadOnlyList<string> manual)
+        {
+            var machines = new List<(int Indicator, List<int> Buttons, List<int> Joltage)>(manual.Count);
+
+            foreach (string line in manual)
+            {
+                var remaining = line.AsSpan();
+                int index = remaining.IndexOf('{');
+
+                var joltage = ParseJoltage(remaining[(index + 1)..^1]);
+
+                remaining = remaining[0..(index - 1)];
+
+                index = remaining.IndexOf(']');
+
+                int indicator = ParseIndicator(remaining[1..index]);
+
+                var buttons = new List<int>();
+
+                remaining = remaining[(index + 1)..];
+
+                while (!remaining.IsEmpty)
+                {
+                    index = remaining.IndexOf('(');
+
+                    if (index < 0)
+                    {
+                        break;
+                    }
+
+                    remaining = remaining[(index + 1)..];
+                    index = remaining.IndexOf(')');
+
+                    int buttonState = ParseMask(remaining[..index], ch => ch - '0');
+
+                    buttons.Add(buttonState);
+                    remaining = remaining[(index + 1)..];
+                }
+
+                machines.Add((indicator, buttons, joltage));
+            }
+
+            return machines;
+
+            static int ParseIndicator(ReadOnlySpan<char> span)
+            {
+                int configuration = 0;
+
+                for (int i = 0; i < span.Length; i++)
+                {
+                    configuration |= (span[i] == '#' ? 1 : 0) << i;
+                }
+
+                return configuration;
+            }
+
+            static List<int> ParseJoltage(ReadOnlySpan<char> span)
+            {
+                var joltage = new List<int>();
+
+                foreach (var range in span.Split(','))
+                {
+                    joltage.Add(Parse<int>(span[range]));
+                }
+
+                return joltage;
+            }
+
+            static int ParseMask(ReadOnlySpan<char> span, Func<char, int> converter)
+            {
+                int mask = 0;
+
+                foreach (var range in span.Split(','))
+                {
+                    int bit = converter(span[range.Start]);
+                    mask |= 1 << bit;
+                }
+
+                return mask;
             }
         }
     }
