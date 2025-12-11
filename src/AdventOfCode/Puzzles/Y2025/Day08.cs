@@ -49,13 +49,13 @@ public sealed class Day08 : Puzzle<int>
             }
         }
 
-        var d = distances.OrderBy((p) => p.Distance).ToList();
-
+        var sorted = distances.OrderBy((p) => p.Distance).ToList();
         var circuits = new List<HashSet<Vector3>>();
 
-        for (int i = 0; i < d.Count; i++)
+        // TODO Fix circuit connection processing
+        for (int i = 0; i < sorted.Count; i++)
         {
-            (var first, var second, _) = d[i];
+            (var first, var second, _) = sorted[i];
 
             if (circuits.Any((p) => p.Contains(first) && p.Contains(second)))
             {
@@ -79,7 +79,6 @@ public sealed class Day08 : Puzzle<int>
             boxes.Remove(second);
         }
 
-        // TODO
         return circuits
             .OrderByDescending((p) => p.Count)
             .Take(3)

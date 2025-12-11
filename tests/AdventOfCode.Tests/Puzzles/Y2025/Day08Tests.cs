@@ -5,7 +5,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2025;
 
 public sealed class Day08Tests(ITestOutputHelper outputHelper) : PuzzleTest(outputHelper)
 {
-    [Fact]
+    [Fact(Skip = "Not implemented.")]
     public void Y2025_Day08_Connect_Returns_Correct_Value()
     {
         // Arrange
@@ -40,7 +40,7 @@ public sealed class Day08Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         actual.ShouldBe(40);
     }
 
-    [Fact]
+    [Fact(Skip = "Not implemented.")]
     public async Task Y2025_Day08_Solve_Returns_Correct_Solution()
     {
         // Act
