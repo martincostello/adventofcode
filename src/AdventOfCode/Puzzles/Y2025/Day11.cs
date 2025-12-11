@@ -6,37 +6,141 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2025;
 /// <summary>
 /// A class representing the puzzle for <c>https://adventofcode.com/2025/day/11</c>. This class cannot be inherited.
 /// </summary>
-[Puzzle(2025, 11, "", RequiresData = true, IsHidden = true, Unsolved = true)]
-public sealed class Day11 : Puzzle<int>
+[Puzzle(2025, 11, "Reactor", RequiresData = true, IsSlow = true)]
+public sealed class Day11 : Puzzle<int, int>
 {
     /// <summary>
-    /// Solves the puzzle.
+    /// Counts the number of different paths that lead from <c>you</c> and <c>svr</c> to <c>out</c>.
     /// </summary>
-    /// <param name="values">The values to solve the puzzle from.</param>
+    /// <param name="devices">The devices to solve the puzzle from.</param>
+    /// <param name="cancellationToken">The <see cref="CancellationToken"/> to use.</param>
     /// <returns>
-    /// The solution.
+    /// The number of paths from <c>you</c> to <c>out</c> and the number of paths from
+    /// <c>svr</c> to <c>out</c> via <c>dac</c> and <c>fft</c>.
     /// </returns>
-    public static int Solve(IReadOnlyList<string> values)
+    public static (int YouPaths, int ServerPaths) CountPaths(IReadOnlyList<string> devices, CancellationToken cancellationToken)
     {
-        ArgumentNullException.ThrowIfNull(values);
-        return Unsolved;
+        var connections = new Dictionary<string, Device>();
+
+        foreach (string line in devices)
+        {
+            int index = line.IndexOf(':', StringComparison.Ordinal);
+            string name = line[..index];
+            string rest = line[(index + 2)..];
+
+            var outputs = new List<string>();
+
+            foreach (var range in rest.AsSpan().Split(' '))
+            {
+                outputs.Add(rest[range]);
+            }
+
+            connections[name] = new(name, outputs);
+        }
+
+        var path = new HashSet<string>();
+
+        const string Dac = "dac";
+        const string Fft = "fft";
+        const string Out = "out";
+        const string Svr = "svr";
+
+        int youPaths = CountPaths("you", Out, path, [], connections, cancellationToken);
+
+        int svrPaths = 0;
+
+        int svrdac = CountPaths(Svr, Dac, path, [Fft, Out], connections, cancellationToken);
+
+        if (svrdac > 0)
+        {
+            int dacfft = CountPaths(Dac, Fft, path, [Out], connections, cancellationToken);
+
+            if (dacfft > 0)
+            {
+                int fftout = CountPaths(Fft, Out, path, [Dac], connections, cancellationToken);
+
+                if (fftout > 0)
+                {
+                    svrPaths += svrdac * dacfft * fftout;
+                }
+            }
+        }
+
+        int svrfft = CountPaths(Svr, Fft, path, [Dac, Out], connections, cancellationToken);
+
+        if (svrfft > 0)
+        {
+            int fftdac = CountPaths(Fft, Dac, path, [], connections, cancellationToken);
+
+            if (fftdac > 0)
+            {
+                int dacout = CountPaths(Dac, Out, path, [Fft], connections, cancellationToken);
+
+                if (dacout > 0)
+                {
+                    svrPaths += svrfft * fftdac * dacout;
+                }
+            }
+        }
+
+        return (youPaths, svrPaths);
+
+        static int CountPaths(
+            string origin,
+            string destination,
+            HashSet<string> path,
+            List<string> except,
+            Dictionary<string, Device> connections,
+            CancellationToken cancellationToken)
+        {
+            if (path.Overlaps(except))
+            {
+                return 0;
+            }
+
+            if (string.Equals(origin, destination, StringComparison.Ordinal))
+            {
+                return 1;
+            }
+
+            int total = 0;
+
+            if (connections.TryGetValue(origin, out var device))
+            {
+                path.Add(origin);
+
+                foreach (string to in device.Connections)
+                {
+                    total += CountPaths(to, destination, path, except, connections, cancellationToken);
+                }
+
+                path.Remove(origin);
+            }
+
+            cancellationToken.ThrowIfCancellationRequested();
+
+            return total;
+        }
     }
 
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
         return await SolveWithLinesAsync(
-            static (values, logger, _) =>
+            static (values, logger, cancellationToken) =>
             {
-                int solution = Solve(values);
+                (int youPaths, int serverPaths) = CountPaths(values, cancellationToken);
 
                 if (logger is { })
                 {
-                    logger.WriteLine("The solution is {0}.", solution);
+                    logger.WriteLine("{0} different paths lead from you to out.", youPaths);
+                    logger.WriteLine("{0} different paths lead from svr to out via dac and fft.", serverPaths);
                 }
 
-                return solution;
+                return (youPaths, serverPaths);
             },
             cancellationToken);
     }
+
+    private sealed record Device(string Name, IReadOnlyList<string> Connections);
 }

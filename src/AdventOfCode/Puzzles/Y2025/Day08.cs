@@ -10,16 +10,76 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2025;
 public sealed class Day08 : Puzzle<int>
 {
     /// <summary>
-    /// Solves the puzzle.
+    /// Connects the specified function boxes together as distinct circuits.
     /// </summary>
     /// <param name="values">The values to solve the puzzle from.</param>
     /// <returns>
-    /// The solution.
+    /// The product of the sizes of the three largest circuits.
     /// </returns>
-    public static int Solve(IReadOnlyList<string> values)
+    public static int Connect(IReadOnlyList<string> values)
     {
-        ArgumentNullException.ThrowIfNull(values);
-        return Unsolved;
+        var boxes = new List<Vector3>();
+
+        foreach (string item in values)
+        {
+            (string x, string y, string z) = item.Trifurcate(',');
+            boxes.Add(new(Parse<float>(x), Parse<float>(y), Parse<float>(z)));
+        }
+
+        var distances = new HashSet<(Vector3 Left, Vector3 Right, float Distance)>();
+
+        for (int i = 0; i < boxes.Count; i++)
+        {
+            var left = boxes[i];
+
+            for (int j = 0; j < boxes.Count; j++)
+            {
+                if (i == j)
+                {
+                    continue;
+                }
+
+                var right = boxes[j];
+
+                float distance = Vector3.Distance(left, right);
+
+                distances.Add((left, right, distance));
+                distances.Add((right, left, distance));
+            }
+        }
+
+        var sorted = distances.OrderBy((p) => p.Distance).ToList();
+        var circuits = new List<HashSet<Vector3>>();
+
+        // TODO Fix circuit connection processing
+        for (int i = 0; i < sorted.Count; i++)
+        {
+            (var first, var second, _) = sorted[i];
+
+            if (circuits.Any((p) => p.Contains(first) && p.Contains(second)))
+            {
+                continue;
+            }
+
+            var circuit =
+                circuits.FirstOrDefault((p) => p.Contains(first) && !p.Contains(second)) ??
+                circuits.FirstOrDefault((p) => !p.Contains(first) && p.Contains(second));
+
+            if (circuit is null)
+            {
+                circuits.Add([first, second]);
+            }
+            else
+            {
+                circuit.Add(first);
+                circuit.Add(second);
+            }
+        }
+
+        return circuits
+            .OrderByDescending((p) => p.Count)
+            .Take(3)
+            .Aggregate(1, (x, y) => x * y.Count);
     }
 
     /// <inheritdoc />
@@ -28,14 +88,14 @@ public sealed class Day08 : Puzzle<int>
         return await SolveWithLinesAsync(
             static (values, logger, _) =>
             {
-                int solution = Solve(values);
+                int product = Connect(values);
 
                 if (logger is { })
                 {
-                    logger.WriteLine("The solution is {0}.", solution);
+                    logger.WriteLine("The product of the sizes of the three largest circuits is {0}.", product);
                 }
 
-                return solution;
+                return product;
             },
             cancellationToken);
     }
