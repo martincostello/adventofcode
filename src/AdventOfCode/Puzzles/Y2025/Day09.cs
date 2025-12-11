@@ -30,13 +30,13 @@ public sealed class Day09 : Puzzle<long>
 
         for (int i = 0; i < points.Count; i++)
         {
-            var left = points[i];
+            var first = points[i];
 
-            for (int j = 0; j < points.Count; j++)
+            for (int j = 1; j < points.Count; j++)
             {
                 if (i != j)
                 {
-                    pairs.Add((left, points[j]));
+                    pairs.Add((first, points[j]));
                 }
             }
         }
