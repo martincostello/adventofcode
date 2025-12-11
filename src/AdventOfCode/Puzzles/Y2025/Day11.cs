@@ -10,7 +10,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2025;
 public sealed class Day11 : Puzzle<int, int>
 {
     /// <summary>
-    /// Counts the number of different paths that lead from <c>you</c> and <c>srv</c> to <c>out</c>.
+    /// Counts the number of different paths that lead from <c>you</c> and <c>svr</c> to <c>out</c>.
     /// </summary>
     /// <param name="devices">The devices to solve the puzzle from.</param>
     /// <param name="cancellationToken">The <see cref="CancellationToken"/> to use.</param>
@@ -38,7 +38,7 @@ public sealed class Day11 : Puzzle<int, int>
             connections[name] = new(name, outputs);
         }
 
-        var path = new Stack<string>();
+        var path = new HashSet<string>();
 
         const string Dac = "dac";
         const string Fft = "fft";
@@ -47,7 +47,7 @@ public sealed class Day11 : Puzzle<int, int>
 
         int youPaths = CountPaths("you", Out, path, [], connections, cancellationToken);
 
-        int srvPaths = 0;
+        int svrPaths = 0;
 
         int svrdac = CountPaths(Svr, Dac, path, [Fft, Out], connections, cancellationToken);
 
@@ -61,7 +61,7 @@ public sealed class Day11 : Puzzle<int, int>
 
                 if (fftout > 0)
                 {
-                    srvPaths += svrdac * dacfft * fftout;
+                    svrPaths += svrdac * dacfft * fftout;
                 }
             }
         }
@@ -76,29 +76,29 @@ public sealed class Day11 : Puzzle<int, int>
             {
                 int dacout = CountPaths(Dac, Out, path, [Fft], connections, cancellationToken);
 
-                if (svrfft > 0 && fftdac > 0 && dacout > 0)
+                if (dacout > 0)
                 {
-                    srvPaths += svrfft * fftdac * dacout;
+                    svrPaths += svrfft * fftdac * dacout;
                 }
             }
         }
 
-        return (youPaths, srvPaths);
+        return (youPaths, svrPaths);
 
         static int CountPaths(
             string origin,
             string destination,
-            Stack<string> path,
+            HashSet<string> path,
             List<string> except,
             Dictionary<string, Device> connections,
             CancellationToken cancellationToken)
         {
-            if (except.Any(path.Contains))
+            if (path.Overlaps(except))
             {
                 return 0;
             }
 
-            if (origin.SequenceEqual(destination))
+            if (string.Equals(origin, destination, StringComparison.Ordinal))
             {
                 return 1;
             }
@@ -107,16 +107,14 @@ public sealed class Day11 : Puzzle<int, int>
 
             if (connections.TryGetValue(origin, out var device))
             {
-                path.Push(origin);
-                connections.Remove(origin);
+                path.Add(origin);
 
                 foreach (string to in device.Connections)
                 {
                     total += CountPaths(to, destination, path, except, connections, cancellationToken);
                 }
 
-                path.Pop();
-                connections.Add(origin, device);
+                path.Remove(origin);
             }
 
             cancellationToken.ThrowIfCancellationRequested();
@@ -136,7 +134,7 @@ public sealed class Day11 : Puzzle<int, int>
                 if (logger is { })
                 {
                     logger.WriteLine("{0} different paths lead from you to out.", youPaths);
-                    logger.WriteLine("{0} different paths lead from srv to out via dac and fft.", serverPaths);
+                    logger.WriteLine("{0} different paths lead from svr to out via dac and fft.", serverPaths);
                 }
 
                 return (youPaths, serverPaths);
