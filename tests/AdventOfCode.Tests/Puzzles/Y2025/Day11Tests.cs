@@ -6,22 +6,31 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2025;
 public sealed class Day11Tests(ITestOutputHelper outputHelper) : PuzzleTest(outputHelper)
 {
     [Fact]
-    public void Y2025_Day11_Solve_Returns_Correct_Value()
+    public void Y2025_Day11_CountPaths_Returns_Correct_Value()
     {
         // Arrange
         string[] values =
         [
-            "_",
+            "aaa: you hhh",
+            "you: bbb ccc",
+            "bbb: ddd eee",
+            "ccc: ddd eee fff",
+            "ddd: ggg",
+            "eee: out",
+            "fff: out",
+            "ggg: out",
+            "hhh: ccc fff iii",
+            "iii: out",
         ];
 
         // Act
-        int actual = Day11.Solve(values);
+        int actual = Day11.CountPaths(values);
 
         // Assert
-        actual.ShouldBe(Puzzle.Unsolved);
+        actual.ShouldBe(5);
     }
 
-    [Fact(Skip = "Not implemented.")]
+    [Fact]
     public async Task Y2025_Day11_Solve_Returns_Correct_Solution()
     {
         // Act
@@ -29,6 +38,6 @@ public sealed class Day11Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
 
         // Assert
         puzzle.ShouldNotBeNull();
-        puzzle.Solution.ShouldBe(Puzzle.Unsolved);
+        puzzle.Solution.ShouldBe(788);
     }
 }

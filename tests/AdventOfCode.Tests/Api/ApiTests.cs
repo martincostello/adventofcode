@@ -242,7 +242,7 @@ public class ApiTests(HttpServerFixture fixture, ITestOutputHelper outputHelper)
     [UnimplementedPuzzleData(2025, 8)]
     [UnimplementedPuzzleData(2025, 9)]
     [TooSlowPuzzleData(2025, 10, 524, Puzzle.Unsolved)]
-    [UnimplementedPuzzleData(2025, 11)]
+    [PuzzleData(2025, 11, 788)]
     [UnimplementedPuzzleData(2025, 12)]
     public async Task Can_Solve_Puzzle(int year, int day, PuzzleDataAttribute testCase)
     {

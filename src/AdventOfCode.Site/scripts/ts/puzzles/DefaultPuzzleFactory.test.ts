@@ -183,7 +183,7 @@ describe('Puzzles', () => {
         [2025, 8, [], [-1, -1]],
         [2025, 9, [], [-1, -1]],
         [2025, 10, [], [524, -1]],
-        [2025, 11, [], [-1, -1]],
+        [2025, 11, [], [788, -1]],
         [2025, 12, [], [-1, -1]],
         */
     ])('%i day %i returns the correct solution for %s', async (year: number, day: number, inputs: string[], expected: any[]) => {

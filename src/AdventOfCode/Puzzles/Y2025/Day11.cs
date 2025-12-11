@@ -6,20 +6,62 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2025;
 /// <summary>
 /// A class representing the puzzle for <c>https://adventofcode.com/2025/day/11</c>. This class cannot be inherited.
 /// </summary>
-[Puzzle(2025, 11, "", RequiresData = true, IsHidden = true, Unsolved = true)]
+[Puzzle(2025, 11, "Reactor", RequiresData = true)]
 public sealed class Day11 : Puzzle<int>
 {
     /// <summary>
-    /// Solves the puzzle.
+    /// Counts the number of different paths that lead from <c>you</c> to <c>out</c>.
     /// </summary>
-    /// <param name="values">The values to solve the puzzle from.</param>
+    /// <param name="devices">The devices to solve the puzzle from.</param>
     /// <returns>
     /// The solution.
     /// </returns>
-    public static int Solve(IReadOnlyList<string> values)
+    public static int CountPaths(IReadOnlyList<string> devices)
     {
-        ArgumentNullException.ThrowIfNull(values);
-        return Unsolved;
+        var connections = new Dictionary<string, Device>();
+
+        foreach (string line in devices)
+        {
+            int index = line.IndexOf(':', StringComparison.Ordinal);
+            string name = line[..index];
+            string rest = line[(index + 1)..];
+
+            var outputs = new List<string>();
+
+            foreach (var range in rest.AsSpan().Split(' '))
+            {
+                outputs.Add(rest[range]);
+            }
+
+            connections[name] = new(name, outputs);
+        }
+
+        var alternate = connections.GetAlternateLookup();
+
+        return CountPaths("you", "out", alternate);
+
+        static int CountPaths(
+            ReadOnlySpan<char> origin,
+            ReadOnlySpan<char> destination,
+            Dictionary<string, Device>.AlternateLookup<ReadOnlySpan<char>> connections)
+        {
+            if (origin.SequenceEqual(destination))
+            {
+                return 1;
+            }
+
+            int total = 0;
+
+            if (connections.TryGetValue(origin, out var device))
+            {
+                foreach (string to in device.Connections)
+                {
+                    total += CountPaths(to, destination, connections);
+                }
+            }
+
+            return total;
+        }
     }
 
     /// <inheritdoc />
@@ -28,15 +70,17 @@ public sealed class Day11 : Puzzle<int>
         return await SolveWithLinesAsync(
             static (values, logger, _) =>
             {
-                int solution = Solve(values);
+                int solution = CountPaths(values);
 
                 if (logger is { })
                 {
-                    logger.WriteLine("The solution is {0}.", solution);
+                    logger.WriteLine("{0} different paths lead from you to out.", solution);
                 }
 
                 return solution;
             },
             cancellationToken);
     }
+
+    private sealed record Device(string Name, IReadOnlyList<string> Connections);
 }
