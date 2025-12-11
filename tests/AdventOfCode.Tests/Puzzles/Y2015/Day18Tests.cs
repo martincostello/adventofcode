@@ -82,7 +82,7 @@ public sealed class Day18Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         var puzzle = await SolvePuzzleAsync<Day18>();
 
         // Assert
-        puzzle.LightsIlluminated.ShouldBe(814);
-        puzzle.LightsIlluminatedWithStuckLights.ShouldBe(924);
+        puzzle.Solution1.ShouldBe(814);
+        puzzle.Solution2.ShouldBe(924);
     }
 }

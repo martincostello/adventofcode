@@ -7,18 +7,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2025;
 /// A class representing the puzzle for <c>https://adventofcode.com/2025/day/1</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2025, 01, "Secret Entrance", RequiresData = true)]
-public sealed class Day01 : Puzzle
+public sealed class Day01 : Puzzle<int, int>
 {
-    /// <summary>
-    /// Gets the password to open the door.
-    /// </summary>
-    public int Password1 { get; private set; }
-
-    /// <summary>
-    /// Gets the password to open the door using method <c>0x434C49434B</c>.
-    /// </summary>
-    public int Password2 { get; private set; }
-
     /// <summary>
     /// Gets the password to open the door from the specified list of rotations.
     /// </summary>
@@ -64,19 +54,20 @@ public sealed class Day01 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        ArgumentNullException.ThrowIfNull(args);
+        return await SolveWithLinesAsync(
+            static (values, logger, _) =>
+            {
+                int password1 = GetPassword(values, useMethod0x434C49434B: false);
+                int password2 = GetPassword(values, useMethod0x434C49434B: true);
 
-        var values = await ReadResourceAsLinesAsync(cancellationToken);
+                if (logger is { })
+                {
+                    logger.WriteLine("The password to open the door is {0}.", password1);
+                    logger.WriteLine("The password to open the door using method 0x434C49434B is {0}.", password2);
+                }
 
-        Password1 = GetPassword(values, useMethod0x434C49434B: false);
-        Password2 = GetPassword(values, useMethod0x434C49434B: true);
-
-        if (Verbose)
-        {
-            Logger.WriteLine("The password to open the door is {0}", Password1);
-            Logger.WriteLine("The password to open the door using method 0x434C49434B is {0}", Password2);
-        }
-
-        return PuzzleResult.Create(Password1, Password2);
+                return (password1, password2);
+            },
+            cancellationToken);
     }
 }

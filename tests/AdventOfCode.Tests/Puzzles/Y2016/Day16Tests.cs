@@ -29,6 +29,6 @@ public sealed class Day16Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         var puzzle = await SolvePuzzleAsync<Day16>(args);
 
         // Assert
-        puzzle.Checksum.ShouldBe(expected);
+        puzzle.Solution.ShouldBe(expected);
     }
 }

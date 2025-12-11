@@ -174,8 +174,7 @@ public sealed class Day10Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         var puzzle = await SolvePuzzleAsync<Day10>();
 
         // Assert
-        puzzle.ShouldNotBeNull();
-        puzzle.SumOfSignalStrengths.ShouldBe(12740);
-        puzzle.Message.ShouldBe("RBPARAGF");
+        puzzle.Solution1.ShouldBe(12740);
+        puzzle.Solution2.ShouldBe("RBPARAGF");
     }
 }

@@ -38,7 +38,7 @@ public sealed class Day08Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         var puzzle = await SolvePuzzleAsync<Day08>();
 
         // Assert
-        puzzle.Accumulator.ShouldBe(1137);
-        puzzle.AccumulatorWithFix.ShouldBe(1125);
+        puzzle.Solution1.ShouldBe(1137);
+        puzzle.Solution2.ShouldBe(1125);
     }
 }

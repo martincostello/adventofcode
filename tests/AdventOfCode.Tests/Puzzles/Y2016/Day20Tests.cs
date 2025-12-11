@@ -24,7 +24,7 @@ public sealed class Day20Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         var puzzle = await SolvePuzzleAsync<Day20>();
 
         // Assert
-        puzzle.LowestNonblockedIP.ShouldBe(22887907u);
-        puzzle.AllowedIPCount.ShouldBe(109u);
+        puzzle.Solution1.ShouldBe(22887907u);
+        puzzle.Solution2.ShouldBe(109u);
     }
 }

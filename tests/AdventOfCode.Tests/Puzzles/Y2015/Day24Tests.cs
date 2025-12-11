@@ -29,7 +29,7 @@ public sealed class Day24Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         var puzzle = await SolvePuzzleAsync<Day24>();
 
         // Assert
-        puzzle.QuantumEntanglementFor3.ShouldBe(11266889531);
-        puzzle.QuantumEntanglementFor4.ShouldBe(77387711);
+        puzzle.Solution1.ShouldBe(11266889531);
+        puzzle.Solution2.ShouldBe(77387711);
     }
 }

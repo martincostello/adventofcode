@@ -41,8 +41,7 @@ public sealed class Day08Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         var puzzle = await SolvePuzzleAsync<Day08>();
 
         // Assert
-        puzzle.ShouldNotBeNull();
-        puzzle.UniqueAntinodes.ShouldBe(308);
-        puzzle.UniqueAntinodesWithResonance.ShouldBe(1147);
+        puzzle.Solution1.ShouldBe(308);
+        puzzle.Solution2.ShouldBe(1147);
     }
 }

@@ -7,18 +7,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016;
 /// A class representing the puzzle for <c>https://adventofcode.com/2016/day/9</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2016, 09, "Explosives in Cyberspace", RequiresData = true)]
-public sealed class Day09 : Puzzle
+public sealed class Day09 : Puzzle<long, long>
 {
-    /// <summary>
-    /// Gets the decompressed length of the data using version 1 of the decompression algorithm.
-    /// </summary>
-    public long DecompressedLengthVersion1 { get; private set; }
-
-    /// <summary>
-    /// Gets the decompressed length of the data using version 2 of the decompression algorithm.
-    /// </summary>
-    public long DecompressedLengthVersion2 { get; private set; }
-
     /// <summary>
     /// Decompresses the specified data and returns the length of the decompressed data.
     /// </summary>
@@ -33,18 +23,21 @@ public sealed class Day09 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        string data = await ReadResourceAsStringAsync(cancellationToken);
+        return await SolveWithStringAsync(
+            static (data, logger, _) =>
+            {
+                long decompressedLengthVersion1 = GetDecompressedLength(data, version: 1);
+                long decompressedLengthVersion2 = GetDecompressedLength(data, version: 2);
 
-        DecompressedLengthVersion1 = GetDecompressedLength(data, version: 1);
-        DecompressedLengthVersion2 = GetDecompressedLength(data, version: 2);
+                if (logger is { })
+                {
+                    logger.WriteLine($"The decompressed length of the data using version 1 of the algorithm is {decompressedLengthVersion1:N0}.");
+                    logger.WriteLine($"The decompressed length of the data using version 2 of the algorithm is {decompressedLengthVersion2:N0}.");
+                }
 
-        if (Verbose)
-        {
-            Logger.WriteLine($"The decompressed length of the data using version 1 of the algorithm is {DecompressedLengthVersion1:N0}.");
-            Logger.WriteLine($"The decompressed length of the data using version 2 of the algorithm is {DecompressedLengthVersion2:N0}.");
-        }
-
-        return PuzzleResult.Create(DecompressedLengthVersion1, DecompressedLengthVersion2);
+                return (decompressedLengthVersion1, decompressedLengthVersion2);
+            },
+            cancellationToken);
     }
 
     /// <summary>

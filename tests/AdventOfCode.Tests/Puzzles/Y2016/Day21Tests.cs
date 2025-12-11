@@ -68,6 +68,6 @@ public sealed class Day21Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         var puzzle = await SolvePuzzleAsync<Day21>(args);
 
         // Assert
-        puzzle.ScrambledResult.ShouldBe(expected);
+        puzzle.Solution.ShouldBe(expected);
     }
 }

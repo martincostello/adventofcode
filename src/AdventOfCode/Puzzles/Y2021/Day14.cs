@@ -7,22 +7,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2021;
 /// A class representing the puzzle for <c>https://adventofcode.com/2021/day/14</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2021, 14, "Extended Polymerization", RequiresData = true)]
-public sealed class Day14 : Puzzle
+public sealed class Day14 : Puzzle<long, long>
 {
-    /// <summary>
-    /// Gets the "score" of the polymer after being expanded 10 times,
-    /// which is the quantity of the most common element subtracted by
-    /// the quantity of the least common element.
-    /// </summary>
-    public long Score10 { get; private set; }
-
-    /// <summary>
-    /// Gets the "score" of the polymer after being expanded 40 times,
-    /// which is the quantity of the most common element subtracted by
-    /// the quantity of the least common element.
-    /// </summary>
-    public long Score40 { get; private set; }
-
     /// <summary>
     /// Expands the polymer template as specified by the instructions.
     /// </summary>
@@ -90,17 +76,20 @@ public sealed class Day14 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        var instructions = await ReadResourceAsLinesAsync(cancellationToken);
+        return await SolveWithLinesAsync(
+            static (instructions, logger, _) =>
+            {
+                long score10 = Expand(instructions, steps: 10);
+                long score40 = Expand(instructions, steps: 40);
 
-        Score10 = Expand(instructions, steps: 10);
-        Score40 = Expand(instructions, steps: 40);
+                if (logger is { })
+                {
+                    logger.WriteLine("The \"score\" of the polymer after 10 steps of expansion is {0:N0}.", score10);
+                    logger.WriteLine("The \"score\" of the polymer after 40 steps of expansion is {0:N0}.", score40);
+                }
 
-        if (Verbose)
-        {
-            Logger.WriteLine("The \"score\" of the polymer after 10 steps of expansion is {0:N0}.", Score10);
-            Logger.WriteLine("The \"score\" of the polymer after 40 steps of expansion is {0:N0}.", Score40);
-        }
-
-        return PuzzleResult.Create(Score10, Score40);
+                return (score10, score40);
+            },
+            cancellationToken);
     }
 }

@@ -38,8 +38,7 @@ public sealed class Day03Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         var puzzle = await SolvePuzzleAsync<Day03>();
 
         // Assert
-        puzzle.ShouldNotBeNull();
-        puzzle.SumOfPartNumbers.ShouldBe(535351);
-        puzzle.SumOfGearRatios.ShouldBe(87287096);
+        puzzle.Solution1.ShouldBe(535351);
+        puzzle.Solution2.ShouldBe(87287096);
     }
 }

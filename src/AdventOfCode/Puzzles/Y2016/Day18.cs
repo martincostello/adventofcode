@@ -7,18 +7,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016;
 /// A class representing the puzzle for <c>https://adventofcode.com/2016/day/18</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2016, 18, "Like a Rogue", RequiresData = true, IsSlow = true)]
-public sealed class Day18 : Puzzle
+public sealed class Day18 : Puzzle<int, int>
 {
-    /// <summary>
-    /// Gets the number of safe tiles in the puzzle input for 40 rows.
-    /// </summary>
-    public int SafeTileCount40 { get; private set; }
-
-    /// <summary>
-    /// Gets the number of safe tiles in the puzzle input for 400,000 rows.
-    /// </summary>
-    public int SafeTileCount400000 { get; private set; }
-
     /// <summary>
     /// Finds the number of safe tiles from the specified map.
     /// </summary>
@@ -31,7 +21,7 @@ public sealed class Day18 : Puzzle
     internal static (int SafeTileCount, string Visualization) FindSafeTileCount(
         string firstRowTiles,
         int rows,
-        ILogger logger)
+        ILogger? logger)
     {
         int width = firstRowTiles.Length;
 
@@ -63,7 +53,7 @@ public sealed class Day18 : Puzzle
 
         string visualization = string.Empty;
 
-        if (rows <= 75)
+        if (rows <= 75 && logger is { })
         {
             visualization = logger.WriteGrid(tiles, '.', '^');
         }
@@ -74,21 +64,26 @@ public sealed class Day18 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        string firstRowTiles = (await ReadResourceAsStringAsync(cancellationToken)).TrimEnd();
+        string visualization = string.Empty;
 
-        (SafeTileCount40, string visualization) = FindSafeTileCount(firstRowTiles, rows: 40, Logger);
-        (SafeTileCount400000, _) = FindSafeTileCount(firstRowTiles, rows: 400_000, Logger);
+        var result = await SolveWithStringAsync(
+            (value, logger) =>
+            {
+                string firstRowTiles = value.TrimEnd();
 
-        if (Verbose)
-        {
-            Logger.WriteLine($"The number of safe tiles with 40 rows is {SafeTileCount40:N0}.");
-            Logger.WriteLine($"The number of safe tiles with 400,000 rows is {SafeTileCount400000:N0}.");
-        }
+                (int safeTileCount40, visualization) = FindSafeTileCount(firstRowTiles, rows: 40, logger);
+                (int safeTileCount400000, _) = FindSafeTileCount(firstRowTiles, rows: 400_000, logger);
 
-        var result = new PuzzleResult();
+                if (logger is { })
+                {
+                    logger.WriteLine($"The number of safe tiles with 40 rows is {safeTileCount40:N0}.");
+                    logger.WriteLine($"The number of safe tiles with 400,000 rows is {safeTileCount400000:N0}.");
+                }
 
-        result.Solutions.Add(SafeTileCount40);
-        result.Solutions.Add(SafeTileCount400000);
+                return (safeTileCount40, safeTileCount400000);
+            },
+            cancellationToken);
+
         result.Visualizations.Add(visualization);
 
         return result;

@@ -7,18 +7,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017;
 /// A class representing the puzzle for <c>https://adventofcode.com/2017/day/9</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2017, 09, "Stream Processing", RequiresData = true)]
-public sealed class Day09 : Puzzle
+public sealed class Day09 : Puzzle<int, int>
 {
-    /// <summary>
-    /// Gets the total score for all groups in the stream.
-    /// </summary>
-    public int TotalScore { get; private set; }
-
-    /// <summary>
-    /// Gets the number of garbage characters in the stream.
-    /// </summary>
-    public int GarbageCount { get; private set; }
-
     /// <summary>
     /// Computes the total score for all the groups in the specified stream.
     /// </summary>
@@ -101,16 +91,21 @@ public sealed class Day09 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        string stream = (await ReadResourceAsStringAsync(cancellationToken)).Trim();
+        return await SolveWithStringAsync(
+            static (stream, logger, _) =>
+            {
+                stream = stream.Trim();
 
-        (TotalScore, GarbageCount) = ParseStream(stream);
+                (int totalScore, int garbageCount) = ParseStream(stream);
 
-        if (Verbose)
-        {
-            Logger.WriteLine($"The total score for all the groups is {TotalScore:N0}.");
-            Logger.WriteLine($"There are {GarbageCount:N0} non-canceled characters within the garbage.");
-        }
+                if (logger is { })
+                {
+                    logger.WriteLine($"The total score for all the groups is {totalScore:N0}.");
+                    logger.WriteLine($"There are {garbageCount:N0} non-canceled characters within the garbage.");
+                }
 
-        return PuzzleResult.Create(TotalScore, GarbageCount);
+                return (totalScore, garbageCount);
+            },
+            cancellationToken);
     }
 }

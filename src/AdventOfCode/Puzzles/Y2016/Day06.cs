@@ -7,18 +7,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016;
 /// A class representing the puzzle for <c>https://adventofcode.com/2016/day/6</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2016, 06, "Signals and Noise", RequiresData = true)]
-public sealed class Day06 : Puzzle
+public sealed class Day06 : Puzzle<string, string>
 {
-    /// <summary>
-    /// Gets the error corrected message.
-    /// </summary>
-    public string? ErrorCorrectedMessage { get; private set; }
-
-    /// <summary>
-    /// Gets the error corrected message when a modified repetition code is used.
-    /// </summary>
-    public string? ModifiedErrorCorrectedMessage { get; private set; }
-
     /// <summary>
     /// Decrypts the specified message using a repetition code.
     /// </summary>
@@ -55,17 +45,20 @@ public sealed class Day06 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        var messages = await ReadResourceAsLinesAsync(cancellationToken);
+        return await SolveWithLinesAsync(
+            static (messages, logger, _) =>
+            {
+                string errorCorrectedMessage = DecryptMessage(messages, leastLikely: false);
+                string modifiedErrorCorrectedMessage = DecryptMessage(messages, leastLikely: true);
 
-        ErrorCorrectedMessage = DecryptMessage(messages, leastLikely: false);
-        ModifiedErrorCorrectedMessage = DecryptMessage(messages, leastLikely: true);
+                if (logger is { })
+                {
+                    logger.WriteLine($"The error-corrected message using the most likely letters is: {errorCorrectedMessage}.");
+                    logger.WriteLine($"The error-corrected message using the least likely letters is: {modifiedErrorCorrectedMessage}.");
+                }
 
-        if (Verbose)
-        {
-            Logger.WriteLine($"The error-corrected message using the most likely letters is: {ErrorCorrectedMessage}.");
-            Logger.WriteLine($"The error-corrected message using the least likely letters is: {ModifiedErrorCorrectedMessage}.");
-        }
-
-        return PuzzleResult.Create(ErrorCorrectedMessage, ModifiedErrorCorrectedMessage);
+                return (errorCorrectedMessage, modifiedErrorCorrectedMessage);
+            },
+            cancellationToken);
     }
 }

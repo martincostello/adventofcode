@@ -7,13 +7,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2024;
 /// A class representing the puzzle for <c>https://adventofcode.com/2024/day/9</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2024, 09, "Disk Fragmenter", RequiresData = true)]
-public sealed class Day09 : Puzzle
+public sealed class Day09 : Puzzle<long>
 {
-    /// <summary>
-    /// Gets the checksum of the defragmented disk.
-    /// </summary>
-    public long Checksum { get; private set; }
-
     /// <summary>
     /// Defragments the specified disk.
     /// </summary>
@@ -97,17 +92,18 @@ public sealed class Day09 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        ArgumentNullException.ThrowIfNull(args);
+        return await SolveWithStringAsync(
+            static async (map, logger, _) =>
+            {
+                long checksum = Defragment(map);
 
-        string map = await ReadResourceAsStringAsync(cancellationToken);
+                if (logger is { })
+                {
+                    logger.WriteLine("The filesystem checksum is {0}.", checksum);
+                }
 
-        Checksum = Defragment(map);
-
-        if (Verbose)
-        {
-            Logger.WriteLine("The filesystem checksum is {0}.", Checksum);
-        }
-
-        return PuzzleResult.Create(Checksum);
+                return checksum;
+            },
+            cancellationToken);
     }
 }

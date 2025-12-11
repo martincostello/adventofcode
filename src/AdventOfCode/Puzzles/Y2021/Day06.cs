@@ -7,18 +7,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2021;
 /// A class representing the puzzle for <c>https://adventofcode.com/2021/day/6</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2021, 06, "Lanternfish", RequiresData = true)]
-public sealed class Day06 : Puzzle
+public sealed class Day06 : Puzzle<long, long>
 {
-    /// <summary>
-    /// Gets the number of lantern fish present after 80 days.
-    /// </summary>
-    public long FishCount80 { get; private set; }
-
-    /// <summary>
-    /// Gets the number of lantern fish present after 256 days.
-    /// </summary>
-    public long FishCount256 { get; private set; }
-
     /// <summary>
     /// Counts the number of fish present after the specified number of days.
     /// </summary>
@@ -79,17 +69,22 @@ public sealed class Day06 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        var fish = (await ReadResourceAsStringAsync(cancellationToken)).AsNumbers<int>();
+        return await SolveWithStringAsync(
+            static (data, logger) =>
+            {
+                var fish = data.AsNumbers<int>();
 
-        FishCount80 = CountFish(fish, days: 80);
-        FishCount256 = CountFish(fish, days: 256);
+                long fishCount80 = CountFish(fish, days: 80);
+                long fishCount256 = CountFish(fish, days: 256);
 
-        if (Verbose)
-        {
-            Logger.WriteLine("There are {0:N0} lanternfish after 80 days.", FishCount80);
-            Logger.WriteLine("There are {0:N0} lanternfish after 256 days.", FishCount256);
-        }
+                if (logger is { })
+                {
+                    logger.WriteLine("There are {0:N0} lanternfish after 80 days.", fishCount80);
+                    logger.WriteLine("There are {0:N0} lanternfish after 256 days.", fishCount256);
+                }
 
-        return PuzzleResult.Create(FishCount80, FishCount256);
+                return (fishCount80, fishCount256);
+            },
+            cancellationToken);
     }
 }

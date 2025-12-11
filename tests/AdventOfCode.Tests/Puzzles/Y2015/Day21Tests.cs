@@ -24,7 +24,7 @@ public sealed class Day21Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         var puzzle = await SolvePuzzleAsync<Day21>();
 
         // Assert
-        puzzle.MaximumCostToLose.ShouldBe(148);
-        puzzle.MinimumCostToWin.ShouldBe(78);
+        puzzle.Solution1.ShouldBe(148);
+        puzzle.Solution2.ShouldBe(78);
     }
 }

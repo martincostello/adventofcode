@@ -12,7 +12,7 @@ public sealed class Day16Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         var puzzle = await SolvePuzzleAsync<Day16>();
 
         // Assert
-        puzzle.AuntSueNumber.ShouldBe(373);
-        puzzle.RealAuntSueNumber.ShouldBe(260);
+        puzzle.Solution1.ShouldBe(373);
+        puzzle.Solution2.ShouldBe(260);
     }
 }

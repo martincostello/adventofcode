@@ -7,21 +7,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2021;
 /// A class representing the puzzle for <c>https://adventofcode.com/2021/day/21</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2021, 21, "Dirac Dice", RequiresData = true, IsSlow = true)]
-public sealed class Day21 : Puzzle
+public sealed class Day21 : Puzzle<int, long>
 {
-    /// <summary>
-    /// Gets the product of the score of the losing player and
-    /// the number of times the die was rolled during the game
-    /// for the practice game with the deterministic die.
-    /// </summary>
-    public int PracticeOutcome { get; private set; }
-
-    /// <summary>
-    /// Gets the number of universes in which the winning
-    /// player wins for the real game using the Dirac die.
-    /// </summary>
-    public long WinningUniverses { get; private set; }
-
     /// <summary>
     /// Plays a practice game of Dirac Dice.
     /// </summary>
@@ -170,23 +157,26 @@ public sealed class Day21 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        var players = await ReadResourceAsLinesAsync(cancellationToken);
+        return await SolveWithLinesAsync(
+            static (players, logger, _) =>
+            {
+                int practiceOutcome = PlayPractice(players);
+                long winningUniverses = Play(players);
 
-        PracticeOutcome = PlayPractice(players);
-        WinningUniverses = Play(players);
+                if (logger is { })
+                {
+                    logger.WriteLine(
+                        "The product of the score of the losing player and the number of times the die was rolled during the game is {0:N0}.",
+                        practiceOutcome);
 
-        if (Verbose)
-        {
-            Logger.WriteLine(
-                "The product of the score of the losing player and the number of times the die was rolled during the game is {0:N0}.",
-                PracticeOutcome);
+                    logger.WriteLine(
+                        "The winning player wins in {0:N0} universes during the real game.",
+                        winningUniverses);
+                }
 
-            Logger.WriteLine(
-                "The winning player wins in {0:N0} universes during the real game.",
-                WinningUniverses);
-        }
-
-        return PuzzleResult.Create(PracticeOutcome, WinningUniverses);
+                return (practiceOutcome, winningUniverses);
+            },
+            cancellationToken);
     }
 
     private static Player Move(Player player, int roll)

@@ -7,7 +7,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017;
 /// A class representing the puzzle for <c>https://adventofcode.com/2017/day/11</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2017, 11, "Hex Ed", RequiresData = true)]
-public sealed class Day11 : Puzzle
+public sealed class Day11 : Puzzle<int, int>
 {
     /// <summary>
     /// A move north. This field is read-only.
@@ -38,16 +38,6 @@ public sealed class Day11 : Puzzle
     /// A move south-west. This field is read-only.
     /// </summary>
     private static readonly Vector2 SouthWest = -Vector2.UnitY + -Vector2.UnitX;
-
-    /// <summary>
-    /// Gets the maximum distance the child process reached from its origin.
-    /// </summary>
-    public int MaximumDistance { get; private set; }
-
-    /// <summary>
-    /// Gets the minimum number of steps required to reach the child process.
-    /// </summary>
-    public int MinimumSteps { get; private set; }
 
     /// <summary>
     /// Finds the minimum number of steps required to traverse the specified path and
@@ -84,17 +74,20 @@ public sealed class Day11 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        string path = (await ReadResourceAsStringAsync(cancellationToken)).Trim();
+        return await SolveWithStringAsync(
+            static (path, logger) =>
+            {
+                (int maximumDistance, int minimumSteps) = FindStepRange(path.Trim());
 
-        (MinimumSteps, MaximumDistance) = FindStepRange(path);
+                if (logger is { })
+                {
+                    logger.WriteLine($"The minimum number of steps required to reach the child process is {maximumDistance:N0}.");
+                    logger.WriteLine($"The maximum distance reached by the child process was {minimumSteps:N0}.");
+                }
 
-        if (Verbose)
-        {
-            Logger.WriteLine($"The minimum number of steps required to reach the child process is {MinimumSteps:N0}.");
-            Logger.WriteLine($"The maximum distance reached by the child process was {MaximumDistance:N0}.");
-        }
-
-        return PuzzleResult.Create(MinimumSteps, MaximumDistance);
+                return (maximumDistance, minimumSteps);
+            },
+            cancellationToken);
     }
 
     /// <summary>

@@ -9,18 +9,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2021;
 /// A class representing the puzzle for <c>https://adventofcode.com/2021/day/18</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2021, 18, "Snailfish", RequiresData = true, IsSlow = true)]
-public sealed class Day18 : Puzzle
+public sealed class Day18 : Puzzle<int, int>
 {
-    /// <summary>
-    /// Gets the magnitude of the sum of the snail numbers.
-    /// </summary>
-    public int MagnitudeOfSum { get; private set; }
-
-    /// <summary>
-    /// Gets the largest magnitude of the sum of any two of the snail numbers.
-    /// </summary>
-    public int LargestSumMagnitude { get; private set; }
-
     /// <summary>
     /// Calculates the sum of the specified snail numbers.
     /// </summary>
@@ -111,17 +101,20 @@ public sealed class Day18 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        var numbers = await ReadResourceAsLinesAsync(cancellationToken);
+        return await SolveWithLinesAsync(
+            static (numbers, logger, _) =>
+            {
+                (int magnitudeOfSum, int largestSumMagnitude) = Sum(numbers);
 
-        (MagnitudeOfSum, LargestSumMagnitude) = Sum(numbers);
+                if (logger is { })
+                {
+                    logger.WriteLine("The magnitude of the final sum is {0:N0}.", magnitudeOfSum);
+                    logger.WriteLine("The largest magnitude of any sum of two numbers is {0:N0}.", largestSumMagnitude);
+                }
 
-        if (Verbose)
-        {
-            Logger.WriteLine("The magnitude of the final sum is {0:N0}.", MagnitudeOfSum);
-            Logger.WriteLine("The largest magnitude of any sum of two numbers is {0:N0}.", LargestSumMagnitude);
-        }
-
-        return PuzzleResult.Create(MagnitudeOfSum, LargestSumMagnitude);
+                return (magnitudeOfSum, largestSumMagnitude);
+            },
+            cancellationToken);
     }
 
     private static List<SnailPair> ParseRaw(IList<string> numbers)

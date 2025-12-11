@@ -55,8 +55,7 @@ public sealed class Day18Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         var puzzle = await SolvePuzzleAsync<Day18>();
 
         // Assert
-        puzzle.ShouldNotBeNull();
-        puzzle.MinimumSteps.ShouldBe(308);
-        puzzle.BlockingByte.ShouldBe("46,28");
+        puzzle.Solution1.ShouldBe(308);
+        puzzle.Solution2.ShouldBe("46,28");
     }
 }

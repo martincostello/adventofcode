@@ -7,7 +7,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2022;
 /// A class representing the puzzle for <c>https://adventofcode.com/2022/day/14</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2022, 14, "Regolith Reservoir", RequiresData = true)]
-public sealed class Day14 : Puzzle
+public sealed class Day14 : Puzzle<int, int>
 {
     private static readonly Size Down = Directions.Down;
     private static readonly Size Left = new(-1, 1);
@@ -20,18 +20,6 @@ public sealed class Day14 : Puzzle
         Sand,
         Floor,
     }
-
-    /// <summary>
-    /// Gets the number of grains of sand that come to rest
-    /// before sand starts flowing into the abyss below.
-    /// </summary>
-    public int GrainsOfSandWithVoid { get; private set; }
-
-    /// <summary>
-    /// Gets the number of grains of sand that come to rest
-    /// before the source of the sand becomes blocked.
-    /// </summary>
-    public int GrainsOfSandWithFloor { get; private set; }
 
     /// <summary>
     /// Simulates the flow of sand through the specified cave.
@@ -218,23 +206,19 @@ public sealed class Day14 : Puzzle
     {
         var paths = await ReadResourceAsLinesAsync(cancellationToken);
 
-        (GrainsOfSandWithVoid, string visualization1) = Simulate(paths, hasFloor: false, cancellationToken);
-        (GrainsOfSandWithFloor, string visualization2) = Simulate(paths, hasFloor: true, cancellationToken);
+        (Solution1, string visualization1) = Simulate(paths, hasFloor: false, cancellationToken);
+        (Solution2, string visualization2) = Simulate(paths, hasFloor: true, cancellationToken);
 
         if (Verbose)
         {
-            Logger.WriteLine("{0} grains of sand come to rest before sand starts flowing into the abyss below.", GrainsOfSandWithVoid);
+            Logger.WriteLine("{0} grains of sand come to rest before sand starts flowing into the abyss below.", Solution1);
             Logger.WriteLine(visualization1);
 
-            Logger.WriteLine("{0} grains of sand come to rest before sand blocks the source.", GrainsOfSandWithFloor);
+            Logger.WriteLine("{0} grains of sand come to rest before sand blocks the source.", Solution2);
             Logger.WriteLine(visualization2);
         }
 
-        var result = new PuzzleResult();
-
-        result.Solutions.Add(GrainsOfSandWithVoid);
-        result.Solutions.Add(GrainsOfSandWithFloor);
-
+        var result = Result();
         result.Visualizations.Add(visualization1);
         result.Visualizations.Add(visualization2);
 

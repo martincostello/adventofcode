@@ -51,7 +51,7 @@ public sealed class Day23Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         var puzzle = await SolvePuzzleAsync<Day23>("583976241");
 
         // Assert
-        puzzle.LabelsAfterCup1.ShouldBe("24987653");
-        puzzle.ProductOfLabelsAfterCup1.ShouldBe(442938711161L);
+        puzzle.Solution1.ShouldBe("24987653");
+        puzzle.Solution2.ShouldBe(442938711161);
     }
 }

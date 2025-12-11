@@ -7,18 +7,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2024;
 /// A class representing the puzzle for <c>https://adventofcode.com/2024/day/5</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2024, 05, "Print Queue", RequiresData = true)]
-public sealed class Day05 : Puzzle
+public sealed class Day05 : Puzzle<int, int>
 {
-    /// <summary>
-    /// Gets the sum of the middle page numbers for correctly-ordered updates.
-    /// </summary>
-    public int MiddlePageSumCorrect { get; private set; }
-
-    /// <summary>
-    /// Gets the sum of the middle page numbers for incorrectly-ordered updates once fixed.
-    /// </summary>
-    public int MiddlePageSumIncorrect { get; private set; }
-
     /// <summary>
     /// Sorts the rules and returns the sum of the middle page numbers for page updates.
     /// </summary>
@@ -76,15 +66,15 @@ public sealed class Day05 : Puzzle
 
         var values = await ReadResourceAsLinesAsync(cancellationToken);
 
-        MiddlePageSumCorrect = Sort(values, fix: false);
-        MiddlePageSumIncorrect = Sort(values, fix: true);
+        Solution1 = Sort(values, fix: false);
+        Solution2 = Sort(values, fix: true);
 
         if (Verbose)
         {
-            Logger.WriteLine("The sum of the middle page numbers from correctly-ordered updates is {0}.", MiddlePageSumCorrect);
-            Logger.WriteLine("The sum of the middle page numbers after correctly ordering incorrectly-ordered updates is {0}.", MiddlePageSumIncorrect);
+            Logger.WriteLine("The sum of the middle page numbers from correctly-ordered updates is {0}.", Solution1);
+            Logger.WriteLine("The sum of the middle page numbers after correctly ordering incorrectly-ordered updates is {0}.", Solution2);
         }
 
-        return PuzzleResult.Create(MiddlePageSumCorrect, MiddlePageSumIncorrect);
+        return Result();
     }
 }

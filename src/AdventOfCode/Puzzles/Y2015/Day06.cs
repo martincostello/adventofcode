@@ -7,51 +7,44 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015;
 /// A class representing the puzzle for <c>https://adventofcode.com/2015/day/6</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2015, 06, "Probably a Fire Hazard", RequiresData = true, IsSlow = true)]
-public sealed class Day06 : Puzzle
+public sealed class Day06 : Puzzle<int, int>
 {
-    /// <summary>
-    /// Gets the number of lights illuminated using the version 1 parser.
-    /// </summary>
-    public int LightsIlluminated { get; private set; }
-
-    /// <summary>
-    /// Gets the total brightness of the grid using the version 2 parser.
-    /// </summary>
-    public int TotalBrightness { get; private set; }
-
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        var lines = await ReadResourceAsLinesAsync(cancellationToken);
+        return await SolveWithLinesAsync(
+            static (lines, logger, _) =>
+            {
+                var instructionsV1 = lines.Select(InstructionV1.Parse).ToArray();
+                var instructionsV2 = lines.Select(InstructionV2.Parse).ToArray();
 
-        var instructionsV1 = lines.Select(InstructionV1.Parse).ToArray();
-        var instructionsV2 = lines.Select(InstructionV2.Parse).ToArray();
+                const int Length = 1_000;
 
-        const int Length = 1_000;
+                var gridV1 = new LightGrid(Length, Length);
+                var gridV2 = new LightGrid(Length, Length);
 
-        var gridV1 = new LightGrid(Length, Length);
-        var gridV2 = new LightGrid(Length, Length);
+                foreach (var instruction in instructionsV1)
+                {
+                    instruction.Act(gridV1);
+                }
 
-        foreach (var instruction in instructionsV1)
-        {
-            instruction.Act(gridV1);
-        }
+                foreach (var instruction in instructionsV2)
+                {
+                    instruction.Act(gridV2);
+                }
 
-        foreach (var instruction in instructionsV2)
-        {
-            instruction.Act(gridV2);
-        }
+                int lightsIlluminated = gridV1.Count;
+                int totalBrightness = gridV2.Brightness;
 
-        LightsIlluminated = gridV1.Count;
-        TotalBrightness = gridV2.Brightness;
+                if (logger is { })
+                {
+                    logger.WriteLine("{0:N0} lights are illuminated with the version 1 grid.", lightsIlluminated);
+                    logger.WriteLine("The total brightness of the version 2 grid is {0:N0}.", totalBrightness);
+                }
 
-        if (Verbose)
-        {
-            Logger.WriteLine("{0:N0} lights are illuminated with the version 1 grid.", LightsIlluminated);
-            Logger.WriteLine("The total brightness of the version 2 grid is {0:N0}.", TotalBrightness);
-        }
-
-        return PuzzleResult.Create(LightsIlluminated, TotalBrightness);
+                return (lightsIlluminated, totalBrightness);
+            },
+            cancellationToken);
     }
 
     /// <summary>

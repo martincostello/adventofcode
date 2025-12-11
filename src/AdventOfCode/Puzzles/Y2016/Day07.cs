@@ -7,18 +7,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016;
 /// A class representing the puzzle for <c>https://adventofcode.com/2016/day/4</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2016, 07, "Internet Protocol Version 7", RequiresData = true)]
-public sealed class Day07 : Puzzle
+public sealed class Day07 : Puzzle<int, int>
 {
-    /// <summary>
-    /// Gets the number of IPv7 addresses that support SSL.
-    /// </summary>
-    public int IPAddressesSupportingSsl { get; private set; }
-
-    /// <summary>
-    /// Gets the number of IPv7 addresses that support TLS.
-    /// </summary>
-    public int IPAddressesSupportingTls { get; private set; }
-
     /// <summary>
     /// Returns whether the specified IPv7 address supports SSL.
     /// </summary>
@@ -78,18 +68,21 @@ public sealed class Day07 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        var addresses = await ReadResourceAsLinesAsync(cancellationToken);
+        return await SolveWithLinesAsync(
+            static (addresses, logger, _) =>
+            {
+                int ipAddressesSupportingSsl = addresses.Count(DoesIPAddressSupportTls);
+                int ipAddressesSupportingTls = addresses.Count(DoesIPAddressSupportSsl);
 
-        IPAddressesSupportingTls = addresses.Count(DoesIPAddressSupportTls);
-        IPAddressesSupportingSsl = addresses.Count(DoesIPAddressSupportSsl);
+                if (logger is { })
+                {
+                    logger.WriteLine("{0:N0} IPv7 addresses support TLS.", ipAddressesSupportingSsl);
+                    logger.WriteLine("{0:N0} IPv7 addresses support SSL.", ipAddressesSupportingTls);
+                }
 
-        if (Verbose)
-        {
-            Logger.WriteLine("{0:N0} IPv7 addresses support TLS.", IPAddressesSupportingTls);
-            Logger.WriteLine("{0:N0} IPv7 addresses support SSL.", IPAddressesSupportingSsl);
-        }
-
-        return PuzzleResult.Create(IPAddressesSupportingTls, IPAddressesSupportingSsl);
+                return (ipAddressesSupportingSsl, ipAddressesSupportingTls);
+            },
+            cancellationToken);
     }
 
     /// <summary>

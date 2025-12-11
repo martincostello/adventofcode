@@ -33,8 +33,7 @@ public sealed class Day12Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         var puzzle = await SolvePuzzleAsync<Day12>();
 
         // Assert
-        puzzle.ShouldNotBeNull();
-        puzzle.MinimumStepsFromStart.ShouldBe(408);
-        puzzle.MinimumStepsFromGroundLevel.ShouldBe(399);
+        puzzle.Solution1.ShouldBe(408);
+        puzzle.Solution2.ShouldBe(399);
     }
 }

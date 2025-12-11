@@ -7,18 +7,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016;
 /// A class representing the puzzle for <c>https://adventofcode.com/2016/day/20</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2016, 20, "Firewall Rules", RequiresData = true)]
-public sealed class Day20 : Puzzle
+public sealed class Day20 : Puzzle<uint, uint>
 {
-    /// <summary>
-    /// Gets the number of IP addresses that are not blocked.
-    /// </summary>
-    public uint AllowedIPCount { get; private set; }
-
-    /// <summary>
-    /// Gets the value of the lowest IP address that is not blocked.
-    /// </summary>
-    public uint LowestNonblockedIP { get; private set; }
-
     /// <summary>
     /// Returns the value of the lowest IP address that is not
     /// blocked by the specified IP address range deny-list.
@@ -115,17 +105,20 @@ public sealed class Day20 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        var ranges = await ReadResourceAsLinesAsync(cancellationToken);
+        return await SolveWithLinesAsync(
+            static (ranges, logger, _) =>
+            {
+                uint allowedIPCount = GetLowestNonblockedIP(uint.MaxValue, ranges, out uint count);
+                uint lowestNonblockedIP = count;
 
-        LowestNonblockedIP = GetLowestNonblockedIP(uint.MaxValue, ranges, out uint count);
-        AllowedIPCount = count;
+                if (logger is { })
+                {
+                    logger.WriteLine($"The lowest-valued IP that is not blocked is {allowedIPCount}.");
+                    logger.WriteLine($"The number of IP addresses allowed is {lowestNonblockedIP:N0}.");
+                }
 
-        if (Verbose)
-        {
-            Logger.WriteLine($"The lowest-valued IP that is not blocked is {LowestNonblockedIP}.");
-            Logger.WriteLine($"The number of IP addresses allowed is {AllowedIPCount:N0}.");
-        }
-
-        return PuzzleResult.Create(LowestNonblockedIP, AllowedIPCount);
+                return (allowedIPCount, lowestNonblockedIP);
+            },
+            cancellationToken);
     }
 }

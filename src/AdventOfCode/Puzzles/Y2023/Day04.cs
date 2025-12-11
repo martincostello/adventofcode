@@ -7,18 +7,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2023;
 /// A class representing the puzzle for <c>https://adventofcode.com/2023/day/04</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2023, 04, "Scratchcards", RequiresData = true)]
-public sealed class Day04 : Puzzle
+public sealed class Day04 : Puzzle<int, int>
 {
-    /// <summary>
-    /// Gets the total number of points the scratchcards are worth.
-    /// </summary>
-    public int TotalPoints { get; private set; }
-
-    /// <summary>
-    /// Gets the total number scratchcards in your possession.
-    /// </summary>
-    public int TotalScratchcards { get; private set; }
-
     /// <summary>
     /// Gets the total number of points the specified scratchcards are worth.
     /// </summary>
@@ -92,14 +82,14 @@ public sealed class Day04 : Puzzle
 
         var scratchcards = await ReadResourceAsLinesAsync(cancellationToken);
 
-        (TotalPoints, TotalScratchcards) = Score(scratchcards);
+        (Solution1, Solution2) = Score(scratchcards);
 
         if (Verbose)
         {
-            Logger.WriteLine("The scratchcards are worth {0} points in total.", TotalPoints);
-            Logger.WriteLine("The total number of scratchcards in the end is {0}.", TotalScratchcards);
+            Logger.WriteLine("The scratchcards are worth {0} points in total.", Solution1);
+            Logger.WriteLine("The total number of scratchcards in the end is {0}.", Solution2);
         }
 
-        return PuzzleResult.Create(TotalPoints, TotalScratchcards);
+        return Result();
     }
 }

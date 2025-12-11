@@ -7,18 +7,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2025;
 /// A class representing the puzzle for <c>https://adventofcode.com/2025/day/3</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2025, 03, "Lobby", RequiresData = true)]
-public sealed class Day03 : Puzzle
+public sealed class Day03 : Puzzle<long, long>
 {
-    /// <summary>
-    /// Gets the total output joltage for two batteries.
-    /// </summary>
-    public long TotalOutputJoltageFor2 { get; private set; }
-
-    /// <summary>
-    /// Gets the total output joltage for twelve batteries.
-    /// </summary>
-    public long TotalOutputJoltageFor12 { get; private set; }
-
     /// <summary>
     /// Gets the sum of the maximum joltage produced by the specified battery banks.
     /// </summary>
@@ -90,19 +80,20 @@ public sealed class Day03 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        ArgumentNullException.ThrowIfNull(args);
+        return await SolveWithLinesAsync(
+            static (batteryBanks, logger, _) =>
+            {
+                long totalOutputJoltageFor2 = GetJoltage(batteryBanks, batteries: 2);
+                long totalOutputJoltageFor12 = GetJoltage(batteryBanks, batteries: 12);
 
-        var batteryBanks = await ReadResourceAsLinesAsync(cancellationToken);
+                if (logger is { })
+                {
+                    logger.WriteLine("The total output joltage for 2 batteries is {0}.", totalOutputJoltageFor2);
+                    logger.WriteLine("The total output joltage for 12 batteries is {0}.", totalOutputJoltageFor12);
+                }
 
-        TotalOutputJoltageFor2 = GetJoltage(batteryBanks, batteries: 2);
-        TotalOutputJoltageFor12 = GetJoltage(batteryBanks, batteries: 12);
-
-        if (Verbose)
-        {
-            Logger.WriteLine("The total output joltage for 2 batteries is {0}", TotalOutputJoltageFor2);
-            Logger.WriteLine("The total output joltage for 12 batteries is {0}", TotalOutputJoltageFor12);
-        }
-
-        return PuzzleResult.Create(TotalOutputJoltageFor2, TotalOutputJoltageFor12);
+                return (totalOutputJoltageFor2, totalOutputJoltageFor12);
+            },
+            cancellationToken);
     }
 }

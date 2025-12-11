@@ -7,13 +7,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2023;
 /// A class representing the puzzle for <c>https://adventofcode.com/2023/day/17</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2023, 17, "Clumsy Crucible", RequiresData = true, Unsolved = true)]
-public sealed class Day17 : Puzzle
+public sealed class Day17 : Puzzle<int>
 {
-    /// <summary>
-    /// Gets the minimum heat loss that can be incurred.
-    /// </summary>
-    public int MinimumHeatLoss { get; private set; }
-
     /// <summary>
     /// Finds the minimum heat loss that can be incurred moving the crucible.
     /// </summary>
@@ -56,18 +51,19 @@ public sealed class Day17 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        ArgumentNullException.ThrowIfNull(args);
+        return await SolveWithLinesAsync(
+            static (values, logger, cancellationToken) =>
+            {
+                int minimumHeatLoss = Solve(values);
 
-        var values = await ReadResourceAsLinesAsync(cancellationToken);
+                if (logger is { })
+                {
+                    logger.WriteLine("The minimum heat loss that can be incurred is {0}.", minimumHeatLoss);
+                }
 
-        MinimumHeatLoss = Solve(values);
-
-        if (Verbose)
-        {
-            Logger.WriteLine("The minimum heat loss that can be incurred is {0}.", MinimumHeatLoss);
-        }
-
-        return PuzzleResult.Create(MinimumHeatLoss);
+                return minimumHeatLoss;
+            },
+            cancellationToken);
     }
 
     private readonly record struct Move(Point Location, Size Direction, int Steps) : IEquatable<Move>

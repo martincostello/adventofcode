@@ -7,18 +7,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2023;
 /// A class representing the puzzle for <c>https://adventofcode.com/2023/day/22</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2023, 22, "Sand Slabs", RequiresData = true)]
-public sealed class Day22 : Puzzle
+public sealed class Day22 : Puzzle<int, int>
 {
-    /// <summary>
-    /// Gets the number of bricks that could be safely chosen to be disintegrated.
-    /// </summary>
-    public int SafeBricks { get; private set; }
-
-    /// <summary>
-    /// Gets the sum of the number of bricks that would fall when removing each unsafe brick.
-    /// </summary>
-    public int MaximumChainReaction { get; private set; }
-
     /// <summary>
     /// Determines the number of bricks that could be safely chosen to be disintegrated.
     /// </summary>
@@ -150,14 +140,14 @@ public sealed class Day22 : Puzzle
 
         var snapshot = await ReadResourceAsLinesAsync(cancellationToken);
 
-        (SafeBricks, MaximumChainReaction) = Disintegrate(snapshot);
+        (Solution1, Solution2) = Disintegrate(snapshot);
 
         if (Verbose)
         {
-            Logger.WriteLine("{0} bricks could be safely chosen as the one to get disintegrated.", SafeBricks);
-            Logger.WriteLine("The sum of the number of other bricks that would fall is {0}.", MaximumChainReaction);
+            Logger.WriteLine("{0} bricks could be safely chosen as the one to get disintegrated.", Solution1);
+            Logger.WriteLine("The sum of the number of other bricks that would fall is {0}.", Solution2);
         }
 
-        return PuzzleResult.Create(SafeBricks, MaximumChainReaction);
+        return Result();
     }
 }

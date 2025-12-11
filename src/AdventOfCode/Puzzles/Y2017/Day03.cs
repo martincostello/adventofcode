@@ -7,7 +7,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017;
 /// A class representing the puzzle for <c>https://adventofcode.com/2017/day/3</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2017, 03, "Spiral Memory", MinimumArguments = 1)]
-public sealed class Day03 : Puzzle
+public sealed class Day03 : Puzzle<int, int>
 {
     private static readonly Size Left = Directions.Left;
 
@@ -18,16 +18,6 @@ public sealed class Day03 : Puzzle
     private static readonly Size Down = Directions.Up;
 
     private static readonly Size[] Bounds = [Left, Down, Right];
-
-    /// <summary>
-    /// Gets the number steps that are required to carry the data from the input value to the access port.
-    /// </summary>
-    public int Steps { get; private set; }
-
-    /// <summary>
-    /// Gets the first value written that is larger than the input value.
-    /// </summary>
-    public int FirstStorageLargerThanInput { get; private set; }
 
     /// <summary>
     /// Computes how many steps are required to carry the data from the specified square identified all the way to the access port.
@@ -155,21 +145,21 @@ public sealed class Day03 : Puzzle
     }
 
     /// <inheritdoc />
-    protected override Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
+    protected override Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken) => SolveWithArgument(args, static (value, logger) =>
     {
-        int square = Parse<int>(args[0]);
+        int square = Parse<int>(value);
 
-        Steps = ComputeSteps(square);
-        FirstStorageLargerThanInput = ComputeFirstLargestWrittenValue(square);
+        int steps = ComputeSteps(square);
+        int firstStorageLargerThanInput = ComputeFirstLargestWrittenValue(square);
 
-        if (Verbose)
+        if (logger is { })
         {
-            Logger.WriteLine($"The number of steps required to carry the data from square {square:N0} all the way to the access port is {Steps:N0}.");
-            Logger.WriteLine($"The first value written that is larger than square {square:N0} is {FirstStorageLargerThanInput:N0}.");
+            logger.WriteLine($"The number of steps required to carry the data from square {square:N0} all the way to the access port is {steps:N0}.");
+            logger.WriteLine($"The first value written that is larger than square {square:N0} is {firstStorageLargerThanInput:N0}.");
         }
 
-        return PuzzleResult.Create(Steps, FirstStorageLargerThanInput);
-    }
+        return (steps, firstStorageLargerThanInput);
+    });
 
     /// <summary>
     /// Gets the length of the specified ring number.

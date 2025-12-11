@@ -25,6 +25,6 @@ public sealed class Day14Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         var puzzle = await SolvePuzzleAsync<Day14>("hwlqcszp");
 
         // Assert
-        puzzle.SquaresUsed.ShouldBe(8304);
+        puzzle.Solution.ShouldBe(8304);
     }
 }

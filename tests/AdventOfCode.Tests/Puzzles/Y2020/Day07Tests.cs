@@ -62,7 +62,7 @@ public sealed class Day07Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         var puzzle = await SolvePuzzleAsync<Day07>("shiny gold");
 
         // Assert
-        puzzle.BagColorsThatCanContainColor.ShouldBe(179);
-        puzzle.BagsInsideBag.ShouldBe(18925);
+        puzzle.Solution1.ShouldBe(179);
+        puzzle.Solution2.ShouldBe(18925);
     }
 }

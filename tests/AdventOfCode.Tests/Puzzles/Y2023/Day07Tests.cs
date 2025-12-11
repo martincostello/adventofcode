@@ -34,8 +34,7 @@ public sealed class Day07Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         var puzzle = await SolvePuzzleAsync<Day07>();
 
         // Assert
-        puzzle.ShouldNotBeNull();
-        puzzle.TotalWinnings.ShouldBe(249726565);
-        puzzle.TotalWinningsWithJokers.ShouldBe(251135960);
+        puzzle.Solution1.ShouldBe(249726565);
+        puzzle.Solution2.ShouldBe(251135960);
     }
 }

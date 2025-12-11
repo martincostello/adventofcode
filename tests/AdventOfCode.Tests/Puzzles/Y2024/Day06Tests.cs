@@ -40,8 +40,7 @@ public sealed class Day06Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         var puzzle = await SolvePuzzleAsync<Day06>();
 
         // Assert
-        puzzle.ShouldNotBeNull();
-        puzzle.DistinctPositions.ShouldBe(5453);
-        puzzle.DistinctObstructions.ShouldBe(2188);
+        puzzle.Solution1.ShouldBe(5453);
+        puzzle.Solution2.ShouldBe(2188);
     }
 }

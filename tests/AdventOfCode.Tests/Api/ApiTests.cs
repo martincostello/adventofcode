@@ -41,8 +41,7 @@ public class ApiTests(HttpServerFixture fixture, ITestOutputHelper outputHelper)
     [PuzzleData(2015, 19, 576, 207)]
     [PuzzleData(2015, 20, ["34000000"], 786240, 831600)]
     [PuzzleData(2015, 21, 148, 78)]
-    [PuzzleData(2015, 22, ["easy"], 953)]
-    [PuzzleData(2015, 22, ["hard"], 1289)]
+    [PuzzleData(2015, 22, ["_"], 953, 1289)]
     [PuzzleData(2015, 23, 1u, 170u)]
     [PuzzleData(2015, 23, ["1"], 1u, 247u, SendResource = true)]
     [TooSlowPuzzleData(2015, 24, 11266889531, 77387711)]
@@ -252,7 +251,7 @@ public class ApiTests(HttpServerFixture fixture, ITestOutputHelper outputHelper)
 
         using var content = new MultipartFormDataContent();
 
-        if (testCase.Arguments is not null)
+        if (testCase.Arguments is { Length: > 0 })
         {
             foreach (string argument in testCase.Arguments)
             {

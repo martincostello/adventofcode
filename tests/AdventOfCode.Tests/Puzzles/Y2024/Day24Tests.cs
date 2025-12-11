@@ -28,7 +28,6 @@ public sealed class Day24Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         var puzzle = await SolvePuzzleAsync<Day24>();
 
         // Assert
-        puzzle.ShouldNotBeNull();
-        puzzle.Solution.ShouldBe(-1);
+        puzzle.Solution.ShouldBe(Puzzle.Unsolved);
     }
 }

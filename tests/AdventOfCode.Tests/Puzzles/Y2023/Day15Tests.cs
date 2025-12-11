@@ -37,8 +37,7 @@ public sealed class Day15Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         var puzzle = await SolvePuzzleAsync<Day15>();
 
         // Assert
-        puzzle.ShouldNotBeNull();
-        puzzle.HashSum.ShouldBe(511215);
-        puzzle.FocusingPower.ShouldBe(236057);
+        puzzle.Solution1.ShouldBe(511215);
+        puzzle.Solution2.ShouldBe(236057);
     }
 }

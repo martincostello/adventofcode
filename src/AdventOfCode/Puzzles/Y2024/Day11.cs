@@ -7,18 +7,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2024;
 /// A class representing the puzzle for <c>https://adventofcode.com/2024/day/11</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2024, 11, "Plutonian Pebbles", RequiresData = true)]
-public sealed class Day11 : Puzzle
+public sealed class Day11 : Puzzle<long, long>
 {
-    /// <summary>
-    /// Gets the number of stones after 25 blinks.
-    /// </summary>
-    public long Count25 { get; private set; }
-
-    /// <summary>
-    /// Gets the number of stones after 75 blinks.
-    /// </summary>
-    public long Count75 { get; private set; }
-
     /// <summary>
     /// Counts the number of stones after the specified number of blinks.
     /// </summary>
@@ -92,15 +82,15 @@ public sealed class Day11 : Puzzle
 
         string stones = await ReadResourceAsStringAsync(cancellationToken);
 
-        Count25 = Blink(stones, blinks: 25);
-        Count75 = Blink(stones, blinks: 75);
+        Solution1 = Blink(stones, blinks: 25);
+        Solution2 = Blink(stones, blinks: 75);
 
         if (Verbose)
         {
-            Logger.WriteLine("There are {0} stones after blinking 25 times", Count25);
-            Logger.WriteLine("There are {0} stones after blinking 75 times", Count75);
+            Logger.WriteLine("There are {0} stones after blinking 25 times", Solution1);
+            Logger.WriteLine("There are {0} stones after blinking 75 times", Solution2);
         }
 
-        return PuzzleResult.Create(Count25, Count75);
+        return Result();
     }
 }

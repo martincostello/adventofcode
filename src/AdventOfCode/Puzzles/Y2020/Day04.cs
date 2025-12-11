@@ -9,22 +9,12 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020;
 /// A class representing the puzzle for <c>https://adventofcode.com/2020/day/4</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2020, 04, "Passport Processing", RequiresData = true)]
-public sealed partial class Day04 : Puzzle
+public sealed partial class Day04 : Puzzle<int, int>
 {
     /// <summary>
     /// The required keys for passports. This field is read-only.
     /// </summary>
     private static readonly ImmutableArray<string> RequiredKeys = ["byr", "ecl", "eyr", "hcl", "hgt", "iyr", "pid"];
-
-    /// <summary>
-    /// Gets the number of valid passports.
-    /// </summary>
-    public int ValidPassports { get; private set; }
-
-    /// <summary>
-    /// Gets the number of verified passports.
-    /// </summary>
-    public int VerifiedPassports { get; private set; }
 
     [GeneratedRegex("#[0-9a-f]{6}", RegexOptions.IgnoreCase)]
     private static partial Regex HexColor { get; }
@@ -88,17 +78,20 @@ public sealed partial class Day04 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        var batch = await ReadResourceAsLinesAsync(cancellationToken);
+        return await SolveWithLinesAsync(
+            static (batch, logger, _) =>
+            {
+                (int validPassports, int verifiedPassports) = VerifyPassports(batch);
 
-        (ValidPassports, VerifiedPassports) = VerifyPassports(batch);
+                if (logger is { })
+                {
+                    logger.WriteLine("There are {0} valid passports.", validPassports);
+                    logger.WriteLine("There are {0} verified passports.", verifiedPassports);
+                }
 
-        if (Verbose)
-        {
-            Logger.WriteLine("There are {0} valid passports.", ValidPassports);
-            Logger.WriteLine("There are {0} verified passports.", VerifiedPassports);
-        }
-
-        return PuzzleResult.Create(ValidPassports, VerifiedPassports);
+                return (validPassports, verifiedPassports);
+            },
+            cancellationToken);
     }
 
     /// <summary>

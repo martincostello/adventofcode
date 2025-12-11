@@ -7,18 +7,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019;
 /// A class representing the puzzle for <c>https://adventofcode.com/2019/day/4</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2019, 04, "Secure Container", MinimumArguments = 1)]
-public sealed class Day04 : Puzzle
+public sealed class Day04 : Puzzle<int, int>
 {
-    /// <summary>
-    /// Gets the number of valid passwords in the given range for version 1 of the rules.
-    /// </summary>
-    public int CountV1 { get; private set; }
-
-    /// <summary>
-    /// Gets the number of valid passwords in the given range for version 2 of the rules.
-    /// </summary>
-    public int CountV2 { get; private set; }
-
     /// <summary>
     /// Gets the number of valid passwords in the specified range.
     /// </summary>
@@ -108,17 +98,17 @@ public sealed class Day04 : Puzzle
     }
 
     /// <inheritdoc />
-    protected override Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
+    protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken) => SolveWithArgument(args, static (input, logger) =>
     {
-        CountV1 = GetPasswordsInRange(args[0], rulesVersion: 1);
-        CountV2 = GetPasswordsInRange(args[0], rulesVersion: 2);
+        int countV1 = GetPasswordsInRange(input, rulesVersion: 1);
+        int countV2 = GetPasswordsInRange(input, rulesVersion: 2);
 
-        if (Verbose)
+        if (logger is { })
         {
-            Logger.WriteLine("{0} different passwords within the range meet the criteria for version 1.", CountV1);
-            Logger.WriteLine("{0} different passwords within the range meet the criteria for version 2.", CountV2);
+            logger.WriteLine("{0} different passwords within the range meet the criteria for version 1.", countV1);
+            logger.WriteLine("{0} different passwords within the range meet the criteria for version 2.", countV2);
         }
 
-        return PuzzleResult.Create(CountV1, CountV2);
-    }
+        return (countV1, countV2);
+    });
 }

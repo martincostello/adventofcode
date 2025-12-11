@@ -32,7 +32,7 @@ public sealed class Day21Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         var puzzle = await SolvePuzzleAsync<Day21>();
 
         // Assert
-        puzzle.IngredientsWithNoAllergens.ShouldBe(2098);
-        puzzle.CanonicalAllergens.ShouldBe("ppdplc,gkcplx,ktlh,msfmt,dqsbql,mvqkdj,ggsz,hbhsx");
+        puzzle.Solution1.ShouldBe(2098);
+        puzzle.Solution2.ShouldBe("ppdplc,gkcplx,ktlh,msfmt,dqsbql,mvqkdj,ggsz,hbhsx");
     }
 }

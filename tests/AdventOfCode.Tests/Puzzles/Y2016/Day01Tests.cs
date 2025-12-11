@@ -29,7 +29,7 @@ public sealed class Day01Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         var puzzle = await SolvePuzzleAsync<Day01>();
 
         // Assert
-        puzzle.BlocksToEasterBunnyHQIgnoringDuplicates.ShouldBe(287);
-        puzzle.BlocksToEasterBunnyHQ.ShouldBe(133);
+        puzzle.Solution1.ShouldBe(287);
+        puzzle.Solution2.ShouldBe(133);
     }
 }

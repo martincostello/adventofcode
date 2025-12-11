@@ -7,18 +7,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019;
 /// A class representing the puzzle for <c>https://adventofcode.com/2019/day/8</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2019, 08, "Space Image Format", RequiresData = true)]
-public sealed class Day08 : Puzzle
+public sealed class Day08 : Puzzle<int, string>
 {
-    /// <summary>
-    /// Gets the checksum of the image.
-    /// </summary>
-    public int Checksum { get; private set; }
-
-    /// <summary>
-    /// Gets the message.
-    /// </summary>
-    public string Message { get; private set; } = string.Empty;
-
     /// <summary>
     /// Gets the checksum for the specified image.
     /// </summary>
@@ -117,20 +107,25 @@ public sealed class Day08 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        string image = (await ReadResourceAsStringAsync(cancellationToken)).TrimEnd('\n');
+        string visualization = string.Empty;
 
-        (Checksum, Message, string visualization) = GetImageChecksum(image, 6, 25, Logger);
+        var result = await SolveWithStringAsync(
+            (image, logger, _) =>
+            {
+                image = image.TrimEnd('\n');
 
-        if (Verbose)
-        {
-            Logger.WriteLine("The checksum of the image data is {0}.", Checksum);
-            Logger.WriteLine("The message in the image data is {0}.", Message);
-        }
+                (int checksum, string message, visualization) = GetImageChecksum(image, 6, 25, logger);
 
-        var result = new PuzzleResult();
+                if (logger is { })
+                {
+                    logger.WriteLine("The checksum of the image data is {0}.", checksum);
+                    logger.WriteLine("The message in the image data is {0}.", message);
+                }
 
-        result.Solutions.Add(Checksum);
-        result.Solutions.Add(Message);
+                return (checksum, message);
+            },
+            cancellationToken);
+
         result.Visualizations.Add(visualization);
 
         return result;

@@ -7,18 +7,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020;
 /// A class representing the puzzle for <c>https://adventofcode.com/2020/day/9</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2020, 09, "Encoding Error", RequiresData = true)]
-public sealed class Day09 : Puzzle
+public sealed class Day09 : Puzzle<long, long>
 {
-    /// <summary>
-    /// Gets the first weak number in the signal.
-    /// </summary>
-    public long WeakNumber { get; private set; }
-
-    /// <summary>
-    /// Gets the encryption weakness.
-    /// </summary>
-    public long Weakness { get; private set; }
-
     /// <summary>
     /// Gets the first weak number from the specified XMAS signal.
     /// </summary>
@@ -90,17 +80,22 @@ public sealed class Day09 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        long[] values = [.. await ReadResourceAsNumbersAsync<long>(cancellationToken)];
+        return await SolveWithNumbersAsync<long>(
+            static (numbers, logger, _) =>
+            {
+                long[] values = [.. numbers];
 
-        WeakNumber = GetWeakNumber(values, 25);
-        Weakness = GetWeakness(values, WeakNumber);
+                long weakNumber = GetWeakNumber(values, 25);
+                long weakness = GetWeakness(values, weakNumber);
 
-        if (Verbose)
-        {
-            Logger.WriteLine("The first weak number in the XMAS sequence is {0}.", WeakNumber);
-            Logger.WriteLine("The encryption weakness of the XMAS sequence is {0}.", Weakness);
-        }
+                if (logger is { })
+                {
+                    logger.WriteLine("The first weak number in the XMAS sequence is {0}.", weakNumber);
+                    logger.WriteLine("The encryption weakness of the XMAS sequence is {0}.", weakness);
+                }
 
-        return PuzzleResult.Create(WeakNumber, Weakness);
+                return (weakNumber, weakness);
+            },
+            cancellationToken);
     }
 }

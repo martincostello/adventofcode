@@ -7,18 +7,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015;
 /// A class representing the puzzle for <c>https://adventofcode.com/2015/day/2</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2015, 02, "I Was Told There Would Be No Math", RequiresData = true)]
-public sealed class Day02 : Puzzle
+public sealed class Day02 : Puzzle<int, int>
 {
-    /// <summary>
-    /// Gets the total amount of wrapping paper required in square feet.
-    /// </summary>
-    internal int TotalAreaOfPaper { get; private set; }
-
-    /// <summary>
-    /// Gets the total length of ribbon required in feet.
-    /// </summary>
-    internal int TotalLengthOfRibbon { get; private set; }
-
     /// <summary>
     /// Gets the total area of wrapping paper and length of ribbon required to
     /// wrap the presents of the specified dimensions.
@@ -45,20 +35,23 @@ public sealed class Day02 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        var dimensions = await ReadResourceAsLinesAsync(cancellationToken);
+        return await SolveWithLinesAsync(
+            (dimensions, logger, _) =>
+            {
+                (int totalAreaOfPaper, int totalLengthOfRibbon) = GetTotalWrappingPaperAreaAndRibbonLength(dimensions);
 
-        (TotalAreaOfPaper, TotalLengthOfRibbon) = GetTotalWrappingPaperAreaAndRibbonLength(dimensions);
+                if (Verbose)
+                {
+                    Logger.WriteLine(
+                        "The elves should order {0:N0} square feet of wrapping paper.{1}They also need {2:N0} feet of ribbon.",
+                        totalAreaOfPaper,
+                        Environment.NewLine,
+                        totalLengthOfRibbon);
+                }
 
-        if (Verbose)
-        {
-            Logger.WriteLine(
-                "The elves should order {0:N0} square feet of wrapping paper.{1}They also need {2:N0} feet of ribbon.",
-                TotalAreaOfPaper,
-                Environment.NewLine,
-                TotalLengthOfRibbon);
-        }
-
-        return PuzzleResult.Create(TotalAreaOfPaper, TotalLengthOfRibbon);
+                return (totalAreaOfPaper, totalLengthOfRibbon);
+            },
+            cancellationToken);
     }
 
     /// <summary>

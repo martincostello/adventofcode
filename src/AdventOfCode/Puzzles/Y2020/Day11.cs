@@ -7,7 +7,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020;
 /// A class representing the puzzle for <c>https://adventofcode.com/2020/day/11</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2020, 11, "Seating System", RequiresData = true)]
-public sealed class Day11 : Puzzle
+public sealed class Day11 : Puzzle<int, int>
 {
     /// <summary>
     /// An empty chair.
@@ -18,16 +18,6 @@ public sealed class Day11 : Puzzle
     /// An occupied chair.
     /// </summary>
     private const char Occupied = '#';
-
-    /// <summary>
-    /// Gets the number of occupied seats using version 1 of the rules.
-    /// </summary>
-    public int OccupiedSeatsV1 { get; private set; }
-
-    /// <summary>
-    /// Gets the number of occupied seats using version 2 of the rules.
-    /// </summary>
-    public int OccupiedSeatsV2 { get; private set; }
 
     /// <summary>
     /// Gets the number of occupied seats for the specified layout.
@@ -66,26 +56,26 @@ public sealed class Day11 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        var layout = await ReadResourceAsLinesAsync(cancellationToken);
+        string visualizationV1 = string.Empty;
+        string visualizationV2 = string.Empty;
 
-        (int occupiedSeatsV1, string visualizationV1) = GetOccupiedSeats(layout, version: 1);
-        (int occupiedSeatsV2, string visualizationV2) = GetOccupiedSeats(layout, version: 2);
+        var result = await SolveWithLinesAsync(
+            (layout, logger, _) =>
+            {
+                (int occupiedSeatsV1, visualizationV1) = GetOccupiedSeats(layout, version: 1);
+                (int occupiedSeatsV2, visualizationV2) = GetOccupiedSeats(layout, version: 2);
 
-        OccupiedSeatsV1 = occupiedSeatsV1;
-        OccupiedSeatsV2 = occupiedSeatsV2;
+                if (logger is { })
+                {
+                    logger.WriteLine("There are {0} occupied seats using the first set of rules.", occupiedSeatsV1);
+                    logger.WriteLine("There are {0} occupied seats using the second set of rules.", occupiedSeatsV2);
+                }
 
-        if (Verbose)
-        {
-            Logger.WriteLine("There are {0} occupied seats using the first set of rules.", OccupiedSeatsV1);
-            Logger.WriteLine("There are {0} occupied seats using the second set of rules.", OccupiedSeatsV2);
-        }
+                return (occupiedSeatsV1, occupiedSeatsV2);
+            },
+            cancellationToken);
 
-        var result = new PuzzleResult();
-
-        result.Solutions.Add(OccupiedSeatsV1);
         result.Visualizations.Add(visualizationV1);
-
-        result.Solutions.Add(OccupiedSeatsV2);
         result.Visualizations.Add(visualizationV2);
 
         return result;

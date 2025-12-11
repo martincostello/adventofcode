@@ -9,19 +9,9 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2023;
 /// A class representing the puzzle for <c>https://adventofcode.com/2023/day/01</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2023, 01, "Trebuchet?!", RequiresData = true)]
-public sealed class Day01 : Puzzle
+public sealed class Day01 : Puzzle<int, int>
 {
     private static readonly SearchValues<char> Digits = SearchValues.Create("123456789");
-
-    /// <summary>
-    /// Gets the sum of all of the calibration values using only digits.
-    /// </summary>
-    public int SumOfCalibrationsDigits { get; private set; }
-
-    /// <summary>
-    /// Gets the sum of all of the calibration values using words and digits.
-    /// </summary>
-    public int SumOfCalibrationsWordsAndDigits { get; private set; }
 
     private static ReadOnlySpan<string> Numbers => new[]
     {
@@ -109,15 +99,15 @@ public sealed class Day01 : Puzzle
 
         var values = await ReadResourceAsLinesAsync(cancellationToken);
 
-        SumOfCalibrationsDigits = SumCalibrations(values, useWords: false);
-        SumOfCalibrationsWordsAndDigits = SumCalibrations(values, useWords: true);
+        Solution1 = SumCalibrations(values, useWords: false);
+        Solution2 = SumCalibrations(values, useWords: true);
 
         if (Verbose)
         {
-            Logger.WriteLine("The sum of all of the calibration values is {0} using only digits.", SumOfCalibrationsDigits);
-            Logger.WriteLine("The sum of all of the calibration values is {0} using words and digits.", SumOfCalibrationsWordsAndDigits);
+            Logger.WriteLine("The sum of all of the calibration values is {0} using only digits.", Solution1);
+            Logger.WriteLine("The sum of all of the calibration values is {0} using words and digits.", Solution2);
         }
 
-        return PuzzleResult.Create(SumOfCalibrationsDigits, SumOfCalibrationsWordsAndDigits);
+        return Result();
     }
 }

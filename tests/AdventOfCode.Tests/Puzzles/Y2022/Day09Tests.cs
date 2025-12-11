@@ -160,8 +160,7 @@ public sealed class Day09Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         var puzzle = await SolvePuzzleAsync<Day09>();
 
         // Assert
-        puzzle.ShouldNotBeNull();
-        puzzle.PositionsVisited2.ShouldBe(5683);
-        puzzle.PositionsVisited10.ShouldBe(2372);
+        puzzle.Solution1.ShouldBe(5683);
+        puzzle.Solution2.ShouldBe(2372);
     }
 }

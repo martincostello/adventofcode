@@ -7,20 +7,10 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2021;
 /// A class representing the puzzle for <c>https://adventofcode.com/2021/day/3</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2021, 03, "Binary Diagnostic", RequiresData = true)]
-public sealed class Day03 : Puzzle
+public sealed class Day03 : Puzzle<int, int>
 {
     private const char Zero = '0';
     private const char One = '1';
-
-    /// <summary>
-    /// Gets the power consumption of the submarine.
-    /// </summary>
-    public int PowerConsumption { get; private set; }
-
-    /// <summary>
-    /// Gets the life support rating of the submarine.
-    /// </summary>
-    public int LifeSupportRating { get; private set; }
 
     /// <summary>
     /// Gets the power consumption of the submarine computed from the diagnostic report.
@@ -99,23 +89,26 @@ public sealed class Day03 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        var diagnosticReport = await ReadResourceAsLinesAsync(cancellationToken);
+        return await SolveWithLinesAsync(
+            static (diagnosticReport, logger, _) =>
+            {
+                int powerConsumption = GetPowerConsumption(diagnosticReport);
+                int lifeSupportRating = GetLifeSupportRating(diagnosticReport);
 
-        PowerConsumption = GetPowerConsumption(diagnosticReport);
-        LifeSupportRating = GetLifeSupportRating(diagnosticReport);
+                if (logger is { })
+                {
+                    logger.WriteLine(
+                        "The power consumption of the submarine is {0:N0}.",
+                        powerConsumption);
 
-        if (Verbose)
-        {
-            Logger.WriteLine(
-                "The power consumption of the submarine is {0:N0}.",
-                PowerConsumption);
+                    logger.WriteLine(
+                        "The life support rating of the submarine is {0:N0}.",
+                        lifeSupportRating);
+                }
 
-            Logger.WriteLine(
-                "The life support rating of the submarine is {0:N0}.",
-                LifeSupportRating);
-        }
-
-        return PuzzleResult.Create(PowerConsumption, LifeSupportRating);
+                return (powerConsumption, lifeSupportRating);
+            },
+            cancellationToken);
     }
 
     private static (int Zeroes, int Ones) CountBits(IEnumerable<string> values, int bit)

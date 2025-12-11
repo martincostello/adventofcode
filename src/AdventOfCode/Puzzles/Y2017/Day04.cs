@@ -7,18 +7,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017;
 /// A class representing the puzzle for <c>https://adventofcode.com/2017/day/4</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2017, 04, "High-Entropy Passphrases", RequiresData = true)]
-public sealed class Day04 : Puzzle
+public sealed class Day04 : Puzzle<int, int>
 {
-    /// <summary>
-    /// Gets the number of valid passphrases in the input using version 1 of the passphrase policy.
-    /// </summary>
-    public int ValidPassphraseCountV1 { get; private set; }
-
-    /// <summary>
-    /// Gets the number of valid passphrases in the input using version 2 of the passphrase policy.
-    /// </summary>
-    public int ValidPassphraseCountV2 { get; private set; }
-
     /// <summary>
     /// Returns whether the specified passphrase is valid.
     /// </summary>
@@ -51,17 +41,23 @@ public sealed class Day04 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        var passphrases = await ReadResourceAsLinesAsync(cancellationToken);
+        return await SolveWithLinesAsync(
+            static (passphrases, logger, _) =>
+            {
+                int validPassphraseCountV1 = Count(passphrases, version: 1);
+                int validPassphraseCountV2 = Count(passphrases, version: 2);
 
-        ValidPassphraseCountV1 = passphrases.Count((p) => IsPassphraseValid(p, 1));
-        ValidPassphraseCountV2 = passphrases.Count((p) => IsPassphraseValid(p, 2));
+                if (logger is { })
+                {
+                    logger.WriteLine($"There are {validPassphraseCountV1:N0} valid passphrases using version 1 of the policy.");
+                    logger.WriteLine($"There are {validPassphraseCountV2:N0} valid passphrases using version 2 of the policy.");
+                }
 
-        if (Verbose)
-        {
-            Logger.WriteLine($"There are {ValidPassphraseCountV1:N0} valid passphrases using version 1 of the policy.");
-            Logger.WriteLine($"There are {ValidPassphraseCountV2:N0} valid passphrases using version 2 of the policy.");
-        }
+                return (validPassphraseCountV1, validPassphraseCountV2);
 
-        return PuzzleResult.Create(ValidPassphraseCountV1, ValidPassphraseCountV2);
+                static int Count(List<string> passphrases, int version)
+                    => passphrases.Count((p) => IsPassphraseValid(p, version));
+            },
+            cancellationToken);
     }
 }

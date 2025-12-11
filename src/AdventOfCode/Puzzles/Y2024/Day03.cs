@@ -9,18 +9,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2024;
 /// A class representing the puzzle for <c>https://adventofcode.com/2024/day/3</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2024, 03, "Mull It Over", RequiresData = true)]
-public sealed partial class Day03 : Puzzle
+public sealed partial class Day03 : Puzzle<int, int>
 {
-    /// <summary>
-    /// Gets the sum of the multiplications.
-    /// </summary>
-    public int Sum { get; private set; }
-
-    /// <summary>
-    /// Gets the sum of the multiplications with enhanced accuracy.
-    /// </summary>
-    public int AccurateSum { get; private set; }
-
     /// <summary>
     /// A regular expression that finds <c>mul</c> instructions.
     /// </summary>
@@ -107,15 +97,15 @@ public sealed partial class Day03 : Puzzle
 
         string memory = await ReadResourceAsStringAsync(cancellationToken);
 
-        Sum = Scan(memory, enhancedAccuracy: false, cancellationToken);
-        AccurateSum = Scan(memory, enhancedAccuracy: true, cancellationToken);
+        Solution1 = Scan(memory, enhancedAccuracy: false, cancellationToken);
+        Solution2 = Scan(memory, enhancedAccuracy: true, cancellationToken);
 
         if (Verbose)
         {
-            Logger.WriteLine("The sum of the multiplications is {0}", Sum);
-            Logger.WriteLine("The sum of the multiplications with more accuracy is {0}", AccurateSum);
+            Logger.WriteLine("The sum of the multiplications is {0}", Solution1);
+            Logger.WriteLine("The sum of the multiplications with more accuracy is {0}", Solution2);
         }
 
-        return PuzzleResult.Create(Sum, AccurateSum);
+        return Result();
     }
 }

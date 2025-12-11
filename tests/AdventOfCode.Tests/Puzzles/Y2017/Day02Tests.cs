@@ -74,7 +74,7 @@ public sealed class Day02Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         var puzzle = await SolvePuzzleAsync<Day02>();
 
         // Assert
-        puzzle.ChecksumForDifference.ShouldBe(36174);
-        puzzle.ChecksumForEvenlyDivisible.ShouldBe(244);
+        puzzle.Solution1.ShouldBe(36174);
+        puzzle.Solution2.ShouldBe(244);
     }
 }

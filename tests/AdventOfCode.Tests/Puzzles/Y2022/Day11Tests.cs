@@ -59,8 +59,7 @@ public sealed class Day11Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         var puzzle = await SolvePuzzleAsync<Day11>();
 
         // Assert
-        puzzle.ShouldNotBeNull();
-        puzzle.MonkeyBusiness20.ShouldBe(56120);
-        puzzle.MonkeyBusiness10000.ShouldBe(24389045529);
+        puzzle.Solution1.ShouldBe(56120);
+        puzzle.Solution2.ShouldBe(24389045529);
     }
 }

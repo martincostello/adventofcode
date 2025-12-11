@@ -34,7 +34,7 @@ public sealed class Day01Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         var puzzle = await SolvePuzzleAsync<Day01>();
 
         // Assert
-        puzzle.FinalFloor.ShouldBe(232);
-        puzzle.FirstBasementInstruction.ShouldBe(1783);
+        puzzle.Solution1.ShouldBe(232);
+        puzzle.Solution2.ShouldBe(1783);
     }
 }

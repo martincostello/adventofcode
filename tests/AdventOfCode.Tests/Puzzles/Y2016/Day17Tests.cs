@@ -30,7 +30,7 @@ public sealed class Day17Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         var puzzle = await SolvePuzzleAsync<Day17>("pvhmgsws");
 
         // Assert
-        puzzle.ShortestPathToVault.ShouldBe("DRRDRLDURD");
-        puzzle.LongestPathToVault.ShouldBe(618);
+        puzzle.Solution1.ShouldBe("DRRDRLDURD");
+        puzzle.Solution2.ShouldBe(618);
     }
 }

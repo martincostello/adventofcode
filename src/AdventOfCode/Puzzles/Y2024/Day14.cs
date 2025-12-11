@@ -7,18 +7,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2024;
 /// A class representing the puzzle for <c>https://adventofcode.com/2024/day/14</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2024, 14, "Restroom Redoubt", RequiresData = true)]
-public sealed class Day14 : Puzzle
+public sealed class Day14 : Puzzle<int, int>
 {
-    /// <summary>
-    /// Gets the safety factor after 100 seconds.
-    /// </summary>
-    public int SafetyFactor { get; private set; }
-
-    /// <summary>
-    /// Gets the number of seconds after which the robots display the Easter egg, if any.
-    /// </summary>
-    public int EasterEggSeconds { get; private set; }
-
     /// <summary>
     /// Simulates the specified robots' positions after the specified number of seconds.
     /// </summary>
@@ -120,16 +110,16 @@ public sealed class Day14 : Puzzle
 
         var bounds = new Rectangle(0, 0, 101, 103);
 
-        SafetyFactor = Simulate(values, bounds, seconds: 100, findEasterEgg: false, cancellationToken);
-        EasterEggSeconds = Simulate(values, bounds, seconds: int.MaxValue, findEasterEgg: true, cancellationToken);
+        Solution1 = Simulate(values, bounds, seconds: 100, findEasterEgg: false, cancellationToken);
+        Solution2 = Simulate(values, bounds, seconds: int.MaxValue, findEasterEgg: true, cancellationToken);
 
         if (Verbose)
         {
-            Logger.WriteLine("The safety factor after 100 seconds is {0}.", SafetyFactor);
-            Logger.WriteLine("The robots first display the Easter egg after {0} seconds.", EasterEggSeconds);
+            Logger.WriteLine("The safety factor after 100 seconds is {0}.", Solution1);
+            Logger.WriteLine("The robots first display the Easter egg after {0} seconds.", Solution2);
         }
 
-        return PuzzleResult.Create(SafetyFactor, EasterEggSeconds);
+        return Result();
     }
 
     private record Robot(Point Origin, Size Velocity, Rectangle Bounds)

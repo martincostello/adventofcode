@@ -7,7 +7,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2023;
 /// A class representing the puzzle for <c>https://adventofcode.com/2023/day/19</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2023, 19, "Aplenty", RequiresData = true, Unsolved = true)]
-public sealed class Day19 : Puzzle
+public sealed class Day19 : Puzzle<int, long>
 {
     /*
     private const int MinimumRating = 1;
@@ -17,16 +17,6 @@ public sealed class Day19 : Puzzle
     */
 
     private delegate (string? Next, bool? Result) Analyzer(Part part);
-
-    /// <summary>
-    /// Gets the sum of the rating numbers of all the parts that are accepted.
-    /// </summary>
-    public int RatingNumbersSum { get; private set; }
-
-    /// <summary>
-    /// Gets how many distinct combinations of ratings will be accepted.
-    /// </summary>
-    public long CombinationsAccepted { get; private set; }
 
     /// <summary>
     /// Runs the workflows for the specified parts.
@@ -196,15 +186,15 @@ public sealed class Day19 : Puzzle
 
         var values = await ReadResourceAsLinesAsync(cancellationToken);
 
-        (RatingNumbersSum, CombinationsAccepted) = Run(values);
+        (Solution1, Solution2) = Run(values);
 
         if (Verbose)
         {
-            Logger.WriteLine("The sum of the rating numbers of all the accepted parts is {0}.", RatingNumbersSum);
-            Logger.WriteLine("{0} distinct combinations of ratings will be accepted.", CombinationsAccepted);
+            Logger.WriteLine("The sum of the rating numbers of all the accepted parts is {0}.", Solution1);
+            Logger.WriteLine("{0} distinct combinations of ratings will be accepted.", Solution2);
         }
 
-        return PuzzleResult.Create(RatingNumbersSum, CombinationsAccepted);
+        return Result();
     }
 
     private sealed record Part(int X, int M, int A, int S)

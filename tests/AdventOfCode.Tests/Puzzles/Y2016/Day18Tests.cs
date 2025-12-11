@@ -24,7 +24,7 @@ public sealed class Day18Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         var puzzle = await SolvePuzzleAsync<Day18>();
 
         // Assert
-        puzzle.SafeTileCount40.ShouldBe(1987);
-        puzzle.SafeTileCount400000.ShouldBe(19984714);
+        puzzle.Solution1.ShouldBe(1987);
+        puzzle.Solution2.ShouldBe(19984714);
     }
 }

@@ -12,6 +12,6 @@ public sealed class Day13Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         var puzzle = await SolvePuzzleAsync<Day13>();
 
         // Assert
-        puzzle.BlockTileCount.ShouldBe(315);
+        puzzle.Solution.ShouldBe(315);
     }
 }

@@ -77,7 +77,6 @@ public sealed class Day16Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         var puzzle = await SolvePuzzleAsync<Day16>();
 
         // Assert
-        puzzle.ShouldNotBeNull();
-        puzzle.WinningScore.ShouldBe(90440);
+        puzzle.Solution.ShouldBe(90440);
     }
 }

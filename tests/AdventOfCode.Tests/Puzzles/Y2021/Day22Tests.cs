@@ -143,7 +143,7 @@ public sealed class Day22Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         var puzzle = await SolvePuzzleAsync<Day22>();
 
         // Assert
-        puzzle.InitializedCubeCount.ShouldBe(537042);
-        puzzle.RebootedCubeCount.ShouldBe(1304385553084863);
+        puzzle.Solution1.ShouldBe(537042);
+        puzzle.Solution2.ShouldBe(1304385553084863);
     }
 }

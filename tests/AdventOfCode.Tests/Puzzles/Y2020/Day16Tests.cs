@@ -68,7 +68,7 @@ public sealed class Day16Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         var puzzle = await SolvePuzzleAsync<Day16>();
 
         // Assert
-        puzzle.ScanningErrorRate.ShouldBe(21071);
-        puzzle.DepartureProduct.ShouldBe(3429967441937L);
+        puzzle.Solution1.ShouldBe(21071);
+        puzzle.Solution2.ShouldBe(3429967441937);
     }
 }

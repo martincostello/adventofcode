@@ -9,13 +9,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017;
 /// A class representing the puzzle for <c>https://adventofcode.com/2017/day/14</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2017, 14, "Disk Defragmentation", MinimumArguments = 1)]
-public sealed class Day14 : Puzzle
+public sealed class Day14 : Puzzle<int>
 {
-    /// <summary>
-    /// Gets the severity of the trip through the firewall.
-    /// </summary>
-    public int SquaresUsed { get; private set; }
-
     /// <summary>
     /// Gets the number of squares used for the specified key.
     /// </summary>
@@ -50,15 +45,21 @@ public sealed class Day14 : Puzzle
     /// <inheritdoc />
     protected override Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        string key = args[0];
+        return SolveWithArguments(
+            args,
+            static (arguments, logger, cancellationToken) =>
+            {
+                string key = arguments[0];
 
-        SquaresUsed = GetSquaresUsed(key);
+                int squaresUsed = GetSquaresUsed(key);
 
-        if (Verbose)
-        {
-            Logger.WriteLine($"The number of squares used for key {key} is {SquaresUsed:N0}.");
-        }
+                if (logger is { })
+                {
+                    logger.WriteLine($"The number of squares used for key {key} is {squaresUsed:N0}.");
+                }
 
-        return PuzzleResult.Create(SquaresUsed);
+                return squaresUsed;
+            },
+            cancellationToken);
     }
 }

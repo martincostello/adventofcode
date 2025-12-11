@@ -7,18 +7,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2021;
 /// A class representing the puzzle for <c>https://adventofcode.com/2021/day/20</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2021, 20, "Trench Map", RequiresData = true, IsSlow = true)]
-public sealed class Day20 : Puzzle
+public sealed class Day20 : Puzzle<int, int>
 {
-    /// <summary>
-    /// Gets the number of lit pixels after the image is enhanced twice.
-    /// </summary>
-    public int LitPixelCount2 { get; private set; }
-
-    /// <summary>
-    /// Gets the number of lit pixels after the image is enhanced fifty times.
-    /// </summary>
-    public int LitPixelCount50 { get; private set; }
-
     /// <summary>
     /// Enhances an image the specified number of times.
     /// </summary>
@@ -145,17 +135,20 @@ public sealed class Day20 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        var imageData = await ReadResourceAsLinesAsync(cancellationToken);
+        return await SolveWithLinesAsync(
+            static (imageData, logger, cancellationToken) =>
+            {
+                (int litPixelCount2, _) = Enhance(imageData, enhancements: 2);
+                (int litPixelCount50, _) = Enhance(imageData, enhancements: 50);
 
-        (LitPixelCount2, _) = Enhance(imageData, enhancements: 2);
-        (LitPixelCount50, _) = Enhance(imageData, enhancements: 50);
+                if (logger is { })
+                {
+                    logger.WriteLine("There are {0:N0} lit pixels after two enhancements of the image.", litPixelCount2);
+                    logger.WriteLine("There are {0:N0} lit pixels after fifty enhancements of the image.", litPixelCount50);
+                }
 
-        if (Verbose)
-        {
-            Logger.WriteLine("There are {0:N0} lit pixels after two enhancements of the image.", LitPixelCount2);
-            Logger.WriteLine("There are {0:N0} lit pixels after fifty enhancements of the image.", LitPixelCount50);
-        }
-
-        return PuzzleResult.Create(LitPixelCount2, LitPixelCount50);
+                return (litPixelCount2, litPixelCount50);
+            },
+            cancellationToken);
     }
 }

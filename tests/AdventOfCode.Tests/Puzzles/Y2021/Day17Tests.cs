@@ -26,7 +26,7 @@ public sealed class Day17Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         var puzzle = await SolvePuzzleAsync<Day17>();
 
         // Assert
-        puzzle.MaxApogee.ShouldBe(8646);
-        puzzle.Count.ShouldBe(5945);
+        puzzle.Solution1.ShouldBe(8646);
+        puzzle.Solution2.ShouldBe(5945);
     }
 }

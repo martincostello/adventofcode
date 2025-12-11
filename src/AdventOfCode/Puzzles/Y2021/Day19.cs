@@ -7,18 +7,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2021;
 /// A class representing the puzzle for <c>https://adventofcode.com/2021/day/19</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2021, 19, "Beacon Scanner", RequiresData = true, IsSlow = true)]
-public sealed class Day19 : Puzzle
+public sealed class Day19 : Puzzle<int, int>
 {
-    /// <summary>
-    /// Gets the number of beacons.
-    /// </summary>
-    public int BeaconCount { get; private set; }
-
-    /// <summary>
-    /// Gets the largest Manhattan distance between any two scanners.
-    /// </summary>
-    public int LargestScannerDistance { get; private set; }
-
     /// <summary>
     /// Finds the beacons from the specified scanner results.
     /// </summary>
@@ -227,17 +217,20 @@ public sealed class Day19 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        var target = await ReadResourceAsLinesAsync(cancellationToken);
+        return await SolveWithLinesAsync(
+            static (target, logger, cancellationToken) =>
+            {
+                (int beaconCount, int largestScannerDistance) = FindBeacons(target, cancellationToken);
 
-        (BeaconCount, LargestScannerDistance) = FindBeacons(target, cancellationToken);
+                if (logger is { })
+                {
+                    logger.WriteLine("There are {0:N0} beacons.", beaconCount);
+                    logger.WriteLine("There largest Manhattan distance between two scanners is {0:N0}.", largestScannerDistance);
+                }
 
-        if (Verbose)
-        {
-            Logger.WriteLine("There are {0:N0} beacons.", BeaconCount);
-            Logger.WriteLine("There largest Manhattan distance between two scanners is {0:N0}.", LargestScannerDistance);
-        }
-
-        return PuzzleResult.Create(BeaconCount, LargestScannerDistance);
+                return (beaconCount, largestScannerDistance);
+            },
+            cancellationToken);
     }
 
     private sealed class Scanner : HashSet<Vector3>

@@ -39,8 +39,7 @@ public sealed class Day04Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         var puzzle = await SolvePuzzleAsync<Day04>();
 
         // Assert
-        puzzle.ShouldNotBeNull();
-        puzzle.SimpleCount.ShouldBe(2603);
-        puzzle.CrossCount.ShouldBe(1965);
+        puzzle.Solution1.ShouldBe(2603);
+        puzzle.Solution2.ShouldBe(1965);
     }
 }

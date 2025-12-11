@@ -125,7 +125,7 @@ public sealed class Day20Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         (long actualCornerIdProduct, int actualRoughness, _) = Day20.GetCornerTileIdProduct(input, Logger, CancellationToken.None);
 
         // Assert
-        actualCornerIdProduct.ShouldBe(20899048083289L);
+        actualCornerIdProduct.ShouldBe(20899048083289);
         actualRoughness.ShouldBe(273);
     }
 
@@ -136,7 +136,7 @@ public sealed class Day20Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         var puzzle = await SolvePuzzleAsync<Day20>();
 
         // Assert
-        puzzle.ProductOfCornerTiles.ShouldBe(17712468069479L);
-        puzzle.WaterRoughness.ShouldBe(2173);
+        puzzle.Solution1.ShouldBe(17712468069479);
+        puzzle.Solution2.ShouldBe(2173);
     }
 }

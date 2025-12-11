@@ -7,18 +7,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2022;
 /// A class representing the puzzle for <c>https://adventofcode.com/2022/day/13</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2022, 13, "Distress Signal", RequiresData = true)]
-public sealed class Day13 : Puzzle
+public sealed class Day13 : Puzzle<int, int>
 {
-    /// <summary>
-    /// Gets the sum of the indices of the already correctly sorted pairs.
-    /// </summary>
-    public int SumOfPresortedIndicies { get; private set; }
-
-    /// <summary>
-    /// Gets the decoder key for the distress signal.
-    /// </summary>
-    public int DecoderKey { get; private set; }
-
     /// <summary>
     /// Returns the sum of the indices of the correctly sorted packet pairs.
     /// </summary>
@@ -127,15 +117,15 @@ public sealed class Day13 : Puzzle
     {
         var packets = await ReadResourceAsLinesAsync(cancellationToken);
 
-        (SumOfPresortedIndicies, DecoderKey) = DecodePackets(packets);
+        (Solution1, Solution2) = DecodePackets(packets);
 
         if (Verbose)
         {
-            Logger.WriteLine("The sum of the indices of the pairs of packets already in the right order is {0}.", SumOfPresortedIndicies);
-            Logger.WriteLine("The decoder key for the distress signal is {0}.", DecoderKey);
+            Logger.WriteLine("The sum of the indices of the pairs of packets already in the right order is {0}.", Solution1);
+            Logger.WriteLine("The decoder key for the distress signal is {0}.", Solution2);
         }
 
-        return PuzzleResult.Create(SumOfPresortedIndicies, DecoderKey);
+        return Result();
     }
 
     private sealed class Packet : IComparable<Packet>, IEquatable<Packet>

@@ -7,7 +7,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016;
 /// A class representing the puzzle for <c>https://adventofcode.com/2016/day/2</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2016, 02, "Bathroom Security", RequiresData = true)]
-public sealed class Day02 : Puzzle
+public sealed class Day02 : Puzzle<string, string>
 {
     /// <summary>
     /// An enumeration of directions.
@@ -34,16 +34,6 @@ public sealed class Day02 : Puzzle
         /// </summary>
         Right,
     }
-
-    /// <summary>
-    /// Gets the code for the bathroom using an alphanumeric keypad.
-    /// </summary>
-    public string? BathroomCodeAlphanumericKeypad { get; private set; }
-
-    /// <summary>
-    /// Gets the code for the bathroom using a keypad with only digits.
-    /// </summary>
-    public string? BathroomCodeDigitKeypad { get; private set; }
 
     /// <summary>
     /// Gets the keypad grid containing digits and letters.
@@ -120,23 +110,26 @@ public sealed class Day02 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        var instructions = await ReadResourceAsLinesAsync(cancellationToken);
+        return await SolveWithLinesAsync(
+            static (instructions, logger, _) =>
+            {
+                string bathroomCodeAlphanumericKeypad = GetBathroomCode(instructions, DigitGrid);
+                string bathroomCodeDigitKeypad = GetBathroomCode(instructions, AlphanumericGrid);
 
-        BathroomCodeDigitKeypad = GetBathroomCode(instructions, DigitGrid);
-        BathroomCodeAlphanumericKeypad = GetBathroomCode(instructions, AlphanumericGrid);
+                if (logger is { })
+                {
+                    logger.WriteLine(
+                        "The code for the bathroom with a digit keypad is {0}.",
+                        bathroomCodeAlphanumericKeypad);
 
-        if (Verbose)
-        {
-            Logger.WriteLine(
-                "The code for the bathroom with a digit keypad is {0}.",
-                BathroomCodeDigitKeypad);
+                    logger.WriteLine(
+                        "The code for the bathroom with an alphanumeric keypad is {0}.",
+                        bathroomCodeDigitKeypad);
+                }
 
-            Logger.WriteLine(
-                "The code for the bathroom with an alphanumeric keypad is {0}.",
-                BathroomCodeAlphanumericKeypad);
-        }
-
-        return PuzzleResult.Create(BathroomCodeDigitKeypad, BathroomCodeAlphanumericKeypad);
+                return (bathroomCodeAlphanumericKeypad, bathroomCodeDigitKeypad);
+            },
+            cancellationToken);
     }
 
     /// <summary>

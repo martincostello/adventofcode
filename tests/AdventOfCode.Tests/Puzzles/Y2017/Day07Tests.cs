@@ -68,7 +68,7 @@ public sealed class Day07Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         var puzzle = await SolvePuzzleAsync<Day07>();
 
         // Assert
-        puzzle.BottomProgramName.ShouldBe("fbgguv");
-        puzzle.DesiredWeightOfUnbalancedDisc.ShouldBe(1864);
+        puzzle.Solution1.ShouldBe("fbgguv");
+        puzzle.Solution2.ShouldBe(1864);
     }
 }

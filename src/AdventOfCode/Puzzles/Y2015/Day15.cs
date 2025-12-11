@@ -7,18 +7,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015;
 /// A class representing the puzzle for <c>https://adventofcode.com/2015/day/15</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2015, 15, "Science for Hungry People", RequiresData = true, IsSlow = true)]
-public sealed class Day15 : Puzzle
+public sealed class Day15 : Puzzle<int, int>
 {
-    /// <summary>
-    /// Gets the highest total cookie score.
-    /// </summary>
-    internal int HighestTotalCookieScore { get; private set; }
-
-    /// <summary>
-    /// Gets the highest total cookie score that has exactly 500 calories.
-    /// </summary>
-    internal int HighestTotalCookieScoreWith500Calories { get; private set; }
-
     /// <summary>
     /// Returns the highest total cookie score for the specified ingredients.
     /// </summary>
@@ -84,18 +74,23 @@ public sealed class Day15 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        var ingredients = await ReadResourceAsLinesAsync(cancellationToken);
+        return await SolveWithLinesAsync(
+            static (ingredients, logger, _) =>
+            {
+                const int CalorieTarget = 500;
 
-        HighestTotalCookieScore = GetHighestTotalCookieScore(ingredients);
-        HighestTotalCookieScoreWith500Calories = GetHighestTotalCookieScore(ingredients, 500);
+                int highestTotalCookieScore = GetHighestTotalCookieScore(ingredients);
+                int highestTotalCookieScoreWith500Calories = GetHighestTotalCookieScore(ingredients, calorieCount: CalorieTarget);
 
-        if (Verbose)
-        {
-            Logger.WriteLine("The highest total cookie score is {0:N0}.", HighestTotalCookieScore);
-            Logger.WriteLine("The highest total cookie score for a cookie with 500 calories is {0:N0}.", HighestTotalCookieScoreWith500Calories);
-        }
+                if (logger is { })
+                {
+                    logger.WriteLine("The highest total cookie score is {0:N0}.", highestTotalCookieScore);
+                    logger.WriteLine("The highest total cookie score for a cookie with {0} calories is {1:N0}.", CalorieTarget, highestTotalCookieScoreWith500Calories);
+                }
 
-        return PuzzleResult.Create(HighestTotalCookieScore, HighestTotalCookieScoreWith500Calories);
+                return (highestTotalCookieScore, highestTotalCookieScoreWith500Calories);
+            },
+            cancellationToken);
     }
 
     /// <summary>

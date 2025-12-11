@@ -9,18 +9,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2021;
 /// A class representing the puzzle for <c>https://adventofcode.com/2021/day/16</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2021, 16, "Packet Decoder", RequiresData = true)]
-public sealed class Day16 : Puzzle
+public sealed class Day16 : Puzzle<long, long>
 {
-    /// <summary>
-    /// Gets the sum of the packet version numbers.
-    /// </summary>
-    public long VersionNumberSum { get; private set; }
-
-    /// <summary>
-    /// Gets the evaluated value of the transmission.
-    /// </summary>
-    public long Value { get; private set; }
-
     /// <summary>
     /// Decodes the packets in the specified transmission.
     /// </summary>
@@ -192,16 +182,21 @@ public sealed class Day16 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        string transmission = (await ReadResourceAsStringAsync(cancellationToken)).Trim();
+        return await SolveWithStringAsync(
+            static (transmission, logger) =>
+            {
+                transmission = transmission.Trim();
 
-        (VersionNumberSum, Value) = Decode(transmission);
+                (long versionNumberSum, long value) = Decode(transmission);
 
-        if (Verbose)
-        {
-            Logger.WriteLine("The sum of the version numbers in all packets is {0:N0}.", VersionNumberSum);
-            Logger.WriteLine("The result of evaluating the transmission is {0:N0}.", Value);
-        }
+                if (logger is { })
+                {
+                    logger.WriteLine("The sum of the version numbers in all packets is {0:N0}.", versionNumberSum);
+                    logger.WriteLine("The result of evaluating the transmission is {0:N0}.", value);
+                }
 
-        return PuzzleResult.Create(VersionNumberSum, Value);
+                return (versionNumberSum, value);
+            },
+            cancellationToken);
     }
 }

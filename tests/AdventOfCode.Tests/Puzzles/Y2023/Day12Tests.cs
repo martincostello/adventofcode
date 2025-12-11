@@ -62,8 +62,7 @@ public sealed class Day12Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         var puzzle = await SolvePuzzleAsync<Day12>();
 
         // Assert
-        puzzle.ShouldNotBeNull();
-        puzzle.SumOfCountsFolded.ShouldBe(7047);
-        puzzle.SumOfCountsUnfolded.ShouldBe(-1);
+        puzzle.Solution1.ShouldBe(7047);
+        puzzle.Solution2.ShouldBe(Puzzle.Unsolved);
     }
 }

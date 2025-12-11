@@ -39,7 +39,7 @@ public sealed class Day15Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         var puzzle = await SolvePuzzleAsync<Day15>();
 
         // Assert
-        puzzle.RiskLevelSmall.ShouldBe(487);
-        puzzle.RiskLevelLarge.ShouldBe(2821);
+        puzzle.Solution1.ShouldBe(487);
+        puzzle.Solution2.ShouldBe(2821);
     }
 }

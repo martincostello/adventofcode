@@ -213,7 +213,7 @@ public sealed class Day06Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         var puzzle = await SolvePuzzleAsync<Day06>();
 
         // Assert
-        puzzle.LightsIlluminated.ShouldBe(543903);
-        puzzle.TotalBrightness.ShouldBe(14687245);
+        puzzle.Solution1.ShouldBe(543903);
+        puzzle.Solution2.ShouldBe(14687245);
     }
 }

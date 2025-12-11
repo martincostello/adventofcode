@@ -7,18 +7,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2018;
 /// A class representing the puzzle for <c>https://adventofcode.com/2018/day/6</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2018, 06, "Chronal Coordinates", RequiresData = true, IsSlow = true)]
-public sealed class Day06 : Puzzle
+public sealed class Day06 : Puzzle<int, int>
 {
-    /// <summary>
-    /// Gets the largest non-infinite area between coordinates.
-    /// </summary>
-    public int LargestNonInfiniteArea { get; private set; }
-
-    /// <summary>
-    /// Gets the size of the area within the region defined by the distance limit.
-    /// </summary>
-    public int AreaOfRegion { get; private set; }
-
     /// <summary>
     /// Returns the largest non-infinite area between a set of coordinates.
     /// </summary>
@@ -112,22 +102,25 @@ public sealed class Day06 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        var coordinates = await ReadResourceAsLinesAsync(cancellationToken);
+        return await SolveWithLinesAsync(
+            static (coordinates, logger, _) =>
+            {
+                const int DistanceLimit = 10_000;
 
-        const int DistanceLimit = 10_000;
+                (int largestNonInfiniteArea, int areaOfRegion) = GetLargestArea(coordinates, DistanceLimit);
 
-        (LargestNonInfiniteArea, AreaOfRegion) = GetLargestArea(coordinates, DistanceLimit);
+                if (logger is { })
+                {
+                    logger.WriteLine("The largest non-infinite area is {0:N0}.", largestNonInfiniteArea);
 
-        if (Verbose)
-        {
-            Logger.WriteLine("The largest non-infinite area is {0:N0}.", LargestNonInfiniteArea);
+                    logger.WriteLine(
+                        "The size of the region containing all locations which have a total distance to all given coordinates of less than {0:N0} is {1:N0}.",
+                        DistanceLimit,
+                        areaOfRegion);
+                }
 
-            Logger.WriteLine(
-                "The size of the region containing all locations which have a total distance to all given coordinates of less than {0:N0} is {1:N0}.",
-                DistanceLimit,
-                AreaOfRegion);
-        }
-
-        return PuzzleResult.Create(LargestNonInfiniteArea, AreaOfRegion);
+                return (largestNonInfiniteArea, areaOfRegion);
+            },
+            cancellationToken);
     }
 }

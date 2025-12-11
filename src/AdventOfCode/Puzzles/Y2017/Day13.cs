@@ -7,18 +7,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017;
 /// A class representing the puzzle for <c>https://adventofcode.com/2017/day/13</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2017, 13, "Packet Scanners", RequiresData = true)]
-public sealed class Day13 : Puzzle
+public sealed class Day13 : Puzzle<int, int>
 {
-    /// <summary>
-    /// Gets the severity of the trip through the firewall.
-    /// </summary>
-    public int Severity { get; private set; }
-
-    /// <summary>
-    /// Gets the shortest delay for a trip through the firewall that has a severity of zero.
-    /// </summary>
-    public int ShortestDelay { get; private set; }
-
     /// <summary>
     /// Gets the severity of a trip through the firewall with the specified scanner depth and ranges.
     /// </summary>
@@ -102,17 +92,20 @@ public sealed class Day13 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        var depthRanges = await ReadResourceAsLinesAsync(cancellationToken);
+        return await SolveWithLinesAsync(
+            static (depthRanges, logger, _) =>
+            {
+                int severity = GetSeverityOfTrip(depthRanges);
+                int shortestDelay = GetShortestDelayForNeverCaught(depthRanges);
 
-        Severity = GetSeverityOfTrip(depthRanges);
-        ShortestDelay = GetShortestDelayForNeverCaught(depthRanges);
+                if (logger is { })
+                {
+                    logger.WriteLine($"The severity of the trip through the firewall is {severity:N0}.");
+                    logger.WriteLine($"The fewest number of picoseconds that the packet needs to be delayed by to pass through the firewall without being caught is {shortestDelay:N0}.");
+                }
 
-        if (Verbose)
-        {
-            Logger.WriteLine($"The severity of the trip through the firewall is {Severity:N0}.");
-            Logger.WriteLine($"The fewest number of picoseconds that the packet needs to be delayed by to pass through the firewall without being caught is {ShortestDelay:N0}.");
-        }
-
-        return PuzzleResult.Create(Severity, ShortestDelay);
+                return (severity, shortestDelay);
+            },
+            cancellationToken);
     }
 }

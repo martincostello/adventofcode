@@ -9,7 +9,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2023;
 /// A class representing the puzzle for <c>https://adventofcode.com/2023/day/20</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2023, 20, "Pulse Propagation", RequiresData = true)]
-public sealed class Day20 : Puzzle
+public sealed class Day20 : Puzzle<int, long>
 {
     private const string Activator = "rx";
     private const string Broadcaster = "broadcaster";
@@ -20,18 +20,6 @@ public sealed class Day20 : Puzzle
         Low = 0,
         High,
     }
-
-    /// <summary>
-    /// Gets the product of the count of the number of
-    /// high and low pulses sent ater 1,000 presses of the button.
-    /// </summary>
-    public int PulsesProduct { get; private set; }
-
-    /// <summary>
-    /// Gets the fewest number of button presses required
-    /// to activate the machine, if possible.
-    /// </summary>
-    public long ActivationCycles { get; private set; }
 
     /// <summary>
     /// Presses the button connecting the modules the specified number of times.
@@ -236,15 +224,15 @@ public sealed class Day20 : Puzzle
 
         var configuration = await ReadResourceAsLinesAsync(cancellationToken);
 
-        (PulsesProduct, ActivationCycles) = Run(configuration, presses: 1_000, cancellationToken);
+        (Solution1, Solution2) = Run(configuration, presses: 1_000, cancellationToken);
 
         if (Verbose)
         {
-            Logger.WriteLine("The total number of low pulses sent multiplied by the total number of high pulses sent is {0}.", PulsesProduct);
-            Logger.WriteLine("The fewest number of button presses required to deliver a single low pulse to the module named rx is {0}.", ActivationCycles);
+            Logger.WriteLine("The total number of low pulses sent multiplied by the total number of high pulses sent is {0}.", Solution1);
+            Logger.WriteLine("The fewest number of button presses required to deliver a single low pulse to the module named rx is {0}.", Solution2);
         }
 
-        return PuzzleResult.Create(PulsesProduct, ActivationCycles);
+        return Result();
     }
 
     private sealed class PulseReceivedEventArgs(Pulse pulse, Module sender, Module receiver) : EventArgs

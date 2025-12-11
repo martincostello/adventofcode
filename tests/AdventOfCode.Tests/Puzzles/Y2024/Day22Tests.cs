@@ -54,7 +54,6 @@ public sealed class Day22Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         var puzzle = await SolvePuzzleAsync<Day22>();
 
         // Assert
-        puzzle.ShouldNotBeNull();
-        puzzle.SecretNumber2000Sum.ShouldBe(14623556510);
+        puzzle.Solution.ShouldBe(14623556510);
     }
 }

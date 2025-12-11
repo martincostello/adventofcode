@@ -7,7 +7,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015;
 /// A class representing the puzzle for <c>https://adventofcode.com/2015/day/16</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2015, 16, "Aunt Sue", RequiresData = true)]
-public sealed class Day16 : Puzzle
+public sealed class Day16 : Puzzle<int, int>
 {
     /// <summary>
     /// The result of the forensic analysis of the gift from Aunt Sue X
@@ -26,16 +26,6 @@ public sealed class Day16 : Puzzle
         ["cars"] = (2, 0),
         ["perfumes"] = (1, 0),
     }.ToFrozenDictionary();
-
-    /// <summary>
-    /// Gets the number of the Aunt Sue that sent the gift.
-    /// </summary>
-    internal int AuntSueNumber { get; private set; }
-
-    /// <summary>
-    /// Gets the number of the real Aunt Sue that sent the gift.
-    /// </summary>
-    internal int RealAuntSueNumber { get; private set; }
 
     /// <summary>
     /// Returns the number of the Aunt Sue that sent the gift from the specified Aunt Sue metadata.
@@ -104,20 +94,23 @@ public sealed class Day16 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        var auntSueMetadata = await ReadResourceAsLinesAsync(cancellationToken);
+        return await SolveWithLinesAsync(
+            static (metadata, logger, _) =>
+            {
+                int auntSueNumber = WhichAuntSueSentTheGift(metadata);
+                int realAuntSueNumber = WhichAuntSueSentTheGift(metadata, compensateForRetroEncabulator: true);
 
-        AuntSueNumber = WhichAuntSueSentTheGift(auntSueMetadata);
-        RealAuntSueNumber = WhichAuntSueSentTheGift(auntSueMetadata, compensateForRetroEncabulator: true);
+                if (logger is { })
+                {
+                    logger.WriteLine(
+                        "The number of the Aunt Sue that got me the gift was originally thought to be {0}, but it was actually {1}.",
+                        auntSueNumber,
+                        realAuntSueNumber);
+                }
 
-        if (Verbose)
-        {
-            Logger.WriteLine(
-                "The number of the Aunt Sue that got me the gift was originally thought to be {0}, but it was actually {1}.",
-                AuntSueNumber,
-                RealAuntSueNumber);
-        }
-
-        return PuzzleResult.Create(AuntSueNumber, RealAuntSueNumber);
+                return (auntSueNumber, realAuntSueNumber);
+            },
+            cancellationToken);
     }
 
     /// <summary>

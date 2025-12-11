@@ -50,7 +50,6 @@ public sealed class Day23Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         var puzzle = await SolvePuzzleAsync<Day23>();
 
         // Assert
-        puzzle.ShouldNotBeNull();
-        puzzle.MaximumSteps.ShouldBe(-1);
+        puzzle.Solution.ShouldBe(Puzzle.Unsolved);
     }
 }

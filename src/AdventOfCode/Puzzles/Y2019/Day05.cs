@@ -7,18 +7,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019;
 /// A class representing the puzzle for <c>https://adventofcode.com/2019/day/5</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2019, 05, "Sunny with a Chance of Asteroids", RequiresData = true)]
-public sealed class Day05 : Puzzle
+public sealed class Day05 : Puzzle<long, long>
 {
-    /// <summary>
-    /// Gets the diagnostic code output by the program with an input of 1.
-    /// </summary>
-    public long DiagnosticCode1 { get; private set; }
-
-    /// <summary>
-    /// Gets the diagnostic code output by the program with an input of 5.
-    /// </summary>
-    public long DiagnosticCode5 { get; private set; }
-
     /// <summary>
     /// Runs the specified Intcode program.
     /// </summary>
@@ -52,17 +42,20 @@ public sealed class Day05 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        string program = await ReadResourceAsStringAsync(cancellationToken);
+        return await SolveWithStringAsync(
+            async static (program, logger, cancellationToken) =>
+            {
+                long diagnosticCode1 = await RunProgramAsync(program, input: 1, cancellationToken);
+                long diagnosticCode5 = await RunProgramAsync(program, input: 5, cancellationToken);
 
-        DiagnosticCode1 = await RunProgramAsync(program, input: 1, cancellationToken);
-        DiagnosticCode5 = await RunProgramAsync(program, input: 5, cancellationToken);
+                if (logger is { })
+                {
+                    logger.WriteLine("The program produces diagnostic code {0} for an input of 1.", diagnosticCode1);
+                    logger.WriteLine("The program produces diagnostic code {0} for an input of 5.", diagnosticCode5);
+                }
 
-        if (Verbose)
-        {
-            Logger.WriteLine("The program produces diagnostic code {0} for an input of 1.", DiagnosticCode1);
-            Logger.WriteLine("The program produces diagnostic code {0} for an input of 5.", DiagnosticCode5);
-        }
-
-        return PuzzleResult.Create(DiagnosticCode1, DiagnosticCode5);
+                return (diagnosticCode1, diagnosticCode5);
+            },
+            cancellationToken);
     }
 }

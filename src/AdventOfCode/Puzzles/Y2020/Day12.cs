@@ -7,7 +7,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020;
 /// A class representing the puzzle for <c>https://adventofcode.com/2020/day/12</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2020, 12, "Rain Risk", RequiresData = true)]
-public sealed class Day12 : Puzzle
+public sealed class Day12 : Puzzle<int, int>
 {
     /// <summary>
     /// A dictionary of vectors keyed by headings. This field is read-only.
@@ -19,16 +19,6 @@ public sealed class Day12 : Puzzle
         [Headings.East] = Directions.Right,
         [Headings.West] = Directions.Left,
     }.ToFrozenDictionary();
-
-    /// <summary>
-    /// Gets the Manhattan distance the ship has travelled.
-    /// </summary>
-    public int ManhattanDistance { get; private set; }
-
-    /// <summary>
-    /// Gets the Manhattan distance the ship has travelled when the waypoint is used.
-    /// </summary>
-    public int ManhattanDistanceWithWaypoint { get; private set; }
 
     /// <summary>
     /// Gets the Manhattan distance travelled by the ship navigating the specified instructions.
@@ -155,18 +145,21 @@ public sealed class Day12 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        var instructions = await ReadResourceAsLinesAsync(cancellationToken);
+        return await SolveWithLinesAsync(
+            static (instructions, logger, _) =>
+            {
+                int manhattanDistance = GetDistanceTravelled(instructions);
+                int manhattanDistanceWithWaypoint = GetDistanceTravelledWithWaypoint(instructions);
 
-        ManhattanDistance = GetDistanceTravelled(instructions);
-        ManhattanDistanceWithWaypoint = GetDistanceTravelledWithWaypoint(instructions);
+                if (logger is { })
+                {
+                    logger.WriteLine("The Manhattan distance travelled by the ship is {0}.", manhattanDistance);
+                    logger.WriteLine("The Manhattan distance travelled by the ship when using the waypoint is {0}.", manhattanDistanceWithWaypoint);
+                }
 
-        if (Verbose)
-        {
-            Logger.WriteLine("The Manhattan distance travelled by the ship is {0}.", ManhattanDistance);
-            Logger.WriteLine("The Manhattan distance travelled by the ship when using the waypoint is {0}.", ManhattanDistanceWithWaypoint);
-        }
-
-        return PuzzleResult.Create(ManhattanDistance, ManhattanDistanceWithWaypoint);
+                return (manhattanDistance, manhattanDistanceWithWaypoint);
+            },
+            cancellationToken);
     }
 
     /// <summary>

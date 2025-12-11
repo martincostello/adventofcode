@@ -38,8 +38,7 @@ public sealed class Day05Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         var puzzle = await SolvePuzzleAsync<Day05>();
 
         // Assert
-        puzzle.ShouldNotBeNull();
-        puzzle.TopCratesOfStacks9000.ShouldBe("TGWSMRBPN");
-        puzzle.TopCratesOfStacks9001.ShouldBe("TZLTLWRNF");
+        puzzle.Solution1.ShouldBe("TGWSMRBPN");
+        puzzle.Solution2.ShouldBe("TZLTLWRNF");
     }
 }

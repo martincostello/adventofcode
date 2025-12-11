@@ -7,7 +7,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019;
 /// A class representing the puzzle for <c>https://adventofcode.com/2019/day/3</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2019, 03, "Crossed Wires", RequiresData = true)]
-public sealed class Day03 : Puzzle
+public sealed class Day03 : Puzzle<int, int>
 {
     /// <summary>
     /// Represents the wires passing through a grid square.
@@ -30,16 +30,6 @@ public sealed class Day03 : Puzzle
         /// </summary>
         Second = 2,
     }
-
-    /// <summary>
-    /// Gets the Manhattan distance of the central port to the closest intersection.
-    /// </summary>
-    public int ManhattanDistance { get; private set; }
-
-    /// <summary>
-    /// Gets the intersection that is reached in the minimum number of steps.
-    /// </summary>
-    public int MinimumSteps { get; private set; }
 
     /// <summary>
     /// Gets the Manhattan distance of the central port to the closest intersection for the specified wires.
@@ -120,17 +110,20 @@ public sealed class Day03 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        var wires = await ReadResourceAsLinesAsync(cancellationToken);
+        return await SolveWithLinesAsync(
+            static (wires, logger, _) =>
+            {
+                (int manhattanDistance, int minimumSteps) = GetManhattanDistanceOfClosesIntersection(wires);
 
-        (ManhattanDistance, MinimumSteps) = GetManhattanDistanceOfClosesIntersection(wires);
+                if (logger is { })
+                {
+                    logger.WriteLine("The Manhattan distance from the central port to the closest intersection is {0}.", manhattanDistance);
+                    logger.WriteLine("The minimum number of combined steps to get to an intersection is {0}.", minimumSteps);
+                }
 
-        if (Verbose)
-        {
-            Logger.WriteLine("The Manhattan distance from the central port to the closest intersection is {0}.", ManhattanDistance);
-            Logger.WriteLine("The minimum number of combined steps to get to an intersection is {0}.", MinimumSteps);
-        }
-
-        return PuzzleResult.Create(ManhattanDistance, MinimumSteps);
+                return (manhattanDistance, minimumSteps);
+            },
+            cancellationToken);
     }
 
     /// <summary>

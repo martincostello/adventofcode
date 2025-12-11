@@ -40,8 +40,7 @@ public sealed class Day16Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         var puzzle = await SolvePuzzleAsync<Day16>();
 
         // Assert
-        puzzle.ShouldNotBeNull();
-        puzzle.EnergizedTiles00.ShouldBe(6906);
-        puzzle.EnergizedTilesOptimum.ShouldBe(7330);
+        puzzle.Solution1.ShouldBe(6906);
+        puzzle.Solution2.ShouldBe(7330);
     }
 }

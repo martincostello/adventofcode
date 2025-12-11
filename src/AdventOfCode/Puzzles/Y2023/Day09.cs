@@ -7,18 +7,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2023;
 /// A class representing the puzzle for <c>https://adventofcode.com/2023/day/09</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2023, 09, "Mirage Maintenance", RequiresData = true)]
-public sealed class Day09 : Puzzle
+public sealed class Day09 : Puzzle<int, int>
 {
-    /// <summary>
-    /// Gets the sum of the extrapolated next values.
-    /// </summary>
-    public int SumNext { get; private set; }
-
-    /// <summary>
-    /// Gets the sum of these extrapolated previous values.
-    /// </summary>
-    public int SumPrevious { get; private set; }
-
     /// <summary>
     /// Analyze the OASIS report and extrapolate the next value for each history.
     /// </summary>
@@ -80,15 +70,15 @@ public sealed class Day09 : Puzzle
 
         var values = await ReadResourceAsLinesAsync(cancellationToken);
 
-        SumNext = Analyze(values, reverse: false);
-        SumPrevious = Analyze(values, reverse: true);
+        Solution1 = Analyze(values, reverse: false);
+        Solution2 = Analyze(values, reverse: true);
 
         if (Verbose)
         {
-            Logger.WriteLine("The sum of the extrapolated next values is {0}.", SumNext);
-            Logger.WriteLine("The sum of the extrapolated previous values is {0}.", SumPrevious);
+            Logger.WriteLine("The sum of the extrapolated next values is {0}.", Solution1);
+            Logger.WriteLine("The sum of the extrapolated previous values is {0}.", Solution2);
         }
 
-        return PuzzleResult.Create(SumNext, SumPrevious);
+        return Result();
     }
 }

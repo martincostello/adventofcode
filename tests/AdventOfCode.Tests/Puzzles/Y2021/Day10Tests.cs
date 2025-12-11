@@ -38,7 +38,7 @@ public sealed class Day10Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         var puzzle = await SolvePuzzleAsync<Day10>();
 
         // Assert
-        puzzle.SyntaxErrorScore.ShouldBe(323613);
-        puzzle.MiddleAutoCompleteScore.ShouldBe(3103006161);
+        puzzle.Solution1.ShouldBe(323613);
+        puzzle.Solution2.ShouldBe(3103006161);
     }
 }

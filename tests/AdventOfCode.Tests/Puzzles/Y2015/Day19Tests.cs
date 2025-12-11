@@ -58,7 +58,7 @@ public sealed class Day19Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         var puzzle = await SolvePuzzleAsync<Day19>();
 
         // Assert
-        puzzle.CalibrationSolution.ShouldBe(576);
-        puzzle.FabricationSolution.ShouldBe(207);
+        puzzle.Solution1.ShouldBe(576);
+        puzzle.Solution2.ShouldBe(207);
     }
 }

@@ -7,18 +7,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016;
 /// A class representing the puzzle for <c>https://adventofcode.com/2016/day/24</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2016, 24, "Air Duct Spelunking", RequiresData = true)]
-public sealed class Day24 : Puzzle
+public sealed class Day24 : Puzzle<int, int>
 {
-    /// <summary>
-    /// Gets the fewest steps that can be taken to visit all of the locations.
-    /// </summary>
-    public int FewestStepsToVisitAllLocations { get; private set; }
-
-    /// <summary>
-    /// Gets the fewest steps that can be taken to visit all of the locations and return to the origin.
-    /// </summary>
-    public int FewestStepsToVisitAllLocationsAndReturn { get; private set; }
-
     /// <summary>
     /// Returns the minimum number of steps required to visit all of the locations in the maze.
     /// </summary>
@@ -88,23 +78,26 @@ public sealed class Day24 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        var layout = await ReadResourceAsLinesAsync(cancellationToken);
+        return await SolveWithLinesAsync(
+            static async (layout, logger, cancellationToken) =>
+            {
+                int fewestStepsToVisitAllLocations = GetMinimumStepsToVisitLocations(layout, returnToOrigin: false, cancellationToken);
+                int fewestStepsToVisitAllLocationsAndReturn = GetMinimumStepsToVisitLocations(layout, returnToOrigin: true, cancellationToken);
 
-        FewestStepsToVisitAllLocations = GetMinimumStepsToVisitLocations(layout, returnToOrigin: false, cancellationToken);
-        FewestStepsToVisitAllLocationsAndReturn = GetMinimumStepsToVisitLocations(layout, returnToOrigin: true, cancellationToken);
+                if (logger is { })
+                {
+                    logger.WriteLine(
+                        "The fewest number of steps required to visit every location is {0}.",
+                        fewestStepsToVisitAllLocations);
 
-        if (Verbose)
-        {
-            Logger.WriteLine(
-                "The fewest number of steps required to visit every location is {0}.",
-                FewestStepsToVisitAllLocations);
+                    logger.WriteLine(
+                        "The fewest number of steps required to visit every location and return to the origin is {0}.",
+                        fewestStepsToVisitAllLocationsAndReturn);
+                }
 
-            Logger.WriteLine(
-                "The fewest number of steps required to visit every location and return to the origin is {0}.",
-                FewestStepsToVisitAllLocationsAndReturn);
-        }
-
-        return PuzzleResult.Create(FewestStepsToVisitAllLocations, FewestStepsToVisitAllLocationsAndReturn);
+                return (fewestStepsToVisitAllLocations, fewestStepsToVisitAllLocationsAndReturn);
+            },
+            cancellationToken);
     }
 
     /// <summary>

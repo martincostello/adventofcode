@@ -51,7 +51,7 @@ public sealed class Day13Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         var puzzle = await SolvePuzzleAsync<Day13>();
 
         // Assert
-        puzzle.DotCountAfterFold1.ShouldBe(647);
-        puzzle.ActivationCode.ShouldBe("HEJHJRCJ");
+        puzzle.Solution1.ShouldBe(647);
+        puzzle.Solution2.ShouldBe("HEJHJRCJ");
     }
 }

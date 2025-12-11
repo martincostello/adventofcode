@@ -47,7 +47,7 @@ public sealed class Day14Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         var puzzle = await SolvePuzzleAsync<Day14>();
 
         // Assert
-        puzzle.Score10.ShouldBe(3587);
-        puzzle.Score40.ShouldBe(3906445077999);
+        puzzle.Solution1.ShouldBe(3587);
+        puzzle.Solution2.ShouldBe(3906445077999);
     }
 }

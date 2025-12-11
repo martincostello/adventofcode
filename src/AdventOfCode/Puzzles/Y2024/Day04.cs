@@ -9,7 +9,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2024;
 /// A class representing the puzzle for <c>https://adventofcode.com/2024/day/4</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2024, 04, "Ceres Search", RequiresData = true)]
-public sealed class Day04 : Puzzle
+public sealed class Day04 : Puzzle<int, int>
 {
     /// <summary>
     /// The target string to search for <c>XMAS</c>.
@@ -20,16 +20,6 @@ public sealed class Day04 : Puzzle
     /// The search space for the <see cref="XmasTarget"/> string. This field is read-only.
     /// </summary>
     private static readonly SearchValues<string> XmasNeedle = SearchValues.Create([XmasTarget], StringComparison.Ordinal);
-
-    /// <summary>
-    /// Gets the count of the number of occurrences of <c>XMAS</c> in the grid.
-    /// </summary>
-    public int SimpleCount { get; private set; }
-
-    /// <summary>
-    /// Gets the count of the number of occurrences of <c>MAS</c>-crossed in the grid.
-    /// </summary>
-    public int CrossCount { get; private set; }
 
     /// <summary>
     /// Searches for the number of occurrences of a value in the specified grid.
@@ -49,16 +39,16 @@ public sealed class Day04 : Puzzle
 
         var values = await ReadResourceAsLinesAsync(cancellationToken);
 
-        SimpleCount = Search(values, crossCount: false);
-        CrossCount = Search(values, crossCount: true);
+        Solution1 = Search(values, crossCount: false);
+        Solution2 = Search(values, crossCount: true);
 
         if (Verbose)
         {
-            Logger.WriteLine("XMAS appears {0} times.", SimpleCount);
-            Logger.WriteLine("MAS appears crossed {0} times.", CrossCount);
+            Logger.WriteLine("XMAS appears {0} times.", Solution1);
+            Logger.WriteLine("MAS appears crossed {0} times.", Solution2);
         }
 
-        return PuzzleResult.Create(SimpleCount, CrossCount);
+        return Result();
     }
 
     private static int CountXmas(IList<string> grid)

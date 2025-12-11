@@ -82,7 +82,7 @@ public sealed class Day09Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         var puzzle = await SolvePuzzleAsync<Day09>();
 
         // Assert
-        puzzle.WeakNumber.ShouldBe(22406676);
-        puzzle.Weakness.ShouldBe(2942387);
+        puzzle.Solution1.ShouldBe(22406676);
+        puzzle.Solution2.ShouldBe(2942387);
     }
 }

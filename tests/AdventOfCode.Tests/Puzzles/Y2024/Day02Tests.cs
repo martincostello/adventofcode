@@ -37,8 +37,7 @@ public sealed class Day02Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         var puzzle = await SolvePuzzleAsync<Day02>();
 
         // Assert
-        puzzle.ShouldNotBeNull();
-        puzzle.SafeReports.ShouldBe(236);
-        puzzle.SafeReportsWithDampener.ShouldBe(308);
+        puzzle.Solution1.ShouldBe(236);
+        puzzle.Solution2.ShouldBe(308);
     }
 }

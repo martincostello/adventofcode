@@ -38,7 +38,7 @@ public sealed class Day03Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         var puzzle = await SolvePuzzleAsync<Day03>();
 
         // Assert
-        puzzle.Area.ShouldBe(100595);
-        puzzle.IdOfUniqueClaim.ShouldBe("415");
+        puzzle.Solution1.ShouldBe(100595);
+        puzzle.Solution2.ShouldBe("415");
     }
 }

@@ -7,28 +7,27 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016;
 /// A class representing the puzzle for <c>https://adventofcode.com/2016/day/23</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2016, 23, "Safe Cracking", MinimumArguments = 1, RequiresData = true, IsHidden = true)]
-public sealed class Day23 : Puzzle
+public sealed class Day23 : Puzzle<int>
 {
-    /// <summary>
-    /// Gets the value to send to the safe.
-    /// </summary>
-    public int SafeValue { get; private set; }
-
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        int input = Parse<int>(args[0]);
+        return await SolveWithLinesAsync(
+            args,
+            static (arguments, instructions, logger, cancellationToken) =>
+            {
+                int input = Parse<int>(arguments[0]);
 
-        var instructions = await ReadResourceAsLinesAsync(cancellationToken);
+                var registers = Day12.Process(instructions, initialValueOfA: input, cancellationToken: cancellationToken);
+                int safeValue = registers['a'];
 
-        var registers = Day12.Process(instructions, initialValueOfA: input, cancellationToken: cancellationToken);
-        SafeValue = registers['a'];
+                if (logger is { })
+                {
+                    logger.WriteLine($"The value to send to the safe for an input of {input:N0} is '{safeValue}'.");
+                }
 
-        if (Verbose)
-        {
-            Logger.WriteLine($"The value to send to the safe for an input of {input:N0} is '{SafeValue}'.");
-        }
-
-        return PuzzleResult.Create(SafeValue);
+                return safeValue;
+            },
+            cancellationToken);
     }
 }

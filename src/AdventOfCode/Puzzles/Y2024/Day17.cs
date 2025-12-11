@@ -10,19 +10,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2024;
 /// A class representing the puzzle for <c>https://adventofcode.com/2024/day/17</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2024, 17, "Chronospatial Computer", RequiresData = true)]
-public sealed class Day17 : Puzzle
+public sealed class Day17 : Puzzle<string, long>
 {
-    /// <summary>
-    /// Gets the output of the program.
-    /// </summary>
-    public string Output { get; private set; } = string.Empty;
-
-    /// <summary>
-    /// Gets the lowest positive initial value for register A
-    /// that causes the program to output a copy of itself.
-    /// </summary>
-    public long RegisterA { get; private set; }
-
     /// <summary>
     /// Runs the specified 7-bit program.
     /// </summary>
@@ -123,16 +112,16 @@ public sealed class Day17 : Puzzle
 
         var values = await ReadResourceAsLinesAsync(cancellationToken);
 
-        (Output, _) = Run(values, fix: false, cancellationToken);
-        (_, RegisterA) = Run(values, fix: true, cancellationToken);
+        (Solution1, _) = Run(values, fix: false, cancellationToken);
+        (_, Solution2) = Run(values, fix: true, cancellationToken);
 
         if (Verbose)
         {
-            Logger.WriteLine("The output of the program is {0}.", Output);
-            Logger.WriteLine("The lowest positive initial value for register A that causes the program to output a copy of itself is {0}.", RegisterA);
+            Logger.WriteLine("The output of the program is {0}.", Solution1);
+            Logger.WriteLine("The lowest positive initial value for register A that causes the program to output a copy of itself is {0}.", Solution2);
         }
 
-        return PuzzleResult.Create(Output, RegisterA);
+        return Result();
     }
 
     private static List<int> Run(List<int> program, long a, long b, long c)

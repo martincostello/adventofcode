@@ -7,65 +7,62 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016;
 /// A class representing the puzzle for <c>https://adventofcode.com/2016/day/25</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2016, 25, "Clock Signal", RequiresData = true, IsSlow = true)]
-public sealed class Day25 : Puzzle
+public sealed class Day25 : Puzzle<int>
 {
-    /// <summary>
-    /// Gets the minimum value that generates a clock signal.
-    /// </summary>
-    public int ClockSignalValue { get; private set; }
-
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        var instructions = await ReadResourceAsLinesAsync(cancellationToken);
-
-        foreach (int i in Enumerable.InfiniteSequence(1, 1))
-        {
-            bool isRepeating = false;
-            bool lastSignal = true;
-
-            int iterations = 0;
-
-            bool Signal(int p)
+        return await SolveWithLinesAsync(
+            async static (instructions, logger, cancellationToken) =>
             {
-                // If the signal is not 0 or 1, then not of interest
-                bool stop = true;
-
-                if ((p == 0 && lastSignal) || (p == 1 && !lastSignal))
+                foreach (int i in Enumerable.InfiniteSequence(1, 1))
                 {
-                    // Alternation continues
-                    lastSignal = !lastSignal;
-                    stop = false;
+                    bool isRepeating = false;
+                    bool lastSignal = true;
+
+                    int iterations = 0;
+
+                    bool Signal(int p)
+                    {
+                        // If the signal is not 0 or 1, then not of interest
+                        bool stop = true;
+
+                        if ((p == 0 && lastSignal) || (p == 1 && !lastSignal))
+                        {
+                            // Alternation continues
+                            lastSignal = !lastSignal;
+                            stop = false;
+                        }
+
+                        if (!stop && iterations++ > 100)
+                        {
+                            // 100 alternating characters, so assume indefinite
+                            isRepeating = true;
+                            stop = true;
+                        }
+
+                        return stop;
+                    }
+
+                    Day12.Process(
+                        instructions,
+                        initialValueOfA: i,
+                        signal: Signal,
+                        cancellationToken: cancellationToken);
+
+                    if (isRepeating)
+                    {
+                        if (logger is { })
+                        {
+                            logger.WriteLine($"The lowest positive integer that produces a clock signal is '{i:N0}'.");
+                        }
+
+                        return i;
+                    }
                 }
 
-                if (!stop && iterations++ > 100)
-                {
-                    // 100 alternating characters, so assume indefinite
-                    isRepeating = true;
-                    stop = true;
-                }
-
-                return stop;
-            }
-
-            Day12.Process(
-                instructions,
-                initialValueOfA: i,
-                signal: Signal,
-                cancellationToken: cancellationToken);
-
-            if (isRepeating)
-            {
-                ClockSignalValue = i;
-                break;
-            }
-        }
-
-        if (Verbose)
-        {
-            Logger.WriteLine($"The lowest positive integer that produces a clock signal is '{ClockSignalValue:N0}'.");
-        }
-
-        return PuzzleResult.Create(ClockSignalValue);
+                return Unsolved;
+            },
+            cancellationToken);
     }
 }

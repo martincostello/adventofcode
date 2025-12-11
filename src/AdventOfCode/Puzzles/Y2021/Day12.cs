@@ -7,18 +7,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2021;
 /// A class representing the puzzle for <c>https://adventofcode.com/2021/day/12</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2021, 12, "Passage Pathing", RequiresData = true)]
-public sealed class Day12 : Puzzle
+public sealed class Day12 : Puzzle<int, int>
 {
-    /// <summary>
-    /// Gets the number of paths through the cave system that visit one small cave once.
-    /// </summary>
-    public int Count1 { get; private set; }
-
-    /// <summary>
-    /// Gets the number of paths through the cave system that visit one small cave twice.
-    /// </summary>
-    public int Count2 { get; private set; }
-
     /// <summary>
     /// Navigates the specified cave system.
     /// </summary>
@@ -46,23 +36,26 @@ public sealed class Day12 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        var nodes = await ReadResourceAsLinesAsync(cancellationToken);
+        return await SolveWithLinesAsync(
+            static (nodes, logger, _) =>
+            {
+                int count1 = Navigate(nodes, smallCaveVisitLimit: 1);
+                int count2 = Navigate(nodes, smallCaveVisitLimit: 2);
 
-        Count1 = Navigate(nodes, smallCaveVisitLimit: 1);
-        Count2 = Navigate(nodes, smallCaveVisitLimit: 2);
+                if (logger is { })
+                {
+                    logger.WriteLine(
+                        "There are {0:N0} paths through the cave system that visit one small cave once at most.",
+                        count1);
 
-        if (Verbose)
-        {
-            Logger.WriteLine(
-                "There are {0:N0} paths through the cave system that visit one small cave once at most.",
-                Count1);
+                    logger.WriteLine(
+                        "There are {0:N0} paths through the cave system that visit one small cave twice at most.",
+                        count2);
+                }
 
-            Logger.WriteLine(
-                "There are {0:N0} paths through the cave system that visit one small cave twice at most.",
-                Count2);
-        }
-
-        return PuzzleResult.Create(Count1, Count2);
+                return (count1, count2);
+            },
+            cancellationToken);
     }
 
     private static int CountPaths(Graph<string> graph, int smallCaveVisitLimit)

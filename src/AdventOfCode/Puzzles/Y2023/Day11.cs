@@ -7,20 +7,10 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2023;
 /// A class representing the puzzle for <c>https://adventofcode.com/2023/day/11</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2023, 11, "Cosmic Expansion", RequiresData = true)]
-public sealed class Day11 : Puzzle
+public sealed class Day11 : Puzzle<long, long>
 {
     private const char Empty = '.';
     private const char Galaxy = '#';
-
-    /// <summary>
-    /// Gets the sum of the lengths of shortest path between each galaxy.
-    /// </summary>
-    public long SumOfLengthsSmall { get; private set; }
-
-    /// <summary>
-    /// Gets the sum of the lengths of shortest path between each galaxy.
-    /// </summary>
-    public long SumOfLengthsLarge { get; private set; }
 
     /// <summary>
     /// Analyzes the specified image of galaxies and returns the
@@ -145,15 +135,15 @@ public sealed class Day11 : Puzzle
 
         var image = await ReadResourceAsLinesAsync(cancellationToken);
 
-        SumOfLengthsSmall = Analyze(image, expansion: 1);
-        SumOfLengthsLarge = Analyze(image, expansion: 1_000_000);
+        Solution1 = Analyze(image, expansion: 1);
+        Solution2 = Analyze(image, expansion: 1_000_000);
 
         if (Verbose)
         {
-            Logger.WriteLine("The sum of the shortest path between each galaxy with an expansion of 1 is {0}.", SumOfLengthsSmall);
-            Logger.WriteLine("The sum of the shortest path between each galaxy with an expansion of 1,000,000 is {0}.", SumOfLengthsLarge);
+            Logger.WriteLine("The sum of the shortest path between each galaxy with an expansion of 1 is {0}.", Solution1);
+            Logger.WriteLine("The sum of the shortest path between each galaxy with an expansion of 1,000,000 is {0}.", Solution2);
         }
 
-        return PuzzleResult.Create(SumOfLengthsSmall, SumOfLengthsLarge);
+        return Result();
     }
 }

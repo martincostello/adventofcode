@@ -9,18 +9,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2025;
 /// A class representing the puzzle for <c>https://adventofcode.com/2025/day/5</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2025, 05, "Cafeteria", RequiresData = true)]
-public sealed class Day05 : Puzzle
+public sealed class Day05 : Puzzle<int, long>
 {
-    /// <summary>
-    /// Gets the number of available ingredient IDs that are fresh.
-    /// </summary>
-    public int AvailableFreshIngredientIds { get; private set; }
-
-    /// <summary>
-    /// Gets the total number of ingredient IDs that are fresh.
-    /// </summary>
-    public long FreshIngredientIds { get; private set; }
-
     /// <summary>
     /// Counts the number of fresh ingredients in the specified inventory database.
     /// </summary>
@@ -112,18 +102,19 @@ public sealed class Day05 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        ArgumentNullException.ThrowIfNull(args);
+        return await SolveWithLinesAsync(
+            static (values, logger, _) =>
+            {
+                (int availableFreshIngredientIds, long freshIngredientIds) = CountFreshIngredients(values);
 
-        var values = await ReadResourceAsLinesAsync(cancellationToken);
+                if (logger is { })
+                {
+                    logger.WriteLine("{0} available ingredient IDs are fresh.", availableFreshIngredientIds);
+                    logger.WriteLine("{0} ingredient IDs are fresh.", freshIngredientIds);
+                }
 
-        (AvailableFreshIngredientIds, FreshIngredientIds) = CountFreshIngredients(values);
-
-        if (Verbose)
-        {
-            Logger.WriteLine("{0} available ingredient IDs are fresh.", AvailableFreshIngredientIds);
-            Logger.WriteLine("{0} ingredient IDs are fresh.", FreshIngredientIds);
-        }
-
-        return PuzzleResult.Create(AvailableFreshIngredientIds, FreshIngredientIds);
+                return (availableFreshIngredientIds, freshIngredientIds);
+            },
+            cancellationToken);
     }
 }

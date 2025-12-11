@@ -7,18 +7,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016;
 /// A class representing the puzzle for <c>https://adventofcode.com/2016/day/8</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2016, 08, "Two-Factor Authentication", RequiresData = true)]
-public sealed class Day08 : Puzzle
+public sealed class Day08 : Puzzle<int, string>
 {
-    /// <summary>
-    /// Gets the number of pixels that are be lit.
-    /// </summary>
-    public int PixelsLit { get; private set; }
-
-    /// <summary>
-    /// Gets the code displayed on the screen.
-    /// </summary>
-    public string Code { get; private set; } = string.Empty;
-
     /// <summary>
     /// Gets the number of pixels lit in the specified grid after following the specified instructions.
     /// </summary>
@@ -72,20 +62,23 @@ public sealed class Day08 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        var instructions = await ReadResourceAsLinesAsync(cancellationToken);
+        string visualization = string.Empty;
 
-        (PixelsLit, Code, string visualization) = GetPixelsLit(instructions, width: 50, height: 6, Logger);
+        var result = await SolveWithLinesAsync(
+            (instructions, logger, _) =>
+            {
+                (int pixelsLit, string code, visualization) = GetPixelsLit(instructions, width: 50, height: 6, Logger);
 
-        if (Verbose)
-        {
-            Logger.WriteLine($"There are {PixelsLit:N0} pixels lit.");
-            Logger.WriteLine($"The code displayed is {Code}.");
-        }
+                if (Verbose)
+                {
+                    Logger.WriteLine($"There are {pixelsLit:N0} pixels lit.");
+                    Logger.WriteLine($"The code displayed is {code}.");
+                }
 
-        var result = new PuzzleResult();
+                return (pixelsLit, code);
+            },
+            cancellationToken);
 
-        result.Solutions.Add(PixelsLit);
-        result.Solutions.Add(Code);
         result.Visualizations.Add(visualization);
 
         return result;

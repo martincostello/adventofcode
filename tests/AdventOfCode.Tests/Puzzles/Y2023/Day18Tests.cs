@@ -43,8 +43,7 @@ public sealed class Day18Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         var puzzle = await SolvePuzzleAsync<Day18>();
 
         // Assert
-        puzzle.ShouldNotBeNull();
-        puzzle.Volume.ShouldBe(47139);
-        puzzle.VolumeWithFix.ShouldBe(173152345887206);
+        puzzle.Solution1.ShouldBe(47139);
+        puzzle.Solution2.ShouldBe(173152345887206);
     }
 }

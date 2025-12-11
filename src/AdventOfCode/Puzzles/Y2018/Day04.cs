@@ -7,18 +7,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2018;
 /// A class representing the puzzle for <c>https://adventofcode.com/2018/day/4</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2018, 04, "Repose Record", RequiresData = true)]
-public sealed class Day04 : Puzzle
+public sealed class Day04 : Puzzle<int, int>
 {
-    /// <summary>
-    /// Gets the product of the Id of the guard who slept the most and the minute they were asleep the most.
-    /// </summary>
-    public int SleepiestGuardMinute { get; private set; }
-
-    /// <summary>
-    /// Gets the product of the minute a guard was most asleep and the Id of the guard most asleep in that minute.
-    /// </summary>
-    public int SleepiestMinuteGuard { get; private set; }
-
     /// <summary>
     /// Calculates the product of the guard who slept the most and the minute they were asleep the most from the specified log.
     /// </summary>
@@ -145,17 +135,20 @@ public sealed class Day04 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        var log = await ReadResourceAsLinesAsync(cancellationToken);
+        return await SolveWithLinesAsync(
+            static (log, logger, _) =>
+            {
+                (int sleepiestGuardMinute, int sleepiestMinuteGuard) = GetSleepiestGuardsMinutes(log);
 
-        (SleepiestGuardMinute, SleepiestMinuteGuard) = GetSleepiestGuardsMinutes(log);
+                if (logger is { })
+                {
+                    logger.WriteLine($"The ID of the sleepiest guard multiplied by the most common minute is {sleepiestGuardMinute:N0}.");
+                    logger.WriteLine($"The most common minute a guard was asleep in multiplied by the guard's ID is {sleepiestMinuteGuard:N0}.");
+                }
 
-        if (Verbose)
-        {
-            Logger.WriteLine($"The ID of the sleepiest guard multiplied by the most common minute is {SleepiestGuardMinute:N0}.");
-            Logger.WriteLine($"The most common minute a guard was asleep in multiplied by the guard's ID is {SleepiestMinuteGuard:N0}.");
-        }
-
-        return PuzzleResult.Create(SleepiestGuardMinute, SleepiestMinuteGuard);
+                return (sleepiestGuardMinute, sleepiestMinuteGuard);
+            },
+            cancellationToken);
     }
 
     /// <summary>

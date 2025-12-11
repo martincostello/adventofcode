@@ -29,7 +29,7 @@ public sealed class Day15Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         var puzzle = await SolvePuzzleAsync<Day15>();
 
         // Assert
-        puzzle.TimeOfFirstButtonPress.ShouldBe(16824);
-        puzzle.TimeOfFirstButtonPressWithExtraDisc.ShouldBe(3543984);
+        puzzle.Solution1.ShouldBe(16824);
+        puzzle.Solution2.ShouldBe(3543984);
     }
 }

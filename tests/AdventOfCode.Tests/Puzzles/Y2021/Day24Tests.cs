@@ -12,7 +12,7 @@ public sealed class Day24Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         var puzzle = await SolvePuzzleAsync<Day24>();
 
         // Assert
-        puzzle.MaximumValidModelNumber.ShouldBe(92928914999991);
-        puzzle.MinimumValidModelNumber.ShouldBe(91811211611981);
+        puzzle.Solution1.ShouldBe(92928914999991);
+        puzzle.Solution2.ShouldBe(91811211611981);
     }
 }

@@ -7,20 +7,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2021;
 /// A class representing the puzzle for <c>https://adventofcode.com/2021/day/7</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2021, 07, "The Treachery of Whales", RequiresData = true)]
-public sealed class Day07 : Puzzle
+public sealed class Day07 : Puzzle<long, long>
 {
-    /// <summary>
-    /// Gets the optimal units of fuel consumed to align the crab
-    /// submarines when the fuel has a constant burn rate.
-    /// </summary>
-    public long FuelConsumedWithConstantBurnRate { get; private set; }
-
-    /// <summary>
-    /// Gets the optimal units of fuel consumed to align the crab
-    /// submarines when the fuel has a variable burn rate.
-    /// </summary>
-    public long FuelConsumedWithVariableBurnRate { get; private set; }
-
     /// <summary>
     /// Determines the optimal units of fuel consumed to align the specified crab submarines.
     /// </summary>
@@ -72,22 +60,27 @@ public sealed class Day07 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        var submarines = (await ReadResourceAsStringAsync(cancellationToken)).AsNumbers<int>();
+        return await SolveWithStringAsync(
+            static (data, logger) =>
+            {
+                var submarines = data.AsNumbers<int>();
 
-        FuelConsumedWithConstantBurnRate = AlignSubmarines(submarines, withVariableBurnRate: false);
-        FuelConsumedWithVariableBurnRate = AlignSubmarines(submarines, withVariableBurnRate: true);
+                long fuelConsumedWithConstantBurnRate = AlignSubmarines(submarines, withVariableBurnRate: false);
+                long fuelConsumedWithVariableBurnRate = AlignSubmarines(submarines, withVariableBurnRate: true);
 
-        if (Verbose)
-        {
-            Logger.WriteLine(
-                "The least fuel consumed to align the crabs' submarines with a constant burn rate is {0:N0}.",
-                FuelConsumedWithConstantBurnRate);
+                if (logger is { })
+                {
+                    logger.WriteLine(
+                        "The least fuel consumed to align the crabs' submarines with a constant burn rate is {0:N0}.",
+                        fuelConsumedWithConstantBurnRate);
 
-            Logger.WriteLine(
-                "The least fuel consumed to align the crabs' submarines with a variable burn rate is {0:N0}.",
-                FuelConsumedWithVariableBurnRate);
-        }
+                    logger.WriteLine(
+                        "The least fuel consumed to align the crabs' submarines with a variable burn rate is {0:N0}.",
+                        fuelConsumedWithVariableBurnRate);
+                }
 
-        return PuzzleResult.Create(FuelConsumedWithConstantBurnRate, FuelConsumedWithVariableBurnRate);
+                return (fuelConsumedWithConstantBurnRate, fuelConsumedWithVariableBurnRate);
+            },
+            cancellationToken);
     }
 }

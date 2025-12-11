@@ -72,6 +72,6 @@ public sealed class Day25Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         var puzzle = await SolvePuzzleAsync<Day25>("2947", "3029");
 
         // Assert
-        puzzle.Code.ShouldBe(19980801u);
+        puzzle.Solution.ShouldBe(19980801u);
     }
 }

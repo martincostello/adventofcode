@@ -7,19 +7,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2022;
 /// A class representing the puzzle for <c>https://adventofcode.com/2022/day/10</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2022, 10, "Cathode-Ray Tube", RequiresData = true)]
-public sealed class Day10 : Puzzle
+public sealed class Day10 : Puzzle<int, string>
 {
-    /// <summary>
-    /// Gets the sum of the signal strengths for the 20th,
-    /// 60th, 100th, 140th, 180th and 220th cycles.
-    /// </summary>
-    public int SumOfSignalStrengths { get; private set; }
-
-    /// <summary>
-    /// Gets the message output by the CRT display.
-    /// </summary>
-    public string Message { get; private set; } = string.Empty;
-
     /// <summary>
     /// Gets displayed message from executing the specified instructions.
     /// </summary>
@@ -121,18 +110,15 @@ public sealed class Day10 : Puzzle
     {
         var program = await ReadResourceAsLinesAsync(cancellationToken);
 
-        (Message, string visualization, SumOfSignalStrengths) = GetMessage(program);
+        (Solution2, string visualization, Solution1) = GetMessage(program);
 
         if (Verbose)
         {
-            Logger.WriteLine("The sum of the six signal strengths is {0}.", SumOfSignalStrengths);
-            Logger.WriteLine("The message output to the CRT is '{0}'.", Message);
+            Logger.WriteLine("The sum of the six signal strengths is {0}.", Solution1);
+            Logger.WriteLine("The message output to the CRT is '{0}'.", Solution2);
         }
 
-        var result = new PuzzleResult();
-
-        result.Solutions.Add(SumOfSignalStrengths);
-        result.Solutions.Add(Message);
+        var result = Result();
         result.Visualizations.Add(visualization);
 
         return result;

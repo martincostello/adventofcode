@@ -38,7 +38,7 @@ public sealed class Day03Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         var puzzle = await SolvePuzzleAsync<Day03>();
 
         // Assert
-        puzzle.HousesWithPresentsFromSanta.ShouldBe(2565);
-        puzzle.HousesWithPresentsFromSantaAndRoboSanta.ShouldBe(2639);
+        puzzle.Solution1.ShouldBe(2565);
+        puzzle.Solution2.ShouldBe(2639);
     }
 }

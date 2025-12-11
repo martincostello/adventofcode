@@ -7,18 +7,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2022;
 /// A class representing the puzzle for <c>https://adventofcode.com/2022/day/8</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2022, 08, "Treetop Tree House", RequiresData = true)]
-public sealed class Day08 : Puzzle
+public sealed class Day08 : Puzzle<int, int>
 {
-    /// <summary>
-    /// Gets how many trees are visible from outside the grid.
-    /// </summary>
-    public int VisibleTrees { get; private set; }
-
-    /// <summary>
-    /// Gets the maximum scenic score that can be achieved for a treehouse in a tree in the grid.
-    /// </summary>
-    public int MaximumScenicScore { get; private set; }
-
     /// <summary>
     /// Returns how many trees are visible from outside the specified grid.
     /// </summary>
@@ -165,15 +155,15 @@ public sealed class Day08 : Puzzle
     {
         var grid = await ReadResourceAsLinesAsync(cancellationToken);
 
-        (VisibleTrees, MaximumScenicScore) = CountVisibleTrees(grid);
+        (Solution1, Solution2) = CountVisibleTrees(grid);
 
         if (Verbose)
         {
-            Logger.WriteLine("There are {0} trees visible from outside the grid.", VisibleTrees);
-            Logger.WriteLine("The highest scenic score is {0}.", MaximumScenicScore);
+            Logger.WriteLine("There are {0} trees visible from outside the grid.", Solution1);
+            Logger.WriteLine("The highest scenic score is {0}.", Solution2);
         }
 
-        return PuzzleResult.Create(VisibleTrees, MaximumScenicScore);
+        return Result();
     }
 
     private sealed record Tree(Point Location, int Height)

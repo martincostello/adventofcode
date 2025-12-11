@@ -7,18 +7,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2021;
 /// A class representing the puzzle for <c>https://adventofcode.com/2021/day/4</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2021, 04, "Giant Squid", RequiresData = true)]
-public sealed class Day04 : Puzzle
+public sealed class Day04 : Puzzle<int, int>
 {
-    /// <summary>
-    /// Gets the score of the first winning card from playing Bingo.
-    /// </summary>
-    public int FirstWinningScore { get; private set; }
-
-    /// <summary>
-    /// Gets the score of the last winning card from playing Bingo.
-    /// </summary>
-    public int LastWinningScore { get; private set; }
-
     /// <summary>
     /// Plays the specified game of Bingo.
     /// </summary>
@@ -55,17 +45,20 @@ public sealed class Day04 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        var game = await ReadResourceAsLinesAsync(cancellationToken);
+        return await SolveWithLinesAsync(
+            static (game, logger, _) =>
+            {
+                (int firstWinningScore, int lastWinningScore) = PlayBingo(game);
 
-        (FirstWinningScore, LastWinningScore) = PlayBingo(game);
+                if (logger is { })
+                {
+                    logger.WriteLine("The score of the first winning Bingo card is {0:N0}.", firstWinningScore);
+                    logger.WriteLine("The score of the last winning Bingo card is {0:N0}.", lastWinningScore);
+                }
 
-        if (Verbose)
-        {
-            Logger.WriteLine("The score of the first winning Bingo card is {0:N0}.", FirstWinningScore);
-            Logger.WriteLine("The score of the last winning Bingo card is {0:N0}.", LastWinningScore);
-        }
-
-        return PuzzleResult.Create(FirstWinningScore, LastWinningScore);
+                return (firstWinningScore, lastWinningScore);
+            },
+            cancellationToken);
     }
 
     private static List<BingoCard> ParseCards(IEnumerable<string> game)

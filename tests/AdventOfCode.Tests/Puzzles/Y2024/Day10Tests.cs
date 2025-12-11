@@ -36,8 +36,7 @@ public sealed class Day10Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         var puzzle = await SolvePuzzleAsync<Day10>();
 
         // Assert
-        puzzle.ShouldNotBeNull();
-        puzzle.SumOfScores.ShouldBe(778);
-        puzzle.SumOfRatings.ShouldBe(1925);
+        puzzle.Solution1.ShouldBe(778);
+        puzzle.Solution2.ShouldBe(1925);
     }
 }

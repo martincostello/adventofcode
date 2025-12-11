@@ -39,7 +39,7 @@ public sealed class Day17Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         var puzzle = await SolvePuzzleAsync<Day17>();
 
         // Assert
-        puzzle.ActiveCubes3D.ShouldBe(388);
-        puzzle.ActiveCubes4D.ShouldBe(2280);
+        puzzle.Solution1.ShouldBe(388);
+        puzzle.Solution2.ShouldBe(2280);
     }
 }

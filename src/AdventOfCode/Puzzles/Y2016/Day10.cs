@@ -7,18 +7,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016;
 /// A class representing the puzzle for <c>https://adventofcode.com/2016/day/10</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2016, 10, "Balance Bots", RequiresData = true)]
-public sealed class Day10 : Puzzle
+public sealed class Day10 : Puzzle<int, int>
 {
-    /// <summary>
-    /// Gets the number of the bot that compares value-61 and value-17 microchips.
-    /// </summary>
-    public int BotThatCompares61And17Microchips { get; private set; }
-
-    /// <summary>
-    /// Gets the product of the value of the microchips in output bins 0, 1 and 2.
-    /// </summary>
-    public int ProductOfMicrochipsInBins012 { get; private set; }
-
     /// <summary>
     /// Returns the value of the bot that compares microchips with the specified values.
     /// </summary>
@@ -79,18 +69,22 @@ public sealed class Day10 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        var instructions = await ReadResourceAsLinesAsync(cancellationToken);
-        int[] binsOfInterest = [0, 1, 2];
+        return await SolveWithLinesAsync(
+            static (instructions, logger, _) =>
+            {
+                int[] binsOfInterest = [0, 1, 2];
 
-        (BotThatCompares61And17Microchips, ProductOfMicrochipsInBins012) = GetBotNumber(instructions, 61, 17, binsOfInterest);
+                (int botThatCompares61And17Microchips, int productOfMicrochipsInBins012) = GetBotNumber(instructions, 61, 17, binsOfInterest);
 
-        if (Verbose)
-        {
-            Logger.WriteLine($"The number of the bot that compares value-61 and value-17 microchips is {BotThatCompares61And17Microchips:N0}.");
-            Logger.WriteLine($"The product of the microchips in output bins 0, 1 and 2 is {ProductOfMicrochipsInBins012:N0}.");
-        }
+                if (logger is { })
+                {
+                    logger.WriteLine($"The number of the bot that compares value-61 and value-17 microchips is {botThatCompares61And17Microchips:N0}.");
+                    logger.WriteLine($"The product of the microchips in output bins 0, 1 and 2 is {productOfMicrochipsInBins012:N0}.");
+                }
 
-        return PuzzleResult.Create(BotThatCompares61And17Microchips, ProductOfMicrochipsInBins012);
+                return (botThatCompares61And17Microchips, productOfMicrochipsInBins012);
+            },
+            cancellationToken);
     }
 
     /// <summary>

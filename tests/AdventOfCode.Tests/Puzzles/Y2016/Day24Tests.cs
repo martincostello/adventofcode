@@ -32,7 +32,7 @@ public sealed class Day24Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         var puzzle = await SolvePuzzleAsync<Day24>();
 
         // Assert
-        puzzle.FewestStepsToVisitAllLocations.ShouldBe(502);
-        puzzle.FewestStepsToVisitAllLocationsAndReturn.ShouldBe(724);
+        puzzle.Solution1.ShouldBe(502);
+        puzzle.Solution2.ShouldBe(724);
     }
 }

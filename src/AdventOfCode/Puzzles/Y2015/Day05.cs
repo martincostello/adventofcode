@@ -9,22 +9,12 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015;
 /// A class representing the puzzle for <c>https://adventofcode.com/2015/day/5</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2015, 05, "Doesn't He Have Intern-Elves For This?", RequiresData = true)]
-public sealed class Day05 : Puzzle
+public sealed class Day05 : Puzzle<int, int>
 {
     /// <summary>
     /// The sequences of characters that are not considered nice. This field is read-only.
     /// </summary>
     private static readonly SearchValues<string> NotNiceSequences = SearchValues.Create(["ab", "cd", "pq", "xy"], StringComparison.Ordinal);
-
-    /// <summary>
-    /// Gets the number of 'nice' strings using version 1 of the rules.
-    /// </summary>
-    public int NiceStringCountV1 { get; private set; }
-
-    /// <summary>
-    /// Gets the number of 'nice' strings using version 2 of the rules.
-    /// </summary>
-    public int NiceStringCountV2 { get; private set; }
 
     /// <summary>
     /// Returns whether the specified string is 'nice' using the first set of criteria.
@@ -87,12 +77,9 @@ public sealed class Day05 : Puzzle
     /// <returns>
     /// <see langword="true"/> if <paramref name="value"/> is 'nice'; otherwise <see langword="false"/>.
     /// </returns>
-    public static bool IsNiceV2(string value)
-    {
-        return
-            HasLetterThatIsTheBreadOfALetterSandwich(value) &&
-            HasPairOfLettersWithMoreThanOneOccurrence(value);
-    }
+    public static bool IsNiceV2(ReadOnlySpan<char> value) =>
+        HasLetterThatIsTheBreadOfALetterSandwich(value) &&
+        HasPairOfLettersWithMoreThanOneOccurrence(value);
 
     /// <summary>
     /// Tests whether a string contains a pair of any two letters that
@@ -149,17 +136,23 @@ public sealed class Day05 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        var values = await ReadResourceAsLinesAsync(cancellationToken);
+        return await SolveWithLinesAsync(
+            static (values, logger, _) =>
+            {
+                int niceStringCountV1 = values.Count(IsNiceV1);
+                int niceStringCountV2 = values.Count(IsNiceV2);
 
-        NiceStringCountV1 = values.Count((p) => IsNiceV1(p));
-        NiceStringCountV2 = values.Count(IsNiceV2);
+                if (logger is { })
+                {
+                    logger.WriteLine("{0:N0} strings are nice using version 1 of the rules.", niceStringCountV1);
+                    logger.WriteLine("{0:N0} strings are nice using version 2 of the rules.", niceStringCountV2);
+                }
 
-        if (Verbose)
-        {
-            Logger.WriteLine("{0:N0} strings are nice using version 1 of the rules.", NiceStringCountV1);
-            Logger.WriteLine("{0:N0} strings are nice using version 2 of the rules.", NiceStringCountV2);
-        }
+                return (niceStringCountV1, niceStringCountV2);
+            },
+            cancellationToken);
 
-        return PuzzleResult.Create(NiceStringCountV1, NiceStringCountV2);
+        static bool IsNiceV1(string s) => Day05.IsNiceV1(s);
+        static bool IsNiceV2(string s) => Day05.IsNiceV2(s);
     }
 }

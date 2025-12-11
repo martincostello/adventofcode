@@ -34,7 +34,7 @@ public sealed class Day14Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         var puzzle = await SolvePuzzleAsync<Day14>(args);
 
         // Assert
-        puzzle.IndexOfKey64.ShouldBe(15035);
-        puzzle.IndexOfKey64WithStretching.ShouldBe(19968);
+        puzzle.Solution1.ShouldBe(15035);
+        puzzle.Solution2.ShouldBe(19968);
     }
 }

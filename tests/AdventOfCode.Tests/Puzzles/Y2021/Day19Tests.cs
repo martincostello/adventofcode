@@ -164,7 +164,7 @@ public sealed class Day19Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         var puzzle = await SolvePuzzleAsync<Day19>();
 
         // Assert
-        puzzle.BeaconCount.ShouldBe(308);
-        puzzle.LargestScannerDistance.ShouldBe(12124);
+        puzzle.Solution1.ShouldBe(308);
+        puzzle.Solution2.ShouldBe(12124);
     }
 }

@@ -103,7 +103,7 @@ public sealed class Day19Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         var puzzle = await SolvePuzzleAsync<Day19>();
 
         // Assert
-        puzzle.MatchesRule0.ShouldBe(195);
-        puzzle.MatchesRule0WithFix.ShouldBe(309);
+        puzzle.Solution1.ShouldBe(195);
+        puzzle.Solution2.ShouldBe(309);
     }
 }

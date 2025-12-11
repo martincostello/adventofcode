@@ -42,7 +42,6 @@ public sealed class Day21Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         var puzzle = await SolvePuzzleAsync<Day21>();
 
         // Assert
-        puzzle.ShouldNotBeNull();
-        puzzle.Plots64.ShouldBe(3782);
+        puzzle.Solution.ShouldBe(3782);
     }
 }

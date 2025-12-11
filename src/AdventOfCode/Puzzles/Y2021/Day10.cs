@@ -7,18 +7,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2021;
 /// A class representing the puzzle for <c>https://adventofcode.com/2021/day/10</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2021, 10, "Syntax Scoring", RequiresData = true)]
-public sealed class Day10 : Puzzle
+public sealed class Day10 : Puzzle<int, long>
 {
-    /// <summary>
-    /// Gets the syntax error score for the navigation subsystem.
-    /// </summary>
-    public int SyntaxErrorScore { get; private set; }
-
-    /// <summary>
-    /// Gets the middle auto-complete score for the navigation subsystem.
-    /// </summary>
-    public long MiddleAutoCompleteScore { get; private set; }
-
     /// <summary>
     /// Compiles the specified lines of the navigation subsystem.
     /// </summary>
@@ -127,16 +117,19 @@ public sealed class Day10 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        var lines = await ReadResourceAsLinesAsync(cancellationToken);
+        return await SolveWithLinesAsync(
+            static (lines, logger, _) =>
+            {
+                (int syntaxErrorScore, long middleAutoCompleteScore) = Compile(lines);
 
-        (SyntaxErrorScore, MiddleAutoCompleteScore) = Compile(lines);
+                if (logger is { })
+                {
+                    logger.WriteLine("The total syntax error score is {0:N0}.", syntaxErrorScore);
+                    logger.WriteLine("The middle auto-complete score is {0:N0}.", middleAutoCompleteScore);
+                }
 
-        if (Verbose)
-        {
-            Logger.WriteLine("The total syntax error score is {0:N0}.", SyntaxErrorScore);
-            Logger.WriteLine("The middle auto-complete score is {0:N0}.", MiddleAutoCompleteScore);
-        }
-
-        return PuzzleResult.Create(SyntaxErrorScore, MiddleAutoCompleteScore);
+                return (syntaxErrorScore, middleAutoCompleteScore);
+            },
+            cancellationToken);
     }
 }

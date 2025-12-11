@@ -24,7 +24,7 @@ public sealed class Day06Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         var puzzle = await SolvePuzzleAsync<Day06>();
 
         // Assert
-        puzzle.ErrorCorrectedMessage.ShouldBe("qzedlxso");
-        puzzle.ModifiedErrorCorrectedMessage.ShouldBe("ucmifjae");
+        puzzle.Solution1.ShouldBe("qzedlxso");
+        puzzle.Solution2.ShouldBe("ucmifjae");
     }
 }

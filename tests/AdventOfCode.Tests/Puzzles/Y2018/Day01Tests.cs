@@ -45,7 +45,7 @@ public sealed class Day01Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         var puzzle = await SolvePuzzleAsync<Day01>();
 
         // Assert
-        puzzle.Frequency.ShouldBe(543);
-        puzzle.FirstRepeatedFrequency.ShouldBe(621);
+        puzzle.Solution1.ShouldBe(543);
+        puzzle.Solution2.ShouldBe(621);
     }
 }

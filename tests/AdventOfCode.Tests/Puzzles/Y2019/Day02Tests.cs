@@ -14,7 +14,7 @@ public sealed class Day02Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
     public async Task Y2019_Day02_RunProgram_Returns_Correct_State(string program, long[] expected)
     {
         // Act
-        IReadOnlyList<long> actual = await Day02.RunProgramAsync(program, cancellationToken: CancellationToken.None);
+        var actual = await Day02.RunProgramAsync(program, cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
         actual.ShouldBe(expected);
@@ -27,8 +27,6 @@ public sealed class Day02Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         var puzzle = await SolvePuzzleAsync<Day02>();
 
         // Assert
-        puzzle.Output.ShouldNotBeNull();
-        puzzle.Output.ShouldNotBeEmpty();
-        puzzle.Output[0].ShouldBe(9581917);
+        puzzle.Solution.ShouldBe(9581917);
     }
 }

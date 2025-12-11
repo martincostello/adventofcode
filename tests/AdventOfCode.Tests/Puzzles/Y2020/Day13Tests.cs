@@ -41,7 +41,7 @@ public sealed class Day13Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         var puzzle = await SolvePuzzleAsync<Day13>();
 
         // Assert
-        puzzle.BusWaitProduct.ShouldBe(2935);
-        puzzle.EarliestTimestamp.ShouldBe(836024966345345L);
+        puzzle.Solution1.ShouldBe(2935);
+        puzzle.Solution2.ShouldBe(836024966345345);
     }
 }

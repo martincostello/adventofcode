@@ -39,7 +39,7 @@ public sealed class Day13Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         var puzzle = await SolvePuzzleAsync<Day13>();
 
         // Assert
-        puzzle.MaximumTotalChangeInHappiness.ShouldBe(618);
-        puzzle.MaximumTotalChangeInHappinessWithCurrentUser.ShouldBe(601);
+        puzzle.Solution1.ShouldBe(618);
+        puzzle.Solution2.ShouldBe(601);
     }
 }

@@ -7,18 +7,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015;
 /// A class representing the puzzle for <c>https://adventofcode.com/2015/day/21</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2015, 21, "RPG Simulator 20XX", RequiresData = true)]
-public sealed class Day21 : Puzzle
+public sealed class Day21 : Puzzle<int, int>
 {
-    /// <summary>
-    /// Gets the maximum cost of items that can be purchased for the human to lost to the boss.
-    /// </summary>
-    internal int MaximumCostToLose { get; private set; }
-
-    /// <summary>
-    /// Gets the minimum cost of items that can be purchased for the human to beat the boss.
-    /// </summary>
-    internal int MinimumCostToWin { get; private set; }
-
     /// <summary>
     /// Simulates a fight between the player and the boss using the specified upgrades.
     /// </summary>
@@ -82,79 +72,77 @@ public sealed class Day21 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        var stats = await ReadResourceAsLinesAsync(cancellationToken);
-
-        int bossHitPoints = Parse<int>(stats[0].Split(':')[1]);
-        int bossDamage = Parse<int>(stats[1].Split(':')[1]);
-        int bossArmor = Parse<int>(stats[2].Split(':')[1]);
-
-        var bossStats = (bossHitPoints, bossDamage, bossArmor);
-
-        string[] potentialWeapons = [.. Shop.PotentialWeapons.Keys];
-        string?[] potentialArmor = [.. Shop.PotentialArmor.Keys, null!];
-
-        string[] keys = [.. Shop.PotentialRings.Keys];
-
-        var potentialRings = new List<IList<string>>((keys.Length * 2) + 1)
-        {
-            Array.Empty<string>(),
-        };
-
-        foreach (string ring in keys)
-        {
-            potentialRings.Add([ring]);
-        }
-
-        var permutations = Maths.GetPermutations(keys, 2);
-
-        foreach (var permutation in permutations)
-        {
-            potentialRings.Add([.. permutation]);
-        }
-
-        var costsToLose = new List<int>((potentialArmor.Length + potentialRings.Count + potentialWeapons.Length) / 2);
-        var costsToWin = new List<int>(costsToLose.Capacity);
-
-        foreach (string weapon in potentialWeapons)
-        {
-            if (cancellationToken.IsCancellationRequested)
+        return await SolveWithLinesAsync(
+            static async (stats, logger, cancellationToken) =>
             {
-                break;
-            }
+                int bossHitPoints = Parse<int>(stats[0].Split(':')[1]);
+                int bossDamage = Parse<int>(stats[1].Split(':')[1]);
+                int bossArmor = Parse<int>(stats[2].Split(':')[1]);
 
-            foreach (string? armor in potentialArmor)
-            {
-                foreach (var rings in potentialRings)
+                var bossStats = (bossHitPoints, bossDamage, bossArmor);
+
+                string[] potentialWeapons = [.. Shop.PotentialWeapons.Keys];
+                string?[] potentialArmor = [.. Shop.PotentialArmor.Keys, null!];
+
+                string[] keys = [.. Shop.PotentialRings.Keys];
+
+                var potentialRings = new List<IList<string>>((keys.Length * 2) + 1)
                 {
-                    (bool didHumanWin, int goldSpent) = Fight(weapon, armor, rings, bossStats);
+                    Array.Empty<string>(),
+                };
 
-                    if (didHumanWin)
+                foreach (string ring in keys)
+                {
+                    potentialRings.Add([ring]);
+                }
+
+                var permutations = Maths.GetPermutations(keys, 2);
+
+                foreach (var permutation in permutations)
+                {
+                    potentialRings.Add([.. permutation]);
+                }
+
+                var costsToLose = new List<int>((potentialArmor.Length + potentialRings.Count + potentialWeapons.Length) / 2);
+                var costsToWin = new List<int>(costsToLose.Capacity);
+
+                foreach (string weapon in potentialWeapons)
+                {
+                    if (cancellationToken.IsCancellationRequested)
                     {
-                        costsToWin.Add(goldSpent);
+                        break;
                     }
-                    else
+
+                    foreach (string? armor in potentialArmor)
                     {
-                        costsToLose.Add(goldSpent);
+                        foreach (var rings in potentialRings)
+                        {
+                            (bool didHumanWin, int goldSpent) = Fight(weapon, armor, rings, bossStats);
+
+                            if (didHumanWin)
+                            {
+                                costsToWin.Add(goldSpent);
+                            }
+                            else
+                            {
+                                costsToLose.Add(goldSpent);
+                            }
+                        }
                     }
                 }
-            }
-        }
 
-        MaximumCostToLose = costsToLose.Max();
-        MinimumCostToWin = costsToWin.Min();
+                int maximumCostToLose = costsToLose.Max();
+                int minimumCostToWin = costsToWin.Min();
 
-        if (Verbose)
-        {
-            Logger.WriteLine(
-                "The minimum amount of gold spent for the human to beat the boss is {0:N0}.",
-                MinimumCostToWin);
+                if (logger is { })
+                {
+                    logger.WriteLine("The minimum amount of gold spent for the human to beat the boss is {0:N0}.", maximumCostToLose);
+                    logger.WriteLine("The maximum amount of gold spent for the human to lose to the boss is {0:N0}.", minimumCostToWin);
+                }
 
-            Logger.WriteLine(
-                "The maximum amount of gold spent for the human to lose to the boss is {0:N0}.",
-                MaximumCostToLose);
-        }
-
-        return PuzzleResult.Create(MaximumCostToLose, MinimumCostToWin);
+                return (maximumCostToLose, minimumCostToWin);
+            },
+            cancellationToken);
     }
 
     /// <summary>

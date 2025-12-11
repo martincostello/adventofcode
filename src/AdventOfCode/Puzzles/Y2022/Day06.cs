@@ -7,18 +7,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2022;
 /// A class representing the puzzle for <c>https://adventofcode.com/2022/day/6</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2022, 06, "Tuning Trouble", RequiresData = true)]
-public sealed class Day06 : Puzzle
+public sealed class Day06 : Puzzle<int, int>
 {
-    /// <summary>
-    /// Gets the index of the first start-of-packet marker.
-    /// </summary>
-    public int IndexOfFirstStartOfPacketMarker { get; private set; }
-
-    /// <summary>
-    /// Gets the index of the first start-of-message marker.
-    /// </summary>
-    public int IndexOfFirstStartOfMessageMarker { get; private set; }
-
     /// <summary>
     /// Finds the index of the first start-of-packet marker in the datastream.
     /// </summary>
@@ -55,20 +45,20 @@ public sealed class Day06 : Puzzle
     {
         string datastream = await ReadResourceAsStringAsync(cancellationToken);
 
-        IndexOfFirstStartOfPacketMarker = FindFirstPacket(datastream, 4);
-        IndexOfFirstStartOfMessageMarker = FindFirstPacket(datastream, 14);
+        Solution1 = FindFirstPacket(datastream, 4);
+        Solution2 = FindFirstPacket(datastream, 14);
 
         if (Verbose)
         {
             Logger.WriteLine(
                 "{0} characters need to be processed before the first start-of-packet marker is detected.",
-                IndexOfFirstStartOfPacketMarker);
+                Solution1);
 
             Logger.WriteLine(
                 "{0} characters need to be processed before the first start-of-message marker is detected.",
-                IndexOfFirstStartOfMessageMarker);
+                Solution2);
         }
 
-        return PuzzleResult.Create(IndexOfFirstStartOfPacketMarker, IndexOfFirstStartOfMessageMarker);
+        return Result();
     }
 }

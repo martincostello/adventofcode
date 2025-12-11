@@ -7,18 +7,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015;
 /// A class representing the puzzle for <c>https://adventofcode.com/2015/day/10</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2015, 10, "Elves Look, Elves Say", MinimumArguments = 1, IsSlow = true)]
-public sealed class Day10 : Puzzle
+public sealed class Day10 : Puzzle<int, int>
 {
-    /// <summary>
-    /// Gets the solution to the puzzle for 40 iterations.
-    /// </summary>
-    public int Solution40 { get; private set; }
-
-    /// <summary>
-    /// Gets the solution to the puzzle for 50 iterations.
-    /// </summary>
-    public int Solution50 { get; private set; }
-
     /// <summary>
     /// Gets the 'look-and-say' representation of a span of characters.
     /// </summary>
@@ -55,29 +45,32 @@ public sealed class Day10 : Puzzle
     /// <inheritdoc />
     protected override Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        string value = args[0];
-        string result = value;
-
-        for (int i = 0; i < 40; i++)
+        return SolveWithArguments(args, static (arguments, logger) =>
         {
-            result = AsLookAndSay(result);
-        }
+            string value = arguments[0];
+            string result = value;
 
-        Solution40 = result.Length;
+            for (int i = 0; i < 40; i++)
+            {
+                result = AsLookAndSay(result);
+            }
 
-        for (int i = 0; i < 10; i++)
-        {
-            result = AsLookAndSay(result);
-        }
+            int solution40 = result.Length;
 
-        Solution50 = result.Length;
+            for (int i = 0; i < 10; i++)
+            {
+                result = AsLookAndSay(result);
+            }
 
-        if (Verbose)
-        {
-            Logger.WriteLine("The length of the result for input '{0}' after 40 iterations is {1:N0}.", value, Solution40);
-            Logger.WriteLine("The length of the result for input '{0}' after 50 iterations is {1:N0}.", value, Solution50);
-        }
+            int solution50 = result.Length;
 
-        return PuzzleResult.Create(Solution40, Solution50);
+            if (logger is { })
+            {
+                logger.WriteLine("The length of the result for input '{0}' after 40 iterations is {1:N0}.", value, solution40);
+                logger.WriteLine("The length of the result for input '{0}' after 50 iterations is {1:N0}.", value, solution50);
+            }
+
+            return (solution40, solution50);
+        });
     }
 }

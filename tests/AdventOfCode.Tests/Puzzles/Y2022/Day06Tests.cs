@@ -32,8 +32,7 @@ public sealed class Day06Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         var puzzle = await SolvePuzzleAsync<Day06>();
 
         // Assert
-        puzzle.ShouldNotBeNull();
-        puzzle.IndexOfFirstStartOfPacketMarker.ShouldBe(1850);
-        puzzle.IndexOfFirstStartOfMessageMarker.ShouldBe(2823);
+        puzzle.Solution1.ShouldBe(1850);
+        puzzle.Solution2.ShouldBe(2823);
     }
 }

@@ -7,18 +7,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017;
 /// A class representing the puzzle for <c>https://adventofcode.com/2017/day/15</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2017, 15, "Dueling Generators", RequiresData = true, IsSlow = true)]
-public sealed class Day15 : Puzzle
+public sealed class Day15 : Puzzle<int, int>
 {
-    /// <summary>
-    /// Gets the judge's final count using version 1.
-    /// </summary>
-    public int FinalCountV1 { get; private set; }
-
-    /// <summary>
-    /// Gets the judge's final count using version 2.
-    /// </summary>
-    public int FinalCountV2 { get; private set; }
-
     /// <summary>
     /// Gets the number of values whose lowest 16 bits match when a sequence is generated 40,000,000 times.
     /// </summary>
@@ -106,17 +96,20 @@ public sealed class Day15 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        var input = await ReadResourceAsLinesAsync(cancellationToken);
+        return await SolveWithLinesAsync(
+            static (input, logger, _) =>
+            {
+                int finalCountV1 = GetMatchingPairs(input, version: 1);
+                int finalCountV2 = GetMatchingPairs(input, version: 2);
 
-        FinalCountV1 = GetMatchingPairs(input, version: 1);
-        FinalCountV2 = GetMatchingPairs(input, version: 2);
+                if (logger is { })
+                {
+                    logger.WriteLine($"The judge's final count using version 1 is {finalCountV1:N0}.");
+                    logger.WriteLine($"The judge's final count using version 2 is {finalCountV2:N0}.");
+                }
 
-        if (Verbose)
-        {
-            Logger.WriteLine($"The judge's final count using version 1 is {FinalCountV1:N0}.");
-            Logger.WriteLine($"The judge's final count using version 2 is {FinalCountV2:N0}.");
-        }
-
-        return PuzzleResult.Create(FinalCountV1, FinalCountV2);
+                return (finalCountV1, finalCountV2);
+            },
+            cancellationToken);
     }
 }

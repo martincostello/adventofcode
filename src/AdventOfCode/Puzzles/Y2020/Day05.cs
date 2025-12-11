@@ -7,18 +7,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020;
 /// A class representing the puzzle for <c>https://adventofcode.com/2020/day/5</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2020, 05, "Binary Boarding", RequiresData = true)]
-public sealed class Day05 : Puzzle
+public sealed class Day05 : Puzzle<int, int>
 {
-    /// <summary>
-    /// Gets the highest seat Id of the scanned boarding passes.
-    /// </summary>
-    public int HighestSeatId { get; private set; }
-
-    /// <summary>
-    /// Gets my seat Id from the scanned boarding passes.
-    /// </summary>
-    public int MySeatId { get; private set; }
-
     /// <summary>
     /// Scans the specified boarding pass to get the seat information.
     /// </summary>
@@ -78,20 +68,23 @@ public sealed class Day05 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        var boardingPasses = await ReadResourceAsLinesAsync(cancellationToken);
+        return await SolveWithLinesAsync(
+            static (boardingPasses, logger, _) =>
+            {
+                (int mySeatId, int highestSeatId) = Process(boardingPasses);
 
-        (MySeatId, HighestSeatId) = Process(boardingPasses);
+                if (logger is { })
+                {
+                    logger.WriteLine("The highest seat Id from a boarding pass is {0}.", highestSeatId);
+                    logger.WriteLine("My seat Id is {0}.", mySeatId);
+                }
 
-        if (Verbose)
-        {
-            Logger.WriteLine("The highest seat Id from a boarding pass is {0}.", HighestSeatId);
-            Logger.WriteLine("My seat Id is {0}.", MySeatId);
-        }
-
-        return PuzzleResult.Create(HighestSeatId, MySeatId);
+                return (highestSeatId, mySeatId);
+            },
+            cancellationToken);
     }
 
-    private static (int MySetId, int HighestSeatId) Process(List<string> boardingPasses)
+    private static (int MySeatId, int HighestSeatId) Process(List<string> boardingPasses)
     {
         Span<int> ids = new int[boardingPasses.Count];
 

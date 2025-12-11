@@ -9,20 +9,10 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2023;
 /// A class representing the puzzle for <c>https://adventofcode.com/2023/day/03</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2023, 03, "Gear Ratios", RequiresData = true)]
-public sealed class Day03 : Puzzle
+public sealed class Day03 : Puzzle<int, int>
 {
     private static readonly SearchValues<char> Digits = SearchValues.Create("0123456789");
     private static readonly SearchValues<char> NotParts = SearchValues.Create("0123456789.");
-
-    /// <summary>
-    /// Gets the sum of all of the part numbers in the engine schematic.
-    /// </summary>
-    public int SumOfPartNumbers { get; private set; }
-
-    /// <summary>
-    /// Gets the sum of all of the gear ratios in the engine schematic.
-    /// </summary>
-    public int SumOfGearRatios { get; private set; }
 
     /// <summary>
     /// Gets the sum of all of the part numbers and gear ratios in the engine schematic.
@@ -182,14 +172,14 @@ public sealed class Day03 : Puzzle
 
         var values = await ReadResourceAsLinesAsync(cancellationToken);
 
-        (SumOfPartNumbers, SumOfGearRatios) = Solve(values);
+        (Solution1, Solution2) = Solve(values);
 
         if (Verbose)
         {
-            Logger.WriteLine("The sum of all of the part numbers in the engine schematic is {0}.", SumOfPartNumbers);
-            Logger.WriteLine("The sum of all of the gear ratios in the engine schematic is {0}.", SumOfGearRatios);
+            Logger.WriteLine("The sum of all of the part numbers in the engine schematic is {0}.", Solution1);
+            Logger.WriteLine("The sum of all of the gear ratios in the engine schematic is {0}.", Solution2);
         }
 
-        return PuzzleResult.Create(SumOfPartNumbers, SumOfGearRatios);
+        return Result();
     }
 }

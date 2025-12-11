@@ -7,18 +7,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015;
 /// A class representing the puzzle for <c>https://adventofcode.com/2015/day/14</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2015, 14, "Reindeer Olympics", MinimumArguments = 1, RequiresData = true)]
-public sealed class Day14 : Puzzle
+public sealed class Day14 : Puzzle<int, int>
 {
-    /// <summary>
-    /// Gets the maximum distance travelled by the winning reindeer at the given point in time, in kilometers.
-    /// </summary>
-    internal int MaximumReindeerDistance { get; private set; }
-
-    /// <summary>
-    /// Gets the maximum number of points for the winning reindeer at the given point in time.
-    /// </summary>
-    internal int MaximumReindeerPoints { get; private set; }
-
     /// <summary>
     /// Gets the maximum distance travelled by the specified reindeer at the specified time index.
     /// </summary>
@@ -73,30 +63,29 @@ public sealed class Day14 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        int timeIndex = Parse<int>(args[0], NumberStyles.Integer & ~NumberStyles.AllowLeadingSign);
+        return await SolveWithLinesAsync(
+            args,
+            static async (arguments, flightData, logger, _) =>
+            {
+                int timeIndex = Parse<int>(arguments[0], NumberStyles.Integer & ~NumberStyles.AllowLeadingSign);
 
-        if (timeIndex < 0)
-        {
-            throw new PuzzleException("The time index specified is invalid.");
-        }
+                if (timeIndex < 0)
+                {
+                    throw new PuzzleException("The time index specified is invalid.");
+                }
 
-        var flightData = await ReadResourceAsLinesAsync(cancellationToken);
+                int maximumReindeerDistance = GetMaximumDistanceOfFastestReindeer(flightData, timeIndex);
+                int maximumReindeerPoints = GetMaximumPointsOfFastestReindeer(flightData, timeIndex);
 
-        MaximumReindeerDistance = GetMaximumDistanceOfFastestReindeer(flightData, timeIndex);
+                if (logger is { })
+                {
+                    logger.WriteLine("After {0:N0} seconds, the furthest reindeer is {1:N0} km away.", timeIndex, maximumReindeerDistance);
+                    logger.WriteLine("After {0:N0} seconds, the reindeer in the lead has {1:N0} points.", timeIndex, maximumReindeerPoints);
+                }
 
-        if (Verbose)
-        {
-            Logger.WriteLine("After {0:N0} seconds, the furthest reindeer is {1:N0} km away.", timeIndex, MaximumReindeerDistance);
-        }
-
-        MaximumReindeerPoints = GetMaximumPointsOfFastestReindeer(flightData, timeIndex);
-
-        if (Verbose)
-        {
-            Logger.WriteLine("After {0:N0} seconds, the reindeer in the lead has {1:N0} points.", timeIndex, MaximumReindeerPoints);
-        }
-
-        return PuzzleResult.Create(MaximumReindeerDistance, MaximumReindeerPoints);
+                return (maximumReindeerDistance, maximumReindeerPoints);
+            },
+            cancellationToken);
     }
 
     /// <summary>

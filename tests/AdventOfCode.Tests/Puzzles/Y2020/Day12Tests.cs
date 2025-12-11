@@ -38,7 +38,7 @@ public sealed class Day12Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         var puzzle = await SolvePuzzleAsync<Day12>();
 
         // Assert
-        puzzle.ManhattanDistance.ShouldBe(439);
-        puzzle.ManhattanDistanceWithWaypoint.ShouldBe(12385);
+        puzzle.Solution1.ShouldBe(439);
+        puzzle.Solution2.ShouldBe(12385);
     }
 }

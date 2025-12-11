@@ -66,7 +66,7 @@ public sealed class Day03Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         var puzzle = await SolvePuzzleAsync<Day03>();
 
         // Assert
-        puzzle.PowerConsumption.ShouldBe(3633500);
-        puzzle.LifeSupportRating.ShouldBe(4550283);
+        puzzle.Solution1.ShouldBe(3633500);
+        puzzle.Solution2.ShouldBe(4550283);
     }
 }

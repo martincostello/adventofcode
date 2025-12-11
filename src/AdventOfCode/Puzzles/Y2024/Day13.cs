@@ -9,18 +9,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2024;
 /// A class representing the puzzle for <c>https://adventofcode.com/2024/day/13</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2024, 13, "Claw Contraption", RequiresData = true)]
-public sealed class Day13 : Puzzle
+public sealed class Day13 : Puzzle<long, long>
 {
-    /// <summary>
-    /// Gets the fewest tokens needed to be spent to win all possible prizes.
-    /// </summary>
-    public long FewestTokens { get; private set; }
-
-    /// <summary>
-    /// Gets the fewest tokens needed to be spent to win all possible prizes with the correct offset.
-    /// </summary>
-    public long FewestTokensFixed { get; private set; }
-
     /// <summary>
     /// Plays the specified claw machines.
     /// </summary>
@@ -76,16 +66,16 @@ public sealed class Day13 : Puzzle
 
         var values = await ReadResourceAsLinesAsync(cancellationToken);
 
-        FewestTokens = Play(values, offset: 0, limit: 100);
-        FewestTokensFixed = Play(values, offset: 10_000_000_000_000, limit: long.MaxValue);
+        Solution1 = Play(values, offset: 0, limit: 100);
+        Solution2 = Play(values, offset: 10_000_000_000_000, limit: long.MaxValue);
 
         if (Verbose)
         {
-            Logger.WriteLine("The fewest tokens you would have to spend to win all possible prizes is {0}.", FewestTokens);
-            Logger.WriteLine("The fewest tokens you would have to spend to win all possible prizes with the correct offset is {0}.", FewestTokensFixed);
+            Logger.WriteLine("The fewest tokens you would have to spend to win all possible prizes is {0}.", Solution1);
+            Logger.WriteLine("The fewest tokens you would have to spend to win all possible prizes with the correct offset is {0}.", Solution2);
         }
 
-        return PuzzleResult.Create(FewestTokens, FewestTokensFixed);
+        return Result();
     }
 
     private sealed record ClawMachine(Point A, Point B, Point Prize)

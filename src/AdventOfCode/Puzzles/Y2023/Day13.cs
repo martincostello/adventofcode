@@ -7,18 +7,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2023;
 /// A class representing the puzzle for <c>https://adventofcode.com/2023/day/13</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2023, 13, "Point of Incidence", RequiresData = true)]
-public sealed class Day13 : Puzzle
+public sealed class Day13 : Puzzle<int, int>
 {
-    /// <summary>
-    /// Gets the number after summarizing all of the notes.
-    /// </summary>
-    public int Summary { get; private set; }
-
-    /// <summary>
-    /// Gets the number after summarizing all of the notes with all the smudges cleaned.
-    /// </summary>
-    public int SummaryWithSmudgesCleaned { get; private set; }
-
     /// <summary>
     /// Finds the lines of symmetry for the specified mirrors.
     /// </summary>
@@ -131,15 +121,15 @@ public sealed class Day13 : Puzzle
 
         var values = await ReadResourceAsLinesAsync(cancellationToken);
 
-        Summary = Summarize(values, cleanSmudges: false);
-        SummaryWithSmudgesCleaned = Summarize(values, cleanSmudges: true);
+        Solution1 = Summarize(values, cleanSmudges: false);
+        Solution2 = Summarize(values, cleanSmudges: true);
 
         if (Verbose)
         {
-            Logger.WriteLine("The number after summarizing all of the notes is {0}.", Summary);
-            Logger.WriteLine("The number after summarizing all of the notes after cleaning the smudges is {0}.", SummaryWithSmudgesCleaned);
+            Logger.WriteLine("The number after summarizing all of the notes is {0}.", Solution1);
+            Logger.WriteLine("The number after summarizing all of the notes after cleaning the smudges is {0}.", Solution2);
         }
 
-        return PuzzleResult.Create(Summary, SummaryWithSmudgesCleaned);
+        return Result();
     }
 }

@@ -7,18 +7,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020;
 /// A class representing the puzzle for <c>https://adventofcode.com/2020/day/14</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2020, 14, "Docking Data", RequiresData = true)]
-public sealed class Day14 : Puzzle
+public sealed class Day14 : Puzzle<long, long>
 {
-    /// <summary>
-    /// Gets the sum of all values left in memory after processing completes using version 1.
-    /// </summary>
-    public long SumOfRemainingValuesV1 { get; private set; }
-
-    /// <summary>
-    /// Gets the sum of all values left in memory after processing completes using version 2.
-    /// </summary>
-    public long SumOfRemainingValuesV2 { get; private set; }
-
     /// <summary>
     /// Runs the specified program.
     /// </summary>
@@ -125,17 +115,20 @@ public sealed class Day14 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        var values = await ReadResourceAsLinesAsync(cancellationToken);
+        return await SolveWithLinesAsync(
+            static (values, logger, _) =>
+            {
+                long sumOfRemainingValuesV1 = RunProgram(values, version: 1);
+                long sumOfRemainingValuesV2 = RunProgram(values, version: 2);
 
-        SumOfRemainingValuesV1 = RunProgram(values, version: 1);
-        SumOfRemainingValuesV2 = RunProgram(values, version: 2);
+                if (logger is { })
+                {
+                    logger.WriteLine("The sum of all values left in memory using version 1 is {0}.", sumOfRemainingValuesV1);
+                    logger.WriteLine("The sum of all values left in memory using version 2 is {0}.", sumOfRemainingValuesV2);
+                }
 
-        if (Verbose)
-        {
-            Logger.WriteLine("The sum of all values left in memory using version 1 is {0}.", SumOfRemainingValuesV1);
-            Logger.WriteLine("The sum of all values left in memory using version 2 is {0}.", SumOfRemainingValuesV2);
-        }
-
-        return PuzzleResult.Create(SumOfRemainingValuesV1, SumOfRemainingValuesV2);
+                return (sumOfRemainingValuesV1, sumOfRemainingValuesV2);
+            },
+            cancellationToken);
     }
 }

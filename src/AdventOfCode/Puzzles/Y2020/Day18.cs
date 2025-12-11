@@ -7,18 +7,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020;
 /// A class representing the puzzle for <c>https://adventofcode.com/2020/day/18</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2020, 18, "Operation Order", RequiresData = true)]
-public sealed class Day18 : Puzzle
+public sealed class Day18 : Puzzle<long, long>
 {
-    /// <summary>
-    /// Gets the sum of evaluating the expression(s) using V1 of the precedence rules.
-    /// </summary>
-    public long SumV1 { get; private set; }
-
-    /// <summary>
-    /// Gets the sum of evaluating the expression(s) using V2 of the precedence rules.
-    /// </summary>
-    public long SumV2 { get; private set; }
-
     /// <summary>
     /// Evaluates the result of the specified expression(s) and returns the sum.
     /// </summary>
@@ -143,17 +133,20 @@ public sealed class Day18 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        var expressions = await ReadResourceAsLinesAsync(cancellationToken);
+        return await SolveWithLinesAsync(
+            static (expressions, logger, _) =>
+            {
+                long sumV1 = Evaluate(expressions, version: 1);
+                long sumV2 = Evaluate(expressions, version: 2);
 
-        SumV1 = Evaluate(expressions, version: 1);
-        SumV2 = Evaluate(expressions, version: 2);
+                if (logger is { })
+                {
+                    logger.WriteLine("The sum of the evaluated expressions with the first precedence rules is {0}.", sumV1);
+                    logger.WriteLine("The sum of the evaluated expressions with the second precedence rules is {0}.", sumV2);
+                }
 
-        if (Verbose)
-        {
-            Logger.WriteLine("The sum of the evaluated expressions with the first precedence rules is {0}.", SumV1);
-            Logger.WriteLine("The sum of the evaluated expressions with the second precedence rules is {0}.", SumV2);
-        }
-
-        return PuzzleResult.Create(SumV1, SumV2);
+                return (sumV1, sumV2);
+            },
+            cancellationToken);
     }
 }

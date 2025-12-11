@@ -8,13 +8,13 @@ public sealed class Day22Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
     [Theory]
     [InlineData("easy", 953)]
     [InlineData("hard", 1289)]
-    public async Task Y2015_Day22_Solve_Returns_Correct_Solution(string difficulty, int expected)
+    public void Y2015_Day22_Solve_Returns_Correct_Solution(string difficulty, int expected)
     {
         // Act
-        var puzzle = await SolvePuzzleAsync<Day22>(difficulty);
+        int actual = Day22.Fight(difficulty);
 
         // Assert
-        puzzle.MinimumCostToWin.ShouldBe(expected);
+        actual.ShouldBe(expected);
     }
 
     [Fact]
@@ -31,7 +31,7 @@ public sealed class Day22Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         string difficulty = "easy";
 
         // Act
-        Day22.Player actual = Day22.Fight(wizard, opponent, difficulty, Output);
+        Day22.Player actual = Day22.Fight(wizard, opponent, difficulty, OutputHelper.WriteLine);
 
         // Assert
         actual.ShouldNotBeNull();
@@ -62,7 +62,7 @@ public sealed class Day22Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         string difficulty = "easy";
 
         // Act
-        Day22.Player actual = Day22.Fight(wizard, opponent, difficulty, Output);
+        Day22.Player actual = Day22.Fight(wizard, opponent, difficulty, OutputHelper.WriteLine);
 
         // Assert
         actual.ShouldNotBeNull();
@@ -77,17 +77,4 @@ public sealed class Day22Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         wizard.ManaSpent.ShouldBe(229 + 113 + 73 + 173 + 53);
         wizard.SpellsCast.ShouldBe(spellsToConjure);
     }
-
-    /// <summary>
-    /// Outputs the specified message.
-    /// </summary>
-    /// <param name="format">
-    /// A format string that contains zero or more format items, which
-    /// correspond to objects in the <paramref name="args"/> array.
-    /// </param>
-    /// <param name="args">
-    /// An object array containing zero or more objects to format.
-    /// </param>
-    private void Output(string format, object[] args)
-        => OutputHelper.WriteLine(format, args);
 }

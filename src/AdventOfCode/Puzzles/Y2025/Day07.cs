@@ -76,16 +76,19 @@ public sealed class Day07 : Puzzle<int, long>
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        var diagram = await ReadResourceAsLinesAsync(cancellationToken);
+        return await SolveWithLinesAsync(
+            static (diagram, logger, cancellationToken) =>
+            {
+                (int splits, long timelines) = Simulate(diagram, cancellationToken);
 
-        (Solution1, Solution2) = Simulate(diagram, cancellationToken);
+                if (logger is { })
+                {
+                    logger.WriteLine("The beam splits {0} times.", splits);
+                    logger.WriteLine("A single tachyon particle would exist in {0} different timelines.", timelines);
+                }
 
-        if (Verbose)
-        {
-            Logger.WriteLine("The beam splits {0} times.", Solution1);
-            Logger.WriteLine("A single tachyon particle would exist in {0} different timelines.", Solution2);
-        }
-
-        return PuzzleResult.Create(Solution1, Solution2);
+                return (splits, timelines);
+            },
+            cancellationToken);
     }
 }

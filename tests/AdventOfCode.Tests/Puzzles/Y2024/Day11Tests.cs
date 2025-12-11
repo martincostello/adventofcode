@@ -25,8 +25,7 @@ public sealed class Day11Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         var puzzle = await SolvePuzzleAsync<Day11>();
 
         // Assert
-        puzzle.ShouldNotBeNull();
-        puzzle.Count25.ShouldBe(220722);
-        puzzle.Count75.ShouldBe(261952051690787);
+        puzzle.Solution1.ShouldBe(220722);
+        puzzle.Solution2.ShouldBe(261952051690787);
     }
 }

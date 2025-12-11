@@ -47,7 +47,7 @@ public sealed class Day16Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         var puzzle = await SolvePuzzleAsync<Day16>();
 
         // Assert
-        puzzle.VersionNumberSum.ShouldBe(974);
-        puzzle.Value.ShouldBe(180616437720);
+        puzzle.Solution1.ShouldBe(974);
+        puzzle.Solution2.ShouldBe(180616437720);
     }
 }

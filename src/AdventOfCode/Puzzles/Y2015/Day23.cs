@@ -7,18 +7,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015;
 /// A class representing the puzzle for <c>https://adventofcode.com/2015/day/23</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2015, 23, "Opening the Turing Lock", RequiresData = true)]
-public sealed class Day23 : Puzzle
+public sealed class Day23 : Puzzle<uint, uint>
 {
-    /// <summary>
-    /// Gets the final value of the <c>a</c> register.
-    /// </summary>
-    internal uint A { get; private set; }
-
-    /// <summary>
-    /// Gets the final value of the <c>b</c> register.
-    /// </summary>
-    internal uint B { get; private set; }
-
     /// <summary>
     /// Processes the specified instructions and returns the values of registers a and b.
     /// </summary>
@@ -31,7 +21,7 @@ public sealed class Day23 : Puzzle
     internal static (uint A, uint B) ProcessInstructions(
         IList<string> instructions,
         uint initialValue,
-        ILogger logger)
+        ILogger? logger)
     {
         var a = new Register()
         {
@@ -86,13 +76,13 @@ public sealed class Day23 : Puzzle
                     break;
 
                 default:
-                    logger.WriteLine($"Instruction '{operation}' is not defined.");
+                    logger?.WriteLine($"Instruction '{operation}' is not defined.");
                     return (uint.MaxValue, uint.MaxValue);
             }
 
             if (next == i)
             {
-                logger.WriteLine($"Instruction at line {i + 1:N0} creates an infinite loop.");
+                logger?.WriteLine($"Instruction at line {i + 1:N0} creates an infinite loop.");
                 break;
             }
 
@@ -105,21 +95,26 @@ public sealed class Day23 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        var instructions = await ReadResourceAsLinesAsync(cancellationToken);
-        uint initialValue = args.Length == 1 ? Parse<uint>(args[0]) : 0;
+        return await SolveWithLinesAsync(
+            args,
+            static (arguments, instructions, logger, _) =>
+            {
+                uint initialValue = arguments.Count == 1 ? Parse<uint>(arguments[0]) : 0;
 
-        (A, B) = ProcessInstructions(instructions, initialValue, Logger);
+                (uint a, uint b) = ProcessInstructions(instructions, initialValue, logger);
 
-        if (Verbose)
-        {
-            Logger.WriteLine(
-                "After processing {0:N0} instructions, the value of a is {1:N0} and the value of b is {2:N0}.",
-                instructions.Count,
-                A,
-                B);
-        }
+                if (logger is { })
+                {
+                    logger.WriteLine(
+                        "After processing {0:N0} instructions, the value of a is {1:N0} and the value of b is {2:N0}.",
+                        instructions.Count,
+                        a,
+                        b);
+                }
 
-        return PuzzleResult.Create(A, B);
+                return (a, b);
+            },
+            cancellationToken);
     }
 
     /// <summary>

@@ -49,7 +49,7 @@ public sealed class Day15Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         var puzzle = await SolvePuzzleAsync<Day15>("0,5,4,1,10,14,7");
 
         // Assert
-        puzzle.Number2020.ShouldBe(203);
-        puzzle.Number30000000.ShouldBe(9007186);
+        puzzle.Solution1.ShouldBe(203);
+        puzzle.Solution2.ShouldBe(9007186);
     }
 }

@@ -7,19 +7,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2024;
 /// A class representing the puzzle for <c>https://adventofcode.com/2024/day/8</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2024, 08, "Resonant Collinearity", RequiresData = true)]
-public sealed class Day08 : Puzzle
+public sealed class Day08 : Puzzle<int, int>
 {
-    /// <summary>
-    /// Gets the number of unique locations within the bounds of the map that contain an antinode.
-    /// </summary>
-    public int UniqueAntinodes { get; private set; }
-
-    /// <summary>
-    /// Gets the number of unique locations within the bounds of the map that contain an antinode
-    /// when resonant harmonics are applied.
-    /// </summary>
-    public int UniqueAntinodesWithResonance { get; private set; }
-
     /// <summary>
     /// Solves the puzzle for the specified map.
     /// </summary>
@@ -130,15 +119,15 @@ public sealed class Day08 : Puzzle
 
         var values = await ReadResourceAsLinesAsync(cancellationToken);
 
-        UniqueAntinodes = FindAntinodes(values, resonantHarmonics: false);
-        UniqueAntinodesWithResonance = FindAntinodes(values, resonantHarmonics: true);
+        Solution1 = FindAntinodes(values, resonantHarmonics: false);
+        Solution2 = FindAntinodes(values, resonantHarmonics: true);
 
         if (Verbose)
         {
-            Logger.WriteLine("{0} unique locations within the bounds of the map contain an antinode.", UniqueAntinodes);
-            Logger.WriteLine("{0} unique locations within the bounds of the map contain an antinode using resonant harmonics.", UniqueAntinodesWithResonance);
+            Logger.WriteLine("{0} unique locations within the bounds of the map contain an antinode.", Solution1);
+            Logger.WriteLine("{0} unique locations within the bounds of the map contain an antinode using resonant harmonics.", Solution2);
         }
 
-        return PuzzleResult.Create(UniqueAntinodes, UniqueAntinodesWithResonance);
+        return Result();
     }
 }

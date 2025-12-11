@@ -7,18 +7,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016;
 /// A class representing the puzzle for <c>https://adventofcode.com/2016/day/19</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2016, 19, "An Elephant Named Joseph", MinimumArguments = 1, IsSlow = true)]
-public sealed class Day19 : Puzzle
+public sealed class Day19 : Puzzle<int, int>
 {
-    /// <summary>
-    /// Gets the number of the elf who receives all the presents with version 1 of the rules.
-    /// </summary>
-    public int ElfWithAllPresentsV1 { get; private set; }
-
-    /// <summary>
-    /// Gets the number of the elf who receives all the presents with version 2 of the rules.
-    /// </summary>
-    public int ElfWithAllPresentsV2 { get; private set; }
-
     /// <summary>
     /// Finds the elf that receives all of the presents.
     /// </summary>
@@ -27,30 +17,27 @@ public sealed class Day19 : Puzzle
     /// <returns>
     /// The number of the elf that receives all the presents.
     /// </returns>
-    internal static int FindElfThatGetsAllPresents(int count, int version)
-    {
-        return
-            version == 2 ?
-            FindElfThatGetsAllPresentsV2(count) :
-            FindElfThatGetsAllPresentsV1(count);
-    }
+    internal static int FindElfThatGetsAllPresents(int count, int version) =>
+        version == 2 ?
+        FindElfThatGetsAllPresentsV2(count) :
+        FindElfThatGetsAllPresentsV1(count);
 
     /// <inheritdoc />
-    protected override Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
+    protected override Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken) => SolveWithArgument(args, static (value, logger) =>
     {
-        int count = Parse<int>(args[0]);
+        int count = Parse<int>(value);
 
-        ElfWithAllPresentsV1 = FindElfThatGetsAllPresents(count, version: 1);
-        ElfWithAllPresentsV2 = FindElfThatGetsAllPresents(count, version: 2);
+        int elfWithAllPresentsV1 = FindElfThatGetsAllPresents(count, version: 1);
+        int elfWithAllPresentsV2 = FindElfThatGetsAllPresents(count, version: 2);
 
-        if (Verbose)
+        if (logger is { })
         {
-            Logger.WriteLine($"The elf that gets all the presents using version 1 of the rules is {ElfWithAllPresentsV1:N0}.");
-            Logger.WriteLine($"The elf that gets all the presents using version 2 of the rules is {ElfWithAllPresentsV2:N0}.");
+            logger.WriteLine($"The elf that gets all the presents using version 1 of the rules is {elfWithAllPresentsV1:N0}.");
+            logger.WriteLine($"The elf that gets all the presents using version 2 of the rules is {elfWithAllPresentsV2:N0}.");
         }
 
-        return PuzzleResult.Create(ElfWithAllPresentsV1, ElfWithAllPresentsV2);
-    }
+        return (elfWithAllPresentsV1, elfWithAllPresentsV2);
+    });
 
     /// <summary>
     /// Finds the elf that receives all of the presents using version 1 of the rules.

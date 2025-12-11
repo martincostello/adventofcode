@@ -23,7 +23,7 @@ public sealed class Day08Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         var puzzle = await SolvePuzzleAsync<Day08>();
 
         // Assert
-        puzzle.PixelsLit.ShouldBe(121);
-        puzzle.Code.ShouldBe("RURUCEOEIL");
+        puzzle.Solution1.ShouldBe(121);
+        puzzle.Solution2.ShouldBe("RURUCEOEIL");
     }
 }

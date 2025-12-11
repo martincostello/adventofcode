@@ -27,7 +27,7 @@ public sealed class Day09Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         var puzzle = await SolvePuzzleAsync<Day09>();
 
         // Assert
-        puzzle.Keycode1.ShouldBe(2494485073);
-        puzzle.Keycode2.ShouldBe(44997);
+        puzzle.Solution1.ShouldBe(2494485073);
+        puzzle.Solution2.ShouldBe(44997);
     }
 }

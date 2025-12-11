@@ -48,7 +48,7 @@ public sealed class Day05Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         var puzzle = await SolvePuzzleAsync<Day05>();
 
         // Assert
-        puzzle.DiagnosticCode1.ShouldBe(6745903);
-        puzzle.DiagnosticCode5.ShouldBe(9168267);
+        puzzle.Solution1.ShouldBe(6745903);
+        puzzle.Solution2.ShouldBe(9168267);
     }
 }

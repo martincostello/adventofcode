@@ -39,7 +39,7 @@ public sealed class Day05Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         var puzzle = await SolvePuzzleAsync<Day05>();
 
         // Assert
-        puzzle.OverlappingVents.ShouldBe(5690);
-        puzzle.OverlappingVentsWithDiagonals.ShouldBe(17741);
+        puzzle.Solution1.ShouldBe(5690);
+        puzzle.Solution2.ShouldBe(17741);
     }
 }

@@ -62,7 +62,7 @@ public sealed class Day20Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         var puzzle = await SolvePuzzleAsync<Day20>(input);
 
         // Assert
-        puzzle.LowestHouseNumber.ShouldBe(786240);
-        puzzle.LowestHouseNumberWithCap.ShouldBe(831600);
+        puzzle.Solution1.ShouldBe(786240);
+        puzzle.Solution2.ShouldBe(831600);
     }
 }

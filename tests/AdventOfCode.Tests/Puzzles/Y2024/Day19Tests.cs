@@ -38,8 +38,7 @@ public sealed class Day19Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         var puzzle = await SolvePuzzleAsync<Day19>();
 
         // Assert
-        puzzle.ShouldNotBeNull();
-        puzzle.PossibleDesigns.ShouldBe(371);
-        puzzle.UniqueDesigns.ShouldBe(650354687260341);
+        puzzle.Solution1.ShouldBe(371);
+        puzzle.Solution2.ShouldBe(650354687260341);
     }
 }

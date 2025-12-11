@@ -36,7 +36,7 @@ public sealed class Day10Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         var puzzle = await SolvePuzzleAsync<Day10>();
 
         // Assert
-        puzzle.BotThatCompares61And17Microchips.ShouldBe(141);
-        puzzle.ProductOfMicrochipsInBins012.ShouldBe(1209);
+        puzzle.Solution1.ShouldBe(141);
+        puzzle.Solution2.ShouldBe(1209);
     }
 }

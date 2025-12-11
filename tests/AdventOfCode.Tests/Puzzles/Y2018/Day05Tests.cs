@@ -44,7 +44,7 @@ public sealed class Day05Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         var puzzle = await SolvePuzzleAsync<Day05>();
 
         // Assert
-        puzzle.RemainingUnits.ShouldBe(10638);
-        puzzle.RemainingUnitsOptimized.ShouldBe(4944);
+        puzzle.Solution1.ShouldBe(10638);
+        puzzle.Solution2.ShouldBe(4944);
     }
 }

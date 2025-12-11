@@ -95,7 +95,7 @@ public sealed class Day04Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         var puzzle = await SolvePuzzleAsync<Day04>();
 
         // Assert
-        puzzle.ValidPassports.ShouldBe(226);
-        puzzle.VerifiedPassports.ShouldBe(160);
+        puzzle.Solution1.ShouldBe(226);
+        puzzle.Solution2.ShouldBe(160);
     }
 }

@@ -7,18 +7,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020;
 /// A class representing the puzzle for <c>https://adventofcode.com/2020/day/22</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2020, 22, "Crab Combat", RequiresData = true)]
-public sealed class Day22 : Puzzle
+public sealed class Day22 : Puzzle<int, int>
 {
-    /// <summary>
-    /// Gets the score for the winning player.
-    /// </summary>
-    public int WinningScore { get; private set; }
-
-    /// <summary>
-    /// Gets the score for the winning player using recursive rules.
-    /// </summary>
-    public int WinningScoreRecursive { get; private set; }
-
     /// <summary>
     /// Plays a game of Combat for the specified starting deck.
     /// </summary>
@@ -120,17 +110,20 @@ public sealed class Day22 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        var values = await ReadResourceAsLinesAsync(cancellationToken);
+        return await SolveWithLinesAsync(
+            static (values, logger, _) =>
+            {
+                int winningScore = PlayCombat(values, recursive: false);
+                int winningScoreRecursive = PlayCombat(values, recursive: true);
 
-        WinningScore = PlayCombat(values, recursive: false);
-        WinningScoreRecursive = PlayCombat(values, recursive: true);
+                if (logger is { })
+                {
+                    logger.WriteLine("The winning player's score with normal rules is {0}.", winningScore);
+                    logger.WriteLine("The winning player's score with recursive rules is {0}.", winningScoreRecursive);
+                }
 
-        if (Verbose)
-        {
-            Logger.WriteLine("The winning player's score with normal rules is {0}.", WinningScore);
-            Logger.WriteLine("The winning player's score with recursive rules is {0}.", WinningScoreRecursive);
-        }
-
-        return PuzzleResult.Create(WinningScore, WinningScoreRecursive);
+                return (winningScore, winningScoreRecursive);
+            },
+            cancellationToken);
     }
 }
