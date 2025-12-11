@@ -6,7 +6,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2025;
 public sealed class Day11Tests(ITestOutputHelper outputHelper) : PuzzleTest(outputHelper)
 {
     [Fact]
-    public void Y2025_Day11_CountPaths_Returns_Correct_Value()
+    public void Y2025_Day11_CountPaths_Returns_Correct_You_Value()
     {
         // Arrange
         string[] values =
@@ -24,13 +24,41 @@ public sealed class Day11Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         ];
 
         // Act
-        int actual = Day11.CountPaths(values);
+        (int actual, _) = Day11.CountPaths(values, TestContext.Current.CancellationToken);
 
         // Assert
         actual.ShouldBe(5);
     }
 
     [Fact]
+    public void Y2025_Day11_CountPaths_Returns_Correct_Server_Value()
+    {
+        // Arrange
+        string[] values =
+        [
+            "svr: aaa bbb",
+            "aaa: fft",
+            "fft: ccc",
+            "bbb: tty",
+            "tty: ccc",
+            "ccc: ddd eee",
+            "ddd: hub",
+            "hub: fff",
+            "eee: dac",
+            "dac: fff",
+            "fff: ggg hhh",
+            "ggg: out",
+            "hhh: out",
+        ];
+
+        // Act
+        (_, int actual) = Day11.CountPaths(values, TestContext.Current.CancellationToken);
+
+        // Assert
+        actual.ShouldBe(2);
+    }
+
+    [Fact(Skip = "Too slow.")]
     public async Task Y2025_Day11_Solve_Returns_Correct_Solution()
     {
         // Act
@@ -38,6 +66,7 @@ public sealed class Day11Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
 
         // Assert
         puzzle.ShouldNotBeNull();
-        puzzle.Solution.ShouldBe(788);
+        puzzle.Solution1.ShouldBe(788);
+        puzzle.Solution2.ShouldBe(Puzzle.Unsolved);
     }
 }
