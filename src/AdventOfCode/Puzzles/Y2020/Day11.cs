@@ -60,10 +60,10 @@ public sealed class Day11 : Puzzle<int, int>
         string visualizationV2 = string.Empty;
 
         var result = await SolveWithLinesAsync(
-            static (layout, logger, _) =>
+            (layout, logger, _) =>
             {
-                (int occupiedSeatsV1, string visualizationV1) = GetOccupiedSeats(layout, version: 1);
-                (int occupiedSeatsV2, string visualizationV2) = GetOccupiedSeats(layout, version: 2);
+                (int occupiedSeatsV1, visualizationV1) = GetOccupiedSeats(layout, version: 1);
+                (int occupiedSeatsV2, visualizationV2) = GetOccupiedSeats(layout, version: 2);
 
                 if (logger is { })
                 {
