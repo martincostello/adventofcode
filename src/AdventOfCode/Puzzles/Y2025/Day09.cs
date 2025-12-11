@@ -7,7 +7,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2025;
 /// A class representing the puzzle for <c>https://adventofcode.com/2025/day/9</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2025, 09, "Movie Theater", RequiresData = true, IsHidden = true, Unsolved = true)]
-public sealed class Day09 : Puzzle<int>
+public sealed class Day09 : Puzzle<long>
 {
     /// <summary>
     /// Solves the puzzle.
@@ -63,7 +63,7 @@ public sealed class Day09 : Puzzle<int>
         return await SolveWithLinesAsync(
             static (values, logger, _) =>
             {
-                int solution = FindLargestRectangle(values);
+                long solution = FindLargestRectangle(values);
 
                 if (logger is { })
                 {
