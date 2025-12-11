@@ -182,16 +182,21 @@ public sealed class Day16 : Puzzle<long, long>
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        string transmission = (await ReadResourceAsStringAsync(cancellationToken)).Trim();
+        return await SolveWithStringAsync(
+            static (transmission, logger) =>
+            {
+                transmission = transmission.Trim();
 
-        (Solution1, Solution2) = Decode(transmission);
+                (long versionNumberSum, long value) = Decode(transmission);
 
-        if (Verbose)
-        {
-            Logger.WriteLine("The sum of the version numbers in all packets is {0:N0}.", Solution1);
-            Logger.WriteLine("The result of evaluating the transmission is {0:N0}.", Solution2);
-        }
+                if (logger is { })
+                {
+                    logger.WriteLine("The sum of the version numbers in all packets is {0:N0}.", versionNumberSum);
+                    logger.WriteLine("The result of evaluating the transmission is {0:N0}.", value);
+                }
 
-        return Result();
+                return (versionNumberSum, value);
+            },
+            cancellationToken);
     }
 }

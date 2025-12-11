@@ -50,18 +50,21 @@ public sealed class Day23 : Puzzle<int, int>
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        var diagram = await ReadResourceAsLinesAsync(cancellationToken);
+        return await SolveWithLinesAsync(
+            static async (diagram, logger, cancellationToken) =>
+            {
+                int minimumEnergyFolded = Organize(diagram, unfoldDiagram: false, cancellationToken);
+                int minimumEnergyUnfolded = Organize(diagram, unfoldDiagram: true, cancellationToken);
 
-        Solution1 = Organize(diagram, unfoldDiagram: false, cancellationToken);
-        Solution2 = Organize(diagram, unfoldDiagram: true, cancellationToken);
+                if (logger is { })
+                {
+                    logger.WriteLine("The least energy required to organize the amphipods with the diagram folded is {0:N0}.", minimumEnergyFolded);
+                    logger.WriteLine("The least energy required to organize the amphipods with the diagram unfolded is {0:N0}.", minimumEnergyUnfolded);
+                }
 
-        if (Verbose)
-        {
-            Logger.WriteLine("The least energy required to organize the amphipods with the diagram folded is {0:N0}.", Solution1);
-            Logger.WriteLine("The least energy required to organize the amphipods with the diagram unfolded is {0:N0}.", Solution2);
-        }
-
-        return Result();
+                return (minimumEnergyFolded, minimumEnergyUnfolded);
+            },
+            cancellationToken);
     }
 
     private record struct State(string Hallway, string Amber, string Bronze, string Copper, string Desert)

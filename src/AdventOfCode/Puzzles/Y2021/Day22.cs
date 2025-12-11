@@ -119,18 +119,21 @@ public sealed class Day22 : Puzzle<long, long>
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        var instructions = await ReadResourceAsLinesAsync(cancellationToken);
+        return await SolveWithLinesAsync(
+            static async (instructions, logger, _) =>
+            {
+                long initializedCubeCount = Reboot(instructions, initialize: true);
+                long rebootedCubeCount = Reboot(instructions, initialize: false);
 
-        Solution1 = Reboot(instructions, initialize: true);
-        Solution2 = Reboot(instructions, initialize: false);
+                if (logger is { })
+                {
+                    logger.WriteLine("{0:N0} cubes in the reactor are on after initialization.", initializedCubeCount);
+                    logger.WriteLine("{0:N0} cubes in the reactor are on after reboot.", rebootedCubeCount);
+                }
 
-        if (Verbose)
-        {
-            Logger.WriteLine("{0:N0} cubes in the reactor are on after initialization.", Solution1);
-            Logger.WriteLine("{0:N0} cubes in the reactor are on after reboot.", Solution2);
-        }
-
-        return Result();
+                return (initializedCubeCount, rebootedCubeCount);
+            },
+            cancellationToken);
     }
 
     [System.Diagnostics.DebuggerDisplay("({Origin.X}, {Origin.Y}, {Origin.Z}), ({Length.X}, {Length.Y}, {Length.Z})")]

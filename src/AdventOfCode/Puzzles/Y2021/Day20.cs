@@ -135,17 +135,20 @@ public sealed class Day20 : Puzzle<int, int>
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        var imageData = await ReadResourceAsLinesAsync(cancellationToken);
+        return await SolveWithLinesAsync(
+            static (imageData, logger, cancellationToken) =>
+            {
+                (int litPixelCount2, _) = Enhance(imageData, enhancements: 2);
+                (int litPixelCount50, _) = Enhance(imageData, enhancements: 50);
 
-        (Solution1, _) = Enhance(imageData, enhancements: 2);
-        (Solution2, _) = Enhance(imageData, enhancements: 50);
+                if (logger is { })
+                {
+                    logger.WriteLine("There are {0:N0} lit pixels after two enhancements of the image.", litPixelCount2);
+                    logger.WriteLine("There are {0:N0} lit pixels after fifty enhancements of the image.", litPixelCount50);
+                }
 
-        if (Verbose)
-        {
-            Logger.WriteLine("There are {0:N0} lit pixels after two enhancements of the image.", Solution1);
-            Logger.WriteLine("There are {0:N0} lit pixels after fifty enhancements of the image.", Solution2);
-        }
-
-        return Result();
+                return (litPixelCount2, litPixelCount50);
+            },
+            cancellationToken);
     }
 }

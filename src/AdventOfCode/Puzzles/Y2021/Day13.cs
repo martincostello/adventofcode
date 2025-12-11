@@ -125,23 +125,29 @@ public sealed class Day13 : Puzzle<int, string>
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        var instructions = await ReadResourceAsLinesAsync(cancellationToken);
+        string? visualization = null;
 
-        (Solution1, _, _) = Fold(instructions, folds: 1);
-        (_, Solution2, string? visualization) = Fold(instructions, folds: null, Logger);
+        var result = await SolveWithLinesAsync(
+            (instructions, logger, cancellationToken) =>
+            {
+                (int dotCountAfterFold1, _, _) = Fold(instructions, folds: 1);
+                (_, string activationCode, visualization) = Fold(instructions, folds: null, Logger);
 
-        if (Verbose)
-        {
-            Logger.WriteLine(
-                "{0:N0} dots are visible after completing the first fold.",
-                Solution1);
+                if (logger is { })
+                {
+                    logger.WriteLine(
+                        "{0:N0} dots are visible after completing the first fold.",
+                        dotCountAfterFold1);
 
-            Logger.WriteLine(
-                "The code to activate the infrared thermal imaging camera system is {0}.",
-                Solution2!);
-        }
+                    logger.WriteLine(
+                        "The code to activate the infrared thermal imaging camera system is {0}.",
+                        Solution2!);
+                }
 
-        var result = Result();
+                return (dotCountAfterFold1, activationCode);
+            },
+            cancellationToken);
+
         result.Visualizations.Add(visualization!);
 
         return result;

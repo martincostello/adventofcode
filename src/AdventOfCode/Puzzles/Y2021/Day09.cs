@@ -102,16 +102,19 @@ public sealed class Day09 : Puzzle<int, int>
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        var heightmap = await ReadResourceAsLinesAsync(cancellationToken);
+        return await SolveWithLinesAsync(
+            static (heightmap, logger, cancellationToken) =>
+            {
+                (int sumOfRiskLevels, int areaOfThreeLargestBasins) = AnalyzeRisk(heightmap, cancellationToken);
 
-        (Solution1, Solution2) = AnalyzeRisk(heightmap, cancellationToken);
+                if (logger is { })
+                {
+                    logger.WriteLine("The sum of the risk levels of all low points on the heightmap is {0:N0}.", sumOfRiskLevels);
+                    logger.WriteLine("The area of the three largest basins in the heightmap is {0:N0}.", areaOfThreeLargestBasins);
+                }
 
-        if (Verbose)
-        {
-            Logger.WriteLine("The sum of the risk levels of all low points on the heightmap is {0:N0}.", Solution1);
-            Logger.WriteLine("The area of the three largest basins in the heightmap is {0:N0}.", Solution2);
-        }
-
-        return Result();
+                return (sumOfRiskLevels, areaOfThreeLargestBasins);
+            },
+            cancellationToken);
     }
 }

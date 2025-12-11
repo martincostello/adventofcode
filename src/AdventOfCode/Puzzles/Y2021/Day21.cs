@@ -157,23 +157,26 @@ public sealed class Day21 : Puzzle<int, long>
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        var players = await ReadResourceAsLinesAsync(cancellationToken);
+        return await SolveWithLinesAsync(
+            static (players, logger, _) =>
+            {
+                int practiceOutcome = PlayPractice(players);
+                long winningUniverses = Play(players);
 
-        Solution1 = PlayPractice(players);
-        Solution2 = Play(players);
+                if (logger is { })
+                {
+                    logger.WriteLine(
+                        "The product of the score of the losing player and the number of times the die was rolled during the game is {0:N0}.",
+                        practiceOutcome);
 
-        if (Verbose)
-        {
-            Logger.WriteLine(
-                "The product of the score of the losing player and the number of times the die was rolled during the game is {0:N0}.",
-                Solution1);
+                    logger.WriteLine(
+                        "The winning player wins in {0:N0} universes during the real game.",
+                        winningUniverses);
+                }
 
-            Logger.WriteLine(
-                "The winning player wins in {0:N0} universes during the real game.",
-                Solution2);
-        }
-
-        return Result();
+                return (practiceOutcome, winningUniverses);
+            },
+            cancellationToken);
     }
 
     private static Player Move(Player player, int roll)

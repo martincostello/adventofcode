@@ -117,16 +117,19 @@ public sealed class Day10 : Puzzle<int, long>
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        var lines = await ReadResourceAsLinesAsync(cancellationToken);
+        return await SolveWithLinesAsync(
+            static (lines, logger, _) =>
+            {
+                (int syntaxErrorScore, long middleAutoCompleteScore) = Compile(lines);
 
-        (Solution1, Solution2) = Compile(lines);
+                if (logger is { })
+                {
+                    logger.WriteLine("The total syntax error score is {0:N0}.", syntaxErrorScore);
+                    logger.WriteLine("The middle auto-complete score is {0:N0}.", middleAutoCompleteScore);
+                }
 
-        if (Verbose)
-        {
-            Logger.WriteLine("The total syntax error score is {0:N0}.", Solution1);
-            Logger.WriteLine("The middle auto-complete score is {0:N0}.", Solution2);
-        }
-
-        return Result();
+                return (syntaxErrorScore, middleAutoCompleteScore);
+            },
+            cancellationToken);
     }
 }

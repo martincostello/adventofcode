@@ -217,17 +217,20 @@ public sealed class Day19 : Puzzle<int, int>
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        var target = await ReadResourceAsLinesAsync(cancellationToken);
+        return await SolveWithLinesAsync(
+            static (target, logger, cancellationToken) =>
+            {
+                (int beaconCount, int largestScannerDistance) = FindBeacons(target, cancellationToken);
 
-        (Solution1, Solution2) = FindBeacons(target, cancellationToken);
+                if (logger is { })
+                {
+                    logger.WriteLine("There are {0:N0} beacons.", beaconCount);
+                    logger.WriteLine("There largest Manhattan distance between two scanners is {0:N0}.", largestScannerDistance);
+                }
 
-        if (Verbose)
-        {
-            Logger.WriteLine("There are {0:N0} beacons.", Solution1);
-            Logger.WriteLine("There largest Manhattan distance between two scanners is {0:N0}.", Solution2);
-        }
-
-        return Result();
+                return (beaconCount, largestScannerDistance);
+            },
+            cancellationToken);
     }
 
     private sealed class Scanner : HashSet<Vector3>

@@ -53,22 +53,25 @@ public sealed class Day05 : Puzzle<int, int>
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        var lineSegments = await ReadResourceAsLinesAsync(cancellationToken);
+        return await SolveWithLinesAsync(
+            static (lineSegments, logger, _) =>
+            {
+                int overlappingVents = NavigateVents(lineSegments, useDiagonals: false);
+                int overlappingVentsWithDiagonals = NavigateVents(lineSegments, useDiagonals: true);
 
-        Solution1 = NavigateVents(lineSegments, useDiagonals: false);
-        Solution2 = NavigateVents(lineSegments, useDiagonals: true);
+                if (logger is { })
+                {
+                    logger.WriteLine(
+                        "There are overlapping vents at {0:N0} points without considering diagonals.",
+                        overlappingVents);
 
-        if (Verbose)
-        {
-            Logger.WriteLine(
-                "There are overlapping vents at {0:N0} points without considering diagonals.",
-                Solution1);
+                    logger.WriteLine(
+                        "There are overlapping vents at {0:N0} points considering diagonals.",
+                        overlappingVentsWithDiagonals);
+                }
 
-            Logger.WriteLine(
-                "There are overlapping vents at {0:N0} points considering diagonals.",
-                Solution2);
-        }
-
-        return Result();
+                return (overlappingVents, overlappingVentsWithDiagonals);
+            },
+            cancellationToken);
     }
 }

@@ -36,23 +36,26 @@ public sealed class Day12 : Puzzle<int, int>
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        var nodes = await ReadResourceAsLinesAsync(cancellationToken);
+        return await SolveWithLinesAsync(
+            static (nodes, logger, _) =>
+            {
+                int count1 = Navigate(nodes, smallCaveVisitLimit: 1);
+                int count2 = Navigate(nodes, smallCaveVisitLimit: 2);
 
-        Solution1 = Navigate(nodes, smallCaveVisitLimit: 1);
-        Solution2 = Navigate(nodes, smallCaveVisitLimit: 2);
+                if (logger is { })
+                {
+                    logger.WriteLine(
+                        "There are {0:N0} paths through the cave system that visit one small cave once at most.",
+                        count1);
 
-        if (Verbose)
-        {
-            Logger.WriteLine(
-                "There are {0:N0} paths through the cave system that visit one small cave once at most.",
-                Solution1);
+                    logger.WriteLine(
+                        "There are {0:N0} paths through the cave system that visit one small cave twice at most.",
+                        count2);
+                }
 
-            Logger.WriteLine(
-                "There are {0:N0} paths through the cave system that visit one small cave twice at most.",
-                Solution2);
-        }
-
-        return Result();
+                return (count1, count2);
+            },
+            cancellationToken);
     }
 
     private static int CountPaths(Graph<string> graph, int smallCaveVisitLimit)

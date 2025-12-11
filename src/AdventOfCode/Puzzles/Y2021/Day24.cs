@@ -67,17 +67,20 @@ public sealed class Day24 : Puzzle<long, long>
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        var instructions = await ReadResourceAsLinesAsync(cancellationToken);
+        return await SolveWithLinesAsync(
+            static async (instructions, logger, _) =>
+            {
+                long maximumValidModelNumber = Execute(instructions, maximumValue: true);
+                long minimumValidModelNumber = Execute(instructions, maximumValue: false);
 
-        Solution1 = Execute(instructions, maximumValue: true);
-        Solution2 = Execute(instructions, maximumValue: false);
+                if (logger is { })
+                {
+                    logger.WriteLine("The largest model number accepted by MONAD is {0:N0}.", maximumValidModelNumber);
+                    logger.WriteLine("The smallest model number accepted by MONAD is {0:N0}.", minimumValidModelNumber);
+                }
 
-        if (Verbose)
-        {
-            Logger.WriteLine("The largest model number accepted by MONAD is {0:N0}.", Solution1);
-            Logger.WriteLine("The smallest model number accepted by MONAD is {0:N0}.", Solution2);
-        }
-
-        return Result();
+                return (maximumValidModelNumber, minimumValidModelNumber);
+            },
+            cancellationToken);
     }
 }

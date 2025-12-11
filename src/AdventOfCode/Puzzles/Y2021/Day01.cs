@@ -53,22 +53,25 @@ public sealed class Day01 : Puzzle<int, int>
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        var values = await ReadResourceAsNumbersAsync<int>(cancellationToken);
+        return await SolveWithNumbersAsync<int>(
+            static (values, logger, _) =>
+            {
+                int depthIncreases = GetDepthMeasurementIncreases(values, useSlidingWindow: false);
+                int depthIncreasesWithSlidingWindow = GetDepthMeasurementIncreases(values, useSlidingWindow: true);
 
-        Solution1 = GetDepthMeasurementIncreases(values, useSlidingWindow: false);
-        Solution2 = GetDepthMeasurementIncreases(values, useSlidingWindow: true);
+                if (logger is { })
+                {
+                    logger.WriteLine(
+                        "The depth measurement increases {0:N0} times.",
+                        depthIncreases);
 
-        if (Verbose)
-        {
-            Logger.WriteLine(
-                "The depth measurement increases {0:N0} times.",
-                Solution1);
+                    logger.WriteLine(
+                        "The depth measurement increases {0:N0} times when using a sliding window of 3 measurements.",
+                        depthIncreasesWithSlidingWindow);
+                }
 
-            Logger.WriteLine(
-                "The depth measurement increases {0:N0} times when using a sliding window of 3 measurements.",
-                Solution2);
-        }
-
-        return Result();
+                return (depthIncreases, depthIncreasesWithSlidingWindow);
+            },
+            cancellationToken);
     }
 }

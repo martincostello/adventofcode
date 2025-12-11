@@ -108,16 +108,19 @@ public sealed class Day08 : Puzzle<int, int>
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        var entries = await ReadResourceAsLinesAsync(cancellationToken);
+        return await SolveWithLinesAsync(
+            static (entries, logger, _) =>
+            {
+                (int count, int sum) = DecodeDigits(entries);
 
-        (Solution1, Solution2) = DecodeDigits(entries);
+                if (logger is { })
+                {
+                    logger.WriteLine("There are {0:N0} instances of digits that use a unique number of LED segments.", count);
+                    logger.WriteLine("The sum of the output values is {0:N0}.", sum);
+                }
 
-        if (Verbose)
-        {
-            Logger.WriteLine("There are {0:N0} instances of digits that use a unique number of LED segments.", Solution1);
-            Logger.WriteLine("The sum of the output values is {0:N0}.", Solution2);
-        }
-
-        return Result();
+                return (count, sum);
+            },
+            cancellationToken);
     }
 }

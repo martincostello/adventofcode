@@ -139,17 +139,20 @@ public sealed class Day11 : Puzzle<int, int>
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        var lines = await ReadResourceAsLinesAsync(cancellationToken);
+        return await SolveWithLinesAsync(
+            static (lines, logger, cancellationToken) =>
+            {
+                (int flashes100, _) = Simulate(lines, steps: 100);
+                (_, int stepOfFirstSynchronizedFlash) = Simulate(lines, steps: int.MaxValue);
 
-        (Solution1, _) = Simulate(lines, steps: 100);
-        (_, Solution2) = Simulate(lines, steps: int.MaxValue);
+                if (logger is { })
+                {
+                    logger.WriteLine("After 100 steps there are {0:N0} flashes.", flashes100);
+                    logger.WriteLine("The octopuses all flash for the first time after {0:N0} steps.", stepOfFirstSynchronizedFlash);
+                }
 
-        if (Verbose)
-        {
-            Logger.WriteLine("After 100 steps there are {0:N0} flashes.", Solution1);
-            Logger.WriteLine("The octopuses all flash for the first time after {0:N0} steps.", Solution2);
-        }
-
-        return Result();
+                return (flashes100, stepOfFirstSynchronizedFlash);
+            },
+            cancellationToken);
     }
 }

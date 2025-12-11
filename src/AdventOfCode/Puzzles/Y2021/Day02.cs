@@ -63,22 +63,25 @@ public sealed class Day02 : Puzzle<int, int>
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        var course = await ReadResourceAsLinesAsync(cancellationToken);
+        return await SolveWithLinesAsync(
+            static (course, logger, _) =>
+            {
+                int productOfFinalPosition = NavigateCourse(course, useAim: false);
+                int productOfFinalPositionWithAim = NavigateCourse(course, useAim: true);
 
-        Solution1 = NavigateCourse(course, useAim: false);
-        Solution2 = NavigateCourse(course, useAim: true);
+                if (logger is { })
+                {
+                    logger.WriteLine(
+                        "The product of the submarine's final depth and forward position is {0:N0}.",
+                        productOfFinalPosition);
 
-        if (Verbose)
-        {
-            Logger.WriteLine(
-                "The product of the submarine's final depth and forward position is {0:N0}.",
-                Solution1);
+                    logger.WriteLine(
+                        "The product of the submarine's final depth and forward position is {0:N0} when accounting for aim.",
+                        productOfFinalPositionWithAim);
+                }
 
-            Logger.WriteLine(
-                "The product of the submarine's final depth and forward position is {0:N0} when accounting for aim.",
-                Solution2);
-        }
-
-        return Result();
+                return (productOfFinalPosition, productOfFinalPositionWithAim);
+            },
+            cancellationToken);
     }
 }

@@ -89,23 +89,26 @@ public sealed class Day03 : Puzzle<int, int>
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        var diagnosticReport = await ReadResourceAsLinesAsync(cancellationToken);
+        return await SolveWithLinesAsync(
+            static (diagnosticReport, logger, _) =>
+            {
+                int powerConsumption = GetPowerConsumption(diagnosticReport);
+                int lifeSupportRating = GetLifeSupportRating(diagnosticReport);
 
-        Solution1 = GetPowerConsumption(diagnosticReport);
-        Solution2 = GetLifeSupportRating(diagnosticReport);
+                if (logger is { })
+                {
+                    logger.WriteLine(
+                        "The power consumption of the submarine is {0:N0}.",
+                        powerConsumption);
 
-        if (Verbose)
-        {
-            Logger.WriteLine(
-                "The power consumption of the submarine is {0:N0}.",
-                Solution1);
+                    logger.WriteLine(
+                        "The life support rating of the submarine is {0:N0}.",
+                        lifeSupportRating);
+                }
 
-            Logger.WriteLine(
-                "The life support rating of the submarine is {0:N0}.",
-                Solution2);
-        }
-
-        return Result();
+                return (powerConsumption, lifeSupportRating);
+            },
+            cancellationToken);
     }
 
     private static (int Zeroes, int Ones) CountBits(IEnumerable<string> values, int bit)

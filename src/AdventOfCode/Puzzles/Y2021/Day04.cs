@@ -45,17 +45,20 @@ public sealed class Day04 : Puzzle<int, int>
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        var game = await ReadResourceAsLinesAsync(cancellationToken);
+        return await SolveWithLinesAsync(
+            static (game, logger, _) =>
+            {
+                (int firstWinningScore, int lastWinningScore) = PlayBingo(game);
 
-        (Solution1, Solution2) = PlayBingo(game);
+                if (logger is { })
+                {
+                    logger.WriteLine("The score of the first winning Bingo card is {0:N0}.", firstWinningScore);
+                    logger.WriteLine("The score of the last winning Bingo card is {0:N0}.", lastWinningScore);
+                }
 
-        if (Verbose)
-        {
-            Logger.WriteLine("The score of the first winning Bingo card is {0:N0}.", Solution1);
-            Logger.WriteLine("The score of the last winning Bingo card is {0:N0}.", Solution2);
-        }
-
-        return Result();
+                return (firstWinningScore, lastWinningScore);
+            },
+            cancellationToken);
     }
 
     private static List<BingoCard> ParseCards(IEnumerable<string> game)

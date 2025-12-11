@@ -101,17 +101,20 @@ public sealed class Day18 : Puzzle<int, int>
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        var numbers = await ReadResourceAsLinesAsync(cancellationToken);
+        return await SolveWithLinesAsync(
+            static (numbers, logger, _) =>
+            {
+                (int magnitudeOfSum, int largestSumMagnitude) = Sum(numbers);
 
-        (Solution1, Solution2) = Sum(numbers);
+                if (logger is { })
+                {
+                    logger.WriteLine("The magnitude of the final sum is {0:N0}.", magnitudeOfSum);
+                    logger.WriteLine("The largest magnitude of any sum of two numbers is {0:N0}.", largestSumMagnitude);
+                }
 
-        if (Verbose)
-        {
-            Logger.WriteLine("The magnitude of the final sum is {0:N0}.", Solution1);
-            Logger.WriteLine("The largest magnitude of any sum of two numbers is {0:N0}.", Solution2);
-        }
-
-        return Result();
+                return (magnitudeOfSum, largestSumMagnitude);
+            },
+            cancellationToken);
     }
 
     private static List<SnailPair> ParseRaw(IList<string> numbers)

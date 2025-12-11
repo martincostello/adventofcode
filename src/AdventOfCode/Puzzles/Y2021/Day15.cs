@@ -93,23 +93,26 @@ public sealed class Day15 : Puzzle<int, int>
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        var riskMap = await ReadResourceAsLinesAsync(cancellationToken);
+        return await SolveWithLinesAsync(
+            static (riskMap, logger, cancellationToken) =>
+            {
+                int riskLevelSmall = GetRiskLevel(riskMap, largeMap: false, cancellationToken);
+                int riskLevelLarge = GetRiskLevel(riskMap, largeMap: true, cancellationToken);
 
-        Solution1 = GetRiskLevel(riskMap, largeMap: false, cancellationToken);
-        Solution2 = GetRiskLevel(riskMap, largeMap: true, cancellationToken);
+                if (logger is { })
+                {
+                    logger.WriteLine(
+                        "The lowest total risk of any path from the top left to the bottom right using the small map is {0:N0}.",
+                        riskLevelSmall);
 
-        if (Verbose)
-        {
-            Logger.WriteLine(
-                "The lowest total risk of any path from the top left to the bottom right using the small map is {0:N0}.",
-                Solution1);
+                    logger.WriteLine(
+                        "The lowest total risk of any path from the top left to the bottom right using the large map is {0:N0}.",
+                        riskLevelLarge);
+                }
 
-            Logger.WriteLine(
-                "The lowest total risk of any path from the top left to the bottom right using the large map is {0:N0}.",
-                Solution2);
-        }
-
-        return Result();
+                return (riskLevelSmall, riskLevelLarge);
+            },
+            cancellationToken);
     }
 
     private sealed class RiskMap(int width, int height, Dictionary<Point, int> risks) : SquareGrid(width, height)

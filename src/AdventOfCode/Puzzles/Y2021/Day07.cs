@@ -60,22 +60,27 @@ public sealed class Day07 : Puzzle<long, long>
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        var submarines = (await ReadResourceAsStringAsync(cancellationToken)).AsNumbers<int>();
+        return await SolveWithStringAsync(
+            static (data, logger) =>
+            {
+                var submarines = data.AsNumbers<int>();
 
-        Solution1 = AlignSubmarines(submarines, withVariableBurnRate: false);
-        Solution2 = AlignSubmarines(submarines, withVariableBurnRate: true);
+                long fuelConsumedWithConstantBurnRate = AlignSubmarines(submarines, withVariableBurnRate: false);
+                long fuelConsumedWithVariableBurnRate = AlignSubmarines(submarines, withVariableBurnRate: true);
 
-        if (Verbose)
-        {
-            Logger.WriteLine(
-                "The least fuel consumed to align the crabs' submarines with a constant burn rate is {0:N0}.",
-                Solution1);
+                if (logger is { })
+                {
+                    logger.WriteLine(
+                        "The least fuel consumed to align the crabs' submarines with a constant burn rate is {0:N0}.",
+                        fuelConsumedWithConstantBurnRate);
 
-            Logger.WriteLine(
-                "The least fuel consumed to align the crabs' submarines with a variable burn rate is {0:N0}.",
-                Solution2);
-        }
+                    logger.WriteLine(
+                        "The least fuel consumed to align the crabs' submarines with a variable burn rate is {0:N0}.",
+                        fuelConsumedWithVariableBurnRate);
+                }
 
-        return Result();
+                return (fuelConsumedWithConstantBurnRate, fuelConsumedWithVariableBurnRate);
+            },
+            cancellationToken);
     }
 }

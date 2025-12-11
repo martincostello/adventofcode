@@ -108,21 +108,21 @@ public sealed class Day17 : Puzzle<int, int>
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        string target = (await ReadResourceAsStringAsync(cancellationToken)).Trim();
+        return await SolveWithStringAsync(
+            static (target, logger) =>
+            {
+                target = target.Trim();
 
-        (Solution1, Solution2) = Calculate(target);
+                (int maxApogee, int count) = Calculate(target);
 
-        if (Verbose)
-        {
-            Logger.WriteLine(
-                "The highest y position reached on a trajectory that lands in the target area is {0:N0}.",
-                Solution1);
+                if (logger is { })
+                {
+                    logger.WriteLine("The highest y position reached on a trajectory that lands in the target area is {0:N0}.", maxApogee);
+                    logger.WriteLine("{0:N0} distinct initial velocity values cause the probe to land within the target area.", count);
+                }
 
-            Logger.WriteLine(
-                "{0:N0} distinct initial velocity values cause the probe to land within the target area.",
-                Solution2);
-        }
-
-        return Result();
+                return (maxApogee, count);
+            },
+            cancellationToken);
     }
 }

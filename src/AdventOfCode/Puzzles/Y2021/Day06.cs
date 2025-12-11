@@ -69,17 +69,22 @@ public sealed class Day06 : Puzzle<long, long>
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        var fish = (await ReadResourceAsStringAsync(cancellationToken)).AsNumbers<int>();
+        return await SolveWithStringAsync(
+            static (data, logger) =>
+            {
+                var fish = data.AsNumbers<int>();
 
-        Solution1 = CountFish(fish, days: 80);
-        Solution2 = CountFish(fish, days: 256);
+                long fishCount80 = CountFish(fish, days: 80);
+                long fishCount256 = CountFish(fish, days: 256);
 
-        if (Verbose)
-        {
-            Logger.WriteLine("There are {0:N0} lanternfish after 80 days.", Solution1);
-            Logger.WriteLine("There are {0:N0} lanternfish after 256 days.", Solution2);
-        }
+                if (logger is { })
+                {
+                    logger.WriteLine("There are {0:N0} lanternfish after 80 days.", fishCount80);
+                    logger.WriteLine("There are {0:N0} lanternfish after 256 days.", fishCount256);
+                }
 
-        return Result();
+                return (fishCount80, fishCount256);
+            },
+            cancellationToken);
     }
 }

@@ -76,17 +76,20 @@ public sealed class Day14 : Puzzle<long, long>
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        var instructions = await ReadResourceAsLinesAsync(cancellationToken);
+        return await SolveWithLinesAsync(
+            static (instructions, logger, _) =>
+            {
+                long score10 = Expand(instructions, steps: 10);
+                long score40 = Expand(instructions, steps: 40);
 
-        Solution1 = Expand(instructions, steps: 10);
-        Solution2 = Expand(instructions, steps: 40);
+                if (logger is { })
+                {
+                    logger.WriteLine("The \"score\" of the polymer after 10 steps of expansion is {0:N0}.", score10);
+                    logger.WriteLine("The \"score\" of the polymer after 40 steps of expansion is {0:N0}.", score40);
+                }
 
-        if (Verbose)
-        {
-            Logger.WriteLine("The \"score\" of the polymer after 10 steps of expansion is {0:N0}.", Solution1);
-            Logger.WriteLine("The \"score\" of the polymer after 40 steps of expansion is {0:N0}.", Solution2);
-        }
-
-        return Result();
+                return (score10, score40);
+            },
+            cancellationToken);
     }
 }
