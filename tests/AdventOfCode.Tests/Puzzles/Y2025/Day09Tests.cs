@@ -6,22 +6,29 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2025;
 public sealed class Day09Tests(ITestOutputHelper outputHelper) : PuzzleTest(outputHelper)
 {
     [Fact]
-    public void Y2025_Day09_Solve_Returns_Correct_Value()
+    public void Y2025_Day09_FindLargestRectangle_Returns_Correct_Value()
     {
         // Arrange
         string[] values =
         [
-            "_",
+            "7,1",
+            "11,1",
+            "11,7",
+            "9,7",
+            "9,5",
+            "2,5",
+            "2,3",
+            "7,3",
         ];
 
         // Act
-        int actual = Day09.Solve(values);
+        long actual = Day09.FindLargestRectangle(values);
 
         // Assert
-        actual.ShouldBe(Puzzle.Unsolved);
+        actual.ShouldBe(50);
     }
 
-    [Fact(Skip = "Not implemented.")]
+    [Fact]
     public async Task Y2025_Day09_Solve_Returns_Correct_Solution()
     {
         // Act
@@ -29,6 +36,6 @@ public sealed class Day09Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
 
         // Assert
         puzzle.ShouldNotBeNull();
-        puzzle.Solution.ShouldBe(Puzzle.Unsolved);
+        puzzle.Solution.ShouldBe(4759420470);
     }
 }
