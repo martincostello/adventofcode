@@ -97,7 +97,7 @@ public sealed class Day07 : Puzzle<int, int>
             {
                 // Create a copy of the instructions to avoid mutating the original
                 instructions = [.. instructions];
-            
+
                 // Get the wire values for the initial instructions
                 Dictionary<string, ushort> values = GetWireValues(instructions);
 
