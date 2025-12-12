@@ -10,11 +10,11 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2025;
 public sealed class Day12 : Puzzle<int>
 {
     /// <summary>
-    /// Counts the number of regions whose arrangements that can fit all of the required presents.
+    /// Counts the number of regions that can fit all of the required presents.
     /// </summary>
     /// <param name="summary">The values to solve the puzzle from.</param>
     /// <returns>
-    /// The count of regions can fit all of the presents.
+    /// The count of regions that can fit all of the presents.
     /// </returns>
     public static int Arrange(IReadOnlyList<string> summary)
     {
