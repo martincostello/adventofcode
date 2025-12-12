@@ -6,20 +6,95 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2025;
 /// <summary>
 /// A class representing the puzzle for <c>https://adventofcode.com/2025/day/12</c>. This class cannot be inherited.
 /// </summary>
-[Puzzle(2025, 12, "", RequiresData = true, IsHidden = true, Unsolved = true)]
+[Puzzle(2025, 12, "Christmas Tree Farm", RequiresData = true)]
 public sealed class Day12 : Puzzle<int>
 {
     /// <summary>
-    /// Solves the puzzle.
+    /// Counts the number of regions that can fit all of the required presents.
     /// </summary>
-    /// <param name="values">The values to solve the puzzle from.</param>
+    /// <param name="summary">The values to solve the puzzle from.</param>
     /// <returns>
-    /// The solution.
+    /// The count of regions that can fit all of the presents.
     /// </returns>
-    public static int Solve(IReadOnlyList<string> values)
+    public static int Arrange(IReadOnlyList<string> summary)
     {
-        ArgumentNullException.ThrowIfNull(values);
-        return Unsolved;
+        (var shapes, var regions) = ParseSummary(summary);
+
+        int count = 0;
+
+        foreach (var region in regions)
+        {
+            int required = 0;
+
+            for (int i = 0; i < region.Quantities.Count; i++)
+            {
+                required += region.Quantities[i] * shapes[i].Count;
+            }
+
+            if (required < region.Bounds.Area())
+            {
+                count++;
+            }
+        }
+
+        return count;
+
+        static (List<Shape> Shapes, List<Region> Regions) ParseSummary(IReadOnlyList<string> summary)
+        {
+            var shapes = new List<Shape>();
+            var regions = new List<Region>();
+
+            for (int i = 0; i < summary.Count; i++)
+            {
+                string first = summary[i];
+
+                if (TryParse(first.TrimEnd(':'), out int index))
+                {
+                    int y = 0;
+                    var shape = new Shape(index);
+
+                    while (!string.IsNullOrEmpty(summary[++i]))
+                    {
+                        string row = summary[i];
+
+                        for (int x = 0; x < row.Length; x++)
+                        {
+                            if (row[x] == '#')
+                            {
+                                shape.Add(new(x, y));
+                            }
+                        }
+
+                        y++;
+                    }
+
+                    shapes.Add(shape);
+                }
+                else
+                {
+                    var region = first.AsSpan();
+                    index = region.IndexOf(' ');
+
+                    var bounds = region[..(index - 1)];
+                    var counts = region[(index + 1)..];
+
+                    var quantities = new List<int>();
+
+                    foreach (var range in counts.Split(' '))
+                    {
+                        quantities.Add(Parse<int>(counts[range]));
+                    }
+
+                    index = bounds.IndexOf('x');
+                    int width = Parse<int>(bounds[..index]);
+                    int height = Parse<int>(bounds[(index + 1)..]);
+
+                    regions.Add(new(width, height, quantities));
+                }
+            }
+
+            return (shapes, regions);
+        }
     }
 
     /// <inheritdoc />
@@ -28,15 +103,27 @@ public sealed class Day12 : Puzzle<int>
         return await SolveWithLinesAsync(
             static (values, logger, _) =>
             {
-                int solution = Solve(values);
+                int count = Arrange(values);
 
                 if (logger is { })
                 {
-                    logger.WriteLine("The solution is {0}.", solution);
+                    logger.WriteLine("{0} regions can fit all of the presents.", count);
                 }
 
-                return solution;
+                return count;
             },
             cancellationToken);
+    }
+
+    private sealed class Region(int width, int height, IReadOnlyList<int> quantities)
+    {
+        public Rectangle Bounds { get; } = new(0, 0, width, height);
+
+        public IReadOnlyList<int> Quantities { get; } = quantities;
+    }
+
+    private sealed class Shape(int index) : HashSet<Point>
+    {
+        public int Index { get; } = index;
     }
 }
