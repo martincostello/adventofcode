@@ -273,7 +273,7 @@ public sealed class Day12 : Puzzle<int>
 
         public IEnumerable<Shape> Transformations()
         {
-            if (_transformations.Count == _transformations.Capacity)
+            if (_transformations.Count == 8)
             {
                 foreach (var transformation in _transformations)
                 {
