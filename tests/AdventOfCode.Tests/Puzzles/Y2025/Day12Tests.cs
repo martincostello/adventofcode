@@ -46,8 +46,10 @@ public sealed class Day12Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
             "12x5: 1 0 1 0 3 2",
         ];
 
+        using var cts = Timeout();
+
         // Act
-        int actual = Day12.Arrange(values, TestContext.Current.CancellationToken);
+        int actual = Day12.Arrange(values, cts.Token);
 
         // Assert
         actual.ShouldBe(2);
