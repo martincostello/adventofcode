@@ -13,10 +13,11 @@ public sealed class Day12 : Puzzle<int>
     /// Counts the number of regions that can fit all of the required presents.
     /// </summary>
     /// <param name="summary">The values to solve the puzzle from.</param>
+    /// <param name="cancellationToken">The <see cref="CancellationToken"/> to use.</param>
     /// <returns>
     /// The count of regions that can fit all of the presents.
     /// </returns>
-    public static int Arrange(IReadOnlyList<string> summary)
+    public static int Arrange(IReadOnlyList<string> summary, CancellationToken cancellationToken)
     {
         (var shapes, var regions) = ParseSummary(summary);
 
@@ -24,14 +25,7 @@ public sealed class Day12 : Puzzle<int>
 
         foreach (var region in regions)
         {
-            int required = 0;
-
-            for (int i = 0; i < region.Quantities.Count; i++)
-            {
-                required += region.Quantities[i] * shapes[i].Count;
-            }
-
-            if (required < region.Bounds.Area())
+            if (TryPack(region, shapes, cancellationToken))
             {
                 count++;
             }
@@ -95,15 +89,118 @@ public sealed class Day12 : Puzzle<int>
 
             return (shapes, regions);
         }
+
+        static bool TryPack(Region region, List<Shape> shapes, CancellationToken cancellationToken)
+        {
+            int requirement = 0;
+
+            var queue = new Queue<Shape>();
+
+            for (int i = 0; i < region.Quantities.Count; i++)
+            {
+                int quantity = region.Quantities[i];
+                var shape = shapes[i];
+
+                for (int j = 0; j < quantity; j++)
+                {
+                    queue.Enqueue(shape);
+                }
+
+                requirement += quantity * shape.Count;
+            }
+
+            int area = region.Bounds.Area();
+
+            if (requirement > area)
+            {
+                // Definitely cannot fit
+                return false;
+            }
+
+            if ((float)requirement / area < 0.75f)
+            {
+                // If it is less than 75% full, we assume it can fit
+                return true;
+            }
+
+            var cache = new Dictionary<int, bool>();
+            var empty = region.Empty();
+
+            return Pack(area - requirement, region.Bounds, empty, queue, cache, cancellationToken);
+        }
+
+        static bool Pack(int target, Rectangle bounds, HashSet<Point> available, Queue<Shape> shapes, Dictionary<int, bool> cache, CancellationToken cancellationToken)
+        {
+            int hash = Region.HashCode(available, shapes);
+
+            if (cache.TryGetValue(hash, out bool result))
+            {
+                return result;
+            }
+
+            bool canPack = false;
+
+            if (shapes.Count == 0)
+            {
+                canPack = available.Count >= target;
+            }
+            else
+            {
+                var shape = shapes.Dequeue();
+
+                foreach (var transform in shape.Transformations())
+                {
+                    for (int y = 0; y < bounds.Height && !canPack; y++)
+                    {
+                        for (int x = 0; x < bounds.Width && !canPack; x++)
+                        {
+                            if (!available.Contains(new(x, y)))
+                            {
+                                continue;
+                            }
+
+                            var offset = new Size(x, y);
+                            HashSet<Point> transformation = [.. transform.Select((p) => p + offset)];
+
+                            if (!transformation.IsSubsetOf(available))
+                            {
+                                continue;
+                            }
+
+                            available.Not(transformation);
+
+                            if (Pack(target, bounds, available, shapes, cache, cancellationToken))
+                            {
+                                canPack = true;
+                                break;
+                            }
+
+                            available.And(transformation);
+                        }
+                    }
+
+                    if (canPack)
+                    {
+                        break;
+                    }
+                }
+            }
+
+            cancellationToken.ThrowIfCancellationRequested();
+
+            cache[hash] = canPack;
+
+            return canPack;
+        }
     }
 
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
         return await SolveWithLinesAsync(
-            static (values, logger, _) =>
+            static (values, logger, cancellationToken) =>
             {
-                int count = Arrange(values);
+                int count = Arrange(values, cancellationToken);
 
                 if (logger is { })
                 {
@@ -120,10 +217,96 @@ public sealed class Day12 : Puzzle<int>
         public Rectangle Bounds { get; } = new(0, 0, width, height);
 
         public IReadOnlyList<int> Quantities { get; } = quantities;
+
+        public static int HashCode(HashSet<Point> region, IEnumerable<Shape> shapes)
+        {
+            HashCode hash = default;
+
+            foreach (var point in region.OrderBy((p) => p.Y).ThenBy((p) => p.X))
+            {
+                hash.Add(point.GetHashCode());
+            }
+
+            foreach (var shape in shapes)
+            {
+                hash.Add(HashCode(shape, []));
+            }
+
+            return hash.ToHashCode();
+        }
+
+        public HashSet<Point> Empty()
+        {
+            var empty = new HashSet<Point>();
+
+            for (int y = 0; y < Bounds.Height; y++)
+            {
+                for (int x = 0; x < Bounds.Width; x++)
+                {
+                    empty.Add(new(x, y));
+                }
+            }
+
+            return empty;
+        }
     }
 
     private sealed class Shape(int index) : HashSet<Point>
     {
+        private readonly List<Shape> _transformations = new(8);
+
         public int Index { get; } = index;
+
+        public IEnumerable<Shape> Transformations()
+        {
+            if (_transformations.Count == _transformations.Capacity)
+            {
+                foreach (var transformation in _transformations)
+                {
+                    yield return transformation;
+                }
+
+                yield break;
+            }
+
+            Shape current = this;
+
+            for (int i = 0; i < 4; i++)
+            {
+                _transformations.Add(current);
+                yield return current;
+
+                current = current.Flip();
+
+                _transformations.Add(current);
+                yield return current;
+
+                current = current.Rotate();
+            }
+        }
+
+        private Shape Flip()
+        {
+            var flipped = new Shape(Index);
+
+            foreach (var point in this)
+            {
+                flipped.Add(new(-point.X, point.Y));
+            }
+
+            return flipped;
+        }
+
+        private Shape Rotate()
+        {
+            var rotated = new Shape(Index);
+
+            foreach (var point in this)
+            {
+                rotated.Add(new(point.Y, -point.X));
+            }
+
+            return rotated;
+        }
     }
 }

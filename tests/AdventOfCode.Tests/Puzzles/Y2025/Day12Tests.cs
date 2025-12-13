@@ -5,7 +5,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2025;
 
 public sealed class Day12Tests(ITestOutputHelper outputHelper) : PuzzleTest(outputHelper)
 {
-    [Fact(Skip = "Unsolved.")]
+    [Fact]
     public void Y2025_Day12_Arrange_Returns_Correct_Value()
     {
         // Arrange
@@ -47,7 +47,7 @@ public sealed class Day12Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         ];
 
         // Act
-        int actual = Day12.Arrange(values);
+        int actual = Day12.Arrange(values, TestContext.Current.CancellationToken);
 
         // Assert
         actual.ShouldBe(2);
