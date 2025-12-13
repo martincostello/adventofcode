@@ -21,10 +21,15 @@ public sealed class Day12 : Puzzle<int>
     {
         (var shapes, var regions) = ParseSummary(summary);
 
+        // Start with the largest shapes
+        shapes.Sort((a, b) => b.Count.CompareTo(a.Count));
+
         int count = 0;
 
         foreach (var region in regions)
         {
+            cancellationToken.ThrowIfCancellationRequested();
+
             if (TryPack(region, shapes, cancellationToken))
             {
                 count++;
@@ -161,6 +166,8 @@ public sealed class Day12 : Puzzle<int>
 
                 foreach (var transform in shape.Transformations())
                 {
+                    cancellationToken.ThrowIfCancellationRequested();
+
                     for (int y = 0; y < bounds.Height && !canPack && !cancellationToken.IsCancellationRequested; y++)
                     {
                         for (int x = 0; x < bounds.Width && !canPack && !cancellationToken.IsCancellationRequested; x++)
