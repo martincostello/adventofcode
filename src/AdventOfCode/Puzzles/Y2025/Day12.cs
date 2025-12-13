@@ -168,9 +168,9 @@ public sealed class Day12 : Puzzle<int>
                 {
                     cancellationToken.ThrowIfCancellationRequested();
 
-                    for (int y = 0; y < bounds.Height && !canPack && !cancellationToken.IsCancellationRequested; y++)
+                    for (int y = 0; y < bounds.Height && !cancellationToken.IsCancellationRequested; y++)
                     {
-                        for (int x = 0; x < bounds.Width && !canPack && !cancellationToken.IsCancellationRequested; x++)
+                        for (int x = 0; x < bounds.Width && !cancellationToken.IsCancellationRequested; x++)
                         {
                             if (!available.Contains(new(x, y)))
                             {
