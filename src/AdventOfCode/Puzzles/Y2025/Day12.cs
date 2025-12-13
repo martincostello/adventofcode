@@ -142,6 +142,12 @@ public sealed class Day12 : Puzzle<int>
             Dictionary<int, bool> cache,
             CancellationToken cancellationToken)
         {
+            if (shapes.Count > 0 && available.Count < shapes.Peek().Count)
+            {
+                // There's not enough space left to fit the next shape
+                return false;
+            }
+
             int hash = Region.HashCode(available, shapes);
 
             if (cache.TryGetValue(hash, out bool result))
@@ -185,6 +191,11 @@ public sealed class Day12 : Puzzle<int>
                                 continue;
                             }
 
+                            if (!CanFitBoundingBox(available, transformation, offset))
+                            {
+                                continue;
+                            }
+
                             available.Not(transformation);
 
                             if (Pack(target, bounds, available, shapes, cache, cancellationToken))
@@ -205,6 +216,18 @@ public sealed class Day12 : Puzzle<int>
             cache[hash] = canPack;
 
             return canPack;
+        }
+
+        static bool CanFitBoundingBox(HashSet<Point> available, HashSet<Point> shape, Size offset)
+        {
+            int minX = shape.Min((p) => p.X) + offset.Width;
+            int maxX = shape.Max((p) => p.X) + offset.Width;
+            int minY = shape.Min((p) => p.Y) + offset.Height;
+            int maxY = shape.Max((p) => p.Y) + offset.Height;
+
+            var box = new Rectangle(minX, minY, maxX - minX + 1, maxY - minY + 1);
+
+            return available.Any(box.Contains);
         }
     }
 
@@ -234,19 +257,21 @@ public sealed class Day12 : Puzzle<int>
 
         public static int HashCode(HashSet<Point> region, IEnumerable<Shape> shapes)
         {
-            HashCode hash = default;
+            HashCode hashCode = default;
 
-            foreach (var point in region.OrderBy((p) => p.Y).ThenBy((p) => p.X))
+            hashCode.Add(region.Count);
+
+            foreach (var point in region.Take(20))
             {
-                hash.Add(point.GetHashCode());
+                hashCode.Add(point);
             }
 
             foreach (var shape in shapes)
             {
-                hash.Add(HashCode(shape, []));
+                hashCode.Add(shape.Index);
             }
 
-            return hash.ToHashCode();
+            return hashCode.ToHashCode();
         }
 
         public HashSet<Point> Empty()
