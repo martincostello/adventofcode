@@ -129,7 +129,13 @@ public sealed class Day12 : Puzzle<int>
             return Pack(area - requirement, region.Bounds, empty, queue, cache, cancellationToken);
         }
 
-        static bool Pack(int target, Rectangle bounds, HashSet<Point> available, Queue<Shape> shapes, Dictionary<int, bool> cache, CancellationToken cancellationToken)
+        static bool Pack(
+            int target,
+            Rectangle bounds,
+            HashSet<Point> available,
+            Queue<Shape> shapes,
+            Dictionary<int, bool> cache,
+            CancellationToken cancellationToken)
         {
             int hash = Region.HashCode(available, shapes);
 
@@ -146,6 +152,11 @@ public sealed class Day12 : Puzzle<int>
             }
             else
             {
+                if (available.Count < shapes.Peek().Count)
+                {
+                    return cache[hash] = false;
+                }
+
                 var shape = shapes.Dequeue();
 
                 foreach (var transform in shape.Transformations())
@@ -171,19 +182,15 @@ public sealed class Day12 : Puzzle<int>
 
                             if (Pack(target, bounds, available, shapes, cache, cancellationToken))
                             {
-                                canPack = true;
-                                break;
+                                return cache[hash] = true;
                             }
 
-                            available.And(transformation);
+                            available.Or(transformation);
                         }
                     }
-
-                    if (canPack)
-                    {
-                        break;
-                    }
                 }
+
+                shapes.Enqueue(shape);
             }
 
             cancellationToken.ThrowIfCancellationRequested();
