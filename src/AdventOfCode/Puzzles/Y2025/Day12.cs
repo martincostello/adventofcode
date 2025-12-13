@@ -47,7 +47,7 @@ public sealed class Day12 : Puzzle<int>
                 if (TryParse(first.TrimEnd(':'), out int index))
                 {
                     int y = 0;
-                    var shape = new Shape(index);
+                    var shape = new Shape(index, 9);
 
                     while (!string.IsNullOrEmpty(summary[++i]))
                     {
@@ -265,7 +265,7 @@ public sealed class Day12 : Puzzle<int>
         }
     }
 
-    private sealed class Shape(int index) : HashSet<Point>
+    private sealed class Shape(int index, int capacity) : HashSet<Point>(capacity)
     {
         private readonly List<Shape> _transformations = new(8);
 
@@ -301,26 +301,42 @@ public sealed class Day12 : Puzzle<int>
 
         private Shape Flip()
         {
-            var flipped = new Shape(Index);
+            var flipped = new HashSet<Point>(Count);
 
             foreach (var point in this)
             {
                 flipped.Add(new(-point.X, point.Y));
             }
 
-            return flipped;
+            return Normalize(flipped);
         }
 
         private Shape Rotate()
         {
-            var rotated = new Shape(Index);
+            var rotated = new HashSet<Point>(Count);
 
             foreach (var point in this)
             {
                 rotated.Add(new(point.Y, -point.X));
             }
 
-            return rotated;
+            return Normalize(rotated);
+        }
+
+        private Shape Normalize(HashSet<Point> points)
+        {
+            int minX = points.Min((p) => p.X);
+            int minY = points.Min((p) => p.Y);
+
+            var offset = new Size(-minX, -minY);
+            var normalized = new Shape(Index, points.Count);
+
+            foreach (var point in points)
+            {
+                normalized.Add(point + offset);
+            }
+
+            return normalized;
         }
     }
 }
