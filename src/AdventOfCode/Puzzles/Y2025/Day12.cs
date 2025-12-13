@@ -161,9 +161,9 @@ public sealed class Day12 : Puzzle<int>
 
                 foreach (var transform in shape.Transformations())
                 {
-                    for (int y = 0; y < bounds.Height && !canPack; y++)
+                    for (int y = 0; y < bounds.Height && !canPack && !cancellationToken.IsCancellationRequested; y++)
                     {
-                        for (int x = 0; x < bounds.Width && !canPack; x++)
+                        for (int x = 0; x < bounds.Width && !canPack && !cancellationToken.IsCancellationRequested; x++)
                         {
                             if (!available.Contains(new(x, y)))
                             {
