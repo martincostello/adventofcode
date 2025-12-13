@@ -21,9 +21,6 @@ public sealed class Day12 : Puzzle<int>
     {
         (var shapes, var regions) = ParseSummary(summary);
 
-        // Start with the largest shapes
-        shapes.Sort((a, b) => b.Count.CompareTo(a.Count));
-
         int count = 0;
 
         foreach (var region in regions)
@@ -99,7 +96,7 @@ public sealed class Day12 : Puzzle<int>
         {
             int requirement = 0;
 
-            var queue = new Queue<Shape>();
+            var presents = new List<Shape>();
 
             for (int i = 0; i < region.Quantities.Count; i++)
             {
@@ -108,11 +105,13 @@ public sealed class Day12 : Puzzle<int>
 
                 for (int j = 0; j < quantity; j++)
                 {
-                    queue.Enqueue(shape);
+                    presents.Add(shape);
                 }
 
                 requirement += quantity * shape.Count;
             }
+
+            presents.Sort((a, b) => b.Count.CompareTo(a.Count));
 
             int area = region.Bounds.Area();
 
@@ -130,6 +129,7 @@ public sealed class Day12 : Puzzle<int>
 
             var cache = new Dictionary<int, bool>();
             var empty = region.Empty();
+            var queue = new Queue<Shape>(presents);
 
             return Pack(area - requirement, region.Bounds, empty, queue, cache, cancellationToken);
         }
