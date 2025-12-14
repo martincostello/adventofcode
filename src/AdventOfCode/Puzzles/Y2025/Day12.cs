@@ -111,8 +111,6 @@ public sealed class Day12 : Puzzle<int>
                 requirement += quantity * shape.Count;
             }
 
-            presents.Sort((a, b) => b.Count.CompareTo(a.Count));
-
             int area = region.Bounds.Area();
 
             if (requirement > area)
@@ -126,6 +124,8 @@ public sealed class Day12 : Puzzle<int>
                 // If it is less than 75% full, we assume it can fit
                 return true;
             }
+
+            presents.Sort((a, b) => b.Count.CompareTo(a.Count));
 
             var cache = new Dictionary<int, bool>();
             var empty = region.Empty();
