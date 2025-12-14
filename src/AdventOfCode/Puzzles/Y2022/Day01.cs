@@ -48,19 +48,22 @@ public sealed class Day01 : Puzzle<int, int>
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        var inventories = await ReadResourceAsLinesAsync(cancellationToken);
+        return await SolveWithLinesAsync(
+            static (inventories, logger, _) =>
+            {
+                var calories = GetCalorieInventories(inventories);
 
-        var calories = GetCalorieInventories(inventories);
+                int maximumCalories = calories.Max();
+                int maximumCaloriesForTop3 = calories.OrderDescending().Take(3).Sum();
 
-        Solution1 = calories.Max();
-        Solution2 = calories.OrderDescending().Take(3).Sum();
+                if (logger is { })
+                {
+                    logger.WriteLine("The elf carrying the largest inventory has {0:N0} Calories.", maximumCalories);
+                    logger.WriteLine("The elves carrying the largest three inventories have {0:N0} Calories.", maximumCaloriesForTop3);
+                }
 
-        if (Verbose)
-        {
-            Logger.WriteLine("The elf carrying the largest inventory has {0:N0} Calories.", Solution1);
-            Logger.WriteLine("The elves carrying the largest three inventories have {0:N0} Calories.", Solution2);
-        }
-
-        return Result();
+                return (maximumCalories, maximumCaloriesForTop3);
+            },
+            cancellationToken);
     }
 }

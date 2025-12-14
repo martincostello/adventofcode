@@ -95,19 +95,20 @@ public sealed class Day01 : Puzzle<int, int>
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        ArgumentNullException.ThrowIfNull(args);
+        return await SolveWithLinesAsync(
+            static (values, logger, _) =>
+            {
+                int sumOfCalibrationsDigits = SumCalibrations(values, useWords: false);
+                int sumOfCalibrationsWordsAndDigits = SumCalibrations(values, useWords: true);
 
-        var values = await ReadResourceAsLinesAsync(cancellationToken);
+                if (logger is { })
+                {
+                    logger.WriteLine("The sum of all of the calibration values is {0} using only digits.", sumOfCalibrationsDigits);
+                    logger.WriteLine("The sum of all of the calibration values is {0} using words and digits.", sumOfCalibrationsWordsAndDigits);
+                }
 
-        Solution1 = SumCalibrations(values, useWords: false);
-        Solution2 = SumCalibrations(values, useWords: true);
-
-        if (Verbose)
-        {
-            Logger.WriteLine("The sum of all of the calibration values is {0} using only digits.", Solution1);
-            Logger.WriteLine("The sum of all of the calibration values is {0} using words and digits.", Solution2);
-        }
-
-        return Result();
+                return (sumOfCalibrationsDigits, sumOfCalibrationsWordsAndDigits);
+            },
+            cancellationToken);
     }
 }

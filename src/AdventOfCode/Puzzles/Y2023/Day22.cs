@@ -136,18 +136,19 @@ public sealed class Day22 : Puzzle<int, int>
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        ArgumentNullException.ThrowIfNull(args);
+        return await SolveWithLinesAsync(
+            static (snapshot, logger, _) =>
+            {
+                (int safeBricks, int maximumChainReaction) = Disintegrate(snapshot);
 
-        var snapshot = await ReadResourceAsLinesAsync(cancellationToken);
+                if (logger is { })
+                {
+                    logger.WriteLine("{0} bricks could be safely chosen as the one to get disintegrated.", safeBricks);
+                    logger.WriteLine("The sum of the number of other bricks that would fall is {0}.", maximumChainReaction);
+                }
 
-        (Solution1, Solution2) = Disintegrate(snapshot);
-
-        if (Verbose)
-        {
-            Logger.WriteLine("{0} bricks could be safely chosen as the one to get disintegrated.", Solution1);
-            Logger.WriteLine("The sum of the number of other bricks that would fall is {0}.", Solution2);
-        }
-
-        return Result();
+                return (safeBricks, maximumChainReaction);
+            },
+            cancellationToken);
     }
 }

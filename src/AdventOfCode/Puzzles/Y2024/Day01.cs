@@ -65,18 +65,19 @@ public sealed class Day01 : Puzzle<int, int>
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        ArgumentNullException.ThrowIfNull(args);
+        return await SolveWithLinesAsync(
+            static (values, logger, _) =>
+            {
+                (int totalDistance, int similarityScore) = ParseList(values);
 
-        var values = await ReadResourceAsLinesAsync(cancellationToken);
+                if (logger is { })
+                {
+                    logger.WriteLine("The total distance between the lists is {0}", totalDistance);
+                    logger.WriteLine("The similarity score for the lists is {0}", similarityScore);
+                }
 
-        (Solution1, Solution2) = ParseList(values);
-
-        if (Verbose)
-        {
-            Logger.WriteLine("The total distance between the lists is {0}", Solution1);
-            Logger.WriteLine("The similarity score for the lists is {0}", Solution2);
-        }
-
-        return Result();
+                return (totalDistance, similarityScore);
+            },
+            cancellationToken);
     }
 }

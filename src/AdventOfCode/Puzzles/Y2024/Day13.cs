@@ -62,20 +62,21 @@ public sealed class Day13 : Puzzle<long, long>
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        ArgumentNullException.ThrowIfNull(args);
+        return await SolveWithLinesAsync(
+            static (values, logger, _) =>
+            {
+                long fewestTokens = Play(values, offset: 0, limit: 100);
+                long fewestTokensFixed = Play(values, offset: 10_000_000_000_000, limit: long.MaxValue);
 
-        var values = await ReadResourceAsLinesAsync(cancellationToken);
+                if (logger is { })
+                {
+                    logger.WriteLine("The fewest tokens you would have to spend to win all possible prizes is {0}.", fewestTokens);
+                    logger.WriteLine("The fewest tokens you would have to spend to win all possible prizes with the correct offset is {0}.", fewestTokensFixed);
+                }
 
-        Solution1 = Play(values, offset: 0, limit: 100);
-        Solution2 = Play(values, offset: 10_000_000_000_000, limit: long.MaxValue);
-
-        if (Verbose)
-        {
-            Logger.WriteLine("The fewest tokens you would have to spend to win all possible prizes is {0}.", Solution1);
-            Logger.WriteLine("The fewest tokens you would have to spend to win all possible prizes with the correct offset is {0}.", Solution2);
-        }
-
-        return Result();
+                return (fewestTokens, fewestTokensFixed);
+            },
+            cancellationToken);
     }
 
     private sealed record ClawMachine(Point A, Point B, Point Prize)

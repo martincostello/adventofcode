@@ -125,19 +125,20 @@ public sealed class Day08 : Puzzle<long, long>
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        ArgumentNullException.ThrowIfNull(args);
+        return await SolveWithLinesAsync(
+            static (values, logger, cancellationToken) =>
+            {
+                long steps = WalkNetwork(values, asGhost: false, cancellationToken);
+                long stepsAsGhost = WalkNetwork(values, asGhost: true, cancellationToken);
 
-        var values = await ReadResourceAsLinesAsync(cancellationToken);
+                if (logger is { })
+                {
+                    logger.WriteLine("{0} steps are required to reach ZZZ.", steps);
+                    logger.WriteLine("{0} steps are required to simultaneously reach nodes all ending with Z.", stepsAsGhost);
+                }
 
-        Solution1 = WalkNetwork(values, asGhost: false, cancellationToken);
-        Solution2 = WalkNetwork(values, asGhost: true, cancellationToken);
-
-        if (Verbose)
-        {
-            Logger.WriteLine("{0} steps are required to reach ZZZ.", Solution1);
-            Logger.WriteLine("{0} steps are required to simultaneously reach nodes all ending with Z.", Solution2);
-        }
-
-        return Result();
+                return (steps, stepsAsGhost);
+            },
+            cancellationToken);
     }
 }

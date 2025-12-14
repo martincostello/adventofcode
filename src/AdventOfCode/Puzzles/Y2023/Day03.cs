@@ -168,18 +168,19 @@ public sealed class Day03 : Puzzle<int, int>
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        ArgumentNullException.ThrowIfNull(args);
+        return await SolveWithLinesAsync(
+            static (values, logger, _) =>
+            {
+                (int sumOfPartNumbers, int sumOfGearRatios) = Solve(values);
 
-        var values = await ReadResourceAsLinesAsync(cancellationToken);
+                if (logger is { })
+                {
+                    logger.WriteLine("The sum of all of the part numbers in the engine schematic is {0}.", sumOfPartNumbers);
+                    logger.WriteLine("The sum of all of the gear ratios in the engine schematic is {0}.", sumOfGearRatios);
+                }
 
-        (Solution1, Solution2) = Solve(values);
-
-        if (Verbose)
-        {
-            Logger.WriteLine("The sum of all of the part numbers in the engine schematic is {0}.", Solution1);
-            Logger.WriteLine("The sum of all of the gear ratios in the engine schematic is {0}.", Solution2);
-        }
-
-        return Result();
+                return (sumOfPartNumbers, sumOfGearRatios);
+            },
+            cancellationToken);
     }
 }

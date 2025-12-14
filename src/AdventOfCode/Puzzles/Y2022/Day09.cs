@@ -61,18 +61,21 @@ public sealed class Day09 : Puzzle<int, int>
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        var moves = await ReadResourceAsLinesAsync(cancellationToken);
+        return await SolveWithLinesAsync(
+            static (moves, logger, _) =>
+            {
+                int positionsVisited2 = Move(moves, knots: 2);
+                int positionsVisited10 = Move(moves, knots: 10);
 
-        Solution1 = Move(moves, knots: 2);
-        Solution2 = Move(moves, knots: 10);
+                if (logger is { })
+                {
+                    logger.WriteLine("The tail of the rope with two knots visits {0} positions at least once.", positionsVisited2);
+                    logger.WriteLine("The tail of the rope with ten knots visits {0} positions at least once.", positionsVisited10);
+                }
 
-        if (Verbose)
-        {
-            Logger.WriteLine("The tail of the rope with two knots visits {0} positions at least once.", Solution1);
-            Logger.WriteLine("The tail of the rope with ten knots visits {0} positions at least once.", Solution2);
-        }
-
-        return Result();
+                return (positionsVisited2, positionsVisited10);
+            },
+            cancellationToken);
     }
 
     /// <summary>

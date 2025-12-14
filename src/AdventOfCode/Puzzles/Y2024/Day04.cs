@@ -35,20 +35,21 @@ public sealed class Day04 : Puzzle<int, int>
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        ArgumentNullException.ThrowIfNull(args);
+        return await SolveWithLinesAsync(
+            static (values, logger, _) =>
+            {
+                int simpleCount = Search(values, crossCount: false);
+                int crossCount = Search(values, crossCount: true);
 
-        var values = await ReadResourceAsLinesAsync(cancellationToken);
+                if (logger is { })
+                {
+                    logger.WriteLine("XMAS appears {0} times.", simpleCount);
+                    logger.WriteLine("MAS appears crossed {0} times.", crossCount);
+                }
 
-        Solution1 = Search(values, crossCount: false);
-        Solution2 = Search(values, crossCount: true);
-
-        if (Verbose)
-        {
-            Logger.WriteLine("XMAS appears {0} times.", Solution1);
-            Logger.WriteLine("MAS appears crossed {0} times.", Solution2);
-        }
-
-        return Result();
+                return (simpleCount, crossCount);
+            },
+            cancellationToken);
     }
 
     private static int CountXmas(IList<string> grid)

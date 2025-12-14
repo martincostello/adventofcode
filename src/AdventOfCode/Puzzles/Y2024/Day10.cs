@@ -71,19 +71,20 @@ public sealed class Day10 : Puzzle<int, int>
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        ArgumentNullException.ThrowIfNull(args);
+        return await SolveWithLinesAsync(
+            static (values, logger, _) =>
+            {
+                (int sumOfScores, int sumOfRatings) = Explore(values);
 
-        var values = await ReadResourceAsLinesAsync(cancellationToken);
+                if (logger is { })
+                {
+                    logger.WriteLine("The sum of the scores of all trailheads in the topographic map is {0}.", sumOfScores);
+                    logger.WriteLine("The sum of the ratings of all trailheads in the topographic map is {0}.", sumOfRatings);
+                }
 
-        (Solution1, Solution2) = Explore(values);
-
-        if (Verbose)
-        {
-            Logger.WriteLine("The sum of the scores of all trailheads in the topographic map is {0}.", Solution1);
-            Logger.WriteLine("The sum of the ratings of all trailheads in the topographic map is {0}.", Solution2);
-        }
-
-        return Result();
+                return (sumOfScores, sumOfRatings);
+            },
+            cancellationToken);
     }
 
     private sealed class TopographicMap(Rectangle bounds) : SquareGrid(bounds)

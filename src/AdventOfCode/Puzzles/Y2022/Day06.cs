@@ -43,22 +43,25 @@ public sealed class Day06 : Puzzle<int, int>
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        string datastream = await ReadResourceAsStringAsync(cancellationToken);
+        return await SolveWithStringAsync(
+            static (datastream, logger) =>
+            {
+                int indexOfFirstStartOfPacketMarker = FindFirstPacket(datastream, 4);
+                int indexOfFirstStartOfMessageMarker = FindFirstPacket(datastream, 14);
 
-        Solution1 = FindFirstPacket(datastream, 4);
-        Solution2 = FindFirstPacket(datastream, 14);
+                if (logger is { })
+                {
+                    logger.WriteLine(
+                        "{0} characters need to be processed before the first start-of-packet marker is detected.",
+                        indexOfFirstStartOfPacketMarker);
 
-        if (Verbose)
-        {
-            Logger.WriteLine(
-                "{0} characters need to be processed before the first start-of-packet marker is detected.",
-                Solution1);
+                    logger.WriteLine(
+                        "{0} characters need to be processed before the first start-of-message marker is detected.",
+                        indexOfFirstStartOfMessageMarker);
+                }
 
-            Logger.WriteLine(
-                "{0} characters need to be processed before the first start-of-message marker is detected.",
-                Solution2);
-        }
-
-        return Result();
+                return (indexOfFirstStartOfPacketMarker, indexOfFirstStartOfMessageMarker);
+            },
+            cancellationToken);
     }
 }

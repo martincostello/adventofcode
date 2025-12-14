@@ -47,19 +47,20 @@ public sealed class Day06 : Puzzle<int, int>
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        ArgumentNullException.ThrowIfNull(args);
+        return await SolveWithLinesAsync(
+            static (values, logger, cancellationToken) =>
+            {
+                (int distinctPositions, int distinctObstructions) = Patrol(values, cancellationToken);
 
-        var values = await ReadResourceAsLinesAsync(cancellationToken);
+                if (logger is { })
+                {
+                    logger.WriteLine("{0} distinct positions are visited by the guard before leaving the mapped area.", distinctPositions);
+                    logger.WriteLine("{0} distinct positions can be chosen for an obstruction to create a loop.", distinctObstructions);
+                }
 
-        (Solution1, Solution2) = Patrol(values, cancellationToken);
-
-        if (Verbose)
-        {
-            Logger.WriteLine("{0} distinct positions are visited by the guard before leaving the mapped area.", Solution1);
-            Logger.WriteLine("{0} distinct positions can be chosen for an obstruction to create a loop.", Solution2);
-        }
-
-        return Result();
+                return (distinctPositions, distinctObstructions);
+            },
+            cancellationToken);
     }
 
     private static (Dictionary<Point, bool> Lab, Point Origin) ParseMap(IList<string> map)

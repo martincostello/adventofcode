@@ -85,18 +85,19 @@ public sealed class Day19 : Puzzle<int, long>
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        ArgumentNullException.ThrowIfNull(args);
+        return await SolveWithLinesAsync(
+            static (values, logger, _) =>
+            {
+                (int possibleDesigns, long uniqueDesigns) = CountPossibilities(values);
 
-        var values = await ReadResourceAsLinesAsync(cancellationToken);
+                if (logger is { })
+                {
+                    logger.WriteLine("{0} designs are possible.", possibleDesigns);
+                    logger.WriteLine("There are {0} different ways to make each design.", uniqueDesigns);
+                }
 
-        (Solution1, Solution2) = CountPossibilities(values);
-
-        if (Verbose)
-        {
-            Logger.WriteLine("{0} designs are possible.", Solution1);
-            Logger.WriteLine("There are {0} different ways to make each design.", Solution2);
-        }
-
-        return Result();
+                return (possibleDesigns, uniqueDesigns);
+            },
+            cancellationToken);
     }
 }

@@ -122,23 +122,26 @@ public sealed class Day11 : Puzzle<long, long>
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        var observations = await ReadResourceAsLinesAsync(cancellationToken);
+        return await SolveWithLinesAsync(
+            static (observations, logger, _) =>
+            {
+                long monkeyBusiness20 = GetMonkeyBusiness(observations, rounds: 20, highAnxiety: false);
+                long monkeyBusiness10000 = GetMonkeyBusiness(observations, rounds: 10_000, highAnxiety: true);
 
-        Solution1 = GetMonkeyBusiness(observations, rounds: 20, highAnxiety: false);
-        Solution2 = GetMonkeyBusiness(observations, rounds: 10_000, highAnxiety: true);
+                if (logger is { })
+                {
+                    logger.WriteLine(
+                        "The level of monkey business after 20 rounds of stuff-slinging simian shenanigans is {0}.",
+                        monkeyBusiness20);
 
-        if (Verbose)
-        {
-            Logger.WriteLine(
-                "The level of monkey business after 20 rounds of stuff-slinging simian shenanigans is {0}.",
-                Solution1);
+                    logger.WriteLine(
+                        "The level of monkey business after 10,000 rounds of stuff-slinging simian shenanigans is {0}.",
+                        monkeyBusiness10000);
+                }
 
-            Logger.WriteLine(
-                "The level of monkey business after 10,000 rounds of stuff-slinging simian shenanigans is {0}.",
-                Solution2);
-        }
-
-        return Result();
+                return (monkeyBusiness20, monkeyBusiness10000);
+            },
+            cancellationToken);
     }
 
     [DebuggerDisplay("{Number}")]

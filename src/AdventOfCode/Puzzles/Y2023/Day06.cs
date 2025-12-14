@@ -91,19 +91,20 @@ public sealed class Day06 : Puzzle<long, long>
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        ArgumentNullException.ThrowIfNull(args);
+        return await SolveWithLinesAsync(
+            static (values, logger, _) =>
+            {
+                long combinationsProduct = Race(values, fixKerning: false);
+                long combinationsProductWithFix = Race(values, fixKerning: true);
 
-        var values = await ReadResourceAsLinesAsync(cancellationToken);
+                if (logger is { })
+                {
+                    logger.WriteLine("The product of the number of ways to beat the record is {0}.", combinationsProduct);
+                    logger.WriteLine("The product of the number of ways to beat the record with the kerning fixed is {0}.", combinationsProductWithFix);
+                }
 
-        Solution1 = Race(values, fixKerning: false);
-        Solution2 = Race(values, fixKerning: true);
-
-        if (Verbose)
-        {
-            Logger.WriteLine("The product of the number of ways to beat the record is {0}.", Solution1);
-            Logger.WriteLine("The product of the number of ways to beat the record with the kerning fixed is {0}.", Solution2);
-        }
-
-        return Result();
+                return (combinationsProduct, combinationsProductWithFix);
+            },
+            cancellationToken);
     }
 }

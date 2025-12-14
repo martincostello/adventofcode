@@ -115,17 +115,20 @@ public sealed class Day13 : Puzzle<int, int>
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        var packets = await ReadResourceAsLinesAsync(cancellationToken);
+        return await SolveWithLinesAsync(
+            static (packets, logger, _) =>
+            {
+                (int sumOfPresortedIndicies, int decoderKey) = DecodePackets(packets);
 
-        (Solution1, Solution2) = DecodePackets(packets);
+                if (logger is { })
+                {
+                    logger.WriteLine("The sum of the indices of the pairs of packets already in the right order is {0}.", sumOfPresortedIndicies);
+                    logger.WriteLine("The decoder key for the distress signal is {0}.", decoderKey);
+                }
 
-        if (Verbose)
-        {
-            Logger.WriteLine("The sum of the indices of the pairs of packets already in the right order is {0}.", Solution1);
-            Logger.WriteLine("The decoder key for the distress signal is {0}.", Solution2);
-        }
-
-        return Result();
+                return (sumOfPresortedIndicies, decoderKey);
+            },
+            cancellationToken);
     }
 
     private sealed class Packet : IComparable<Packet>, IEquatable<Packet>

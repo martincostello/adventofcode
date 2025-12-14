@@ -97,22 +97,25 @@ public sealed class Day02 : Puzzle<int, int>
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        var moves = await ReadResourceAsLinesAsync(cancellationToken);
+        return await SolveWithLinesAsync(
+            static (moves, logger, _) =>
+            {
+                int totalScoreForMoves = GetTotalScore(moves, containsDesiredOutcome: false);
+                int totalScoreForOutcomes = GetTotalScore(moves, containsDesiredOutcome: true);
 
-        Solution1 = GetTotalScore(moves, containsDesiredOutcome: false);
-        Solution2 = GetTotalScore(moves, containsDesiredOutcome: true);
+                if (logger is { })
+                {
+                    logger.WriteLine(
+                        "The total score from following the encrypted strategy guide of moves would be {0:N0}.",
+                        totalScoreForMoves);
 
-        if (Verbose)
-        {
-            Logger.WriteLine(
-                "The total score from following the encrypted strategy guide of moves would be {0:N0}.",
-                Solution1);
+                    logger.WriteLine(
+                        "The total score from following the encrypted strategy guide of desired outcomes would be {0:N0}.",
+                        totalScoreForOutcomes);
+                }
 
-            Logger.WriteLine(
-                "The total score from following the encrypted strategy guide of desired outcomes would be {0:N0}.",
-                Solution2);
-        }
-
-        return Result();
+                return (totalScoreForMoves, totalScoreForOutcomes);
+            },
+            cancellationToken);
     }
 }

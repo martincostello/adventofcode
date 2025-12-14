@@ -60,19 +60,20 @@ public sealed class Day18 : Puzzle<long, long>
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        ArgumentNullException.ThrowIfNull(args);
+        return await SolveWithLinesAsync(
+            static (plan, logger, _) =>
+            {
+                long volume = Dig(plan, fix: false);
+                long volumeWithFix = Dig(plan, fix: true);
 
-        var plan = await ReadResourceAsLinesAsync(cancellationToken);
+                if (logger is { })
+                {
+                    logger.WriteLine("The lagoon can hold {0} cubic meters of lava.", volume);
+                    logger.WriteLine("The lagoon can hold {0} cubic meters of lava using the fixed plan.", volumeWithFix);
+                }
 
-        Solution1 = Dig(plan, fix: false);
-        Solution2 = Dig(plan, fix: true);
-
-        if (Verbose)
-        {
-            Logger.WriteLine("The lagoon can hold {0} cubic meters of lava.", Solution1);
-            Logger.WriteLine("The lagoon can hold {0} cubic meters of lava using the fixed plan.", Solution2);
-        }
-
-        return Result();
+                return (volume, volumeWithFix);
+            },
+            cancellationToken);
     }
 }

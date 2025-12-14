@@ -126,19 +126,20 @@ public sealed class Day07 : Puzzle<int, int>
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        ArgumentNullException.ThrowIfNull(args);
+        return await SolveWithLinesAsync(
+            static (hands, logger, _) =>
+            {
+                int totalWinnings = Play(hands, useJokers: false);
+                int totalWinningsWithJokers = Play(hands, useJokers: true);
 
-        var hands = await ReadResourceAsLinesAsync(cancellationToken);
+                if (logger is { })
+                {
+                    logger.WriteLine("The total winnings are {0}.", totalWinnings);
+                    logger.WriteLine("The total winnings are {0} with Jokers.", totalWinningsWithJokers);
+                }
 
-        Solution1 = Play(hands, useJokers: false);
-        Solution2 = Play(hands, useJokers: true);
-
-        if (Verbose)
-        {
-            Logger.WriteLine("The total winnings are {0}.", Solution1);
-            Logger.WriteLine("The total winnings are {0} with Jokers.", Solution2);
-        }
-
-        return Result();
+                return (totalWinnings, totalWinningsWithJokers);
+            },
+            cancellationToken);
     }
 }

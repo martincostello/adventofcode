@@ -76,18 +76,19 @@ public sealed class Day02 : Puzzle<int, int>
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        ArgumentNullException.ThrowIfNull(args);
+        return await SolveWithLinesAsync(
+            static (values, logger, _) =>
+            {
+                (int sumOfPossibleSolutions, int sumOfPowers) = Play(values);
 
-        var values = await ReadResourceAsLinesAsync(cancellationToken);
+                if (logger is { })
+                {
+                    logger.WriteLine("The sum of the IDs of the possible games is {0}.", sumOfPossibleSolutions);
+                    logger.WriteLine("The sum of the powers of the cubes in the games is {0}.", sumOfPowers);
+                }
 
-        (Solution1, Solution2) = Play(values);
-
-        if (Verbose)
-        {
-            Logger.WriteLine("The sum of the IDs of the possible games is {0}.", Solution1);
-            Logger.WriteLine("The sum of the powers of the cubes in the games is {0}.", Solution2);
-        }
-
-        return Result();
+                return (sumOfPossibleSolutions, sumOfPowers);
+            },
+            cancellationToken);
     }
 }

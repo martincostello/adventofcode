@@ -220,19 +220,20 @@ public sealed class Day20 : Puzzle<int, long>
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        ArgumentNullException.ThrowIfNull(args);
+        return await SolveWithLinesAsync(
+            static (configuration, logger, cancellationToken) =>
+            {
+                (int pulsesProduct, long activationCycles) = Run(configuration, presses: 1_000, cancellationToken);
 
-        var configuration = await ReadResourceAsLinesAsync(cancellationToken);
+                if (logger is { })
+                {
+                    logger.WriteLine("The total number of low pulses sent multiplied by the total number of high pulses sent is {0}.", pulsesProduct);
+                    logger.WriteLine("The fewest number of button presses required to deliver a single low pulse to the module named rx is {0}.", activationCycles);
+                }
 
-        (Solution1, Solution2) = Run(configuration, presses: 1_000, cancellationToken);
-
-        if (Verbose)
-        {
-            Logger.WriteLine("The total number of low pulses sent multiplied by the total number of high pulses sent is {0}.", Solution1);
-            Logger.WriteLine("The fewest number of button presses required to deliver a single low pulse to the module named rx is {0}.", Solution2);
-        }
-
-        return Result();
+                return (pulsesProduct, activationCycles);
+            },
+            cancellationToken);
     }
 
     private sealed class PulseReceivedEventArgs(Pulse pulse, Module sender, Module receiver) : EventArgs

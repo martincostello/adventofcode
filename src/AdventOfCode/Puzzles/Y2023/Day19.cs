@@ -182,19 +182,20 @@ public sealed class Day19 : Puzzle<int, long>
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        ArgumentNullException.ThrowIfNull(args);
+        return await SolveWithLinesAsync(
+            static (values, logger, _) =>
+            {
+                (int ratingNumbersSum, long combinationsAccepted) = Run(values);
 
-        var values = await ReadResourceAsLinesAsync(cancellationToken);
+                if (logger is { })
+                {
+                    logger.WriteLine("The sum of the rating numbers of all the accepted parts is {0}.", ratingNumbersSum);
+                    logger.WriteLine("{0} distinct combinations of ratings will be accepted.", combinationsAccepted);
+                }
 
-        (Solution1, Solution2) = Run(values);
-
-        if (Verbose)
-        {
-            Logger.WriteLine("The sum of the rating numbers of all the accepted parts is {0}.", Solution1);
-            Logger.WriteLine("{0} distinct combinations of ratings will be accepted.", Solution2);
-        }
-
-        return Result();
+                return (ratingNumbersSum, combinationsAccepted);
+            },
+            cancellationToken);
     }
 
     private sealed record Part(int X, int M, int A, int S)

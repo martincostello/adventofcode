@@ -78,19 +78,20 @@ public sealed class Day11 : Puzzle<long, long>
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        ArgumentNullException.ThrowIfNull(args);
+        return await SolveWithStringAsync(
+             static (stones, logger) =>
+             {
+                 long count25 = Blink(stones, blinks: 25);
+                 long count75 = Blink(stones, blinks: 75);
 
-        string stones = await ReadResourceAsStringAsync(cancellationToken);
+                 if (logger is { })
+                 {
+                     logger.WriteLine("There are {0} stones after blinking 25 times", count25);
+                     logger.WriteLine("There are {0} stones after blinking 75 times", count75);
+                 }
 
-        Solution1 = Blink(stones, blinks: 25);
-        Solution2 = Blink(stones, blinks: 75);
-
-        if (Verbose)
-        {
-            Logger.WriteLine("There are {0} stones after blinking 25 times", Solution1);
-            Logger.WriteLine("There are {0} stones after blinking 75 times", Solution2);
-        }
-
-        return Result();
+                 return (count25, count75);
+             },
+             cancellationToken);
     }
 }

@@ -204,21 +204,28 @@ public sealed class Day14 : Puzzle<int, int>
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        var paths = await ReadResourceAsLinesAsync(cancellationToken);
+        string visualization1 = string.Empty;
+        string visualization2 = string.Empty;
 
-        (Solution1, string visualization1) = Simulate(paths, hasFloor: false, cancellationToken);
-        (Solution2, string visualization2) = Simulate(paths, hasFloor: true, cancellationToken);
+        var result = await SolveWithLinesAsync(
+            (paths, logger, cancellationToken) =>
+            {
+                (int grainsOfSandWithVoid, visualization1) = Simulate(paths, hasFloor: false, cancellationToken);
+                (int grainsOfSandWithFloor, visualization2) = Simulate(paths, hasFloor: true, cancellationToken);
 
-        if (Verbose)
-        {
-            Logger.WriteLine("{0} grains of sand come to rest before sand starts flowing into the abyss below.", Solution1);
-            Logger.WriteLine(visualization1);
+                if (logger is { })
+                {
+                    logger.WriteLine("{0} grains of sand come to rest before sand starts flowing into the abyss below.", Solution1);
+                    logger.WriteLine(visualization1);
 
-            Logger.WriteLine("{0} grains of sand come to rest before sand blocks the source.", Solution2);
-            Logger.WriteLine(visualization2);
-        }
+                    logger.WriteLine("{0} grains of sand come to rest before sand blocks the source.", Solution2);
+                    logger.WriteLine(visualization2);
+                }
 
-        var result = Result();
+                return (grainsOfSandWithVoid, grainsOfSandWithFloor);
+            },
+            cancellationToken);
+
         result.Visualizations.Add(visualization1);
         result.Visualizations.Add(visualization2);
 

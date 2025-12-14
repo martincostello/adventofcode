@@ -76,19 +76,20 @@ public sealed class Day02 : Puzzle<int, int>
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        ArgumentNullException.ThrowIfNull(args);
+        return await SolveWithLinesAsync(
+            static (values, logger, _) =>
+            {
+                int safeReports = CountSafeReports(values, useProblemDampener: false);
+                int safeReportsWithDampener = CountSafeReports(values, useProblemDampener: true);
 
-        var values = await ReadResourceAsLinesAsync(cancellationToken);
+                if (logger is { })
+                {
+                    logger.WriteLine("{0} reports are safe.", safeReports);
+                    logger.WriteLine("{0} reports are safe with the Problem Dampener.", safeReportsWithDampener);
+                }
 
-        Solution1 = CountSafeReports(values, useProblemDampener: false);
-        Solution2 = CountSafeReports(values, useProblemDampener: true);
-
-        if (Verbose)
-        {
-            Logger.WriteLine("{0} reports are safe.", Solution1);
-            Logger.WriteLine("{0} reports are safe with the Problem Dampener.", Solution2);
-        }
-
-        return Result();
+                return (safeReports, safeReportsWithDampener);
+            },
+            cancellationToken);
     }
 }

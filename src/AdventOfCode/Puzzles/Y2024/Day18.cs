@@ -72,18 +72,19 @@ public sealed class Day18 : Puzzle<int, string>
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        ArgumentNullException.ThrowIfNull(args);
+        return await SolveWithLinesAsync(
+            static (values, logger, cancellationToken) =>
+            {
+                (int minimumSteps, string blockingByte) = Simulate(values, size: 71, ticks: 1024, cancellationToken);
 
-        var values = await ReadResourceAsLinesAsync(cancellationToken);
+                if (logger is { })
+                {
+                    logger.WriteLine("The minimum number of steps needed to reach the exit is {0}.", minimumSteps);
+                    logger.WriteLine("The coordinates of the first byte that will prevent the exit from being reachable is {0}.", blockingByte);
+                }
 
-        (Solution1, Solution2) = Simulate(values, size: 71, ticks: 1024, cancellationToken);
-
-        if (Verbose)
-        {
-            Logger.WriteLine("The minimum number of steps needed to reach the exit is {0}.", Solution1);
-            Logger.WriteLine("The coordinates of the first byte that will prevent the exit from being reachable is {0}.", Solution2);
-        }
-
-        return Result();
+                return (minimumSteps, blockingByte);
+            },
+            cancellationToken);
     }
 }

@@ -153,17 +153,20 @@ public sealed class Day08 : Puzzle<int, int>
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        var grid = await ReadResourceAsLinesAsync(cancellationToken);
+        return await SolveWithLinesAsync(
+            static (grid, logger, _) =>
+            {
+                (int visibleTrees, int maximumScenicScore) = CountVisibleTrees(grid);
 
-        (Solution1, Solution2) = CountVisibleTrees(grid);
+                if (logger is { })
+                {
+                    logger.WriteLine("There are {0} trees visible from outside the grid.", visibleTrees);
+                    logger.WriteLine("The highest scenic score is {0}.", maximumScenicScore);
+                }
 
-        if (Verbose)
-        {
-            Logger.WriteLine("There are {0} trees visible from outside the grid.", Solution1);
-            Logger.WriteLine("The highest scenic score is {0}.", Solution2);
-        }
-
-        return Result();
+                return (visibleTrees, maximumScenicScore);
+            },
+            cancellationToken);
     }
 
     private sealed record Tree(Point Location, int Height)

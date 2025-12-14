@@ -76,6 +76,6 @@ public sealed class Day12 : Puzzle<long, long>
             }
         }
 
-        return Result();
+        return PuzzleResult.Create(Solution1, Solution2);
     }
 }

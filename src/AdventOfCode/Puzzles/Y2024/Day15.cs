@@ -127,14 +127,14 @@ public sealed class Day15 : Puzzle<int>
         return await SolveWithLinesAsync(
             static (values, logger, cancellationToken) =>
             {
-                int solution = Move(values);
+                int gpsSum = Move(values);
 
                 if (logger is { })
                 {
-                    logger.WriteLine("The sum of all boxes' GPS coordinates is {0}.", solution);
+                    logger.WriteLine("The sum of all boxes' GPS coordinates is {0}.", gpsSum);
                 }
 
-                return solution;
+                return gpsSum;
             },
             cancellationToken);
     }

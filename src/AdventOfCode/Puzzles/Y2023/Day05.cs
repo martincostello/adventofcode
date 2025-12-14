@@ -134,19 +134,20 @@ public sealed class Day05 : Puzzle<long, long>
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        ArgumentNullException.ThrowIfNull(args);
+        return await SolveWithLinesAsync(
+            static (almanac, logger, cancellationToken) =>
+            {
+                long locationMinimum = Parse(almanac, useRanges: false, cancellationToken);
+                long locationMinimumWithRanges = Parse(almanac, useRanges: true, cancellationToken);
 
-        var almanac = await ReadResourceAsLinesAsync(cancellationToken);
+                if (logger is { })
+                {
+                    logger.WriteLine("The lowest location number that corresponds to any of the initial seed numbers is {0}.", locationMinimum);
+                    logger.WriteLine("The lowest location number that corresponds to any of the initial seed numbers as pairs is {0}.", locationMinimumWithRanges);
+                }
 
-        Solution1 = Parse(almanac, useRanges: false, cancellationToken);
-        Solution2 = Parse(almanac, useRanges: true, cancellationToken);
-
-        if (Verbose)
-        {
-            Logger.WriteLine("The lowest location number that corresponds to any of the initial seed numbers is {0}.", Solution1);
-            Logger.WriteLine("The lowest location number that corresponds to any of the initial seed numbers as pairs is {0}.", Solution2);
-        }
-
-        return Result();
+                return (locationMinimum, locationMinimumWithRanges);
+            },
+            cancellationToken);
     }
 }

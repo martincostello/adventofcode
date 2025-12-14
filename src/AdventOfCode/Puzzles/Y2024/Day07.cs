@@ -99,19 +99,20 @@ public sealed class Day07 : Puzzle<long, long>
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        ArgumentNullException.ThrowIfNull(args);
+        return await SolveWithLinesAsync(
+            static (equations, logger, _) =>
+            {
+                long calibrationResult1 = Calibrate(equations, useConcatenation: false);
+                long calibrationResult2 = Calibrate(equations, useConcatenation: true);
 
-        var equations = await ReadResourceAsLinesAsync(cancellationToken);
+                if (logger is { })
+                {
+                    logger.WriteLine("The total calibration result is {0}.", calibrationResult1);
+                    logger.WriteLine("The total calibration result using concatenation is {0}.", calibrationResult2);
+                }
 
-        Solution1 = Calibrate(equations, useConcatenation: false);
-        Solution2 = Calibrate(equations, useConcatenation: true);
-
-        if (Verbose)
-        {
-            Logger.WriteLine("The total calibration result is {0}.", Solution1);
-            Logger.WriteLine("The total calibration result using concatenation is {0}.", Solution2);
-        }
-
-        return Result();
+                return (calibrationResult1, calibrationResult2);
+            },
+            cancellationToken);
     }
 }

@@ -66,19 +66,20 @@ public sealed class Day09 : Puzzle<int, int>
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        ArgumentNullException.ThrowIfNull(args);
+        return await SolveWithLinesAsync(
+            static (values, logger, _) =>
+            {
+                int sumNext = Analyze(values, reverse: false);
+                int sumPrevious = Analyze(values, reverse: true);
 
-        var values = await ReadResourceAsLinesAsync(cancellationToken);
+                if (logger is { })
+                {
+                    logger.WriteLine("The sum of the extrapolated next values is {0}.", sumNext);
+                    logger.WriteLine("The sum of the extrapolated previous values is {0}.", sumPrevious);
+                }
 
-        Solution1 = Analyze(values, reverse: false);
-        Solution2 = Analyze(values, reverse: true);
-
-        if (Verbose)
-        {
-            Logger.WriteLine("The sum of the extrapolated next values is {0}.", Solution1);
-            Logger.WriteLine("The sum of the extrapolated previous values is {0}.", Solution2);
-        }
-
-        return Result();
+                return (sumNext, sumPrevious);
+            },
+            cancellationToken);
     }
 }

@@ -62,22 +62,25 @@ public sealed class Day04 : Puzzle<int, int>
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        var assignments = await ReadResourceAsLinesAsync(cancellationToken);
+        return await SolveWithLinesAsync(
+            static (assignments, logger, _) =>
+            {
+                int fullyOverlappingAssignments = GetOverlappingAssignments(assignments, false);
+                int partiallyOverlappingAssignments = GetOverlappingAssignments(assignments, true);
 
-        Solution1 = GetOverlappingAssignments(assignments, false);
-        Solution2 = GetOverlappingAssignments(assignments, true);
+                if (logger is { })
+                {
+                    logger.WriteLine(
+                        "There are {0:N0} assignment pairs where one range is entirely contained within the other.",
+                        fullyOverlappingAssignments);
 
-        if (Verbose)
-        {
-            Logger.WriteLine(
-                "There are {0:N0} assignment pairs where one range is entirely contained within the other.",
-                Solution1);
+                    logger.WriteLine(
+                        "There are {0:N0} assignment pairs where one range overlaps with the other.",
+                        partiallyOverlappingAssignments);
+                }
 
-            Logger.WriteLine(
-                "There are {0:N0} assignment pairs where one range overlaps with the other.",
-                Solution2);
-        }
-
-        return Result();
+                return (fullyOverlappingAssignments, partiallyOverlappingAssignments);
+            },
+            cancellationToken);
     }
 }

@@ -168,23 +168,27 @@ public sealed class Day16 : Puzzle<int, int>
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        ArgumentNullException.ThrowIfNull(args);
+        string energized = string.Empty;
+        string optimized = string.Empty;
 
-        var layout = await ReadResourceAsLinesAsync(cancellationToken);
+        var result = await SolveWithLinesAsync(
+            (layout, logger, _) =>
+            {
+                (int energizedTiles00, energized) = Energize(layout, optimize: false);
+                (int energizedTilesOptimum, optimized) = Energize(layout, optimize: true);
 
-        (Solution1, string energized) = Energize(layout, optimize: false);
-        (Solution2, string optimized) = Energize(layout, optimize: true);
+                if (logger is { })
+                {
+                    logger.WriteLine("{0} tiles are energized starting at 0,0.", energizedTiles00);
+                    logger.WriteLine(energized);
 
-        if (Verbose)
-        {
-            Logger.WriteLine("{0} tiles are energized starting at 0,0.", Solution1);
-            Logger.WriteLine(energized);
+                    logger.WriteLine("{0} tiles are energized starting at the optimum position.", energizedTilesOptimum);
+                    logger.WriteLine(optimized);
+                }
 
-            Logger.WriteLine("{0} tiles are energized starting at the optimum position.", Solution2);
-            Logger.WriteLine(optimized);
-        }
-
-        var result = Result();
+                return (energizedTiles00, energizedTilesOptimum);
+            },
+            cancellationToken);
 
         result.Visualizations.Add(energized);
         result.Visualizations.Add(optimized);

@@ -104,22 +104,23 @@ public sealed class Day14 : Puzzle<int, int>
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        ArgumentNullException.ThrowIfNull(args);
+        return await SolveWithLinesAsync(
+            static (values, logger, cancellationToken) =>
+            {
+                var bounds = new Rectangle(0, 0, 101, 103);
 
-        var values = await ReadResourceAsLinesAsync(cancellationToken);
+                int safetyFactor = Simulate(values, bounds, seconds: 100, findEasterEgg: false, cancellationToken);
+                int easterEggSeconds = Simulate(values, bounds, seconds: int.MaxValue, findEasterEgg: true, cancellationToken);
 
-        var bounds = new Rectangle(0, 0, 101, 103);
+                if (logger is { })
+                {
+                    logger.WriteLine("The safety factor after 100 seconds is {0}.", safetyFactor);
+                    logger.WriteLine("The robots first display the Easter egg after {0} seconds.", easterEggSeconds);
+                }
 
-        Solution1 = Simulate(values, bounds, seconds: 100, findEasterEgg: false, cancellationToken);
-        Solution2 = Simulate(values, bounds, seconds: int.MaxValue, findEasterEgg: true, cancellationToken);
-
-        if (Verbose)
-        {
-            Logger.WriteLine("The safety factor after 100 seconds is {0}.", Solution1);
-            Logger.WriteLine("The robots first display the Easter egg after {0} seconds.", Solution2);
-        }
-
-        return Result();
+                return (safetyFactor, easterEggSeconds);
+            },
+            cancellationToken);
     }
 
     private record Robot(Point Origin, Size Velocity, Rectangle Bounds)

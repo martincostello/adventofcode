@@ -117,19 +117,20 @@ public sealed class Day13 : Puzzle<int, int>
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        ArgumentNullException.ThrowIfNull(args);
+        return await SolveWithLinesAsync(
+            static (values, logger, _) =>
+            {
+                int summary = Summarize(values, cleanSmudges: false);
+                int summaryWithSmudgesCleaned = Summarize(values, cleanSmudges: true);
 
-        var values = await ReadResourceAsLinesAsync(cancellationToken);
+                if (logger is { })
+                {
+                    logger.WriteLine("The number after summarizing all of the notes is {0}.", summary);
+                    logger.WriteLine("The number after summarizing all of the notes after cleaning the smudges is {0}.", summaryWithSmudgesCleaned);
+                }
 
-        Solution1 = Summarize(values, cleanSmudges: false);
-        Solution2 = Summarize(values, cleanSmudges: true);
-
-        if (Verbose)
-        {
-            Logger.WriteLine("The number after summarizing all of the notes is {0}.", Solution1);
-            Logger.WriteLine("The number after summarizing all of the notes after cleaning the smudges is {0}.", Solution2);
-        }
-
-        return Result();
+                return (summary, summaryWithSmudgesCleaned);
+            },
+            cancellationToken);
     }
 }

@@ -62,19 +62,20 @@ public sealed class Day05 : Puzzle<int, int>
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        ArgumentNullException.ThrowIfNull(args);
+        return await SolveWithLinesAsync(
+            static (values, logger, _) =>
+            {
+                int middlePageSumIncorrect = Sort(values, fix: false);
+                int middlePageSumCorrect = Sort(values, fix: true);
 
-        var values = await ReadResourceAsLinesAsync(cancellationToken);
+                if (logger is { })
+                {
+                    logger.WriteLine("The sum of the middle page numbers from correctly-ordered updates is {0}.", middlePageSumIncorrect);
+                    logger.WriteLine("The sum of the middle page numbers after correctly ordering incorrectly-ordered updates is {0}.", middlePageSumCorrect);
+                }
 
-        Solution1 = Sort(values, fix: false);
-        Solution2 = Sort(values, fix: true);
-
-        if (Verbose)
-        {
-            Logger.WriteLine("The sum of the middle page numbers from correctly-ordered updates is {0}.", Solution1);
-            Logger.WriteLine("The sum of the middle page numbers after correctly ordering incorrectly-ordered updates is {0}.", Solution2);
-        }
-
-        return Result();
+                return (middlePageSumIncorrect, middlePageSumCorrect);
+            },
+            cancellationToken);
     }
 }

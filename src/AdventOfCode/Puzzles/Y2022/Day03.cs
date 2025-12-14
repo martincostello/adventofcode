@@ -66,22 +66,25 @@ public sealed class Day03 : Puzzle<int, int>
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        var inventories = await ReadResourceAsLinesAsync(cancellationToken);
+        return await SolveWithLinesAsync(
+            static async (inventories, logger, _) =>
+            {
+                int sumOfPriorities = GetSumOfCommonItemTypes(inventories, useGroups: false);
+                int sumOfPrioritiesOfGroups = GetSumOfCommonItemTypes(inventories, useGroups: true);
 
-        Solution1 = GetSumOfCommonItemTypes(inventories, useGroups: false);
-        Solution2 = GetSumOfCommonItemTypes(inventories, useGroups: true);
+                if (logger is { })
+                {
+                    logger.WriteLine(
+                        "The sum of the priorities of the item types which appear in both compartments is {0:N0}.",
+                        sumOfPriorities);
 
-        if (Verbose)
-        {
-            Logger.WriteLine(
-                "The sum of the priorities of the item types which appear in both compartments is {0:N0}.",
-                Solution1);
+                    logger.WriteLine(
+                        "The sum of the priorities of the item types which appear in all three rucksacks of each group of elves is {0:N0}.",
+                        sumOfPrioritiesOfGroups);
+                }
 
-            Logger.WriteLine(
-                "The sum of the priorities of the item types which appear in all three rucksacks of each group of elves is {0:N0}.",
-                Solution2);
-        }
-
-        return Result();
+                return (sumOfPriorities, sumOfPrioritiesOfGroups);
+            },
+            cancellationToken);
     }
 }

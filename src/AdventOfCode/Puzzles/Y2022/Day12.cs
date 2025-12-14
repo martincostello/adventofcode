@@ -81,22 +81,25 @@ public sealed class Day12 : Puzzle<int, int>
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        var heightmap = await ReadResourceAsLinesAsync(cancellationToken);
+        return await SolveWithLinesAsync(
+            static (heightmap, logger, cancellationToken) =>
+            {
+                (int minimumStepsFromStart, int minimumStepsFromGroundLevel) = GetMinimumSteps(heightmap, cancellationToken);
 
-        (Solution1, Solution2) = GetMinimumSteps(heightmap, cancellationToken);
+                if (logger is { })
+                {
+                    logger.WriteLine(
+                        "The fewest steps required to move from your current position to the location that should get the best signal is {0}.",
+                        minimumStepsFromStart);
 
-        if (Verbose)
-        {
-            Logger.WriteLine(
-                "The fewest steps required to move from your current position to the location that should get the best signal is {0}.",
-                Solution1);
+                    logger.WriteLine(
+                        "The fewest steps required to move from any position at ground level to the location that should get the best signal is {0}.",
+                        minimumStepsFromGroundLevel);
+                }
 
-            Logger.WriteLine(
-                "The fewest steps required to move from any position at ground level to the location that should get the best signal is {0}.",
-                Solution2);
-        }
-
-        return Result();
+                return (minimumStepsFromStart, minimumStepsFromGroundLevel);
+            },
+            cancellationToken);
     }
 
     private sealed class Map : SquareGrid

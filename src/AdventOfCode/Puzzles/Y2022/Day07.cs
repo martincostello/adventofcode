@@ -126,22 +126,25 @@ public sealed class Day07 : Puzzle<long, long>
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        var terminalOutput = await ReadResourceAsLinesAsync(cancellationToken);
+        return await SolveWithLinesAsync(
+            static (terminalOutput, logger, _) =>
+            {
+                (long totalSizeOfDirectoriesLargerThanLimit, long sizeOfSmallestDirectoryToDelete) = GetDirectorySizes(terminalOutput);
 
-        (Solution1, Solution2) = GetDirectorySizes(terminalOutput);
+                if (logger is { })
+                {
+                    logger.WriteLine(
+                        "The sum of the total sizes of the directories with a total size of at most 100,000 is {0}.",
+                        totalSizeOfDirectoriesLargerThanLimit);
 
-        if (Verbose)
-        {
-            Logger.WriteLine(
-                "The sum of the total sizes of the directories with a total size of at most 100,000 is {0}.",
-                Solution1);
+                    logger.WriteLine(
+                        "The sizes of the directory would free up enough space on the filesystem to run the update is {0}.",
+                        sizeOfSmallestDirectoryToDelete);
+                }
 
-            Logger.WriteLine(
-                "The sizes of the directory would free up enough space on the filesystem to run the update is {0}.",
-                Solution2);
-        }
-
-        return Result();
+                return (totalSizeOfDirectoriesLargerThanLimit, sizeOfSmallestDirectoryToDelete);
+            },
+            cancellationToken);
     }
 
     private abstract record FileSystemEntry(string Name, FileSystemEntry? Container)

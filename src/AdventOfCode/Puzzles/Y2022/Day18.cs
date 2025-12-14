@@ -84,17 +84,20 @@ public sealed class Day18 : Puzzle<int, int>
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        var cubes = await ReadResourceAsLinesAsync(cancellationToken);
+        return await SolveWithLinesAsync(
+            static (cubes, logger, cancellationToken) =>
+            {
+                int totalDropletSurfaceArea = GetSurfaceArea(cubes, excludeInterior: false, cancellationToken);
+                int externalDropletSurfaceArea = GetSurfaceArea(cubes, excludeInterior: true, cancellationToken);
 
-        Solution1 = GetSurfaceArea(cubes, excludeInterior: false, cancellationToken);
-        Solution2 = GetSurfaceArea(cubes, excludeInterior: true, cancellationToken);
+                if (logger is { })
+                {
+                    logger.WriteLine("The total surface area of the scanned lava droplet is {0}.", totalDropletSurfaceArea);
+                    logger.WriteLine("The external surface area of the scanned lava droplet is {0}.", externalDropletSurfaceArea);
+                }
 
-        if (Verbose)
-        {
-            Logger.WriteLine("The total surface area of the scanned lava droplet is {0}.", Solution1);
-            Logger.WriteLine("The external surface area of the scanned lava droplet is {0}.", Solution2);
-        }
-
-        return Result();
+                return (totalDropletSurfaceArea, externalDropletSurfaceArea);
+            },
+            cancellationToken);
     }
 }

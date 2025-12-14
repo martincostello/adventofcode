@@ -108,17 +108,23 @@ public sealed class Day10 : Puzzle<int, string>
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        var program = await ReadResourceAsLinesAsync(cancellationToken);
+        string visualization = string.Empty;
 
-        (Solution2, string visualization, Solution1) = GetMessage(program);
+        var result = await SolveWithLinesAsync(
+            (program, logger, _) =>
+            {
+                (string message, visualization, int sumOfSignalStrengths) = GetMessage(program);
 
-        if (Verbose)
-        {
-            Logger.WriteLine("The sum of the six signal strengths is {0}.", Solution1);
-            Logger.WriteLine("The message output to the CRT is '{0}'.", Solution2);
-        }
+                if (logger is { })
+                {
+                    logger.WriteLine("The sum of the six signal strengths is {0}.", sumOfSignalStrengths);
+                    logger.WriteLine("The message output to the CRT is '{0}'.", message);
+                }
 
-        var result = Result();
+                return (sumOfSignalStrengths, message);
+            },
+            cancellationToken);
+
         result.Visualizations.Add(visualization);
 
         return result;

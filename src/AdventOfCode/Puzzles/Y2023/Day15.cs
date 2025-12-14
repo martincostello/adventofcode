@@ -121,21 +121,23 @@ public sealed class Day15 : Puzzle<int, int>
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        ArgumentNullException.ThrowIfNull(args);
+        return await SolveWithStringAsync(
+            static (initializationSequence, logger) =>
+            {
+                initializationSequence = initializationSequence.ReplaceLineEndings(string.Empty);
 
-        string initializationSequence = await ReadResourceAsStringAsync(cancellationToken);
-        initializationSequence = initializationSequence.ReplaceLineEndings(string.Empty);
+                int hashSum = HashSequence(initializationSequence);
+                int focusingPower = Initialize(initializationSequence);
 
-        Solution1 = HashSequence(initializationSequence);
-        Solution2 = Initialize(initializationSequence);
+                if (logger is { })
+                {
+                    logger.WriteLine("The sum of the hash values of the initialization sequence is {0}.", hashSum);
+                    logger.WriteLine("The focusing power of the lens configuration is {0}.", focusingPower);
+                }
 
-        if (Verbose)
-        {
-            Logger.WriteLine("The sum of the hash values of the initialization sequence is {0}.", Solution1);
-            Logger.WriteLine("The focusing power of the lens configuration is {0}.", Solution2);
-        }
-
-        return Result();
+                return (hashSum, focusingPower);
+            },
+            cancellationToken);
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]

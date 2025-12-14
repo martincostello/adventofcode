@@ -213,18 +213,19 @@ public sealed class Day10 : Puzzle<int, int>
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        ArgumentNullException.ThrowIfNull(args);
+        return await SolveWithLinesAsync(
+            static (values, logger, _) =>
+            {
+                (int steps, int tiles) = Walk(values);
 
-        var values = await ReadResourceAsLinesAsync(cancellationToken);
+                if (logger is { })
+                {
+                    logger.WriteLine("It takes {0} steps to get to the point furthest from the starting position.", steps);
+                    logger.WriteLine("{0} tiles are enclosed by the loop.", tiles);
+                }
 
-        (Solution1, Solution2) = Walk(values);
-
-        if (Verbose)
-        {
-            Logger.WriteLine("It takes {0} steps to get to the point furthest from the starting position.", Solution1);
-            Logger.WriteLine("{0} tiles are enclosed by the loop.", Solution2);
-        }
-
-        return Result();
+                return (steps, tiles);
+            },
+            cancellationToken);
     }
 }

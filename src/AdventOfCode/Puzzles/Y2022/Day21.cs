@@ -129,18 +129,21 @@ public sealed class Day21 : Puzzle<long, long>
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        var values = await ReadResourceAsLinesAsync(cancellationToken);
+        return await SolveWithLinesAsync(
+            static (values, logger, cancellationToken) =>
+            {
+                long rootMonkeyNumber = GetRootNumber(values, withEquality: false, cancellationToken);
+                long humanNumber = GetRootNumber(values, withEquality: true, cancellationToken);
 
-        Solution1 = GetRootNumber(values, withEquality: false, cancellationToken);
-        Solution2 = GetRootNumber(values, withEquality: true, cancellationToken);
+                if (logger is { })
+                {
+                    logger.WriteLine("The monkey named root will yell {0}.", rootMonkeyNumber);
+                    logger.WriteLine("You must yell {0} for the monkey named root to pass their equality test.", humanNumber);
+                }
 
-        if (Verbose)
-        {
-            Logger.WriteLine("The monkey named root will yell {0}.", Solution1);
-            Logger.WriteLine("You must yell {0} for the monkey named root to pass their equality test.", Solution2);
-        }
-
-        return Result();
+                return (rootMonkeyNumber, humanNumber);
+            },
+            cancellationToken);
     }
 
     private sealed record Monkey(string Name)

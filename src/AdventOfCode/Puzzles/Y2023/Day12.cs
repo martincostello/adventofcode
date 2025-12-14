@@ -56,20 +56,21 @@ public sealed class Day12 : Puzzle<int, int>
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        ArgumentNullException.ThrowIfNull(args);
+        return await SolveWithLinesAsync(
+            static (records, logger, cancellationToken) =>
+            {
+                int sumOfCountsFolded = Analyze(records, unfold: false, cancellationToken);
+                int sumOfCountsUnfolded = Analyze(records, unfold: true, cancellationToken);
 
-        var records = await ReadResourceAsLinesAsync(cancellationToken);
+                if (logger is { })
+                {
+                    logger.WriteLine("The sum of the counts of spring arrangements is {0}.", sumOfCountsFolded);
+                    logger.WriteLine("The sum of the counts of spring arrangements when unfolded is {0}.", sumOfCountsUnfolded);
+                }
 
-        Solution1 = Analyze(records, unfold: false, cancellationToken);
-        Solution2 = Analyze(records, unfold: true, cancellationToken);
-
-        if (Verbose)
-        {
-            Logger.WriteLine("The sum of the counts of spring arrangements is {0}.", Solution1);
-            Logger.WriteLine("The sum of the counts of spring arrangements when unfolded is {0}.", Solution2);
-        }
-
-        return Result();
+                return (sumOfCountsFolded, sumOfCountsUnfolded);
+            },
+            cancellationToken);
     }
 
     private record struct State(string Values, int[] Counts, int Actual, int Desired)

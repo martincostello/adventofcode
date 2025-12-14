@@ -78,18 +78,19 @@ public sealed class Day04 : Puzzle<int, int>
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        ArgumentNullException.ThrowIfNull(args);
+        return await SolveWithLinesAsync(
+            static (scratchcards, logger, _) =>
+            {
+                (int totalPoints, int totalScratchcards) = Score(scratchcards);
 
-        var scratchcards = await ReadResourceAsLinesAsync(cancellationToken);
+                if (logger is { })
+                {
+                    logger.WriteLine("The scratchcards are worth {0} points in total.", totalPoints);
+                    logger.WriteLine("The total number of scratchcards in the end is {0}.", totalScratchcards);
+                }
 
-        (Solution1, Solution2) = Score(scratchcards);
-
-        if (Verbose)
-        {
-            Logger.WriteLine("The scratchcards are worth {0} points in total.", Solution1);
-            Logger.WriteLine("The total number of scratchcards in the end is {0}.", Solution2);
-        }
-
-        return Result();
+                return (totalPoints, totalScratchcards);
+            },
+            cancellationToken);
     }
 }

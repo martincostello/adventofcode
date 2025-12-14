@@ -115,19 +115,20 @@ public sealed class Day08 : Puzzle<int, int>
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        ArgumentNullException.ThrowIfNull(args);
+        return await SolveWithLinesAsync(
+            static (values, logger, _) =>
+            {
+                int uniqueAntinodes = FindAntinodes(values, resonantHarmonics: false);
+                int uniqueAntinodesWithResonance = FindAntinodes(values, resonantHarmonics: true);
 
-        var values = await ReadResourceAsLinesAsync(cancellationToken);
+                if (logger is { })
+                {
+                    logger.WriteLine("{0} unique locations within the bounds of the map contain an antinode.", uniqueAntinodes);
+                    logger.WriteLine("{0} unique locations within the bounds of the map contain an antinode using resonant harmonics.", uniqueAntinodesWithResonance);
+                }
 
-        Solution1 = FindAntinodes(values, resonantHarmonics: false);
-        Solution2 = FindAntinodes(values, resonantHarmonics: true);
-
-        if (Verbose)
-        {
-            Logger.WriteLine("{0} unique locations within the bounds of the map contain an antinode.", Solution1);
-            Logger.WriteLine("{0} unique locations within the bounds of the map contain an antinode using resonant harmonics.", Solution2);
-        }
-
-        return Result();
+                return (uniqueAntinodes, uniqueAntinodesWithResonance);
+            },
+            cancellationToken);
     }
 }

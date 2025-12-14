@@ -93,19 +93,20 @@ public sealed partial class Day03 : Puzzle<int, int>
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        ArgumentNullException.ThrowIfNull(args);
+        return await SolveWithStringAsync(
+            static (memory, logger, cancellationToken) =>
+            {
+                int sum = Scan(memory, enhancedAccuracy: false, cancellationToken);
+                int accurateSum = Scan(memory, enhancedAccuracy: true, cancellationToken);
 
-        string memory = await ReadResourceAsStringAsync(cancellationToken);
+                if (logger is { })
+                {
+                    logger.WriteLine("The sum of the multiplications is {0}", sum);
+                    logger.WriteLine("The sum of the multiplications with more accuracy is {0}", accurateSum);
+                }
 
-        Solution1 = Scan(memory, enhancedAccuracy: false, cancellationToken);
-        Solution2 = Scan(memory, enhancedAccuracy: true, cancellationToken);
-
-        if (Verbose)
-        {
-            Logger.WriteLine("The sum of the multiplications is {0}", Solution1);
-            Logger.WriteLine("The sum of the multiplications with more accuracy is {0}", Solution2);
-        }
-
-        return Result();
+                return (sum, accurateSum);
+            },
+            cancellationToken);
     }
 }

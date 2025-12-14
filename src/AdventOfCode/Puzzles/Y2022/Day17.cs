@@ -65,18 +65,23 @@ public sealed class Day17 : Puzzle<long, long>
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        string jets = (await ReadResourceAsStringAsync(cancellationToken)).Trim();
+        return await SolveWithStringAsync(
+            static (jets, logger, cancellationToken) =>
+            {
+                jets = jets.Trim();
 
-        Solution1 = GetHeightOfTower(jets.Trim(), count: 2022, cancellationToken);
-        Solution2 = GetHeightOfTower(jets.Trim(), count: 1_000_000_000_000, cancellationToken);
+                long height2022 = GetHeightOfTower(jets.Trim(), count: 2022, cancellationToken);
+                long heightTrillion = GetHeightOfTower(jets.Trim(), count: 1_000_000_000_000, cancellationToken);
 
-        if (Verbose)
-        {
-            Logger.WriteLine("The tower of rocks is {0} units tall after 2022 rocks have stopped falling.", Solution1);
-            Logger.WriteLine("The tower of rocks is {0} units tall after 1,000,000,000,000 rocks have stopped falling.", Solution2);
-        }
+                if (logger is { })
+                {
+                    logger.WriteLine("The tower of rocks is {0} units tall after 2022 rocks have stopped falling.", height2022);
+                    logger.WriteLine("The tower of rocks is {0} units tall after 1,000,000,000,000 rocks have stopped falling.", heightTrillion);
+                }
 
-        return Result();
+                return (height2022, heightTrillion);
+            },
+            cancellationToken);
     }
 
     private sealed class Rock

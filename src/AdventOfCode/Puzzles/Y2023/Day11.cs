@@ -131,19 +131,20 @@ public sealed class Day11 : Puzzle<long, long>
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        ArgumentNullException.ThrowIfNull(args);
+        return await SolveWithLinesAsync(
+            static (image, logger, _) =>
+            {
+                long sumOfLengthsSmall = Analyze(image, expansion: 1);
+                long sumOfLengthsLarge = Analyze(image, expansion: 1_000_000);
 
-        var image = await ReadResourceAsLinesAsync(cancellationToken);
+                if (logger is { })
+                {
+                    logger.WriteLine("The sum of the shortest path between each galaxy with an expansion of 1 is {0}.", sumOfLengthsSmall);
+                    logger.WriteLine("The sum of the shortest path between each galaxy with an expansion of 1,000,000 is {0}.", sumOfLengthsLarge);
+                }
 
-        Solution1 = Analyze(image, expansion: 1);
-        Solution2 = Analyze(image, expansion: 1_000_000);
-
-        if (Verbose)
-        {
-            Logger.WriteLine("The sum of the shortest path between each galaxy with an expansion of 1 is {0}.", Solution1);
-            Logger.WriteLine("The sum of the shortest path between each galaxy with an expansion of 1,000,000 is {0}.", Solution2);
-        }
-
-        return Result();
+                return (sumOfLengthsSmall, sumOfLengthsLarge);
+            },
+            cancellationToken);
     }
 }
