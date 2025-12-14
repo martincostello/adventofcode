@@ -51,8 +51,7 @@ public sealed class Day07Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         var puzzle = await SolvePuzzleAsync<Day07>();
 
         // Assert
-        puzzle.ShouldNotBeNull();
-        puzzle.TotalSizeOfDirectoriesLargerThanLimit.ShouldBe(1642503);
-        puzzle.SizeOfSmallestDirectoryToDelete.ShouldBe(6999588);
+        puzzle.Solution1.ShouldBe(1642503);
+        puzzle.Solution2.ShouldBe(6999588);
     }
 }

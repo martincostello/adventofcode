@@ -7,18 +7,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016;
 /// A class representing the puzzle for <c>https://adventofcode.com/2016/day/13</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2016, 13, "A Maze of Twisty Little Cubicles", MinimumArguments = 1)]
-public sealed class Day13 : Puzzle
+public sealed class Day13 : Puzzle<int, int>
 {
-    /// <summary>
-    /// Gets the fewest steps that can be taken to reach coordinate x=13, y=39.
-    /// </summary>
-    public int FewestStepsToReach31X39Y { get; private set; }
-
-    /// <summary>
-    /// Gets the number of locations that are within 50 steps.
-    /// </summary>
-    public int LocationsWithin50 { get; private set; }
-
     /// <summary>
     /// Returns the minimum number of steps required to reach the specified coordinates.
     /// </summary>
@@ -46,18 +36,24 @@ public sealed class Day13 : Puzzle
     /// <inheritdoc />
     protected override Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        int favoriteNumber = Parse<int>(args[0]);
+        return SolveWithArgument(
+            args,
+            static (input, logger, cancellationToken) =>
+            {
+                int favoriteNumber = Parse<int>(input);
 
-        FewestStepsToReach31X39Y = GetMinimumStepsToReachCoordinate(favoriteNumber, 31, 39, cancellationToken);
-        LocationsWithin50 = CountLocationsWithin50Steps(favoriteNumber, cancellationToken);
+                int fewestStepsToReach31X39Y = GetMinimumStepsToReachCoordinate(favoriteNumber, 31, 39, cancellationToken);
+                int locationsWithin50 = CountLocationsWithin50Steps(favoriteNumber, cancellationToken);
 
-        if (Verbose)
-        {
-            Logger.WriteLine("The fewest number of steps required to reach 31,39 is {0}.", FewestStepsToReach31X39Y);
-            Logger.WriteLine("The number of locations within 50 steps of the origin is {0}.", LocationsWithin50);
-        }
+                if (logger is { })
+                {
+                    logger.WriteLine("The fewest number of steps required to reach 31,39 is {0}.", fewestStepsToReach31X39Y);
+                    logger.WriteLine("The number of locations within 50 steps of the origin is {0}.", locationsWithin50);
+                }
 
-        return PuzzleResult.Create(FewestStepsToReach31X39Y, LocationsWithin50);
+                return (fewestStepsToReach31X39Y, locationsWithin50);
+            },
+            cancellationToken);
     }
 
     /// <summary>

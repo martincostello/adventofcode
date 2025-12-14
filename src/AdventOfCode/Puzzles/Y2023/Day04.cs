@@ -7,18 +7,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2023;
 /// A class representing the puzzle for <c>https://adventofcode.com/2023/day/04</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2023, 04, "Scratchcards", RequiresData = true)]
-public sealed class Day04 : Puzzle
+public sealed class Day04 : Puzzle<int, int>
 {
-    /// <summary>
-    /// Gets the total number of points the scratchcards are worth.
-    /// </summary>
-    public int TotalPoints { get; private set; }
-
-    /// <summary>
-    /// Gets the total number scratchcards in your possession.
-    /// </summary>
-    public int TotalScratchcards { get; private set; }
-
     /// <summary>
     /// Gets the total number of points the specified scratchcards are worth.
     /// </summary>
@@ -88,18 +78,19 @@ public sealed class Day04 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        ArgumentNullException.ThrowIfNull(args);
+        return await SolveWithLinesAsync(
+            static (scratchcards, logger, _) =>
+            {
+                (int totalPoints, int totalScratchcards) = Score(scratchcards);
 
-        var scratchcards = await ReadResourceAsLinesAsync(cancellationToken);
+                if (logger is { })
+                {
+                    logger.WriteLine("The scratchcards are worth {0} points in total.", totalPoints);
+                    logger.WriteLine("The total number of scratchcards in the end is {0}.", totalScratchcards);
+                }
 
-        (TotalPoints, TotalScratchcards) = Score(scratchcards);
-
-        if (Verbose)
-        {
-            Logger.WriteLine("The scratchcards are worth {0} points in total.", TotalPoints);
-            Logger.WriteLine("The total number of scratchcards in the end is {0}.", TotalScratchcards);
-        }
-
-        return PuzzleResult.Create(TotalPoints, TotalScratchcards);
+                return (totalPoints, totalScratchcards);
+            },
+            cancellationToken);
     }
 }

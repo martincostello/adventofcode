@@ -7,19 +7,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2023;
 /// A class representing the puzzle for <c>https://adventofcode.com/2023/day/08</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2023, 08, "Haunted Wasteland", RequiresData = true)]
-public sealed class Day08 : Puzzle
+public sealed class Day08 : Puzzle<long, long>
 {
-    /// <summary>
-    /// Gets the number of steps required to reach ZZZ.
-    /// </summary>
-    public long Steps { get; private set; }
-
-    /// <summary>
-    /// Gets the number of steps required to simultaneously
-    /// reach nodes all ending with Z.
-    /// </summary>
-    public long StepsAsGhost { get; private set; }
-
     /// <summary>
     /// Walks the network of nodes and returns the number of steps required to reach ZZZ.
     /// </summary>
@@ -136,19 +125,20 @@ public sealed class Day08 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        ArgumentNullException.ThrowIfNull(args);
+        return await SolveWithLinesAsync(
+            static (values, logger, cancellationToken) =>
+            {
+                long steps = WalkNetwork(values, asGhost: false, cancellationToken);
+                long stepsAsGhost = WalkNetwork(values, asGhost: true, cancellationToken);
 
-        var values = await ReadResourceAsLinesAsync(cancellationToken);
+                if (logger is { })
+                {
+                    logger.WriteLine("{0} steps are required to reach ZZZ.", steps);
+                    logger.WriteLine("{0} steps are required to simultaneously reach nodes all ending with Z.", stepsAsGhost);
+                }
 
-        Steps = WalkNetwork(values, asGhost: false, cancellationToken);
-        StepsAsGhost = WalkNetwork(values, asGhost: true, cancellationToken);
-
-        if (Verbose)
-        {
-            Logger.WriteLine("{0} steps are required to reach ZZZ.", Steps);
-            Logger.WriteLine("{0} steps are required to simultaneously reach nodes all ending with Z.", StepsAsGhost);
-        }
-
-        return PuzzleResult.Create(Steps, StepsAsGhost);
+                return (steps, stepsAsGhost);
+            },
+            cancellationToken);
     }
 }

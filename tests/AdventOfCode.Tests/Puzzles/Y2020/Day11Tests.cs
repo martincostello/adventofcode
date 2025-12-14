@@ -39,7 +39,7 @@ public sealed class Day11Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         var puzzle = await SolvePuzzleAsync<Day11>();
 
         // Assert
-        puzzle.OccupiedSeatsV1.ShouldBe(2108);
-        puzzle.OccupiedSeatsV2.ShouldBe(1897);
+        puzzle.Solution1.ShouldBe(2108);
+        puzzle.Solution2.ShouldBe(1897);
     }
 }

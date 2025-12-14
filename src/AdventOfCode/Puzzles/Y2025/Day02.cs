@@ -7,18 +7,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2025;
 /// A class representing the puzzle for <c>https://adventofcode.com/2025/day/2</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2025, 02, "Gift Shop", RequiresData = true)]
-public sealed class Day02 : Puzzle
+public sealed class Day02 : Puzzle<long, long>
 {
-    /// <summary>
-    /// Gets the sum of the invalid product IDs for the first version of the validation rules.
-    /// </summary>
-    public long InvalidIdSumV1 { get; private set; }
-
-    /// <summary>
-    /// Gets the sum of the invalid product IDs for the second version of the validation rules.
-    /// </summary>
-    public long InvalidIdSumV2 { get; private set; }
-
     /// <summary>
     /// Gets the sum of the invalid product IDs in the specified ranges.
     /// </summary>
@@ -98,19 +88,20 @@ public sealed class Day02 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        ArgumentNullException.ThrowIfNull(args);
+        return await SolveWithStringAsync(
+            static (productIds, logger) =>
+            {
+                long invalidIdSumV1 = Validate(productIds, anyRepeatingSequence: false);
+                long invalidIdSumV2 = Validate(productIds, anyRepeatingSequence: true);
 
-        string productIds = await ReadResourceAsStringAsync(cancellationToken);
+                if (logger is { })
+                {
+                    logger.WriteLine("The sum of the invalid IDs with the first set of rules is {0}.", invalidIdSumV1);
+                    logger.WriteLine("The sum of the invalid IDs with the second set of rules is {0}.", invalidIdSumV2);
+                }
 
-        InvalidIdSumV1 = Validate(productIds, anyRepeatingSequence: false);
-        InvalidIdSumV2 = Validate(productIds, anyRepeatingSequence: true);
-
-        if (Verbose)
-        {
-            Logger.WriteLine("The sum of the invalid IDs with the first set of rules is {0}", InvalidIdSumV1);
-            Logger.WriteLine("The sum of the invalid IDs with the second set of rules is {0}", InvalidIdSumV2);
-        }
-
-        return PuzzleResult.Create(InvalidIdSumV1, InvalidIdSumV2);
+                return (invalidIdSumV1, invalidIdSumV2);
+            },
+            cancellationToken);
     }
 }

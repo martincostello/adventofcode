@@ -7,7 +7,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016;
 /// A class representing the puzzle for <c>https://adventofcode.com/2016/day/1</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2016, 01, "No Time for a Taxicab", RequiresData = true)]
-public sealed class Day01 : Puzzle
+public sealed class Day01 : Puzzle<int, int>
 {
     private static readonly char[] Separators = [',', ' '];
 
@@ -26,16 +26,6 @@ public sealed class Day01 : Puzzle
         /// </summary>
         Right,
     }
-
-    /// <summary>
-    /// Gets the number of blocks to the Easter Bunny's headquarters.
-    /// </summary>
-    public int BlocksToEasterBunnyHQ { get; private set; }
-
-    /// <summary>
-    /// Gets the number of blocks to the Easter Bunny's headquarters ignoring duplicates.
-    /// </summary>
-    public int BlocksToEasterBunnyHQIgnoringDuplicates { get; private set; }
 
     /// <summary>
     /// Calculate the distance, in blocks, by following the specified instructions.
@@ -88,23 +78,26 @@ public sealed class Day01 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        string instructions = await ReadResourceAsStringAsync(cancellationToken);
+        return await SolveWithStringAsync(
+            static (instructions, logger) =>
+            {
+                int blocksToEasterBunnyHQ = CalculateDistance(instructions, ignoreDuplicates: true);
+                int blocksToEasterBunnyHQIgnoringDuplicates = CalculateDistance(instructions, ignoreDuplicates: false);
 
-        BlocksToEasterBunnyHQIgnoringDuplicates = CalculateDistance(instructions, ignoreDuplicates: true);
-        BlocksToEasterBunnyHQ = CalculateDistance(instructions, ignoreDuplicates: false);
+                if (logger is { })
+                {
+                    logger.WriteLine(
+                        "The Easter Bunny's headquarters are {0:N0} blocks away.",
+                        blocksToEasterBunnyHQ);
 
-        if (Verbose)
-        {
-            Logger.WriteLine(
-                "The Easter Bunny's headquarters are {0:N0} blocks away.",
-                BlocksToEasterBunnyHQIgnoringDuplicates);
+                    logger.WriteLine(
+                        "The Easter Bunny's headquarters are {0:N0} blocks away if it is the first location visited twice.",
+                        blocksToEasterBunnyHQIgnoringDuplicates);
+                }
 
-            Logger.WriteLine(
-                "The Easter Bunny's headquarters are {0:N0} blocks away if it is the first location visited twice.",
-                BlocksToEasterBunnyHQ);
-        }
-
-        return PuzzleResult.Create(BlocksToEasterBunnyHQIgnoringDuplicates, BlocksToEasterBunnyHQ);
+                return (blocksToEasterBunnyHQ, blocksToEasterBunnyHQIgnoringDuplicates);
+            },
+            cancellationToken);
     }
 
     /// <summary>

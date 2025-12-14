@@ -10,19 +10,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2024;
 /// A class representing the puzzle for <c>https://adventofcode.com/2024/day/17</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2024, 17, "Chronospatial Computer", RequiresData = true)]
-public sealed class Day17 : Puzzle
+public sealed class Day17 : Puzzle<string, long>
 {
-    /// <summary>
-    /// Gets the output of the program.
-    /// </summary>
-    public string Output { get; private set; } = string.Empty;
-
-    /// <summary>
-    /// Gets the lowest positive initial value for register A
-    /// that causes the program to output a copy of itself.
-    /// </summary>
-    public long RegisterA { get; private set; }
-
     /// <summary>
     /// Runs the specified 7-bit program.
     /// </summary>
@@ -119,20 +108,21 @@ public sealed class Day17 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        ArgumentNullException.ThrowIfNull(args);
+        return await SolveWithLinesAsync(
+            static (values, logger, cancellationToken) =>
+            {
+                (string output, _) = Run(values, fix: false, cancellationToken);
+                (_, long registerA) = Run(values, fix: true, cancellationToken);
 
-        var values = await ReadResourceAsLinesAsync(cancellationToken);
+                if (logger is { })
+                {
+                    logger.WriteLine("The output of the program is {0}.", output);
+                    logger.WriteLine("The lowest positive initial value for register A that causes the program to output a copy of itself is {0}.", registerA);
+                }
 
-        (Output, _) = Run(values, fix: false, cancellationToken);
-        (_, RegisterA) = Run(values, fix: true, cancellationToken);
-
-        if (Verbose)
-        {
-            Logger.WriteLine("The output of the program is {0}.", Output);
-            Logger.WriteLine("The lowest positive initial value for register A that causes the program to output a copy of itself is {0}.", RegisterA);
-        }
-
-        return PuzzleResult.Create(Output, RegisterA);
+                return (output, registerA);
+            },
+            cancellationToken);
     }
 
     private static List<int> Run(List<int> program, long a, long b, long c)

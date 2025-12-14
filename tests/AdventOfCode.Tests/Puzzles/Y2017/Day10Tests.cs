@@ -40,7 +40,7 @@ public sealed class Day10Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         var puzzle = await SolvePuzzleAsync<Day10>();
 
         // Assert
-        puzzle.ProductOfFirstTwoElements.ShouldBe(11413);
-        puzzle.DenseHash.ShouldBe("7adfd64c2a03a4968cf708d1b7fd418d");
+        puzzle.Solution1.ShouldBe(11413);
+        puzzle.Solution2.ShouldBe("7adfd64c2a03a4968cf708d1b7fd418d");
     }
 }

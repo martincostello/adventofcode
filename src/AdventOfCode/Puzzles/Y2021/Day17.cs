@@ -7,18 +7,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2021;
 /// A class representing the puzzle for <c>https://adventofcode.com/2021/day/17</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2021, 17, "Trick Shot", RequiresData = true)]
-public sealed class Day17 : Puzzle
+public sealed class Day17 : Puzzle<int, int>
 {
-    /// <summary>
-    /// Gets the highest apogee reached by a velocity that is within the target area.
-    /// </summary>
-    public int MaxApogee { get; private set; }
-
-    /// <summary>
-    /// Gets the number of initial velocities that will hit the target area.
-    /// </summary>
-    public int Count { get; private set; }
-
     /// <summary>
     /// Calculates a ballistic trajectory that lands the probe within the specified target area.
     /// </summary>
@@ -118,21 +108,21 @@ public sealed class Day17 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        string target = (await ReadResourceAsStringAsync(cancellationToken)).Trim();
+        return await SolveWithStringAsync(
+            static (target, logger) =>
+            {
+                target = target.Trim();
 
-        (MaxApogee, Count) = Calculate(target);
+                (int maxApogee, int count) = Calculate(target);
 
-        if (Verbose)
-        {
-            Logger.WriteLine(
-                "The highest y position reached on a trajectory that lands in the target area is {0:N0}.",
-                MaxApogee);
+                if (logger is { })
+                {
+                    logger.WriteLine("The highest y position reached on a trajectory that lands in the target area is {0:N0}.", maxApogee);
+                    logger.WriteLine("{0:N0} distinct initial velocity values cause the probe to land within the target area.", count);
+                }
 
-            Logger.WriteLine(
-                "{0:N0} distinct initial velocity values cause the probe to land within the target area.",
-                Count);
-        }
-
-        return PuzzleResult.Create(MaxApogee, Count);
+                return (maxApogee, count);
+            },
+            cancellationToken);
     }
 }

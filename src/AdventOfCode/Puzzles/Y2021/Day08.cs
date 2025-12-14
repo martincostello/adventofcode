@@ -7,18 +7,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2021;
 /// A class representing the puzzle for <c>https://adventofcode.com/2021/day/8</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2021, 08, "Seven Segment Search", RequiresData = true)]
-public sealed class Day08 : Puzzle
+public sealed class Day08 : Puzzle<int, int>
 {
-    /// <summary>
-    /// Gets the number of instances of digits that use a unique number of LED segments.
-    /// </summary>
-    public int Count { get; private set; }
-
-    /// <summary>
-    /// Gets the sum of the decoded output values.
-    /// </summary>
-    public int Sum { get; private set; }
-
     /// <summary>
     /// Returns the number of instances of digits that use a unique number of LED segments
     /// for the specified entries detailing how the LED segments are lit.
@@ -118,16 +108,19 @@ public sealed class Day08 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        var entries = await ReadResourceAsLinesAsync(cancellationToken);
+        return await SolveWithLinesAsync(
+            static (entries, logger, _) =>
+            {
+                (int count, int sum) = DecodeDigits(entries);
 
-        (Count, Sum) = DecodeDigits(entries);
+                if (logger is { })
+                {
+                    logger.WriteLine("There are {0:N0} instances of digits that use a unique number of LED segments.", count);
+                    logger.WriteLine("The sum of the output values is {0:N0}.", sum);
+                }
 
-        if (Verbose)
-        {
-            Logger.WriteLine("There are {0:N0} instances of digits that use a unique number of LED segments.", Count);
-            Logger.WriteLine("The sum of the output values is {0:N0}.", Sum);
-        }
-
-        return PuzzleResult.Create(Count, Sum);
+                return (count, sum);
+            },
+            cancellationToken);
     }
 }

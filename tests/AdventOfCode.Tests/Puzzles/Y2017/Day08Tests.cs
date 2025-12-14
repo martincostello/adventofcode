@@ -50,7 +50,7 @@ public sealed class Day08Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         var puzzle = await SolvePuzzleAsync<Day08>();
 
         // Assert
-        puzzle.HighestRegisterValueAtEnd.ShouldBe(7296);
-        puzzle.HighestRegisterValueDuring.ShouldBe(8186);
+        puzzle.Solution1.ShouldBe(7296);
+        puzzle.Solution2.ShouldBe(8186);
     }
 }

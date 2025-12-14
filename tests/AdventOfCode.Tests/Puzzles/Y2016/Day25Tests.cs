@@ -12,6 +12,6 @@ public sealed class Day25Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         var puzzle = await SolvePuzzleAsync<Day25>();
 
         // Assert
-        puzzle.ClockSignalValue.ShouldBe(198);
+        puzzle.Solution.ShouldBe(198);
     }
 }

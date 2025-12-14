@@ -7,18 +7,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2024;
 /// A class representing the puzzle for <c>https://adventofcode.com/2024/day/10</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2024, 10, "Hoof It", RequiresData = true)]
-public sealed class Day10 : Puzzle
+public sealed class Day10 : Puzzle<int, int>
 {
-    /// <summary>
-    /// Gets the sum of the trailhead scores.
-    /// </summary>
-    public int SumOfScores { get; private set; }
-
-    /// <summary>
-    /// Gets the sum of the trailhead ratings.
-    /// </summary>
-    public int SumOfRatings { get; private set; }
-
     /// <summary>
     /// Explores the specified map of trails.
     /// </summary>
@@ -81,19 +71,20 @@ public sealed class Day10 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        ArgumentNullException.ThrowIfNull(args);
+        return await SolveWithLinesAsync(
+            static (values, logger, _) =>
+            {
+                (int sumOfScores, int sumOfRatings) = Explore(values);
 
-        var values = await ReadResourceAsLinesAsync(cancellationToken);
+                if (logger is { })
+                {
+                    logger.WriteLine("The sum of the scores of all trailheads in the topographic map is {0}.", sumOfScores);
+                    logger.WriteLine("The sum of the ratings of all trailheads in the topographic map is {0}.", sumOfRatings);
+                }
 
-        (SumOfScores, SumOfRatings) = Explore(values);
-
-        if (Verbose)
-        {
-            Logger.WriteLine("The sum of the scores of all trailheads in the topographic map is {0}.", SumOfScores);
-            Logger.WriteLine("The sum of the ratings of all trailheads in the topographic map is {0}.", SumOfRatings);
-        }
-
-        return PuzzleResult.Create(SumOfScores, SumOfRatings);
+                return (sumOfScores, sumOfRatings);
+            },
+            cancellationToken);
     }
 
     private sealed class TopographicMap(Rectangle bounds) : SquareGrid(bounds)

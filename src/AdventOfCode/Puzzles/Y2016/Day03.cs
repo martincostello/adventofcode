@@ -7,18 +7,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016;
 /// A class representing the puzzle for <c>https://adventofcode.com/2016/day/3</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2016, 03, "Squares With Three Sides", RequiresData = true)]
-public sealed class Day03 : Puzzle
+public sealed class Day03 : Puzzle<int, int>
 {
-    /// <summary>
-    /// Gets the number of possible triangles by columns.
-    /// </summary>
-    public int PossibleTrianglesByColumns { get; private set; }
-
-    /// <summary>
-    /// Gets the number of possible triangles by rows.
-    /// </summary>
-    public int PossibleTrianglesByRows { get; private set; }
-
     /// <summary>
     /// Returns the number of valid triangles from the specified triangle instructions.
     /// </summary>
@@ -53,18 +43,21 @@ public sealed class Day03 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        var dimensions = await ReadResourceAsLinesAsync(cancellationToken);
+        return await SolveWithLinesAsync(
+            static (dimensions, logger, _) =>
+            {
+                int possibleTrianglesByColumns = GetPossibleTriangleCount(dimensions, readAsColumns: false);
+                int possibleTrianglesByRows = GetPossibleTriangleCount(dimensions, readAsColumns: true);
 
-        PossibleTrianglesByRows = GetPossibleTriangleCount(dimensions, readAsColumns: false);
-        PossibleTrianglesByColumns = GetPossibleTriangleCount(dimensions, readAsColumns: true);
+                if (logger is { })
+                {
+                    logger.WriteLine("The number of possible triangles using rows is {0:N0}.", possibleTrianglesByColumns);
+                    logger.WriteLine("The number of possible triangles using columns is {0:N0}.", possibleTrianglesByRows);
+                }
 
-        if (Verbose)
-        {
-            Logger.WriteLine("The number of possible triangles using rows is {0:N0}.", PossibleTrianglesByRows);
-            Logger.WriteLine("The number of possible triangles using columns is {0:N0}.", PossibleTrianglesByColumns);
-        }
-
-        return PuzzleResult.Create(PossibleTrianglesByRows, PossibleTrianglesByColumns);
+                return (possibleTrianglesByColumns, possibleTrianglesByRows);
+            },
+            cancellationToken);
     }
 
     /// <summary>

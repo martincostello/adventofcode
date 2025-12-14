@@ -7,18 +7,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015;
 /// A class representing the puzzle for <c>https://adventofcode.com/2015/day/9</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2015, 09, "All in a Single Night", RequiresData = true, IsSlow = true)]
-public sealed class Day09 : Puzzle
+public sealed class Day09 : Puzzle<int, int>
 {
-    /// <summary>
-    /// Gets the shortest distance.
-    /// </summary>
-    public int ShortestDistance { get; private set; }
-
-    /// <summary>
-    /// Gets the longest distance.
-    /// </summary>
-    public int LongestDistance { get; private set; }
-
     /// <summary>
     /// Gets the distance to visit all of the specified locations exactly
     /// once and starting and ending at distinct separate points.
@@ -67,18 +57,21 @@ public sealed class Day09 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        var collection = await ReadResourceAsLinesAsync(cancellationToken);
+        return await SolveWithLinesAsync(
+            static (values, logger, _) =>
+            {
+                int shortestDistance = GetDistanceBetweenPoints(values, findLongest: false);
+                int longestDistance = GetDistanceBetweenPoints(values, findLongest: true);
 
-        ShortestDistance = GetDistanceBetweenPoints(collection, findLongest: false);
-        LongestDistance = GetDistanceBetweenPoints(collection, findLongest: true);
+                if (logger is { })
+                {
+                    logger.WriteLine("The distance of the shortest route is {0:N0}.", shortestDistance);
+                    logger.WriteLine("The distance of the longest route is {0:N0}.", longestDistance);
+                }
 
-        if (Verbose)
-        {
-            Logger.WriteLine("The distance of the shortest route is {0:N0}.", ShortestDistance);
-            Logger.WriteLine("The distance of the longest route is {0:N0}.", LongestDistance);
-        }
-
-        return PuzzleResult.Create(ShortestDistance, LongestDistance);
+                return (shortestDistance, longestDistance);
+            },
+            cancellationToken);
     }
 
     private static IList<int> GetRouteDistances(Map map, string start)

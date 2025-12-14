@@ -7,18 +7,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2022;
 /// A class representing the puzzle for <c>https://adventofcode.com/2022/day/9</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2022, 09, "Rope Bridge", RequiresData = true)]
-public sealed class Day09 : Puzzle
+public sealed class Day09 : Puzzle<int, int>
 {
-    /// <summary>
-    /// Gets the number of positions that the tail of the rope with two knots visits at least once.
-    /// </summary>
-    public int PositionsVisited2 { get; private set; }
-
-    /// <summary>
-    /// Gets the number of positions that the tail of the rope with ten knots visits at least once.
-    /// </summary>
-    public int PositionsVisited10 { get; private set; }
-
     /// <summary>
     /// Moves a rope using the specified moves and returns the
     /// number of positions that the tail of the rope visits at least once.
@@ -71,18 +61,21 @@ public sealed class Day09 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        var moves = await ReadResourceAsLinesAsync(cancellationToken);
+        return await SolveWithLinesAsync(
+            static (moves, logger, _) =>
+            {
+                int positionsVisited2 = Move(moves, knots: 2);
+                int positionsVisited10 = Move(moves, knots: 10);
 
-        PositionsVisited2 = Move(moves, knots: 2);
-        PositionsVisited10 = Move(moves, knots: 10);
+                if (logger is { })
+                {
+                    logger.WriteLine("The tail of the rope with two knots visits {0} positions at least once.", positionsVisited2);
+                    logger.WriteLine("The tail of the rope with ten knots visits {0} positions at least once.", positionsVisited10);
+                }
 
-        if (Verbose)
-        {
-            Logger.WriteLine("The tail of the rope with two knots visits {0} positions at least once.", PositionsVisited2);
-            Logger.WriteLine("The tail of the rope with ten knots visits {0} positions at least once.", PositionsVisited10);
-        }
-
-        return PuzzleResult.Create(PositionsVisited2, PositionsVisited10);
+                return (positionsVisited2, positionsVisited10);
+            },
+            cancellationToken);
     }
 
     /// <summary>

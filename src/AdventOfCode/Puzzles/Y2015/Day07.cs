@@ -7,18 +7,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015;
 /// A class representing the puzzle for <c>https://adventofcode.com/2015/day/7</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2015, 07, "Some Assembly Required", RequiresData = true)]
-public sealed class Day07 : Puzzle
+public sealed class Day07 : Puzzle<int, int>
 {
-    /// <summary>
-    /// Gets the first signal value.
-    /// </summary>
-    internal int FirstSignal { get; private set; }
-
-    /// <summary>
-    /// Gets the second signal value.
-    /// </summary>
-    internal int SecondSignal { get; private set; }
-
     /// <summary>
     /// Gets the wire values for the specified instructions.
     /// </summary>
@@ -102,32 +92,34 @@ public sealed class Day07 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        List<string> instructions = [.. await ReadResourceAsLinesAsync(cancellationToken)];
+        return await SolveWithLinesAsync(
+            static (instructions, logger, _) =>
+            {
+                // Create a copy of the instructions to avoid mutating the original
+                instructions = [.. instructions];
 
-        // Get the wire values for the initial instructions
-        Dictionary<string, ushort> values = GetWireValues(instructions);
+                // Get the wire values for the initial instructions
+                Dictionary<string, ushort> values = GetWireValues(instructions);
 
-        FirstSignal = values["a"];
+                int firstSignal = values["a"];
 
-        if (Verbose)
-        {
-            Logger.WriteLine("The signal for wire a is {0:N0}.", FirstSignal);
-        }
+                // Replace the input value for b with the value for a, then re-calculate
+                int indexForB = instructions.IndexOf("44430 -> b");
+                instructions[indexForB] = Format("{0} -> b", firstSignal);
 
-        // Replace the input value for b with the value for a, then re-calculate
-        int indexForB = instructions.IndexOf("44430 -> b");
-        instructions[indexForB] = Format("{0} -> b", FirstSignal);
+                values = GetWireValues(instructions);
 
-        values = GetWireValues(instructions);
+                int secondSignal = values["a"];
 
-        SecondSignal = values["a"];
+                if (logger is { })
+                {
+                    logger.WriteLine("The signal for wire a is {0:N0}.", firstSignal);
+                    logger.WriteLine("The new signal for wire a is {0:N0}.", secondSignal);
+                }
 
-        if (Verbose)
-        {
-            Logger.WriteLine("The new signal for wire a is {0:N0}.", SecondSignal);
-        }
-
-        return PuzzleResult.Create(FirstSignal, SecondSignal);
+                return (firstSignal, secondSignal);
+            },
+            cancellationToken);
     }
 
     /// <summary>

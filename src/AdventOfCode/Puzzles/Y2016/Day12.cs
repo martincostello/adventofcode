@@ -7,20 +7,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016;
 /// A class representing the puzzle for <c>https://adventofcode.com/2016/day/12</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2016, 12, "Leonardo's Monorail", RequiresData = true, IsSlow = true)]
-public sealed class Day12 : Puzzle
+public sealed class Day12 : Puzzle<int, int>
 {
-    /// <summary>
-    /// Gets the value in register A after processing the instructions.
-    /// </summary>
-    public int ValueInRegisterA { get; private set; }
-
-    /// <summary>
-    /// Gets the value in register A after processing the instructions
-    /// if register C is initialized with the value of the position of
-    /// the ignition key.
-    /// </summary>
-    public int ValueInRegisterAWhenInitializedWithIgnitionKey { get; private set; }
-
     /// <summary>
     /// Processes the specified instructions and returns the values of the CPU registers.
     /// </summary>
@@ -148,20 +136,23 @@ public sealed class Day12 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        var instructions = await ReadResourceAsLinesAsync(cancellationToken);
+        return await SolveWithLinesAsync(
+            static (instructions, logger, cancellationToken) =>
+            {
+                var registers = Process(instructions, initialValueOfC: 0, cancellationToken: cancellationToken);
+                int valueInRegisterA = registers['a'];
 
-        var registers = Process(instructions, initialValueOfC: 0, cancellationToken: cancellationToken);
-        ValueInRegisterA = registers['a'];
+                registers = Process(instructions, initialValueOfC: 1, cancellationToken: cancellationToken);
+                int valueInRegisterAWhenInitializedWithIgnitionKey = registers['a'];
 
-        registers = Process(instructions, initialValueOfC: 1, cancellationToken: cancellationToken);
-        ValueInRegisterAWhenInitializedWithIgnitionKey = registers['a'];
+                if (logger is { })
+                {
+                    logger.WriteLine($"The value left in register a is {valueInRegisterA:N0}.");
+                    logger.WriteLine($"The value left in register a if c is initialized to 1 is {valueInRegisterAWhenInitializedWithIgnitionKey:N0}.");
+                }
 
-        if (Verbose)
-        {
-            Logger.WriteLine($"The value left in register a is {ValueInRegisterA:N0}.");
-            Logger.WriteLine($"The value left in register a if c is initialized to 1 is {ValueInRegisterAWhenInitializedWithIgnitionKey:N0}.");
-        }
-
-        return PuzzleResult.Create(ValueInRegisterA, ValueInRegisterAWhenInitializedWithIgnitionKey);
+                return (valueInRegisterA, valueInRegisterAWhenInitializedWithIgnitionKey);
+            },
+            cancellationToken);
     }
 }

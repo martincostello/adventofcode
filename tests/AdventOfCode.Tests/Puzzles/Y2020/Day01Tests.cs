@@ -35,7 +35,7 @@ public sealed class Day01Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         var puzzle = await SolvePuzzleAsync<Day01>();
 
         // Assert
-        puzzle.ProductOf2020SumFrom2.ShouldBe(63616);
-        puzzle.ProductOf2020SumFrom3.ShouldBe(67877784);
+        puzzle.Solution1.ShouldBe(63616);
+        puzzle.Solution2.ShouldBe(67877784);
     }
 }

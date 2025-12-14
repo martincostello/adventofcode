@@ -7,18 +7,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2024;
 /// A class representing the puzzle for <c>https://adventofcode.com/2024/day/19</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2024, 19, "Linen Layout", RequiresData = true)]
-public sealed class Day19 : Puzzle
+public sealed class Day19 : Puzzle<int, long>
 {
-    /// <summary>
-    /// Gets the number of possible towel designs that can be created.
-    /// </summary>
-    public int PossibleDesigns { get; private set; }
-
-    /// <summary>
-    /// Gets the number of unique towel designs that can be created.
-    /// </summary>
-    public long UniqueDesigns { get; private set; }
-
     /// <summary>
     /// Counts the number of possible towel designs that can be created from the specified values.
     /// </summary>
@@ -95,18 +85,19 @@ public sealed class Day19 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        ArgumentNullException.ThrowIfNull(args);
+        return await SolveWithLinesAsync(
+            static (values, logger, _) =>
+            {
+                (int possibleDesigns, long uniqueDesigns) = CountPossibilities(values);
 
-        var values = await ReadResourceAsLinesAsync(cancellationToken);
+                if (logger is { })
+                {
+                    logger.WriteLine("{0} designs are possible.", possibleDesigns);
+                    logger.WriteLine("There are {0} different ways to make each design.", uniqueDesigns);
+                }
 
-        (PossibleDesigns, UniqueDesigns) = CountPossibilities(values);
-
-        if (Verbose)
-        {
-            Logger.WriteLine("{0} designs are possible.", PossibleDesigns);
-            Logger.WriteLine("There are {0} different ways to make each design.", UniqueDesigns);
-        }
-
-        return PuzzleResult.Create(PossibleDesigns, UniqueDesigns);
+                return (possibleDesigns, uniqueDesigns);
+            },
+            cancellationToken);
     }
 }

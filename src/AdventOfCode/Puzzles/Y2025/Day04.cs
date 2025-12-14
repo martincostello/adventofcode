@@ -7,18 +7,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2025;
 /// A class representing the puzzle for <c>https://adventofcode.com/2025/day/4</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2025, 04, "Printing Department", RequiresData = true)]
-public sealed class Day04 : Puzzle
+public sealed class Day04 : Puzzle<int, int>
 {
-    /// <summary>
-    /// Gets the number of rolls of paper that can be initially accessed by a forklift.
-    /// </summary>
-    public int AccessibleRolls { get; private set; }
-
-    /// <summary>
-    /// Gets the number of rolls of paper that can be removed by a forklift.
-    /// </summary>
-    public int RemovedRolls { get; private set; }
-
     /// <summary>
     /// Gets the number of rolls of paper that can be accessed by a forklift
     /// as illustrated by the specified diagram.
@@ -90,19 +80,20 @@ public sealed class Day04 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        ArgumentNullException.ThrowIfNull(args);
+        return await SolveWithLinesAsync(
+            static (diagram, logger, cancellationToken) =>
+            {
+                (int accessibleRolls, int removedRolls) = ArrangeRolls(diagram, cancellationToken);
 
-        var diagram = await ReadResourceAsLinesAsync(cancellationToken);
+                if (logger is { })
+                {
+                    logger.WriteLine("{0} rolls of paper can be accessed by a forklift.", accessibleRolls);
+                    logger.WriteLine("{0} rolls of paper can be removed by a forklift.", removedRolls);
+                }
 
-        (AccessibleRolls, RemovedRolls) = ArrangeRolls(diagram, cancellationToken);
-
-        if (Verbose)
-        {
-            Logger.WriteLine("{0} rolls of paper can be accessed by a forklift.", AccessibleRolls);
-            Logger.WriteLine("{0} rolls of paper can be removed by a forklift.", RemovedRolls);
-        }
-
-        return PuzzleResult.Create(AccessibleRolls, RemovedRolls);
+                return (accessibleRolls, removedRolls);
+            },
+            cancellationToken);
     }
 
     private sealed class Warehouse(Rectangle bounds) : SquareGrid(bounds)

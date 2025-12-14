@@ -7,7 +7,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017;
 /// A class representing the puzzle for <c>https://adventofcode.com/2017/day/10</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2017, 10, "Knot Hash", RequiresData = true)]
-public sealed class Day10 : Puzzle
+public sealed class Day10 : Puzzle<int, string>
 {
     /// <summary>
     /// The default sequence length to use.
@@ -18,16 +18,6 @@ public sealed class Day10 : Puzzle
     /// The suffix for all hash operations.
     /// </summary>
     private static readonly ImmutableArray<int> Suffix = [17, 31, 73, 47, 23];
-
-    /// <summary>
-    /// Gets the product of multiplying the first two elements after the hash is applied to the input.
-    /// </summary>
-    public int ProductOfFirstTwoElements { get; private set; }
-
-    /// <summary>
-    /// Gets the hexadecimal representation of the dense hash of the input.
-    /// </summary>
-    public string? DenseHash { get; private set; }
 
     /// <summary>
     /// Computes the hash of the specified sequence of ASCII-encoded bytes.
@@ -81,20 +71,25 @@ public sealed class Day10 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        string rawLengths = (await ReadResourceAsStringAsync(cancellationToken)).Trim();
+        return await SolveWithStringAsync(
+            static (rawLength, logger, _) =>
+            {
+                rawLength = rawLength.Trim();
 
-        var lengths = rawLengths.AsNumbers<int>();
+                var lengths = rawLength.AsNumbers<int>();
 
-        ProductOfFirstTwoElements = FindProductOfFirstTwoHashElements(SequenceLength, lengths);
-        DenseHash = ComputeHash(rawLengths);
+                int productOfFirstTwoElements = FindProductOfFirstTwoHashElements(SequenceLength, lengths);
+                string denseHash = ComputeHash(rawLength);
 
-        if (Verbose)
-        {
-            Logger.WriteLine($"The product of the first two elements of the hash is {ProductOfFirstTwoElements:N0}.");
-            Logger.WriteLine($"The hexadecimal dense hash of the input is {DenseHash}.");
-        }
+                if (logger is { })
+                {
+                    logger.WriteLine($"The product of the first two elements of the hash is {productOfFirstTwoElements:N0}.");
+                    logger.WriteLine($"The hexadecimal dense hash of the input is {denseHash}.");
+                }
 
-        return PuzzleResult.Create(ProductOfFirstTwoElements, DenseHash);
+                return (productOfFirstTwoElements, denseHash);
+            },
+            cancellationToken);
     }
 
     /// <summary>

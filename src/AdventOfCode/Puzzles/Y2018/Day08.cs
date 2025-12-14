@@ -7,18 +7,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2018;
 /// A class representing the puzzle for <c>https://adventofcode.com/2018/day/8</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2018, 08, "Memory Maneuver", RequiresData = true)]
-public sealed class Day08 : Puzzle
+public sealed class Day08 : Puzzle<long, long>
 {
-    /// <summary>
-    /// Gets the sum of the tree's metadata entries.
-    /// </summary>
-    public long SumOfMetadata { get; private set; }
-
-    /// <summary>
-    /// Gets the value of the tree's root node.
-    /// </summary>
-    public long RootNodeValue { get; private set; }
-
     /// <summary>
     /// Parses the specified tree of nodes.
     /// </summary>
@@ -90,17 +80,22 @@ public sealed class Day08 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        var data = (await ReadResourceAsStringAsync(cancellationToken)).AsNumbers<int>(' ');
+        return await SolveWithStringAsync(
+            static (value, logger) =>
+            {
+                var data = value.AsNumbers<int>(' ');
 
-        (SumOfMetadata, RootNodeValue) = ParseTree(data);
+                (long sumOfMetadata, long rootNodeValue) = ParseTree(data);
 
-        if (Verbose)
-        {
-            Logger.WriteLine("The sum of the tree's metadata entries is {0}.", SumOfMetadata);
-            Logger.WriteLine("The value the tree's root node is {0}.", RootNodeValue);
-        }
+                if (logger is { })
+                {
+                    logger.WriteLine("The sum of the tree's metadata entries is {0}.", sumOfMetadata);
+                    logger.WriteLine("The value the tree's root node is {0}.", rootNodeValue);
+                }
 
-        return PuzzleResult.Create(SumOfMetadata, RootNodeValue);
+                return (sumOfMetadata, rootNodeValue);
+            },
+            cancellationToken);
     }
 
     private sealed class Node(int childCount, int metadataCount)

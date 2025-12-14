@@ -9,20 +9,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2022;
 /// A class representing the puzzle for <c>https://adventofcode.com/2022/day/11</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2022, 11, "Monkey in the Middle", RequiresData = true)]
-public sealed class Day11 : Puzzle
+public sealed class Day11 : Puzzle<long, long>
 {
-    /// <summary>
-    /// Gets the level of monkey business after 20 rounds of
-    /// stuff-slinging simian shenanigans with baseline anxiety.
-    /// </summary>
-    public long MonkeyBusiness20 { get; private set; }
-
-    /// <summary>
-    /// Gets the level of monkey business after 10,000 rounds of
-    /// stuff-slinging simian shenanigans wth higher anxiety.
-    /// </summary>
-    public long MonkeyBusiness10000 { get; private set; }
-
     /// <summary>
     /// Returns the level of monkey business after a number of rounds of stuff-slinging simian shenanigans.
     /// </summary>
@@ -134,23 +122,26 @@ public sealed class Day11 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        var observations = await ReadResourceAsLinesAsync(cancellationToken);
+        return await SolveWithLinesAsync(
+            static (observations, logger, _) =>
+            {
+                long monkeyBusiness20 = GetMonkeyBusiness(observations, rounds: 20, highAnxiety: false);
+                long monkeyBusiness10000 = GetMonkeyBusiness(observations, rounds: 10_000, highAnxiety: true);
 
-        MonkeyBusiness20 = GetMonkeyBusiness(observations, rounds: 20, highAnxiety: false);
-        MonkeyBusiness10000 = GetMonkeyBusiness(observations, rounds: 10_000, highAnxiety: true);
+                if (logger is { })
+                {
+                    logger.WriteLine(
+                        "The level of monkey business after 20 rounds of stuff-slinging simian shenanigans is {0}.",
+                        monkeyBusiness20);
 
-        if (Verbose)
-        {
-            Logger.WriteLine(
-                "The level of monkey business after 20 rounds of stuff-slinging simian shenanigans is {0}.",
-                MonkeyBusiness20);
+                    logger.WriteLine(
+                        "The level of monkey business after 10,000 rounds of stuff-slinging simian shenanigans is {0}.",
+                        monkeyBusiness10000);
+                }
 
-            Logger.WriteLine(
-                "The level of monkey business after 10,000 rounds of stuff-slinging simian shenanigans is {0}.",
-                MonkeyBusiness10000);
-        }
-
-        return PuzzleResult.Create(MonkeyBusiness20, MonkeyBusiness10000);
+                return (monkeyBusiness20, monkeyBusiness10000);
+            },
+            cancellationToken);
     }
 
     [DebuggerDisplay("{Number}")]

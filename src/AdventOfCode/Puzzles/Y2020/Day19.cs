@@ -9,18 +9,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020;
 /// A class representing the puzzle for <c>https://adventofcode.com/2020/day/19</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2020, 19, "Monster Messages", RequiresData = true)]
-public sealed class Day19 : Puzzle
+public sealed class Day19 : Puzzle<int, int>
 {
-    /// <summary>
-    /// Gets the number of messages that completely match rule zero.
-    /// </summary>
-    public int MatchesRule0 { get; private set; }
-
-    /// <summary>
-    /// Gets the number of messages that completely match rule zero with the fix applied.
-    /// </summary>
-    public int MatchesRule0WithFix { get; private set; }
-
     /// <summary>
     /// Gets the count of the number of messages that completely match rule 0.
     /// </summary>
@@ -122,17 +112,20 @@ public sealed class Day19 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        var input = await ReadResourceAsLinesAsync(cancellationToken);
+        return await SolveWithLinesAsync(
+            static (input, logger, _) =>
+            {
+                int matchesRule0 = GetMatchCount(input, applyFix: false);
+                int matchesRule0WithFix = GetMatchCount(input, applyFix: true);
 
-        MatchesRule0 = GetMatchCount(input, applyFix: false);
-        MatchesRule0WithFix = GetMatchCount(input, applyFix: true);
+                if (logger is { })
+                {
+                    logger.WriteLine("The number of messages that completely match rule 0 is {0} without the fix.", matchesRule0);
+                    logger.WriteLine("The number of messages that completely match rule 0 is {0} with the fix.", matchesRule0WithFix);
+                }
 
-        if (Verbose)
-        {
-            Logger.WriteLine("The number of messages that completely match rule 0 is {0} without the fix.", MatchesRule0);
-            Logger.WriteLine("The number of messages that completely match rule 0 is {0} with the fix.", MatchesRule0WithFix);
-        }
-
-        return PuzzleResult.Create(MatchesRule0, MatchesRule0WithFix);
+                return (matchesRule0, matchesRule0WithFix);
+            },
+            cancellationToken);
     }
 }

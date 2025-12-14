@@ -39,8 +39,7 @@ public sealed class Day05Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         var puzzle = await SolvePuzzleAsync<Day05>();
 
         // Assert
-        puzzle.ShouldNotBeNull();
-        puzzle.AvailableFreshIngredientIds.ShouldBe(761);
-        puzzle.FreshIngredientIds.ShouldBe(345755049374932);
+        puzzle.Solution1.ShouldBe(761);
+        puzzle.Solution2.ShouldBe(345755049374932);
     }
 }

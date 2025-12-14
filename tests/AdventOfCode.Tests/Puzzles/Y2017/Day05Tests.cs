@@ -27,7 +27,7 @@ public sealed class Day05Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         var puzzle = await SolvePuzzleAsync<Day05>();
 
         // Assert
-        puzzle.StepsToExitV1.ShouldBe(373543);
-        puzzle.StepsToExitV2.ShouldBe(27502966);
+        puzzle.Solution1.ShouldBe(373543);
+        puzzle.Solution2.ShouldBe(27502966);
     }
 }

@@ -7,18 +7,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020;
 /// A class representing the puzzle for <c>https://adventofcode.com/2020/day/7</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2020, 07, "Handy Haversacks", MinimumArguments = 1, RequiresData = true)]
-public sealed class Day07 : Puzzle
+public sealed class Day07 : Puzzle<int, int>
 {
-    /// <summary>
-    /// Gets the number of bag colors that can eventually contain at least one bag of the given color.
-    /// </summary>
-    public int BagColorsThatCanContainColor { get; private set; }
-
-    /// <summary>
-    /// Gets the number of bags required inside the specified top-level bag to allow it be carried.
-    /// </summary>
-    public int BagsInsideBag { get; private set; }
-
     /// <summary>
     /// Gets the number of bag colors that can eventually contain at least one bag of the specified colors.
     /// </summary>
@@ -132,20 +122,24 @@ public sealed class Day07 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        string color = args[0];
+        return await SolveWithLinesAsync(
+            args,
+            static (arguments, rules, logger, _) =>
+            {
+                string color = arguments[0];
 
-        var rules = await ReadResourceAsLinesAsync(cancellationToken);
+                int bagColorsThatCanContainColor = GetBagColorsThatCouldContainColor(rules, color);
+                int bagsInsideBag = GetInsideBagCount(rules, color);
 
-        BagColorsThatCanContainColor = GetBagColorsThatCouldContainColor(rules, color);
-        BagsInsideBag = GetInsideBagCount(rules, color);
+                if (logger is { })
+                {
+                    logger.WriteLine("The number of bags that can contain a {0} bag is {1}.", color, bagColorsThatCanContainColor);
+                    logger.WriteLine("The number of bags contained in a {0} bag is {1}.", color, bagsInsideBag);
+                }
 
-        if (Verbose)
-        {
-            Logger.WriteLine("The number of bags that can contain a {0} bag is {1}.", color, BagColorsThatCanContainColor);
-            Logger.WriteLine("The number of bags contained in a {0} bag is {1}.", color, BagsInsideBag);
-        }
-
-        return PuzzleResult.Create(BagColorsThatCanContainColor, BagsInsideBag);
+                return (bagColorsThatCanContainColor, bagsInsideBag);
+            },
+            cancellationToken);
     }
 
     /// <summary>

@@ -73,7 +73,6 @@ public sealed class Day15Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         var puzzle = await SolvePuzzleAsync<Day15>();
 
         // Assert
-        puzzle.ShouldNotBeNull();
-        puzzle.GpsSum.ShouldBe(1465152);
+        puzzle.Solution.ShouldBe(1465152);
     }
 }

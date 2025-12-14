@@ -7,18 +7,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2023;
 /// A class representing the puzzle for <c>https://adventofcode.com/2023/day/02</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2023, 02, "Cube Conundrum", RequiresData = true)]
-public sealed class Day02 : Puzzle
+public sealed class Day02 : Puzzle<int, int>
 {
-    /// <summary>
-    /// Gets the sum of the IDs of the games that are possible.
-    /// </summary>
-    public int SumOfPossibleSolutions { get; private set; }
-
-    /// <summary>
-    /// Gets the sum of the power of the set of cubes in each game.
-    /// </summary>
-    public int SumOfPowers { get; private set; }
-
     /// <summary>
     /// Plays the specified games of Cube Conundrum and returns
     /// the sum of the IDs of the games that are possible and
@@ -86,18 +76,19 @@ public sealed class Day02 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        ArgumentNullException.ThrowIfNull(args);
+        return await SolveWithLinesAsync(
+            static (values, logger, _) =>
+            {
+                (int sumOfPossibleSolutions, int sumOfPowers) = Play(values);
 
-        var values = await ReadResourceAsLinesAsync(cancellationToken);
+                if (logger is { })
+                {
+                    logger.WriteLine("The sum of the IDs of the possible games is {0}.", sumOfPossibleSolutions);
+                    logger.WriteLine("The sum of the powers of the cubes in the games is {0}.", sumOfPowers);
+                }
 
-        (SumOfPossibleSolutions, SumOfPowers) = Play(values);
-
-        if (Verbose)
-        {
-            Logger.WriteLine("The sum of the IDs of the possible games is {0}.", SumOfPossibleSolutions);
-            Logger.WriteLine("The sum of the powers of the cubes in the games is {0}.", SumOfPowers);
-        }
-
-        return PuzzleResult.Create(SumOfPossibleSolutions, SumOfPowers);
+                return (sumOfPossibleSolutions, sumOfPowers);
+            },
+            cancellationToken);
     }
 }

@@ -9,13 +9,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016;
 /// A class representing the puzzle for <c>https://adventofcode.com/2016/day/21</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2016, 21, "Scrambled Letters and Hash", MinimumArguments = 1, RequiresData = true)]
-public sealed class Day21 : Puzzle
+public sealed class Day21 : Puzzle<string>
 {
-    /// <summary>
-    /// Gets the result of scrambling the puzzle input.
-    /// </summary>
-    public string ScrambledResult { get; private set; } = string.Empty;
-
     /// <summary>
     /// Scrambles the specified text.
     /// </summary>
@@ -102,19 +97,23 @@ public sealed class Day21 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        string text = args[0];
-        bool reverse = args.Length > 1 && string.Equals(args[1], bool.TrueString, StringComparison.OrdinalIgnoreCase);
+        return await SolveWithLinesAsync(
+            args,
+            static (arguments, instructions, logger, cancellationToken) =>
+            {
+                string text = arguments[0];
+                bool reverse = arguments.Count > 1 && string.Equals(arguments[1], bool.TrueString, StringComparison.OrdinalIgnoreCase);
 
-        var instructions = await ReadResourceAsLinesAsync(cancellationToken);
+                string scrambledResult = Scramble(text, instructions, reverse);
 
-        ScrambledResult = Scramble(text, instructions, reverse);
+                if (logger is { })
+                {
+                    logger.WriteLine($"The result of {(reverse ? "un" : string.Empty)}scrambling '{text}' is '{scrambledResult}'.");
+                }
 
-        if (Verbose)
-        {
-            Logger.WriteLine($"The result of {(reverse ? "un" : string.Empty)}scrambling '{text}' is '{ScrambledResult}'.");
-        }
-
-        return PuzzleResult.Create(ScrambledResult);
+                return scrambledResult;
+            },
+            cancellationToken);
     }
 
     /// <summary>

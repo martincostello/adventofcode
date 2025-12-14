@@ -7,18 +7,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2021;
 /// A class representing the puzzle for <c>https://adventofcode.com/2021/day/9</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2021, 09, "Smoke Basin", RequiresData = true)]
-public sealed class Day09 : Puzzle
+public sealed class Day09 : Puzzle<int, int>
 {
-    /// <summary>
-    /// Gets the sum of the risk levels of all the low points in the heightmap.
-    /// </summary>
-    public int SumOfRiskLevels { get; private set; }
-
-    /// <summary>
-    /// Gets the total area of the three largest basins in the heightmap.
-    /// </summary>
-    public int AreaOfThreeLargestBasins { get; private set; }
-
     /// <summary>
     /// Determines the level of risk of the low points in the specified heightmap.
     /// </summary>
@@ -112,16 +102,19 @@ public sealed class Day09 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        var heightmap = await ReadResourceAsLinesAsync(cancellationToken);
+        return await SolveWithLinesAsync(
+            static (heightmap, logger, cancellationToken) =>
+            {
+                (int sumOfRiskLevels, int areaOfThreeLargestBasins) = AnalyzeRisk(heightmap, cancellationToken);
 
-        (SumOfRiskLevels, AreaOfThreeLargestBasins) = AnalyzeRisk(heightmap, cancellationToken);
+                if (logger is { })
+                {
+                    logger.WriteLine("The sum of the risk levels of all low points on the heightmap is {0:N0}.", sumOfRiskLevels);
+                    logger.WriteLine("The area of the three largest basins in the heightmap is {0:N0}.", areaOfThreeLargestBasins);
+                }
 
-        if (Verbose)
-        {
-            Logger.WriteLine("The sum of the risk levels of all low points on the heightmap is {0:N0}.", SumOfRiskLevels);
-            Logger.WriteLine("The area of the three largest basins in the heightmap is {0:N0}.", AreaOfThreeLargestBasins);
-        }
-
-        return PuzzleResult.Create(SumOfRiskLevels, AreaOfThreeLargestBasins);
+                return (sumOfRiskLevels, areaOfThreeLargestBasins);
+            },
+            cancellationToken);
     }
 }

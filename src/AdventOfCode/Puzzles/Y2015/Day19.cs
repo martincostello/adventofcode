@@ -9,18 +9,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015;
 /// A class representing the puzzle for <c>https://adventofcode.com/2015/day/19</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2015, 19, "Medicine for Rudolph", RequiresData = true)]
-public sealed partial class Day19 : Puzzle
+public sealed partial class Day19 : Puzzle<int, int>
 {
-    /// <summary>
-    /// Gets the solution for calibration.
-    /// </summary>
-    public int CalibrationSolution { get; private set; }
-
-    /// <summary>
-    /// Gets the solution for fabrication.
-    /// </summary>
-    public int FabricationSolution { get; private set; }
-
     /// <summary>
     /// Gets the possible molecules that can be created from single step transformations of a molecule.
     /// </summary>
@@ -143,30 +133,33 @@ public sealed partial class Day19 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        var lines = await ReadResourceAsLinesAsync(cancellationToken);
+        return await SolveWithLinesAsync(
+            static async (lines, logger, cancellationToken) =>
+            {
+                string molecule = lines[^1];
 
-        string molecule = lines[^1];
+                var replacements = lines
+                    .Take(lines.Count - 1)
+                    .Where((p) => !string.IsNullOrEmpty(p))
+                    .Select((p) => p.Split(" => "))
+                    .Select((p) => (p[0], p[1]))
+                    .ToList();
 
-        var replacements = lines
-            .Take(lines.Count - 1)
-            .Where((p) => !string.IsNullOrEmpty(p))
-            .Select((p) => p.Split(" => "))
-            .Select((p) => (p[0], p[1]))
-            .ToList();
+                int calibrationSolution = GetPossibleMolecules(molecule, replacements, cancellationToken);
 
-        CalibrationSolution = GetPossibleMolecules(molecule, replacements, cancellationToken);
+                // See https://www.reddit.com/r/adventofcode/comments/3xflz8/comment/cy4h7ji/.
+                // For some reason, it doesn't work on the test inputs (off by one) but does on the real input.
+                int fabricationSolution = molecule.Count(char.IsUpper) - ArgonOrRadon().Count(molecule) - (2 * molecule.Count((p) => p is 'Y')) - 1;
 
-        // See https://www.reddit.com/r/adventofcode/comments/3xflz8/comment/cy4h7ji/.
-        // For some reason, it doesn't work on the test inputs (off by one) but does on the real input.
-        FabricationSolution = molecule.Count(char.IsUpper) - ArgonOrRadon().Count(molecule) - (2 * molecule.Count((p) => p is 'Y')) - 1;
+                if (logger is { })
+                {
+                    logger.WriteLine($"{calibrationSolution:N0} distinct molecules can be created from {fabricationSolution:N0} possible replacements.");
+                    logger.WriteLine($"The target molecule can be made in a minimum of {calibrationSolution:N0} steps.");
+                }
 
-        if (Verbose)
-        {
-            Logger.WriteLine($"{CalibrationSolution:N0} distinct molecules can be created from {FabricationSolution:N0} possible replacements.");
-            Logger.WriteLine($"The target molecule can be made in a minimum of {CalibrationSolution:N0} steps.");
-        }
-
-        return PuzzleResult.Create(CalibrationSolution, FabricationSolution);
+                return (calibrationSolution, fabricationSolution);
+            },
+            cancellationToken);
     }
 
     [GeneratedRegex("Ar|Rn")]

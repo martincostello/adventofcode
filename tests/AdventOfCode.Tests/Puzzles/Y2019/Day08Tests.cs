@@ -24,7 +24,7 @@ public sealed class Day08Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         var puzzle = await SolvePuzzleAsync<Day08>();
 
         // Assert
-        puzzle.Checksum.ShouldBe(2080);
-        puzzle.Message.ShouldBe("AURCY");
+        puzzle.Solution1.ShouldBe(2080);
+        puzzle.Solution2.ShouldBe("AURCY");
     }
 }

@@ -7,7 +7,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015;
 /// A class representing the puzzle for <c>https://adventofcode.com/2015/day/18</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2015, 18, "Like a GIF For Your Yard", RequiresData = true, IsSlow = true)]
-public sealed class Day18 : Puzzle
+public sealed class Day18 : Puzzle<int, int>
 {
     /// <summary>
     /// The character that signifies that a light is on.
@@ -18,16 +18,6 @@ public sealed class Day18 : Puzzle
     /// The character that signifies that a light is on.
     /// </summary>
     private const char On = '#';
-
-    /// <summary>
-    /// Gets the number of lights that are illuminated without the stuck lights.
-    /// </summary>
-    public int LightsIlluminated { get; private set; }
-
-    /// <summary>
-    /// Gets the number of lights that are illuminated with the stuck lights.
-    /// </summary>
-    public int LightsIlluminatedWithStuckLights { get; private set; }
 
     /// <summary>
     /// Returns the light configuration for the specified initial state after the specified number of steps.
@@ -74,30 +64,33 @@ public sealed class Day18 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        var initial = await ReadResourceAsLinesAsync(cancellationToken);
+        return await SolveWithLinesAsync(
+            static (initial, logger, _) =>
+            {
+                const int Steps = 100;
 
-        int steps = 100;
+                string[] finalUnstuck = GetGridConfigurationAfterSteps(initial, Steps, areCornerLightsBroken: false);
+                string[] finalStuck = GetGridConfigurationAfterSteps(initial, Steps, areCornerLightsBroken: true);
 
-        string[] finalUnstuck = GetGridConfigurationAfterSteps(initial, steps, areCornerLightsBroken: false);
-        string[] finalStuck = GetGridConfigurationAfterSteps(initial, steps, areCornerLightsBroken: true);
+                int lightsIlluminated = finalUnstuck.Sum((p) => p.Count(On));
+                int lightsIlluminatedWithStuckLights = finalStuck.Sum((p) => System.MemoryExtensions.Count(p.AsSpan(), On));
 
-        LightsIlluminated = finalUnstuck.Sum((p) => p.Count(On));
-        LightsIlluminatedWithStuckLights = finalStuck.Sum((p) => System.MemoryExtensions.Count(p.AsSpan(), On));
+                if (logger is { })
+                {
+                    logger.WriteLine(
+                        "There are {0:N0} lights illuminated after {1:N0} steps.",
+                        lightsIlluminated,
+                        Steps);
 
-        if (Verbose)
-        {
-            Logger.WriteLine(
-                "There are {0:N0} lights illuminated after {1:N0} steps.",
-                LightsIlluminated,
-                steps);
+                    logger.WriteLine(
+                        "There are {0:N0} lights illuminated after {1:N0} steps with the corner lights stuck on.",
+                        lightsIlluminatedWithStuckLights,
+                        Steps);
+                }
 
-            Logger.WriteLine(
-                "There are {0:N0} lights illuminated after {1:N0} steps with the corner lights stuck on.",
-                LightsIlluminatedWithStuckLights,
-                steps);
-        }
-
-        return PuzzleResult.Create(LightsIlluminated, LightsIlluminatedWithStuckLights);
+                return (lightsIlluminated, lightsIlluminatedWithStuckLights);
+            },
+            cancellationToken);
     }
 
     /// <summary>

@@ -7,13 +7,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015;
 /// A class representing the puzzle for <c>https://adventofcode.com/2015/day/25</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2015, 25, "Let It Snow", MinimumArguments = 2, IsSlow = true)]
-public sealed class Day25 : Puzzle
+public sealed class Day25 : Puzzle<ulong>
 {
-    /// <summary>
-    /// Gets the code for the weather machine.
-    /// </summary>
-    internal ulong Code { get; private set; }
-
     /// <summary>
     /// Gets the code for the weather machine at the specified row and column.
     /// </summary>
@@ -65,20 +60,23 @@ public sealed class Day25 : Puzzle
     /// <inheritdoc />
     protected override Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        int row = Parse<int>(args[0]);
-        int column = Parse<int>(args[1]);
-
-        Code = GetCodeForWeatherMachine(row, column);
-
-        if (Verbose)
+        return SolveWithArguments(args, static (arguments, logger) =>
         {
-            Logger.WriteLine(
-                "The code for row {0:N0} and column {1:N0} is {2:N0}.",
-                row,
-                column,
-                Code);
-        }
+            int row = Parse<int>(arguments[0]);
+            int column = Parse<int>(arguments[1]);
 
-        return PuzzleResult.Create(Code);
+            ulong code = GetCodeForWeatherMachine(row, column);
+
+            if (logger is { })
+            {
+                logger.WriteLine(
+                    "The code for row {0:N0} and column {1:N0} is {2:N0}.",
+                    row,
+                    column,
+                    code);
+            }
+
+            return code;
+        });
     }
 }

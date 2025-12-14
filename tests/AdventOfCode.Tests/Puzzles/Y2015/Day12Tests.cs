@@ -39,7 +39,7 @@ public sealed class Day12Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         var puzzle = await SolvePuzzleAsync<Day12>();
 
         // Assert
-        puzzle.Sum.ShouldBe(191164);
-        puzzle.SumIgnoringRed.ShouldBe(87842);
+        puzzle.Solution1.ShouldBe(191164);
+        puzzle.Solution2.ShouldBe(87842);
     }
 }

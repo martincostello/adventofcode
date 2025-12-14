@@ -46,7 +46,7 @@ public sealed class Day21Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         var puzzle = await SolvePuzzleAsync<Day21>();
 
         // Assert
-        puzzle.PracticeOutcome.ShouldBe(713328);
-        puzzle.WinningUniverses.ShouldBe(92399285032143);
+        puzzle.Solution1.ShouldBe(713328);
+        puzzle.Solution2.ShouldBe(92399285032143);
     }
 }

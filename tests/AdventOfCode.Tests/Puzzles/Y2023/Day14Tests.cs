@@ -44,8 +44,7 @@ public sealed class Day14Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         var puzzle = await SolvePuzzleAsync<Day14>();
 
         // Assert
-        puzzle.ShouldNotBeNull();
-        puzzle.TotalLoad.ShouldBe(108641);
-        puzzle.TotalLoadWithSpinCycle.ShouldBe(84328);
+        puzzle.Solution1.ShouldBe(108641);
+        puzzle.Solution2.ShouldBe(84328);
     }
 }

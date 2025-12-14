@@ -7,18 +7,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2022;
 /// A class representing the puzzle for <c>https://adventofcode.com/2022/day/1</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2022, 01, "Calorie Counting", RequiresData = true)]
-public sealed class Day01 : Puzzle
+public sealed class Day01 : Puzzle<int, int>
 {
-    /// <summary>
-    /// Gets the number of calories carried by the elf with the most calorific inventory.
-    /// </summary>
-    public int MaximumCalories { get; private set; }
-
-    /// <summary>
-    /// Gets the number of calories carried by the three elves with the most calorific inventories.
-    /// </summary>
-    public int MaximumCaloriesForTop3 { get; private set; }
-
     /// <summary>
     /// Returns the number of calories carried by each elf in the specified inventories.
     /// </summary>
@@ -58,19 +48,22 @@ public sealed class Day01 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        var inventories = await ReadResourceAsLinesAsync(cancellationToken);
+        return await SolveWithLinesAsync(
+            static (inventories, logger, _) =>
+            {
+                var calories = GetCalorieInventories(inventories);
 
-        var calories = GetCalorieInventories(inventories);
+                int maximumCalories = calories.Max();
+                int maximumCaloriesForTop3 = calories.OrderDescending().Take(3).Sum();
 
-        MaximumCalories = calories.Max();
-        MaximumCaloriesForTop3 = calories.OrderDescending().Take(3).Sum();
+                if (logger is { })
+                {
+                    logger.WriteLine("The elf carrying the largest inventory has {0:N0} Calories.", maximumCalories);
+                    logger.WriteLine("The elves carrying the largest three inventories have {0:N0} Calories.", maximumCaloriesForTop3);
+                }
 
-        if (Verbose)
-        {
-            Logger.WriteLine("The elf carrying the largest inventory has {0:N0} Calories.", MaximumCalories);
-            Logger.WriteLine("The elves carrying the largest three inventories have {0:N0} Calories.", MaximumCaloriesForTop3);
-        }
-
-        return PuzzleResult.Create(MaximumCalories, MaximumCaloriesForTop3);
+                return (maximumCalories, maximumCaloriesForTop3);
+            },
+            cancellationToken);
     }
 }

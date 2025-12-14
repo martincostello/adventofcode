@@ -7,18 +7,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2022;
 /// A class representing the puzzle for <c>https://adventofcode.com/2022/day/8</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2022, 08, "Treetop Tree House", RequiresData = true)]
-public sealed class Day08 : Puzzle
+public sealed class Day08 : Puzzle<int, int>
 {
-    /// <summary>
-    /// Gets how many trees are visible from outside the grid.
-    /// </summary>
-    public int VisibleTrees { get; private set; }
-
-    /// <summary>
-    /// Gets the maximum scenic score that can be achieved for a treehouse in a tree in the grid.
-    /// </summary>
-    public int MaximumScenicScore { get; private set; }
-
     /// <summary>
     /// Returns how many trees are visible from outside the specified grid.
     /// </summary>
@@ -163,17 +153,20 @@ public sealed class Day08 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        var grid = await ReadResourceAsLinesAsync(cancellationToken);
+        return await SolveWithLinesAsync(
+            static (grid, logger, _) =>
+            {
+                (int visibleTrees, int maximumScenicScore) = CountVisibleTrees(grid);
 
-        (VisibleTrees, MaximumScenicScore) = CountVisibleTrees(grid);
+                if (logger is { })
+                {
+                    logger.WriteLine("There are {0} trees visible from outside the grid.", visibleTrees);
+                    logger.WriteLine("The highest scenic score is {0}.", maximumScenicScore);
+                }
 
-        if (Verbose)
-        {
-            Logger.WriteLine("There are {0} trees visible from outside the grid.", VisibleTrees);
-            Logger.WriteLine("The highest scenic score is {0}.", MaximumScenicScore);
-        }
-
-        return PuzzleResult.Create(VisibleTrees, MaximumScenicScore);
+                return (visibleTrees, maximumScenicScore);
+            },
+            cancellationToken);
     }
 
     private sealed record Tree(Point Location, int Height)

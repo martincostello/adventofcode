@@ -50,7 +50,7 @@ public sealed class Day13Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         var puzzle = await SolvePuzzleAsync<Day13>();
 
         // Assert
-        puzzle.Severity.ShouldBe(1612);
-        puzzle.ShortestDelay.ShouldBe(3907994);
+        puzzle.Solution1.ShouldBe(1612);
+        puzzle.Solution2.ShouldBe(3907994);
     }
 }

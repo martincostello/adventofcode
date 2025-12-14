@@ -7,18 +7,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2024;
 /// A class representing the puzzle for <c>https://adventofcode.com/2024/day/14</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2024, 14, "Restroom Redoubt", RequiresData = true)]
-public sealed class Day14 : Puzzle
+public sealed class Day14 : Puzzle<int, int>
 {
-    /// <summary>
-    /// Gets the safety factor after 100 seconds.
-    /// </summary>
-    public int SafetyFactor { get; private set; }
-
-    /// <summary>
-    /// Gets the number of seconds after which the robots display the Easter egg, if any.
-    /// </summary>
-    public int EasterEggSeconds { get; private set; }
-
     /// <summary>
     /// Simulates the specified robots' positions after the specified number of seconds.
     /// </summary>
@@ -114,22 +104,23 @@ public sealed class Day14 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        ArgumentNullException.ThrowIfNull(args);
+        return await SolveWithLinesAsync(
+            static (values, logger, cancellationToken) =>
+            {
+                var bounds = new Rectangle(0, 0, 101, 103);
 
-        var values = await ReadResourceAsLinesAsync(cancellationToken);
+                int safetyFactor = Simulate(values, bounds, seconds: 100, findEasterEgg: false, cancellationToken);
+                int easterEggSeconds = Simulate(values, bounds, seconds: int.MaxValue, findEasterEgg: true, cancellationToken);
 
-        var bounds = new Rectangle(0, 0, 101, 103);
+                if (logger is { })
+                {
+                    logger.WriteLine("The safety factor after 100 seconds is {0}.", safetyFactor);
+                    logger.WriteLine("The robots first display the Easter egg after {0} seconds.", easterEggSeconds);
+                }
 
-        SafetyFactor = Simulate(values, bounds, seconds: 100, findEasterEgg: false, cancellationToken);
-        EasterEggSeconds = Simulate(values, bounds, seconds: int.MaxValue, findEasterEgg: true, cancellationToken);
-
-        if (Verbose)
-        {
-            Logger.WriteLine("The safety factor after 100 seconds is {0}.", SafetyFactor);
-            Logger.WriteLine("The robots first display the Easter egg after {0} seconds.", EasterEggSeconds);
-        }
-
-        return PuzzleResult.Create(SafetyFactor, EasterEggSeconds);
+                return (safetyFactor, easterEggSeconds);
+            },
+            cancellationToken);
     }
 
     private record Robot(Point Origin, Size Velocity, Rectangle Bounds)

@@ -9,19 +9,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016;
 /// A class representing the puzzle for <c>https://adventofcode.com/2016/day/14</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2016, 14, "One-Time Pad", MinimumArguments = 1, IsHidden = true)]
-public sealed class Day14 : Puzzle
+public sealed class Day14 : Puzzle<int, int>
 {
-    /// <summary>
-    /// Gets the index that produces the 64th one-time pad key.
-    /// </summary>
-    public int IndexOfKey64 { get; private set; }
-
-    /// <summary>
-    /// Gets the index that produces the 64th one-time pad key
-    /// when key stretching is in use.
-    /// </summary>
-    public int IndexOfKey64WithStretching { get; private set; }
-
     /// <summary>
     /// Returns the index of the one-time pad key for the specified ordinal.
     /// </summary>
@@ -82,20 +71,24 @@ public sealed class Day14 : Puzzle
     }
 
     /// <inheritdoc />
-    protected override Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
+    protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        string salt = args[0];
+        return SolveWithArgument(
+            args,
+            static (salt, logger, cancellationToken) =>
+            {
+                int indexOfKey64 = GetOneTimePadKeyIndex(salt, 64, useKeyStretching: false, cancellationToken);
+                int indexOfKey64WithStretching = GetOneTimePadKeyIndex(salt, 64, useKeyStretching: true, cancellationToken);
 
-        IndexOfKey64 = GetOneTimePadKeyIndex(salt, 64, useKeyStretching: false, cancellationToken);
-        IndexOfKey64WithStretching = GetOneTimePadKeyIndex(salt, 64, useKeyStretching: true, cancellationToken);
+                if (logger is { })
+                {
+                    logger.WriteLine($"The index that produces the 64th one-time pad key is {indexOfKey64:N0}.");
+                    logger.WriteLine($"The index that produces the 64th one-time pad key when using key stretching is {indexOfKey64WithStretching:N0}.");
+                }
 
-        if (Verbose)
-        {
-            Logger.WriteLine($"The index that produces the 64th one-time pad key is {IndexOfKey64:N0}.");
-            Logger.WriteLine($"The index that produces the 64th one-time pad key when using key stretching is {IndexOfKey64WithStretching:N0}.");
-        }
-
-        return PuzzleResult.Create(IndexOfKey64, IndexOfKey64WithStretching);
+                return (indexOfKey64, indexOfKey64WithStretching);
+            },
+            cancellationToken);
     }
 
     /// <summary>

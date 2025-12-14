@@ -10,18 +10,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015;
 /// A class representing the puzzle for <c>https://adventofcode.com/2015/day/4</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2015, 04, "The Ideal Stocking Stuffer", MinimumArguments = 1, IsSlow = true)]
-public sealed class Day04 : Puzzle
+public sealed class Day04 : Puzzle<int, int>
 {
-    /// <summary>
-    /// Gets the lowest value that produces a hash that starts with 5 zeroes.
-    /// </summary>
-    public int LowestZeroHash5 { get; private set; }
-
-    /// <summary>
-    /// Gets the lowest value that produces a hash that starts with 6 zeroes.
-    /// </summary>
-    public int LowestZeroHash6 { get; private set; }
-
     /// <summary>
     /// Gets the lowest positive integer which when combined with a secret key has an MD5 hash whose
     /// hexadecimal representation starts with the specified number of zeroes.
@@ -129,18 +119,19 @@ public sealed class Day04 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        string secretKey = args[0];
-
-        LowestZeroHash5 = await GetLowestPositiveNumberWithStartingZeroesAsync(secretKey, zeroes: 5);
-        LowestZeroHash6 = await GetLowestPositiveNumberWithStartingZeroesAsync(secretKey, zeroes: 6);
-
-        if (Verbose)
+        return await SolveWithArgumentAsync(args, static async (secretKey, logger) =>
         {
-            Logger.WriteLine("The lowest positive number for a hash starting with 5 zeroes is {0:N0}.", LowestZeroHash5);
-            Logger.WriteLine("The lowest positive number for a hash starting with 6 zeroes is {0:N0}.", LowestZeroHash6);
-        }
+            int lowestZeroHash5 = await GetLowestPositiveNumberWithStartingZeroesAsync(secretKey, zeroes: 5);
+            int lowestZeroHash6 = await GetLowestPositiveNumberWithStartingZeroesAsync(secretKey, zeroes: 6);
 
-        return PuzzleResult.Create(LowestZeroHash5, LowestZeroHash6);
+            if (logger is { })
+            {
+                logger.WriteLine("The lowest positive number for a hash starting with 5 zeroes is {0:N0}.", lowestZeroHash5);
+                logger.WriteLine("The lowest positive number for a hash starting with 6 zeroes is {0:N0}.", lowestZeroHash6);
+            }
+
+            return (lowestZeroHash5, lowestZeroHash6);
+        });
     }
 
     /// <summary>

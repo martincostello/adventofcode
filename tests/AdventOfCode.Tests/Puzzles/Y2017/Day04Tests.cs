@@ -30,7 +30,7 @@ public sealed class Day04Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         var puzzle = await SolvePuzzleAsync<Day04>();
 
         // Assert
-        puzzle.ValidPassphraseCountV1.ShouldBe(383);
-        puzzle.ValidPassphraseCountV2.ShouldBe(265);
+        puzzle.Solution1.ShouldBe(383);
+        puzzle.Solution2.ShouldBe(265);
     }
 }

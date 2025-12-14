@@ -7,18 +7,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015;
 /// A class representing the puzzle for <c>https://adventofcode.com/2015/day/1</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2015, 01, "Not Quite Lisp", RequiresData = true)]
-public sealed class Day01 : Puzzle
+public sealed class Day01 : Puzzle<int, int>
 {
-    /// <summary>
-    /// Gets the final floor reached by the instructions.
-    /// </summary>
-    internal int FinalFloor { get; private set; }
-
-    /// <summary>
-    /// Gets the instruction number that first causes the basement to first be entered.
-    /// </summary>
-    internal int FirstBasementInstruction { get; private set; }
-
     /// <summary>
     /// Gets the final floor reached by following the specified set of instructions
     /// and the number of the instruction that first enters the basement.
@@ -64,16 +54,19 @@ public sealed class Day01 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        string value = await ReadResourceAsStringAsync(cancellationToken);
+        return await SolveWithStringAsync(
+            static (value, logger, _) =>
+            {
+                (int finalFloor, int firstBasementInstruction) = GetFinalFloorAndFirstInstructionBasementReached(value);
 
-        (FinalFloor, FirstBasementInstruction) = GetFinalFloorAndFirstInstructionBasementReached(value);
+                if (logger is { })
+                {
+                    logger.WriteLine("Santa should go to floor {0}.", finalFloor);
+                    logger.WriteLine("Santa first enters the basement after following instruction {0:N0}.", firstBasementInstruction);
+                }
 
-        if (Verbose)
-        {
-            Logger.WriteLine("Santa should go to floor {0}.", FinalFloor);
-            Logger.WriteLine("Santa first enters the basement after following instruction {0:N0}.", FirstBasementInstruction);
-        }
-
-        return PuzzleResult.Create(FinalFloor, FirstBasementInstruction);
+                return (finalFloor, firstBasementInstruction);
+            },
+            cancellationToken);
     }
 }

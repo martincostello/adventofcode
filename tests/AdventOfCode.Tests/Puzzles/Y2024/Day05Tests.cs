@@ -57,8 +57,7 @@ public sealed class Day05Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         var puzzle = await SolvePuzzleAsync<Day05>();
 
         // Assert
-        puzzle.ShouldNotBeNull();
-        puzzle.MiddlePageSumCorrect.ShouldBe(5948);
-        puzzle.MiddlePageSumIncorrect.ShouldBe(3062);
+        puzzle.Solution1.ShouldBe(5948);
+        puzzle.Solution2.ShouldBe(3062);
     }
 }

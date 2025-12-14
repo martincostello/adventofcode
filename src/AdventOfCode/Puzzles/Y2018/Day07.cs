@@ -7,18 +7,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2018;
 /// A class representing the puzzle for <c>https://adventofcode.com/2018/day/7</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2018, 07, "The Sum of Its Parts", RequiresData = true)]
-public sealed class Day07 : Puzzle
+public sealed class Day07 : Puzzle<string, int>
 {
-    /// <summary>
-    /// Gets the order in which the parts of the sleigh should be assembled.
-    /// </summary>
-    public string OrderOfAssembly { get; private set; } = string.Empty;
-
-    /// <summary>
-    /// Gets the time, in seconds, it takes to assemble the sleigh.
-    /// </summary>
-    public int TimeToAssemble { get; private set; }
-
     /// <summary>
     /// Assembles the sleigh from the specified instructions.
     /// </summary>
@@ -101,19 +91,22 @@ public sealed class Day07 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        var instructions = await ReadResourceAsLinesAsync(cancellationToken);
+        return await SolveWithLinesAsync(
+            static (instructions, logger, cancellationToken) =>
+            {
+                const int OneMinute = 60;
 
-        const int OneMinute = 60;
+                (string orderOfAssembly, _) = Assemble(instructions, workers: 1, partDuration: OneMinute);
+                (_, int timeToAssemble) = Assemble(instructions, workers: 5, partDuration: OneMinute);
 
-        (OrderOfAssembly, _) = Assemble(instructions, workers: 1, partDuration: OneMinute);
-        (_, TimeToAssemble) = Assemble(instructions, workers: 5, partDuration: OneMinute);
+                if (logger is { })
+                {
+                    logger.WriteLine("The order of assembly for the sleigh with one worker is {0}.", orderOfAssembly);
+                    logger.WriteLine("The time to assemble the sleigh with 5 workers is {0}.", timeToAssemble);
+                }
 
-        if (Verbose)
-        {
-            Logger.WriteLine("The order of assembly for the sleigh with one worker is {0}.", OrderOfAssembly);
-            Logger.WriteLine("The time to assemble the sleigh with 5 workers is {0}.", TimeToAssemble);
-        }
-
-        return PuzzleResult.Create(OrderOfAssembly, TimeToAssemble);
+                return (orderOfAssembly, timeToAssemble);
+            },
+            cancellationToken);
     }
 }

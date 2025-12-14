@@ -9,20 +9,10 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2023;
 /// A class representing the puzzle for <c>https://adventofcode.com/2023/day/10</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2023, 10, "Pipe Maze", RequiresData = true)]
-public sealed class Day10 : Puzzle
+public sealed class Day10 : Puzzle<int, int>
 {
     private const char Empty = '.';
     private const char Start = 'S';
-
-    /// <summary>
-    /// Gets the number of steps to the furthest position in the pipe from the starting location.
-    /// </summary>
-    public int Steps { get; private set; }
-
-    /// <summary>
-    /// Gets the number of tiles enclosed by the loop of pipe containing the animal.
-    /// </summary>
-    public int Tiles { get; private set; }
 
     /// <summary>
     /// Walks the pipe maze and returns the number of steps to
@@ -223,18 +213,19 @@ public sealed class Day10 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        ArgumentNullException.ThrowIfNull(args);
+        return await SolveWithLinesAsync(
+            static (values, logger, _) =>
+            {
+                (int steps, int tiles) = Walk(values);
 
-        var values = await ReadResourceAsLinesAsync(cancellationToken);
+                if (logger is { })
+                {
+                    logger.WriteLine("It takes {0} steps to get to the point furthest from the starting position.", steps);
+                    logger.WriteLine("{0} tiles are enclosed by the loop.", tiles);
+                }
 
-        (Steps, Tiles) = Walk(values);
-
-        if (Verbose)
-        {
-            Logger.WriteLine("It takes {0} steps to get to the point furthest from the starting position.", Steps);
-            Logger.WriteLine("{0} tiles are enclosed by the loop.", Tiles);
-        }
-
-        return PuzzleResult.Create(Steps, Tiles);
+                return (steps, tiles);
+            },
+            cancellationToken);
     }
 }

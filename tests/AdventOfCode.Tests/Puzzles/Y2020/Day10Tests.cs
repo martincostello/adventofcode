@@ -36,7 +36,7 @@ public sealed class Day10Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         var puzzle = await SolvePuzzleAsync<Day10>();
 
         // Assert
-        puzzle.JoltageProduct.ShouldBe(2775);
-        puzzle.ValidArrangements.ShouldBe(518344341716992L);
+        puzzle.Solution1.ShouldBe(2775);
+        puzzle.Solution2.ShouldBe(518344341716992);
     }
 }

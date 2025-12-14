@@ -7,18 +7,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020;
 /// A class representing the puzzle for <c>https://adventofcode.com/2020/day/21</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2020, 21, "Allergen Assessment", RequiresData = true)]
-public sealed class Day21 : Puzzle
+public sealed class Day21 : Puzzle<int, string>
 {
-    /// <summary>
-    /// Gets the canonical list of ingredients that are allergens.
-    /// </summary>
-    public string CanonicalAllergens { get; private set; } = string.Empty;
-
-    /// <summary>
-    /// Gets the number of times ingredients with no allergens appear.
-    /// </summary>
-    public int IngredientsWithNoAllergens { get; private set; }
-
     /// <summary>
     /// Gets the number of times ingredients with no allergens appear in the specified foods
     /// and the list of ingredients which are the allergens.
@@ -118,16 +108,19 @@ public sealed class Day21 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        var recipes = await ReadResourceAsLinesAsync(cancellationToken);
+        return await SolveWithLinesAsync(
+            static (recipes, logger, cancellationToken) =>
+            {
+                (int ingredientsWithNoAllergens, string canonicalAllergens) = GetIngredientsWithNoAllergens(recipes, cancellationToken);
 
-        (IngredientsWithNoAllergens, CanonicalAllergens) = GetIngredientsWithNoAllergens(recipes, cancellationToken);
+                if (logger is { })
+                {
+                    logger.WriteLine("Ingredients with no allergens appear {0} times.", ingredientsWithNoAllergens);
+                    logger.WriteLine("The canonical allergens are: {0}.", canonicalAllergens);
+                }
 
-        if (Verbose)
-        {
-            Logger.WriteLine("Ingredients with no allergens appear {0} times.", IngredientsWithNoAllergens);
-            Logger.WriteLine("The canonical allergens are: {0}.", CanonicalAllergens);
-        }
-
-        return PuzzleResult.Create(IngredientsWithNoAllergens, CanonicalAllergens);
+                return (ingredientsWithNoAllergens, canonicalAllergens);
+            },
+            cancellationToken);
     }
 }

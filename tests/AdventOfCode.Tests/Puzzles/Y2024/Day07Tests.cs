@@ -38,8 +38,7 @@ public sealed class Day07Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         var puzzle = await SolvePuzzleAsync<Day07>();
 
         // Assert
-        puzzle.ShouldNotBeNull();
-        puzzle.CalibrationResult1.ShouldBe(1153997401072);
-        puzzle.CalibrationResult2.ShouldBe(97902809384118);
+        puzzle.Solution1.ShouldBe(1153997401072);
+        puzzle.Solution2.ShouldBe(97902809384118);
     }
 }

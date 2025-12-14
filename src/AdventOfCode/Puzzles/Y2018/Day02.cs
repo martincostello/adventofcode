@@ -7,18 +7,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2018;
 /// A class representing the puzzle for <c>https://adventofcode.com/2018/day/2</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2018, 02, "Inventory Management System", RequiresData = true)]
-public sealed class Day02 : Puzzle
+public sealed class Day02 : Puzzle<int, string>
 {
-    /// <summary>
-    /// Gets the checksum of the box Ids.
-    /// </summary>
-    public int Checksum { get; private set; }
-
-    /// <summary>
-    /// Gets the common letters between the two similar box Ids.
-    /// </summary>
-    public string? CommonLettersForBoxes { get; private set; }
-
     /// <summary>
     /// Calculates the checksum for the specified box Ids.
     /// </summary>
@@ -132,17 +122,20 @@ public sealed class Day02 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        var ids = await ReadResourceAsLinesAsync(cancellationToken);
+        return await SolveWithLinesAsync(
+            static (ids, logger, _) =>
+            {
+                int checksum = CalculateChecksum(ids);
+                string commonLettersForBoxes = GetCommonLetters(ids);
 
-        Checksum = CalculateChecksum(ids);
-        CommonLettersForBoxes = GetCommonLetters(ids);
+                if (logger is { })
+                {
+                    logger.WriteLine($"The checksum is {checksum:N0}.");
+                    logger.WriteLine($"The common letters are {commonLettersForBoxes}.");
+                }
 
-        if (Verbose)
-        {
-            Logger.WriteLine($"The checksum is {Checksum:N0}.");
-            Logger.WriteLine($"The common letters are {CommonLettersForBoxes}.");
-        }
-
-        return PuzzleResult.Create(Checksum, CommonLettersForBoxes);
+                return (checksum, commonLettersForBoxes);
+            },
+            cancellationToken);
     }
 }

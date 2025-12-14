@@ -7,7 +7,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020;
 /// A class representing the puzzle for <c>https://adventofcode.com/2020/day/17</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2020, 17, "Conway Cubes", RequiresData = true, IsSlow = true)]
-public sealed class Day17 : Puzzle
+public sealed class Day17 : Puzzle<int, int>
 {
     /// <summary>
     /// An active cube.
@@ -18,16 +18,6 @@ public sealed class Day17 : Puzzle
     /// An inactive cube.
     /// </summary>
     private const char Inactive = '.';
-
-    /// <summary>
-    /// Gets the number of active cubes in three dimensions after the specified number of cycles.
-    /// </summary>
-    public int ActiveCubes3D { get; private set; }
-
-    /// <summary>
-    /// Gets the number of active cubes in four dimensions after the specified number of cycles.
-    /// </summary>
-    public int ActiveCubes4D { get; private set; }
 
     /// <summary>
     /// Gets the number of active cubes for the specified initial states.
@@ -56,28 +46,28 @@ public sealed class Day17 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        var layout = await ReadResourceAsLinesAsync(cancellationToken);
+        string visualization3D = string.Empty;
+        string visualization4D = string.Empty;
 
-        int cycles = 6;
+        var result = await SolveWithLinesAsync(
+            (layout, logger, _) =>
+            {
+                const int Cycles = 6;
 
-        (int activeCubes3D, string visualization3D) = GetActiveCubes(layout, cycles, dimensions: 3);
-        (int activeCubes4D, string visualization4D) = GetActiveCubes(layout, cycles, dimensions: 4);
+                (int activeCubes3D, visualization3D) = GetActiveCubes(layout, Cycles, dimensions: 3);
+                (int activeCubes4D, visualization4D) = GetActiveCubes(layout, Cycles, dimensions: 4);
 
-        ActiveCubes3D = activeCubes3D;
-        ActiveCubes4D = activeCubes4D;
+                if (logger is { })
+                {
+                    logger.WriteLine("There are {0} active cubes after {1} cycles in 3 dimensions.", activeCubes3D, Cycles);
+                    logger.WriteLine("There are {0} active cubes after {1} cycles in 4 dimensions.", activeCubes4D, Cycles);
+                }
 
-        if (Verbose)
-        {
-            Logger.WriteLine("There are {0} active cubes after {1} cycles in 3 dimensions.", ActiveCubes3D, cycles);
-            Logger.WriteLine("There are {0} active cubes after {1} cycles in 4 dimensions.", ActiveCubes4D, cycles);
-        }
+                return (activeCubes3D, activeCubes4D);
+            },
+            cancellationToken);
 
-        var result = new PuzzleResult();
-
-        result.Solutions.Add(ActiveCubes3D);
         result.Visualizations.Add(visualization3D);
-
-        result.Solutions.Add(ActiveCubes4D);
         result.Visualizations.Add(visualization4D);
 
         return result;

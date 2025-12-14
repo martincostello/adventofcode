@@ -9,20 +9,10 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2023;
 /// A class representing the puzzle for <c>https://adventofcode.com/2023/day/03</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2023, 03, "Gear Ratios", RequiresData = true)]
-public sealed class Day03 : Puzzle
+public sealed class Day03 : Puzzle<int, int>
 {
     private static readonly SearchValues<char> Digits = SearchValues.Create("0123456789");
     private static readonly SearchValues<char> NotParts = SearchValues.Create("0123456789.");
-
-    /// <summary>
-    /// Gets the sum of all of the part numbers in the engine schematic.
-    /// </summary>
-    public int SumOfPartNumbers { get; private set; }
-
-    /// <summary>
-    /// Gets the sum of all of the gear ratios in the engine schematic.
-    /// </summary>
-    public int SumOfGearRatios { get; private set; }
 
     /// <summary>
     /// Gets the sum of all of the part numbers and gear ratios in the engine schematic.
@@ -178,18 +168,19 @@ public sealed class Day03 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        ArgumentNullException.ThrowIfNull(args);
+        return await SolveWithLinesAsync(
+            static (values, logger, _) =>
+            {
+                (int sumOfPartNumbers, int sumOfGearRatios) = Solve(values);
 
-        var values = await ReadResourceAsLinesAsync(cancellationToken);
+                if (logger is { })
+                {
+                    logger.WriteLine("The sum of all of the part numbers in the engine schematic is {0}.", sumOfPartNumbers);
+                    logger.WriteLine("The sum of all of the gear ratios in the engine schematic is {0}.", sumOfGearRatios);
+                }
 
-        (SumOfPartNumbers, SumOfGearRatios) = Solve(values);
-
-        if (Verbose)
-        {
-            Logger.WriteLine("The sum of all of the part numbers in the engine schematic is {0}.", SumOfPartNumbers);
-            Logger.WriteLine("The sum of all of the gear ratios in the engine schematic is {0}.", SumOfGearRatios);
-        }
-
-        return PuzzleResult.Create(SumOfPartNumbers, SumOfGearRatios);
+                return (sumOfPartNumbers, sumOfGearRatios);
+            },
+            cancellationToken);
     }
 }

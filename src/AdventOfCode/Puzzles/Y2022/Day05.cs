@@ -7,20 +7,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2022;
 /// A class representing the puzzle for <c>https://adventofcode.com/2022/day/5</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2022, 05, "Supply Stacks", RequiresData = true)]
-public sealed class Day05 : Puzzle
+public sealed class Day05 : Puzzle<string, string>
 {
-    /// <summary>
-    /// Gets a string containing the IDs of the crates at
-    /// the top of each stack using a CraneMover 9000.
-    /// </summary>
-    public string TopCratesOfStacks9000 { get; private set; } = string.Empty;
-
-    /// <summary>
-    /// Gets a string containing the IDs of the crates at
-    /// the top of each stack using a CraneMover 9001.
-    /// </summary>
-    public string TopCratesOfStacks9001 { get; private set; } = string.Empty;
-
     /// <summary>
     /// Rearranges the crates specified by the puzzle input.
     /// </summary>
@@ -145,17 +133,20 @@ public sealed class Day05 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        var instructions = await ReadResourceAsLinesAsync(cancellationToken);
+        return await SolveWithLinesAsync(
+            static async (instructions, logger, _) =>
+            {
+                string topCratesOfStacks9000 = RearrangeCrates(instructions, canMoveMultipleCrates: false);
+                string topCratesOfStacks9001 = RearrangeCrates(instructions, canMoveMultipleCrates: true);
 
-        TopCratesOfStacks9000 = RearrangeCrates(instructions, canMoveMultipleCrates: false);
-        TopCratesOfStacks9001 = RearrangeCrates(instructions, canMoveMultipleCrates: true);
+                if (logger is { })
+                {
+                    logger.WriteLine("The crates on the top of each stack with the CraneMover 9000 are: {0}.", topCratesOfStacks9000);
+                    logger.WriteLine("The crates on the top of each stack with the CraneMover 9001 are: {0}.", topCratesOfStacks9001);
+                }
 
-        if (Verbose)
-        {
-            Logger.WriteLine("The crates on the top of each stack with the CraneMover 9000 are: {0}.", TopCratesOfStacks9000);
-            Logger.WriteLine("The crates on the top of each stack with the CraneMover 9001 are: {0}.", TopCratesOfStacks9001);
-        }
-
-        return PuzzleResult.Create(TopCratesOfStacks9000, TopCratesOfStacks9001);
+                return (topCratesOfStacks9000, topCratesOfStacks9001);
+            },
+            cancellationToken);
     }
 }

@@ -7,18 +7,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020;
 /// A class representing the puzzle for <c>https://adventofcode.com/2020/day/6</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2020, 06, "Custom Customs", RequiresData = true)]
-public sealed class Day06 : Puzzle
+public sealed class Day06 : Puzzle<int, int>
 {
-    /// <summary>
-    /// Gets the sum of the questions answered by the provided groups by anyone.
-    /// </summary>
-    public int SumOfQuestionsAnyoneYes { get; private set; }
-
-    /// <summary>
-    /// Gets the sum of the questions answered by the provided groups by everyone.
-    /// </summary>
-    public int SumOfQuestionsEveryoneYes { get; private set; }
-
     /// <summary>
     /// Gets the sum of the questions answered as yes for the groups and responses
     /// specified by a collection of values.
@@ -66,17 +56,20 @@ public sealed class Day06 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        var values = await ReadResourceAsLinesAsync(cancellationToken);
+        return await SolveWithLinesAsync(
+            static (values, logger, _) =>
+            {
+                int sumOfQuestionsAnyoneYes = GetSumOfQuestionsWithYesAnswers(values, byEveryone: false);
+                int sumOfQuestionsEveryoneYes = GetSumOfQuestionsWithYesAnswers(values, byEveryone: true);
 
-        SumOfQuestionsAnyoneYes = GetSumOfQuestionsWithYesAnswers(values, byEveryone: false);
-        SumOfQuestionsEveryoneYes = GetSumOfQuestionsWithYesAnswers(values, byEveryone: true);
+                if (logger is { })
+                {
+                    logger.WriteLine("The sum of the questions answered \"yes\" by anyone in the groups is {0}.", sumOfQuestionsAnyoneYes);
+                    logger.WriteLine("The sum of the questions answered \"yes\" by everyone in the groups is {0}.", sumOfQuestionsEveryoneYes);
+                }
 
-        if (Verbose)
-        {
-            Logger.WriteLine("The sum of the questions answered \"yes\" by anyone in the groups is {0}.", SumOfQuestionsAnyoneYes);
-            Logger.WriteLine("The sum of the questions answered \"yes\" by everyone in the groups is {0}.", SumOfQuestionsEveryoneYes);
-        }
-
-        return PuzzleResult.Create(SumOfQuestionsAnyoneYes, SumOfQuestionsEveryoneYes);
+                return (sumOfQuestionsAnyoneYes, sumOfQuestionsEveryoneYes);
+            },
+            cancellationToken);
     }
 }

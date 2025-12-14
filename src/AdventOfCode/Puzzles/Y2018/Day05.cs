@@ -7,18 +7,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2018;
 /// A class representing the puzzle for <c>https://adventofcode.com/2018/day/5</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2018, 05, "Alchemical Reduction", RequiresData = true, IsSlow = true)]
-public sealed class Day05 : Puzzle
+public sealed class Day05 : Puzzle<int, int>
 {
-    /// <summary>
-    /// Gets the number of remaining polymer units after the reduction.
-    /// </summary>
-    public int RemainingUnits { get; private set; }
-
-    /// <summary>
-    /// Gets the number of remaining polymer units after the reduction using optimization.
-    /// </summary>
-    public int RemainingUnitsOptimized { get; private set; }
-
     /// <summary>
     /// Reduces the specified polymer.
     /// </summary>
@@ -75,18 +65,23 @@ public sealed class Day05 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        string polymer = (await ReadResourceAsStringAsync(cancellationToken)).Trim('\r', '\n');
+        return await SolveWithStringAsync(
+            static (polymer, logger, _) =>
+            {
+                polymer = polymer.Trim('\r', '\n');
 
-        RemainingUnits = Reduce(polymer).Length;
-        RemainingUnitsOptimized = ReduceWithOptimization(polymer).Length;
+                int remainingUnits = Reduce(polymer).Length;
+                int remainingUnitsOptimized = ReduceWithOptimization(polymer).Length;
 
-        if (Verbose)
-        {
-            Logger.WriteLine($"The number of units that remain after fully reacting the polymer is {RemainingUnits:N0}.");
-            Logger.WriteLine($"The number of units that remain after fully reacting the polymer with optimization is {RemainingUnitsOptimized:N0}.");
-        }
+                if (logger is { })
+                {
+                    logger.WriteLine($"The number of units that remain after fully reacting the polymer is {remainingUnits:N0}.");
+                    logger.WriteLine($"The number of units that remain after fully reacting the polymer with optimization is {remainingUnitsOptimized:N0}.");
+                }
 
-        return PuzzleResult.Create(RemainingUnits, RemainingUnitsOptimized);
+                return (remainingUnits, remainingUnitsOptimized);
+            },
+            cancellationToken);
     }
 
     /// <summary>

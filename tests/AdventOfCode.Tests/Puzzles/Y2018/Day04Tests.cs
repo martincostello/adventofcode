@@ -45,7 +45,7 @@ public sealed class Day04Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         var puzzle = await SolvePuzzleAsync<Day04>();
 
         // Assert
-        puzzle.SleepiestGuardMinute.ShouldBe(4716);
-        puzzle.SleepiestMinuteGuard.ShouldBe(117061);
+        puzzle.Solution1.ShouldBe(4716);
+        puzzle.Solution2.ShouldBe(117061);
     }
 }

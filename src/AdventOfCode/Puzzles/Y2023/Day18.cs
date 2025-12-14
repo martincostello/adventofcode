@@ -7,18 +7,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2023;
 /// A class representing the puzzle for <c>https://adventofcode.com/2023/day/18</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2023, 18, "Lavaduct Lagoon", RequiresData = true)]
-public sealed class Day18 : Puzzle
+public sealed class Day18 : Puzzle<long, long>
 {
-    /// <summary>
-    /// Gets the volume of lava the lagoon can hold.
-    /// </summary>
-    public long Volume { get; private set; }
-
-    /// <summary>
-    /// Gets the volume of lava the lagoon can hold using the fixed plan.
-    /// </summary>
-    public long VolumeWithFix { get; private set; }
-
     /// <summary>
     /// Digs out the lagoon specified in the plan and returns its volume.
     /// </summary>
@@ -70,19 +60,20 @@ public sealed class Day18 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        ArgumentNullException.ThrowIfNull(args);
+        return await SolveWithLinesAsync(
+            static (plan, logger, _) =>
+            {
+                long volume = Dig(plan, fix: false);
+                long volumeWithFix = Dig(plan, fix: true);
 
-        var plan = await ReadResourceAsLinesAsync(cancellationToken);
+                if (logger is { })
+                {
+                    logger.WriteLine("The lagoon can hold {0} cubic meters of lava.", volume);
+                    logger.WriteLine("The lagoon can hold {0} cubic meters of lava using the fixed plan.", volumeWithFix);
+                }
 
-        Volume = Dig(plan, fix: false);
-        VolumeWithFix = Dig(plan, fix: true);
-
-        if (Verbose)
-        {
-            Logger.WriteLine("The lagoon can hold {0} cubic meters of lava.", Volume);
-            Logger.WriteLine("The lagoon can hold {0} cubic meters of lava using the fixed plan.", VolumeWithFix);
-        }
-
-        return PuzzleResult.Create(Volume, VolumeWithFix);
+                return (volume, volumeWithFix);
+            },
+            cancellationToken);
     }
 }

@@ -7,13 +7,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2022;
 /// A class representing the puzzle for <c>https://adventofcode.com/2022/day/20</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2022, 20, "Grove Positioning System", RequiresData = true, IsHidden = true, Unsolved = true)]
-public sealed class Day20 : Puzzle
+public sealed class Day20 : Puzzle<int>
 {
-    /// <summary>
-    /// Gets the solution.
-    /// </summary>
-    public int Solution { get; private set; }
-
     /// <summary>
     /// Solves the puzzle.
     /// </summary>
@@ -30,17 +25,18 @@ public sealed class Day20 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        ArgumentNullException.ThrowIfNull(args);
+        return await SolveWithLinesAsync(
+            static (values, logger, cancellationToken) =>
+            {
+                int solution = Solve(values);
 
-        var values = await ReadResourceAsLinesAsync(cancellationToken);
+                if (logger is { })
+                {
+                    logger.WriteLine("The solution is {0}.", solution);
+                }
 
-        Solution = Solve(values);
-
-        if (Verbose)
-        {
-            Logger.WriteLine("The solution is {0}.", Solution);
-        }
-
-        return PuzzleResult.Create(Solution);
+                return solution;
+            },
+            cancellationToken);
     }
 }

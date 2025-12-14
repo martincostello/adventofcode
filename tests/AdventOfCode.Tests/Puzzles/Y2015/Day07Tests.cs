@@ -47,7 +47,7 @@ public sealed class Day07Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         var puzzle = await SolvePuzzleAsync<Day07>();
 
         // Assert
-        puzzle.FirstSignal.ShouldBe(3176);
-        puzzle.SecondSignal.ShouldBe(14710);
+        puzzle.Solution1.ShouldBe(3176);
+        puzzle.Solution2.ShouldBe(14710);
     }
 }

@@ -7,18 +7,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020;
 /// A class representing the puzzle for <c>https://adventofcode.com/2020/day/20</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2020, 20, "Jurassic Jigsaw", RequiresData = true)]
-public sealed class Day20 : Puzzle
+public sealed class Day20 : Puzzle<long, int>
 {
-    /// <summary>
-    /// Gets the product of Ids of the corner tiles.
-    /// </summary>
-    public long ProductOfCornerTiles { get; private set; }
-
-    /// <summary>
-    /// Gets the roughness of the waters.
-    /// </summary>
-    public int WaterRoughness { get; private set; }
-
     /// <summary>
     /// Gets the product of the four corner tiles of an image
     /// when they are assembled in the correct order.
@@ -31,7 +21,7 @@ public sealed class Day20 : Puzzle
     /// </returns>
     public static (long CornerIdProduct, int Roughness, string Visualization) GetCornerTileIdProduct(
         IList<string> input,
-        ILogger logger,
+        ILogger? logger,
         CancellationToken cancellationToken)
     {
         var tiles = ParseTiles(input);
@@ -140,7 +130,7 @@ public sealed class Day20 : Puzzle
 
         FindMonsters(finalImage, highlightMonsters: true);
 
-        string visualization = logger.WriteGrid(finalImage);
+        string visualization = logger?.WriteGrid(finalImage) ?? string.Empty;
 
         int roughness = hashes - (seaMonsters * seaMonster.Length);
 
@@ -458,25 +448,24 @@ public sealed class Day20 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        var tiles = await ReadResourceAsLinesAsync(cancellationToken);
+        string image = string.Empty;
 
-        (long productOfCornerTiles, int waterRoughness, string image) = GetCornerTileIdProduct(tiles, Logger, cancellationToken);
+        var result = await SolveWithLinesAsync(
+            (tiles, logger, cancellationToken) =>
+            {
+                (long productOfCornerTiles, int waterRoughness, image) = GetCornerTileIdProduct(tiles, logger, cancellationToken);
 
-        ProductOfCornerTiles = productOfCornerTiles;
-        WaterRoughness = waterRoughness;
+                if (logger is { })
+                {
+                    logger.WriteLine(image);
+                    logger.WriteLine("The product of the Ids of the four corner tiles is {0}.", productOfCornerTiles);
+                    logger.WriteLine("The roughness of the water is {0}.", waterRoughness);
+                }
 
-        Logger.WriteLine(image);
+                return (productOfCornerTiles, waterRoughness);
+            },
+            cancellationToken);
 
-        if (Verbose)
-        {
-            Logger.WriteLine("The product of the Ids of the four corner tiles is {0}.", ProductOfCornerTiles);
-            Logger.WriteLine("The roughness of the water is {0}.", WaterRoughness);
-        }
-
-        var result = new PuzzleResult();
-
-        result.Solutions.Add(ProductOfCornerTiles);
-        result.Solutions.Add(WaterRoughness);
         result.Visualizations.Add(image);
 
         return result;

@@ -29,7 +29,7 @@ public sealed class Day01Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         var puzzle = await SolvePuzzleAsync<Day01>();
 
         // Assert
-        puzzle.DepthIncreases.ShouldBe(1532);
-        puzzle.DepthIncreasesWithSlidingWindow.ShouldBe(1571);
+        puzzle.Solution1.ShouldBe(1532);
+        puzzle.Solution2.ShouldBe(1571);
     }
 }

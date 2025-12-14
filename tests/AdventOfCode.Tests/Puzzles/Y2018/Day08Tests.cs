@@ -26,7 +26,7 @@ public sealed class Day08Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         var puzzle = await SolvePuzzleAsync<Day08>();
 
         // Assert
-        puzzle.SumOfMetadata.ShouldBe(45210);
-        puzzle.RootNodeValue.ShouldBe(22793);
+        puzzle.Solution1.ShouldBe(45210);
+        puzzle.Solution2.ShouldBe(22793);
     }
 }

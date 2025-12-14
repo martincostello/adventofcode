@@ -7,18 +7,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2021;
 /// A class representing the puzzle for <c>https://adventofcode.com/2021/day/13</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2021, 13, "Transparent Origami", RequiresData = true)]
-public sealed class Day13 : Puzzle
+public sealed class Day13 : Puzzle<int, string>
 {
-    /// <summary>
-    /// Gets the number of dots that are visible after completing the first fold.
-    /// </summary>
-    public int DotCountAfterFold1 { get; private set; }
-
-    /// <summary>
-    /// Gets the activation code for the infrared thermal imaging camera system.
-    /// </summary>
-    public string? ActivationCode { get; private set; }
-
     /// <summary>
     /// Folds the transparent paper the specified number of times.
     /// </summary>
@@ -30,7 +20,7 @@ public sealed class Day13 : Puzzle
     /// and the activation code on the paper if <paramref name="folds"/> is <see langword="null"/>,
     /// and a visualization of the paper if <paramref name="folds"/> is <see langword="null"/>.
     /// </returns>
-    public static (int DotCount, string? ActivationCode, string? Visualization) Fold(
+    public static (int DotCount, string ActivationCode, string? Visualization) Fold(
         IList<string> instructions,
         int? folds,
         ILogger? logger = null)
@@ -100,7 +90,7 @@ public sealed class Day13 : Puzzle
             }
         }
 
-        string? activationCode = null;
+        string activationCode = string.Empty;
         string? visualization = null;
 
         if (folds is null)
@@ -135,26 +125,29 @@ public sealed class Day13 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        var instructions = await ReadResourceAsLinesAsync(cancellationToken);
+        string? visualization = null;
 
-        (DotCountAfterFold1, _, _) = Fold(instructions, folds: 1);
-        (_, ActivationCode, string? visualization) = Fold(instructions, folds: null, Logger);
+        var result = await SolveWithLinesAsync(
+            (instructions, logger, cancellationToken) =>
+            {
+                (int dotCountAfterFold1, _, _) = Fold(instructions, folds: 1);
+                (_, string activationCode, visualization) = Fold(instructions, folds: null, logger);
 
-        if (Verbose)
-        {
-            Logger.WriteLine(
-                "{0:N0} dots are visible after completing the first fold.",
-                DotCountAfterFold1);
+                if (logger is { })
+                {
+                    logger.WriteLine(
+                        "{0:N0} dots are visible after completing the first fold.",
+                        dotCountAfterFold1);
 
-            Logger.WriteLine(
-                "The code to activate the infrared thermal imaging camera system is {0}.",
-                ActivationCode!);
-        }
+                    logger.WriteLine(
+                        "The code to activate the infrared thermal imaging camera system is {0}.",
+                        activationCode);
+                }
 
-        var result = new PuzzleResult();
+                return (dotCountAfterFold1, activationCode);
+            },
+            cancellationToken);
 
-        result.Solutions.Add(DotCountAfterFold1);
-        result.Solutions.Add(ActivationCode!);
         result.Visualizations.Add(visualization!);
 
         return result;

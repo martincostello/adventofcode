@@ -7,18 +7,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020;
 /// A class representing the puzzle for <c>https://adventofcode.com/2020/day/3</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2020, 03, "Toboggan Trajectory", RequiresData = true)]
-public sealed class Day03 : Puzzle
+public sealed class Day03 : Puzzle<long, long>
 {
-    /// <summary>
-    /// Gets the number of trees collided with when traversing the grid.
-    /// </summary>
-    public long TreeCollisions { get; private set; }
-
-    /// <summary>
-    /// Gets the product of the number of trees collided with when traversing the grids.
-    /// </summary>
-    public long ProductOfTreeCollisions { get; private set; }
-
     /// <summary>
     /// Gets the number of trees that would be collided with by
     /// traversing the specified grid in the specified direction.
@@ -78,34 +68,37 @@ public sealed class Day03 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        var grid = await ReadResourceAsLinesAsync(cancellationToken);
+        return await SolveWithLinesAsync(
+            static (grid, logger, _) =>
+            {
+                Point[] slopes =
+                [
+                    new(1, 1),
+                    new(5, 1),
+                    new(7, 1),
+                    new(1, 2),
+                ];
 
-        var slopes = new[]
-        {
-            new Point(1, 1),
-            new Point(5, 1),
-            new Point(7, 1),
-            new Point(1, 2),
-        };
+                long treeCollisions = GetTreeCollisionCount(grid, 3, 1);
 
-        TreeCollisions = GetTreeCollisionCount(grid, 3, 1);
+                long product = treeCollisions;
 
-        long product = TreeCollisions;
+                for (int i = 0; i < slopes.Length; i++)
+                {
+                    var slope = slopes[i];
+                    product *= GetTreeCollisionCount(grid, slope.X, slope.Y);
+                }
 
-        for (int i = 0; i < slopes.Length; i++)
-        {
-            var slope = slopes[i];
-            product *= GetTreeCollisionCount(grid, slope.X, slope.Y);
-        }
+                long productOfTreeCollisions = product;
 
-        ProductOfTreeCollisions = product;
+                if (logger is { })
+                {
+                    logger.WriteLine("{0} trees would be encountered using a right-3/down-1 slope.", treeCollisions);
+                    logger.WriteLine("The product of the collisions from traversing the slopes is {0}.", productOfTreeCollisions);
+                }
 
-        if (Verbose)
-        {
-            Logger.WriteLine("{0} trees would be encountered using a right-3/down-1 slope.", TreeCollisions);
-            Logger.WriteLine("The product of the collisions from traversing the slopes is {0}.", ProductOfTreeCollisions);
-        }
-
-        return PuzzleResult.Create(TreeCollisions, ProductOfTreeCollisions);
+                return (treeCollisions, productOfTreeCollisions);
+            },
+            cancellationToken);
     }
 }

@@ -7,7 +7,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020;
 /// A class representing the puzzle for <c>https://adventofcode.com/2020/day/8</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2020, 08, "Handheld Halting", RequiresData = true)]
-public sealed class Day08 : Puzzle
+public sealed class Day08 : Puzzle<int, int>
 {
     /// <summary>
     /// An enumeration of CPU operations.
@@ -29,16 +29,6 @@ public sealed class Day08 : Puzzle
         /// </summary>
         Jump,
     }
-
-    /// <summary>
-    /// Gets the value of the accumulator after one iteration of the program has been completed.
-    /// </summary>
-    public int Accumulator { get; private set; }
-
-    /// <summary>
-    /// Gets the value of the accumulator when the fixed program has terminated.
-    /// </summary>
-    public int AccumulatorWithFix { get; private set; }
 
     /// <summary>
     /// Runs the specified program and returns the value of the accumulator.
@@ -90,18 +80,21 @@ public sealed class Day08 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        var program = await ReadResourceAsLinesAsync(cancellationToken);
+        return await SolveWithLinesAsync(
+            static (program, logger, _) =>
+            {
+                int accumulator = RunProgram(program, fix: false);
+                int accumulatorWithFix = RunProgram(program, fix: true);
 
-        Accumulator = RunProgram(program, fix: false);
-        AccumulatorWithFix = RunProgram(program, fix: true);
+                if (logger is { })
+                {
+                    logger.WriteLine("The value of the accumulator after one iteration is {0}.", accumulator);
+                    logger.WriteLine("The value of the accumulator when the fixed program completes is {0}.", accumulatorWithFix);
+                }
 
-        if (Verbose)
-        {
-            Logger.WriteLine("The value of the accumulator after one iteration is {0}.", Accumulator);
-            Logger.WriteLine("The value of the accumulator when the fixed program completes is {0}.", AccumulatorWithFix);
-        }
-
-        return PuzzleResult.Create(Accumulator, AccumulatorWithFix);
+                return (accumulator, accumulatorWithFix);
+            },
+            cancellationToken);
     }
 
     /// <summary>

@@ -34,7 +34,7 @@ public sealed class Day04Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         var puzzle = await SolvePuzzleAsync<Day04>(args);
 
         // Assert
-        puzzle.CountV1.ShouldBe(1890);
-        puzzle.CountV2.ShouldBe(1277);
+        puzzle.Solution1.ShouldBe(1890);
+        puzzle.Solution2.ShouldBe(1277);
     }
 }

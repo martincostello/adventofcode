@@ -9,18 +9,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2022;
 /// A class representing the puzzle for <c>https://adventofcode.com/2022/day/7</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2022, 07, "No Space Left On Device", RequiresData = true)]
-public sealed class Day07 : Puzzle
+public sealed class Day07 : Puzzle<long, long>
 {
-    /// <summary>
-    /// Gets the total size of all directories with a total size of at least 100,000.
-    /// </summary>
-    public long TotalSizeOfDirectoriesLargerThanLimit { get; private set; }
-
-    /// <summary>
-    /// Gets the total size of the smallest directory to delete that frees enough disk space.
-    /// </summary>
-    public long SizeOfSmallestDirectoryToDelete { get; private set; }
-
     /// <summary>
     /// Finds the total size of the directories with a total size of at least 100,000 and
     /// the total size of the smallest directory to delete that frees enough disk space.
@@ -136,22 +126,25 @@ public sealed class Day07 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        var terminalOutput = await ReadResourceAsLinesAsync(cancellationToken);
+        return await SolveWithLinesAsync(
+            static (terminalOutput, logger, _) =>
+            {
+                (long totalSizeOfDirectoriesLargerThanLimit, long sizeOfSmallestDirectoryToDelete) = GetDirectorySizes(terminalOutput);
 
-        (TotalSizeOfDirectoriesLargerThanLimit, SizeOfSmallestDirectoryToDelete) = GetDirectorySizes(terminalOutput);
+                if (logger is { })
+                {
+                    logger.WriteLine(
+                        "The sum of the total sizes of the directories with a total size of at most 100,000 is {0}.",
+                        totalSizeOfDirectoriesLargerThanLimit);
 
-        if (Verbose)
-        {
-            Logger.WriteLine(
-                "The sum of the total sizes of the directories with a total size of at most 100,000 is {0}.",
-                TotalSizeOfDirectoriesLargerThanLimit);
+                    logger.WriteLine(
+                        "The sizes of the directory would free up enough space on the filesystem to run the update is {0}.",
+                        sizeOfSmallestDirectoryToDelete);
+                }
 
-            Logger.WriteLine(
-                "The sizes of the directory would free up enough space on the filesystem to run the update is {0}.",
-                SizeOfSmallestDirectoryToDelete);
-        }
-
-        return PuzzleResult.Create(TotalSizeOfDirectoriesLargerThanLimit, SizeOfSmallestDirectoryToDelete);
+                return (totalSizeOfDirectoriesLargerThanLimit, sizeOfSmallestDirectoryToDelete);
+            },
+            cancellationToken);
     }
 
     private abstract record FileSystemEntry(string Name, FileSystemEntry? Container)

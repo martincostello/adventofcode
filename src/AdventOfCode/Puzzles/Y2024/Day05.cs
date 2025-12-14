@@ -7,18 +7,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2024;
 /// A class representing the puzzle for <c>https://adventofcode.com/2024/day/5</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2024, 05, "Print Queue", RequiresData = true)]
-public sealed class Day05 : Puzzle
+public sealed class Day05 : Puzzle<int, int>
 {
-    /// <summary>
-    /// Gets the sum of the middle page numbers for correctly-ordered updates.
-    /// </summary>
-    public int MiddlePageSumCorrect { get; private set; }
-
-    /// <summary>
-    /// Gets the sum of the middle page numbers for incorrectly-ordered updates once fixed.
-    /// </summary>
-    public int MiddlePageSumIncorrect { get; private set; }
-
     /// <summary>
     /// Sorts the rules and returns the sum of the middle page numbers for page updates.
     /// </summary>
@@ -72,19 +62,20 @@ public sealed class Day05 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        ArgumentNullException.ThrowIfNull(args);
+        return await SolveWithLinesAsync(
+            static (values, logger, _) =>
+            {
+                int middlePageSumIncorrect = Sort(values, fix: false);
+                int middlePageSumCorrect = Sort(values, fix: true);
 
-        var values = await ReadResourceAsLinesAsync(cancellationToken);
+                if (logger is { })
+                {
+                    logger.WriteLine("The sum of the middle page numbers from correctly-ordered updates is {0}.", middlePageSumIncorrect);
+                    logger.WriteLine("The sum of the middle page numbers after correctly ordering incorrectly-ordered updates is {0}.", middlePageSumCorrect);
+                }
 
-        MiddlePageSumCorrect = Sort(values, fix: false);
-        MiddlePageSumIncorrect = Sort(values, fix: true);
-
-        if (Verbose)
-        {
-            Logger.WriteLine("The sum of the middle page numbers from correctly-ordered updates is {0}.", MiddlePageSumCorrect);
-            Logger.WriteLine("The sum of the middle page numbers after correctly ordering incorrectly-ordered updates is {0}.", MiddlePageSumIncorrect);
-        }
-
-        return PuzzleResult.Create(MiddlePageSumCorrect, MiddlePageSumIncorrect);
+                return (middlePageSumIncorrect, middlePageSumCorrect);
+            },
+            cancellationToken);
     }
 }

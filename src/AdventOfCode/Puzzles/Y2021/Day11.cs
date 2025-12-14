@@ -7,18 +7,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2021;
 /// A class representing the puzzle for <c>https://adventofcode.com/2021/day/11</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2021, 11, "Dumbo Octopus", RequiresData = true)]
-public sealed class Day11 : Puzzle
+public sealed class Day11 : Puzzle<int, int>
 {
-    /// <summary>
-    /// Gets the number of flashes after 100 steps.
-    /// </summary>
-    public int Flashes100 { get; private set; }
-
-    /// <summary>
-    /// Gets the number of the first step where all the octopuses flash.
-    /// </summary>
-    public int StepOfFirstSynchronizedFlash { get; private set; }
-
     /// <summary>
     /// Simulates the energy levels of the specified octopuses.
     /// </summary>
@@ -149,17 +139,20 @@ public sealed class Day11 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        var lines = await ReadResourceAsLinesAsync(cancellationToken);
+        return await SolveWithLinesAsync(
+            static (lines, logger, cancellationToken) =>
+            {
+                (int flashes100, _) = Simulate(lines, steps: 100);
+                (_, int stepOfFirstSynchronizedFlash) = Simulate(lines, steps: int.MaxValue);
 
-        (Flashes100, _) = Simulate(lines, steps: 100);
-        (_, StepOfFirstSynchronizedFlash) = Simulate(lines, steps: int.MaxValue);
+                if (logger is { })
+                {
+                    logger.WriteLine("After 100 steps there are {0:N0} flashes.", flashes100);
+                    logger.WriteLine("The octopuses all flash for the first time after {0:N0} steps.", stepOfFirstSynchronizedFlash);
+                }
 
-        if (Verbose)
-        {
-            Logger.WriteLine("After 100 steps there are {0:N0} flashes.", Flashes100);
-            Logger.WriteLine("The octopuses all flash for the first time after {0:N0} steps.", StepOfFirstSynchronizedFlash);
-        }
-
-        return PuzzleResult.Create(Flashes100, StepOfFirstSynchronizedFlash);
+                return (flashes100, stepOfFirstSynchronizedFlash);
+            },
+            cancellationToken);
     }
 }

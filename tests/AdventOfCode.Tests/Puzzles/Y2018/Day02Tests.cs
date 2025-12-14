@@ -46,7 +46,7 @@ public sealed class Day02Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         var puzzle = await SolvePuzzleAsync<Day02>();
 
         // Assert
-        puzzle.Checksum.ShouldBe(5880);
-        puzzle.CommonLettersForBoxes.ShouldBe("tiwcdpbseqhxryfmgkvjujvza");
+        puzzle.Solution1.ShouldBe(5880);
+        puzzle.Solution2.ShouldBe("tiwcdpbseqhxryfmgkvjujvza");
     }
 }

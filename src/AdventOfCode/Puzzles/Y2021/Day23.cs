@@ -9,18 +9,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2021;
 /// A class representing the puzzle for <c>https://adventofcode.com/2021/day/23</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2021, 23, "Amphipod", RequiresData = true, IsSlow = true)]
-public sealed class Day23 : Puzzle
+public sealed class Day23 : Puzzle<int, int>
 {
-    /// <summary>
-    /// Gets the least energy required to organize the amphipods with the diagram folded.
-    /// </summary>
-    public int MinimumEnergyFolded { get; private set; }
-
-    /// <summary>
-    /// Gets the least energy required to organize the amphipods with the diagram unfolded.
-    /// </summary>
-    public int MinimumEnergyUnfolded { get; private set; }
-
     /// <summary>
     /// Organizes the specified amphipods into the correct burrows.
     /// </summary>
@@ -60,18 +50,21 @@ public sealed class Day23 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        var diagram = await ReadResourceAsLinesAsync(cancellationToken);
+        return await SolveWithLinesAsync(
+            static async (diagram, logger, cancellationToken) =>
+            {
+                int minimumEnergyFolded = Organize(diagram, unfoldDiagram: false, cancellationToken);
+                int minimumEnergyUnfolded = Organize(diagram, unfoldDiagram: true, cancellationToken);
 
-        MinimumEnergyFolded = Organize(diagram, unfoldDiagram: false, cancellationToken);
-        MinimumEnergyUnfolded = Organize(diagram, unfoldDiagram: true, cancellationToken);
+                if (logger is { })
+                {
+                    logger.WriteLine("The least energy required to organize the amphipods with the diagram folded is {0:N0}.", minimumEnergyFolded);
+                    logger.WriteLine("The least energy required to organize the amphipods with the diagram unfolded is {0:N0}.", minimumEnergyUnfolded);
+                }
 
-        if (Verbose)
-        {
-            Logger.WriteLine("The least energy required to organize the amphipods with the diagram folded is {0:N0}.", MinimumEnergyFolded);
-            Logger.WriteLine("The least energy required to organize the amphipods with the diagram unfolded is {0:N0}.", MinimumEnergyUnfolded);
-        }
-
-        return PuzzleResult.Create(MinimumEnergyFolded, MinimumEnergyUnfolded);
+                return (minimumEnergyFolded, minimumEnergyUnfolded);
+            },
+            cancellationToken);
     }
 
     private record struct State(string Hallway, string Amber, string Bronze, string Copper, string Desert)

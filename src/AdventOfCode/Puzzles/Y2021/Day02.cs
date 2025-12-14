@@ -7,21 +7,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2021;
 /// A class representing the puzzle for <c>https://adventofcode.com/2021/day/2</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2021, 02, "Dive!", RequiresData = true)]
-public sealed class Day02 : Puzzle
+public sealed class Day02 : Puzzle<int, int>
 {
-    /// <summary>
-    /// Gets the product of the depth and horizontal
-    /// position of the submarine at the end of its course.
-    /// </summary>
-    public int ProductOfFinalPosition { get; private set; }
-
-    /// <summary>
-    /// Gets the product of the depth and horizontal position
-    /// of the submarine at the end of its course when the aim
-    /// of the submarine is accounted for.
-    /// </summary>
-    public int ProductOfFinalPositionWithAim { get; private set; }
-
     /// <summary>
     /// Navigates the submarine through the specified course.
     /// </summary>
@@ -76,22 +63,25 @@ public sealed class Day02 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        var course = await ReadResourceAsLinesAsync(cancellationToken);
+        return await SolveWithLinesAsync(
+            static (course, logger, _) =>
+            {
+                int productOfFinalPosition = NavigateCourse(course, useAim: false);
+                int productOfFinalPositionWithAim = NavigateCourse(course, useAim: true);
 
-        ProductOfFinalPosition = NavigateCourse(course, useAim: false);
-        ProductOfFinalPositionWithAim = NavigateCourse(course, useAim: true);
+                if (logger is { })
+                {
+                    logger.WriteLine(
+                        "The product of the submarine's final depth and forward position is {0:N0}.",
+                        productOfFinalPosition);
 
-        if (Verbose)
-        {
-            Logger.WriteLine(
-                "The product of the submarine's final depth and forward position is {0:N0}.",
-                ProductOfFinalPosition);
+                    logger.WriteLine(
+                        "The product of the submarine's final depth and forward position is {0:N0} when accounting for aim.",
+                        productOfFinalPositionWithAim);
+                }
 
-            Logger.WriteLine(
-                "The product of the submarine's final depth and forward position is {0:N0} when accounting for aim.",
-                ProductOfFinalPositionWithAim);
-        }
-
-        return PuzzleResult.Create(ProductOfFinalPosition, ProductOfFinalPositionWithAim);
+                return (productOfFinalPosition, productOfFinalPositionWithAim);
+            },
+            cancellationToken);
     }
 }

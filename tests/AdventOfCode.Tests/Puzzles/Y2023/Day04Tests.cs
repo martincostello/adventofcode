@@ -34,8 +34,7 @@ public sealed class Day04Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         var puzzle = await SolvePuzzleAsync<Day04>();
 
         // Assert
-        puzzle.ShouldNotBeNull();
-        puzzle.TotalPoints.ShouldBe(21138);
-        puzzle.TotalScratchcards.ShouldBe(7185540);
+        puzzle.Solution1.ShouldBe(21138);
+        puzzle.Solution2.ShouldBe(7185540);
     }
 }

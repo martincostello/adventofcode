@@ -9,18 +9,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2024;
 /// A class representing the puzzle for <c>https://adventofcode.com/2024/day/13</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2024, 13, "Claw Contraption", RequiresData = true)]
-public sealed class Day13 : Puzzle
+public sealed class Day13 : Puzzle<long, long>
 {
-    /// <summary>
-    /// Gets the fewest tokens needed to be spent to win all possible prizes.
-    /// </summary>
-    public long FewestTokens { get; private set; }
-
-    /// <summary>
-    /// Gets the fewest tokens needed to be spent to win all possible prizes with the correct offset.
-    /// </summary>
-    public long FewestTokensFixed { get; private set; }
-
     /// <summary>
     /// Plays the specified claw machines.
     /// </summary>
@@ -72,20 +62,21 @@ public sealed class Day13 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        ArgumentNullException.ThrowIfNull(args);
+        return await SolveWithLinesAsync(
+            static (values, logger, _) =>
+            {
+                long fewestTokens = Play(values, offset: 0, limit: 100);
+                long fewestTokensFixed = Play(values, offset: 10_000_000_000_000, limit: long.MaxValue);
 
-        var values = await ReadResourceAsLinesAsync(cancellationToken);
+                if (logger is { })
+                {
+                    logger.WriteLine("The fewest tokens you would have to spend to win all possible prizes is {0}.", fewestTokens);
+                    logger.WriteLine("The fewest tokens you would have to spend to win all possible prizes with the correct offset is {0}.", fewestTokensFixed);
+                }
 
-        FewestTokens = Play(values, offset: 0, limit: 100);
-        FewestTokensFixed = Play(values, offset: 10_000_000_000_000, limit: long.MaxValue);
-
-        if (Verbose)
-        {
-            Logger.WriteLine("The fewest tokens you would have to spend to win all possible prizes is {0}.", FewestTokens);
-            Logger.WriteLine("The fewest tokens you would have to spend to win all possible prizes with the correct offset is {0}.", FewestTokensFixed);
-        }
-
-        return PuzzleResult.Create(FewestTokens, FewestTokensFixed);
+                return (fewestTokens, fewestTokensFixed);
+            },
+            cancellationToken);
     }
 
     private sealed record ClawMachine(Point A, Point B, Point Prize)

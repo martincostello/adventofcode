@@ -7,18 +7,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017;
 /// A class representing the puzzle for <c>https://adventofcode.com/2017/day/1</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2017, 01, "Inverse Captcha", RequiresData = true)]
-public sealed class Day01 : Puzzle
+public sealed class Day01 : Puzzle<int, int>
 {
-    /// <summary>
-    /// Gets the solution to the captcha using the next number.
-    /// </summary>
-    public int CaptchaSolutionNext { get; private set; }
-
-    /// <summary>
-    /// Gets the solution to the captcha using the "opposite" number.
-    /// </summary>
-    public int CaptchaSolutionOpposite { get; private set; }
-
     /// <summary>
     /// Calculates the sum of all digits that match either the next or "opposite" digit in the specified string.
     /// </summary>
@@ -56,17 +46,22 @@ public sealed class Day01 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        string digits = (await ReadResourceAsStringAsync(cancellationToken)).TrimEnd();
+        return await SolveWithStringAsync(
+            static async (digits, logger, _) =>
+            {
+                digits = digits.TrimEnd();
 
-        CaptchaSolutionNext = CalculateSum(digits, useOppositeDigit: false);
-        CaptchaSolutionOpposite = CalculateSum(digits, useOppositeDigit: true);
+                int captchaSolutionNext = CalculateSum(digits, useOppositeDigit: false);
+                int captchaSolutionOpposite = CalculateSum(digits, useOppositeDigit: true);
 
-        if (Verbose)
-        {
-            Logger.WriteLine($"The solution to the first captcha is {CaptchaSolutionNext:N0}.");
-            Logger.WriteLine($"The solution to the second captcha is {CaptchaSolutionOpposite:N0}.");
-        }
+                if (logger is { })
+                {
+                    logger.WriteLine($"The solution to the first captcha is {captchaSolutionNext:N0}.");
+                    logger.WriteLine($"The solution to the second captcha is {captchaSolutionOpposite:N0}.");
+                }
 
-        return PuzzleResult.Create(CaptchaSolutionNext, CaptchaSolutionOpposite);
+                return (captchaSolutionNext, captchaSolutionOpposite);
+            },
+            cancellationToken);
     }
 }

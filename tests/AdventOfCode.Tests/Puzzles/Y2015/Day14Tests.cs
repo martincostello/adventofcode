@@ -76,7 +76,7 @@ public sealed class Day14Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         var puzzle = await SolvePuzzleAsync<Day14>("2503");
 
         // Assert
-        puzzle.MaximumReindeerDistance.ShouldBe(2655);
-        puzzle.MaximumReindeerPoints.ShouldBe(1059);
+        puzzle.Solution1.ShouldBe(2655);
+        puzzle.Solution2.ShouldBe(1059);
     }
 }

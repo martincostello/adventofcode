@@ -7,18 +7,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017;
 /// A class representing the puzzle for <c>https://adventofcode.com/2017/day/7</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2017, 07, "Recursive Circus", RequiresData = true)]
-public sealed class Day07 : Puzzle
+public sealed class Day07 : Puzzle<string, int>
 {
-    /// <summary>
-    /// Gets the name of the bottom program.
-    /// </summary>
-    public string? BottomProgramName { get; private set; }
-
-    /// <summary>
-    /// Gets the weight that the disc that unbalances the structure should be to balance it.
-    /// </summary>
-    public int DesiredWeightOfUnbalancedDisc { get; private set; }
-
     /// <summary>
     /// Finds the name of the program at the bottom of the specified structure.
     /// </summary>
@@ -52,18 +42,21 @@ public sealed class Day07 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        var structure = await ReadResourceAsLinesAsync(cancellationToken);
+        return await SolveWithLinesAsync(
+            static (structure, logger, _) =>
+            {
+                string bottomProgramName = FindBottomProgramName(structure);
+                int desiredWeightOfUnbalancedDisc = FindDesiredWeightOfUnbalancedDisc(structure);
 
-        BottomProgramName = FindBottomProgramName(structure);
-        DesiredWeightOfUnbalancedDisc = FindDesiredWeightOfUnbalancedDisc(structure);
+                if (logger is { })
+                {
+                    logger.WriteLine($"The name of the bottom program is '{bottomProgramName}'.");
+                    logger.WriteLine($"The desired weight of the program to balance the structure is {desiredWeightOfUnbalancedDisc:N0}.");
+                }
 
-        if (Verbose)
-        {
-            Logger.WriteLine($"The name of the bottom program is '{BottomProgramName}'.");
-            Logger.WriteLine($"The desired weight of the program to balance the structure is {DesiredWeightOfUnbalancedDisc:N0}.");
-        }
-
-        return PuzzleResult.Create(BottomProgramName, DesiredWeightOfUnbalancedDisc);
+                return (bottomProgramName, desiredWeightOfUnbalancedDisc);
+            },
+            cancellationToken);
     }
 
     /// <summary>

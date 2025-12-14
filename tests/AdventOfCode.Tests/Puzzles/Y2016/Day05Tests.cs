@@ -24,7 +24,7 @@ public sealed class Day05Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         var puzzle = await SolvePuzzleAsync<Day05>("wtnhxymk");
 
         // Assert
-        puzzle.Password.ShouldBe("2414bc77");
-        puzzle.PasswordWhenPositionIsIndicated.ShouldBe("437e60fc");
+        puzzle.Solution1.ShouldBe("2414bc77");
+        puzzle.Solution2.ShouldBe("437e60fc");
     }
 }

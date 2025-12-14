@@ -7,18 +7,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015;
 /// A class representing the puzzle for <c>https://adventofcode.com/2015/day/3</c>.
 /// </summary>
 [Puzzle(2015, 03, "Perfectly Spherical Houses in a Vacuum", RequiresData = true)]
-public class Day03 : Puzzle
+public class Day03 : Puzzle<int, int>
 {
-    /// <summary>
-    /// Gets the number of houses with presents delivered to by Santa.
-    /// </summary>
-    internal int HousesWithPresentsFromSanta { get; private set; }
-
-    /// <summary>
-    /// Gets the number of houses with presents delivered to by Santa and Robo-Santa.
-    /// </summary>
-    internal int HousesWithPresentsFromSantaAndRoboSanta { get; private set; }
-
     /// <summary>
     /// Gets the number of unique houses that Santa delivers at least one present to.
     /// </summary>
@@ -73,23 +63,26 @@ public class Day03 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        string instructions = await ReadResourceAsStringAsync(cancellationToken);
+        return await SolveWithStringAsync(
+            static (instructions, logger, _) =>
+            {
+                int housesWithPresentsFromSanta = GetUniqueHousesVisitedBySanta(instructions);
+                int housesWithPresentsFromSantaAndRoboSanta = GetUniqueHousesVisitedBySantaAndRoboSanta(instructions);
 
-        HousesWithPresentsFromSanta = GetUniqueHousesVisitedBySanta(instructions);
-        HousesWithPresentsFromSantaAndRoboSanta = GetUniqueHousesVisitedBySantaAndRoboSanta(instructions);
+                if (logger is { })
+                {
+                    logger.WriteLine(
+                        "In 2015, Santa delivered presents to {0:N0} houses.",
+                        housesWithPresentsFromSanta);
 
-        if (Verbose)
-        {
-            Logger.WriteLine(
-                "In 2015, Santa delivered presents to {0:N0} houses.",
-                HousesWithPresentsFromSanta);
+                    logger.WriteLine(
+                        "In 2016, Santa and Robo-Santa delivered presents to {0:N0} houses.",
+                        housesWithPresentsFromSantaAndRoboSanta);
+                }
 
-            Logger.WriteLine(
-                "In 2016, Santa and Robo-Santa delivered presents to {0:N0} houses.",
-                HousesWithPresentsFromSantaAndRoboSanta);
-        }
-
-        return PuzzleResult.Create(HousesWithPresentsFromSanta, HousesWithPresentsFromSantaAndRoboSanta);
+                return (housesWithPresentsFromSanta, housesWithPresentsFromSantaAndRoboSanta);
+            },
+            cancellationToken);
     }
 
     /// <summary>

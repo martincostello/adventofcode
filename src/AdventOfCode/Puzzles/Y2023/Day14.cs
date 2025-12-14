@@ -7,18 +7,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2023;
 /// A class representing the puzzle for <c>https://adventofcode.com/2023/day/14</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2023, 14, "Parabolic Reflector Dish", RequiresData = true)]
-public sealed class Day14 : Puzzle
+public sealed class Day14 : Puzzle<int, int>
 {
-    /// <summary>
-    /// Gets the total load on the northern support beams.
-    /// </summary>
-    public int TotalLoad { get; private set; }
-
-    /// <summary>
-    /// Gets the total load on the northern support beams after 1 billion rotations of the spin cycle.
-    /// </summary>
-    public int TotalLoadWithSpinCycle { get; private set; }
-
     /// <summary>
     /// Computes the total load on the northern support beams.
     /// </summary>
@@ -195,20 +185,24 @@ public sealed class Day14 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        ArgumentNullException.ThrowIfNull(args);
+        string visualizationNorth = string.Empty;
+        string visualizationCycles = string.Empty;
 
-        var positions = await ReadResourceAsLinesAsync(cancellationToken);
+        var result = await SolveWithLinesAsync(
+            (positions, logger, cancellationToken) =>
+            {
+                (int totalLoad, visualizationNorth) = ComputeLoad(positions, rotations: 0, logger, cancellationToken);
+                (int totalLoadWithSpinCycle, visualizationCycles) = ComputeLoad(positions, rotations: 1_000_000_000, logger, cancellationToken);
 
-        (TotalLoad, string visualizationNorth) = ComputeLoad(positions, rotations: 0, Logger, cancellationToken);
-        (TotalLoadWithSpinCycle, string visualizationCycles) = ComputeLoad(positions, rotations: 1_000_000_000, Logger, cancellationToken);
+                if (logger is { })
+                {
+                    Logger.WriteLine("The total load on the north support beams is {0}.", Solution1);
+                    Logger.WriteLine("The total load on the north support beams after 1,000,000,000 spins is {0}.", Solution2);
+                }
 
-        if (Verbose)
-        {
-            Logger.WriteLine("The total load on the north support beams is {0}.", TotalLoad);
-            Logger.WriteLine("The total load on the north support beams after 1,000,000,000 spins is {0}.", TotalLoad, TotalLoadWithSpinCycle);
-        }
-
-        var result = PuzzleResult.Create(TotalLoad, TotalLoadWithSpinCycle);
+                return (totalLoad, totalLoadWithSpinCycle);
+            },
+            cancellationToken);
 
         result.Visualizations.Add(visualizationNorth);
         result.Visualizations.Add(visualizationCycles);

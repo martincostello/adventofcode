@@ -7,18 +7,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2023;
 /// A class representing the puzzle for <c>https://adventofcode.com/2023/day/06</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2023, 06, "Wait For It", RequiresData = true)]
-public sealed class Day06 : Puzzle
+public sealed class Day06 : Puzzle<long, long>
 {
-    /// <summary>
-    /// Gets the product of the number of combinations of ways to beat the record.
-    /// </summary>
-    public long CombinationsProduct { get; private set; }
-
-    /// <summary>
-    /// Gets the product of the number of combinations of ways to beat the record with the kerning fixed.
-    /// </summary>
-    public long CombinationsProductWithFix { get; private set; }
-
     /// <summary>
     /// Races the specified boats.
     /// </summary>
@@ -101,19 +91,20 @@ public sealed class Day06 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        ArgumentNullException.ThrowIfNull(args);
+        return await SolveWithLinesAsync(
+            static (values, logger, _) =>
+            {
+                long combinationsProduct = Race(values, fixKerning: false);
+                long combinationsProductWithFix = Race(values, fixKerning: true);
 
-        var values = await ReadResourceAsLinesAsync(cancellationToken);
+                if (logger is { })
+                {
+                    logger.WriteLine("The product of the number of ways to beat the record is {0}.", combinationsProduct);
+                    logger.WriteLine("The product of the number of ways to beat the record with the kerning fixed is {0}.", combinationsProductWithFix);
+                }
 
-        CombinationsProduct = Race(values, fixKerning: false);
-        CombinationsProductWithFix = Race(values, fixKerning: true);
-
-        if (Verbose)
-        {
-            Logger.WriteLine("The product of the number of ways to beat the record is {0}.", CombinationsProduct);
-            Logger.WriteLine("The product of the number of ways to beat the record with the kerning fixed is {0}.", CombinationsProductWithFix);
-        }
-
-        return PuzzleResult.Create(CombinationsProduct, CombinationsProductWithFix);
+                return (combinationsProduct, combinationsProductWithFix);
+            },
+            cancellationToken);
     }
 }

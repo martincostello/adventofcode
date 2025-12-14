@@ -41,7 +41,7 @@ public sealed class Day07Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         var puzzle = await SolvePuzzleAsync<Day07>();
 
         // Assert
-        puzzle.OrderOfAssembly.ShouldBe("BGJCNLQUYIFMOEZTADKSPVXRHW");
-        puzzle.TimeToAssemble.ShouldBe(1017);
+        puzzle.Solution1.ShouldBe("BGJCNLQUYIFMOEZTADKSPVXRHW");
+        puzzle.Solution2.ShouldBe(1017);
     }
 }

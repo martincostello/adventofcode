@@ -7,18 +7,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2021;
 /// A class representing the puzzle for <c>https://adventofcode.com/2021/day/15</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2021, 15, "Chiton", RequiresData = true)]
-public sealed class Day15 : Puzzle
+public sealed class Day15 : Puzzle<int, int>
 {
-    /// <summary>
-    /// Gets the path through the cave with the lowest total risk using the small map.
-    /// </summary>
-    public int RiskLevelSmall { get; private set; }
-
-    /// <summary>
-    /// Gets the path through the cave with the lowest total risk using the large map.
-    /// </summary>
-    public int RiskLevelLarge { get; private set; }
-
     /// <summary>
     /// Gets the minimum risk level from the specified path.
     /// </summary>
@@ -103,23 +93,26 @@ public sealed class Day15 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        var riskMap = await ReadResourceAsLinesAsync(cancellationToken);
+        return await SolveWithLinesAsync(
+            static (riskMap, logger, cancellationToken) =>
+            {
+                int riskLevelSmall = GetRiskLevel(riskMap, largeMap: false, cancellationToken);
+                int riskLevelLarge = GetRiskLevel(riskMap, largeMap: true, cancellationToken);
 
-        RiskLevelSmall = GetRiskLevel(riskMap, largeMap: false, cancellationToken);
-        RiskLevelLarge = GetRiskLevel(riskMap, largeMap: true, cancellationToken);
+                if (logger is { })
+                {
+                    logger.WriteLine(
+                        "The lowest total risk of any path from the top left to the bottom right using the small map is {0:N0}.",
+                        riskLevelSmall);
 
-        if (Verbose)
-        {
-            Logger.WriteLine(
-                "The lowest total risk of any path from the top left to the bottom right using the small map is {0:N0}.",
-                RiskLevelSmall);
+                    logger.WriteLine(
+                        "The lowest total risk of any path from the top left to the bottom right using the large map is {0:N0}.",
+                        riskLevelLarge);
+                }
 
-            Logger.WriteLine(
-                "The lowest total risk of any path from the top left to the bottom right using the large map is {0:N0}.",
-                RiskLevelLarge);
-        }
-
-        return PuzzleResult.Create(RiskLevelSmall, RiskLevelLarge);
+                return (riskLevelSmall, riskLevelLarge);
+            },
+            cancellationToken);
     }
 
     private sealed class RiskMap(int width, int height, Dictionary<Point, int> risks) : SquareGrid(width, height)

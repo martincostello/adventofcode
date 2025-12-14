@@ -7,18 +7,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2018;
 /// A class representing the puzzle for <c>https://adventofcode.com/2018/day/1</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2018, 01, "Chronal Calibration", RequiresData = true, IsSlow = true)]
-public sealed class Day01 : Puzzle
+public sealed class Day01 : Puzzle<int, int>
 {
-    /// <summary>
-    /// Gets the frequency of the device calculated from the sequence.
-    /// </summary>
-    public int Frequency { get; private set; }
-
-    /// <summary>
-    /// Gets the frequency of the device calculated from the sequence that is repeated first.
-    /// </summary>
-    public int FirstRepeatedFrequency { get; private set; }
-
     /// <summary>
     /// Calculates the resulting frequency after applying the specified sequence.
     /// </summary>
@@ -77,17 +67,20 @@ public sealed class Day01 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        var sequence = await ReadResourceAsNumbersAsync<int>(cancellationToken);
+        return await SolveWithNumbersAsync<int>(
+            static (sequence, logger, _) =>
+            {
+                (int frequency, int firstRepeatedFrequency) = CalculateFrequencyWithRepetition(sequence);
 
-        (Frequency, FirstRepeatedFrequency) = CalculateFrequencyWithRepetition(sequence);
+                if (logger is { })
+                {
+                    logger.WriteLine($"The resulting frequency is {frequency:N0}.");
+                    logger.WriteLine($"The first repeated frequency is {firstRepeatedFrequency:N0}.");
+                }
 
-        if (Verbose)
-        {
-            Logger.WriteLine($"The resulting frequency is {Frequency:N0}.");
-            Logger.WriteLine($"The first repeated frequency is {FirstRepeatedFrequency:N0}.");
-        }
-
-        return PuzzleResult.Create(Frequency, FirstRepeatedFrequency);
+                return (frequency, firstRepeatedFrequency);
+            },
+            cancellationToken);
     }
 
     /// <summary>

@@ -47,7 +47,7 @@ public sealed class Day09Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         var puzzle = await SolvePuzzleAsync<Day09>();
 
         // Assert
-        puzzle.TotalScore.ShouldBe(11898);
-        puzzle.GarbageCount.ShouldBe(5601);
+        puzzle.Solution1.ShouldBe(11898);
+        puzzle.Solution2.ShouldBe(5601);
     }
 }

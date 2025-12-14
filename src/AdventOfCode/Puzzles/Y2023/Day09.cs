@@ -7,18 +7,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2023;
 /// A class representing the puzzle for <c>https://adventofcode.com/2023/day/09</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2023, 09, "Mirage Maintenance", RequiresData = true)]
-public sealed class Day09 : Puzzle
+public sealed class Day09 : Puzzle<int, int>
 {
-    /// <summary>
-    /// Gets the sum of the extrapolated next values.
-    /// </summary>
-    public int SumNext { get; private set; }
-
-    /// <summary>
-    /// Gets the sum of these extrapolated previous values.
-    /// </summary>
-    public int SumPrevious { get; private set; }
-
     /// <summary>
     /// Analyze the OASIS report and extrapolate the next value for each history.
     /// </summary>
@@ -76,19 +66,20 @@ public sealed class Day09 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        ArgumentNullException.ThrowIfNull(args);
+        return await SolveWithLinesAsync(
+            static (values, logger, _) =>
+            {
+                int sumNext = Analyze(values, reverse: false);
+                int sumPrevious = Analyze(values, reverse: true);
 
-        var values = await ReadResourceAsLinesAsync(cancellationToken);
+                if (logger is { })
+                {
+                    logger.WriteLine("The sum of the extrapolated next values is {0}.", sumNext);
+                    logger.WriteLine("The sum of the extrapolated previous values is {0}.", sumPrevious);
+                }
 
-        SumNext = Analyze(values, reverse: false);
-        SumPrevious = Analyze(values, reverse: true);
-
-        if (Verbose)
-        {
-            Logger.WriteLine("The sum of the extrapolated next values is {0}.", SumNext);
-            Logger.WriteLine("The sum of the extrapolated previous values is {0}.", SumPrevious);
-        }
-
-        return PuzzleResult.Create(SumNext, SumPrevious);
+                return (sumNext, sumPrevious);
+            },
+            cancellationToken);
     }
 }

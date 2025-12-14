@@ -9,18 +9,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2016;
 /// A class representing the puzzle for <c>https://adventofcode.com/2016/day/17</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2016, 17, "Two Steps Forward", MinimumArguments = 1)]
-public sealed class Day17 : Puzzle
+public sealed class Day17 : Puzzle<string, int>
 {
-    /// <summary>
-    /// Gets the shortest path to the vault.
-    /// </summary>
-    public string ShortestPathToVault { get; private set; } = string.Empty;
-
-    /// <summary>
-    /// Gets the longest path to the vault.
-    /// </summary>
-    public int LongestPathToVault { get; private set; }
-
     /// <summary>
     /// Determines the shortest path to reach the vault.
     /// </summary>
@@ -114,18 +104,16 @@ public sealed class Day17 : Puzzle
     }
 
     /// <inheritdoc />
-    protected override Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
+    protected override Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken) => SolveWithArgument(args, static (passcode, logger) =>
     {
-        string passcode = args[0];
+        (string shortestPathToVault, int longestPathToVault) = GetPathsToVault(passcode);
 
-        (ShortestPathToVault, LongestPathToVault) = GetPathsToVault(passcode);
-
-        if (Verbose)
+        if (logger is { })
         {
-            Logger.WriteLine("The shortest path to the vault is {0}.", ShortestPathToVault);
-            Logger.WriteLine("The longest path to the vault is {0}.", LongestPathToVault);
+            logger.WriteLine("The shortest path to the vault is {0}.", shortestPathToVault);
+            logger.WriteLine("The longest path to the vault is {0}.", longestPathToVault);
         }
 
-        return PuzzleResult.Create(ShortestPathToVault, LongestPathToVault);
-    }
+        return (shortestPathToVault, longestPathToVault);
+    });
 }

@@ -7,13 +7,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2023;
 /// A class representing the puzzle for <c>https://adventofcode.com/2023/day/23</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2023, 23, "A Long Walk", RequiresData = true, Unsolved = true)]
-public sealed class Day23 : Puzzle
+public sealed class Day23 : Puzzle<int>
 {
-    /// <summary>
-    /// Gets the number of steps for the longest walk through the hiking trail.
-    /// </summary>
-    public int MaximumSteps { get; private set; }
-
     /// <summary>
     /// Walks the specified hiking trail and returns the number of steps for the longest walk.
     /// </summary>
@@ -68,18 +63,19 @@ public sealed class Day23 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        ArgumentNullException.ThrowIfNull(args);
+        return await SolveWithLinesAsync(
+            static (hikingTrail, logger, cancellationToken) =>
+            {
+                int maximumSteps = Walk(hikingTrail, cancellationToken);
 
-        var hikingTrail = await ReadResourceAsLinesAsync(cancellationToken);
+                if (logger is { })
+                {
+                    logger.WriteLine("The longest hike is {0} steps.", maximumSteps);
+                }
 
-        MaximumSteps = Walk(hikingTrail, cancellationToken);
-
-        if (Verbose)
-        {
-            Logger.WriteLine("The longest hike is {0} steps.", MaximumSteps);
-        }
-
-        return PuzzleResult.Create(MaximumSteps);
+                return maximumSteps;
+            },
+            cancellationToken);
     }
 
     private sealed class HikingTrail(int width, int height) : SquareGrid(width, height)

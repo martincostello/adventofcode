@@ -7,7 +7,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2023;
 /// A class representing the puzzle for <c>https://adventofcode.com/2023/day/07</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2023, 07, "Camel Cards", RequiresData = true)]
-public sealed class Day07 : Puzzle
+public sealed class Day07 : Puzzle<int, int>
 {
     private static readonly Dictionary<char, int> ScoreMap = new()
     {
@@ -36,16 +36,6 @@ public sealed class Day07 : Puzzle
         FourOfAKind,
         FiveOfAKind,
     }
-
-    /// <summary>
-    /// Gets the total winnings.
-    /// </summary>
-    public int TotalWinnings { get; private set; }
-
-    /// <summary>
-    /// Gets the total winnings using Jokers.
-    /// </summary>
-    public int TotalWinningsWithJokers { get; private set; }
 
     /// <summary>
     /// Plays the specified hands of Camel Cards.
@@ -136,19 +126,20 @@ public sealed class Day07 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        ArgumentNullException.ThrowIfNull(args);
+        return await SolveWithLinesAsync(
+            static (hands, logger, _) =>
+            {
+                int totalWinnings = Play(hands, useJokers: false);
+                int totalWinningsWithJokers = Play(hands, useJokers: true);
 
-        var hands = await ReadResourceAsLinesAsync(cancellationToken);
+                if (logger is { })
+                {
+                    logger.WriteLine("The total winnings are {0}.", totalWinnings);
+                    logger.WriteLine("The total winnings are {0} with Jokers.", totalWinningsWithJokers);
+                }
 
-        TotalWinnings = Play(hands, useJokers: false);
-        TotalWinningsWithJokers = Play(hands, useJokers: true);
-
-        if (Verbose)
-        {
-            Logger.WriteLine("The total winnings are {0}.", TotalWinnings);
-            Logger.WriteLine("The total winnings are {0} with Jokers.", TotalWinningsWithJokers);
-        }
-
-        return PuzzleResult.Create(TotalWinnings, TotalWinningsWithJokers);
+                return (totalWinnings, totalWinningsWithJokers);
+            },
+            cancellationToken);
     }
 }

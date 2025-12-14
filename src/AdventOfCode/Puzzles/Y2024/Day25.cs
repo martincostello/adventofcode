@@ -7,13 +7,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2024;
 /// A class representing the puzzle for <c>https://adventofcode.com/2024/day/25</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2024, 25, "Code Chronicle", RequiresData = true)]
-public sealed class Day25 : Puzzle
+public sealed class Day25 : Puzzle<int>
 {
-    /// <summary>
-    /// Gets the number of unique lock/key pairs fit together without overlapping in any column.
-    /// </summary>
-    public int UniquePairs { get; private set; }
-
     /// <summary>
     /// Simulates the specified lock and key patterns.
     /// </summary>
@@ -91,17 +86,18 @@ public sealed class Day25 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        ArgumentNullException.ThrowIfNull(args);
+        return await SolveWithLinesAsync(
+            static (values, logger, cancellationToken) =>
+            {
+                int uniquePairs = Simulate(values);
 
-        var values = await ReadResourceAsLinesAsync(cancellationToken);
+                if (logger is { })
+                {
+                    logger.WriteLine("{0} unique lock/key pairs fit together without overlapping in any column.", uniquePairs);
+                }
 
-        UniquePairs = Simulate(values);
-
-        if (Verbose)
-        {
-            Logger.WriteLine("{0} unique lock/key pairs fit together without overlapping in any column.", UniquePairs);
-        }
-
-        return PuzzleResult.Create(UniquePairs);
+                return uniquePairs;
+            },
+            cancellationToken);
     }
 }

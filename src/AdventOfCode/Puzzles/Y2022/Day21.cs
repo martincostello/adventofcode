@@ -7,19 +7,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2022;
 /// A class representing the puzzle for <c>https://adventofcode.com/2022/day/21</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2022, 21, "Monkey Math", RequiresData = true)]
-public sealed class Day21 : Puzzle
+public sealed class Day21 : Puzzle<long, long>
 {
-    /// <summary>
-    /// Gets the number that the monkey named <c>root</c> will yell.
-    /// </summary>
-    public long RootMonkeyNumber { get; private set; }
-
-    /// <summary>
-    /// Gets the number that the human should yell to get the
-    /// monkey named <c>root</c> to receive two equal values.
-    /// </summary>
-    public long HumanNumber { get; private set; }
-
     /// <summary>
     /// Gets the number that the monkey named <c>root</c> will yell given the specified monkey jobs.
     /// </summary>
@@ -140,18 +129,21 @@ public sealed class Day21 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        var values = await ReadResourceAsLinesAsync(cancellationToken);
+        return await SolveWithLinesAsync(
+            static (values, logger, cancellationToken) =>
+            {
+                long rootMonkeyNumber = GetRootNumber(values, withEquality: false, cancellationToken);
+                long humanNumber = GetRootNumber(values, withEquality: true, cancellationToken);
 
-        RootMonkeyNumber = GetRootNumber(values, withEquality: false, cancellationToken);
-        HumanNumber = GetRootNumber(values, withEquality: true, cancellationToken);
+                if (logger is { })
+                {
+                    logger.WriteLine("The monkey named root will yell {0}.", rootMonkeyNumber);
+                    logger.WriteLine("You must yell {0} for the monkey named root to pass their equality test.", humanNumber);
+                }
 
-        if (Verbose)
-        {
-            Logger.WriteLine("The monkey named root will yell {0}.", RootMonkeyNumber);
-            Logger.WriteLine("You must yell {0} for the monkey named root to pass their equality test.", HumanNumber);
-        }
-
-        return PuzzleResult.Create(RootMonkeyNumber, HumanNumber);
+                return (rootMonkeyNumber, humanNumber);
+            },
+            cancellationToken);
     }
 
     private sealed record Monkey(string Name)

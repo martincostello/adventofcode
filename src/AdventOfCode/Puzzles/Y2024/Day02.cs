@@ -7,18 +7,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2024;
 /// A class representing the puzzle for <c>https://adventofcode.com/2024/day/2</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2024, 02, "Red-Nosed Reports", RequiresData = true)]
-public sealed class Day02 : Puzzle
+public sealed class Day02 : Puzzle<int, int>
 {
-    /// <summary>
-    /// Gets the number of safe reports.
-    /// </summary>
-    public int SafeReports { get; private set; }
-
-    /// <summary>
-    /// Gets the number of safe reports with the Problem Dampener in use.
-    /// </summary>
-    public int SafeReportsWithDampener { get; private set; }
-
     /// <summary>
     /// Counts the number of reports that are safe.
     /// </summary>
@@ -86,19 +76,20 @@ public sealed class Day02 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        ArgumentNullException.ThrowIfNull(args);
+        return await SolveWithLinesAsync(
+            static (values, logger, _) =>
+            {
+                int safeReports = CountSafeReports(values, useProblemDampener: false);
+                int safeReportsWithDampener = CountSafeReports(values, useProblemDampener: true);
 
-        var values = await ReadResourceAsLinesAsync(cancellationToken);
+                if (logger is { })
+                {
+                    logger.WriteLine("{0} reports are safe.", safeReports);
+                    logger.WriteLine("{0} reports are safe with the Problem Dampener.", safeReportsWithDampener);
+                }
 
-        SafeReports = CountSafeReports(values, useProblemDampener: false);
-        SafeReportsWithDampener = CountSafeReports(values, useProblemDampener: true);
-
-        if (Verbose)
-        {
-            Logger.WriteLine("{0} reports are safe.", SafeReports);
-            Logger.WriteLine("{0} reports are safe with the Problem Dampener.", SafeReportsWithDampener);
-        }
-
-        return PuzzleResult.Create(SafeReports, SafeReportsWithDampener);
+                return (safeReports, safeReportsWithDampener);
+            },
+            cancellationToken);
     }
 }

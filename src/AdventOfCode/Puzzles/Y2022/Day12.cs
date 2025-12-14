@@ -7,20 +7,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2022;
 /// A class representing the puzzle for <c>https://adventofcode.com/2022/day/12</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2022, 12, "Hill Climbing Algorithm", RequiresData = true)]
-public sealed class Day12 : Puzzle
+public sealed class Day12 : Puzzle<int, int>
 {
-    /// <summary>
-    /// Gets the fewest steps required to move from your current
-    /// position to the location that should get the best signal.
-    /// </summary>
-    public int MinimumStepsFromStart { get; private set; }
-
-    /// <summary>
-    /// Gets the fewest steps required to move from any position at
-    /// ground level to the location that should get the best signal.
-    /// </summary>
-    public int MinimumStepsFromGroundLevel { get; private set; }
-
     /// <summary>
     /// Returns the minimum number of steps required to go to the
     /// highest point in the specified heightmap from the starting
@@ -93,22 +81,25 @@ public sealed class Day12 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        var heightmap = await ReadResourceAsLinesAsync(cancellationToken);
+        return await SolveWithLinesAsync(
+            static (heightmap, logger, cancellationToken) =>
+            {
+                (int minimumStepsFromStart, int minimumStepsFromGroundLevel) = GetMinimumSteps(heightmap, cancellationToken);
 
-        (MinimumStepsFromStart, MinimumStepsFromGroundLevel) = GetMinimumSteps(heightmap, cancellationToken);
+                if (logger is { })
+                {
+                    logger.WriteLine(
+                        "The fewest steps required to move from your current position to the location that should get the best signal is {0}.",
+                        minimumStepsFromStart);
 
-        if (Verbose)
-        {
-            Logger.WriteLine(
-                "The fewest steps required to move from your current position to the location that should get the best signal is {0}.",
-                MinimumStepsFromStart);
+                    logger.WriteLine(
+                        "The fewest steps required to move from any position at ground level to the location that should get the best signal is {0}.",
+                        minimumStepsFromGroundLevel);
+                }
 
-            Logger.WriteLine(
-                "The fewest steps required to move from any position at ground level to the location that should get the best signal is {0}.",
-                MinimumStepsFromGroundLevel);
-        }
-
-        return PuzzleResult.Create(MinimumStepsFromStart, MinimumStepsFromGroundLevel);
+                return (minimumStepsFromStart, minimumStepsFromGroundLevel);
+            },
+            cancellationToken);
     }
 
     private sealed class Map : SquareGrid

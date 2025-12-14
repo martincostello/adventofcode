@@ -7,18 +7,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2024;
 /// A class representing the puzzle for <c>https://adventofcode.com/2024/day/1</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2024, 01, "Historian Hysteria", RequiresData = true)]
-public sealed class Day01 : Puzzle
+public sealed class Day01 : Puzzle<int, int>
 {
-    /// <summary>
-    /// Gets the total distance between the values in the list.
-    /// </summary>
-    public int TotalDistance { get; private set; }
-
-    /// <summary>
-    /// Gets the similarity score between the values in the list.
-    /// </summary>
-    public int SimilarityScore { get; private set; }
-
     /// <summary>
     /// Gets the total distance between the values in the list.
     /// </summary>
@@ -75,18 +65,19 @@ public sealed class Day01 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        ArgumentNullException.ThrowIfNull(args);
+        return await SolveWithLinesAsync(
+            static (values, logger, _) =>
+            {
+                (int totalDistance, int similarityScore) = ParseList(values);
 
-        var values = await ReadResourceAsLinesAsync(cancellationToken);
+                if (logger is { })
+                {
+                    logger.WriteLine("The total distance between the lists is {0}", totalDistance);
+                    logger.WriteLine("The similarity score for the lists is {0}", similarityScore);
+                }
 
-        (TotalDistance, SimilarityScore) = ParseList(values);
-
-        if (Verbose)
-        {
-            Logger.WriteLine("The total distance between the lists is {0}", TotalDistance);
-            Logger.WriteLine("The similarity score for the lists is {0}", SimilarityScore);
-        }
-
-        return PuzzleResult.Create(TotalDistance, SimilarityScore);
+                return (totalDistance, similarityScore);
+            },
+            cancellationToken);
     }
 }

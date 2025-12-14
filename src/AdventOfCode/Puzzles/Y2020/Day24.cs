@@ -7,18 +7,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020;
 /// A class representing the puzzle for <c>https://adventofcode.com/2020/day/24</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2020, 24, "Lobby Layout", RequiresData = true)]
-public sealed class Day24 : Puzzle
+public sealed class Day24 : Puzzle<int, int>
 {
-    /// <summary>
-    /// Gets the number of black tiles after 1 day.
-    /// </summary>
-    public int BlackTilesDay0 { get; private set; }
-
-    /// <summary>
-    /// Gets the number of black tiles after 100 days.
-    /// </summary>
-    public int BlackTilesDay100 { get; private set; }
-
     /// <summary>
     /// Applies the tiling pattern to the floor using the specified instructions.
     /// </summary>
@@ -122,18 +112,21 @@ public sealed class Day24 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        var instructions = await ReadResourceAsLinesAsync(cancellationToken);
+        return await SolveWithLinesAsync(
+            static (instructions, logger, _) =>
+            {
+                int blackTilesDay0 = TileFloor(instructions, days: 0);
+                int blackTilesDay100 = TileFloor(instructions, days: 100);
 
-        BlackTilesDay0 = TileFloor(instructions, days: 0);
-        BlackTilesDay100 = TileFloor(instructions, days: 100);
+                if (logger is { })
+                {
+                    logger.WriteLine("{0} tiles are left with the black side up initially.", blackTilesDay0);
+                    logger.WriteLine("{0} tiles are left with the black side up after 100 days.", blackTilesDay100);
+                }
 
-        if (Verbose)
-        {
-            Logger.WriteLine("{0} tiles are left with the black side up initially.", BlackTilesDay0);
-            Logger.WriteLine("{0} tiles are left with the black side up after 100 days.", BlackTilesDay100);
-        }
-
-        return PuzzleResult.Create(BlackTilesDay0, BlackTilesDay100);
+                return (blackTilesDay0, blackTilesDay100);
+            },
+            cancellationToken);
     }
 
     /// <summary>

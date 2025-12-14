@@ -26,7 +26,7 @@ public sealed class Day06Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         var puzzle = await SolvePuzzleAsync<Day06>();
 
         // Assert
-        puzzle.CycleCount.ShouldBe(3156);
-        puzzle.LoopSize.ShouldBe(1610);
+        puzzle.Solution1.ShouldBe(3156);
+        puzzle.Solution2.ShouldBe(1610);
     }
 }

@@ -7,18 +7,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2022;
 /// A class representing the puzzle for <c>https://adventofcode.com/2022/day/4</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2022, 04, "Camp Cleanup", RequiresData = true)]
-public sealed class Day04 : Puzzle
+public sealed class Day04 : Puzzle<int, int>
 {
-    /// <summary>
-    /// Gets the number of assignment pairs where one range fully contains the other.
-    /// </summary>
-    public int FullyOverlappingAssignments { get; private set; }
-
-    /// <summary>
-    /// Gets the number of assignment pairs where one range partially contains the other.
-    /// </summary>
-    public int PartiallyOverlappingAssignments { get; private set; }
-
     /// <summary>
     /// Gets the number of assignment pairs where one range fully or partially contains the other.
     /// </summary>
@@ -72,22 +62,25 @@ public sealed class Day04 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        var assignments = await ReadResourceAsLinesAsync(cancellationToken);
+        return await SolveWithLinesAsync(
+            static (assignments, logger, _) =>
+            {
+                int fullyOverlappingAssignments = GetOverlappingAssignments(assignments, false);
+                int partiallyOverlappingAssignments = GetOverlappingAssignments(assignments, true);
 
-        FullyOverlappingAssignments = GetOverlappingAssignments(assignments, false);
-        PartiallyOverlappingAssignments = GetOverlappingAssignments(assignments, true);
+                if (logger is { })
+                {
+                    logger.WriteLine(
+                        "There are {0:N0} assignment pairs where one range is entirely contained within the other.",
+                        fullyOverlappingAssignments);
 
-        if (Verbose)
-        {
-            Logger.WriteLine(
-                "There are {0:N0} assignment pairs where one range is entirely contained within the other.",
-                FullyOverlappingAssignments);
+                    logger.WriteLine(
+                        "There are {0:N0} assignment pairs where one range overlaps with the other.",
+                        partiallyOverlappingAssignments);
+                }
 
-            Logger.WriteLine(
-                "There are {0:N0} assignment pairs where one range overlaps with the other.",
-                PartiallyOverlappingAssignments);
-        }
-
-        return PuzzleResult.Create(FullyOverlappingAssignments, PartiallyOverlappingAssignments);
+                return (fullyOverlappingAssignments, partiallyOverlappingAssignments);
+            },
+            cancellationToken);
     }
 }

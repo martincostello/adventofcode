@@ -7,7 +7,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2022;
 /// A class representing the puzzle for <c>https://adventofcode.com/2022/day/2</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2022, 02, "Rock Paper Scissors", RequiresData = true)]
-public sealed class Day02 : Puzzle
+public sealed class Day02 : Puzzle<int, int>
 {
     private enum Move
     {
@@ -22,16 +22,6 @@ public sealed class Day02 : Puzzle
         Draw = 3,
         Win = 6,
     }
-
-    /// <summary>
-    /// Gets the total score from following the encrypted strategy guide as a series of moves.
-    /// </summary>
-    public int TotalScoreForMoves { get; private set; }
-
-    /// <summary>
-    /// Gets the total score from following the encrypted strategy guide as a series of desired outcomes.
-    /// </summary>
-    public int TotalScoreForOutcomes { get; private set; }
 
     /// <summary>
     /// Gets the total score from following the encrypted strategy guide.
@@ -107,22 +97,25 @@ public sealed class Day02 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        var moves = await ReadResourceAsLinesAsync(cancellationToken);
+        return await SolveWithLinesAsync(
+            static (moves, logger, _) =>
+            {
+                int totalScoreForMoves = GetTotalScore(moves, containsDesiredOutcome: false);
+                int totalScoreForOutcomes = GetTotalScore(moves, containsDesiredOutcome: true);
 
-        TotalScoreForMoves = GetTotalScore(moves, containsDesiredOutcome: false);
-        TotalScoreForOutcomes = GetTotalScore(moves, containsDesiredOutcome: true);
+                if (logger is { })
+                {
+                    logger.WriteLine(
+                        "The total score from following the encrypted strategy guide of moves would be {0:N0}.",
+                        totalScoreForMoves);
 
-        if (Verbose)
-        {
-            Logger.WriteLine(
-                "The total score from following the encrypted strategy guide of moves would be {0:N0}.",
-                TotalScoreForMoves);
+                    logger.WriteLine(
+                        "The total score from following the encrypted strategy guide of desired outcomes would be {0:N0}.",
+                        totalScoreForOutcomes);
+                }
 
-            Logger.WriteLine(
-                "The total score from following the encrypted strategy guide of desired outcomes would be {0:N0}.",
-                TotalScoreForOutcomes);
-        }
-
-        return PuzzleResult.Create(TotalScoreForMoves, TotalScoreForOutcomes);
+                return (totalScoreForMoves, totalScoreForOutcomes);
+            },
+            cancellationToken);
     }
 }

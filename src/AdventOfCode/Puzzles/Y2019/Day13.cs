@@ -7,19 +7,9 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019;
 /// A class representing the puzzle for <c>https://adventofcode.com/2019/day/13</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2019, 13, "Care Package", RequiresData = true)]
-public sealed class Day13 : Puzzle
+public sealed class Day13 : Puzzle<long>
 {
     private static readonly long[] Seed = [2];
-
-    /// <summary>
-    /// Gets the number of block tiles on the screen.
-    /// </summary>
-    public long BlockTileCount { get; private set; }
-
-    /// <summary>
-    /// Gets the score when the game ends.
-    /// </summary>
-    public long Score { get; private set; }
 
     /// <summary>
     /// Gets the number of block tiles on the screen after the game is run.
@@ -75,16 +65,18 @@ public sealed class Day13 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        string program = await ReadResourceAsStringAsync(cancellationToken);
+        return await SolveWithStringAsync(
+            async static (program, logger, cancellationToken) =>
+            {
+                (long blockTileCount, _) = await PlayGameAsync(program, cancellationToken);
 
-        (BlockTileCount, Score) = await PlayGameAsync(program, cancellationToken);
+                if (logger is { })
+                {
+                    logger.WriteLine("There are {0} block tiles on the screen when the game exits.", blockTileCount);
+                }
 
-        if (Verbose)
-        {
-            Logger.WriteLine("There are {0} block tiles on the screen when the game exits.", BlockTileCount);
-            Logger.WriteLine("The score after the last block is broken is {0}", Score);
-        }
-
-        return PuzzleResult.Create(BlockTileCount/*, Score*/);
+                return blockTileCount;
+            },
+            cancellationToken);
     }
 }

@@ -36,7 +36,7 @@ public sealed class Day23Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         var puzzle = await SolvePuzzleAsync<Day23>(args);
 
         // Assert
-        puzzle.A.ShouldBe(a);
-        puzzle.B.ShouldBe(b);
+        puzzle.Solution1.ShouldBe(a);
+        puzzle.Solution2.ShouldBe(b);
     }
 }

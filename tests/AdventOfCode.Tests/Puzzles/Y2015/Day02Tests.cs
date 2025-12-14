@@ -25,7 +25,7 @@ public sealed class Day02Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         var puzzle = await SolvePuzzleAsync<Day02>();
 
         // Assert
-        puzzle.TotalAreaOfPaper.ShouldBe(1598415);
-        puzzle.TotalLengthOfRibbon.ShouldBe(3812909);
+        puzzle.Solution1.ShouldBe(1598415);
+        puzzle.Solution2.ShouldBe(3812909);
     }
 }

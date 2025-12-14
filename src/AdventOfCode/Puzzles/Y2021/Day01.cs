@@ -7,18 +7,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2021;
 /// A class representing the puzzle for <c>https://adventofcode.com/2021/day/1</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2021, 01, "Sonar Sweep", RequiresData = true)]
-public sealed class Day01 : Puzzle
+public sealed class Day01 : Puzzle<int, int>
 {
-    /// <summary>
-    /// Gets the number of times the recorded depth increases.
-    /// </summary>
-    public int DepthIncreases { get; private set; }
-
-    /// <summary>
-    /// Gets the number of times the recorded depth increases over a sliding window.
-    /// </summary>
-    public int DepthIncreasesWithSlidingWindow { get; private set; }
-
     /// <summary>
     /// Gets the number of times the depth increases in the specified sequence of depth measurements.
     /// </summary>
@@ -63,22 +53,25 @@ public sealed class Day01 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        var values = await ReadResourceAsNumbersAsync<int>(cancellationToken);
+        return await SolveWithNumbersAsync<int>(
+            static (values, logger, _) =>
+            {
+                int depthIncreases = GetDepthMeasurementIncreases(values, useSlidingWindow: false);
+                int depthIncreasesWithSlidingWindow = GetDepthMeasurementIncreases(values, useSlidingWindow: true);
 
-        DepthIncreases = GetDepthMeasurementIncreases(values, useSlidingWindow: false);
-        DepthIncreasesWithSlidingWindow = GetDepthMeasurementIncreases(values, useSlidingWindow: true);
+                if (logger is { })
+                {
+                    logger.WriteLine(
+                        "The depth measurement increases {0:N0} times.",
+                        depthIncreases);
 
-        if (Verbose)
-        {
-            Logger.WriteLine(
-                "The depth measurement increases {0:N0} times.",
-                DepthIncreases);
+                    logger.WriteLine(
+                        "The depth measurement increases {0:N0} times when using a sliding window of 3 measurements.",
+                        depthIncreasesWithSlidingWindow);
+                }
 
-            Logger.WriteLine(
-                "The depth measurement increases {0:N0} times when using a sliding window of 3 measurements.",
-                DepthIncreasesWithSlidingWindow);
-        }
-
-        return PuzzleResult.Create(DepthIncreases, DepthIncreasesWithSlidingWindow);
+                return (depthIncreases, depthIncreasesWithSlidingWindow);
+            },
+            cancellationToken);
     }
 }

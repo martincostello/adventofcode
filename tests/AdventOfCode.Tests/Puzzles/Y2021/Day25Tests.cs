@@ -36,6 +36,6 @@ public sealed class Day25Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         var puzzle = await SolvePuzzleAsync<Day25>();
 
         // Assert
-        puzzle.FirstStepWithNoMoves.ShouldBe(532);
+        puzzle.Solution.ShouldBe(532);
     }
 }

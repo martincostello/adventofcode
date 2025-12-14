@@ -9,18 +9,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015;
 /// A class representing the puzzle for <c>https://adventofcode.com/2015/day/12</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2015, 12, "JSAbacusFramework.io", RequiresData = true)]
-public sealed class Day12 : Puzzle
+public sealed class Day12 : Puzzle<long, long>
 {
-    /// <summary>
-    /// Gets the sum of all the integers in the JSON document.
-    /// </summary>
-    public long Sum { get; private set; }
-
-    /// <summary>
-    /// Gets the sum of the integers in the JSON document when the red key is ignored.
-    /// </summary>
-    public long SumIgnoringRed { get; private set; }
-
     /// <summary>
     /// Sums the integer values in the specified JSON element, ignoring any values from
     /// child elements that contain the specified string value, if specified.
@@ -69,13 +59,13 @@ public sealed class Day12 : Puzzle
         {
             using var document = await JsonDocument.ParseAsync(resource, cancellationToken: cancellationToken);
 
-            Sum = SumIntegerValues(document.RootElement, string.Empty);
-            SumIgnoringRed = SumIntegerValues(document.RootElement, "red");
+            Solution1 = SumIntegerValues(document.RootElement, string.Empty);
+            Solution2 = SumIntegerValues(document.RootElement, "red");
 
             if (Verbose)
             {
-                Logger.WriteLine("The sum of the integers in the JSON document is {0:N0}.", Sum);
-                Logger.WriteLine("The sum of the integers in the JSON document ignoring the red key is {0:N0}.", SumIgnoringRed);
+                Logger.WriteLine("The sum of the integers in the JSON document is {0:N0}.", Solution1);
+                Logger.WriteLine("The sum of the integers in the JSON document ignoring the red key is {0:N0}.", Solution2);
             }
         }
         finally
@@ -86,6 +76,6 @@ public sealed class Day12 : Puzzle
             }
         }
 
-        return PuzzleResult.Create(Sum, SumIgnoringRed);
+        return PuzzleResult.Create(Solution1, Solution2);
     }
 }

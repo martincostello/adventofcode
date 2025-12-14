@@ -7,18 +7,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015;
 /// A class representing the puzzle for <c>https://adventofcode.com/2015/day/17</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2015, 17, "No Such Thing as Too Much", MinimumArguments = 1, RequiresData = true)]
-public sealed class Day17 : Puzzle
+public sealed class Day17 : Puzzle<int, int>
 {
-    /// <summary>
-    /// Gets the number of combinations of containers that can be used.
-    /// </summary>
-    internal int Combinations { get; private set; }
-
-    /// <summary>
-    /// Gets the number of combinations of the minimum number of containers that can be used.
-    /// </summary>
-    internal int CombinationsWithMinimumContainers { get; private set; }
-
     /// <summary>
     /// Returns the combinations of containers that can be used to completely fill
     /// one or more containers completely with the specified total volume of eggnog.
@@ -28,7 +18,7 @@ public sealed class Day17 : Puzzle
     /// <returns>
     /// The combinations of containers that can store the volume specified by <paramref name="volume"/>.
     /// </returns>
-    internal static IList<ICollection<int>> GetContainerCombinations(int volume, IList<int> containerVolumes)
+    internal static IList<ICollection<int>> GetContainerCombinations(int volume, List<int> containerVolumes)
     {
         var containers = containerVolumes
             .OrderDescending()
@@ -40,34 +30,38 @@ public sealed class Day17 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        var containerVolumes = await ReadResourceAsNumbersAsync<int>(cancellationToken);
+        return await SolveWithNumbersAsync<int>(
+            args,
+            static (arguments, containerVolumes, logger, _) =>
+            {
+                int volume = Parse<int>(arguments[0]);
 
-        int volume = Parse<int>(args[0]);
+                var allCombinations = GetContainerCombinations(volume, containerVolumes);
 
-        var combinations = GetContainerCombinations(volume, containerVolumes);
+                var combinationsWithLeastContainers = allCombinations
+                    .CountBy((p) => p.Count)
+                    .OrderBy((p) => p.Key)
+                    .First();
 
-        var combinationsWithLeastContainers = combinations
-            .CountBy((p) => p.Count)
-            .OrderBy((p) => p.Key)
-            .First();
+                int combinations = allCombinations.Count;
+                int combinationsWithMinimumContainers = combinationsWithLeastContainers.Value;
 
-        Combinations = combinations.Count;
-        CombinationsWithMinimumContainers = combinationsWithLeastContainers.Value;
+                if (logger is { })
+                {
+                    logger.WriteLine(
+                        "There are {0:N0} combinations of containers that can store {1:0} liters of eggnog.",
+                        combinations,
+                        volume);
 
-        if (Verbose)
-        {
-            Logger.WriteLine(
-                "There are {0:N0} combinations of containers that can store {1:0} liters of eggnog.",
-                Combinations,
-                volume);
+                    logger.WriteLine(
+                        "There are {0:N0} combinations of containers that can store {1:0} liters of eggnog using {2} containers.",
+                        combinationsWithMinimumContainers,
+                        volume,
+                        combinationsWithLeastContainers.Key);
+                }
 
-            Logger.WriteLine(
-                "There are {0:N0} combinations of containers that can store {1:0} liters of eggnog using {2} containers.",
-                CombinationsWithMinimumContainers,
-                volume,
-                combinationsWithLeastContainers.Key);
-        }
-
-        return PuzzleResult.Create(Combinations, CombinationsWithMinimumContainers);
+                return (combinations, combinationsWithMinimumContainers);
+            },
+            cancellationToken);
     }
 }

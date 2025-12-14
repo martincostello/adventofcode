@@ -7,18 +7,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2022;
 /// A class representing the puzzle for <c>https://adventofcode.com/2022/day/18</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2022, 18, "Boiling Boulders", RequiresData = true)]
-public sealed class Day18 : Puzzle
+public sealed class Day18 : Puzzle<int, int>
 {
-    /// <summary>
-    /// Gets the total surface area of the scanned lava droplet.
-    /// </summary>
-    public int TotalDropletSurfaceArea { get; private set; }
-
-    /// <summary>
-    /// Gets the external surface area of the scanned lava droplet.
-    /// </summary>
-    public int ExternalDropletSurfaceArea { get; private set; }
-
     /// <summary>
     /// Gets the total surface area of the lava droplet described by the specified cubes.
     /// </summary>
@@ -94,17 +84,20 @@ public sealed class Day18 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        var cubes = await ReadResourceAsLinesAsync(cancellationToken);
+        return await SolveWithLinesAsync(
+            static (cubes, logger, cancellationToken) =>
+            {
+                int totalDropletSurfaceArea = GetSurfaceArea(cubes, excludeInterior: false, cancellationToken);
+                int externalDropletSurfaceArea = GetSurfaceArea(cubes, excludeInterior: true, cancellationToken);
 
-        TotalDropletSurfaceArea = GetSurfaceArea(cubes, excludeInterior: false, cancellationToken);
-        ExternalDropletSurfaceArea = GetSurfaceArea(cubes, excludeInterior: true, cancellationToken);
+                if (logger is { })
+                {
+                    logger.WriteLine("The total surface area of the scanned lava droplet is {0}.", totalDropletSurfaceArea);
+                    logger.WriteLine("The external surface area of the scanned lava droplet is {0}.", externalDropletSurfaceArea);
+                }
 
-        if (Verbose)
-        {
-            Logger.WriteLine("The total surface area of the scanned lava droplet is {0}.", TotalDropletSurfaceArea);
-            Logger.WriteLine("The external surface area of the scanned lava droplet is {0}.", ExternalDropletSurfaceArea);
-        }
-
-        return PuzzleResult.Create(TotalDropletSurfaceArea, ExternalDropletSurfaceArea);
+                return (totalDropletSurfaceArea, externalDropletSurfaceArea);
+            },
+            cancellationToken);
     }
 }

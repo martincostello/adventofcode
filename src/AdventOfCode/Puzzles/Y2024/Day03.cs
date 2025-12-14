@@ -9,18 +9,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2024;
 /// A class representing the puzzle for <c>https://adventofcode.com/2024/day/3</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2024, 03, "Mull It Over", RequiresData = true)]
-public sealed partial class Day03 : Puzzle
+public sealed partial class Day03 : Puzzle<int, int>
 {
-    /// <summary>
-    /// Gets the sum of the multiplications.
-    /// </summary>
-    public int Sum { get; private set; }
-
-    /// <summary>
-    /// Gets the sum of the multiplications with enhanced accuracy.
-    /// </summary>
-    public int AccurateSum { get; private set; }
-
     /// <summary>
     /// A regular expression that finds <c>mul</c> instructions.
     /// </summary>
@@ -103,19 +93,20 @@ public sealed partial class Day03 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        ArgumentNullException.ThrowIfNull(args);
+        return await SolveWithStringAsync(
+            static (memory, logger, cancellationToken) =>
+            {
+                int sum = Scan(memory, enhancedAccuracy: false, cancellationToken);
+                int accurateSum = Scan(memory, enhancedAccuracy: true, cancellationToken);
 
-        string memory = await ReadResourceAsStringAsync(cancellationToken);
+                if (logger is { })
+                {
+                    logger.WriteLine("The sum of the multiplications is {0}", sum);
+                    logger.WriteLine("The sum of the multiplications with more accuracy is {0}", accurateSum);
+                }
 
-        Sum = Scan(memory, enhancedAccuracy: false, cancellationToken);
-        AccurateSum = Scan(memory, enhancedAccuracy: true, cancellationToken);
-
-        if (Verbose)
-        {
-            Logger.WriteLine("The sum of the multiplications is {0}", Sum);
-            Logger.WriteLine("The sum of the multiplications with more accuracy is {0}", AccurateSum);
-        }
-
-        return PuzzleResult.Create(Sum, AccurateSum);
+                return (sum, accurateSum);
+            },
+            cancellationToken);
     }
 }

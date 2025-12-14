@@ -9,18 +9,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2023;
 /// A class representing the puzzle for <c>https://adventofcode.com/2023/day/05</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2023, 05, "If You Give A Seed A Fertilizer", RequiresData = true)]
-public sealed class Day05 : Puzzle
+public sealed class Day05 : Puzzle<long, long>
 {
-    /// <summary>
-    /// Gets the lowest location number that corresponds to any of the initial seed numbers.
-    /// </summary>
-    public long LocationMinimum { get; private set; }
-
-    /// <summary>
-    /// Gets the lowest location number that corresponds to any of the initial seed numbers when using ranges.
-    /// </summary>
-    public long LocationMinimumWithRanges { get; private set; }
-
     /// <summary>
     /// Parses the specified almanac and returns the lowest location number
     /// that corresponds to any of the initial seed numbers.
@@ -144,19 +134,20 @@ public sealed class Day05 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        ArgumentNullException.ThrowIfNull(args);
+        return await SolveWithLinesAsync(
+            static (almanac, logger, cancellationToken) =>
+            {
+                long locationMinimum = Parse(almanac, useRanges: false, cancellationToken);
+                long locationMinimumWithRanges = Parse(almanac, useRanges: true, cancellationToken);
 
-        var almanac = await ReadResourceAsLinesAsync(cancellationToken);
+                if (logger is { })
+                {
+                    logger.WriteLine("The lowest location number that corresponds to any of the initial seed numbers is {0}.", locationMinimum);
+                    logger.WriteLine("The lowest location number that corresponds to any of the initial seed numbers as pairs is {0}.", locationMinimumWithRanges);
+                }
 
-        LocationMinimum = Parse(almanac, useRanges: false, cancellationToken);
-        LocationMinimumWithRanges = Parse(almanac, useRanges: true, cancellationToken);
-
-        if (Verbose)
-        {
-            Logger.WriteLine("The lowest location number that corresponds to any of the initial seed numbers is {0}.", LocationMinimum);
-            Logger.WriteLine("The lowest location number that corresponds to any of the initial seed numbers as pairs is {0}.", LocationMinimumWithRanges);
-        }
-
-        return PuzzleResult.Create(LocationMinimum, LocationMinimumWithRanges);
+                return (locationMinimum, locationMinimumWithRanges);
+            },
+            cancellationToken);
     }
 }

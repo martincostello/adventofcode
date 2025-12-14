@@ -7,18 +7,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2017;
 /// A class representing the puzzle for <c>https://adventofcode.com/2017/day/5</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2017, 05, "A Maze of Twisty Trampolines, All Alike", RequiresData = true)]
-public sealed class Day05 : Puzzle
+public sealed class Day05 : Puzzle<int, int>
 {
-    /// <summary>
-    /// Gets the number of steps required to exit the input instructions for version 1 of the CPU.
-    /// </summary>
-    public int StepsToExitV1 { get; private set; }
-
-    /// <summary>
-    /// Gets the number of steps required to exit the input instructions for version 2 of the CPU.
-    /// </summary>
-    public int StepsToExitV2 { get; private set; }
-
     /// <summary>
     /// Executes the specified program and CPU version.
     /// </summary>
@@ -50,17 +40,20 @@ public sealed class Day05 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        var program = await ReadResourceAsNumbersAsync<int>(cancellationToken);
+        return await SolveWithNumbersAsync<int>(
+            static (program, logger, _) =>
+            {
+                int stepsToExitV1 = Execute(program, version: 1);
+                int stepsToExitV2 = Execute(program, version: 2);
 
-        StepsToExitV1 = Execute(program, 1);
-        StepsToExitV2 = Execute(program, 2);
+                if (logger is { })
+                {
+                    logger.WriteLine($"It takes {stepsToExitV1:N0} to reach the exit using version 1.");
+                    logger.WriteLine($"It takes {stepsToExitV2:N0} to reach the exit using version 2.");
+                }
 
-        if (Verbose)
-        {
-            Logger.WriteLine($"It takes {StepsToExitV1:N0} to reach the exit using version 1.");
-            Logger.WriteLine($"It takes {StepsToExitV2:N0} to reach the exit using version 2.");
-        }
-
-        return PuzzleResult.Create(StepsToExitV1, StepsToExitV2);
+                return (stepsToExitV1, stepsToExitV2);
+            },
+            cancellationToken);
     }
 }

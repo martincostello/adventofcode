@@ -9,18 +9,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019;
 /// A class representing the puzzle for <c>https://adventofcode.com/2019/day/9</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2019, 09, "Sensor Boost", RequiresData = true)]
-public sealed class Day09 : Puzzle
+public sealed class Day09 : Puzzle<long, long>
 {
-    /// <summary>
-    /// Gets the key code output by the program for an input of 1.
-    /// </summary>
-    public long Keycode1 { get; private set; }
-
-    /// <summary>
-    /// Gets the key code output by the program for an input of 2.
-    /// </summary>
-    public long Keycode2 { get; private set; }
-
     /// <summary>
     /// Runs the specified Intcode program.
     /// </summary>
@@ -62,17 +52,20 @@ public sealed class Day09 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        string program = await ReadResourceAsStringAsync(cancellationToken);
+        return await SolveWithStringAsync(
+            static async (program, logger, cancellationToken) =>
+            {
+                long keycode1 = (await RunProgramAsync(program, input: 1, cancellationToken))[0];
+                long keycode2 = (await RunProgramAsync(program, input: 2, cancellationToken))[0];
 
-        Keycode1 = (await RunProgramAsync(program, input: 1, cancellationToken))[0];
-        Keycode2 = (await RunProgramAsync(program, input: 2, cancellationToken))[0];
+                if (logger is { })
+                {
+                    logger.WriteLine("The program produces BOOST keycode {0} for an input of 1.", keycode1);
+                    logger.WriteLine("The program produces BOOST keycode {0} for an input of 2.", keycode2);
+                }
 
-        if (Verbose)
-        {
-            Logger.WriteLine("The program produces BOOST keycode {0} for an input of 1.", Keycode1);
-            Logger.WriteLine("The program produces BOOST keycode {0} for an input of 2.", Keycode2);
-        }
-
-        return PuzzleResult.Create(Keycode1, Keycode2);
+                return (keycode1, keycode2);
+            },
+            cancellationToken);
     }
 }

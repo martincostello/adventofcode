@@ -40,7 +40,7 @@ public sealed class Day07Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         var puzzle = await SolvePuzzleAsync<Day07>();
 
         // Assert
-        puzzle.IPAddressesSupportingTls.ShouldBe(118);
-        puzzle.IPAddressesSupportingSsl.ShouldBe(260);
+        puzzle.Solution1.ShouldBe(118);
+        puzzle.Solution2.ShouldBe(260);
     }
 }

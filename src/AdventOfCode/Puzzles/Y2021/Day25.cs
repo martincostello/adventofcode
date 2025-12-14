@@ -7,13 +7,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2021;
 /// A class representing the puzzle for <c>https://adventofcode.com/2021/day/25</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2021, 25, "Sea Cucumber", RequiresData = true)]
-public sealed class Day25 : Puzzle
+public sealed class Day25 : Puzzle<int>
 {
-    /// <summary>
-    /// Gets the number of sea cucumber moves after which no further moves are made.
-    /// </summary>
-    public int FirstStepWithNoMoves { get; private set; }
-
     /// <summary>
     /// Clears the sea floor of sea cucumbers to create a space to land the submarine.
     /// </summary>
@@ -124,15 +119,18 @@ public sealed class Day25 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        var instructions = await ReadResourceAsLinesAsync(cancellationToken);
+        return await SolveWithLinesAsync(
+            static (instructions, logger, cancellationToken) =>
+            {
+                int firstStepWithNoMoves = ClearSeaFloor(instructions);
 
-        FirstStepWithNoMoves = ClearSeaFloor(instructions);
+                if (logger is { })
+                {
+                    logger.WriteLine("The first step on which no sea cucumbers move is {0:N0}.", firstStepWithNoMoves);
+                }
 
-        if (Verbose)
-        {
-            Logger.WriteLine("The first step on which no sea cucumbers move is {0:N0}.", FirstStepWithNoMoves);
-        }
-
-        return PuzzleResult.Create(FirstStepWithNoMoves);
+                return firstStepWithNoMoves;
+            },
+            cancellationToken);
     }
 }

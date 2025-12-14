@@ -7,20 +7,10 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2023;
 /// A class representing the puzzle for <c>https://adventofcode.com/2023/day/12</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2023, 12, "Hot Springs", RequiresData = true, Unsolved = true)]
-public sealed class Day12 : Puzzle
+public sealed class Day12 : Puzzle<int, int>
 {
     private const char Damaged = '#';
     private const char Unknown = '?';
-
-    /// <summary>
-    /// Gets the sum of the counts of the possible spring arrangements when folded.
-    /// </summary>
-    public int SumOfCountsFolded { get; private set; }
-
-    /// <summary>
-    /// Gets the sum of the counts of the possible spring arrangements when unfolded.
-    /// </summary>
-    public int SumOfCountsUnfolded { get; private set; }
 
     /// <summary>
     /// Analyzes the specified spring arrangement.
@@ -66,20 +56,21 @@ public sealed class Day12 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        ArgumentNullException.ThrowIfNull(args);
+        return await SolveWithLinesAsync(
+            static (records, logger, cancellationToken) =>
+            {
+                int sumOfCountsFolded = Analyze(records, unfold: false, cancellationToken);
+                int sumOfCountsUnfolded = Analyze(records, unfold: true, cancellationToken);
 
-        var records = await ReadResourceAsLinesAsync(cancellationToken);
+                if (logger is { })
+                {
+                    logger.WriteLine("The sum of the counts of spring arrangements is {0}.", sumOfCountsFolded);
+                    logger.WriteLine("The sum of the counts of spring arrangements when unfolded is {0}.", sumOfCountsUnfolded);
+                }
 
-        SumOfCountsFolded = Analyze(records, unfold: false, cancellationToken);
-        SumOfCountsUnfolded = Analyze(records, unfold: true, cancellationToken);
-
-        if (Verbose)
-        {
-            Logger.WriteLine("The sum of the counts of spring arrangements is {0}.", SumOfCountsFolded);
-            Logger.WriteLine("The sum of the counts of spring arrangements when unfolded is {0}.", SumOfCountsUnfolded);
-        }
-
-        return PuzzleResult.Create(SumOfCountsFolded, SumOfCountsUnfolded);
+                return (sumOfCountsFolded, sumOfCountsUnfolded);
+            },
+            cancellationToken);
     }
 
     private record struct State(string Values, int[] Counts, int Actual, int Desired)

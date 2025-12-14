@@ -27,7 +27,7 @@ public sealed class Day07Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         var puzzle = await SolvePuzzleAsync<Day07>();
 
         // Assert
-        puzzle.HighestSignal.ShouldBe(77500);
-        puzzle.HighestSignalUsingFeedback.ShouldBe(22476942);
+        puzzle.Solution1.ShouldBe(77500);
+        puzzle.Solution2.ShouldBe(22476942);
     }
 }

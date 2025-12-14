@@ -34,7 +34,7 @@ public sealed class Day23Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         var puzzle = await SolvePuzzleAsync<Day23>();
 
         // Assert
-        puzzle.MinimumEnergyFolded.ShouldBe(12240);
-        puzzle.MinimumEnergyUnfolded.ShouldBe(44618);
+        puzzle.Solution1.ShouldBe(12240);
+        puzzle.Solution2.ShouldBe(44618);
     }
 }

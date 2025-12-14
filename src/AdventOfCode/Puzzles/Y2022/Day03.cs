@@ -7,20 +7,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2022;
 /// A class representing the puzzle for <c>https://adventofcode.com/2022/day/3</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2022, 03, "Rucksack Reorganization", RequiresData = true)]
-public sealed class Day03 : Puzzle
+public sealed class Day03 : Puzzle<int, int>
 {
-    /// <summary>
-    /// Gets the sum of the priorities for the item type
-    /// which appears in both compartments of each rucksack.
-    /// </summary>
-    public int SumOfPriorities { get; private set; }
-
-    /// <summary>
-    /// Gets the sum of the priorities for the item type
-    /// which appears in all three rucksacks of each group of elves.
-    /// </summary>
-    public int SumOfPrioritiesOfGroups { get; private set; }
-
     /// <summary>
     /// Gets the sum of the priorities for the item type which is common to each rucksack.
     /// </summary>
@@ -78,22 +66,25 @@ public sealed class Day03 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        var inventories = await ReadResourceAsLinesAsync(cancellationToken);
+        return await SolveWithLinesAsync(
+            static async (inventories, logger, _) =>
+            {
+                int sumOfPriorities = GetSumOfCommonItemTypes(inventories, useGroups: false);
+                int sumOfPrioritiesOfGroups = GetSumOfCommonItemTypes(inventories, useGroups: true);
 
-        SumOfPriorities = GetSumOfCommonItemTypes(inventories, useGroups: false);
-        SumOfPrioritiesOfGroups = GetSumOfCommonItemTypes(inventories, useGroups: true);
+                if (logger is { })
+                {
+                    logger.WriteLine(
+                        "The sum of the priorities of the item types which appear in both compartments is {0:N0}.",
+                        sumOfPriorities);
 
-        if (Verbose)
-        {
-            Logger.WriteLine(
-                "The sum of the priorities of the item types which appear in both compartments is {0:N0}.",
-                SumOfPriorities);
+                    logger.WriteLine(
+                        "The sum of the priorities of the item types which appear in all three rucksacks of each group of elves is {0:N0}.",
+                        sumOfPrioritiesOfGroups);
+                }
 
-            Logger.WriteLine(
-                "The sum of the priorities of the item types which appear in all three rucksacks of each group of elves is {0:N0}.",
-                SumOfPrioritiesOfGroups);
-        }
-
-        return PuzzleResult.Create(SumOfPriorities, SumOfPrioritiesOfGroups);
+                return (sumOfPriorities, sumOfPrioritiesOfGroups);
+            },
+            cancellationToken);
     }
 }

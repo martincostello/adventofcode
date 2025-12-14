@@ -7,18 +7,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015;
 /// A class representing the puzzle for <c>https://adventofcode.com/2015/day/11</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2015, 11, "Corporate Policy", MinimumArguments = 1)]
-public sealed class Day11 : Puzzle
+public sealed class Day11 : Puzzle<string, string>
 {
-    /// <summary>
-    /// Gets the first next password.
-    /// </summary>
-    public string FirstPassword { get; private set; } = string.Empty;
-
-    /// <summary>
-    /// Gets the second next password.
-    /// </summary>
-    public string SecondPassword { get; private set; } = string.Empty;
-
     /// <summary>
     /// Generates the next password that should be used based on a current password value.
     /// </summary>
@@ -98,18 +88,19 @@ public sealed class Day11 : Puzzle
     /// <inheritdoc />
     protected override Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        string current = args[0];
-
-        FirstPassword = GenerateNextPassword(current);
-        SecondPassword = GenerateNextPassword(FirstPassword);
-
-        if (Verbose)
+        return SolveWithArgument(args, static (current, logger) =>
         {
-            Logger.WriteLine("Santa's first new password should be '{0}'.", FirstPassword);
-            Logger.WriteLine("Santa's second new password should be '{0}'.", SecondPassword);
-        }
+            string firstPassword = GenerateNextPassword(current);
+            string secondPassword = GenerateNextPassword(firstPassword);
 
-        return PuzzleResult.Create(FirstPassword, SecondPassword);
+            if (logger is { })
+            {
+                logger.WriteLine("Santa's first new password should be '{0}'.", firstPassword);
+                logger.WriteLine("Santa's second new password should be '{0}'.", secondPassword);
+            }
+
+            return (firstPassword, secondPassword);
+        });
     }
 
     /// <summary>

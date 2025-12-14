@@ -23,14 +23,6 @@ public abstract class Puzzle<T1, T2> : Puzzle
     public T2 Solution2 { get; protected set; } = default!;
 
     /// <summary>
-    /// Creates a new <see cref="PuzzleResult"/> instance using the current solutions.
-    /// </summary>
-    /// <returns>
-    /// A <see cref="PuzzleResult"/> for <see cref="Solution1"/> and <see cref="Solution2"/>.
-    /// </returns>
-    protected PuzzleResult Result() => PuzzleResult.Create(Solution1, Solution2);
-
-    /// <summary>
     /// Executes the specified solver using a single value from the specified arguments and returns the result.
     /// </summary>
     /// <param name="arguments">The arguments to pass to the solver.</param>

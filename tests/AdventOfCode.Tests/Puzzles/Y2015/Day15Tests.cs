@@ -35,7 +35,7 @@ public sealed class Day15Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         var puzzle = await SolvePuzzleAsync<Day15>();
 
         // Assert
-        puzzle.HighestTotalCookieScore.ShouldBe(222870);
-        puzzle.HighestTotalCookieScoreWith500Calories.ShouldBe(117936);
+        puzzle.Solution1.ShouldBe(222870);
+        puzzle.Solution2.ShouldBe(117936);
     }
 }

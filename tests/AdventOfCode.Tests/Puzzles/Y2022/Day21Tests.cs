@@ -44,8 +44,7 @@ public sealed class Day21Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         var puzzle = await SolvePuzzleAsync<Day21>();
 
         // Assert
-        puzzle.ShouldNotBeNull();
-        puzzle.RootMonkeyNumber.ShouldBe(10037517593724);
-        puzzle.HumanNumber.ShouldBe(3272260914328);
+        puzzle.Solution1.ShouldBe(10037517593724);
+        puzzle.Solution2.ShouldBe(3272260914328);
     }
 }

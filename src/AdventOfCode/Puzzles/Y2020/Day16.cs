@@ -7,18 +7,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020;
 /// A class representing the puzzle for <c>https://adventofcode.com/2020/day/16</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2020, 16, "Ticket Translation", RequiresData = true)]
-public sealed class Day16 : Puzzle
+public sealed class Day16 : Puzzle<int, long>
 {
-    /// <summary>
-    /// Gets the ticket scanning error rate.
-    /// </summary>
-    public int ScanningErrorRate { get; private set; }
-
-    /// <summary>
-    /// Gets the product of the departure fields on your ticket.
-    /// </summary>
-    public long DepartureProduct { get; private set; }
-
     /// <summary>
     /// Scans the tickets associated with the specified notes.
     /// </summary>
@@ -171,23 +161,24 @@ public sealed class Day16 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        var values = await ReadResourceAsLinesAsync(cancellationToken);
+        return await SolveWithLinesAsync(
+            static (values, logger, _) =>
+            {
+                (int scanningErrorRate, var ticket) = ScanTickets(values);
 
-        (int scanningErrorRate, var ticket) = ScanTickets(values);
+                long departureProduct = ticket
+                    .Where((p) => p.Key.AsSpan().StartsWith("departure"))
+                    .Select((p) => (long)p.Value)
+                    .Product();
 
-        ScanningErrorRate = scanningErrorRate;
+                if (logger is { })
+                {
+                    logger.WriteLine("The ticket scanning error rate is {0}.", scanningErrorRate);
+                    logger.WriteLine("The product of the ticket fields starting with 'departure' is {0}.", departureProduct);
+                }
 
-        DepartureProduct = ticket
-            .Where((p) => p.Key.AsSpan().StartsWith("departure"))
-            .Select((p) => (long)p.Value)
-            .Product();
-
-        if (Verbose)
-        {
-            Logger.WriteLine("The ticket scanning error rate is {0}.", ScanningErrorRate);
-            Logger.WriteLine("The product of the ticket fields starting with 'departure' is {0}.", DepartureProduct);
-        }
-
-        return PuzzleResult.Create(ScanningErrorRate, DepartureProduct);
+                return (scanningErrorRate, departureProduct);
+            },
+            cancellationToken);
     }
 }

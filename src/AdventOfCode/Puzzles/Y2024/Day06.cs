@@ -7,18 +7,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2024;
 /// A class representing the puzzle for <c>https://adventofcode.com/2024/day/6</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2024, 06, "Guard Gallivant", RequiresData = true)]
-public sealed class Day06 : Puzzle
+public sealed class Day06 : Puzzle<int, int>
 {
-    /// <summary>
-    /// Gets the number of distinct positions visited by the guard.
-    /// </summary>
-    public int DistinctPositions { get; private set; }
-
-    /// <summary>
-    /// Gets the number of distinct positions where an obstruction can be placed to cause the guard to patrol in a loop.
-    /// </summary>
-    public int DistinctObstructions { get; private set; }
-
     /// <summary>
     /// Patrol the lab defined by the specified map.
     /// </summary>
@@ -57,19 +47,20 @@ public sealed class Day06 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        ArgumentNullException.ThrowIfNull(args);
+        return await SolveWithLinesAsync(
+            static (values, logger, cancellationToken) =>
+            {
+                (int distinctPositions, int distinctObstructions) = Patrol(values, cancellationToken);
 
-        var values = await ReadResourceAsLinesAsync(cancellationToken);
+                if (logger is { })
+                {
+                    logger.WriteLine("{0} distinct positions are visited by the guard before leaving the mapped area.", distinctPositions);
+                    logger.WriteLine("{0} distinct positions can be chosen for an obstruction to create a loop.", distinctObstructions);
+                }
 
-        (DistinctPositions, DistinctObstructions) = Patrol(values, cancellationToken);
-
-        if (Verbose)
-        {
-            Logger.WriteLine("{0} distinct positions are visited by the guard before leaving the mapped area.", DistinctPositions);
-            Logger.WriteLine("{0} distinct positions can be chosen for an obstruction to create a loop.", DistinctObstructions);
-        }
-
-        return PuzzleResult.Create(DistinctPositions, DistinctObstructions);
+                return (distinctPositions, distinctObstructions);
+            },
+            cancellationToken);
     }
 
     private static (Dictionary<Point, bool> Lab, Point Origin) ParseMap(IList<string> map)

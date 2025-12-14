@@ -7,18 +7,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2024;
 /// A class representing the puzzle for <c>https://adventofcode.com/2024/day/7</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2024, 07, "Bridge Repair", RequiresData = true)]
-public sealed class Day07 : Puzzle
+public sealed class Day07 : Puzzle<long, long>
 {
-    /// <summary>
-    /// Gets the first calibration result for the bridge.
-    /// </summary>
-    public long CalibrationResult1 { get; private set; }
-
-    /// <summary>
-    /// Gets the second calibration result for the bridge.
-    /// </summary>
-    public long CalibrationResult2 { get; private set; }
-
     /// <summary>
     /// Calibrates the bridge using the specified equations.
     /// </summary>
@@ -109,19 +99,20 @@ public sealed class Day07 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        ArgumentNullException.ThrowIfNull(args);
+        return await SolveWithLinesAsync(
+            static (equations, logger, _) =>
+            {
+                long calibrationResult1 = Calibrate(equations, useConcatenation: false);
+                long calibrationResult2 = Calibrate(equations, useConcatenation: true);
 
-        var equations = await ReadResourceAsLinesAsync(cancellationToken);
+                if (logger is { })
+                {
+                    logger.WriteLine("The total calibration result is {0}.", calibrationResult1);
+                    logger.WriteLine("The total calibration result using concatenation is {0}.", calibrationResult2);
+                }
 
-        CalibrationResult1 = Calibrate(equations, useConcatenation: false);
-        CalibrationResult2 = Calibrate(equations, useConcatenation: true);
-
-        if (Verbose)
-        {
-            Logger.WriteLine("The total calibration result is {0}.", CalibrationResult1);
-            Logger.WriteLine("The total calibration result using concatenation is {0}.", CalibrationResult2);
-        }
-
-        return PuzzleResult.Create(CalibrationResult1, CalibrationResult2);
+                return (calibrationResult1, calibrationResult2);
+            },
+            cancellationToken);
     }
 }

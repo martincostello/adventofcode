@@ -9,18 +9,8 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2019;
 /// A class representing the puzzle for <c>https://adventofcode.com/2019/day/7</c>. This class cannot be inherited.
 /// </summary>
 [Puzzle(2019, 07, "Amplification Circuit", RequiresData = true)]
-public sealed class Day07 : Puzzle
+public sealed class Day07 : Puzzle<long, long>
 {
-    /// <summary>
-    /// Gets the highest signal that can be sent to the thrusters.
-    /// </summary>
-    public long HighestSignal { get; private set; }
-
-    /// <summary>
-    /// Gets the highest signal that can be sent to the thrusters using a feedback loop.
-    /// </summary>
-    public long HighestSignalUsingFeedback { get; private set; }
-
     /// <summary>
     /// Runs the specified Intcode program.
     /// </summary>
@@ -105,17 +95,20 @@ public sealed class Day07 : Puzzle
     /// <inheritdoc />
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        string program = await ReadResourceAsStringAsync(cancellationToken);
+        return await SolveWithStringAsync(
+            static async (program, logger, cancellationToken) =>
+            {
+                long highestSignal = await RunProgramAsync(program, useFeedback: false, cancellationToken);
+                long highestSignalUsingFeedback = await RunProgramAsync(program, useFeedback: true, cancellationToken);
 
-        HighestSignal = await RunProgramAsync(program, useFeedback: false, cancellationToken);
-        HighestSignalUsingFeedback = await RunProgramAsync(program, useFeedback: true, cancellationToken);
+                if (logger is { })
+                {
+                    logger.WriteLine("The highest signal that can be sent to the thrusters is {0}.", highestSignal);
+                    logger.WriteLine("The highest signal that can be sent to the thrusters using a feedback loop is {0}.", highestSignalUsingFeedback);
+                }
 
-        if (Verbose)
-        {
-            Logger.WriteLine("The highest signal that can be sent to the thrusters is {0}.", HighestSignal);
-            Logger.WriteLine("The highest signal that can be sent to the thrusters using a feedback loop is {0}.", HighestSignalUsingFeedback);
-        }
-
-        return PuzzleResult.Create(HighestSignal, HighestSignalUsingFeedback);
+                return (highestSignal, highestSignalUsingFeedback);
+            },
+            cancellationToken);
     }
 }
