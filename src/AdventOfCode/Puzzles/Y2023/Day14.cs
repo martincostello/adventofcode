@@ -197,7 +197,7 @@ public sealed class Day14 : Puzzle<int, int>
                 if (logger is { })
                 {
                     Logger.WriteLine("The total load on the north support beams is {0}.", Solution1);
-                    Logger.WriteLine("The total load on the north support beams after 1,000,000,000 spins is {0}.", Solution1, Solution2);
+                    Logger.WriteLine("The total load on the north support beams after 1,000,000,000 spins is {0}.", Solution2);
                 }
 
                 return (totalLoad, totalLoadWithSpinCycle);

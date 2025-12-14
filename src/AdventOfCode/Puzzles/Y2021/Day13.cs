@@ -131,7 +131,7 @@ public sealed class Day13 : Puzzle<int, string>
             (instructions, logger, cancellationToken) =>
             {
                 (int dotCountAfterFold1, _, _) = Fold(instructions, folds: 1);
-                (_, string activationCode, visualization) = Fold(instructions, folds: null, Logger);
+                (_, string activationCode, visualization) = Fold(instructions, folds: null, logger);
 
                 if (logger is { })
                 {
@@ -141,7 +141,7 @@ public sealed class Day13 : Puzzle<int, string>
 
                     logger.WriteLine(
                         "The code to activate the infrared thermal imaging camera system is {0}.",
-                        Solution2!);
+                        activationCode);
                 }
 
                 return (dotCountAfterFold1, activationCode);
