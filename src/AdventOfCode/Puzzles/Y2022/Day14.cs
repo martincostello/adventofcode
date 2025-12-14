@@ -215,10 +215,10 @@ public sealed class Day14 : Puzzle<int, int>
 
                 if (logger is { })
                 {
-                    logger.WriteLine("{0} grains of sand come to rest before sand starts flowing into the abyss below.", Solution1);
+                    logger.WriteLine("{0} grains of sand come to rest before sand starts flowing into the abyss below.", grainsOfSandWithVoid);
                     logger.WriteLine(visualization1);
 
-                    logger.WriteLine("{0} grains of sand come to rest before sand blocks the source.", Solution2);
+                    logger.WriteLine("{0} grains of sand come to rest before sand blocks the source.", grainsOfSandWithFloor);
                     logger.WriteLine(visualization2);
                 }
 
