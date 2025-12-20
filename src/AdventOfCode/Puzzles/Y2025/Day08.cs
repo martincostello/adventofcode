@@ -13,7 +13,7 @@ public sealed class Day08 : Puzzle<int, int>
     /// Connects the specified function boxes together as distinct circuits.
     /// </summary>
     /// <param name="values">The values to solve the puzzle from.</param>
-    /// <param name="pairs">The maximum number of junction boxes to pair.</param>
+    /// <param name="pairs">The maximum number of junction boxes to pair to capture the size of the three largest circuits at.</param>
     /// <returns>
     /// The product of the sizes of the three largest circuits and the product
     /// of the X coordinates of the last two junction boxes to be connected.
@@ -62,30 +62,29 @@ public sealed class Day08 : Puzzle<int, int>
 
             (var first, var second, _) = sorted[i];
 
-            if (circuits.Any((p) => p.Contains(first) && p.Contains(second)))
+            var firstCircuit = circuits.FirstOrDefault((p) => p.Contains(first));
+            var secondCircuit = circuits.FirstOrDefault((p) => p.Contains(second));
+
+            if (firstCircuit is { } && firstCircuit == secondCircuit)
             {
                 continue;
             }
-
-            var leftJunction = circuits.FirstOrDefault((p) => p.Contains(first));
-            var rightJunction = circuits.FirstOrDefault((p) => p.Contains(second));
-
-            if (leftJunction is null && rightJunction is null)
+            else if (firstCircuit is null && secondCircuit is null)
             {
                 circuits.Add([first, second]);
             }
-            else if (leftJunction is { } && rightJunction is { })
+            else if (firstCircuit is { } && secondCircuit is { })
             {
-                leftJunction.UnionWith(rightJunction);
-                circuits.Remove(rightJunction);
+                firstCircuit.UnionWith(secondCircuit);
+                circuits.Remove(secondCircuit);
             }
-            else if (leftJunction is { })
+            else if (firstCircuit is { })
             {
-                leftJunction.Add(second);
+                firstCircuit.Add(second);
             }
-            else if (rightJunction is { })
+            else if (secondCircuit is { })
             {
-                rightJunction.Add(first);
+                secondCircuit.Add(first);
             }
 
             if (circuits.Count == 1)
