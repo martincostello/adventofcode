@@ -6,17 +6,18 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2025;
 /// <summary>
 /// A class representing the puzzle for <c>https://adventofcode.com/2025/day/8</c>. This class cannot be inherited.
 /// </summary>
-[Puzzle(2025, 08, "Playground", RequiresData = true, IsHidden = true, Unsolved = true)]
+[Puzzle(2025, 08, "Playground", RequiresData = true)]
 public sealed class Day08 : Puzzle<int>
 {
     /// <summary>
     /// Connects the specified function boxes together as distinct circuits.
     /// </summary>
     /// <param name="values">The values to solve the puzzle from.</param>
+    /// <param name="pairs">The number of junction boxes to pair.</param>
     /// <returns>
     /// The product of the sizes of the three largest circuits.
     /// </returns>
-    public static int Connect(IReadOnlyList<string> values)
+    public static int Connect(IReadOnlyList<string> values, int pairs)
     {
         var boxes = new List<Vector3>();
 
@@ -32,27 +33,20 @@ public sealed class Day08 : Puzzle<int>
         {
             var left = boxes[i];
 
-            for (int j = 0; j < boxes.Count; j++)
+            for (int j = i + 1; j < boxes.Count; j++)
             {
-                if (i == j)
-                {
-                    continue;
-                }
-
                 var right = boxes[j];
 
                 float distance = Vector3.Distance(left, right);
 
                 distances.Add((left, right, distance));
-                distances.Add((right, left, distance));
             }
         }
 
         var sorted = distances.OrderBy((p) => p.Distance).ToList();
         var circuits = new List<HashSet<Vector3>>();
 
-        // TODO Fix circuit connection processing
-        for (int i = 0; i < sorted.Count; i++)
+        for (int i = 0; i < pairs; i++)
         {
             (var first, var second, _) = sorted[i];
 
@@ -61,18 +55,25 @@ public sealed class Day08 : Puzzle<int>
                 continue;
             }
 
-            var circuit =
-                circuits.FirstOrDefault((p) => p.Contains(first) && !p.Contains(second)) ??
-                circuits.FirstOrDefault((p) => !p.Contains(first) && p.Contains(second));
+            var leftJunction = circuits.FirstOrDefault((p) => p.Contains(first));
+            var rightJunction = circuits.FirstOrDefault((p) => p.Contains(second));
 
-            if (circuit is null)
+            if (leftJunction is null && rightJunction is null)
             {
                 circuits.Add([first, second]);
             }
-            else
+            else if (leftJunction is { } && rightJunction is { })
             {
-                circuit.Add(first);
-                circuit.Add(second);
+                leftJunction.UnionWith(rightJunction);
+                circuits.Remove(rightJunction);
+            }
+            else if (leftJunction is { })
+            {
+                leftJunction.Add(second);
+            }
+            else if (rightJunction is { })
+            {
+                rightJunction.Add(first);
             }
         }
 
@@ -88,7 +89,7 @@ public sealed class Day08 : Puzzle<int>
         return await SolveWithLinesAsync(
             static (values, logger, _) =>
             {
-                int product = Connect(values);
+                int product = Connect(values, pairs: 1_000);
 
                 if (logger is { })
                 {
