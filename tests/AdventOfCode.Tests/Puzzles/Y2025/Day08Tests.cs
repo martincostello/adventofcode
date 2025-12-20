@@ -5,7 +5,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2025;
 
 public sealed class Day08Tests(ITestOutputHelper outputHelper) : PuzzleTest(outputHelper)
 {
-    [Fact(Skip = "Not implemented.")]
+    [Fact]
     public void Y2025_Day08_Connect_Returns_Correct_Value()
     {
         // Arrange
@@ -34,19 +34,21 @@ public sealed class Day08Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         ];
 
         // Act
-        int actual = Day08.Connect(values);
+        (int actualTop3, int actualX) = Day08.Connect(values, pairs: 10);
 
         // Assert
-        actual.ShouldBe(40);
+        actualTop3.ShouldBe(40);
+        actualX.ShouldBe(25272);
     }
 
-    [Fact(Skip = "Not implemented.")]
+    [Fact]
     public async Task Y2025_Day08_Solve_Returns_Correct_Solution()
     {
         // Act
         var puzzle = await SolvePuzzleAsync<Day08>();
 
         // Assert
-        puzzle.Solution.ShouldBe(Puzzle.Unsolved);
+        puzzle.Solution1.ShouldBe(63920);
+        puzzle.Solution2.ShouldBe(1026594680);
     }
 }

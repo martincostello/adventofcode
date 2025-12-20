@@ -6,17 +6,19 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2025;
 /// <summary>
 /// A class representing the puzzle for <c>https://adventofcode.com/2025/day/8</c>. This class cannot be inherited.
 /// </summary>
-[Puzzle(2025, 08, "Playground", RequiresData = true, IsHidden = true, Unsolved = true)]
-public sealed class Day08 : Puzzle<int>
+[Puzzle(2025, 08, "Playground", RequiresData = true)]
+public sealed class Day08 : Puzzle<int, int>
 {
     /// <summary>
     /// Connects the specified function boxes together as distinct circuits.
     /// </summary>
     /// <param name="values">The values to solve the puzzle from.</param>
+    /// <param name="pairs">The maximum number of junction boxes to pair to capture the size of the three largest circuits at.</param>
     /// <returns>
-    /// The product of the sizes of the three largest circuits.
+    /// The product of the sizes of the three largest circuits and the product
+    /// of the X coordinates of the last two junction boxes to be connected.
     /// </returns>
-    public static int Connect(IReadOnlyList<string> values)
+    public static (int Top3Product, int LastPairXProduct) Connect(IReadOnlyList<string> values, int pairs)
     {
         var boxes = new List<Vector3>();
 
@@ -32,54 +34,66 @@ public sealed class Day08 : Puzzle<int>
         {
             var left = boxes[i];
 
-            for (int j = 0; j < boxes.Count; j++)
+            for (int j = i + 1; j < boxes.Count; j++)
             {
-                if (i == j)
-                {
-                    continue;
-                }
-
                 var right = boxes[j];
 
                 float distance = Vector3.Distance(left, right);
 
                 distances.Add((left, right, distance));
-                distances.Add((right, left, distance));
             }
         }
 
         var sorted = distances.OrderBy((p) => p.Distance).ToList();
         var circuits = new List<HashSet<Vector3>>();
 
-        // TODO Fix circuit connection processing
+        int top3Product = Unsolved;
+        int lastPairXProduct = Unsolved;
+
         for (int i = 0; i < sorted.Count; i++)
         {
+            if (i == pairs)
+            {
+                top3Product = circuits
+                    .OrderByDescending((p) => p.Count)
+                    .Take(3)
+                    .Aggregate(1, (x, y) => x * y.Count);
+            }
+
             (var first, var second, _) = sorted[i];
 
-            if (circuits.Any((p) => p.Contains(first) && p.Contains(second)))
+            var firstCircuit = circuits.FirstOrDefault((p) => p.Contains(first));
+            var secondCircuit = circuits.FirstOrDefault((p) => p.Contains(second));
+
+            if (firstCircuit is { } && firstCircuit == secondCircuit)
             {
                 continue;
             }
-
-            var circuit =
-                circuits.FirstOrDefault((p) => p.Contains(first) && !p.Contains(second)) ??
-                circuits.FirstOrDefault((p) => !p.Contains(first) && p.Contains(second));
-
-            if (circuit is null)
+            else if (firstCircuit is null && secondCircuit is null)
             {
                 circuits.Add([first, second]);
             }
-            else
+            else if (firstCircuit is { } && secondCircuit is { })
             {
-                circuit.Add(first);
-                circuit.Add(second);
+                firstCircuit.UnionWith(secondCircuit);
+                circuits.Remove(secondCircuit);
+            }
+            else if (firstCircuit is { })
+            {
+                firstCircuit.Add(second);
+            }
+            else if (secondCircuit is { })
+            {
+                secondCircuit.Add(first);
+            }
+
+            if (circuits.Count == 1)
+            {
+                lastPairXProduct = (int)first.X * (int)second.X;
             }
         }
 
-        return circuits
-            .OrderByDescending((p) => p.Count)
-            .Take(3)
-            .Aggregate(1, (x, y) => x * y.Count);
+        return (top3Product, lastPairXProduct);
     }
 
     /// <inheritdoc />
@@ -88,14 +102,15 @@ public sealed class Day08 : Puzzle<int>
         return await SolveWithLinesAsync(
             static (values, logger, _) =>
             {
-                int product = Connect(values);
+                (int top3Product, int lastPairXProduct) = Connect(values, pairs: 1_000);
 
                 if (logger is { })
                 {
-                    logger.WriteLine("The product of the sizes of the three largest circuits is {0}.", product);
+                    logger.WriteLine("The product of the sizes of the three largest circuits is {0}.", top3Product);
+                    logger.WriteLine("The product of the X coordinates of the last two junction boxes to connect is {0}.", lastPairXProduct);
                 }
 
-                return product;
+                return (top3Product, lastPairXProduct);
             },
             cancellationToken);
     }

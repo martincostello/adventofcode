@@ -238,7 +238,7 @@ public class ApiTests(HttpServerFixture fixture, ITestOutputHelper outputHelper)
     [PuzzleData(2025, 5, 761, 345755049374932)]
     [PuzzleData(2025, 6, 5524274308182, 8843673199391)]
     [PuzzleData(2025, 7, 1566, 5921061943075)]
-    [UnimplementedPuzzleData(2025, 8)]
+    [PuzzleData(2025, 8, 63920, 1026594680)]
     [UnsolvedPuzzleData(2025, 9, 4759420470)]
     [TooSlowPuzzleData(2025, 10, 524, Puzzle.Unsolved)]
     [TooSlowPuzzleData(2025, 11, 788, Puzzle.Unsolved)]
