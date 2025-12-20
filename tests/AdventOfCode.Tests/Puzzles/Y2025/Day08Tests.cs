@@ -34,10 +34,11 @@ public sealed class Day08Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         ];
 
         // Act
-        int actual = Day08.Connect(values, pairs: 10);
+        (int actualTop3, int actualX) = Day08.Connect(values, pairs: 10);
 
         // Assert
-        actual.ShouldBe(40);
+        actualTop3.ShouldBe(40);
+        actualX.ShouldBe(25272);
     }
 
     [Fact]
@@ -47,6 +48,7 @@ public sealed class Day08Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         var puzzle = await SolvePuzzleAsync<Day08>();
 
         // Assert
-        puzzle.Solution.ShouldBe(63920);
+        puzzle.Solution1.ShouldBe(63920);
+        puzzle.Solution2.ShouldBe(1026594680);
     }
 }
