@@ -5,7 +5,7 @@
     <GlobalPackageReference Include="ReferenceTrimmer" Version="3.3.12" />
   </ItemGroup>
   <ItemGroup>
-    <PackageVersion Include="Amazon.Lambda.AspNetCoreServer.Hosting" Version="1.9.0" />
+    <PackageVersion Include="Amazon.Lambda.AspNetCoreServer.Hosting" Version="1.9.1" />
     <PackageVersion Include="Amazon.Lambda.RuntimeSupport" Version="1.14.1" />
     <PackageVersion Include="BenchmarkDotNet" Version="0.15.8" />
     <PackageVersion Include="GitHubActionsTestLogger" Version="3.0.1" />
