@@ -32,7 +32,6 @@
     <File Path=".github/workflows/benchmark.yml" />
     <File Path=".github/workflows/build.yml" />
     <File Path=".github/workflows/dependency-review.yml" />
-    <File Path=".github/workflows/lighthouse.yml" />
     <File Path=".github/workflows/update-dotnet-sdk.yml" />
     <File Path=".github/workflows/update-static-assets.yml" />
   </Folder>
