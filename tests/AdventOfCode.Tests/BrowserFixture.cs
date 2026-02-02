@@ -88,9 +88,7 @@ public class BrowserFixture(ITestOutputHelper outputHelper)
 
         if (System.Diagnostics.Debugger.IsAttached)
         {
-#pragma warning disable CS0612
-            options.Devtools = true;
-#pragma warning restore CS0612
+            options.Args = ["--auto-open-devtools-for-tabs"];
             options.Headless = false;
             options.SlowMo = 100;
         }
