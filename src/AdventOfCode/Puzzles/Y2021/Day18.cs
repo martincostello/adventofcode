@@ -285,15 +285,9 @@ public sealed class Day18 : Puzzle<int, int>
                     SnailValue? left = toExplode.FindNearest(left: true);
                     SnailValue? right = toExplode.FindNearest(left: false);
 
-                    if (left is not null)
-                    {
-                        left.Value += (toExplode.Left as SnailValue)!.Value;
-                    }
+                    left?.Value += (toExplode.Left as SnailValue)!.Value;
 
-                    if (right is not null)
-                    {
-                        right.Value += (toExplode.Right as SnailValue)!.Value;
-                    }
+                    right?.Value += (toExplode.Right as SnailValue)!.Value;
 
                     SnailPair parent = toExplode.Parent!;
                     SnailValue exploded = new(0, parent);

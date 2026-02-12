@@ -79,7 +79,7 @@ public sealed class Day24 : Puzzle<int, int>
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
         return await SolveWithLinesAsync(
-            static async (layout, logger, cancellationToken) =>
+            static (layout, logger, cancellationToken) =>
             {
                 int fewestStepsToVisitAllLocations = GetMinimumStepsToVisitLocations(layout, returnToOrigin: false, cancellationToken);
                 int fewestStepsToVisitAllLocationsAndReturn = GetMinimumStepsToVisitLocations(layout, returnToOrigin: true, cancellationToken);
@@ -95,7 +95,7 @@ public sealed class Day24 : Puzzle<int, int>
                         fewestStepsToVisitAllLocationsAndReturn);
                 }
 
-                return (fewestStepsToVisitAllLocations, fewestStepsToVisitAllLocationsAndReturn);
+                return Task.FromResult<(int Solution1, int Solution2)>((fewestStepsToVisitAllLocations, fewestStepsToVisitAllLocationsAndReturn));
             },
             cancellationToken);
     }

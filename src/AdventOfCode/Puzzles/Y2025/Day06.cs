@@ -207,7 +207,7 @@ public sealed class Day06 : Puzzle<long, long>
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
         return await SolveWithLinesAsync(
-            static async (values, logger, cancellationToken) =>
+            static (values, logger, cancellationToken) =>
             {
                 long grandTotalNormal = SolveWorksheet(values, useCephalopodMaths: false);
                 long grandTotalCephalopod = SolveWorksheet(values, useCephalopodMaths: true);
@@ -218,7 +218,7 @@ public sealed class Day06 : Puzzle<long, long>
                     logger.WriteLine("The grand total using cephalopod maths is {0}.", grandTotalCephalopod);
                 }
 
-                return (grandTotalNormal, grandTotalCephalopod);
+                return Task.FromResult<(long Solution1, long Solution2)>((grandTotalNormal, grandTotalCephalopod));
             },
             cancellationToken);
     }

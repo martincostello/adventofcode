@@ -59,7 +59,7 @@ public sealed class Day12 : Puzzle<int>
                     perimeter++;
                 }
 
-                if (!region.Contains(new(point.X, point.Y + 1))!)
+                if (!region.Contains(new(point.X, point.Y + 1)))
                 {
                     perimeter++;
                 }

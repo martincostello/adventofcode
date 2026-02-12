@@ -24,7 +24,7 @@ public sealed class SiteFixture
         get
         {
             Assert.SkipWhen(field is null, $"The {WebsiteUrl} environment variable is not set or is not a valid absolute URI.");
-            return field!;
+            return field;
         }
         set;
     }
