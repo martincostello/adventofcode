@@ -292,7 +292,7 @@ public sealed class Day12 : Puzzle<int>
 
     private sealed class Shape(int index, int capacity) : HashSet<Point>(capacity)
     {
-        private readonly List<Shape> _transformations = new(8);
+        private readonly List<Shape> _transformations = [with(8)];
 
         public int Index { get; } = index;
 
