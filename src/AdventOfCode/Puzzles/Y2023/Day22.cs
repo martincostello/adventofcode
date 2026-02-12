@@ -115,7 +115,7 @@ public sealed class Day22 : Puzzle<int, int>
 
                 if (transform != Vector3.Zero)
                 {
-                    transformed = new HashSet<Vector3>(cubes!.Length);
+                    transformed = [with(cubes!.Length)];
 
                     for (int i = 0; i < cubes.Length; i++)
                     {
