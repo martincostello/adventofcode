@@ -104,9 +104,9 @@ public sealed class Day08 : Puzzle<long, long>
 
         public int MetadataCount { get; init; } = metadataCount;
 
-        public List<Node> Children { get; } = new(childCount);
+        public List<Node> Children { get; } = [with(childCount)];
 
-        public List<int> Metadata { get; } = new(metadataCount);
+        public List<int> Metadata { get; } = [with(metadataCount)];
 
         public long MetadataSum { get; set; }
 
