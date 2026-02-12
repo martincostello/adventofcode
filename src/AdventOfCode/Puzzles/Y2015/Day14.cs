@@ -65,7 +65,7 @@ public sealed class Day14 : Puzzle<int, int>
     {
         return await SolveWithLinesAsync(
             args,
-            static async (arguments, flightData, logger, _) =>
+            static (arguments, flightData, logger, _) =>
             {
                 int timeIndex = Parse<int>(arguments[0], NumberStyles.Integer & ~NumberStyles.AllowLeadingSign);
 
@@ -83,7 +83,7 @@ public sealed class Day14 : Puzzle<int, int>
                     logger.WriteLine("After {0:N0} seconds, the reindeer in the lead has {1:N0} points.", timeIndex, maximumReindeerPoints);
                 }
 
-                return (maximumReindeerDistance, maximumReindeerPoints);
+                return Task.FromResult<(int Solution1, int Solution2)>((maximumReindeerDistance, maximumReindeerPoints));
             },
             cancellationToken);
     }

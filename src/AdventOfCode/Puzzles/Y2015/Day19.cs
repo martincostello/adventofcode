@@ -134,7 +134,7 @@ public sealed partial class Day19 : Puzzle<int, int>
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
         return await SolveWithLinesAsync(
-            static async (lines, logger, cancellationToken) =>
+            static (lines, logger, cancellationToken) =>
             {
                 string molecule = lines[^1];
 
@@ -157,7 +157,7 @@ public sealed partial class Day19 : Puzzle<int, int>
                     logger.WriteLine($"The target molecule can be made in a minimum of {calibrationSolution:N0} steps.");
                 }
 
-                return (calibrationSolution, fabricationSolution);
+                return Task.FromResult<(int Solution1, int Solution2)>((calibrationSolution, fabricationSolution));
             },
             cancellationToken);
     }

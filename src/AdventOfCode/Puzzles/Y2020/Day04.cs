@@ -155,7 +155,7 @@ public sealed partial class Day04 : Puzzle<int, int>
         }
 
         static bool IsValidYear(ReadOnlySpan<char> value, int minimum, int maximum)
-            => IsValidNumber(value, minimum, maximum) && value!.Length == 4;
+            => IsValidNumber(value, minimum, maximum) && value.Length == 4;
 
         foreach (string? key in passport.Keys)
         {
@@ -169,7 +169,7 @@ public sealed partial class Day04 : Puzzle<int, int>
                 "hcl" => IsValidHairColor(value),
                 "hgt" => IsValidHeight(value),
                 "iyr" => IsValidYear(value, 2010, 2020),
-                "pid" => TryParse(value, out int _) && value!.Length == 9,
+                "pid" => TryParse(value, out int _) && value.Length == 9,
                 _ => true,
             };
 

@@ -120,7 +120,7 @@ public sealed class Day22 : Puzzle<long, long>
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
         return await SolveWithLinesAsync(
-            static async (instructions, logger, _) =>
+            static (instructions, logger, _) =>
             {
                 long initializedCubeCount = Reboot(instructions, initialize: true);
                 long rebootedCubeCount = Reboot(instructions, initialize: false);
@@ -131,7 +131,7 @@ public sealed class Day22 : Puzzle<long, long>
                     logger.WriteLine("{0:N0} cubes in the reactor are on after reboot.", rebootedCubeCount);
                 }
 
-                return (initializedCubeCount, rebootedCubeCount);
+                return Task.FromResult<(long Solution1, long Solution2)>((initializedCubeCount, rebootedCubeCount));
             },
             cancellationToken);
     }

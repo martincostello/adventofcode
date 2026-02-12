@@ -51,7 +51,7 @@ public sealed class Day23 : Puzzle<int, int>
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
         return await SolveWithLinesAsync(
-            static async (diagram, logger, cancellationToken) =>
+            static (diagram, logger, cancellationToken) =>
             {
                 int minimumEnergyFolded = Organize(diagram, unfoldDiagram: false, cancellationToken);
                 int minimumEnergyUnfolded = Organize(diagram, unfoldDiagram: true, cancellationToken);
@@ -62,7 +62,7 @@ public sealed class Day23 : Puzzle<int, int>
                     logger.WriteLine("The least energy required to organize the amphipods with the diagram unfolded is {0:N0}.", minimumEnergyUnfolded);
                 }
 
-                return (minimumEnergyFolded, minimumEnergyUnfolded);
+                return Task.FromResult<(int Solution1, int Solution2)>((minimumEnergyFolded, minimumEnergyUnfolded));
             },
             cancellationToken);
     }
