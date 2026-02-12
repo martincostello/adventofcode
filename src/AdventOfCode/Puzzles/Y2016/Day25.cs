@@ -13,7 +13,7 @@ public sealed class Day25 : Puzzle<int>
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
         return await SolveWithLinesAsync(
-            async static (instructions, logger, cancellationToken) =>
+            static (instructions, logger, cancellationToken) =>
             {
                 foreach (int i in Enumerable.InfiniteSequence(1, 1))
                 {
@@ -57,11 +57,11 @@ public sealed class Day25 : Puzzle<int>
                             logger.WriteLine($"The lowest positive integer that produces a clock signal is '{i:N0}'.");
                         }
 
-                        return i;
+                        return Task.FromResult(i);
                     }
                 }
 
-                return Unsolved;
+                return Task.FromResult(Unsolved);
             },
             cancellationToken);
     }

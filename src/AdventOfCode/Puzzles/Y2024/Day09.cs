@@ -93,7 +93,7 @@ public sealed class Day09 : Puzzle<long>
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
         return await SolveWithStringAsync(
-            static async (map, logger, _) =>
+            static (map, logger, _) =>
             {
                 long checksum = Defragment(map);
 
@@ -102,7 +102,7 @@ public sealed class Day09 : Puzzle<long>
                     logger.WriteLine("The filesystem checksum is {0}.", checksum);
                 }
 
-                return checksum;
+                return Task.FromResult(checksum);
             },
             cancellationToken);
     }

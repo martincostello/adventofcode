@@ -47,7 +47,7 @@ public sealed class Day01 : Puzzle<int, int>
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
         return await SolveWithStringAsync(
-            static async (digits, logger, _) =>
+            static (digits, logger, _) =>
             {
                 digits = digits.TrimEnd();
 
@@ -60,7 +60,7 @@ public sealed class Day01 : Puzzle<int, int>
                     logger.WriteLine($"The solution to the second captcha is {captchaSolutionOpposite:N0}.");
                 }
 
-                return (captchaSolutionNext, captchaSolutionOpposite);
+                return Task.FromResult<(int Solution1, int Solution2)>((captchaSolutionNext, captchaSolutionOpposite));
             },
             cancellationToken);
     }

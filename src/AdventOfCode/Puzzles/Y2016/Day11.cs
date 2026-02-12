@@ -79,7 +79,7 @@ public sealed class Day11 : Puzzle<int>
     /// </returns>
     private static Dictionary<int, List<Element>> ParseInitialState(IList<string> initialState)
     {
-        Dictionary<int, List<Element>> state = new(4);
+        Dictionary<int, List<Element>> state = [with(4)];
 
         for (int i = 0; i < initialState.Count; i++)
         {

@@ -71,9 +71,9 @@ public sealed class Day14 : Puzzle<int, int>
     }
 
     /// <inheritdoc />
-    protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
+    protected override Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        return SolveWithArgument(
+        return Task.FromResult(SolveWithArgument(
             args,
             static (salt, logger, cancellationToken) =>
             {
@@ -88,7 +88,7 @@ public sealed class Day14 : Puzzle<int, int>
 
                 return (indexOfKey64, indexOfKey64WithStretching);
             },
-            cancellationToken);
+            cancellationToken));
     }
 
     /// <summary>

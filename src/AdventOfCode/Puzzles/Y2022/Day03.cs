@@ -67,7 +67,7 @@ public sealed class Day03 : Puzzle<int, int>
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
         return await SolveWithLinesAsync(
-            static async (inventories, logger, _) =>
+            static (inventories, logger, _) =>
             {
                 int sumOfPriorities = GetSumOfCommonItemTypes(inventories, useGroups: false);
                 int sumOfPrioritiesOfGroups = GetSumOfCommonItemTypes(inventories, useGroups: true);
@@ -83,7 +83,7 @@ public sealed class Day03 : Puzzle<int, int>
                         sumOfPrioritiesOfGroups);
                 }
 
-                return (sumOfPriorities, sumOfPrioritiesOfGroups);
+                return Task.FromResult<(int Solution1, int Solution2)>((sumOfPriorities, sumOfPrioritiesOfGroups));
             },
             cancellationToken);
     }

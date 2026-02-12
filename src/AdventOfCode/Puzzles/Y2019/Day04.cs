@@ -98,7 +98,7 @@ public sealed class Day04 : Puzzle<int, int>
     }
 
     /// <inheritdoc />
-    protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken) => SolveWithArgument(args, static (input, logger) =>
+    protected override Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken) => Task.FromResult(SolveWithArgument(args, static (input, logger) =>
     {
         int countV1 = GetPasswordsInRange(input, rulesVersion: 1);
         int countV2 = GetPasswordsInRange(input, rulesVersion: 2);
@@ -110,5 +110,5 @@ public sealed class Day04 : Puzzle<int, int>
         }
 
         return (countV1, countV2);
-    });
+    }));
 }

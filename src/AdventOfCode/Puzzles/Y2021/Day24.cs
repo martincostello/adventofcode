@@ -68,7 +68,7 @@ public sealed class Day24 : Puzzle<long, long>
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
         return await SolveWithLinesAsync(
-            static async (instructions, logger, _) =>
+            static (instructions, logger, _) =>
             {
                 long maximumValidModelNumber = Execute(instructions, maximumValue: true);
                 long minimumValidModelNumber = Execute(instructions, maximumValue: false);
@@ -79,7 +79,7 @@ public sealed class Day24 : Puzzle<long, long>
                     logger.WriteLine("The smallest model number accepted by MONAD is {0:N0}.", minimumValidModelNumber);
                 }
 
-                return (maximumValidModelNumber, minimumValidModelNumber);
+                return Task.FromResult<(long Solution1, long Solution2)>((maximumValidModelNumber, minimumValidModelNumber));
             },
             cancellationToken);
     }

@@ -73,7 +73,7 @@ public sealed class Day21 : Puzzle<int, int>
     protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
         return await SolveWithLinesAsync(
-            static async (stats, logger, cancellationToken) =>
+            static (stats, logger, cancellationToken) =>
             {
                 int bossHitPoints = Parse<int>(stats[0].Split(':')[1]);
                 int bossDamage = Parse<int>(stats[1].Split(':')[1]);
@@ -82,7 +82,7 @@ public sealed class Day21 : Puzzle<int, int>
                 var bossStats = (bossHitPoints, bossDamage, bossArmor);
 
                 string[] potentialWeapons = [.. Shop.PotentialWeapons.Keys];
-                string?[] potentialArmor = [.. Shop.PotentialArmor.Keys, null!];
+                string?[] potentialArmor = [.. Shop.PotentialArmor.Keys, null];
 
                 string[] keys = [.. Shop.PotentialRings.Keys];
 
@@ -140,7 +140,7 @@ public sealed class Day21 : Puzzle<int, int>
                     logger.WriteLine("The maximum amount of gold spent for the human to lose to the boss is {0:N0}.", minimumCostToWin);
                 }
 
-                return (maximumCostToLose, minimumCostToWin);
+                return Task.FromResult<(int Solution1, int Solution2)>((maximumCostToLose, minimumCostToWin));
             },
             cancellationToken);
     }
@@ -289,17 +289,17 @@ public sealed class Day21 : Puzzle<int, int>
         /// <summary>
         /// The shop's current armor inventory. This field is read-only.
         /// </summary>
-        private readonly Dictionary<string, Item> _armor = new(PotentialArmor);
+        private readonly Dictionary<string, Item> _armor = [with(PotentialArmor)];
 
         /// <summary>
         /// The shop's current ring inventory. This field is read-only.
         /// </summary>
-        private readonly Dictionary<string, Item> _rings = new(PotentialRings);
+        private readonly Dictionary<string, Item> _rings = [with(PotentialRings)];
 
         /// <summary>
         /// The shop's current weapon inventory. This field is read-only.
         /// </summary>
-        private readonly Dictionary<string, Item> _weapons = new(PotentialWeapons);
+        private readonly Dictionary<string, Item> _weapons = [with(PotentialWeapons)];
 
         /// <summary>
         /// Purchases the specified armor.
