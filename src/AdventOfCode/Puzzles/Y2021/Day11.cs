@@ -42,7 +42,7 @@ public sealed class Day11 : Puzzle<int, int>
 
         for (int i = 0; i < steps; i++)
         {
-            current = new Dictionary<Point, int>(previous.Count);
+            current = [with(previous.Count)];
 
             var pointsToFlash = new List<Point>();
 
