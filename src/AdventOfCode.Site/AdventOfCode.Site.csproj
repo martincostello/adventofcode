@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
   <PropertyGroup>
     <AWSProjectType>Lambda</AWSProjectType>
-    <ContainerFamily>noble-chiseled-extra</ContainerFamily>
+    <ContainerFamily>resolute-chiseled-extra</ContainerFamily>
     <Description>Web app for solving Advent of Code.</Description>
     <EnableConfigurationBindingGenerator>true</EnableConfigurationBindingGenerator>
     <EnableRequestDelegateGenerator>true</EnableRequestDelegateGenerator>
@@ -11,7 +11,7 @@
     <OutputType>Exe</OutputType>
     <PublishSelfContained>true</PublishSelfContained>
     <RootNamespace>MartinCostello.AdventOfCode.Site</RootNamespace>
-    <TargetFramework>net10.0</TargetFramework>
+    <TargetFramework>net11.0</TargetFramework>
     <TypeScriptCompileBlocked>true</TypeScriptCompileBlocked>
     <TypeScriptToolsVersion>latest</TypeScriptToolsVersion>
   </PropertyGroup>
