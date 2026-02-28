@@ -296,7 +296,7 @@ public sealed class Day06 : Puzzle<int, int>
             }
 
             _bounds = new(0, 0, width, height);
-            _lightBrightnesses = new(width * height);
+            _lightBrightnesses = [with(width * height)];
         }
 
         /// <summary>

@@ -289,17 +289,17 @@ public sealed class Day21 : Puzzle<int, int>
         /// <summary>
         /// The shop's current armor inventory. This field is read-only.
         /// </summary>
-        private readonly Dictionary<string, Item> _armor = new(PotentialArmor);
+        private readonly Dictionary<string, Item> _armor = [with(PotentialArmor)];
 
         /// <summary>
         /// The shop's current ring inventory. This field is read-only.
         /// </summary>
-        private readonly Dictionary<string, Item> _rings = new(PotentialRings);
+        private readonly Dictionary<string, Item> _rings = [with(PotentialRings)];
 
         /// <summary>
         /// The shop's current weapon inventory. This field is read-only.
         /// </summary>
-        private readonly Dictionary<string, Item> _weapons = new(PotentialWeapons);
+        private readonly Dictionary<string, Item> _weapons = [with(PotentialWeapons)];
 
         /// <summary>
         /// Purchases the specified armor.

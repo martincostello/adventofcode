@@ -89,6 +89,6 @@ public sealed class Day10 : Puzzle<int, int>
 
     private sealed class TopographicMap(Rectangle bounds) : SquareGrid(bounds)
     {
-        public Dictionary<Point, int> Heights { get; } = new(bounds.Area());
+        public Dictionary<Point, int> Heights { get; } = [with(bounds.Area())];
     }
 }
