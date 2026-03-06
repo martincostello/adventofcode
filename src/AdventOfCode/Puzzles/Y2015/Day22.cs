@@ -2,7 +2,6 @@
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 using System.Diagnostics;
-using System.Security.Cryptography;
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2015;
 
@@ -21,23 +20,127 @@ public sealed class Day22 : Puzzle<int, int>
     /// </returns>
     public static int Fight(string difficulty)
     {
-        // Play the game 100,000 times with random choices of spells
-        const int Iterations = 100_000;
+        bool isHard = string.Equals("HARD", difficulty, StringComparison.OrdinalIgnoreCase);
 
-        var solutions = new List<(bool DidWizardWin, int ManaSpent)>(Iterations);
+        // Use Dijkstra to find the minimum mana that can be spent for the wizard to win.
+        // State: (wizardHP, wizardMana, bossHP, shieldTimer, poisonTimer, rechargeTimer, isWizardTurn)
+        var queue = new PriorityQueue<(int WizHP, int WizMana, int BossHP, int ShieldT, int PoisonT, int RechargeT, bool IsWizTurn), int>();
+        var visited = new HashSet<(int, int, int, int, int, int, bool)>();
 
-        while (solutions.Count < Iterations)
+        const int InitialWizardHP = 50;
+        const int InitialWizardMana = 500;
+        const int InitialBossHP = 55;
+        const int BossDamage = 8;
+
+        queue.Enqueue((InitialWizardHP, InitialWizardMana, InitialBossHP, 0, 0, 0, true), 0);
+
+        while (queue.TryDequeue(out var state, out int manaSpent))
         {
-            var result = Fight(SpellSelector, difficulty);
-            solutions.Add(result);
+            var (wizHP, wizMana, bossHP, shieldT, poisonT, rechargeT, isWizTurn) = state;
+
+            if (!visited.Add((wizHP, wizMana, bossHP, shieldT, poisonT, rechargeT, isWizTurn)))
+            {
+                continue;
+            }
+
+            // Hard mode: wizard loses 1 HP at the start of their turn
+            if (isHard && isWizTurn)
+            {
+                wizHP--;
+
+                if (wizHP < 1)
+                {
+                    continue;
+                }
+            }
+
+            // Apply effects at the start of this turn
+            int wizardArmor = shieldT > 0 ? 7 : 0;
+
+            if (shieldT > 0)
+            {
+                shieldT--;
+            }
+
+            if (poisonT > 0)
+            {
+                bossHP -= 3;
+                poisonT--;
+            }
+
+            if (rechargeT > 0)
+            {
+                wizMana += 101;
+                rechargeT--;
+            }
+
+            // Check if boss died from effects
+            if (bossHP <= 0)
+            {
+                return manaSpent;
+            }
+
+            if (isWizTurn)
+            {
+                // Wizard's turn: try casting each available spell
+                // Magic Missile: 53 mana, instant, deals 4 damage
+                if (wizMana >= 53)
+                {
+                    int newBossHP = bossHP - 4;
+
+                    if (newBossHP <= 0)
+                    {
+                        return manaSpent + 53;
+                    }
+
+                    queue.Enqueue((wizHP, wizMana - 53, newBossHP, shieldT, poisonT, rechargeT, false), manaSpent + 53);
+                }
+
+                // Drain: 73 mana, instant, deals 2 damage and heals 2 HP
+                if (wizMana >= 73)
+                {
+                    int newBossHP = bossHP - 2;
+
+                    if (newBossHP <= 0)
+                    {
+                        return manaSpent + 73;
+                    }
+
+                    queue.Enqueue((wizHP + 2, wizMana - 73, newBossHP, shieldT, poisonT, rechargeT, false), manaSpent + 73);
+                }
+
+                // Shield: 113 mana, lasts 6 turns (cannot cast if already active)
+                if (wizMana >= 113 && shieldT == 0)
+                {
+                    queue.Enqueue((wizHP, wizMana - 113, bossHP, 6, poisonT, rechargeT, false), manaSpent + 113);
+                }
+
+                // Poison: 173 mana, lasts 6 turns (cannot cast if already active)
+                if (wizMana >= 173 && poisonT == 0)
+                {
+                    queue.Enqueue((wizHP, wizMana - 173, bossHP, shieldT, 6, rechargeT, false), manaSpent + 173);
+                }
+
+                // Recharge: 229 mana, lasts 5 turns (cannot cast if already active)
+                if (wizMana >= 229 && rechargeT == 0)
+                {
+                    queue.Enqueue((wizHP, wizMana - 229, bossHP, shieldT, poisonT, 5, false), manaSpent + 229);
+                }
+            }
+            else
+            {
+                // Boss's turn: boss attacks wizard
+                int damage = Math.Max(1, BossDamage - wizardArmor);
+                int newWizHP = wizHP - damage;
+
+                if (newWizHP > 0)
+                {
+                    queue.Enqueue((newWizHP, wizMana, bossHP, shieldT, poisonT, rechargeT, true), manaSpent);
+                }
+            }
         }
 
-        return solutions
-            .Where((p) => p.DidWizardWin)
-            .Min((p) => p.ManaSpent);
-
-        static string SpellSelector(Wizard wizard, List<string> spells)
-            => spells.ElementAt(RandomNumberGenerator.GetInt32(0, spells.Count));
+        return int.MaxValue; // No winning path found
     }
 
     /// <summary>
