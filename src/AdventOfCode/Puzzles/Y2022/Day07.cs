@@ -103,7 +103,7 @@ public sealed class Day07 : Puzzle<long, long>
             {
                 string item = terminalOutput[i];
 
-                if (item.StartsWith('$'))
+                if (item.StartsWith('$', StringComparison.Ordinal))
                 {
                     count = i;
                     break;
