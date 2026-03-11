@@ -256,7 +256,7 @@ public sealed class Day23 : Puzzle<int, int>
                     continue;
                 }
 
-                int firstSpace = burrow.LastIndexOf(' ');
+                int firstSpace = burrow.LastIndexOf(' ', StringComparison.Ordinal);
                 string populated = Replace(burrow, amphipod, firstSpace);
                 string newHallway = Replace(id.Hallway, ' ', space);
 
