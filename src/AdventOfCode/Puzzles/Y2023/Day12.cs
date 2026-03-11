@@ -166,7 +166,7 @@ public sealed class Day12 : Puzzle<int, int>
 
                     yield return new State(next, id.Counts, id.Actual + 1, id.Desired);
 
-                    i = springs.IndexOf(Unknown, i + 1);
+                    i = springs.IndexOf(Unknown, i + 1, StringComparison.Ordinal);
                 }
             }
         }
