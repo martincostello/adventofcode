@@ -28,8 +28,8 @@ public sealed class Day08 : Puzzle<long, long>
 
         if (asGhost)
         {
-            destination = (p) => p.EndsWith('Z');
-            locations = [.. network.Edges.Keys.Where((p) => p.EndsWith('A'))];
+            destination = (p) => p.EndsWith('Z', StringComparison.Ordinal);
+            locations = [.. network.Edges.Keys.Where((p) => p.EndsWith('A', StringComparison.Ordinal))];
         }
         else
         {
