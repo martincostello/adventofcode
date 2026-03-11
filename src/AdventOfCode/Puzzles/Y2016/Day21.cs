@@ -276,6 +276,8 @@ public sealed class Day21 : Puzzle<string>
     /// <param name="x">The index of the first location to swap.</param>
     /// <param name="y">The index of the second location to swap.</param>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
+#pragma warning disable CA1517 // HACK https://github.com/dotnet/sdk/issues/53388
     private static void SwapPosition(Span<char> values, int x, int y)
+#pragma warning disable CA1517
         => (values[x], values[y]) = (values[y], values[x]);
 }
