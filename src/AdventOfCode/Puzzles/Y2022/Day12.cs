@@ -107,7 +107,7 @@ public sealed class Day12 : Puzzle<int, int>
         public Map(int width, int height)
             : base(width, height)
         {
-            Elevations = new(Width * Height);
+            Elevations = [with(Width * Height)];
         }
 
         public Point Start { get; set; }

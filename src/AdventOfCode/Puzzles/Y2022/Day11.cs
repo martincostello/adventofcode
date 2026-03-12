@@ -80,7 +80,7 @@ public sealed class Day11 : Puzzle<long, long>
 
                 string operationString = operation[2..];
 
-                if (operation.StartsWith('+'))
+                if (operation.StartsWith('+', StringComparison.Ordinal))
                 {
                     if (operationString is "old")
                     {
@@ -92,7 +92,7 @@ public sealed class Day11 : Puzzle<long, long>
                         monkey.Inspector = (p) => p + operationValue;
                     }
                 }
-                else if (operation.StartsWith('*'))
+                else if (operation.StartsWith('*', StringComparison.Ordinal))
                 {
                     if (operationString is "old")
                     {
