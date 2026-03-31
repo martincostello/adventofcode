@@ -5,8 +5,8 @@ import { from } from 'linq-to-typescript';
 import { Puzzle2022 } from './Puzzle2022';
 
 export class Day13 extends Puzzle2022 {
-    sumOfPresortedIndicies: number;
-    decoderKey: number;
+    sumOfPresortedIndicies!: number;
+    decoderKey!: number;
 
     override get name() {
         return 'Distress Signal';

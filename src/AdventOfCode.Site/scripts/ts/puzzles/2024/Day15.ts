@@ -4,8 +4,8 @@
 import { Puzzle2024 } from './Puzzle2024';
 
 export class Day15 extends Puzzle2024 {
-    solution1: number;
-    solution2: number;
+    solution1!: number;
+    solution2!: number;
 
     override get solved() {
         return false;

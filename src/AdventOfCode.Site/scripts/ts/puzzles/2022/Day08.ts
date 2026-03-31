@@ -6,8 +6,8 @@ import { Size } from '../Size';
 import { Puzzle2022 } from './Puzzle2022';
 
 export class Day08 extends Puzzle2022 {
-    visibleTrees: number;
-    maximumScenicScore: number;
+    visibleTrees!: number;
+    maximumScenicScore!: number;
 
     override get name() {
         return 'Treetop Tree House';

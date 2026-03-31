@@ -6,8 +6,8 @@ import { Point, Rectangle } from '../index';
 import { Puzzle2015 } from './Puzzle2015';
 
 export class Day06 extends Puzzle2015 {
-    lightsIlluminated: number;
-    totalBrightness: number;
+    lightsIlluminated!: number;
+    totalBrightness!: number;
 
     override get name() {
         return 'Probably a Fire Hazard';

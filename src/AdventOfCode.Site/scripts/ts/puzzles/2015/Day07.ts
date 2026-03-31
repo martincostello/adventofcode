@@ -4,8 +4,8 @@
 import { Puzzle2015 } from './Puzzle2015';
 
 export class Day07 extends Puzzle2015 {
-    firstSignal: number;
-    secondSignal: number;
+    firstSignal!: number;
+    secondSignal!: number;
 
     override get name() {
         return 'Some Assembly Required';

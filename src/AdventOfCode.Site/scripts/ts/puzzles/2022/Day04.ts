@@ -5,8 +5,8 @@ import { Puzzle } from '../index';
 import { Puzzle2022 } from './Puzzle2022';
 
 export class Day04 extends Puzzle2022 {
-    fullyOverlappingAssignments: number;
-    partiallyOverlappingAssignments: number;
+    fullyOverlappingAssignments!: number;
+    partiallyOverlappingAssignments!: number;
 
     override get name() {
         return 'Camp Cleanup';

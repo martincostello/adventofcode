@@ -6,8 +6,8 @@ import { Puzzle } from '../Puzzle';
 import { Puzzle2015 } from './Puzzle2015';
 
 export class Day09 extends Puzzle2015 {
-    shortestDistance: number;
-    longestDistance: number;
+    shortestDistance!: number;
+    longestDistance!: number;
 
     override get name() {
         return 'All in a Single Night';

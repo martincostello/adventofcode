@@ -4,8 +4,8 @@
 import { Puzzle2015 } from './Puzzle2015';
 
 export class Day01 extends Puzzle2015 {
-    finalFloor: number;
-    firstBasementInstruction: number;
+    finalFloor!: number;
+    firstBasementInstruction!: number;
 
     override get name() {
         return 'Not Quite Lisp';

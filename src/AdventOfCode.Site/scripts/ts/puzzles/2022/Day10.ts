@@ -6,8 +6,8 @@ import { Puzzle } from '../Puzzle';
 import { Puzzle2022 } from './Puzzle2022';
 
 export class Day10 extends Puzzle2022 {
-    sumOfSignalStrengths: number;
-    message: string;
+    sumOfSignalStrengths!: number;
+    message!: string;
 
     override get name() {
         return 'Cathode-Ray Tube';

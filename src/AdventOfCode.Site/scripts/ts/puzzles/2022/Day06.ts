@@ -5,8 +5,8 @@ import { from } from 'linq-to-typescript';
 import { Puzzle2022 } from './Puzzle2022';
 
 export class Day06 extends Puzzle2022 {
-    indexOfFirstStartOfPacketMarker: number;
-    indexOfFirstStartOfMessageMarker: number;
+    indexOfFirstStartOfPacketMarker!: number;
+    indexOfFirstStartOfMessageMarker!: number;
 
     override get name() {
         return 'Tuning Trouble';

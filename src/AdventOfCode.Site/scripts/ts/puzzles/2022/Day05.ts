@@ -6,8 +6,8 @@ import { Puzzle } from '../index';
 import { Puzzle2022 } from './Puzzle2022';
 
 export class Day05 extends Puzzle2022 {
-    topCratesOfStacks9000: string;
-    topCratesOfStacks9001: string;
+    topCratesOfStacks9000!: string;
+    topCratesOfStacks9001!: string;
 
     override get name() {
         return 'Supply Stacks';

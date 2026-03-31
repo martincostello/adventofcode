@@ -6,8 +6,8 @@ import { Puzzle } from '../Puzzle';
 import { Puzzle2022 } from './Puzzle2022';
 
 export class Day11 extends Puzzle2022 {
-    monkeyBusiness20: number;
-    monkeyBusiness10000: number;
+    monkeyBusiness20!: number;
+    monkeyBusiness10000!: number;
 
     override get name() {
         return 'Monkey in the Middle';
@@ -128,9 +128,9 @@ export class Day11 extends Puzzle2022 {
 }
 
 class Monkey {
-    next: (value: number) => Monkey;
-    inspector: (value: number) => number;
-    reducer: (value: number) => number;
+    next!: (value: number) => Monkey;
+    inspector!: (value: number) => number;
+    reducer!: (value: number) => number;
     private inspectionsMade = 0;
 
     constructor(

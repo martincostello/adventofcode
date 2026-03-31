@@ -5,8 +5,8 @@ import { from } from 'linq-to-typescript';
 import { Puzzle2019 } from './Puzzle2019';
 
 export class Day01 extends Puzzle2019 {
-    totalFuelRequiredForModules: number;
-    totalFuelRequiredForRocket: number;
+    totalFuelRequiredForModules!: number;
+    totalFuelRequiredForRocket!: number;
 
     override get name() {
         return 'The Tyranny of the Rocket Equation';

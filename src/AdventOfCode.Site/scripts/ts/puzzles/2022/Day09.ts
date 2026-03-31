@@ -8,8 +8,8 @@ import { Size } from '../Size';
 import { Puzzle2022 } from './Puzzle2022';
 
 export class Day09 extends Puzzle2022 {
-    positionsVisited2: number;
-    positionsVisited10: number;
+    positionsVisited2!: number;
+    positionsVisited10!: number;
 
     override get name() {
         return 'Rope Bridge';

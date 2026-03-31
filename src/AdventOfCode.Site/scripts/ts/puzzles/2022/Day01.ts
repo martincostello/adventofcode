@@ -6,8 +6,8 @@ import { Puzzle } from '../index';
 import { Puzzle2022 } from './Puzzle2022';
 
 export class Day01 extends Puzzle2022 {
-    maximumCalories: number;
-    maximumCaloriesForTop3: number;
+    maximumCalories!: number;
+    maximumCaloriesForTop3!: number;
 
     override get name() {
         return 'Calorie Counting';

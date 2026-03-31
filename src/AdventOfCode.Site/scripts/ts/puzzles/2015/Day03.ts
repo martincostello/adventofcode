@@ -5,8 +5,8 @@ import { CardinalDirection, Point, Size } from '../index';
 import { Puzzle2015 } from './Puzzle2015';
 
 export class Day03 extends Puzzle2015 {
-    housesWithPresentsFromSanta: number;
-    housesWithPresentsFromSantaAndRoboSanta: number;
+    housesWithPresentsFromSanta!: number;
+    housesWithPresentsFromSantaAndRoboSanta!: number;
 
     override get name() {
         return 'Perfectly Spherical Houses in a Vacuum';

@@ -4,8 +4,8 @@
 import { Puzzle2018 } from './Puzzle2018';
 
 export class Day01 extends Puzzle2018 {
-    frequency: number;
-    firstRepeatedFrequency: number;
+    frequency!: number;
+    firstRepeatedFrequency!: number;
 
     override get name() {
         return 'Chronal Calibration';

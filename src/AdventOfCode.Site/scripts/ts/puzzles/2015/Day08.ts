@@ -4,8 +4,8 @@
 import { Puzzle2015 } from './Puzzle2015';
 
 export class Day08 extends Puzzle2015 {
-    firstSolution: number;
-    secondSolution: number;
+    firstSolution!: number;
+    secondSolution!: number;
 
     override get name() {
         return 'Matchsticks';

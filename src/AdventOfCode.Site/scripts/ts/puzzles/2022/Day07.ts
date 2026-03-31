@@ -5,8 +5,8 @@ import { Puzzle } from '../Puzzle';
 import { Puzzle2022 } from './Puzzle2022';
 
 export class Day07 extends Puzzle2022 {
-    totalSizeOfDirectoriesLargerThanLimit: number;
-    sizeOfSmallestDirectoryToDelete: number;
+    totalSizeOfDirectoriesLargerThanLimit!: number;
+    sizeOfSmallestDirectoryToDelete!: number;
 
     override get name() {
         return 'No Space Left On Device';
