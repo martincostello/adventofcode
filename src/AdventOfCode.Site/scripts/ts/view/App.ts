@@ -113,7 +113,9 @@ export class App {
         this.elements.timeToSolve.textContent = '';
         this.elements.visualization.innerHTML = '';
 
-        this.elements.form.setAttribute('action', option.getAttribute('data-location')!);
+        const rawLocation = option.getAttribute('data-location') ?? '';
+        const url = new URL(rawLocation, window.location.href);
+        this.elements.form.setAttribute('action', url.origin === window.location.origin ? url.pathname : '');
         this.elements.form.setAttribute('data-day', option.getAttribute('data-day')!);
         this.elements.form.setAttribute('data-year', option.getAttribute('data-year')!);
 
