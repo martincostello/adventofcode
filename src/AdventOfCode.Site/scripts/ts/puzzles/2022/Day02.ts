@@ -16,8 +16,8 @@ enum Outcome {
 }
 
 export class Day02 extends Puzzle2022 {
-    totalScoreForMoves: number;
-    totalScoreForOutcomes: number;
+    totalScoreForMoves!: number;
+    totalScoreForOutcomes!: number;
 
     override get name() {
         return 'Rock Paper Scissors';

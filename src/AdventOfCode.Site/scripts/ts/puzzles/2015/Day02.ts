@@ -4,8 +4,8 @@
 import { Puzzle2015 } from './Puzzle2015';
 
 export class Day02 extends Puzzle2015 {
-    totalAreaOfPaper: number;
-    totalLengthOfRibbon: number;
+    totalAreaOfPaper!: number;
+    totalLengthOfRibbon!: number;
 
     override get name() {
         return 'I Was Told There Would Be No Math';

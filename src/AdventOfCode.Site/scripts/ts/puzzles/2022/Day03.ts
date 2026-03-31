@@ -5,8 +5,8 @@ import { from } from 'linq-to-typescript';
 import { Puzzle2022 } from './Puzzle2022';
 
 export class Day03 extends Puzzle2022 {
-    sumOfPriorities: number;
-    sumOfPrioritiesOfGroups: number;
+    sumOfPriorities!: number;
+    sumOfPrioritiesOfGroups!: number;
 
     override get name() {
         return 'Rucksack Reorganization';

@@ -4,8 +4,8 @@
 import { Puzzle2021 } from './Puzzle2021';
 
 export class Day01 extends Puzzle2021 {
-    depthIncreases: number;
-    depthIncreasesWithSlidingWindow: number;
+    depthIncreases!: number;
+    depthIncreasesWithSlidingWindow!: number;
 
     override get name() {
         return 'Sonar Sweep';

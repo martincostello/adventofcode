@@ -18,28 +18,28 @@ const solve = async (year: number, day: number, inputs: string[] = []): Promise<
     const puzzle = factory.create(year, day);
 
     expect(puzzle).not.toBeNull();
-    expect(puzzle.year).toBe(year);
-    expect(puzzle.day).toBe(day);
+    expect(puzzle!.year).toBe(year);
+    expect(puzzle!.day).toBe(day);
 
-    const yearString = toNumberWithDigits(puzzle.year, 4);
-    const dayString = toNumberWithDigits(puzzle.day, 2);
+    const yearString = toNumberWithDigits(puzzle!.year, 4);
+    const dayString = toNumberWithDigits(puzzle!.day, 2);
 
     let input = join(__dirname, `../../../../AdventOfCode.Resources/Input/Y${yearString}/Day${dayString}/input.txt`);
     input = resolve(input);
 
     if (existsSync(input)) {
-        puzzle.resource = readFileSync(input, 'utf-8');
+        puzzle!.resource = readFileSync(input, 'utf-8');
     }
 
     // Act
-    const result = await puzzle.solve(inputs);
+    const result = await puzzle!.solve(inputs);
 
     // Assert
     expect(result).not.toBeNull();
     expect(result.solutions).not.toBeNull();
     expect(result.solutions.length).toBeGreaterThan(0);
-    expect(puzzle.name).not.toBeNull();
-    expect(puzzle.name).not.toBe('');
+    expect(puzzle!.name).not.toBeNull();
+    expect(puzzle!.name).not.toBe('');
 
     return result.solutions;
 };

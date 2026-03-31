@@ -5,8 +5,8 @@ import { CardinalDirection, Point, Puzzle, Size } from '../index';
 import { Puzzle2016 } from './Puzzle2016';
 
 export class Day01 extends Puzzle2016 {
-    blocksToEasterBunnyHQ: number;
-    blocksToEasterBunnyHQIgnoringDuplicates: number;
+    blocksToEasterBunnyHQ!: number;
+    blocksToEasterBunnyHQIgnoringDuplicates!: number;
 
     override get name() {
         return 'No Time for a Taxicab';
@@ -114,6 +114,6 @@ enum Direction {
 }
 
 class Instruction {
-    direction: Direction;
-    distance: number;
+    direction!: Direction;
+    distance!: number;
 }

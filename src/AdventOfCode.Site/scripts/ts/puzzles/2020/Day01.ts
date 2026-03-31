@@ -6,8 +6,8 @@ import { Maths } from '../index';
 import { Puzzle2020 } from './Puzzle2020';
 
 export class Day01 extends Puzzle2020 {
-    productOf2020SumFrom2: number;
-    productOf2020SumFrom3: number;
+    productOf2020SumFrom2!: number;
+    productOf2020SumFrom3!: number;
 
     override get name() {
         return 'Report Repair';

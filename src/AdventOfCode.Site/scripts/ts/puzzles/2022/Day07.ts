@@ -5,8 +5,8 @@ import { Puzzle } from '../Puzzle';
 import { Puzzle2022 } from './Puzzle2022';
 
 export class Day07 extends Puzzle2022 {
-    totalSizeOfDirectoriesLargerThanLimit: number;
-    sizeOfSmallestDirectoryToDelete: number;
+    totalSizeOfDirectoriesLargerThanLimit!: number;
+    sizeOfSmallestDirectoryToDelete!: number;
 
     override get name() {
         return 'No Space Left On Device';
@@ -53,7 +53,7 @@ export class Day07 extends Puzzle2022 {
                     const name = line.slice(5);
 
                     if (name === '..') {
-                        current = current.parent;
+                        current = current.parent!;
                     } else {
                         let path;
 
@@ -66,7 +66,7 @@ export class Day07 extends Puzzle2022 {
                         let directory: Directory;
 
                         if (fileSystem.has(path)) {
-                            directory = fileSystem.get(path);
+                            directory = fileSystem.get(path)!;
                         } else {
                             directory = new Directory(name, current);
                             fileSystem.set(directory.path, directory);
@@ -104,7 +104,7 @@ export class Day07 extends Puzzle2022 {
             .map((p) => p.totalSize)
             .reduce((x, y) => x + y, 0);
 
-        const consumed = directories.find((p) => p.container === null).totalSize;
+        const consumed = directories.find((p) => p.container === null)!.totalSize;
         const freeSpace = diskSize - consumed;
         const required = updateSize - freeSpace;
 

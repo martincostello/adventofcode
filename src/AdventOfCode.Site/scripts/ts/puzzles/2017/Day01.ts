@@ -4,8 +4,8 @@
 import { Puzzle2017 } from './Puzzle2017';
 
 export class Day01 extends Puzzle2017 {
-    captchaSolutionNext: number;
-    captchaSolutionOpposite: number;
+    captchaSolutionNext!: number;
+    captchaSolutionOpposite!: number;
 
     override get name() {
         return 'Inverse Captcha';

@@ -6,8 +6,8 @@ import { Puzzle } from '../Puzzle';
 import { Puzzle2022 } from './Puzzle2022';
 
 export class Day10 extends Puzzle2022 {
-    sumOfSignalStrengths: number;
-    message: string;
+    sumOfSignalStrengths!: number;
+    message!: string;
 
     override get name() {
         return 'Cathode-Ray Tube';
@@ -95,7 +95,7 @@ export class Day10 extends Puzzle2022 {
         let sum = 0;
 
         for (const r of [20, 60, 100, 140, 180, 220]) {
-            sum += registers.get(r - 1) * r;
+            sum += registers.get(r - 1)! * r;
         }
 
         return [message, visualization, sum];

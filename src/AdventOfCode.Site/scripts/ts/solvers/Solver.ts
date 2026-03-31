@@ -4,5 +4,5 @@
 import { ProblemDetails, Solution } from '../models/index';
 
 export interface Solver {
-    solve(inputs: string[], resource: string): Promise<ProblemDetails | Solution>;
+    solve(inputs: string[], resource: string | null): Promise<ProblemDetails | Solution>;
 }

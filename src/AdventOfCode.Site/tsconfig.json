@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
     "esModuleInterop": true,
+    "ignoreDeprecations": "6.0",
     "inlineSources": true,
     "moduleResolution": "Node",
     "noEmitOnError": true,

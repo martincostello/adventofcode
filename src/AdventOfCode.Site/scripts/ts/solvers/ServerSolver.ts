@@ -13,7 +13,7 @@ export class ServerSolver implements Solver {
     ) {}
 
     async solve(inputs: string[], resource: string | null): Promise<ProblemDetails | Solution> {
-        const url = this.form.getAttribute('action');
+        const url = this.form.getAttribute('action')!;
         const form = new FormData();
 
         if (inputs) {
@@ -23,7 +23,7 @@ export class ServerSolver implements Solver {
         }
 
         if (resource && resource.length > 0) {
-            const file = this.inputFile.files[0];
+            const file = this.inputFile.files![0];
             form.append('resource', file, 'input.txt');
             form.append('resource', resource);
         }

@@ -6,7 +6,7 @@ import { Puzzle } from '../index';
 import { Puzzle2015 } from './Puzzle2015';
 
 export class Day04 extends Puzzle2015 {
-    lowestZeroHash: number;
+    lowestZeroHash!: number;
 
     override get name() {
         return 'The Ideal Stocking Stuffer';

@@ -6,8 +6,8 @@ import { Puzzle } from '../Puzzle';
 import { Puzzle2022 } from './Puzzle2022';
 
 export class Day11 extends Puzzle2022 {
-    monkeyBusiness20: number;
-    monkeyBusiness10000: number;
+    monkeyBusiness20!: number;
+    monkeyBusiness10000!: number;
 
     override get name() {
         return 'Monkey in the Middle';
@@ -53,7 +53,7 @@ export class Day11 extends Puzzle2022 {
                 const monkeyForTrue = observations[i + 4].slice(truePrefix.length);
                 const monkeyForFalse = observations[i + 5].slice(falsePrefix.length);
 
-                const [monkey, divisor] = monkeys.get(i / 7);
+                const [monkey, divisor] = monkeys.get(i / 7)!;
 
                 monkey.reducer = reducer;
 
@@ -61,26 +61,26 @@ export class Day11 extends Puzzle2022 {
 
                 if (operation.startsWith('+')) {
                     if (operationString === 'old') {
-                        monkey.inspector = (p) => p + p;
+                        monkey.inspector = (p: number) => p + p;
                     } else {
                         const operationValue = Puzzle.parse(operation.slice(2));
-                        monkey.inspector = (p) => p + operationValue;
+                        monkey.inspector = (p: number) => p + operationValue;
                     }
                 } else if (operation.startsWith('*')) {
                     if (operationString === 'old') {
-                        monkey.inspector = (p) => p * p;
+                        monkey.inspector = (p: number) => p * p;
                     } else {
                         const operationValue = Puzzle.parse(operation.slice(2));
-                        monkey.inspector = (p) => p * operationValue;
+                        monkey.inspector = (p: number) => p * operationValue;
                     }
                 } else {
                     throw new Error(`Invalid operation '${operation[0]}'.`);
                 }
 
-                const [recipientForTrue] = monkeys.get(Puzzle.parse(monkeyForTrue));
-                const [recipientForFalse] = monkeys.get(Puzzle.parse(monkeyForFalse));
+                const [recipientForTrue] = monkeys.get(Puzzle.parse(monkeyForTrue))!;
+                const [recipientForFalse] = monkeys.get(Puzzle.parse(monkeyForFalse))!;
 
-                monkey.next = (p) => {
+                monkey.next = (p: number) => {
                     if (p % divisor === 0) {
                         return recipientForTrue;
                     } else {
@@ -128,9 +128,9 @@ export class Day11 extends Puzzle2022 {
 }
 
 class Monkey {
-    next: (value: number) => Monkey;
-    inspector: (value: number) => number;
-    reducer: (value: number) => number;
+    next!: (value: number) => Monkey;
+    inspector!: (value: number) => number;
+    reducer!: (value: number) => number;
     private inspectionsMade = 0;
 
     constructor(
@@ -144,7 +144,7 @@ class Monkey {
 
     inspect() {
         while (this.items.length > 0) {
-            let item = this.items.shift();
+            let item = this.items.shift()!;
 
             item = this.inspector(item);
             item = this.reducer(item);
