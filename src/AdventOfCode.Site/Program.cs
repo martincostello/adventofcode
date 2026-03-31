@@ -165,10 +165,10 @@ app.MapGet("/version", () =>
 }).AllowAnonymous()
   .ExcludeFromDescription();
 
-app.MapMethods("/", [HttpMethod.Get.Method, HttpMethod.Head.Method], () => Results.Extensions.RazorSlice<Home>())
+app.MapMethods("/", [HttpMethod.Get.Method, HttpMethod.Head.Method], () => Results.RazorSlice<Home>())
    .ExcludeFromDescription();
 
-app.MapMethods("/error", [HttpMethod.Get.Method, HttpMethod.Head.Method, HttpMethod.Post.Method], (HttpContext context) => Results.Extensions.RazorSlice<Error>(context.Response.StatusCode))
+app.MapMethods("/error", [HttpMethod.Get.Method, HttpMethod.Head.Method, HttpMethod.Post.Method], (HttpContext context) => Results.RazorSlice<Error>(context.Response.StatusCode))
    .ExcludeFromDescription()
    .WithMetadata(new ResponseCacheAttribute() { Duration = 0, Location = ResponseCacheLocation.None, NoStore = true });
 
