@@ -20,7 +20,7 @@ export class ClientSolver implements Solver {
                 type: '',
                 title: 'Bad Request',
                 status: 400,
-                detail: err.toString(),
+                detail: (err as Error).toString(),
                 instance: this.puzzle.name,
             };
         }

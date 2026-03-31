@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
     "esModuleInterop": true,
+    "ignoreDeprecations": "6.0",
     "inlineSources": true,
     "moduleResolution": "Node",
     "noEmitOnError": true,
@@ -10,6 +11,7 @@
     "outDir": "./wwwroot/static/js",
     "removeComments": false,
     "sourceMap": true,
+    "strictPropertyInitialization": false,
     "target": "ES2015"
   },
   "exclude": [

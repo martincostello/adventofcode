@@ -41,11 +41,11 @@ export class Day08 extends Puzzle2022 {
 
         const sweep = (origin: Point, direction: Size, trees: Map<string, Tree>) => {
             let location = origin;
-            let current = trees.get(location.toString());
+            let current = trees.get(location.toString())!;
             current.markVisible();
 
             while (trees.has((location = Point.add(location, direction)).toString())) {
-                const next = trees.get(location.toString());
+                const next = trees.get(location.toString())!;
                 if (next.height > current.height) {
                     next.markVisible();
                     current = next;
@@ -89,7 +89,7 @@ export class Day08 extends Puzzle2022 {
             let score = 0;
 
             while (trees.has((location = Point.add(location, direction)).toString())) {
-                const next = trees.get(location.toString());
+                const next = trees.get(location.toString())!;
                 score++;
 
                 if (next.height >= origin.height) {
@@ -107,7 +107,7 @@ export class Day08 extends Puzzle2022 {
 
             for (let y = 0; y < height; y++) {
                 for (let x = 0; x < width; x++) {
-                    const tree = trees.get(new Point(x, y).toString());
+                    const tree = trees.get(new Point(x, y).toString())!;
 
                     if (tree.isVisible) {
                         let scenicScore = 1;

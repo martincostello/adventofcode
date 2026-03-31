@@ -65,7 +65,7 @@ export abstract class Puzzle {
     }
 
     protected readResourceAsLines(): string[] {
-        return this.resource.split(/\r?\n/).slice(0, -1);
+        return this.resource!.split(/\r?\n/).slice(0, -1);
     }
 
     protected readResourceAsNumbers(): number[] {
@@ -73,7 +73,7 @@ export abstract class Puzzle {
     }
 
     protected readResourceAsString(): string {
-        return this.resource.trimEnd();
+        return this.resource!.trimEnd();
     }
 
     private ensureArguments(inputs: string[]) {

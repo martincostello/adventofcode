@@ -81,15 +81,15 @@ export class Day05 extends Puzzle2022 {
 
                 if (canMoveMultipleCrates && count > 1) {
                     for (let i = 0; i < count; i++) {
-                        swap.push(source.pop());
+                        swap.push(source.pop()!);
                     }
 
                     for (let i = 0; i < count; i++) {
-                        destination.push(swap.pop());
+                        destination.push(swap.pop()!);
                     }
                 } else {
                     for (let i = 0; i < count; i++) {
-                        destination.push(source.pop());
+                        destination.push(source.pop()!);
                     }
                 }
             }

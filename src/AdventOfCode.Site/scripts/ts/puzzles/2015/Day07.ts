@@ -59,7 +59,7 @@ export class Day07 extends Puzzle2015 {
                 return null;
             }
 
-            return result.get(value);
+            return result.get(value) ?? null;
         };
 
         // Loop through the instructions until we have reduced each instruction to a value
@@ -89,15 +89,15 @@ export class Day07 extends Puzzle2015 {
                     secondOperand = words.length > 1 ? words[1] : null;
 
                     // Is the second operand a value or a previously solved value?
-                    const value = tryParse(secondOperand);
+                    const value = tryParse(secondOperand!);
                     if (value !== null) {
                         result.set(wireId, toUint16(~value));
                     }
                 } else if (words.length === 3) {
                     secondOperand = words.length > 2 ? words[2] : null;
 
-                    const firstValue = tryParse(firstOperand);
-                    const secondValue = tryParse(secondOperand);
+                    const firstValue = tryParse(firstOperand!);
+                    const secondValue = tryParse(secondOperand!);
 
                     // Are both operands a value or a previously solved value?
                     if (firstValue !== null && secondValue !== null) {
@@ -121,7 +121,7 @@ export class Day07 extends Puzzle2015 {
 
         let values = Day07.getWireValues(instructions);
 
-        this.firstSignal = values.get('a');
+        this.firstSignal = values.get('a')!;
 
         console.info(`The signal for wire a is ${this.firstSignal}.`);
 
@@ -130,7 +130,7 @@ export class Day07 extends Puzzle2015 {
 
         values = Day07.getWireValues(instructions);
 
-        this.secondSignal = values.get('a');
+        this.secondSignal = values.get('a')!;
 
         console.info(`The new signal for wire a is ${this.secondSignal}.`);
 

@@ -53,12 +53,7 @@ export class DefaultPuzzleFactory implements PuzzleFactory {
                 factory = new PuzzleFactory2025();
                 break;
             default:
-                factory = null;
-                break;
-        }
-
-        if (!factory) {
-            return null;
+                return null;
         }
 
         return factory.create(year, day);

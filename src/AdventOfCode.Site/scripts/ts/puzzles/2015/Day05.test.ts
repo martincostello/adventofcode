@@ -19,9 +19,9 @@ describe('2015', () => {
             ['xxyxx', '2', true],
             ['uurcxstgmygtbstg', '2', false],
             ['ieodomkazucvgmuy', '2', false],
-        ])('returns correct value for value %s and version %s', (value: string, version: '1' | '2', expected: boolean) => {
+        ])('returns correct value for value %s and version %s', (value: string, version: string, expected: boolean) => {
             // Act
-            const actual = Day05.isNice(value, version);
+            const actual = Day05.isNice(value, version as '1' | '2');
 
             // Assert
             expect(actual).toEqual(expected);

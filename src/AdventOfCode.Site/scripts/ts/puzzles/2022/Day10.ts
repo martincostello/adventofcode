@@ -95,7 +95,7 @@ export class Day10 extends Puzzle2022 {
         let sum = 0;
 
         for (const r of [20, 60, 100, 140, 180, 220]) {
-            sum += registers.get(r - 1) * r;
+            sum += registers.get(r - 1)! * r;
         }
 
         return [message, visualization, sum];

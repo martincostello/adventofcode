@@ -62,7 +62,7 @@ export class App {
                 puzzlesForYear = [];
                 this.puzzlesByYear.set(year, puzzlesForYear);
             } else {
-                puzzlesForYear = this.puzzlesByYear.get(year);
+                puzzlesForYear = this.puzzlesByYear.get(year)!;
             }
 
             const clientPuzzle = this.puzzleFactory.create(puzzle.year, puzzle.day);
@@ -113,11 +113,11 @@ export class App {
         this.elements.timeToSolve.textContent = '';
         this.elements.visualization.innerHTML = '';
 
-        this.elements.form.setAttribute('action', option.getAttribute('data-location'));
-        this.elements.form.setAttribute('data-day', option.getAttribute('data-day'));
-        this.elements.form.setAttribute('data-year', option.getAttribute('data-year'));
+        this.elements.form.setAttribute('action', option.getAttribute('data-location')!);
+        this.elements.form.setAttribute('data-day', option.getAttribute('data-day')!);
+        this.elements.form.setAttribute('data-year', option.getAttribute('data-year')!);
 
-        const minimumArguments = parseInt(option.getAttribute('data-minimum-arguments'), 10);
+        const minimumArguments = parseInt(option.getAttribute('data-minimum-arguments')!, 10);
 
         if (minimumArguments === 0) {
             this.hide(this.elements.argumentsContainer);
@@ -146,7 +146,7 @@ export class App {
     private onYearChanged() {
         this.elements.days.innerHTML = '';
 
-        const puzzlesForYear = this.puzzlesByYear.get(this.elements.years.value);
+        const puzzlesForYear = this.puzzlesByYear.get(this.elements.years.value)!;
 
         for (let i = 0; i < puzzlesForYear.length; i++) {
             const element = document.createElement('option');
@@ -197,14 +197,14 @@ export class App {
             });
         }
 
-        if (this.elements.inputFile.files.length === 1) {
-            const file = this.elements.inputFile.files[0];
+        if (this.elements.inputFile.files!.length === 1) {
+            const file = this.elements.inputFile.files![0];
 
             const reader = new FileReader();
             reader.readAsText(file, 'UTF-8');
 
             reader.onload = (event) => {
-                this.solve(inputs, event.target.result as string);
+                this.solve(inputs, event.target!.result as string);
             };
         } else {
             await this.solve(inputs);
@@ -272,10 +272,10 @@ export class App {
     }
 
     private getSolver(): Solver {
-        const day = parseInt(this.elements.form.getAttribute('data-day'), 10);
-        const year = this.elements.form.getAttribute('data-year');
+        const day = parseInt(this.elements.form.getAttribute('data-day')!, 10);
+        const year = this.elements.form.getAttribute('data-year')!;
 
-        const puzzle = this.puzzlesByYear.get(year).find((p) => p.day === day).puzzle;
+        const puzzle = this.puzzlesByYear.get(year)!.find((p) => p.day === day)!.puzzle;
 
         return puzzle !== null ? new ClientSolver(puzzle) : new ServerSolver(this.server, this.elements.form, this.elements.inputFile);
     }

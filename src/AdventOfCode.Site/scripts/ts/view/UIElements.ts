@@ -21,26 +21,26 @@ export class UIElements {
     readonly years: HTMLInputElement;
 
     constructor() {
-        this.arguments = <HTMLInputElement>document.getElementById('arguments');
-        this.argumentsContainer = document.getElementById('arguments-container');
+        this.arguments = <HTMLInputElement>document.getElementById('arguments')!;
+        this.argumentsContainer = document.getElementById('arguments-container')!;
 
-        this.inputFile = <HTMLInputElement>document.getElementById('resource');
-        this.inputFileLabel = document.getElementById('resource-label');
-        this.inputFileContainer = document.getElementById('file-container');
+        this.inputFile = <HTMLInputElement>document.getElementById('resource')!;
+        this.inputFileLabel = document.getElementById('resource-label')!;
+        this.inputFileContainer = document.getElementById('file-container')!;
 
-        this.solution = document.getElementById('solution');
-        this.solutionContainer = document.getElementById('solution-container');
-        this.solutionHeader = document.getElementById('solution-header');
+        this.solution = document.getElementById('solution')!;
+        this.solutionContainer = document.getElementById('solution-container')!;
+        this.solutionHeader = document.getElementById('solution-header')!;
 
-        this.spinner = document.getElementById('spinner');
-        this.visualization = document.getElementById('visualization');
+        this.spinner = document.getElementById('spinner')!;
+        this.visualization = document.getElementById('visualization')!;
 
-        this.days = <HTMLSelectElement>document.getElementById('day');
-        this.error = document.getElementById('error');
-        this.form = document.getElementById('form');
-        this.solve = <HTMLButtonElement>document.getElementById('solve');
-        this.solveText = document.getElementById('solve-text');
-        this.timeToSolve = document.getElementById('time-to-solve');
-        this.years = <HTMLInputElement>document.getElementById('year');
+        this.days = <HTMLSelectElement>document.getElementById('day')!;
+        this.error = document.getElementById('error')!;
+        this.form = document.getElementById('form')!;
+        this.solve = <HTMLButtonElement>document.getElementById('solve')!;
+        this.solveText = document.getElementById('solve-text')!;
+        this.timeToSolve = document.getElementById('time-to-solve')!;
+        this.years = <HTMLInputElement>document.getElementById('year')!;
     }
 }

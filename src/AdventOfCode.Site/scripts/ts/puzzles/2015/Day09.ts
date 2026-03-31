@@ -78,7 +78,7 @@ export class Day09 extends Puzzle2015 {
 
         const getOrAdd = <T>(values: Map<T, T[]>, key: T) => {
             if (values.has(key)) {
-                return values.get(key);
+                return values.get(key)!;
             } else {
                 const value: T[] = [];
                 values.set(key, value);
@@ -119,7 +119,7 @@ class Graph<T> {
     readonly edges = new Map<T, T[]>();
 
     neighbors(id: T) {
-        return this.edges.get(id);
+        return this.edges.get(id) ?? [];
     }
 }
 
@@ -129,6 +129,6 @@ class LocationMap extends Graph<string> {
     }
 
     cost(a: string, b: string) {
-        return this.distances.get(`${b} to ${a}`);
+        return this.distances.get(`${b} to ${a}`) ?? 0;
     }
 }
