@@ -37,7 +37,7 @@
     "globals": "17.4.0",
     "linq-to-typescript": "10.0.0",
     "prettier": "3.8.1",
-    "ts-loader": "9.5.4",
+    "ts-loader": "9.5.7",
     "ts-md5": "2.0.1",
     "tsify": "5.0.4",
     "typescript": "6.0.2",
