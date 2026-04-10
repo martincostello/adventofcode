@@ -12,13 +12,9 @@ namespace MartinCostello.AdventOfCode.Site;
 /// <param name="next">The next request delegate in the pipeline.</param>
 public sealed class CustomHttpHeadersMiddleware(RequestDelegate next)
 {
-    private static readonly CompositeFormat ContentSecurityPolicyTemplate = CompositeFormat.Parse(string.Join(
+    private static readonly string BaseContentSecurityPolicy = string.Join(
         ';',
         "default-src 'self'",
-        "script-src 'self' 'nonce-{0}' cdnjs.cloudflare.com",
-        "script-src-elem 'self' 'nonce-{0}' cdnjs.cloudflare.com",
-        "style-src 'self' 'nonce-{0}' cdnjs.cloudflare.com",
-        "style-src-elem 'self' 'nonce-{0}' cdnjs.cloudflare.com",
         "img-src 'self' data:",
         "font-src 'self' cdnjs.cloudflare.com",
         "connect-src 'self' cdnjs.cloudflare.com",
@@ -30,7 +26,7 @@ public sealed class CustomHttpHeadersMiddleware(RequestDelegate next)
         "block-all-mixed-content",
         "base-uri 'self'",
         "manifest-src 'self'",
-        "upgrade-insecure-requests"));
+        "upgrade-insecure-requests");
 
     /// <summary>
     /// Invokes the specified middleware.
@@ -86,5 +82,20 @@ public sealed class CustomHttpHeadersMiddleware(RequestDelegate next)
     }
 
     private static string ContentSecurityPolicy(string nonce)
-        => string.Format(CultureInfo.InvariantCulture, ContentSecurityPolicyTemplate, nonce);
+    {
+        var builder = new StringBuilder(BaseContentSecurityPolicy);
+
+        string directive = $" 'self' 'nonce-{nonce}' cdnjs.cloudflare.com;";
+
+        builder.Append(';')
+               .Append("script-src")
+               .Append(directive)
+               .Append("script-src-elem")
+               .Append(directive)
+               .Append("style-src")
+               .Append(directive)
+               .Append("style-src-elem");
+
+        return builder.ToString();
+    }
 }
