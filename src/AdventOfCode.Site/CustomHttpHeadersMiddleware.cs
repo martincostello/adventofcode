@@ -94,7 +94,8 @@ public sealed class CustomHttpHeadersMiddleware(RequestDelegate next)
                .Append(directive)
                .Append("style-src")
                .Append(directive)
-               .Append("style-src-elem");
+               .Append("style-src-elem")
+               .Append(directive);
 
         return builder.ToString();
     }
