@@ -19,8 +19,8 @@ public sealed class Day01 : Puzzle<int, int>
     /// </returns>
     public static (int TotalDistance, int SimilarityScore) ParseList(IList<string> values)
     {
-        List<int> first = new(values.Count);
-        List<int> second = new(values.Count);
+        List<int> first = [with(values.Count)];
+        List<int> second = [with(values.Count)];
 
         foreach (string pair in values)
         {
