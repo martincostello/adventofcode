@@ -49,11 +49,14 @@ jobs:
       matrix:
         include:
           - os-name: macos
-            runner: macos-latest
+            # renovate: datasource=github-runners depName=macos depType=github-runner
+            runner: macos-26
           - os-name: linux
-            runner: ubuntu-latest
+            # renovate: datasource=github-runners depName=ubuntu depType=github-runner
+            runner: ubuntu-24.04
           - os-name: windows
-            runner: windows-latest
+            # renovate: datasource=github-runners depName=windows depType=github-runner
+            runner: windows-2025
 
     steps:
 
@@ -202,7 +205,7 @@ jobs:
         }
 
   typescript:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
 
     permissions:
       contents: read
@@ -235,7 +238,7 @@ jobs:
   deploy-production:
     if: github.event.repository.fork == false && github.ref_name == github.event.repository.default_branch
     needs: [ build, typescript ]
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     concurrency: production_environment
 
     environment:
@@ -292,7 +295,7 @@ jobs:
 
   test-production:
     needs: deploy-production
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     concurrency: production_environment
 
     permissions:
@@ -319,7 +322,7 @@ jobs:
   deploy-aws:
     if: github.event.repository.fork == false && github.ref_name == github.event.repository.default_branch
     needs: [ build, typescript ]
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     concurrency: aws_environment
 
     environment:
@@ -422,7 +425,7 @@ jobs:
 
   test-aws:
     needs: deploy-aws
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     concurrency: aws_environment
 
     permissions:

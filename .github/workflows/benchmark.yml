@@ -15,7 +15,7 @@ permissions: {}
 
 jobs:
   benchmark:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     if: |
       github.event.repository.fork == false &&
       github.event.issue.pull_request != '' &&
