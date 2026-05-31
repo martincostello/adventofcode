@@ -35,6 +35,10 @@ jobs:
       CONTAINER_REGISTRY: '${{ github.repository_owner }}.azurecr.io'
       PUBLISH_CONTAINER: ${{ github.event.repository.fork == false && github.ref_name == github.event.repository.default_branch && matrix.os-name == 'linux' }}
 
+    environment:
+      name: build
+      deployment: false
+
     outputs:
       container-tag: ${{ steps.publish-container.outputs.container-tag }}
       lambda-tools-version: ${{ steps.get-lambda-tools-version.outputs.lambda-tools-version }}
@@ -107,13 +111,18 @@ jobs:
         path: ./artifacts/publish/lambda.zip
         if-no-files-found: error
 
-    - name: Docker log in
-      uses: docker/login-action@650006c6eb7dba73a995cc03b0b2d7f5ca915bee # v4.2.0
+    - name: Azure log in
+      uses: azure/login@532459ea530d8321f2fb9bb10d1e0bcf23869a43 # v3.0.0
       if: env.PUBLISH_CONTAINER == 'true'
       with:
-        registry: ${{ env.CONTAINER_REGISTRY }}
-        username: ${{ secrets.ACR_REGISTRY_USERNAME }}
-        password: ${{ secrets.ACR_REGISTRY_PASSWORD }}
+        client-id: ${{ secrets.AZURE_CLIENT_ID }}
+        tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+        subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+    - name: Log in to Azure Container Registry
+      shell: pwsh
+      if: env.PUBLISH_CONTAINER == 'true'
+      run: az acr login --name ${env:GITHUB_REPOSITORY_OWNER}
 
     - name: Publish container
       id: publish-container
@@ -232,8 +241,6 @@ jobs:
 
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@e79a6962e0d4c0c17b229090214935d2e33f8354 # v6.0.1
-      with:
-        token: ${{ secrets.CODECOV_TOKEN }}
 
   deploy-production:
     if: github.event.repository.fork == false && github.ref_name == github.event.repository.default_branch
