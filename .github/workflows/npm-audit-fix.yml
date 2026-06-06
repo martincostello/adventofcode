@@ -59,15 +59,22 @@ jobs:
           APP_SLUG: ${{ steps.get-github-token.outputs.app-slug }}
           CHECKOUT_COMMIT: ${{ steps.checkout-code.outputs.commit }}
           GH_TOKEN: ${{ steps.get-github-token.outputs.token }}
-          PACKAGE_LOCK_PATH: 'src/AdventOfCode.Site/package-lock.json'
           TOKEN_TYPE: ${{ steps.get-github-token.outputs.token-type }}
         run: |
+          $gitStatus = (git status --porcelain)
+
+          if ([string]::IsNullOrEmpty($gitStatus)) {
+            Write-Output "No changes to commit."
+            "regenerated=false" >> ${env:GITHUB_OUTPUT}
+            exit 0
+          }
+
           $branchName = "npm-audit-fix"
           $branchProbe = gh api "repos/${env:GITHUB_REPOSITORY}/git/ref/heads/${branchName}" 2>&1
 
           if ($LASTEXITCODE -eq 0) {
             Write-Output "::notice::Branch ${branchName} already exists."
-            "updated-version=false" >> ${env:GITHUB_OUTPUT}
+            "regenerated=false" >> ${env:GITHUB_OUTPUT}
             exit 0
           }
 
@@ -75,10 +82,6 @@ jobs:
             throw "Failed to check whether branch '${branchName}' exists."
           }
 
-          $baseSha = ${env:CHECKOUT_COMMIT}
-
-          $filePath = ${env:PACKAGE_LOCK_PATH}
-          $fileFullPath = Join-Path ${env:GITHUB_WORKSPACE} $filePath
           if (${env:TOKEN_TYPE} -eq "app") {
             $gitUserName = "${env:APP_SLUG}[bot]"
             $gitUserId = gh api "users/${gitUserName}" --jq '.id'
@@ -95,14 +98,41 @@ jobs:
               $identity.email
             }
           }
-          $currentFile = gh api "repos/${env:GITHUB_REPOSITORY}/contents/${filePath}?ref=${baseSha}" | ConvertFrom-Json
-          $currentContent = $currentFile.content.Replace("`r", "").Replace("`n", "")
-          $localContent = [System.Convert]::ToBase64String(
-            [System.IO.File]::ReadAllBytes($fileFullPath))
 
-          if ($currentContent -eq $localContent) {
-            Write-Output "::error::No changes to commit."
-            exit 1
+          $baseSha = ${env:CHECKOUT_COMMIT}
+
+          $editedFiles = @()
+          git diff --name-only $baseSha | ForEach-Object {
+            $editedFiles += $_
+          }
+
+          if ($LASTEXITCODE -ne 0 || $editedFiles.Count -lt 1) {
+            Write-Output "No changes to commit."
+            "regenerated=false" >> ${env:GITHUB_OUTPUT}
+            exit 0
+          }
+
+          $edits = @()
+
+          foreach ($filePath in $editedFiles) {
+            $fileFullPath = Join-Path ${env:GITHUB_WORKSPACE} $filePath
+            $currentFile = gh api "repos/${env:GITHUB_REPOSITORY}/contents/${filePath}?ref=${baseSha}" | ConvertFrom-Json
+            $currentContent = $currentFile.content.Replace("`r", "").Replace("`n", "")
+            $localContent = [System.Convert]::ToBase64String(
+              [System.IO.File]::ReadAllBytes($fileFullPath))
+            
+            if ($currentContent -ne $localContent) {
+              $edits += @{
+                path = $filePath
+                contents = $localContent
+              }
+            }
+          }
+
+          if ($edits.Count -lt 1) {
+            Write-Output "No changes to commit."
+            "regenerated=false" >> ${env:GITHUB_OUTPUT}
+            exit 0
           }
 
           @{
@@ -120,7 +150,7 @@ jobs:
           }
           '@
 
-          $body = "Run npm audit fix`n`nRun ``npm audit fix`` to pick up latest fixes.`n`nSigned-off-by: ${gitUserName} <${gitUserEmail}>"
+          $body = "Run ``npm audit fix`` to pick up latest fixes.`n`nSigned-off-by: ${gitUserName} <${gitUserEmail}>"
           $payload = @{
             query = $query
             variables = @{
@@ -131,16 +161,11 @@ jobs:
                 }
                 expectedHeadOid = $baseSha
                 message = @{
-                  headline = "Bump version"
+                  headline = "Run npm audit fix"
                   body = $body
                 }
                 fileChanges = @{
-                  additions = @(
-                    @{
-                      path = $filePath
-                      contents = $localContent
-                    }
-                  )
+                  additions = $edits
                 }
               }
             }
