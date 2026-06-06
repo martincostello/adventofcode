@@ -203,7 +203,7 @@ jobs:
           HEAD_BRANCH: ${{ steps.push-changes.outputs.branch-name }}
           GH_TOKEN: ${{ steps.get-github-token.outputs.token }}
         run: |
-          $workflowUrl = "{$env:GITHUB_SERVER_URL}/${env:GITHUB_REPOSITORY}/actions/runs/${env:GITHUB_RUN_ID}"
+          $workflowUrl = "${env:GITHUB_SERVER_URL}/${env:GITHUB_REPOSITORY}/actions/runs/${env:GITHUB_RUN_ID}"
 
           $body = @(
             "Run ``npm audit fix`` to pick up the latest fixes.",
