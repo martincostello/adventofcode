@@ -59,6 +59,7 @@ jobs:
           APP_SLUG: ${{ steps.get-github-token.outputs.app-slug }}
           CHECKOUT_COMMIT: ${{ steps.checkout-code.outputs.commit }}
           GH_TOKEN: ${{ steps.get-github-token.outputs.token }}
+          PACKAGE_LOCK_PATH: 'src/AdventOfCode.Site/package-lock.json'
           TOKEN_TYPE: ${{ steps.get-github-token.outputs.token-type }}
         run: |
           $branchName = "npm-audit-fix"
@@ -76,7 +77,7 @@ jobs:
 
           $baseSha = ${env:CHECKOUT_COMMIT}
 
-          $filePath = "src/AdventOfCode.Site/package-lock.json"
+          $filePath = ${env:PACKAGE_LOCK_PATH}
           $fileFullPath = Join-Path ${env:GITHUB_WORKSPACE} $filePath
           if (${env:TOKEN_TYPE} -eq "app") {
             $gitUserName = "${env:APP_SLUG}[bot]"
