@@ -3,6 +3,7 @@
     <AssemblyIsCLSCompliant>false</AssemblyIsCLSCompliant>
     <CentralPackageTransitivePinningEnabled>true</CentralPackageTransitivePinningEnabled>
     <CodeAnalysisRuleSet>$(MSBuildThisFileDirectory)AdventOfCode.ruleset</CodeAnalysisRuleSet>
+    <Features>runtime-async=on</Features>
     <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
     <LangVersion>preview</LangVersion>
     <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
