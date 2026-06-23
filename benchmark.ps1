@@ -75,7 +75,7 @@ $benchmarks = (Join-Path $solutionPath "tests" "AdventOfCode.Benchmarks" "Advent
 Write-Information "Running benchmarks..."
 
 $additionalArgs = @(
-    "--consumeTasksSynchronously", # For backwards compatibility with BenchmarkDotNet versions before 0.16.0
+    "--consumeTasksSynchronously" # For backwards compatibility with BenchmarkDotNet versions before 0.16.0
 )
 
 if (![string]::IsNullOrEmpty($Filter)) {
