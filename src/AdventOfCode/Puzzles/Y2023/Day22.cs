@@ -98,8 +98,10 @@ public sealed class Day22 : Puzzle<int, int>
                     {
                         if (shape.Contains(cubes[i] + next))
                         {
+#pragma warning disable IDE0410
                             intersects = true;
                             break;
+#pragma warning restore IDE0410
                         }
                     }
 
