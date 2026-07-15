@@ -71,17 +71,7 @@ public sealed class Day22 : Puzzle<int, int>
         {
             for (int y = 0; y < height; y++)
             {
-                Node? node = null;
-
-                for (int i = 0; i < nodes.Count; i++)
-                {
-                    node = nodes[i];
-
-                    if (node.Location.X == x && node.Location.Y == y)
-                    {
-                        break;
-                    }
-                }
+                Node node = nodes.First((p) => p.Location.X == x && p.Location.Y == y);
 
                 if (node == goalNode)
                 {
@@ -91,7 +81,7 @@ public sealed class Day22 : Puzzle<int, int>
                 {
                     grid[x, y] = Empty;
                 }
-                else if (node!.Used > minimumSize)
+                else if (node.Used > minimumSize)
                 {
                     grid[x, y] = Full;
                 }
