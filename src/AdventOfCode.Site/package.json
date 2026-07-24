@@ -40,7 +40,7 @@
     "ts-loader": "9.6.2",
     "ts-md5": "2.0.1",
     "tsify": "5.0.4",
-    "typescript": "6.0.3",
+    "typescript": "7.0.2",
     "vitest": "4.1.10",
     "webpack": "5.108.4",
     "webpack-cli": "7.2.1"
