@@ -12,8 +12,6 @@
     <PublishSelfContained>true</PublishSelfContained>
     <RootNamespace>MartinCostello.AdventOfCode.Site</RootNamespace>
     <TargetFramework>net10.0</TargetFramework>
-    <TypeScriptCompileBlocked>true</TypeScriptCompileBlocked>
-    <TypeScriptToolsVersion>latest</TypeScriptToolsVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(PublishForAWSLambda)' == 'true' ">
     <AssemblyName>bootstrap</AssemblyName>
@@ -26,7 +24,6 @@
     <PackageReference Include="Amazon.Lambda.AspNetCoreServer.Hosting" />
     <PackageReference Include="Amazon.Lambda.RuntimeSupport" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" />
-    <PackageReference Include="Microsoft.TypeScript.MSBuild" PrivateAssets="all" />
     <PackageReference Include="RazorSlices" />
   </ItemGroup>
   <ItemGroup>

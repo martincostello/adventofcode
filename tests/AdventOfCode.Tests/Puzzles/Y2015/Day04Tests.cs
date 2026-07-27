@@ -8,10 +8,13 @@ public sealed class Day04Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
     [Theory]
     [InlineData("abcdef", 5, 609043)]
     [InlineData("pqrstuv", 5, 1048970)]
-    public static async Task Y2015_Day04_GetLowestPositiveNumberWithStartingZeroesAsync(string secretKey, int zeroes, int expected)
+    public void Y2015_Day04_GetLowestPositiveNumberWithStartingZeroes(string secretKey, int zeroes, int expected)
     {
+        // Arrange
+        using var cts = Timeout();
+
         // Act
-        int actual = await Day04.GetLowestPositiveNumberWithStartingZeroesAsync(secretKey, zeroes);
+        int actual = Day04.GetLowestPositiveNumberWithStartingZeroes(secretKey, zeroes, cts.Token);
 
         // Assert
         actual.ShouldBe(expected);

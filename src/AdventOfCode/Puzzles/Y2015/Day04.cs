@@ -18,120 +18,54 @@ public sealed class Day04 : Puzzle<int, int>
     /// </summary>
     /// <param name="secretKey">The secret key to use.</param>
     /// <param name="zeroes">The number of zeroes to get the value for.</param>
+    /// <param name="cancellationToken"> The <see cref="CancellationToken"/> to use.</param>
     /// <returns>
-    /// A <see cref="Task{TResult}"/> that represents the asynchronous operation to find the
-    /// lowest positive integer that generates an MD5 hash with the number of zeroes specified.
+    /// The lowest positive integer that generates an MD5 hash with the number of zeroes specified.
     /// </returns>
-    public static async Task<int> GetLowestPositiveNumberWithStartingZeroesAsync(string secretKey, int zeroes)
+    public static int GetLowestPositiveNumberWithStartingZeroes(string secretKey, int zeroes, CancellationToken cancellationToken)
     {
+        int rangeSize = 5000;
         var solutions = new ConcurrentBag<int>();
-        var searchedRanges = new ConcurrentBag<int>();
 
-        int fromInclusive = 1;
-        int rangeSize = 10000;
-
-        var chunks = Enumerable.Chunk(Enumerable.InfiniteSequence(fromInclusive, 1), rangeSize);
-        using var cts = new CancellationTokenSource();
-
-        try
+        for (int i = 0; !cancellationToken.IsCancellationRequested; i += rangeSize)
         {
-            await Parallel.ForEachAsync(
-                chunks,
-                cts.Token,
-                async (range, cancellationToken) =>
+            Parallel.For(i, i + rangeSize, (j, state) =>
+            {
+                if (IsSolution(j, secretKey, zeroes))
                 {
-                    try
-                    {
-                        // Does this range start at a value greater than an already found value?
-                        if (!solutions.IsEmpty)
-                        {
-                            int bestSolution = solutions.Min();
+                    solutions.Add(j);
+                    return;
+                }
+            });
 
-                            if (range[0] > bestSolution)
-                            {
-                                var orderedRanges = searchedRanges.ToList();
-
-                                if (orderedRanges.Count == 0)
-                                {
-                                    return;
-                                }
-
-                                orderedRanges.Sort();
-
-                                // Have we searched the first possible range already?
-                                if (orderedRanges[0] == fromInclusive)
-                                {
-                                    for (int i = 1; i < orderedRanges.Count; i++)
-                                    {
-                                        int lastRange = orderedRanges[i - 1];
-                                        int thisRange = orderedRanges[i];
-
-                                        // Is this range the next range?
-                                        if (thisRange != lastRange + rangeSize)
-                                        {
-                                            // A range before the current best solution has not been searched yet
-                                            break;
-                                        }
-
-                                        if (thisRange > bestSolution)
-                                        {
-                                            // We have found the best solution
-                                            await cts.CancelAsync();
-                                        }
-                                    }
-                                }
-                            }
-                        }
-
-                        foreach (int i in range)
-                        {
-                            if (cancellationToken.IsCancellationRequested)
-                            {
-                                break;
-                            }
-
-                            if (IsSolution(i, secretKey, zeroes))
-                            {
-                                solutions.Add(i);
-                                break;
-                            }
-                        }
-                    }
-                    finally
-                    {
-                        searchedRanges.Add(range[0]);
-                    }
-                });
-        }
-        catch (TaskCanceledException)
-        {
-            // Solution found
+            if (!solutions.IsEmpty)
+            {
+                return solutions.Min();
+            }
         }
 
-        if (solutions.IsEmpty)
-        {
-            throw new PuzzleException("No answer was found for the specified secret key.");
-        }
-
-        return solutions.Min();
+        throw new PuzzleException("No answer was found for the specified secret key.");
     }
 
     /// <inheritdoc />
-    protected override async Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
+    protected override Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        return await SolveWithArgumentAsync(args, static async (secretKey, logger) =>
-        {
-            int lowestZeroHash5 = await GetLowestPositiveNumberWithStartingZeroesAsync(secretKey, zeroes: 5);
-            int lowestZeroHash6 = await GetLowestPositiveNumberWithStartingZeroesAsync(secretKey, zeroes: 6);
-
-            if (logger is { })
+        return SolveWithArgument(
+            args,
+            static (secretKey, logger, token) =>
             {
-                logger.WriteLine("The lowest positive number for a hash starting with 5 zeroes is {0:N0}.", lowestZeroHash5);
-                logger.WriteLine("The lowest positive number for a hash starting with 6 zeroes is {0:N0}.", lowestZeroHash6);
-            }
+                int lowestZeroHash5 = GetLowestPositiveNumberWithStartingZeroes(secretKey, zeroes: 5, token);
+                int lowestZeroHash6 = GetLowestPositiveNumberWithStartingZeroes(secretKey, zeroes: 6, token);
 
-            return (lowestZeroHash5, lowestZeroHash6);
-        });
+                if (logger is { })
+                {
+                    logger.WriteLine("The lowest positive number for a hash starting with 5 zeroes is {0:N0}.", lowestZeroHash5);
+                    logger.WriteLine("The lowest positive number for a hash starting with 6 zeroes is {0:N0}.", lowestZeroHash6);
+                }
+
+                return (lowestZeroHash5, lowestZeroHash6);
+            },
+            cancellationToken);
     }
 
     /// <summary>
@@ -150,18 +84,18 @@ public sealed class Day04 : Puzzle<int, int>
         byte[] hash = MD5.HashData(buffer);
 
         (int wholeBytes, int remainder) = Math.DivRem(zeroes, 2);
-        bool hasHalfByte = remainder == 1;
-
-        int sum = hash[0];
 
         // Are the whole bytes all zero?
-        for (int j = 1; sum == 0 && j < wholeBytes; j++)
+        foreach (byte b in hash.AsSpan(0, wholeBytes))
         {
-            sum += hash[j];
+            if (b is not 0)
+            {
+                return false;
+            }
         }
 
         // The current value is a solution if there is an even number
         // of zeroes or if the low bits of the odd byte are zero.
-        return sum is 0 && (!hasHalfByte || hash[wholeBytes] < 0x10);
+        return remainder is not 1 || hash[wholeBytes] < 0x10;
     }
 }
