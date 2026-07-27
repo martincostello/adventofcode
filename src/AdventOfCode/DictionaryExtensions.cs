@@ -40,16 +40,7 @@ internal static class DictionaryExtensions
         where TKey : notnull
         where TValue : INumber<TValue>
     {
-        TValue result;
-
-        if (dictionary.TryGetValue(key, out var current))
-        {
-            result = current + increment;
-        }
-        else
-        {
-            result = value;
-        }
+        var result = dictionary.TryGetValue(key, out var current) ? current + increment : value;
 
         dictionary[key] = result;
 
