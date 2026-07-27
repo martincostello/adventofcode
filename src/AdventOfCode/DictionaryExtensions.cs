@@ -16,7 +16,10 @@ internal static class DictionaryExtensions
     /// <param name="dictionary">The dictionary to add or increment the value for.</param>
     /// <param name="key">The key to increment the value of or add to the dictionary.</param>
     /// <param name="value">The value to add to the dictionary if the key is not found.</param>
-    public static void AddOrIncrement<TKey, TValue>(this Dictionary<TKey, TValue> dictionary, TKey key, TValue value)
+    /// <returns>
+    /// The new value of the specified key after the increment operation.
+    /// </returns>
+    public static TValue AddOrIncrement<TKey, TValue>(this Dictionary<TKey, TValue> dictionary, TKey key, TValue value)
         where TKey : notnull
         where TValue : INumber<TValue>
         => dictionary.AddOrIncrement(key, value, TValue.One);
@@ -30,10 +33,28 @@ internal static class DictionaryExtensions
     /// <param name="key">The key to increment the value of or add to the dictionary.</param>
     /// <param name="value">The value to add to the dictionary if the key is not found.</param>
     /// <param name="increment">The value to increment by.</param>
-    public static void AddOrIncrement<TKey, TValue>(this Dictionary<TKey, TValue> dictionary, TKey key, TValue value, TValue increment)
+    /// <returns>
+    /// The new value of the specified key after the increment operation.
+    /// </returns>
+    public static TValue AddOrIncrement<TKey, TValue>(this Dictionary<TKey, TValue> dictionary, TKey key, TValue value, TValue increment)
         where TKey : notnull
-        where TValue : INumber<TValue> =>
-        dictionary[key] = dictionary.TryGetValue(key, out var current) ? current + increment : value;
+        where TValue : INumber<TValue>
+    {
+        TValue result;
+
+        if (dictionary.TryGetValue(key, out var current))
+        {
+            result = current + increment;
+        }
+        else
+        {
+            result = value;
+        }
+
+        dictionary[key] = result;
+
+        return result;
+    }
 
     /// <summary>
     /// Decrements the value of the specified key, or adds it if not already present.
