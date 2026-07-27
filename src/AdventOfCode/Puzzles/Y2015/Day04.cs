@@ -18,52 +18,54 @@ public sealed class Day04 : Puzzle<int, int>
     /// </summary>
     /// <param name="secretKey">The secret key to use.</param>
     /// <param name="zeroes">The number of zeroes to get the value for.</param>
+    /// <param name="cancellationToken"> The <see cref="CancellationToken"/> to use.</param>
     /// <returns>
     /// The lowest positive integer that generates an MD5 hash with the number of zeroes specified.
     /// </returns>
-    public static int GetLowestPositiveNumberWithStartingZeroes(string secretKey, int zeroes)
+    public static int GetLowestPositiveNumberWithStartingZeroes(string secretKey, int zeroes, CancellationToken cancellationToken)
     {
-        int rangeSize = 500;
-        var chunks = Enumerable.Chunk(Enumerable.InfiniteSequence(1, 1), rangeSize);
+        int rangeSize = 5000;
         var solutions = new ConcurrentBag<int>();
 
-        Parallel.ForEach(chunks, (range, state) =>
+        for (int i = 0; !cancellationToken.IsCancellationRequested; i += rangeSize)
         {
-            foreach (int i in range)
+            Parallel.For(i, i + rangeSize, (j, state) =>
             {
-                if (state.ShouldExitCurrentIteration)
+                if (IsSolution(j, secretKey, zeroes))
                 {
+                    solutions.Add(j);
                     return;
                 }
+            });
 
-                if (IsSolution(i, secretKey, zeroes))
-                {
-                    state.Break();
-                    solutions.Add(i);
-                    return;
-                }
+            if (!solutions.IsEmpty)
+            {
+                return solutions.Min();
             }
-        });
+        }
 
-        return solutions.Min();
+        throw new PuzzleException("No answer was found for the specified secret key.");
     }
 
     /// <inheritdoc />
     protected override Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken)
     {
-        return SolveWithArgument(args, static (secretKey, logger) =>
-        {
-            int lowestZeroHash5 = GetLowestPositiveNumberWithStartingZeroes(secretKey, zeroes: 5);
-            int lowestZeroHash6 = GetLowestPositiveNumberWithStartingZeroes(secretKey, zeroes: 6);
-
-            if (logger is { })
+        return SolveWithArgument(
+            args,
+            static (secretKey, logger, token) =>
             {
-                logger.WriteLine("The lowest positive number for a hash starting with 5 zeroes is {0:N0}.", lowestZeroHash5);
-                logger.WriteLine("The lowest positive number for a hash starting with 6 zeroes is {0:N0}.", lowestZeroHash6);
-            }
+                int lowestZeroHash5 = GetLowestPositiveNumberWithStartingZeroes(secretKey, zeroes: 5, token);
+                int lowestZeroHash6 = GetLowestPositiveNumberWithStartingZeroes(secretKey, zeroes: 6, token);
 
-            return (lowestZeroHash5, lowestZeroHash6);
-        });
+                if (logger is { })
+                {
+                    logger.WriteLine("The lowest positive number for a hash starting with 5 zeroes is {0:N0}.", lowestZeroHash5);
+                    logger.WriteLine("The lowest positive number for a hash starting with 6 zeroes is {0:N0}.", lowestZeroHash6);
+                }
+
+                return (lowestZeroHash5, lowestZeroHash6);
+            },
+            cancellationToken);
     }
 
     /// <summary>
