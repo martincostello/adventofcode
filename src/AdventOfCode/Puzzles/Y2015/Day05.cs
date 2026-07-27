@@ -34,9 +34,6 @@ public sealed class Day05 : Puzzle<int, int>
         int vowels = 0;
         bool hasAnyConsecutiveLetters = false;
 
-        // The string is nice if it has three or more vowels and at least two consecutive letters
-        bool IsNice() => hasAnyConsecutiveLetters && vowels > 2;
-
         for (int i = 0; i < value.Length; i++)
         {
             char current = value[i];
@@ -51,14 +48,15 @@ public sealed class Day05 : Puzzle<int, int>
                 hasAnyConsecutiveLetters = current == value[i - 1];
             }
 
-            if (IsNice())
+            // The string is nice if it has three or more vowels and at least two consecutive letters
+            if (hasAnyConsecutiveLetters && vowels > 2)
             {
                 // Criteria all met, no further analysis required
                 return true;
             }
         }
 
-        return IsNice();
+        return false;
 
         static bool IsVowel(char letter)
         {
@@ -91,20 +89,33 @@ public sealed class Day05 : Puzzle<int, int>
     /// </returns>
     internal static bool HasPairOfLettersWithMoreThanOneOccurrence(ReadOnlySpan<char> value)
     {
-        var letterPairs = new Dictionary<string, List<int>>();
+        if (value.Length < 4)
+        {
+            // The value is not long enough
+            return false;
+        }
+
+        var letterPairs = new Dictionary<string, int>();
         var alternate = letterPairs.GetAlternateLookup();
 
         for (int i = 0; i < value.Length - 1; i++)
         {
-            var indexes = alternate.GetOrAdd(value.Slice(i, 2));
+            var pair = value.Slice(i, 2);
 
-            if (!indexes.Contains(i - 1))
+            if (alternate.TryGetValue(pair, out int j))
             {
-                indexes.Add(i);
+                if (i - j > 1)
+                {
+                    return true;
+                }
+            }
+            else
+            {
+                alternate[pair] = i;
             }
         }
 
-        return letterPairs.Any((p) => p.Value.Count > 1);
+        return false;
     }
 
     /// <summary>
