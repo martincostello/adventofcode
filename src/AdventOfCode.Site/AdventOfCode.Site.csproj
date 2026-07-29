@@ -42,7 +42,6 @@
     <ContainerPort Include="8080" Type="tcp" />
     <Content Update="coverage\**;package.json;package-lock.json;tsconfig.json" CopyToPublishDirectory="Never" />
     <None Remove="scripts\ts\**\*.ts" />
-    <TypeScriptCompile Include="scripts\ts\**\*.ts" />
   </ItemGroup>
   <ItemGroup>
     <None Include="aws-lambda-tools-defaults.json;serverless.template" CopyToOutputDirectory="PreserveNewest" />
