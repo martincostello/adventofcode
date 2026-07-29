@@ -3,6 +3,7 @@
     <AWSProjectType>Lambda</AWSProjectType>
     <ContainerFamily>resolute-chiseled-extra</ContainerFamily>
     <Description>Web app for solving Advent of Code.</Description>
+    <EnableAotAnalyzer>true</EnableAotAnalyzer>
     <EnableConfigurationBindingGenerator>true</EnableConfigurationBindingGenerator>
     <EnableRequestDelegateGenerator>true</EnableRequestDelegateGenerator>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
@@ -41,7 +42,6 @@
     <ContainerPort Include="8080" Type="tcp" />
     <Content Update="coverage\**;package.json;package-lock.json;tsconfig.json" CopyToPublishDirectory="Never" />
     <None Remove="scripts\ts\**\*.ts" />
-    <TypeScriptCompile Include="scripts\ts\**\*.ts" />
   </ItemGroup>
   <ItemGroup>
     <None Include="aws-lambda-tools-defaults.json;serverless.template" CopyToOutputDirectory="PreserveNewest" />
