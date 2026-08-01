@@ -45,6 +45,12 @@ public sealed class Day04 : Puzzle<int, int>
                 },
                 (offset, state, local) =>
                 {
+                    if (cancellationToken.IsCancellationRequested)
+                    {
+                        state.Stop();
+                        return local;
+                    }
+
                     int value = start + offset;
 
                     if (IsSolution(local.Hash, local.Buffer, keyBytes.Length, value, zeroes))
