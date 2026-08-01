@@ -1,6 +1,7 @@
 ﻿// Copyright (c) Martin Costello, 2015. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
+using System.Buffers.Text;
 using System.Collections.Concurrent;
 using System.Security.Cryptography;
 
@@ -27,11 +28,13 @@ public sealed class Day04 : Puzzle<int, int>
         int rangeSize = 5000;
         var solutions = new ConcurrentBag<int>();
 
+        byte[] keyBytes = Encoding.UTF8.GetBytes(secretKey);
+
         for (int i = 0; !cancellationToken.IsCancellationRequested; i += rangeSize)
         {
             Parallel.For(i, i + rangeSize, (j, state) =>
             {
-                if (IsSolution(j, secretKey, zeroes))
+                if (IsSolution(j, keyBytes, zeroes))
                 {
                     solutions.Add(j);
                     return;
@@ -77,11 +80,17 @@ public sealed class Day04 : Puzzle<int, int>
     /// <returns>
     /// <see langword="true"/> if <paramref name="value"/> is a solution; otherwise <see langword="false"/>.
     /// </returns>
-    private static bool IsSolution(int value, string secretKey, int zeroes)
+    private static bool IsSolution(int value, ReadOnlySpan<byte> secretKey, int zeroes)
     {
-        string formatted = secretKey + value.ToString(CultureInfo.InvariantCulture);
-        byte[] buffer = Encoding.UTF8.GetBytes(formatted);
-        byte[] hash = MD5.HashData(buffer);
+        const int MaxValueLength = 11;
+        int bufferLength = secretKey.Length + MaxValueLength;
+
+        Span<byte> buffer = bufferLength < 256 ? stackalloc byte[bufferLength] : new byte[bufferLength];
+        secretKey.CopyTo(buffer);
+
+        _ = Utf8Formatter.TryFormat(value, buffer[secretKey.Length..], out int written);
+
+        byte[] hash = MD5.HashData(buffer[..(secretKey.Length + written)]);
 
         (int wholeBytes, int remainder) = Math.DivRem(zeroes, 2);
 
