@@ -90,12 +90,13 @@ public sealed class Day04 : Puzzle<int, int>
 
         _ = Utf8Formatter.TryFormat(value, buffer[secretKey.Length..], out int written);
 
-        byte[] hash = MD5.HashData(buffer[..(secretKey.Length + written)]);
+        Span<byte> hash = stackalloc byte[MD5.HashSizeInBytes];
+        MD5.HashData(buffer[..(secretKey.Length + written)], hash);
 
         (int wholeBytes, int remainder) = Math.DivRem(zeroes, 2);
 
         // Are the whole bytes all zero?
-        foreach (byte b in hash.AsSpan(0, wholeBytes))
+        foreach (byte b in hash[..wholeBytes])
         {
             if (b is not 0)
             {
