@@ -63,7 +63,7 @@ public class LambdaTests : IAsyncLifetime, IDisposable
         };
 
         // Act
-        APIGatewayProxyResponse actual = await AssertApiGatewayRequestIsHandledAsync(request);
+        APIGatewayProxyResponse actual = await AssertApiGatewayRequestIsHandledAsync(request, TestContext.Current.CancellationToken);
 
         actual.ShouldNotBeNull();
         actual.StatusCode.ShouldBe(StatusCodes.Status200OK);
@@ -111,7 +111,7 @@ public class LambdaTests : IAsyncLifetime, IDisposable
         };
 
         // Act
-        APIGatewayProxyResponse actual = await AssertApiGatewayRequestIsHandledAsync(request);
+        APIGatewayProxyResponse actual = await AssertApiGatewayRequestIsHandledAsync(request, TestContext.Current.CancellationToken);
 
         actual.ShouldNotBeNull();
         actual.StatusCode.ShouldBe(StatusCodes.Status200OK);
@@ -151,7 +151,7 @@ public class LambdaTests : IAsyncLifetime, IDisposable
         };
 
         // Act
-        APIGatewayProxyResponse actual = await AssertApiGatewayRequestIsHandledAsync(request);
+        APIGatewayProxyResponse actual = await AssertApiGatewayRequestIsHandledAsync(request, TestContext.Current.CancellationToken);
 
         actual.ShouldNotBeNull();
         actual.StatusCode.ShouldBe(StatusCodes.Status200OK);
@@ -248,7 +248,8 @@ public class LambdaTests : IAsyncLifetime, IDisposable
     }
 
     private async Task<APIGatewayProxyResponse> AssertApiGatewayRequestIsHandledAsync(
-        APIGatewayProxyRequest request)
+        APIGatewayProxyRequest request,
+        CancellationToken cancellationToken)
     {
         // Arrange
         string json = JsonSerializer.Serialize(request, SerializerOptions);
@@ -256,7 +257,7 @@ public class LambdaTests : IAsyncLifetime, IDisposable
         LambdaTestContext context = await _server.EnqueueAsync(json);
 
         using var cts = GetCancellationTokenSourceForResponseAvailable(context);
-        using var combined = CancellationTokenSource.CreateLinkedTokenSource(cts.Token, _server.CancellationToken);
+        using var combined = CancellationTokenSource.CreateLinkedTokenSource(cts.Token, _server.CancellationToken, cancellationToken);
 
         combined.CancelAfter(LambdaTestTimeout);
 
