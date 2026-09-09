@@ -47,7 +47,7 @@ public sealed class Day19 : Puzzle<int, int>
 
         static Dictionary<string, string> ParseRules(IEnumerable<string> input, int count)
         {
-            Dictionary<string, List<string>> rawRules = new(count);
+            Dictionary<string, List<string>> rawRules = [with(count)];
 
             foreach (string rule in input)
             {

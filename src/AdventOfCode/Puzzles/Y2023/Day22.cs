@@ -86,26 +86,19 @@ public sealed class Day22 : Puzzle<int, int>
                 var transform = Vector3.Zero;
                 Vector3[]? cubes = null;
 
+inner:
                 for (float z = height; z > Floor; z--)
                 {
                     cubes ??= [.. brick];
 
                     var next = transform + gravity;
 
-                    bool intersects = false;
-
                     for (int i = 0; i < cubes.Length; i++)
                     {
                         if (shape.Contains(cubes[i] + next))
                         {
-                            intersects = true;
-                            break;
+                            break inner;
                         }
-                    }
-
-                    if (intersects)
-                    {
-                        break;
                     }
 
                     transform = next;
@@ -115,7 +108,7 @@ public sealed class Day22 : Puzzle<int, int>
 
                 if (transform != Vector3.Zero)
                 {
-                    transformed = new HashSet<Vector3>(cubes!.Length);
+                    transformed = [with(cubes!.Length)];
 
                     for (int i = 0; i < cubes.Length; i++)
                     {
