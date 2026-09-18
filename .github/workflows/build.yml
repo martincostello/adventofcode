@@ -214,7 +214,7 @@ jobs:
         }
 
   typescript:
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-26.04
 
     permissions:
       contents: read
@@ -245,7 +245,7 @@ jobs:
   deploy-production:
     if: github.event.repository.fork == false && github.ref_name == github.event.repository.default_branch
     needs: [ build, typescript ]
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-26.04
     concurrency: production_environment
 
     environment:
@@ -302,7 +302,7 @@ jobs:
 
   test-production:
     needs: deploy-production
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-26.04
     concurrency: production_environment
 
     permissions:
@@ -329,7 +329,7 @@ jobs:
   deploy-aws:
     if: github.event.repository.fork == false && github.ref_name == github.event.repository.default_branch
     needs: [ build, typescript, test-production ]
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-26.04
     concurrency: aws_environment
 
     environment:
@@ -432,7 +432,7 @@ jobs:
 
   test-aws:
     needs: deploy-aws
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-26.04
     concurrency: aws_environment
 
     permissions:
