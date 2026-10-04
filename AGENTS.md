@@ -6,9 +6,11 @@ This file provides guidance to coding agents when working with code in this repo
 
 - Use `./build.ps1` for the main .NET workflow. It builds the solution, runs the .NET tests, and publishes the site/Lambda package.
 - Use `./build.ps1 -SkipPublish` when you only need the .NET build and test steps.
+- Tests run using Microsoft Testing Platform (configured in `global.json`), so `dotnet test` uses MTP-style arguments rather than VSTest ones.
 - Run the .NET test project directly with `dotnet test tests/AdventOfCode.Tests/AdventOfCode.Tests.csproj`.
 - Run a single .NET test with a filter, for example:
-  `dotnet test tests/AdventOfCode.Tests/AdventOfCode.Tests.csproj --filter "FullyQualifiedName~MartinCostello.AdventOfCode.Puzzles.Y2025.Day12Tests.Y2025_Day12_Arrange_Returns_Correct_Value"`
+  `dotnet test tests/AdventOfCode.Tests/AdventOfCode.Tests.csproj --filter-method "MartinCostello.AdventOfCode.Puzzles.Y2025.Day12Tests.Y2025_Day12_Arrange_Returns_Correct_Value"`
+- Filter by trait with `--filter-trait`, for example `--filter-trait "Category=EndToEnd"`.
 - The web assets and browser-side puzzle solvers live under `src/AdventOfCode.Site`. On a clean checkout, run `npm ci` in that directory before any npm scripts.
 - Run the site asset pipeline with `cd src/AdventOfCode.Site && npm run all`. This runs `npm run publish` and `npm test`.
 - Use `cd src/AdventOfCode.Site && npm run build`, `npm run lint`, and `npm test` for narrower TypeScript work.

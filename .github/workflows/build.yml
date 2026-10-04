@@ -324,7 +324,7 @@ jobs:
       shell: pwsh
       env:
         WEBSITE_URL: ${{ env.AZURE_URL_PROD }}
-      run: dotnet test ./tests/AdventOfCode.Tests --configuration Release --filter Category=EndToEnd --logger "GitHubActions;report-warnings=false" /p:CollectCoverage=false
+      run: dotnet test ./tests/AdventOfCode.Tests --configuration Release --filter-trait "Category=EndToEnd"
 
   deploy-aws:
     if: github.event.repository.fork == false && github.ref_name == github.event.repository.default_branch
@@ -454,4 +454,4 @@ jobs:
       shell: pwsh
       env:
         WEBSITE_URL: ${{ env.AWS_URL_PROD }}
-      run: dotnet test ./tests/AdventOfCode.Tests --configuration Release --filter Category=EndToEnd --logger "GitHubActions;report-warnings=false" /p:CollectCoverage=false
+      run: dotnet test ./tests/AdventOfCode.Tests --configuration Release --filter-trait "Category=EndToEnd"

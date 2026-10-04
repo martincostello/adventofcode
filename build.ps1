@@ -81,14 +81,7 @@ if ($LASTEXITCODE -ne 0) {
 if ($SkipTests -eq $false) {
     Write-Information "Running tests..."
 
-    $additionalArgs = @()
-
-    if (![string]::IsNullOrEmpty($env:GITHUB_SHA)) {
-        $additionalArgs += "--logger"
-        $additionalArgs += "GitHubActions;report-warnings=false"
-    }
-
-    & $dotnet test --configuration "Release" $additionalArgs
+    & $dotnet test --configuration "Release"
 
     if ($LASTEXITCODE -ne 0) {
         throw "dotnet test failed with exit code $LASTEXITCODE"
