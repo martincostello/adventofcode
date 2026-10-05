@@ -29,7 +29,7 @@
     "@stylistic/eslint-plugin": "5.10.0",
     "@typescript-eslint/eslint-plugin": "8.71.0",
     "@typescript-eslint/parser": "8.71.0",
-    "@vitest/coverage-v8": "5.0.2",
+    "@vitest/coverage-v8": "5.0.3",
     "@vitest/eslint-plugin": "1.6.27",
     "eslint": "10.11.0",
     "eslint-config-prettier": "10.1.8",
@@ -40,7 +40,7 @@
     "ts-loader": "9.6.2",
     "ts-md5": "2.0.1",
     "typescript": "6.0.3",
-    "vitest": "5.0.2",
+    "vitest": "5.0.3",
     "webpack": "5.111.1",
     "webpack-cli": "7.2.3"
   },
