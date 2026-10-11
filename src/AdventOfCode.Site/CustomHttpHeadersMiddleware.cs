@@ -53,26 +53,26 @@ public sealed class CustomHttpHeadersMiddleware(RequestDelegate next)
                 context.Response.Headers.ContentSecurityPolicy = ContentSecurityPolicy(nonce);
             }
 
-            context.Response.Headers.Append("Cross-Origin-Embedder-Policy", "unsafe-none");
-            context.Response.Headers.Append("Cross-Origin-Opener-Policy", "same-origin");
-            context.Response.Headers.Append("Cross-Origin-Resource-Policy", "same-origin");
+            context.Response.Headers["Cross-Origin-Embedder-Policy"] = "unsafe-none";
+            context.Response.Headers["Cross-Origin-Opener-Policy"] = "same-origin";
+            context.Response.Headers["Cross-Origin-Resource-Policy"] = "same-origin";
 
             if (context.Request.IsHttps)
             {
-                context.Response.Headers.Append("Expect-CT", "max-age=1800");
+                context.Response.Headers["Expect-CT"] = "max-age=1800";
             }
 
-            context.Response.Headers.Append("Permissions-Policy", "accelerometer=(), camera=(), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), payment=(), usb=()");
-            context.Response.Headers.Append("Referrer-Policy", "no-referrer-when-downgrade");
+            context.Response.Headers["Permissions-Policy"] = "accelerometer=(), camera=(), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), payment=(), usb=()";
+            context.Response.Headers["Referrer-Policy"] = "no-referrer-when-downgrade";
             context.Response.Headers.XContentTypeOptions = "nosniff";
-            context.Response.Headers.Append("X-Download-Options", "noopen");
+            context.Response.Headers["X-Download-Options"] = "noopen";
 
             if (!context.Response.Headers.ContainsKey("X-Frame-Options"))
             {
                 context.Response.Headers.XFrameOptions = "DENY";
             }
 
-            context.Response.Headers.Append("X-Request-Id", context.TraceIdentifier);
+            context.Response.Headers["X-Request-Id"] = context.TraceIdentifier;
             context.Response.Headers.XXSSProtection = "1; mode=block";
 
             return Task.CompletedTask;
