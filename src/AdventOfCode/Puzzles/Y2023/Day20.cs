@@ -292,11 +292,11 @@ public sealed class Day20 : Puzzle<int, long>
 
         public override string Type { get; } = "Flip-flop";
 
-        public override void Receive(Module sender, Pulse pulse)
+        public override void Receive(Module sender, Pulse value)
         {
-            OnPulseReceived(sender, pulse);
+            OnPulseReceived(sender, value);
 
-            if (pulse == Pulse.Low)
+            if (value == Pulse.Low)
             {
                 On = !On;
                 Values.Enqueue(On ? Pulse.High : Pulse.Low);

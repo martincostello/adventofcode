@@ -102,9 +102,9 @@ public sealed class Day04 : Puzzle<int, int>
 
                 int length = 1;
 
-                for (int x = originX.GetOffset(width) + deltaX, δy = y + 1; x > -1 && x < width && δy < height; x += deltaX, δy++)
+                for (int x = originX.GetOffset(width) + deltaX, diagonalY = y + 1; x > -1 && x < width && diagonalY < height; x += deltaX, diagonalY++)
                 {
-                    buffer[length++] = grid[δy][x];
+                    buffer[length++] = grid[diagonalY][x];
                 }
 
                 count += CountXmases(buffer[..length]);
@@ -120,9 +120,9 @@ public sealed class Day04 : Puzzle<int, int>
 
                 int length = 1;
 
-                for (int y = 1, δx = x + deltaX; y < height && δx > -1 && δx < width; y++, δx += deltaX)
+                for (int y = 1, diagonalX = x + deltaX; y < height && diagonalX > -1 && diagonalX < width; y++, diagonalX += deltaX)
                 {
-                    buffer[length++] = grid[y][δx];
+                    buffer[length++] = grid[y][diagonalX];
                 }
 
                 count += CountXmases(buffer[..length]);

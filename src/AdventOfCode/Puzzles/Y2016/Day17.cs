@@ -20,10 +20,10 @@ public sealed class Day17 : Puzzle<string, int>
     /// </returns>
     public static (string Shortest, int Longest) GetPathsToVault(string passcode)
     {
-        var up = (vector: Directions.Up, direction: 'U');
-        var down = (vector: Directions.Down, direction: 'D');
-        var left = (vector: Directions.Left, direction: 'L');
-        var right = (vector: Directions.Right, direction: 'R');
+        var up = (Vector: Directions.Up, Direction: 'U');
+        var down = (Vector: Directions.Down, Direction: 'D');
+        var left = (Vector: Directions.Left, Direction: 'L');
+        var right = (Vector: Directions.Right, Direction: 'R');
 
         var possibleMoves = new[] { up, down, left, right };
 

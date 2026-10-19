@@ -11,6 +11,7 @@ namespace MartinCostello.AdventOfCode;
 /// <remarks>
 /// Based on <c>https://www.redblobgames.com/pathfinding/a-star/implementation.html</c>.
 /// </remarks>
+/// <param name="bounds">The bounds of the grid.</param>
 public class SquareGrid(Rectangle bounds) : IWeightedGraph<Point>
 {
     /// <summary>

@@ -35,10 +35,9 @@ public sealed class Day02 : Puzzle<int, int>
     {
         int total = 0;
 
-        Func<string, Move, Move> moveSelector =
-            containsDesiredOutcome ?
-            (value, opponent) => GetMove(ParseOutcome(value), opponent) :
-            (value, _) => ParseMove(value);
+        Func<string, Move, Move> moveSelector = containsDesiredOutcome
+            ? (value, opponent) => GetMove(ParseOutcome(value), opponent)
+            : (value, _) => ParseMove(value);
 
         foreach (string move in moves)
         {

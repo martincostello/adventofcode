@@ -20,10 +20,13 @@ public sealed class Day13 : Puzzle<int, long>
     {
         int timestamp = Parse<int>(notes[0]);
 
-        int[] buses = [.. notes[1]
-            .Split(',')
-            .Where((p) => p is not "x")
-            .Select(Parse<int>)];
+        int[] buses =
+        [
+            .. notes[1]
+                .Split(',')
+                .Where((p) => p is not "x")
+                .Select(Parse<int>),
+        ];
 
         var nextBusesInMinutes = new Dictionary<int, int>(buses.Length);
 
@@ -60,25 +63,25 @@ public sealed class Day13 : Puzzle<int, long>
             .Split(',')
             .Select((id, offset) => (id, offset))
             .Where((p) => p.id is not "x")
-            .Select((p) => (id: Parse<long>(p.id), p.offset))
-            .OrderByDescending((p) => p.id)
+            .Select((p) => (Id: Parse<long>(p.id), Offset: p.offset))
+            .OrderByDescending((p) => p.Id)
             .ToList();
 
-        var largestBus = buses[0];
+        (long largestBusId, int largestBusOffset) = buses[0];
 
-        long timestamp = largestBus.id - largestBus.offset;
-        long period = largestBus.id;
+        long timestamp = largestBusId - largestBusOffset;
+        long period = largestBusId;
 
         for (int i = 1; i <= buses.Count; i++)
         {
-            while (buses.Take(i).Any((p) => (timestamp + p.offset) % p.id != 0))
+            while (buses.Take(i).Any((p) => (timestamp + p.Offset) % p.Id != 0))
             {
                 timestamp += period;
             }
 
             period = buses
                 .Take(i)
-                .Select((p) => p.id)
+                .Select((p) => p.Id)
                 .Aggregate(Maths.LowestCommonMultiple);
         }
 

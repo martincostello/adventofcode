@@ -58,10 +58,9 @@ public sealed class Day06 : Puzzle<int, int>
                 var first = distances[0];
                 var second = distances[1];
 
-                closestPoints[point] =
-                    first.Distance == second.Distance ?
-                    0 : // Two or more coordinates are equidistant from here
-                    ids[first.Point];
+                closestPoints[point] = first.Distance == second.Distance
+                    ? 0 // Two or more coordinates are equidistant from here
+                    : ids[first.Point];
 
                 int totalDistance = distances.Sum((p) => p.Distance);
 

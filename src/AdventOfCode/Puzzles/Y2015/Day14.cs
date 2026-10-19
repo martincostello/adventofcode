@@ -146,10 +146,9 @@ public sealed class Day14 : Puzzle<int, int>
 
             (int cycles, int secondsOfIncompleteCycle) = Math.DivRem(timeIndex, cycleTime);
 
-            int secondsOfTravelInIncompleteCycle =
-                secondsOfIncompleteCycle > MaximumActivityPeriod ?
-                MaximumActivityPeriod :
-                secondsOfIncompleteCycle;
+            int secondsOfTravelInIncompleteCycle = secondsOfIncompleteCycle > MaximumActivityPeriod
+                ? MaximumActivityPeriod
+                : secondsOfIncompleteCycle;
 
             return (cycles * MaximumActivityPeriod * MaximumSpeed) + (secondsOfTravelInIncompleteCycle * MaximumSpeed);
         }

@@ -159,10 +159,9 @@ public sealed class Day07 : Puzzle<string, int>
             Name = split[0];
             Weight = Parse<int>(split[1].Trim('(', ')'));
 
-            ProgramsHeld =
-                split.Length > 2 ?
-                [.. split.Skip(3).Select((p) => p.Trim(','))] :
-                [];
+            ProgramsHeld = split.Length > 2
+                ? [.. split.Skip(3).Select((p) => p.Trim(','))]
+                : [];
         }
 
         /// <summary>

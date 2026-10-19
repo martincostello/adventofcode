@@ -88,10 +88,9 @@ public sealed class Day09 : Puzzle<long, long>
             }
             else if (isInRepeat)
             {
-                long chunkLength =
-                    version == 2 ?
-                    GetDecompressedLength(data, i, repeatLength, 2) :
-                    repeatLength;
+                long chunkLength = version == 2
+                    ? GetDecompressedLength(data, i, repeatLength, 2)
+                    : repeatLength;
 
                 length += chunkLength * repeatCount;
 

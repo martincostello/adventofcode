@@ -56,9 +56,12 @@ public sealed class Day11 : Puzzle<long, long>
 
                 int monkey = Parse<int>(monkeyLine);
 
-                long[] items = [.. observations[i + 1][ItemsPrefix.Length..]
-                    .Split(", ")
-                    .Select(Parse<long>)];
+                long[] items =
+                [
+                    .. observations[i + 1][ItemsPrefix.Length..]
+                        .Split(", ")
+                        .Select(Parse<long>),
+                ];
 
                 long divisor = Parse<long>(testValue);
                 commonDivisor *= divisor;
