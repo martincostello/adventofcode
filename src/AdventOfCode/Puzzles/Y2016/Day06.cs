@@ -31,10 +31,9 @@ public sealed class Day06 : Puzzle<string, string>
                 .OrderBy((p) => p.Value)
                 .Select((p) => p.Key);
 
-            char ch =
-                leastLikely ?
-                characters.First() :
-                characters.Last();
+            char ch = leastLikely
+                ? characters.First()
+                : characters.Last();
 
             result.Append(ch);
         }

@@ -6,6 +6,9 @@ namespace MartinCostello.AdventOfCode;
 /// <summary>
 /// Represents metadata about a puzzle.
 /// </summary>
+/// <param name="year">The year associated with the puzzle.</param>
+/// <param name="day">The day associated with the puzzle.</param>
+/// <param name="name">The name associated with the puzzle.</param>
 [AttributeUsage(AttributeTargets.Class, AllowMultiple = false, Inherited = false)]
 public sealed class PuzzleAttribute(int year, int day, string name) : Attribute
 {

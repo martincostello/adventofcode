@@ -40,10 +40,9 @@ public sealed class Day03 : Puzzle<long, long>
                 return Joltage(digits);
             }
 
-            Span<char> span =
-                digits.Length <= 32 ?
-                stackalloc char[digits.Length] :
-                new char[digits.Length];
+            Span<char> span = digits.Length <= 32
+                ? stackalloc char[digits.Length]
+                : new char[digits.Length];
 
             int remaining = digits.Length - batteries;
             int index = 0;

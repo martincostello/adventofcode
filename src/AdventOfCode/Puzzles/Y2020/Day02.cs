@@ -37,7 +37,7 @@ public sealed class Day02 : Puzzle<int, int>
             int index1 = firstNumber - 1;
             int index2 = secondNumber - 1;
 
-            return password[index1] == requiredCharacter ^ password[index2] == requiredCharacter;
+            return (password[index1] == requiredCharacter) ^ (password[index2] == requiredCharacter);
         }
     }
 

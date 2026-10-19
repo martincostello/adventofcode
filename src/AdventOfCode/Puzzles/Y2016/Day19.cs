@@ -18,9 +18,9 @@ public sealed class Day19 : Puzzle<int, int>
     /// The number of the elf that receives all the presents.
     /// </returns>
     internal static int FindElfThatGetsAllPresents(int count, int version) =>
-        version == 2 ?
-        FindElfThatGetsAllPresentsV2(count) :
-        FindElfThatGetsAllPresentsV1(count);
+        version == 2
+            ? FindElfThatGetsAllPresentsV2(count)
+            : FindElfThatGetsAllPresentsV1(count);
 
     /// <inheritdoc />
     protected override Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken) => SolveWithArgument(args, static (value, logger) =>

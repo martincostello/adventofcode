@@ -150,9 +150,9 @@ public sealed class Day07 : Puzzle<long, long>
     private abstract record FileSystemEntry(string Name, FileSystemEntry? Container)
     {
         public string Path =>
-            Container is null ?
-            Name :
-            Container.Path.TrimEnd('/') + "/" + Name;
+            Container is null
+                ? Name
+                : Container.Path.TrimEnd('/') + "/" + Name;
     }
 
     private sealed record Directory(string Name, Directory? Parent, List<FileSystemEntry> Children)

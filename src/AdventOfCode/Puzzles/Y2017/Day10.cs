@@ -28,9 +28,12 @@ public sealed class Day10 : Puzzle<int, string>
     /// </returns>
     public static string ComputeHash(string asciiBytes)
     {
-        int[] lengths = [.. Encoding.ASCII.GetBytes(asciiBytes)
-            .Select((p) => (int)p)
-            .Concat(Suffix)];
+        int[] lengths =
+        [
+            .. Encoding.ASCII.GetBytes(asciiBytes)
+                .Select((p) => (int)p)
+                .Concat(Suffix),
+        ];
 
         int index = 0;
         int skip = 0;

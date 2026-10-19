@@ -197,14 +197,17 @@ namespace MartinCostello.AdventOfCode.Site
             Justification = "Assembly is trim rooted and all the types requested are available.")]
         internal static List<PuzzleAttribute> GetPuzzles()
         {
-            return [.. typeof(Puzzle).Assembly
-                .GetTypes()
-                .Where((p) => p.IsAssignableTo(typeof(Puzzle)))
-                .Select((p) => p.GetCustomAttribute<PuzzleAttribute>())
-                .Where((p) => p is not null)
-                .Cast<PuzzleAttribute>()
-                .Where((p) => !p.IsHidden)
-                .Where((p) => !p.Unsolved)];
+            return
+            [
+                .. typeof(Puzzle).Assembly
+                    .GetTypes()
+                    .Where((p) => p.IsAssignableTo(typeof(Puzzle)))
+                    .Select((p) => p.GetCustomAttribute<PuzzleAttribute>())
+                    .Where((p) => p is not null)
+                    .Cast<PuzzleAttribute>()
+                    .Where((p) => !p.IsHidden)
+                    .Where((p) => !p.Unsolved),
+            ];
         }
     }
 }

@@ -19,10 +19,9 @@ public sealed class Day02 : Puzzle<int, int>
     /// </returns>
     public static int CalculateChecksum(IList<IList<int>> spreadsheet, bool forEvenlyDivisible)
     {
-        IEnumerable<int> sequence =
-            forEvenlyDivisible ?
-            spreadsheet.Select(ComputeDivisionOfEvenlyDivisible) :
-            spreadsheet.Select(ComputeDifference);
+        IEnumerable<int> sequence = forEvenlyDivisible
+            ? spreadsheet.Select(ComputeDivisionOfEvenlyDivisible)
+            : spreadsheet.Select(ComputeDifference);
 
         return sequence.Sum();
     }

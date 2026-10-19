@@ -51,9 +51,9 @@ public sealed class Day21 : Puzzle<long, long>
             {
                 bool assignLeft = monkey.Left!.IsVariable;
 
-                (var variable, long constant) = assignLeft ?
-                    (monkey.Left!, monkey.Right!.Value!.Value) :
-                    (monkey.Right!, monkey.Left!.Value!.Value);
+                (var variable, long constant) = assignLeft
+                    ? (monkey.Left!, monkey.Right!.Value!.Value)
+                    : (monkey.Right!, monkey.Left!.Value!.Value);
 
                 variable.Value = (monkey.Operation, assignLeft) switch
                 {
@@ -99,9 +99,9 @@ public sealed class Day21 : Puzzle<long, long>
                 string name = split[0];
                 string[] values = split[1].TrimStart().Split(' ');
 
-                monkeys[name] = values.Length == 1 ?
-                    new(name) { Value = Parse<long>(values[0]) } :
-                    new(name)
+                monkeys[name] = values.Length == 1
+                    ? new(name) { Value = Parse<long>(values[0]) }
+                    : new(name)
                     {
                         LeftName = values[0],
                         RightName = values[2],

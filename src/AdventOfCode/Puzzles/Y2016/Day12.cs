@@ -77,13 +77,13 @@ public sealed class Day12 : Puzzle<int, int>
                         string otherInstruction = instructions[target];
                         split = otherInstruction.Split(' ');
 
-                        instructions[target] = split.Length == 2 ?
-                            string.Equals(split[0], "inc", StringComparison.OrdinalIgnoreCase) ?
-                                $"dec {split[1]}" :
-                                $"inc {split[1]}" :
-                            string.Equals(split[0], "jnz", StringComparison.OrdinalIgnoreCase) ?
-                                $"cpy {split[1]} {split[2]}" :
-                                $"jnz {split[1]} {split[2]}";
+                        instructions[target] = split.Length == 2
+                            ? string.Equals(split[0], "inc", StringComparison.OrdinalIgnoreCase)
+                                ? $"dec {split[1]}"
+                                : $"inc {split[1]}"
+                            : string.Equals(split[0], "jnz", StringComparison.OrdinalIgnoreCase)
+                                ? $"cpy {split[1]} {split[2]}"
+                                : $"jnz {split[1]} {split[2]}";
                     }
 
                     break;

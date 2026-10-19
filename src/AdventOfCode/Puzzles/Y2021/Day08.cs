@@ -64,35 +64,53 @@ public sealed class Day08 : Puzzle<int, int>
             }
 
             // 3 is the same as 7 plus two other elements
-            digits[3] = [.. signals
-                .Where((p) => p.Length == 5)
-                .Single((p) => digits[7].IsSubsetOf(p))];
+            digits[3] =
+            [
+                .. signals
+                    .Where((p) => p.Length == 5)
+                    .Single((p) => digits[7].IsSubsetOf(p)),
+            ];
 
             // 9 is the same as 3 plus one other element
-            digits[9] = [.. signals
-                .Where((p) => p.Length == 6)
-                .Single((p) => digits[3].IsSubsetOf(p))];
+            digits[9] =
+            [
+                .. signals
+                    .Where((p) => p.Length == 6)
+                    .Single((p) => digits[3].IsSubsetOf(p)),
+            ];
 
             // 0 is the only remaining unknown signal that contains 7's elements
-            digits[0] = [.. signals
-                .Where((p) => p.Length == 6)
-                .Where((p) => digits[7].IsSubsetOf(p))
-                .Single((p) => !digits.Any((r) => r.Value.SetEquals(p)))];
+            digits[0] =
+            [
+                .. signals
+                    .Where((p) => p.Length == 6)
+                    .Where((p) => digits[7].IsSubsetOf(p))
+                    .Single((p) => !digits.Any((r) => r.Value.SetEquals(p))),
+            ];
 
             // 6 is the only remaining signal with six elements
-            digits[6] = [.. signals
-                .Where((p) => p.Length == 6)
-                .Single((p) => !digits.Any((r) => r.Value.SetEquals(p)))];
+            digits[6] =
+            [
+                .. signals
+                    .Where((p) => p.Length == 6)
+                    .Single((p) => !digits.Any((r) => r.Value.SetEquals(p))),
+            ];
 
             // 5 is a proper subset of 6
-            digits[5] = [.. signals
-                .Where((p) => p.Length == 5)
-                .Single((p) => new HashSet<char>(p).IsProperSubsetOf(digits[6]))];
+            digits[5] =
+            [
+                .. signals
+                    .Where((p) => p.Length == 5)
+                    .Single((p) => new HashSet<char>(p).IsProperSubsetOf(digits[6])),
+            ];
 
             // 2 is the only remaining signal with 5 elements
-            digits[2] = [.. signals
-                .Where((p) => p.Length == 5)
-                .Single((p) => !digits.Any((r) => r.Value.SetEquals(p)))];
+            digits[2] =
+            [
+                .. signals
+                    .Where((p) => p.Length == 5)
+                    .Single((p) => !digits.Any((r) => r.Value.SetEquals(p))),
+            ];
 
             byte[] output = new byte[numbers.Length];
 

@@ -108,15 +108,9 @@ public sealed class Day18 : Puzzle<int, int>
 
         bool[,] output = new bool[width, height];
 
-        Point[] cornerLights;
-
-        cornerLights = !areCornerLightsBroken ? [] :
-            [
-                new(0, 0),
-                new(width - 1, 0),
-                new(0, height - 1),
-                new(width - 1, height - 1),
-            ];
+        Point[] cornerLights = areCornerLightsBroken
+            ? [new(0, 0), new(width - 1, 0), new(0, height - 1), new(width - 1, height - 1)]
+            : [];
 
         for (int x = 0; x < width; x++)
         {
@@ -153,9 +147,9 @@ public sealed class Day18 : Puzzle<int, int>
                         }
                     }
 
-                    newState = input[x, y] ?
-                        neighborsOn is 2 or 3 :
-                        neighborsOn is 3;
+                    newState = input[x, y]
+                        ? neighborsOn is 2 or 3
+                        : neighborsOn is 3;
                 }
 
                 output[x, y] = newState;

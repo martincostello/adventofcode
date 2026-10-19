@@ -11,7 +11,7 @@ public sealed class Day08Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         {
             {
                 [
-                "RL",
+                    "RL",
                     string.Empty,
                     "AAA = (BBB, CCC)",
                     "BBB = (DDD, EEE)",
@@ -26,7 +26,7 @@ public sealed class Day08Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
             },
             {
                 [
-                "LLR",
+                    "LLR",
                     string.Empty,
                     "AAA = (BBB, BBB)",
                     "BBB = (AAA, ZZZ)",
