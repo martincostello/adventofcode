@@ -85,13 +85,14 @@ if (builder.Environment.IsDevelopment())
 
 builder.Services.Configure<BrotliCompressionProviderOptions>((p) => p.Level = CompressionLevel.Fastest);
 builder.Services.Configure<GzipCompressionProviderOptions>((p) => p.Level = CompressionLevel.Fastest);
+builder.Services.Configure<ZstandardCompressionOptions>((p) => p.Quality = 1);
 
 builder.Services.AddResponseCompression((p) =>
 {
     p.EnableForHttps = true;
+    p.Providers.Add<ZstandardCompressionProvider>();
     p.Providers.Add<BrotliCompressionProvider>();
     p.Providers.Add<GzipCompressionProvider>();
-    p.Providers.Add<ZstandardCompressionProvider>();
 });
 
 builder.Services.AddAWSLambdaHosting(LambdaEventSource.RestApi, new ApplicationLambdaSerializer());
