@@ -91,6 +91,7 @@ builder.Services.AddResponseCompression((p) =>
     p.EnableForHttps = true;
     p.Providers.Add<BrotliCompressionProvider>();
     p.Providers.Add<GzipCompressionProvider>();
+    p.Providers.Add<ZstandardCompressionProvider>();
 });
 
 builder.Services.AddAWSLambdaHosting(LambdaEventSource.RestApi, new ApplicationLambdaSerializer());
