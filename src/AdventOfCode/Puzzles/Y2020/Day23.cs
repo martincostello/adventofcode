@@ -24,12 +24,14 @@ public sealed class Day23 : Puzzle<string, long>
         int minimum = circle.Min();
         int maximum = circle.Max();
 
-        var nodeMap = new Dictionary<int, LinkedListNode<int>>(circle.Count);
+        // The cup labels are contiguous, so the node for each cup
+        // can be found by indexing an array by the label of the cup.
+        var nodeMap = new LinkedListNode<int>[maximum - minimum + 1];
         var current = circle.First;
 
         while (current is not null)
         {
-            nodeMap[current.Value] = current;
+            nodeMap[current.Value - minimum] = current;
             current = current.Next;
         }
 
@@ -37,15 +39,13 @@ public sealed class Day23 : Puzzle<string, long>
 
         for (int i = 0; i < moves; i++)
         {
-            const int ToRemove = 3;
-            var selections = new List<LinkedListNode<int>>(ToRemove);
+            var first = circle.Clockwise(current);
+            var second = circle.Clockwise(first);
+            var third = circle.Clockwise(second);
 
-            for (int j = 0; j < ToRemove; j++)
-            {
-                var selection = circle.Clockwise(current);
-                selections.Add(selection);
-                circle.Remove(selection);
-            }
+            circle.Remove(first);
+            circle.Remove(second);
+            circle.Remove(third);
 
             int destination = current.Value;
 
@@ -58,17 +58,13 @@ public sealed class Day23 : Puzzle<string, long>
                     destination = maximum;
                 }
             }
-            while (selections.Exists((p) => p.Value == destination));
+            while (destination == first.Value || destination == second.Value || destination == third.Value);
 
-            var destinationNode = nodeMap[destination];
+            var destinationNode = nodeMap[destination - minimum];
 
-            while (selections.Count > 0)
-            {
-                var selection = selections[0];
-                circle.AddAfter(destinationNode!, selection);
-                destinationNode = selection;
-                selections.Remove(selection);
-            }
+            circle.AddAfter(destinationNode, first);
+            circle.AddAfter(first, second);
+            circle.AddAfter(second, third);
 
             current = circle.Clockwise(current);
         }

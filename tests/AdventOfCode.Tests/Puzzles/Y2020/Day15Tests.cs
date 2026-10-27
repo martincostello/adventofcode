@@ -23,13 +23,13 @@ public sealed class Day15Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
     [InlineData(new[] { 2, 3, 1 }, 2020, 78)]
     [InlineData(new[] { 3, 2, 1 }, 2020, 438)]
     [InlineData(new[] { 3, 1, 2 }, 2020, 1836)]
-    [InlineData(new[] { 0, 3, 6 }, 30000000, 175594, Skip = "Too slow.")]
-    [InlineData(new[] { 1, 3, 2 }, 30000000, 2578, Skip = "Too slow.")]
-    [InlineData(new[] { 2, 1, 3 }, 30000000, 3544142, Skip = "Too slow.")]
-    [InlineData(new[] { 1, 2, 3 }, 30000000, 261214, Skip = "Too slow.")]
-    [InlineData(new[] { 2, 3, 1 }, 30000000, 6895259, Skip = "Too slow.")]
-    [InlineData(new[] { 3, 2, 1 }, 30000000, 18, Skip = "Too slow.")]
-    [InlineData(new[] { 3, 1, 2 }, 30000000, 362, Skip = "Too slow.")]
+    [InlineData(new[] { 0, 3, 6 }, 30000000, 175594)]
+    [InlineData(new[] { 1, 3, 2 }, 30000000, 2578)]
+    [InlineData(new[] { 2, 1, 3 }, 30000000, 3544142)]
+    [InlineData(new[] { 1, 2, 3 }, 30000000, 261214)]
+    [InlineData(new[] { 2, 3, 1 }, 30000000, 6895259)]
+    [InlineData(new[] { 3, 2, 1 }, 30000000, 18)]
+    [InlineData(new[] { 3, 1, 2 }, 30000000, 362)]
     public void Y2020_Day15_GetSpokenNumber_Returns_Correct_Value(
         int[] startingNumbers,
         int number,

@@ -22,7 +22,7 @@ public sealed class Day24Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         actual.ShouldBe(expected);
     }
 
-    [Fact(Skip = "Too slow.")]
+    [Fact]
     public async Task Y2015_Day24_Solve_Returns_Correct_Solution()
     {
         // Act

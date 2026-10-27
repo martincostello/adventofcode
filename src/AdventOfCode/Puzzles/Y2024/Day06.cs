@@ -21,19 +21,34 @@ public sealed class Day06 : Puzzle<int, int>
     {
         (var lab, var origin) = ParseMap(map);
 
-        (var route, _) = Patrol(lab, origin, cancellationToken);
+        byte[] visited = new byte[lab.Width * lab.Height];
 
-        var visited = route.Select((p) => p.Location).ToHashSet();
+        _ = Patrol(lab, origin, visited, cancellationToken);
+
+        var positions = new List<Point>();
+
+        for (int y = 0; y < lab.Height; y++)
+        {
+            for (int x = 0; x < lab.Width; x++)
+            {
+                if (visited[(y * lab.Width) + x] != 0)
+                {
+                    positions.Add(new(x, y));
+                }
+            }
+        }
 
         int loops = 0;
 
-        foreach (var obstruction in visited)
+        foreach (var obstruction in positions)
         {
             cancellationToken.ThrowIfCancellationRequested();
 
             lab[obstruction] = true;
 
-            if (Patrol(lab, origin, cancellationToken) is { Loop: true })
+            Array.Clear(visited);
+
+            if (Patrol(lab, origin, visited, cancellationToken))
             {
                 loops++;
             }
@@ -41,7 +56,7 @@ public sealed class Day06 : Puzzle<int, int>
             lab[obstruction] = false;
         }
 
-        return (visited.Count, loops);
+        return (positions.Count, loops);
     }
 
     /// <inheritdoc />
@@ -63,18 +78,20 @@ public sealed class Day06 : Puzzle<int, int>
             cancellationToken);
     }
 
-    private static (Dictionary<Point, bool> Lab, Point Origin) ParseMap(IList<string> map)
+    private static (Lab Lab, Point Origin) ParseMap(IList<string> map)
     {
-        var lab = new Dictionary<Point, bool>();
+        int height = map.Count;
+        int width = map[0].Length;
+
+        var lab = new Lab(width, height);
         var origin = Point.Empty;
 
-        for (int y = 0; y < map.Count; y++)
+        for (int y = 0; y < height; y++)
         {
             string row = map[y];
 
             for (int x = 0; x < row.Length; x++)
             {
-                bool obstructed = false;
                 char contents = row[x];
 
                 if (contents is '^')
@@ -83,27 +100,29 @@ public sealed class Day06 : Puzzle<int, int>
                 }
                 else if (contents is '#')
                 {
-                    obstructed = true;
+                    lab[new(x, y)] = true;
                 }
-
-                lab[new(x, y)] = obstructed;
             }
         }
 
         return (lab, origin);
     }
 
-    private static (HashSet<(Point Location, Size Direction)> Route, bool Loop) Patrol(
-        Dictionary<Point, bool> lab,
+    private static bool Patrol(
+        Lab lab,
         Point origin,
+        byte[] visited,
         CancellationToken cancellationToken)
     {
+        // Each direction the guard can face is tracked as a single bit for each location
+        const byte Up = 1;
+        const byte Left = 8;
+
         var direction = Directions.Up;
         var location = origin;
-        var route = new HashSet<(Point, Size)>()
-        {
-            (location, direction),
-        };
+        byte facing = Up;
+
+        visited[lab.Index(location)] |= facing;
 
         bool loop = false;
 
@@ -111,26 +130,30 @@ public sealed class Day06 : Puzzle<int, int>
         {
             Point next = location + direction;
 
-            if (!lab.TryGetValue(next, out bool obstructed))
+            if (!lab.InBounds(next))
             {
                 // The guard has left the lab
                 break;
             }
 
-            if (obstructed)
+            if (lab[next])
             {
                 // Turn right by 90°
                 direction = new(-direction.Height, direction.Width);
+                facing = facing == Left ? Up : (byte)(facing << 1);
             }
             else
             {
-                if (!route.Add((next, direction)))
+                ref byte state = ref visited[lab.Index(next)];
+
+                if ((state & facing) != 0)
                 {
                     // The guard has reached a position and orientation previously visited
                     loop = true;
                     break;
                 }
 
+                state |= facing;
                 location = next;
             }
         }
@@ -138,6 +161,26 @@ public sealed class Day06 : Puzzle<int, int>
 
         cancellationToken.ThrowIfCancellationRequested();
 
-        return (route, loop);
+        return loop;
+    }
+
+    private sealed class Lab(int width, int height)
+    {
+        private readonly bool[] _obstructions = new bool[width * height];
+
+        public int Width { get; } = width;
+
+        public int Height { get; } = height;
+
+        public bool this[Point location]
+        {
+            get => _obstructions[Index(location)];
+            set => _obstructions[Index(location)] = value;
+        }
+
+        public bool InBounds(Point location)
+            => location.X >= 0 && location.X < Width && location.Y >= 0 && location.Y < Height;
+
+        public int Index(Point location) => (location.Y * Width) + location.X;
     }
 }

@@ -1,14 +1,12 @@
 ﻿// Copyright (c) Martin Costello, 2015. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
-using System.Security.Cryptography;
-
 namespace MartinCostello.AdventOfCode.Puzzles.Y2016;
 
 /// <summary>
 /// A class representing the puzzle for <c>https://adventofcode.com/2016/day/14</c>. This class cannot be inherited.
 /// </summary>
-[Puzzle(2016, 14, "One-Time Pad", MinimumArguments = 1, IsHidden = true)]
+[Puzzle(2016, 14, "One-Time Pad", MinimumArguments = 1)]
 public sealed class Day14 : Puzzle<int, int>
 {
     /// <summary>
@@ -29,15 +27,14 @@ public sealed class Day14 : Puzzle<int, int>
         CancellationToken cancellationToken)
     {
         int current = 0;
-        var cache = new Dictionary<string, string>();
+
+        var keys = new KeyCache(salt, useKeyStretching);
 
         for (int i = 0; current < ordinal; i++)
         {
             cancellationToken.ThrowIfCancellationRequested();
 
-            string value = salt + i.ToString(CultureInfo.InvariantCulture);
-            string key = GenerateKey(value, useKeyStretching, cache);
-
+            string key = keys[i];
             char triple = GetTripleCharacter(key);
 
             if (triple == default)
@@ -52,8 +49,7 @@ public sealed class Day14 : Puzzle<int, int>
 
             for (int j = next; j <= last; j++)
             {
-                value = salt + j.ToString(CultureInfo.InvariantCulture);
-                key = GenerateKey(value, useKeyStretching, cache);
+                key = keys[j];
 
                 if (key.Contains(quintuple, StringComparison.Ordinal))
                 {
@@ -92,42 +88,6 @@ public sealed class Day14 : Puzzle<int, int>
     }
 
     /// <summary>
-    /// Generates a one-time pad key for the specified value.
-    /// </summary>
-    /// <param name="value">The value to generate the one-time pad key for.</param>
-    /// <param name="useKeyStretching">Whether to use key stretching.</param>
-    /// <param name="cache">A cache of pre-generated hashes.</param>
-    /// <returns>
-    /// A <see cref="string"/> containing the one-time pad key derived from <paramref name="value"/>.
-    /// </returns>
-    private static string GenerateKey(
-        string value,
-        bool useKeyStretching,
-        Dictionary<string, string> cache)
-    {
-        string key = string.Concat(value, useKeyStretching ? "|s" : "|u");
-
-        if (!cache.TryGetValue(key, out string? result))
-        {
-            result = value;
-
-            int rounds = useKeyStretching ? 2017 : 1;
-
-            for (int i = 0; i < rounds; i++)
-            {
-                byte[] buffer = Encoding.ASCII.GetBytes(result);
-                byte[] hash = MD5.HashData(buffer);
-
-                result = GetStringForHash(hash);
-            }
-
-            cache[key] = result;
-        }
-
-        return result;
-    }
-
-    /// <summary>
     /// Returns the character that first occurs three times consecutively
     /// in the specified <see cref="string"/>, if any.
     /// </summary>
@@ -152,13 +112,103 @@ public sealed class Day14 : Puzzle<int, int>
     }
 
     /// <summary>
-    /// Converts the specified <see cref="ReadOnlySpan{T}"/> of <see cref="byte"/> to a
-    /// hexadecimal <see cref="string"/> representation of the hash.
+    /// A class that computes and caches the keys for each index. This class cannot be inherited.
     /// </summary>
-    /// <param name="bytes">The hash bytes to generate the string representation of.</param>
-    /// <returns>
-    /// A <see cref="string"/> containing the hexadecimal representation of <paramref name="bytes"/>.
-    /// </returns>
-    private static string GetStringForHash(ReadOnlySpan<byte> bytes)
-        => Convert.ToHexStringLower(bytes);
+    /// <param name="salt">The salt to use to generate the keys.</param>
+    /// <param name="useKeyStretching">Whether to use key stretching.</param>
+    private sealed class KeyCache(string salt, bool useKeyStretching)
+    {
+        /// <summary>
+        /// The number of keys to generate at once.
+        /// </summary>
+        private const int ChunkSize = 2048;
+
+        private readonly byte[] _salt = Encoding.ASCII.GetBytes(salt);
+        private readonly int _rounds = useKeyStretching ? 2017 : 1;
+        private readonly List<string> _keys = [];
+
+        /// <summary>
+        /// Gets the key for the specified index.
+        /// </summary>
+        /// <param name="index">The index to get the key for.</param>
+        /// <returns>
+        /// The key for the specified index.
+        /// </returns>
+        public string this[int index]
+        {
+            get
+            {
+                while (index >= _keys.Count)
+                {
+                    GenerateKeys();
+                }
+
+                return _keys[index];
+            }
+        }
+
+        /// <summary>
+        /// Generates the key for the specified index.
+        /// </summary>
+        /// <param name="salt">The salt to use.</param>
+        /// <param name="index">The index to generate the key for.</param>
+        /// <param name="rounds">The number of rounds of hashing to perform.</param>
+        /// <returns>
+        /// The key for the specified index.
+        /// </returns>
+        private static string GenerateKey(ReadOnlySpan<byte> salt, int index, int rounds)
+        {
+            const int MaximumIndexLength = 10;
+
+            Span<byte> hash = stackalloc byte[Md5.HashSizeInBytes];
+            Span<byte> buffer = stackalloc byte[Math.Max(salt.Length + MaximumIndexLength, Md5.HashSizeInBytes * 2)];
+
+            salt.CopyTo(buffer);
+            index.TryFormat(buffer[salt.Length..], out int written, provider: CultureInfo.InvariantCulture);
+
+            int length = salt.Length + written;
+
+            for (int i = 0; i < rounds; i++)
+            {
+                Md5.HashData(buffer[..length], hash);
+                length = ToHexLower(hash, buffer);
+            }
+
+            return Encoding.ASCII.GetString(buffer[..length]);
+        }
+
+        /// <summary>
+        /// Writes the lowercase hexadecimal representation of the specified bytes to the specified buffer.
+        /// </summary>
+        /// <param name="bytes">The bytes to convert.</param>
+        /// <param name="destination">The buffer to write the hexadecimal characters to.</param>
+        /// <returns>
+        /// The number of bytes written to <paramref name="destination"/>.
+        /// </returns>
+        private static int ToHexLower(ReadOnlySpan<byte> bytes, Span<byte> destination)
+        {
+            ReadOnlySpan<byte> digits = "0123456789abcdef"u8;
+
+            for (int i = 0; i < bytes.Length; i++)
+            {
+                destination[i * 2] = digits[bytes[i] >> 4];
+                destination[(i * 2) + 1] = digits[bytes[i] & 0xF];
+            }
+
+            return bytes.Length * 2;
+        }
+
+        /// <summary>
+        /// Generates the keys for the next chunk of indexes.
+        /// </summary>
+        private void GenerateKeys()
+        {
+            int start = _keys.Count;
+            string[] keys = new string[ChunkSize];
+
+            Parallel.For(0, keys.Length, (offset) => keys[offset] = GenerateKey(_salt, start + offset, _rounds));
+
+            _keys.AddRange(keys);
+        }
+    }
 }

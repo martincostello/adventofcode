@@ -91,7 +91,7 @@ public sealed class Day23 : Puzzle<int, int>
 
         public readonly bool IsEmpty(char burrow) => string.IsNullOrWhiteSpace(Burrow(burrow));
 
-        public readonly bool IsOrganized(char burrow) => Burrow(burrow).TrimStart().All((p) => p == burrow);
+        public readonly bool IsOrganized(char burrow) => !Burrow(burrow).AsSpan().TrimStart().ContainsAnyExcept(burrow);
 
         public readonly bool IsPathClear(char sourceBurrow, int destinationBurrow, bool fromHallway)
             => IsPathClear(Entrance(sourceBurrow), destinationBurrow, fromHallway);
@@ -117,7 +117,7 @@ public sealed class Day23 : Puzzle<int, int>
 
             int length = endIndex - startIndex + 1;
 
-            return string.IsNullOrWhiteSpace(Hallway.Substring(startIndex, length));
+            return Hallway.AsSpan(startIndex, length).IsWhiteSpace();
         }
     }
 
@@ -125,6 +125,18 @@ public sealed class Day23 : Puzzle<int, int>
     {
         private static readonly ImmutableArray<char> Amphipods = ['D', 'C', 'B', 'A'];
         private static readonly ImmutableArray<int> HallwaySpaces = [0, 1, 3, 5, 7, 9, 10];
+        private static readonly ImmutableArray<ImmutableArray<int>> HallwaySpacesByEntrance =
+        [
+            [],
+            [],
+            [.. HallwaySpaces.OrderBy((p) => Math.Abs(2 - p))],
+            [],
+            [.. HallwaySpaces.OrderBy((p) => Math.Abs(4 - p))],
+            [],
+            [.. HallwaySpaces.OrderBy((p) => Math.Abs(6 - p))],
+            [],
+            [.. HallwaySpaces.OrderBy((p) => Math.Abs(8 - p))],
+        ];
 
         public long Cost(State a, State b)
         {
@@ -186,7 +198,13 @@ public sealed class Day23 : Puzzle<int, int>
             int steps = Math.Abs(State.Entrance(burrowChanged) - index);
             steps += Math.Max(System.MemoryExtensions.Count(before, ' '), System.MemoryExtensions.Count(after, ' '));
 
-            int multiplier = (int)Math.Pow(10, amphipod - 'A');
+            int multiplier = amphipod switch
+            {
+                'B' => 10,
+                'C' => 100,
+                'D' => 1000,
+                _ => 1,
+            };
 
             return steps * multiplier;
         }
@@ -216,7 +234,7 @@ public sealed class Day23 : Puzzle<int, int>
 
                 int burrowEntrance = State.Entrance(amphipod);
 
-                foreach (int space in HallwaySpaces.OrderBy((p) => Math.Abs(burrowEntrance - p)))
+                foreach (int space in HallwaySpacesByEntrance[burrowEntrance])
                 {
                     if (!id.IsPathClear(amphipod, space, fromHallway: false))
                     {
@@ -275,8 +293,11 @@ public sealed class Day23 : Puzzle<int, int>
 
         private static string Replace(string value, char moved, int index)
         {
-            string result = value.Remove(index, 1);
-            return result.Insert(index, char.ToString(moved));
+            return string.Create(value.Length, (value, moved, index), static (span, state) =>
+            {
+                state.value.CopyTo(span);
+                span[state.index] = state.moved;
+            });
         }
 
         private static bool TryVacate(ReadOnlySpan<char> burrow, out char moved, [NotNullWhen(true)] out string? vacated)

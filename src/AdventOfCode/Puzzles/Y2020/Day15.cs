@@ -6,7 +6,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2020;
 /// <summary>
 /// A class representing the puzzle for <c>https://adventofcode.com/2020/day/15</c>. This class cannot be inherited.
 /// </summary>
-[Puzzle(2020, 15, "Rambunctious Recitation", MinimumArguments = 1, IsSlow = true)]
+[Puzzle(2020, 15, "Rambunctious Recitation", MinimumArguments = 1)]
 public sealed class Day15 : Puzzle<int, int>
 {
     /// <summary>
@@ -19,29 +19,43 @@ public sealed class Day15 : Puzzle<int, int>
     /// </returns>
     public static int GetSpokenNumber(IList<int> startingNumbers, int number)
     {
-        var numbers = new Dictionary<int, List<int>>();
+        // A number spoken after the starting numbers is the difference between
+        // two turns, so it can never be larger than the number of turns. This
+        // means an array indexed by the number is sufficient to track the turn
+        // (one-based, so zero means never spoken) a number was last spoken on.
+        int maximum = number;
 
-        int lastSpoken = 0;
-
-        for (int i = 0; i < number && i < startingNumbers.Count; i++)
+        for (int i = 0; i < startingNumbers.Count; i++)
         {
-            lastSpoken = startingNumbers[i];
-            UpdateNumber(lastSpoken, i);
+            maximum = Math.Max(maximum, startingNumbers[i]);
         }
 
-        for (int i = startingNumbers.Count; i < number; i++)
+        int[] lastSpokenOn = new int[maximum + 1];
+
+        int lastSpoken = 0;
+        int turn = 1;
+
+        for (; turn <= number && turn <= startingNumbers.Count; turn++)
         {
-            var times = numbers.GetOrAdd(lastSpoken);
+            if (turn > 1)
+            {
+                lastSpokenOn[lastSpoken] = turn - 1;
+            }
 
-            lastSpoken = times.Count < 2 ? 0 : times[^1] - times[^2];
+            lastSpoken = startingNumbers[turn - 1];
+        }
 
-            UpdateNumber(lastSpoken, i);
+        for (; turn <= number; turn++)
+        {
+            int previous = turn - 1;
+            int spokenOn = lastSpokenOn[lastSpoken];
+
+            lastSpokenOn[lastSpoken] = previous;
+
+            lastSpoken = spokenOn == 0 ? 0 : previous - spokenOn;
         }
 
         return lastSpoken;
-
-        void UpdateNumber(int value, int time)
-            => numbers.GetOrAdd(value).Add(time);
     }
 
     /// <inheritdoc />
