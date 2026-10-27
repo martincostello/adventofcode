@@ -2,7 +2,6 @@
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 using System.Buffers.Text;
-using System.Security.Cryptography;
 
 namespace MartinCostello.AdventOfCode.Puzzles.Y2015;
 
@@ -41,19 +40,19 @@ public sealed class Day04 : Puzzle<int, int>
                 {
                     byte[] buffer = new byte[keyBytes.Length + MaxValueLength];
                     keyBytes.CopyTo(buffer, 0);
-                    return (Hash: MD5.Create(), Buffer: buffer);
+                    return buffer;
                 },
-                (offset, state, local) =>
+                (offset, state, buffer) =>
                 {
                     if (cancellationToken.IsCancellationRequested)
                     {
                         state.Stop();
-                        return local;
+                        return buffer;
                     }
 
                     int value = start + offset;
 
-                    if (IsSolution(local.Hash, local.Buffer, keyBytes.Length, value, zeroes))
+                    if (IsSolution(buffer, keyBytes.Length, value, zeroes))
                     {
                         int current;
 
@@ -71,9 +70,9 @@ public sealed class Day04 : Puzzle<int, int>
                         state.Break();
                     }
 
-                    return local;
+                    return buffer;
                 },
-                (local) => local.Hash.Dispose());
+                static (_) => { });
         }
 
         return answer is not -1 ? answer : throw new PuzzleException("No answer was found for the specified secret key.");
@@ -101,22 +100,21 @@ public sealed class Day04 : Puzzle<int, int>
     }
 
     /// <summary>
-    /// Returns whether the specified integer is a solution for the specified secret key and number of zeroes.
+    /// Returns whether the specified value is a solution for the specified key and number of zeroes.
     /// </summary>
-    /// <param name="hash">The <see cref="MD5"/> instance to use to compute the hash.</param>
-    /// <param name="buffer">The buffer containing the secret key, with room after it for the value.</param>
-    /// <param name="keyLength">The length, in bytes, of the secret key at the start of <paramref name="buffer"/>.</param>
+    /// <param name="buffer">The buffer to use to compute the hash, which starts with the bytes of the secret key.</param>
+    /// <param name="keyLength">The length of the secret key within <paramref name="buffer"/>.</param>
     /// <param name="value">The value to test.</param>
-    /// <param name="zeroes">The number of zeroes to get the value for.</param>
+    /// <param name="zeroes">The number of leading zeroes required in the hash.</param>
     /// <returns>
     /// <see langword="true"/> if <paramref name="value"/> is a solution; otherwise <see langword="false"/>.
     /// </returns>
-    private static bool IsSolution(MD5 hash, byte[] buffer, int keyLength, int value, int zeroes)
+    private static bool IsSolution(byte[] buffer, int keyLength, int value, int zeroes)
     {
         _ = Utf8Formatter.TryFormat(value, buffer.AsSpan(keyLength), out int written);
 
-        Span<byte> hashBytes = stackalloc byte[MD5.HashSizeInBytes];
-        _ = hash.TryComputeHash(buffer.AsSpan(0, keyLength + written), hashBytes, out _);
+        Span<byte> hashBytes = stackalloc byte[Md5.HashSizeInBytes];
+        Md5.HashData(buffer.AsSpan(0, keyLength + written), hashBytes);
 
         (int wholeBytes, int remainder) = Math.DivRem(zeroes, 2);
 

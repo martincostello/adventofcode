@@ -6,7 +6,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015;
 /// <summary>
 /// A class representing the puzzle for <c>https://adventofcode.com/2015/day/15</c>. This class cannot be inherited.
 /// </summary>
-[Puzzle(2015, 15, "Science for Hungry People", RequiresData = true, IsSlow = true)]
+[Puzzle(2015, 15, "Science for Hungry People", RequiresData = true)]
 public sealed class Day15 : Puzzle<int, int>
 {
     /// <summary>
@@ -20,47 +20,22 @@ public sealed class Day15 : Puzzle<int, int>
     internal static int GetHighestTotalCookieScore(IList<string> collection, int? calorieCount = null)
     {
         // Parse the ingredients
-        var ingredientProperties = new Dictionary<string, Ingredient>(collection.Count);
+        var ingredients = new Ingredient[collection.Count];
 
         for (int i = 0; i < collection.Count; i++)
         {
-            var ingredient = Ingredient.Parse(collection[i]);
-            ingredientProperties[ingredient.Name] = ingredient;
+            ingredients[i] = Ingredient.Parse(collection[i]);
         }
 
         // Get the possible combinations of teaspoons for each of the ingredients
-        var teaspoonPermutations = GetTeaspoonPermutations(ingredientProperties.Count);
-
-        // Get all the permutations which the ingredients could be ordered by
-        var ingredientPermutations = Maths.GetPermutations(ingredientProperties.Keys).ToList();
-
-        var recipes = new List<Dictionary<string, int>>(ingredientPermutations.Count * teaspoonPermutations.Count);
-
-        // For each permutation of ingredients, create a recipe for each
-        // permutation of the number of teaspoons of each one there is.
-        foreach (var ordering in ingredientPermutations)
-        {
-            var ingredients = ordering.ToList();
-
-            foreach (var teaspoons in teaspoonPermutations)
-            {
-                var recipe = new Dictionary<string, int>(ingredients.Count);
-
-                for (int i = 0; i < ingredients.Count; i++)
-                {
-                    recipe[ingredients[i]] = teaspoons[i];
-                }
-
-                recipes.Add(recipe);
-            }
-        }
+        var teaspoonPermutations = GetTeaspoonPermutations(ingredients.Length);
 
         // Calculate the total score for each possible recipe
         int bestScore = Unsolved;
 
-        for (int i = 0; i < recipes.Count; i++)
+        foreach (int[] teaspoons in teaspoonPermutations)
         {
-            int thisScore = GetRecipeScore(recipes[i], ingredientProperties, calorieCount);
+            int thisScore = GetRecipeScore(teaspoons, ingredients, calorieCount);
 
             if (thisScore > bestScore)
             {
@@ -101,85 +76,61 @@ public sealed class Day15 : Puzzle<int, int>
     /// An <see cref="IList{T}"/> containing the number of teaspoons to use of an ingredient where
     /// at least one spoon of ingredient is required and no more than 100 teaspoons can be used.
     /// </returns>
-    private static List<List<int>> GetTeaspoonPermutations(int recipeCount)
-        => GetTeaspoonPermutations([], 0, recipeCount);
+    private static List<int[]> GetTeaspoonPermutations(int recipeCount)
+    {
+        const int MaxTeaspoons = 100;
+
+        var result = new List<int[]>();
+        int[] seed = new int[recipeCount];
+
+        GetTeaspoonPermutations(seed, 0, MaxTeaspoons, result);
+
+        return result;
+    }
 
     /// <summary>
     /// Gets the permutation of teaspoon values for a recipe with the specified number of ingredients.
     /// </summary>
     /// <param name="seed">The seed partial teaspoon count to use to calculate further permutations.</param>
     /// <param name="index">The index of the current teaspoon to calculate the values for.</param>
-    /// <param name="count">The number of ingredients to get the permutations for.</param>
-    /// <returns>
-    /// An <see cref="IList{T}"/> containing the number of teaspoons to use of an ingredient where
-    /// at least one spoon of ingredient is required and no more than 100 teaspoons can be used.
-    /// </returns>
-    private static List<List<int>> GetTeaspoonPermutations(List<int> seed, int index, int count)
+    /// <param name="remaining">The number of teaspoons remaining to be used.</param>
+    /// <param name="result">The collection to add the permutations to.</param>
+    private static void GetTeaspoonPermutations(int[] seed, int index, int remaining, List<int[]> result)
     {
-        const int MaxTeaspoons = 100;
-
-        // Holds the permutations of teaspoons for the number of ingredients at this index (i.e. count - index)
-        var thisLevel = new List<List<int>>(seed.Count);
-
-        if (seed.Count < index + 1)
+        if (index == seed.Length - 1)
         {
-            if (index == count - 1)
-            {
-                // This is the last ingredient so the only possible value is the remainder
-                var next = new List<int>(seed)
-                {
-                    MaxTeaspoons - seed.Sum(),
-                };
-
-                thisLevel.Add(next);
-            }
-            else
-            {
-                // Each ingredient must have at least one teaspoon, so the upper bound
-                // is the maximum, less the number already used minus enough so that
-                // any remaining ingredients get at least one teaspoon.
-                int upperBound = MaxTeaspoons - seed.Sum() - count + index + 1;
-
-                // Zero is not considered as that would create a score of zero, and we're
-                // looking for the highest score so we can immediately discount such recipes.
-                for (int i = 1; i < upperBound; i++)
-                {
-                    var next = new List<int>(seed) { i };
-
-                    thisLevel.Add(next);
-                }
-            }
+            // This is the last ingredient so the only possible value is the remainder
+            seed[index] = remaining;
+            result.Add((int[])seed.Clone());
+            return;
         }
 
-        if (thisLevel.Max((p) => p.Count) == count)
+        // Each ingredient must have at least one teaspoon, so the upper bound
+        // is the maximum, less the number already used minus enough so that
+        // any remaining ingredients get at least one teaspoon.
+        int upperBound = remaining - (seed.Length - index - 1);
+
+        // Zero is not considered as that would create a score of zero, and the
+        // highest score is required so such recipes can be immediately discounted.
+        for (int i = 1; i <= upperBound; i++)
         {
-            // We've got no more ingredients to find permutations for at this index
-            return thisLevel;
+            seed[index] = i;
+            GetTeaspoonPermutations(seed, index + 1, remaining - i, result);
         }
-
-        // Find the permutations for the next ingredient from the ones we just found
-        var result = new List<List<int>>(thisLevel.Count);
-
-        foreach (var amount in thisLevel)
-        {
-            result.AddRange(GetTeaspoonPermutations(amount, index + 1, count));
-        }
-
-        return result;
     }
 
     /// <summary>
     /// Gets the score for the specified recipe that optionally has the specified number of calories.
     /// </summary>
-    /// <param name="recipe">The recipe.</param>
+    /// <param name="teaspoons">The number of teaspoons of each ingredient in the recipe.</param>
     /// <param name="ingredients">The ingredients.</param>
     /// <param name="calorieCount">The optional target calorie count.</param>
     /// <returns>
     /// The total score for the specified recipe.
     /// </returns>
     private static int GetRecipeScore(
-        Dictionary<string, int> recipe,
-        Dictionary<string, Ingredient> ingredients,
+        ReadOnlySpan<int> teaspoons,
+        ReadOnlySpan<Ingredient> ingredients,
         int? calorieCount)
     {
         int capacity = 0;
@@ -188,20 +139,22 @@ public sealed class Day15 : Puzzle<int, int>
         int texture = 0;
         int calories = 0;
 
-        foreach ((string name, int teaspoons) in recipe)
+        for (int i = 0; i < teaspoons.Length; i++)
         {
-            if (teaspoons < 1)
+            int count = teaspoons[i];
+
+            if (count < 1)
             {
                 continue;
             }
 
-            Ingredient ingredient = ingredients[name];
+            Ingredient ingredient = ingredients[i];
 
-            calories += ingredient.Calories * teaspoons;
-            capacity += ingredient.Capacity * teaspoons;
-            durability += ingredient.Durability * teaspoons;
-            flavor += ingredient.Flavor * teaspoons;
-            texture += ingredient.Texture * teaspoons;
+            calories += ingredient.Calories * count;
+            capacity += ingredient.Capacity * count;
+            durability += ingredient.Durability * count;
+            flavor += ingredient.Flavor * count;
+            texture += ingredient.Texture * count;
         }
 
         // Negative properties cause the score to become zero

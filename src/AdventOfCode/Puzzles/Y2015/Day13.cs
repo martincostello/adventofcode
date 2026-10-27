@@ -6,7 +6,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015;
 /// <summary>
 /// A class representing the puzzle for <c>https://adventofcode.com/2015/day/13</c>. This class cannot be inherited.
 /// </summary>
-[Puzzle(2015, 13, "Knights of the Dinner Table", RequiresData = true, IsSlow = true)]
+[Puzzle(2015, 13, "Knights of the Dinner Table", RequiresData = true)]
 public sealed class Day13 : Puzzle<int, int>
 {
     /// <summary>
@@ -21,23 +21,51 @@ public sealed class Day13 : Puzzle<int, int>
             .Select(ParsePotentialHappiness)
             .ToList();
 
-        // Determine all of the possible seating arrangements
+        // Determine all of the guests
         var names = potentials
             .Select((p) => p.Name)
             .Distinct()
             .ToList();
 
-        var permutations = Maths.GetPermutations(names)
-            .Select((p) => new List<string>(p))
-            .ToList();
-
         // Key the happiness for each person for the people they could sit next to
-        var happinesses = names.ToDictionary(
-            (p) => p,
-            (p) => potentials.Where((r) => r.Name == p).ToDictionary((r) => r.AdjacentName, (r) => r.Happiness));
+        int[,] happinesses = new int[names.Count, names.Count];
+
+        foreach (var potential in potentials)
+        {
+            happinesses[names.IndexOf(potential.Name), names.IndexOf(potential.AdjacentName)] = potential.Happiness;
+        }
 
         // Get the maximum potential happiness from all the seating arrangements
-        return permutations.Max((p) => GetHappiness(p, happinesses));
+        int[] setting = new int[names.Count];
+
+        for (int i = 0; i < setting.Length; i++)
+        {
+            setting[i] = i;
+        }
+
+        int maximum = int.MinValue;
+
+        Permute(setting, 0, happinesses, ref maximum);
+
+        return maximum;
+
+        static void Permute(int[] setting, int index, int[,] happinesses, ref int maximum)
+        {
+            if (index == setting.Length)
+            {
+                maximum = Math.Max(maximum, GetHappiness(setting, happinesses));
+                return;
+            }
+
+            for (int i = index; i < setting.Length; i++)
+            {
+                (setting[index], setting[i]) = (setting[i], setting[index]);
+
+                Permute(setting, index + 1, happinesses, ref maximum);
+
+                (setting[index], setting[i]) = (setting[i], setting[index]);
+            }
+        }
     }
 
     /// <inheritdoc />
@@ -86,24 +114,23 @@ public sealed class Day13 : Puzzle<int, int>
     /// <param name="setting">The place setting.</param>
     /// <param name="happinesses">The potential happinesses.</param>
     /// <returns>The total change in happiness for the given place setting.</returns>
-    private static int GetHappiness(List<string> setting, Dictionary<string, Dictionary<string, int>> happinesses)
+    private static int GetHappiness(ReadOnlySpan<int> setting, int[,] happinesses)
     {
-        string head = setting[0];
-        string tail = setting[^1];
+        int head = setting[0];
+        int tail = setting[^1];
 
         // Because the table is circular, find the happinesses for the first and last items
-        int happiness = happinesses[head][tail];
-        happiness += happinesses[tail][head];
-        happiness += happinesses[head][setting[1]];
-        happiness += happinesses[tail][setting[^2]];
+        int happiness = happinesses[head, tail];
+        happiness += happinesses[tail, head];
+        happiness += happinesses[head, setting[1]];
+        happiness += happinesses[tail, setting[^2]];
 
         // Find the happiness for each seat which has a seat on either side
-        for (int i = 1; i < setting.Count - 1; i++)
+        for (int i = 1; i < setting.Length - 1; i++)
         {
-            string current = setting[i];
-
-            happiness += happinesses[current][setting[i - 1]];
-            happiness += happinesses[current][setting[i + 1]];
+            int current = setting[i];
+            happiness += happinesses[current, setting[i - 1]];
+            happiness += happinesses[current, setting[i + 1]];
         }
 
         return happiness;

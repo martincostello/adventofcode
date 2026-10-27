@@ -184,26 +184,31 @@ public sealed class Day12 : Puzzle<int>
                             }
 
                             var offset = new Size(x, y);
-                            HashSet<Point> transformation = [.. transform.Select((p) => p + offset)];
 
-                            if (!transformation.IsSubsetOf(available))
+                            if (!IsSubsetOf(transform, offset, available))
                             {
                                 continue;
                             }
 
-                            if (!CanFitBoundingBox(available, transformation, offset))
+                            if (!CanFitBoundingBox(available, transform, offset))
                             {
                                 continue;
                             }
 
-                            available.Not(transformation);
+                            foreach (var point in transform)
+                            {
+                                available.Remove(point + offset);
+                            }
 
                             if (Pack(target, bounds, available, shapes, cache, cancellationToken))
                             {
                                 return cache[hash] = true;
                             }
 
-                            available.Or(transformation);
+                            foreach (var point in transform)
+                            {
+                                available.Add(point + offset);
+                            }
                         }
                     }
                 }
@@ -218,16 +223,50 @@ public sealed class Day12 : Puzzle<int>
             return canPack;
         }
 
-        static bool CanFitBoundingBox(HashSet<Point> available, HashSet<Point> shape, Size offset)
+        static bool IsSubsetOf(Shape shape, Size offset, HashSet<Point> available)
         {
-            int minX = shape.Min((p) => p.X) + offset.Width;
-            int maxX = shape.Max((p) => p.X) + offset.Width;
-            int minY = shape.Min((p) => p.Y) + offset.Height;
-            int maxY = shape.Max((p) => p.Y) + offset.Height;
+            foreach (var point in shape)
+            {
+                if (!available.Contains(point + offset))
+                {
+                    return false;
+                }
+            }
 
-            var box = new Rectangle(minX, minY, maxX - minX + 1, maxY - minY + 1);
+            return true;
+        }
 
-            return available.Any(box.Contains);
+        static bool CanFitBoundingBox(HashSet<Point> available, Shape shape, Size offset)
+        {
+            int minX = int.MaxValue;
+            int maxX = int.MinValue;
+            int minY = int.MaxValue;
+            int maxY = int.MinValue;
+
+            foreach (var point in shape)
+            {
+                minX = Math.Min(minX, point.X);
+                maxX = Math.Max(maxX, point.X);
+                minY = Math.Min(minY, point.Y);
+                maxY = Math.Max(maxY, point.Y);
+            }
+
+            // The bounding box is offset by twice the offset of the shape, which
+            // prunes the search space. The search depends on this behavior.
+            int shiftX = offset.Width * 2;
+            int shiftY = offset.Height * 2;
+
+            var box = new Rectangle(minX + shiftX, minY + shiftY, maxX - minX + 1, maxY - minY + 1);
+
+            foreach (var point in available)
+            {
+                if (box.Contains(point))
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
     }
 

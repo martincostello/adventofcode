@@ -6,7 +6,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015;
 /// <summary>
 /// A class representing the puzzle for <c>https://adventofcode.com/2015/day/6</c>. This class cannot be inherited.
 /// </summary>
-[Puzzle(2015, 06, "Probably a Fire Hazard", RequiresData = true, IsSlow = true)]
+[Puzzle(2015, 06, "Probably a Fire Hazard", RequiresData = true)]
 public sealed class Day06 : Puzzle<int, int>
 {
     /// <inheritdoc />
@@ -263,9 +263,9 @@ public sealed class Day06 : Puzzle<int, int>
     internal sealed class LightGrid
     {
         /// <summary>
-        /// The brightnesses of lights by their position.
+        /// The brightnesses of lights, indexed by their position in row-major order.
         /// </summary>
-        private readonly Dictionary<Point, int> _lightBrightnesses;
+        private readonly int[] _lightBrightnesses;
 
         /// <summary>
         /// The bounds of the grid. This field is read-only.
@@ -296,25 +296,25 @@ public sealed class Day06 : Puzzle<int, int>
             }
 
             _bounds = new(0, 0, width, height);
-            _lightBrightnesses = [with(width * height)];
+            _lightBrightnesses = new int[width * height];
         }
 
         /// <summary>
         /// Gets the total brightness of the grid.
         /// </summary>
-        internal int Brightness => _lightBrightnesses.Values.Sum();
+        internal int Brightness => _lightBrightnesses.Sum();
 
         /// <summary>
         /// Gets the number of lights in the grid that have a brightness of at least one.
         /// </summary>
-        internal int Count => _lightBrightnesses.Values.Count((p) => p > 0);
+        internal int Count => _lightBrightnesses.Length - _lightBrightnesses.AsSpan().Count(0);
 
         /// <summary>
         /// Gets the brightness of the light at the specified position.
         /// </summary>
         /// <param name="position">The position of the light to get the state of.</param>
         /// <returns>The current brightness of the light at <paramref name="position"/>.</returns>
-        internal int this[Point position] => _lightBrightnesses.GetValueOrDefault(position);
+        internal int this[Point position] => _bounds.Contains(position) ? _lightBrightnesses[Index(position)] : 0;
 
         /// <inheritdoc />
         public override string ToString()
@@ -325,7 +325,7 @@ public sealed class Day06 : Puzzle<int, int>
             {
                 for (int y = 0; y < _bounds.Height; y++)
                 {
-                    builder.Append(_lightBrightnesses.GetValueOrDefault(new(x, y)));
+                    builder.Append(_lightBrightnesses[Index(new(x, y))]);
                 }
 
                 builder.AppendLine();
@@ -341,11 +341,13 @@ public sealed class Day06 : Puzzle<int, int>
         /// <param name="delta">The brightness to increase (or decrease) the brightness of the lights by.</param>
         internal void IncrementBrightness(Rectangle bounds, int delta)
         {
-            for (int x = 0; x < bounds.Width; x++)
+            for (int y = 0; y < bounds.Height; y++)
             {
-                for (int y = 0; y < bounds.Height; y++)
+                var row = Row(bounds, y);
+
+                for (int x = 0; x < row.Length; x++)
                 {
-                    IncrementBrightness(new Point(bounds.X + x, bounds.Y + y), delta);
+                    row[x] = Math.Max(row[x] + delta, 0);
                 }
             }
         }
@@ -364,11 +366,14 @@ public sealed class Day06 : Puzzle<int, int>
         /// <param name="bounds">The bounds of the lights to toggle.</param>
         internal void Toggle(Rectangle bounds)
         {
-            for (int x = 0; x < bounds.Width; x++)
+            for (int y = 0; y < bounds.Height; y++)
             {
-                for (int y = 0; y < bounds.Height; y++)
+                var row = Row(bounds, y);
+
+                for (int x = 0; x < row.Length; x++)
                 {
-                    Toggle(new Point(bounds.X + x, bounds.Y + y));
+                    int current = row[x];
+                    row[x] = current == 0 ? 1 : current - 1;
                 }
             }
         }
@@ -396,12 +401,9 @@ public sealed class Day06 : Puzzle<int, int>
         /// <param name="bounds">The bounds of the lights to turn off.</param>
         internal void TurnOff(Rectangle bounds)
         {
-            for (int x = 0; x < bounds.Width; x++)
+            for (int y = 0; y < bounds.Height; y++)
             {
-                for (int y = 0; y < bounds.Height; y++)
-                {
-                    TurnOff(new Point(bounds.X + x, bounds.Y + y));
-                }
+                Row(bounds, y).Clear();
             }
         }
 
@@ -417,12 +419,9 @@ public sealed class Day06 : Puzzle<int, int>
         /// <param name="bounds">The bounds of the lights to turn on.</param>
         internal void TurnOn(Rectangle bounds)
         {
-            for (int x = 0; x < bounds.Width; x++)
+            for (int y = 0; y < bounds.Height; y++)
             {
-                for (int y = 0; y < bounds.Height; y++)
-                {
-                    TurnOn(new Point(bounds.X + x, bounds.Y + y));
-                }
+                Row(bounds, y).Fill(1);
             }
         }
 
@@ -433,6 +432,22 @@ public sealed class Day06 : Puzzle<int, int>
         internal void TurnOn(Point position) => IncrementOrSetBrightness(position, 1, true);
 
         /// <summary>
+        /// Gets the index of the light at the specified position.
+        /// </summary>
+        /// <param name="position">The position of the light.</param>
+        /// <returns>The index of the light at <paramref name="position"/>.</returns>
+        private int Index(Point position) => (position.Y * _bounds.Width) + position.X;
+
+        /// <summary>
+        /// Gets the lights for the specified row within the specified bounds.
+        /// </summary>
+        /// <param name="bounds">The bounds of the lights.</param>
+        /// <param name="y">The row within the bounds to get the lights for.</param>
+        /// <returns>The lights for the specified row of <paramref name="bounds"/>.</returns>
+        private Span<int> Row(Rectangle bounds, int y)
+            => _lightBrightnesses.AsSpan(Index(new(bounds.X, bounds.Y + y)), bounds.Width);
+
+        /// <summary>
         /// Increments or sets the brightness of the light at the specified position by the specified amount.
         /// </summary>
         /// <param name="position">The position of the light to increment the brightness for.</param>
@@ -441,20 +456,13 @@ public sealed class Day06 : Puzzle<int, int>
         /// <returns>The new brightness of the light at <paramref name="position"/>.</returns>
         private int IncrementOrSetBrightness(Point position, int delta, bool set = false)
         {
-            int current = set ? delta : _lightBrightnesses.GetValueOrDefault(position) + delta;
+            ref int light = ref _lightBrightnesses[Index(position)];
 
-            int value = Math.Max(current, 0);
+            int current = set ? delta : light + delta;
 
-            if (value == 0)
-            {
-                _lightBrightnesses.Remove(position);
-            }
-            else
-            {
-                _lightBrightnesses[position] = value;
-            }
+            light = Math.Max(current, 0);
 
-            return value;
+            return light;
         }
     }
 }

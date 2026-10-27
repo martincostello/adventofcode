@@ -1,14 +1,12 @@
 ﻿// Copyright (c) Martin Costello, 2015. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
-using System.Security.Cryptography;
-
 namespace MartinCostello.AdventOfCode.Puzzles.Y2016;
 
 /// <summary>
 /// A class representing the puzzle for <c>https://adventofcode.com/2016/day/5</c>. This class cannot be inherited.
 /// </summary>
-[Puzzle(2016, 05, "How About a Nice Game of Chess?", MinimumArguments = 1, IsSlow = true)]
+[Puzzle(2016, 05, "How About a Nice Game of Chess?", MinimumArguments = 1)]
 public sealed class Day05 : Puzzle<string, string>
 {
     /// <summary>
@@ -21,52 +19,87 @@ public sealed class Day05 : Puzzle<string, string>
     /// </returns>
     internal static string GeneratePassword(string doorId, bool isPositionSpecifiedByHash)
     {
+        (string password, string passwordWhenPositionIsIndicated) = GeneratePasswords(doorId);
+        return isPositionSpecifiedByHash ? passwordWhenPositionIsIndicated : password;
+    }
+
+    /// <summary>
+    /// Generates both passwords for the door with the specified Id.
+    /// </summary>
+    /// <param name="doorId">The door Id to generate the passwords for.</param>
+    /// <returns>
+    /// The password for the door specified by <paramref name="doorId"/> and the
+    /// password when the position is specified by the hash.
+    /// </returns>
+    internal static (string Password, string PasswordWhenPositionIsIndicated) GeneratePasswords(string doorId)
+    {
         const int PasswordLength = 8;
+        const int WindowSize = 1 << 20;
 
-        var characters = new Dictionary<int, char>(PasswordLength);
-        int index = 0;
+        Span<char> password = stackalloc char[PasswordLength];
+        Span<char> positional = stackalloc char[PasswordLength];
 
-        byte[] doorIdAsBytes = Encoding.ASCII.GetBytes(doorId);
+        positional.Clear();
 
-        while (characters.Count < PasswordLength)
+        int passwordCount = 0;
+        int positionalCount = 0;
+
+        byte[] prefix = Encoding.ASCII.GetBytes(doorId);
+
+        int chunks = Environment.ProcessorCount;
+        int chunkSize = WindowSize / chunks;
+
+        var hits = new List<Hit>();
+
+        for (int start = 0; passwordCount < PasswordLength || positionalCount < PasswordLength; start += WindowSize)
         {
-            byte[] buffer = GenerateBytesToHash(doorIdAsBytes, index);
-            byte[] hashBytes = MD5.HashData(buffer);
+            hits.Clear();
 
-            // Are the first four characters 0?
-            if (hashBytes[0] == 0 && hashBytes[1] == 0)
-            {
-                string hash = GetStringForHash(hashBytes);
-
-                if (hash[4] == '0')
+            Parallel.For(
+                0,
+                chunks,
+                () => new List<Hit>(),
+                (chunk, _, local) =>
                 {
-                    if (isPositionSpecifiedByHash)
+                    int from = start + (chunk * chunkSize);
+                    FindHits(prefix, from, from + chunkSize, local);
+                    return local;
+                },
+                (local) =>
+                {
+                    lock (hits)
                     {
-                        int position = hash[5] - '0';
+                        hits.AddRange(local);
+                    }
+                });
 
-                        if (position < PasswordLength && !characters.ContainsKey(position))
-                        {
-                            characters[position] = hash[6];
-                        }
-                    }
-                    else
-                    {
-                        characters[characters.Count] = hash[5];
-                    }
+            hits.Sort(static (x, y) => x.Index.CompareTo(y.Index));
+
+            foreach (var hit in hits)
+            {
+                if (passwordCount < PasswordLength)
+                {
+                    password[passwordCount++] = ToHex(hit.Sixth);
+                }
+
+                if (hit.Sixth < PasswordLength && positional[hit.Sixth] == '\0')
+                {
+                    positional[hit.Sixth] = ToHex(hit.Seventh);
+                    positionalCount++;
                 }
             }
-
-            index++;
         }
 
-        return string.Join(string.Empty, characters.OrderBy((p) => p.Key).Select((p) => p.Value));
+        return (new(password), new(positional));
+
+        static char ToHex(int value)
+            => (char)(value < 10 ? '0' + value : 'a' + value - 10);
     }
 
     /// <inheritdoc />
     protected override Task<PuzzleResult> SolveCoreAsync(string[] args, CancellationToken cancellationToken) => SolveWithArgument(args, static (doorId, logger) =>
     {
-        string password = GeneratePassword(doorId, isPositionSpecifiedByHash: false);
-        string passwordWhenPositionIsIndicated = GeneratePassword(doorId, isPositionSpecifiedByHash: true);
+        (string password, string passwordWhenPositionIsIndicated) = GeneratePasswords(doorId);
 
         if (logger is { })
         {
@@ -78,43 +111,41 @@ public sealed class Day05 : Puzzle<string, string>
     });
 
     /// <summary>
-    /// Generates the hash bytes for the specified door Id and index.
+    /// Finds the hashes whose hexadecimal representation starts with five zeroes for the specified range of indexes.
     /// </summary>
-    /// <param name="doorIdAsBytes">The bytes of the hash of the door Id.</param>
-    /// <param name="index">The index to generate the hash with.</param>
-    /// <returns>
-    /// A <see cref="Array"/> of <see cref="byte"/> containing the hash for the specified door Id and index.
-    /// </returns>
-    private static byte[] GenerateBytesToHash(byte[] doorIdAsBytes, int index)
+    /// <param name="prefix">The prefix of the data to hash.</param>
+    /// <param name="start">The inclusive index to start from.</param>
+    /// <param name="end">The exclusive index to end at.</param>
+    /// <param name="hits">The collection to add any hits to.</param>
+    private static void FindHits(ReadOnlySpan<byte> prefix, int start, int end, List<Hit> hits)
     {
-        byte[] indexAsBytes = Encoding.ASCII.GetBytes(index.ToString(CultureInfo.InvariantCulture));
+        const int MaximumIndexLength = 10;
 
-        byte[] result = new byte[indexAsBytes.Length + doorIdAsBytes.Length];
+        Span<byte> buffer = stackalloc byte[prefix.Length + MaximumIndexLength];
+        Span<byte> hash = stackalloc byte[Md5.HashSizeInBytes];
 
-        Array.Copy(doorIdAsBytes, 0, result, 0, doorIdAsBytes.Length);
-        Array.Copy(indexAsBytes, 0, result, doorIdAsBytes.Length, indexAsBytes.Length);
+        prefix.CopyTo(buffer);
+        var indexBuffer = buffer[prefix.Length..];
 
-        return result;
+        for (int index = start; index < end; index++)
+        {
+            index.TryFormat(indexBuffer, out int written, provider: CultureInfo.InvariantCulture);
+
+            Md5.HashData(buffer[..(prefix.Length + written)], hash);
+
+            // Are the first five hexadecimal characters 0?
+            if (hash[0] == 0 && hash[1] == 0 && (hash[2] & 0xF0) == 0)
+            {
+                hits.Add(new(index, hash[2] & 0x0F, hash[3] >> 4));
+            }
+        }
     }
 
     /// <summary>
-    /// Converts the specified <see cref="Array"/> of <see cref="byte"/> to a
-    /// hexadecimal <see cref="string"/> representation of the hash.
+    /// Represents a hash that starts with five zeroes.
     /// </summary>
-    /// <param name="bytes">The hash bytes to generate the string representation of.</param>
-    /// <returns>
-    /// A <see cref="string"/> containing the hexadecimal representation of <paramref name="bytes"/>.
-    /// </returns>
-    private static string GetStringForHash(ReadOnlySpan<byte> bytes)
-    {
-        var hash = new StringBuilder("0000", bytes.Length + 4);
-
-        // Skip the first 2 bytes as they should already have been checked to be zero
-        for (int i = 2; i < bytes.Length; i++)
-        {
-            hash.Append(bytes[i].ToString("x2", CultureInfo.InvariantCulture));
-        }
-
-        return hash.ToString();
-    }
+    /// <param name="Index">The index that generated the hash.</param>
+    /// <param name="Sixth">The sixth hexadecimal character of the hash.</param>
+    /// <param name="Seventh">The seventh hexadecimal character of the hash.</param>
+    private readonly record struct Hit(int Index, int Sixth, int Seventh);
 }

@@ -91,6 +91,7 @@ public class PuzzleBenchmarks
         {
             [5] = ["wtnhxymk"],
             [13] = ["1362"],
+            [14] = ["ihaygndm"],
             [16] = ["10010000000110000", "272"],
             [17] = ["pvhmgsws"],
             [19] = ["3014387"],

@@ -7,7 +7,7 @@ public sealed class Day14Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
 {
     [Theory]
     [InlineData("abc", 64, false, 22728)]
-    [InlineData("abc", 64, true, 22551, Skip = "Too slow.")]
+    [InlineData("abc", 64, true, 22551)]
     public static void Y2016_Day14_GetOneTimePadKeyIndex_Returns_Correct_Solution(
         string salt,
         int ordinal,
@@ -24,7 +24,7 @@ public sealed class Day14Tests(ITestOutputHelper outputHelper) : PuzzleTest(outp
         actual.ShouldBe(expected);
     }
 
-    [Fact(Skip = "Too slow.")]
+    [Fact]
     public async Task Y2016_Day14_Solve_Returns_Correct_Solution()
     {
         // Arrange

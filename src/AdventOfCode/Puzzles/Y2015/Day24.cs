@@ -6,7 +6,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2015;
 /// <summary>
 /// A class representing the puzzle for <c>https://adventofcode.com/2015/day/24</c>. This class cannot be inherited.
 /// </summary>
-[Puzzle(2015, 24, "It Hangs in the Balance", RequiresData = true, IsHidden = true)]
+[Puzzle(2015, 24, "It Hangs in the Balance", RequiresData = true, IsSlow = true)]
 public sealed class Day24 : Puzzle<long, long>
 {
     /// <summary>
@@ -33,21 +33,22 @@ public sealed class Day24 : Puzzle<long, long>
 
         weights.Reverse();
 
+        // Pre-compute the sum of the weights below each index so that the
+        // sum of the weights for the next combination can be computed from
+        // the bits that changed, rather than summing all of the weights.
+        long[] prefixes = new long[length + 1];
+
+        for (int j = 0; j < length; j++)
+        {
+            prefixes[j + 1] = prefixes[j] + weights[j];
+        }
+
         int minCount = int.MaxValue;
         long minEntanglement = long.MaxValue;
+        long sum = 0;
 
         for (int i = 1 << length; i > -1; i--)
         {
-            long sum = 0;
-
-            for (int j = 0; j < length && sum < total; j++)
-            {
-                if (((bits >> j) & 1) != 0)
-                {
-                    sum += weights[j];
-                }
-            }
-
             int count = BitOperations.PopCount(bits);
 
             if (sum == total && count <= minCount)
@@ -56,14 +57,19 @@ public sealed class Day24 : Puzzle<long, long>
                 minEntanglement = Math.Min(minEntanglement, Entanglement(bits, weights));
             }
 
-            for (int j = 0; j < length; j++)
-            {
-                bits ^= (uint)(1 << j);
+            // Move to the next combination by flipping the bits up to
+            // and including the lowest bit that is not currently set.
+            int j = BitOperations.TrailingZeroCount(~bits);
 
-                if (((bits >> j) & 1) != 0)
-                {
-                    break;
-                }
+            if (j >= length)
+            {
+                bits = 0;
+                sum = 0;
+            }
+            else
+            {
+                bits ^= (1u << (j + 1)) - 1;
+                sum += weights[j] - prefixes[j];
             }
         }
 

@@ -6,7 +6,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2018;
 /// <summary>
 /// A class representing the puzzle for <c>https://adventofcode.com/2018/day/5</c>. This class cannot be inherited.
 /// </summary>
-[Puzzle(2018, 05, "Alchemical Reduction", RequiresData = true, IsSlow = true)]
+[Puzzle(2018, 05, "Alchemical Reduction", RequiresData = true)]
 public sealed class Day05 : Puzzle<int, int>
 {
     /// <summary>
@@ -19,21 +19,22 @@ public sealed class Day05 : Puzzle<int, int>
     /// </returns>
     public static string Reduce(string polymer)
     {
-        var builder = new StringBuilder(polymer, polymer.Length);
+        char[] units = polymer.ToCharArray();
+        int length = units.Length;
 
         while (true)
         {
-            int before = builder.Length;
+            int before = length;
 
-            builder = ReduceOnce(builder);
+            length = ReduceOnce(units.AsSpan(0, length));
 
-            if (before == builder.Length)
+            if (before == length)
             {
                 break;
             }
         }
 
-        return builder.ToString();
+        return new(units, 0, length);
     }
 
     /// <summary>
@@ -87,25 +88,30 @@ public sealed class Day05 : Puzzle<int, int>
     /// <summary>
     /// Reduces the specified polymer once.
     /// </summary>
-    /// <param name="polymer">The polymer to reduce.</param>
+    /// <param name="polymer">The polymer to reduce in-place.</param>
     /// <returns>
-    /// The polymer remaining after reducing the specified <paramref name="polymer"/> value.
+    /// The length of the polymer remaining after reducing the specified <paramref name="polymer"/> value.
     /// </returns>
-    private static StringBuilder ReduceOnce(StringBuilder polymer)
+    private static int ReduceOnce(Span<char> polymer)
     {
         const int Shift = 'a' - 'A';
 
-        for (int i = 0; i < polymer.Length - 1; i++)
+        int length = 0;
+
+        for (int i = 0; i < polymer.Length; i++)
         {
             char x = polymer[i];
-            char y = polymer[i + 1];
 
-            if (Math.Abs(x - y) == Shift)
+            if (i < polymer.Length - 1 && Math.Abs(x - polymer[i + 1]) == Shift)
             {
-                polymer = polymer.Remove(i, 2);
+                // Skip over both units as they react with each other
+                i++;
+                continue;
             }
+
+            polymer[length++] = x;
         }
 
-        return polymer;
+        return length;
     }
 }

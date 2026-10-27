@@ -6,7 +6,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2018;
 /// <summary>
 /// A class representing the puzzle for <c>https://adventofcode.com/2018/day/1</c>. This class cannot be inherited.
 /// </summary>
-[Puzzle(2018, 01, "Chronal Calibration", RequiresData = true, IsSlow = true)]
+[Puzzle(2018, 01, "Chronal Calibration", RequiresData = true)]
 public sealed class Day01 : Puzzle<int, int>
 {
     /// <summary>
@@ -37,6 +37,11 @@ public sealed class Day01 : Puzzle<int, int>
             current,
         };
 
+        var seen = new HashSet<int>(sequence.Count)
+        {
+            current,
+        };
+
         bool isInfinite = TendsToInfinity(sequence);
 
         do
@@ -46,12 +51,13 @@ public sealed class Day01 : Puzzle<int, int>
                 int previous = current;
                 current += shift;
 
-                if (!firstRepeat.HasValue && history.Contains(current) && history[^2] != previous)
+                if (!firstRepeat.HasValue && seen.Contains(current) && history[^2] != previous)
                 {
                     firstRepeat = current;
                 }
 
                 history.Add(current);
+                seen.Add(current);
             }
 
             if (!frequency.HasValue)

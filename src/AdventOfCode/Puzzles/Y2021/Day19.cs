@@ -6,7 +6,7 @@ namespace MartinCostello.AdventOfCode.Puzzles.Y2021;
 /// <summary>
 /// A class representing the puzzle for <c>https://adventofcode.com/2021/day/19</c>. This class cannot be inherited.
 /// </summary>
-[Puzzle(2021, 19, "Beacon Scanner", RequiresData = true, IsSlow = true)]
+[Puzzle(2021, 19, "Beacon Scanner", RequiresData = true)]
 public sealed class Day19 : Puzzle<int, int>
 {
     /// <summary>
@@ -121,12 +121,20 @@ public sealed class Day19 : Puzzle<int, int>
             const int CommonBeacons = 12;
             const float MaximumRange = 3_000;
 
-            foreach (Vector3 first in aligned.Skip(CommonBeacons))
+            Vector3[] alignedBeacons = [.. aligned];
+            Vector3[] unalignedBeacons = [.. unaligned];
+            var rotated = new Vector3[unalignedBeacons.Length];
+
+            Vector3 alignedLocation = aligned.Location;
+
+            for (int i = CommonBeacons; i < alignedBeacons.Length; i++)
             {
                 if (cancellationToken.IsCancellationRequested)
                 {
                     break;
                 }
+
+                Vector3 first = alignedBeacons[i];
 
                 foreach (var transformation in Transforms())
                 {
@@ -135,16 +143,18 @@ public sealed class Day19 : Puzzle<int, int>
                         break;
                     }
 
-                    var rotated = unaligned.Select(transformation);
+                    for (int j = 0; j < rotated.Length; j++)
+                    {
+                        rotated[j] = transformation(unalignedBeacons[j]);
+                    }
 
                     int withinReach = 0;
 
-                    using var reachable = rotated.Where((p) => aligned.Location.ManhattanDistance(first - p) <= MaximumRange).GetEnumerator();
-                    while (reachable.MoveNext())
+                    for (int j = 0; j < rotated.Length && withinReach < CommonBeacons; j++)
                     {
-                        if (++withinReach >= CommonBeacons)
+                        if (alignedLocation.ManhattanDistance(first - rotated[j]) <= MaximumRange)
                         {
-                            break;
+                            withinReach++;
                         }
                     }
 
@@ -153,30 +163,34 @@ public sealed class Day19 : Puzzle<int, int>
                         break;
                     }
 
-                    foreach (Vector3 second in rotated.Skip(CommonBeacons))
+                    for (int j = CommonBeacons; j < rotated.Length; j++)
                     {
-                        Vector3 delta = first - second;
+                        Vector3 delta = first - rotated[j];
 
-                        if (aligned.Location.ManhattanDistance(delta) > MaximumRange)
+                        if (alignedLocation.ManhattanDistance(delta) > MaximumRange)
                         {
                             // This beacon is too far from the other scanner to be detected by it
                             break;
                         }
 
-                        var transformed = rotated.Select((p) => p + delta);
-
                         int count = 0;
 
-                        using var intersection = transformed.Intersect(aligned).GetEnumerator();
-                        while (intersection.MoveNext())
+                        for (int k = 0; k < rotated.Length; k++)
                         {
-                            if (++count == CommonBeacons)
+                            if (aligned.Contains(rotated[k] + delta) && ++count == CommonBeacons)
                             {
-                                return new Scanner(transformed)
+                                var transformed = new Scanner()
                                 {
                                     Id = unaligned.Id,
                                     Location = transformation(unaligned.Location) + delta,
                                 };
+
+                                foreach (Vector3 beacon in rotated)
+                                {
+                                    transformed.Add(beacon + delta);
+                                }
+
+                                return transformed;
                             }
                         }
                     }
