@@ -81,17 +81,17 @@ jobs:
         }
 
     - name: Checkout code
-      uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      uses: actions/checkout@v7.0.1
       with:
         filter: 'tree:0'
         persist-credentials: false
         show-progress: false
 
     - name: Setup .NET SDK
-      uses: actions/setup-dotnet@0f4a354dd5547a28c70b7853dbd95d5b67886e73 # v6.1.0
+      uses: actions/setup-dotnet@v6.1.0
 
     - name: Setup Node
-      uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+      uses: actions/setup-node@v7.1.0
       with:
         node-version: '26.x'
 
@@ -104,7 +104,7 @@ jobs:
       run: ./build.ps1
 
     - name: Publish lambda
-      uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+      uses: actions/upload-artifact@v7.0.2
       if: runner.os == 'Linux' && success()
       with:
         name: lambda
@@ -112,7 +112,7 @@ jobs:
         if-no-files-found: error
 
     - name: Azure log in
-      uses: azure/login@a641126d1b8aa4d1fa005f4f92df94a3a4c4c906 # v3.1.0
+      uses: azure/login@v3.1.0
       if: env.PUBLISH_CONTAINER == 'true'
       with:
         client-id: ${{ secrets.AZURE_CLIENT_ID }}
@@ -134,7 +134,7 @@ jobs:
         dotnet publish ./src/AdventOfCode.Site --arch x64 --os linux -p:PublishProfile=DefaultContainer
 
     - name: Attest container image
-      uses: actions/attest@1e69f48acb82d1966a394da916b4c1698aa569d6 # v4.2.2
+      uses: actions/attest@v4.2.2
       if: steps.publish-container.outputs.container-digest != ''
       with:
         create-storage-record: false
@@ -143,7 +143,7 @@ jobs:
         subject-name: ${{ steps.publish-container.outputs.container-image }}
 
     - name: Publish screenshots
-      uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+      uses: actions/upload-artifact@v7.0.2
       if: ${{ !cancelled() }}
       with:
         name: screenshots-${{ matrix.os-name }}
@@ -151,7 +151,7 @@ jobs:
         if-no-files-found: ignore
 
     - name: Publish traces
-      uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+      uses: actions/upload-artifact@v7.0.2
       if: ${{ !cancelled() }}
       with:
         name: traces-${{ matrix.os-name }}
@@ -159,7 +159,7 @@ jobs:
         if-no-files-found: ignore
 
     - name: Publish videos
-      uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+      uses: actions/upload-artifact@v7.0.2
       if: ${{ !cancelled() }}
       with:
         name: videos-${{ matrix.os-name }}
@@ -222,14 +222,14 @@ jobs:
     steps:
 
     - name: Checkout code
-      uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      uses: actions/checkout@v7.0.1
       with:
         filter: 'tree:0'
         persist-credentials: false
         show-progress: false
 
     - name: Setup Node
-      uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+      uses: actions/setup-node@v7.1.0
       with:
         node-version: '26.x'
 
@@ -240,7 +240,7 @@ jobs:
         npm run all
 
     - name: Upload coverage to Codecov
-      uses: codecov/codecov-action@303a32d7a59b442fa8d48b6a1cc6825c09c847a5 # v7.1.1
+      uses: codecov/codecov-action@v7.1.1
 
   deploy-production:
     if: github.event.repository.fork == false && github.ref_name == github.event.repository.default_branch
@@ -258,14 +258,14 @@ jobs:
     steps:
 
     - name: Azure log in
-      uses: azure/login@a641126d1b8aa4d1fa005f4f92df94a3a4c4c906 # v3.1.0
+      uses: azure/login@v3.1.0
       with:
         client-id: ${{ secrets.AZURE_CLIENT_ID }}
         tenant-id: ${{ secrets.AZURE_TENANT_ID }}
         subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
     - name: Deploy container to Azure App Service
-      uses: azure/webapps-deploy@02a81bead70021f5284939794bcec79c271ab383 # v3.0.8
+      uses: azure/webapps-deploy@v3.0.8
       if: needs.build.outputs.container-tag != ''
       with:
         app-name: ${{ env.AZURE_WEBAPP_NAME }}
@@ -311,14 +311,14 @@ jobs:
     steps:
 
     - name: Checkout code
-      uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      uses: actions/checkout@v7.0.1
       with:
         filter: 'tree:0'
         persist-credentials: false
         show-progress: false
 
     - name: Setup .NET SDK
-      uses: actions/setup-dotnet@0f4a354dd5547a28c70b7853dbd95d5b67886e73 # v6.1.0
+      uses: actions/setup-dotnet@v6.1.0
 
     - name: Run end-to-end tests
       shell: pwsh
@@ -343,7 +343,7 @@ jobs:
     steps:
 
     - name: Download artifacts
-      uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+      uses: actions/download-artifact@v8.0.2
       with:
         name: lambda
 
@@ -365,7 +365,7 @@ jobs:
         $package.Dispose()
 
     - name: Setup .NET SDK
-      uses: actions/setup-dotnet@0f4a354dd5547a28c70b7853dbd95d5b67886e73 # v6.1.0
+      uses: actions/setup-dotnet@v6.1.0
 
     - name: Install .NET Lambda tool
       shell: pwsh
@@ -375,7 +375,7 @@ jobs:
         dotnet tool install --global Amazon.Lambda.Tools --version ${env:LAMBDA_TOOLS_VERSION}
 
     - name: Configure AWS credentials
-      uses: aws-actions/configure-aws-credentials@e1253824e5c10ff9df46874f81ed3ec929e19cfd # v6.3.0
+      uses: aws-actions/configure-aws-credentials@v6.3.0
       with:
         role-to-assume: ${{ secrets.AWS_DEPLOYMENT_ROLE }}
         role-session-name: ${{ github.event.repository.name }}-${{ github.run_id }}-deploy
@@ -441,14 +441,14 @@ jobs:
     steps:
 
     - name: Checkout code
-      uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      uses: actions/checkout@v7.0.1
       with:
         filter: 'tree:0'
         persist-credentials: false
         show-progress: false
 
     - name: Setup .NET SDK
-      uses: actions/setup-dotnet@0f4a354dd5547a28c70b7853dbd95d5b67886e73 # v6.1.0
+      uses: actions/setup-dotnet@v6.1.0
 
     - name: Run end-to-end tests
       shell: pwsh
