@@ -29,7 +29,7 @@ jobs:
     steps:
 
     - name: Parse comment
-      uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
+      uses: actions/github-script@v9.0.0
       id: parse-comment
       with:
         result-encoding: string
@@ -127,19 +127,19 @@ jobs:
           core.setOutput('commit-sha', sha);
 
     - name: Checkout code
-      uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      uses: actions/checkout@v7.0.1
       with:
         filter: 'tree:0'
         persist-credentials: false
         show-progress: false
 
     - name: Setup .NET 8 SDK
-      uses: actions/setup-dotnet@0f4a354dd5547a28c70b7853dbd95d5b67886e73 # v6.1.0
+      uses: actions/setup-dotnet@v6.1.0
       with:
         dotnet-version: 11.0.x
 
     - name: Setup .NET SDK
-      uses: actions/setup-dotnet@0f4a354dd5547a28c70b7853dbd95d5b67886e73 # v6.1.0
+      uses: actions/setup-dotnet@v6.1.0
 
     - name: Install crank
       shell: pwsh
@@ -160,7 +160,7 @@ jobs:
           -PublishResults
 
     - name: Post result comment
-      uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
+      uses: actions/github-script@v9.0.0
       if: ${{ !cancelled() }}
       env:
         BENCHMARK_NAME: ${{ steps.parse-comment.outputs.benchmark }}
